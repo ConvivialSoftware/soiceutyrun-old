@@ -1,0 +1,500 @@
+
+import 'dart:convert';
+import 'dart:core';
+import 'dart:core';
+import 'dart:io';
+
+import 'package:connectivity/connectivity.dart';
+import 'package:ext_storage/ext_storage.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+//import 'package:simple_permissions/simple_permissions.dart';
+import 'package:societyrun/GlobalClasses/AppLanguage.dart';
+import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/LoginResponse.dart';
+import 'package:intl/intl.dart';
+
+
+
+class GlobalFunctions{
+  static SharedPreferences sharedPreferences;
+
+  static void showToast(String msg){
+    Fluttertoast.showToast(
+        msg: msg, toastLength: Toast.LENGTH_SHORT);
+  }
+
+  static convertFutureToNormal(var futureKey) {
+    print('futurekey: '+futureKey.toString());
+    var value;
+    futureKey.then((val){
+      print('converted key : '+val.toString());
+      value=val;
+    });
+    print('converted final key : '+value.toString());
+    return value;
+  }
+
+  static getLoginValue() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyIsLogin)){
+      return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
+    }else{
+      sharedPreferences.setBool(GlobalVariables.keyIsLogin, false);
+      return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
+    }
+  }
+
+  static getUserName() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyUsername)){
+      print('username : '+sharedPreferences.getString(GlobalVariables.keyUsername));
+      return  sharedPreferences.getString(GlobalVariables.keyUsername);
+    }
+    return "";
+  }
+
+  static getPassword() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyPassword)){
+      print('keyPassword : '+sharedPreferences.getString(GlobalVariables.keyPassword));
+      return  sharedPreferences.getString(GlobalVariables.keyPassword);
+    }
+    return "";
+  }
+
+  static getDisplayName() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyName)){
+      print('display username : '+sharedPreferences.getString(GlobalVariables.keyName));
+      return   sharedPreferences.getString(GlobalVariables.keyName);
+    }
+    return "";
+  }
+
+  static getMobile() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyMobile)){
+      print('display username : '+sharedPreferences.getString(GlobalVariables.keyMobile));
+      return   sharedPreferences.getString(GlobalVariables.keyMobile);
+    }
+    return "";
+  }
+
+  static getUserId() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyUserId)){
+      print('display userid : '+sharedPreferences.getString(GlobalVariables.keyUserId));
+      return   sharedPreferences.getString(GlobalVariables.keyUserId);
+    }
+    return "";
+  }
+
+  static getSocietyId() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keySocietyId)){
+      print('keySocietyId : '+sharedPreferences.getString(GlobalVariables.keySocietyId));
+      return   sharedPreferences.getString(GlobalVariables.keySocietyId);
+    }
+    return "";
+  }
+
+  static getLoginId() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyId)){
+      print('keyId : '+sharedPreferences.getString(GlobalVariables.keyId));
+      return   sharedPreferences.getString(GlobalVariables.keyId);
+    }
+    return "";
+  }
+
+  static getSocietyName() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keySocietyName)){
+      print('keySocietyId : '+sharedPreferences.getString(GlobalVariables.keySocietyName));
+      return   sharedPreferences.getString(GlobalVariables.keySocietyName);
+    }
+    return "";
+  }
+
+  static getSocietyEmail() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyEmail)){
+      print('keySocietyId : '+sharedPreferences.getString(GlobalVariables.keyEmail));
+      return   sharedPreferences.getString(GlobalVariables.keyEmail);
+    }
+    return "";
+  }
+
+  static getFlat() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyFlat)){
+      print('keyFlat : '+sharedPreferences.getString(GlobalVariables.keyFlat));
+      return   sharedPreferences.getString(GlobalVariables.keyFlat);
+    }
+    return "";
+  }
+
+  static getBlock() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyBlock)){
+      print('keyBlock : '+sharedPreferences.getString(GlobalVariables.keyBlock));
+      return   sharedPreferences.getString(GlobalVariables.keyBlock);
+    }
+    return "";
+  }
+
+  static getConsumerID() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyConsumerId)){
+      print('keyConsumerId : '+sharedPreferences.getString(GlobalVariables.keyConsumerId));
+      return  sharedPreferences.getString(GlobalVariables.keyConsumerId);
+    }
+    return "";
+  }
+
+
+  static getPhoto() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyPhoto)){
+      print('keyPhoto : '+sharedPreferences.getString(GlobalVariables.keyPhoto));
+      return  sharedPreferences.getString(GlobalVariables.keyPhoto);
+    }
+    return "";
+  }
+
+  static getAppLanguage() async{
+    AppLanguage appLanguage = AppLanguage();
+    Locale _appLocale= await appLanguage.fetchLocale();
+    return _appLocale;
+  }
+  
+  static bool verifyLoginData(String username,String password){
+    if(username.length>0 && password.length>0){
+        return true;
+    }else{
+      return false;
+    }
+  }
+
+  static Future<bool> checkInternetConnection() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if(connectivityResult==ConnectivityResult.mobile){
+      return true;
+    }else if(connectivityResult==ConnectivityResult.wifi){
+      return true;
+    }
+    return false;
+  }
+
+  static Future<void> saveDataToSharedPreferences(LoginResponse value) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool(GlobalVariables.keyIsLogin, true);
+    sharedPreferences.setString(GlobalVariables.keyId, value.ID);
+    sharedPreferences.setString(GlobalVariables.keyUserId, value.USER_ID);
+    sharedPreferences.setString(GlobalVariables.keySocietyId, value.SOCIETY_ID);
+    sharedPreferences.setString(GlobalVariables.keyBlock, value.BLOCK);
+    sharedPreferences.setString(GlobalVariables.keyFlat, value.FLAT);
+    sharedPreferences.setString(GlobalVariables.keyUsername, value.USER_NAME);
+    sharedPreferences.setString(GlobalVariables.keyPassword, value.PASSWORD);
+    sharedPreferences.setString(GlobalVariables.keyMobile, value.MOBILE);
+    sharedPreferences.setString(GlobalVariables.keyUserType, value.TYPE);
+    sharedPreferences.setString(GlobalVariables.keySocietyName, value.Society_Name);
+    sharedPreferences.setString(GlobalVariables.keySocietyAddress, value.Address);
+    sharedPreferences.setString(GlobalVariables.keyEmail, value.Email);
+    sharedPreferences.setString(GlobalVariables.keySocietyPermission, value.society_Permissions);
+    sharedPreferences.setString(GlobalVariables.keyName, value.Name);
+    sharedPreferences.setString(GlobalVariables.keyStaffQRImage, value.Staff_QR_Image);
+    sharedPreferences.setString(GlobalVariables.keyPhoto, value.Photo);
+    sharedPreferences.setString(GlobalVariables.keyUserPermission, value.Permissions);
+    sharedPreferences.setString(GlobalVariables.keyConsumerId, value.Consumer_no);
+  }
+
+  static Future<void> savePasswordToSharedPreferences(String password) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(GlobalVariables.keyPassword, password);
+  }
+
+  static backIconLayoutAndImplementation(BuildContext context,String title){
+    return Container(
+       color: GlobalVariables.white,
+      margin: EdgeInsets.fromLTRB(
+          0, MediaQuery.of(context).size.height /20, 0, 0),
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+            //  color: GlobalVariables.grey,
+            child: SizedBox(
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(Icons.arrow_back,color: GlobalVariables.green,)
+                )),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width/10, 0),
+              // color: GlobalVariables.green,
+              alignment: Alignment.center,
+              child: SizedBox(
+                /*child: SvgPicture.asset(
+                              GlobalVariables.overviewTxtPath,
+                            )*/
+                child: Text(title,style: TextStyle(color: GlobalVariables.green
+                    ,fontSize: 18,fontWeight: FontWeight.bold),),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static getAppHeaderWidgetWithoutAppIcon(BuildContext context, var height){
+    return  Container(
+      alignment: Alignment.topCenter,
+      //color: GlobalVariables.black,
+      height: height,
+      child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: height,
+          child: SvgPicture.asset(
+              GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,fit: BoxFit.fill)),
+    );
+  }
+
+  static getAppHeaderWidget(BuildContext context){
+
+    return  Stack(
+      children: <Widget>[
+        Container(
+          alignment: Alignment.topCenter,
+          //color: GlobalVariables.black,
+          height: MediaQuery.of(context).size.height/4.2,
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SvgPicture.asset(
+                GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,fit: BoxFit.fill)),
+        ),
+        Align(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/8, 0, 0),
+            child: SvgPicture.asset(GlobalVariables.appIconPath,),
+          ),
+          alignment: AlignmentDirectional.topCenter,
+        ),
+      ],
+    );
+  }
+
+  static getAppHeaderWidgetWithUserProfileImage(BuildContext context){
+
+    return  Stack(
+      children: <Widget>[
+        Container(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SvgPicture.asset(
+                GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,)),
+        ),
+        Align(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/8, 0, 0),
+            child: SvgPicture.asset(GlobalVariables.appIconPath,),
+          ),
+          alignment: AlignmentDirectional.topCenter,
+        ),
+      ],
+    );
+  }
+
+  static getNormalProgressDialogInstance(BuildContext context){
+
+    ProgressDialog _progressDialog = ProgressDialog(context,type: ProgressDialogType.Normal);
+    _progressDialog.style(
+        message: "      Please Wait",
+        borderRadius: 10.0,
+        backgroundColor: GlobalVariables.mediumGreen,
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progressWidget: Center(
+           // alignment: Alignment.center,
+            child: CircularProgressIndicator()),
+        messageTextStyle: TextStyle(color:GlobalVariables.white,fontSize:14,fontWeight:FontWeight.bold)
+
+    );
+
+    return _progressDialog;
+
+  }
+
+  static getDownLoadProgressDialogInstance(BuildContext context){
+
+    ProgressDialog _progressDialog = ProgressDialog(context,type: ProgressDialogType.Download);
+    _progressDialog.style(
+        message: "      Please Wait",
+        borderRadius: 10.0,
+        backgroundColor: GlobalVariables.mediumGreen,
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progressWidget: Center(
+          // alignment: Alignment.center,
+            child: CircularProgressIndicator()),
+        messageTextStyle: TextStyle(color:GlobalVariables.white,fontSize:14,fontWeight:FontWeight.bold)
+
+    );
+
+    return _progressDialog;
+
+  }
+
+  static saveDuesDataToSharedPreferences(String duesRs,String duesDate) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(GlobalVariables.keyDuesRs, duesRs);
+    sharedPreferences.setString(GlobalVariables.keyDuesDate, duesDate);
+  }
+
+  static getSharedPreferenceDuesData() async {
+
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    Map<String,String> map = Map<String,String>();
+
+    map = {
+      GlobalVariables.keyDuesRs : sharedPreferences.getString(GlobalVariables.keyDuesRs.toString()),
+      GlobalVariables.keyDuesDate : sharedPreferences.getString(GlobalVariables.keyDuesDate.toString()),
+    };
+
+    print('dues map : '+map.toString());
+
+    return map;
+  }
+
+
+  static getSelectedDate(BuildContext context) async {
+
+    DateTime selectedDate = DateTime.now();
+
+    print('selected year : '+selectedDate.year.toString());
+
+    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1800,8), lastDate: DateTime(2021));
+    if(picked!=null && picked !=selectedDate){
+      selectedDate=picked;
+    }
+    return selectedDate;
+  }
+
+  static Future<String> getFilePath(BuildContext context) async {
+
+    return  await FilePicker.getFilePath(
+        type: FileType.any,
+        /*allowedExtensions: (_extension?.isNotEmpty ?? false)
+            ? _extension?.replaceAll(' ', '')?.split(',')
+            : null*/);
+
+  }
+
+  static String convertFileToString(String attachmentFilePath)  {
+
+    final bytes =  File(attachmentFilePath).readAsBytesSync();
+
+    String str64 = base64Encode(bytes);
+
+    return str64;
+  }
+
+  static Future<String> localPath() async {
+    final path = ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    // For your reference print the AppDoc directory
+
+    return path;
+  }
+
+ /* static Future<bool> isExternalStoragePermission() async {
+    PermissionStatus permissionResult = await SimplePermissions.requestPermission(Permission. WriteExternalStorage);
+    if (permissionResult == PermissionStatus.authorized){
+      // code of read or write file in external storage (SD card)
+      return true;
+    }
+    return false;
+  }
+*/
+
+  static Future<void> downloadAttachment(var url,var _localPath) async {
+
+    final taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: _localPath,
+      //fileName: "SocietyRunImage/Document",
+      showNotification: true, // show download progress in status bar (for Android)
+      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    );
+    FlutterDownloader.open(taskId: taskId);
+
+  }
+
+
+  static Future<void> shareData(var title, var text) async {
+    await FlutterShare.share(title: title, text: text, chooserTitle: title);
+  }
+
+
+  static Future<void> clearSharedPreferenceData() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.clear();
+  }
+
+
+  static String convertDateFormat(String date,String format){
+
+    String newDate;
+    var dFormat = DateFormat(format);
+    DateTime oldDate = DateTime.parse(date);
+    newDate = dFormat.format(oldDate);
+
+    return newDate;
+
+  }
+
+
+  static Future<File>  openCamera() async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+  //  print("picture : "+ picture.path.toString());
+   // print("fileString : "+ convertFileToString(picture.path.toString()));
+    return picture;
+  }
+
+  static Future<bool> checkPermission(Permission permission) async {
+
+    bool status =false;
+    var _permissionStatus =  await permission.status;
+    if(_permissionStatus.isGranted){
+      status = true;
+    }
+    return status;
+  }
+
+  static Future<bool> askPermission(Permission permission) async {
+    bool status =false;
+    await permission.request().then((value) {
+      if(value.isGranted){
+        status = true;
+      }
+    });
+    return status;
+  }
+
+}

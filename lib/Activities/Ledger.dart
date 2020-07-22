@@ -1,0 +1,425 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/Ledger.dart';
+import 'package:societyrun/Models/OpeningBalance.dart';
+import 'package:societyrun/Retrofit/RestClientERP.dart';
+
+class BaseLedger extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return LedgerState();
+  }
+}
+
+class LedgerState extends State<BaseLedger> {
+  List<DateTransaction> _dateTransactionList = new List<DateTransaction>();
+
+  List<Ledger> _ledgerList = new List<Ledger>();
+
+  List<OpeningBalance> _openingBalanceList = new List<OpeningBalance>();
+
+  ProgressDialog _progressDialog;
+
+  double totalOutStanding=0;
+
+  String openingBalance="0.0";
+
+  @override
+  void initState() {
+    super.initState();
+   // getTransactionList();
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        getLedgerData();
+
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+
+    return Builder(
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: GlobalVariables.green,
+          centerTitle: true,
+          elevation: 0,
+          leading: InkWell(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: GlobalVariables.white,
+            ),
+          ),
+          title: Text(
+            AppLocalizations.of(context).translate('ledger'),
+            style: TextStyle(color: GlobalVariables.white),
+          ),
+        ),
+        body: getBaseLayout(),
+      ),
+    );
+  }
+
+  getBaseLayout() {
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+     // height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: GlobalVariables.veryLightGray,
+      ),
+      child: Column(
+        children: <Widget>[
+          Flexible(
+            child: Stack(
+              children: <Widget>[
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 200.0),
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      20, MediaQuery.of(context).size.height / 30, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                            AppLocalizations.of(context).translate('ledger'),style: TextStyle(
+                          color: GlobalVariables.white,fontSize: 20,fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                      Visibility(
+                        visible: false,
+                        child: Container(
+                          child: Icon(
+                            Icons.filter,
+                            color: GlobalVariables.mediumGreen,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                _ledgerList.length>0 ?  Container(
+                  margin: EdgeInsets.fromLTRB(
+                      20, MediaQuery.of(context).size.height / 10, 20,100),
+                  alignment: Alignment.topLeft,
+               //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  // padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: getRecentTransactionLayout(),
+                ): Container(),
+                _ledgerList.length>0 ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: GlobalVariables.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          child: Text(AppLocalizations.of(context).translate('total_outstanding'),style: TextStyle(
+                            color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+                          ),),
+                        ),
+                        Container(
+                          child: Text("Rs. "+totalOutStanding.toString(),style: TextStyle(
+                            color: GlobalVariables.red,fontSize: 18,fontWeight: FontWeight.bold
+                          ),),
+                        )
+                      ],
+                    ),
+                  ),
+                ) : Container()
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  getRecentTransactionLayout() {
+
+    return SingleChildScrollView(
+      child: Container(
+        // padding: EdgeInsets.all(5),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: Text(AppLocalizations.of(context)
+                          .translate('opening_balance'),style: TextStyle(
+                        color: GlobalVariables.black,fontSize: 20,fontWeight: FontWeight.bold
+                      ),),
+                    ),
+                  ),
+                  Container(
+                    child: Text('Rs. '+openingBalance,style: TextStyle(
+                        color: GlobalVariables.red,fontSize: 20,fontWeight: FontWeight.bold
+                    ),),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Builder(
+                  builder: (context) => ListView.builder(
+                     // scrollDirection: Axis.vertical,
+                    physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, position) {
+                        return getDateTransactionItemLayout(position);
+                      },
+                     /* separatorBuilder: (context, position) {
+                        return getDateWiseRecentTransactionLayout(position);
+                      },*/
+                      itemCount: _ledgerList.length)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  getTransactionList() {
+    _dateTransactionList = [
+      DateTransaction(transactionDate: "17 April 2020", recentTransactionLis: [
+        RecentTransaction(
+          transactionTitle: "Maintenance for March'20",
+          transactionRs: "Rs. 2,564.00",
+          transactionDue: true,
+        ),
+        RecentTransaction(
+          transactionTitle: "Banquet Booking",
+          transactionRs: "Rs. 3,000.00",
+          transactionDue: true,
+        ),
+      ]),
+      DateTransaction(transactionDate: "13 April 2020", recentTransactionLis: [
+        RecentTransaction(
+          transactionTitle: "Maintenance for Feb'20",
+          transactionRs: "Rs. 2,466.00",
+          transactionDue: false,
+        ),
+      ]),
+      DateTransaction(transactionDate: "10 April 2020", recentTransactionLis: [
+        RecentTransaction(
+          transactionTitle: "Club House charges",
+          transactionRs: "Rs. 5,000.00",
+          transactionDue: true,
+        ),
+      ]),
+      DateTransaction(transactionDate: "7 April 2020", recentTransactionLis: [
+        RecentTransaction(
+          transactionTitle: "Water charges",
+          transactionRs: "Rs. 1,500.00",
+          transactionDue: true,
+        ),
+        RecentTransaction(
+          transactionTitle: "Legal charges",
+          transactionRs: "Rs. 500.00",
+          transactionDue: false,
+        ),
+      ]),
+      DateTransaction(transactionDate: "3 April 2020", recentTransactionLis: [
+        RecentTransaction(
+          transactionTitle: "Maintenance for Jan'20",
+          transactionRs: "Rs. 1864.00",
+          transactionDue: false,
+        ),
+      ]),
+      DateTransaction(transactionDate: "1 April 2020", recentTransactionLis: [
+        RecentTransaction(
+          transactionTitle: "Legal charges",
+          transactionRs: "Rs. 500.00",
+          transactionDue: true,
+        ),
+      ])
+    ];
+  }
+
+  getDateTransactionItemLayout(int position) {
+
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(5),
+          color: GlobalVariables.lightGreen,
+          child: Container(
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Text(_ledgerList[position].C_DATE,style: TextStyle(
+              color: GlobalVariables.grey,fontSize: 14
+            ),),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        child: Text(_ledgerList[position].LEDGER,style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: 18
+                        ),),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      child: Text("Rs. "+_ledgerList[position].AMOUNT.toString(),style: TextStyle(
+                          color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.green: GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
+                      ),),
+                    )
+                  ],
+                ),
+                position!=_ledgerList.length-1 ? Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Divider(
+                    color: GlobalVariables.lightGreen,
+                    height: 3,
+                  ),
+                ):Container(),
+              ],
+            )
+        )
+      ],
+    );
+
+  }
+
+ /* getDateWiseRecentTransactionItemLayout(int position) {
+
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(_ledgerList[position].LEDGER,style: TextStyle(
+                      color: GlobalVariables.mediumGreen,fontSize: 18
+                  ),),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(5),
+                child: Text(_ledgerList[position].AMOUNT.toString(),style: TextStyle(
+                    color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.green: GlobalVariables.red,fontSize: 16
+                ),),
+              )
+            ],
+          ),
+          position!=_ledgerList.length-1 ? Container(
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Divider(
+              color: GlobalVariables.lightGreen,
+              height: 3,
+            ),
+          ):Container(),
+        ],
+      )
+    );
+  }
+*/
+ /* getDateWiseRecentTransactionLayout(int position) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+    //  height: 100,
+      child: Builder(
+          builder: (context) => ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+              itemBuilder: (context, position) {
+                return getDateWiseRecentTransactionItemLayout(position);
+              },
+              itemCount: _ledgerList.length)),
+    );
+  }*/
+
+  getLedgerData() async {
+    final dio = Dio();
+    final RestClientERP restClientERP =
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+   String  societyId = await GlobalFunctions.getSocietyId();
+   String flat = await GlobalFunctions.getFlat();
+   String  block = await GlobalFunctions.getBlock();
+    _progressDialog.show();
+    restClientERP.getLedgerData(societyId, flat, block).then((value) {
+      print('Response : ' + value.toString());
+      List<dynamic> _listLedger = value.ledger;
+      List<dynamic> _listOpeningBalance = value.openingBalance;
+
+      //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
+
+      _ledgerList = List<Ledger>.from(_listLedger.map((i)=>Ledger.fromJson(i)));
+      _openingBalanceList = List<OpeningBalance>.from(_listOpeningBalance.map((i)=>OpeningBalance.fromJson(i)));
+
+      openingBalance = _openingBalanceList[0].AMOUNT.toString();
+
+      double totalAmount = 0;
+      for(int i =0;i<_listLedger.length;i++){
+        if(_ledgerList[i].TYPE.toLowerCase().toString()=='bill'){
+          totalAmount+=double.parse(_ledgerList[i].AMOUNT);
+        }else{
+          totalAmount-=double.parse(_ledgerList[i].AMOUNT);
+        }
+        totalOutStanding = totalAmount + double.parse(openingBalance);
+      }
+
+      _progressDialog.hide();
+
+      setState(() {});
+    });
+  }
+}
+
+class RecentTransaction {
+  String transactionTitle;
+  String transactionRs;
+  bool transactionDue;
+  RecentTransaction({this.transactionTitle, this.transactionRs,this.transactionDue});
+}
+
+class DateTransaction {
+  String transactionDate;
+  List<RecentTransaction> recentTransactionLis;
+
+  DateTransaction({this.transactionDate, this.recentTransactionLis});
+}

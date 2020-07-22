@@ -1,0 +1,1757 @@
+import 'dart:convert';
+import 'dart:ffi';
+
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:societyrun/Activities/Discover.dart';
+import 'package:societyrun/Activities/DisplayProfileInfo.dart';
+import 'package:societyrun/Activities/Facilities.dart';
+import 'package:societyrun/Activities/HelpDesk.dart';
+import 'package:societyrun/Activities/Ledger.dart';
+import 'package:societyrun/Activities/MyComplex.dart';
+
+import 'package:societyrun/Activities/MyGate.dart';
+import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/LoginResponse.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/main.dart';
+
+import 'LoginPage.dart';
+
+class BaseDashBoard extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    // GlobalFunctions.showToast("DashBoard page");
+    return DashBoardState();
+  }
+}
+
+class DashBoardState extends State<BaseDashBoard> {
+  final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
+      new GlobalKey<ScaffoldState>();
+
+  String _selectedItem;
+  List<DropdownMenuItem<String>> _societyListItems =
+      new List<DropdownMenuItem<String>>();
+  List<LoginResponse> _societyList = new List<LoginResponse>();
+  LoginResponse _selectedSocietyLogin;
+  var username, password, societyId, flat, block, duesRs = "0", duesDate = "";
+
+  List<RootTitle> _list = new List<RootTitle>();
+  int _currentIndex = 0;
+  int _moreIndex = 0;
+  ProgressDialog _progressDialog;
+
+  var name = '';
+  var email = '', phone = '';
+  var photo;
+
+  final cryptor = PlatformStringCryptor();
+  @override
+  void initState() {
+    super.initState();
+
+    getPhoto();
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        getDuesData();
+        getAllSocietyData();
+        geProfileData();
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+  }
+
+  void geProfileData() async{
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+     String societyId = await GlobalFunctions.getSocietyId();
+     String  userId = await GlobalFunctions.getUserId();
+    restClient.getProfileData(societyId,userId).then((value) {
+      //  _progressDialog.hide();
+      if (value.status) {
+        List<dynamic> _list = value.data;
+
+
+      }
+    });
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    getExpandableListViewData(context);
+    // TODO: implement build
+    //  GlobalFunctions.showToast("Dashboard state page");
+    return Builder(
+      builder: (context) => Scaffold(
+        key: _dashboardSacfoldKey,
+        // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
+        body: getBodyLayout(),
+        drawer: getDrawerLayout(),
+        bottomNavigationBar: getBottomNavigationBar(),
+      ),
+    );
+  }
+
+  getBodyLayout() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            color: GlobalVariables.white,
+          ),
+          child: Column(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Container(
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: SvgPicture.asset(
+                          GlobalVariables.headerIconPath,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.fill,
+                        )),
+                  ),
+                  Container(
+                    // color: GlobalVariables.black,
+                    margin: EdgeInsets.fromLTRB(
+                        0, MediaQuery.of(context).size.height / 30, 0, 0),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          //  color: GlobalVariables.grey,
+                          child: SizedBox(
+                              child: GestureDetector(
+                            onTap: () {
+                              _dashboardSacfoldKey.currentState.openDrawer();
+                            },
+                            child: SvgPicture.asset(
+                              GlobalVariables.topBreadCrumPath,
+                            ),
+                          )),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(
+                                0,
+                                0,
+                                MediaQuery.of(context).size.width / 70,
+                                0), // color: GlobalVariables.green,
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              /*child: SvgPicture.asset(
+                              GlobalVariables.overviewTxtPath,
+                            )*/
+                              child: Text(
+                                'OVERVIEW',
+                                style: TextStyle(
+                                    color: GlobalVariables.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              //color: GlobalVariables.grey,
+                              margin: EdgeInsets.fromLTRB(0, 10, 20, 0),
+                              child: SizedBox(
+                                  child: GestureDetector(
+                                onTap: () {
+                                  GlobalFunctions.showToast('Coming Soon...');
+                                },
+                                child: SvgPicture.asset(
+                                  GlobalVariables.notificationBellIconPath,
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              )),
+                            ),
+                            Container(
+                              //  color: GlobalVariables.grey,
+                              margin: EdgeInsets.fromLTRB(
+                                  0, 10, 20, 0), // alignment: Alignment
+                              child: SizedBox(
+                                  child: GestureDetector(
+                                onTap: () {
+                                 // GlobalFunctions.showToast('profile_user');
+                                  Navigator.push(
+                                      context, MaterialPageRoute(builder: (context) => BaseDisplayProfileInfo()));
+                                },
+                                child: photo == null
+                                    ? Image.asset(
+                                        GlobalVariables
+                                            .componentUserProfilePath,
+                                        width: 20,
+                                        height: 20,
+                                      )
+                                    : Container(
+                                        // alignment: Alignment.center,
+                                        /* decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25)),*/
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor:
+                                              GlobalVariables.mediumGreen,
+                                          backgroundImage: NetworkImage(photo),
+                                        ),
+                                      ),
+                              )),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  duesLayout(),
+                ],
+              ),
+              getHomePage()
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  getBottomNavigationBar() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(
+          0, 10, 0, 0), //margin: EdgeInsets.fromLTRB(0, 25, 0, 0),
+      //height: 70,
+      // color: GlobalVariables.green,
+      decoration: BoxDecoration(
+          color: GlobalVariables.green,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50.0), topRight: Radius.circular(50.0))),
+      child: BottomNavigationBar(
+          backgroundColor: GlobalVariables.transparent,
+          elevation: 0,
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            _currentIndex = index;
+            _moreIndex = 0;
+            navigateToPage();
+          },
+          items: [
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  GlobalVariables.bottomHomeIconPath,
+                  color: GlobalVariables.white30,
+                  width: 20,
+                  height: 20,
+                ),
+                activeIcon: SvgPicture.asset(
+                  GlobalVariables.bottomHomeIconPath,
+                  color: GlobalVariables.white,
+                ),
+                title: Text("")),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  GlobalVariables.bottomMyHomeIconPath,
+                  color: GlobalVariables.white30,
+                  width: 20,
+                  height: 20,
+                ),
+                activeIcon: SvgPicture.asset(
+                  GlobalVariables.bottomMyHomeIconPath,
+                  color: GlobalVariables.white,
+                ),
+                title: Text("")),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  GlobalVariables.bottomBuildingIconPath,
+                  color: GlobalVariables.white30,
+                  width: 20,
+                  height: 20,
+                ),
+                activeIcon: SvgPicture.asset(
+                  GlobalVariables.bottomBuildingIconPath,
+                  color: GlobalVariables.white,
+                ),
+                title: Text("")),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  GlobalVariables.bottomServiceIconPath,
+                  color: GlobalVariables.white30,
+                  width: 20,
+                  height: 20,
+                ),
+                activeIcon: SvgPicture.asset(
+                  GlobalVariables.bottomServiceIconPath,
+                  color: GlobalVariables.white,
+                ),
+                title: Text("")),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  GlobalVariables.bottomClubIconPath,
+                  color: GlobalVariables.white30,
+                  width: 20,
+                  height: 20,
+                ),
+                activeIcon: SvgPicture.asset(
+                  GlobalVariables.bottomClubIconPath,
+                  color: GlobalVariables.white,
+                ),
+                title: Text("")),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  GlobalVariables.bottomMenuIconPath,
+                  color: GlobalVariables.white30,
+                  width: 20,
+                  height: 20,
+                ),
+                activeIcon: SvgPicture.asset(
+                  GlobalVariables.bottomMenuIconPath,
+                  color: GlobalVariables.white,
+                ),
+                title: Text("")),
+          ]),
+    );
+  }
+
+  bool isHomePage() {
+    if (_currentIndex == 0) {
+      return true;
+    }
+    return false;
+  }
+
+  navigateToPage() {
+    switch (_currentIndex) {
+      case 0:
+        {
+          //Home
+          setState(() {});
+        }
+        break;
+      case 1:
+        {
+          //MyUnit
+          getMyUnitPage();
+        }
+        break;
+      case 2:
+        {
+          //MyComplex
+          getMyComplexPage();
+        }
+        break;
+      case 3:
+        {
+          //Discover
+          getDiscoverPage();
+        }
+        break;
+      case 4:
+        {
+          //ClubFacilities
+          getClubFacilitiesPage();
+        }
+        break;
+      case 5:
+        {
+          //More
+          if (_moreIndex == 4) {
+            getMyGatePage();
+          } else if (_moreIndex == 5) {
+            getHelpDeskPage();
+          } else if (_moreIndex == 6) {
+            getAdminPage();
+          } else {
+            getMorePage();
+          }
+        }
+        break;
+      default:
+        {
+          getHomePage();
+        }
+        break;
+    }
+  }
+
+  getHomePage() {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            // color: GlobalVariables.grey,
+            width: MediaQuery.of(context).size.width / 1.1,
+            margin: EdgeInsets.fromLTRB(
+                0,
+                MediaQuery.of(context).size.height / 100,
+                0,
+                0), //color: GlobalVariables.black,
+            child: Container(
+              //color: GlobalVariables.green,
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              getMyUnitPage();
+                            },
+                            child: Container(
+                              // color: GlobalVariables.black,
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: SvgPicture.asset(
+                                      GlobalVariables.shopIconPath,
+                                    ),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('my_unit'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              getMyComplexPage();
+                            },
+                            child: Container(
+                              //    color: GlobalVariables.green,
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.buildingIconPath),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('my_complex'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              getHelpDeskPage();
+                            },
+                            child: Container(
+                              //   color: GlobalVariables.black,
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.supportIconPath),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('help_desk'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    //color: GlobalVariables.green,
+                    margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              getClubFacilitiesPage();
+                            },
+                            child: Container(
+                              //    color: GlobalVariables.black,
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.shoppingIconPath),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('facilities'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              getMyGatePage();
+                            },
+                            child: Container(
+                              //   color: GlobalVariables.green,
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.gatePassIconPath),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('my_gate'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              getMorePage();
+                            },
+                            child: Container(
+                              //     color: GlobalVariables.black,
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.moreIconPath),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('more'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: () {
+                                GlobalFunctions.showToast("Coming Soon...");
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(15),
+                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.lightGreen,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                        GlobalVariables.storeIconPath),
+                                    Text('Near By Shop')
+                                  ],
+                                ),
+                              ),
+                            )),
+                        Flexible(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: () {
+                                GlobalFunctions.showToast("Coming Soon...");
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(15),
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.lightGreen,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                        GlobalVariables.serviceIconPath),
+                                    Text('Find Services')
+                                  ],
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      GlobalFunctions.showToast("Coming Soon...");
+                    },
+                    child: /*Container(
+                      //   color: GlobalVariables.lightGreen,
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.lightGreen,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: SvgPicture.asset(
+                                GlobalVariables.classifiedBigIconPath),
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Container(
+                                  //color: GlobalVariables.black,
+                                  child: RichText(
+                                      //  softWrap: true,
+                                      textAlign: TextAlign.start,
+                                      text: TextSpan(
+                                          text: AppLocalizations.of(context)
+                                              .translate('classified_ads'),
+                                          style: TextStyle(
+                                              color: GlobalVariables.green,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold))),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0,
+                                      0), // color: GlobalVariables.black,
+                                  child: RichText(
+                                      // softWrap: true,
+                                      textAlign: TextAlign.start,
+                                      text: TextSpan(
+                                          text: AppLocalizations.of(context)
+                                              .translate('classified_str'),
+                                          style: TextStyle(
+                                            color: GlobalVariables.grey,
+                                            fontSize: 14,
+                                          ))),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),*/
+                    Container(
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.lightGreen,
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),
+                        margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                       // padding: EdgeInsets.all(20),
+                        child:Container(
+                          color: GlobalVariables.mediumGreen,
+                          child: CarouselSlider.builder(
+                            options: CarouselOptions(height: 150.0,autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 3),
+                              autoPlayAnimationDuration: Duration(milliseconds: 800),
+                            ),
+                            itemCount: 4,
+                            itemBuilder: (BuildContext context, int itemIndex) =>
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(itemIndex.toString(),style: TextStyle(
+                                      color: GlobalVariables.black,fontSize: 20
+                                  ),),
+                                ),
+                          ),
+                        )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  getMyUnitPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));
+  }
+
+  getMyComplexPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyComplex(null)));
+  }
+
+  getDiscoverPage() {
+    GlobalFunctions.showToast('Coming Soon...');
+    /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*/
+  }
+
+  getClubFacilitiesPage() {
+    GlobalFunctions.showToast('Coming Soon...');
+    /* Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
+  }
+
+  getMyGatePage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyGate(null)));
+  }
+
+  getMorePage() {
+    GlobalFunctions.showToast('Coming Soon...');
+    /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
+  }
+
+  getHelpDeskPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseHelpDesk()));
+  }
+
+  getAdminPage() {
+    GlobalFunctions.showToast('Coming Soon...');
+    /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
+  }
+
+  getDrawerLayout() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Drawer(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                /*child: Image.asset(GlobalVariables.appLogoPath,
+                    width: 250, height: 80, fit: BoxFit.fill),*/
+                margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
+                padding: EdgeInsets.all(5),
+                alignment: Alignment.topLeft,
+                child: SvgPicture.asset(
+                  GlobalVariables.drawerImagePath,
+                  height: 40,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: EdgeInsets.all(5),
+                color: GlobalVariables.veryLightGray,
+                child: getHeaderLayout(),
+              ),
+              getListData(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  getHeaderLayout() {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: getHeaderData(),
+      builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          print('header data snap map : ' + snapshot.data.toString());
+          return Column(
+            children: <Widget>[
+              Container(
+                //color:GlobalVariables.white,
+                padding: EdgeInsets.all(5),
+                margin: EdgeInsets.fromLTRB(10, 0, 10,
+                    0), // width: MediaQuery.of(context).size.width / 2.2,
+                //  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                /*    decoration: BoxDecoration(
+                                  color: GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                            */
+                //TODO : Dropdown
+                child: ButtonTheme(
+                  //alignedDropdown: true,
+                  child: DropdownButton(
+                    items: _societyListItems,
+                    onChanged: changeDropDownItem,
+                    value: _selectedItem,
+                    underline: SizedBox(),
+                    isExpanded: false,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: GlobalVariables.black,
+                    ),
+                    //iconSize: 20,
+                  ),
+                ),
+              ),
+              Container(
+                //color: GlobalVariables.black,
+                //margin: EdgeInsets.all(5),
+                // padding: EdgeInsets.all(5),
+                child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => BaseDisplayProfileInfo()));
+                      },
+                      child: Container(
+                           margin: EdgeInsets.fromLTRB(0, 0, 0,20),
+                          //color: GlobalVariables.red,
+                          //TODO: userImage
+                          child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30.0),
+                        child: photo == null
+                            ? Image.asset(
+                                GlobalVariables.componentUserProfilePath,
+                                width: 60,
+                                height: 60)
+                            : Container(
+                                // alignment: Alignment.center,
+                                /* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*/
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: GlobalVariables.mediumGreen,
+                                  backgroundImage: NetworkImage(photo),
+                                ),
+                              ),
+                      )),
+                    ),
+                    Container(
+                      alignment: AlignmentDirectional.center,
+                      //color: GlobalVariables.red,
+                      //  padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.fromLTRB(
+                                5, 0, 0, 5), //color: GlobalVariables.green,
+                            //TODO : UserName
+                            child: Text(
+                              snapshot.data[GlobalVariables.keyName],
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: GlobalVariables.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(
+                                5), //   color: GlobalVariables.green,
+                            //TODO : CustomerID
+                            child: Text(
+                              (AppLocalizations.of(context)
+                                      .translate("str_consumer_id") +
+                                  snapshot.data[GlobalVariables.keyConsumerId]),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: GlobalVariables.grey, fontSize: 15),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(
+                                5), //  color: GlobalVariables.green,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Visibility(
+                                  visible: false,
+                                  child: InkWell(
+                                    onTap: (){
+                                      GlobalFunctions.showToast("Logout");
+                                      GlobalFunctions.clearSharedPreferenceData();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            0, 0, 5, 5), //TODO: logout
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Text(
+                                            'Logout',
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: GlobalVariables.grey,
+                                            ),
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: false,
+                                  child: Container(
+                                      margin: EdgeInsets.all(5), //TODO: Divider
+                                      height: 20,
+                                      width: 8,
+                                      child: VerticalDivider(
+                                        color: GlobalVariables.black,
+                                      )),
+                                ),
+                                Visibility(
+                                  visible: false,
+                                  child: Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          5, 0, 5, 5), //Todo: setting
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: Text(
+                                          'Setting',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: GlobalVariables.grey,
+                                          ),
+                                        ),
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          );
+        } else {
+          return Container(
+              // child: CircularProgressIndicator(),
+              );
+        }
+      },
+    );
+
+    /*
+*/
+  }
+
+  getListData() {
+    print('_list.lenght : ' + _list.length.toString());
+    print('_list : ' + _list.toString());
+    print('_list.title at 0 : ' + _list[0].title.toString());
+
+    return Flexible(
+      child: Container(
+        //  color: GlobalVariables.black,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: _list.length,
+            itemBuilder: (context, i) {
+              return Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: GlobalVariables.transparent),
+                child: ExpansionTile(
+                  key: PageStorageKey<String>(_list[i].title),
+                  onExpansionChanged: ((newState) {
+                    //GlobalFunctions.showToast(_list[i].title);
+                    if (_list[i].items.length == 0)
+                      redirectToPage(_list[i].title);
+                    //Navigator.of(context).pop();
+                  }),
+                  title: Container(
+                    // color: GlobalVariables.green,
+                    //transform: Matrix4.translationValues(0, 0, -10.0),
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(
+                            child: SvgPicture.asset(_list[i].rootIconData)),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          child: Text(
+                            _list[i].title,
+                            style: TextStyle(
+                                color: GlobalVariables.grey, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  /* leading:
+                      SizedBox(child: SvgPicture.asset(_list[i].rootIconData)),*/
+                  children: <Widget>[
+                    for (String item in _list[i].items)
+                      InkWell(
+                        onTap: () {
+                          //GlobalFunctions.showToast(item);
+                          redirectToPage(item);
+                        },
+                        child: Container(
+                          // color: GlobalVariables.grey,
+                          margin: EdgeInsets.fromLTRB(55, 0, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.green,
+                                    shape: BoxShape.circle),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(20, 8, 0, 8),
+                                child: Text(
+                                  item,
+                                  style: new TextStyle(
+                                      fontSize: 16.0,
+                                      color: GlobalVariables.grey),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                  trailing: Icon(null),
+                ),
+              );
+            }),
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>> getHeaderData() async {
+    //Future.delayed(Duration(seconds: 2),() async {
+    var headerList = <String, dynamic>{
+      GlobalVariables.keyName: await GlobalFunctions.getDisplayName(),
+      GlobalVariables.keyConsumerId: await GlobalFunctions.getConsumerID(),
+    };
+    print('header data map : ' + headerList.toString());
+    return headerList;
+    // });
+  }
+
+  Future<void> getAllSocietyData() async {
+    //  _progressDialog.show();
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    username = await GlobalFunctions.getUserName();
+    password = await GlobalFunctions.getPassword();
+    societyId = await GlobalFunctions.getSocietyId();
+    String loginId = await GlobalFunctions.getLoginId();
+
+
+    restClient.getAllSocietyData(username, password).then((value) {
+      if (value.status) {
+        List<dynamic> _list = value.data;
+
+        _societyList = List<LoginResponse>.from(
+            _list.map((i) => LoginResponse.fromJson(i)));
+        print('Societylist length ' + _societyList.length.toString());
+        for (int i = 0; i < _societyList.length; i++) {
+          LoginResponse loginResponse = _societyList[i];
+
+    /*    cryptor.generateRandomKey().then((value) async {
+            final encrypted =  await cryptor.encrypt(loginResponse.PASSWORD, value);
+            final decrypted =  await cryptor.decrypt(loginResponse.PASSWORD, 'incredible');
+            print('"loginResponse.ID : ' + loginResponse.ID);
+            print('ShardPref societyId : ' + societyId);
+            print('SocietyId ' + loginResponse.SOCIETY_ID);
+            print('PASSWORD ' + loginResponse.PASSWORD);
+            print('encrypted PASSWORD ' + encrypted);
+            print('decrypted PASSWORD ' + decrypted);
+
+          });*/
+       /*   var bytes1 = utf8.encode("incredible");         // data being hashed
+          var digest1 = sha1.convert(bytes1);         // Hashing Process
+          print("Digest as bytes: ${digest1.bytes}");   // Print Bytes
+          print("Digest as hex string: $digest1");*/
+              print('"loginResponse.ID : ' + loginResponse.ID);
+          print('ShardPref societyId : ' + societyId);
+          print('SocietyId ' + loginResponse.SOCIETY_ID);
+         print('PASSWORD ' + loginResponse.PASSWORD);
+          
+          
+        //  print('SALT KEY '+utf8.encode('incredible').toString());
+          
+       //   print('ENCRYPTION PASSWORD '+ sha1.convert(utf8.encode('incredible')+utf8.encode(loginResponse.PASSWORD)).toString());
+
+        //  print('DECRYPTION PASSWORD '+ sha1.convert();
+
+          print('SocietyId ' + loginResponse.Society_Name +
+              " " +
+              loginResponse.BLOCK +
+              " " +
+              loginResponse.FLAT);
+
+         /* if (loginId == loginResponse.ID) {
+            if (_societyListItems.length > 0) {
+              _societyListItems.insert(
+                  0,
+                  DropdownMenuItem(
+                    value: loginResponse.ID,
+                    child: Text(
+                      loginResponse.Society_Name +
+                          " " +
+                          loginResponse.BLOCK +
+                          " " +
+                          loginResponse.FLAT,
+                      style: TextStyle(color: GlobalVariables.black),
+                    ),
+                  ));
+            } else {
+              _societyListItems.add(DropdownMenuItem(
+                value: loginResponse.ID,
+                child: Text(
+                  loginResponse.Society_Name +
+                      " " +
+                      loginResponse.BLOCK +
+                      " " +
+                      loginResponse.FLAT,
+                  style: TextStyle(color: GlobalVariables.black),
+                  maxLines: 1,
+                ),
+              ));
+            }
+          } else {*/
+            _societyListItems.add(DropdownMenuItem(
+              value: loginResponse.ID,
+              child: Text(
+                loginResponse.Society_Name +
+                    " " +
+                    loginResponse.BLOCK +
+                    " " +
+                    loginResponse.FLAT,
+                style: TextStyle(color: GlobalVariables.black),
+              ),
+            ));
+         // }
+          print('value: ' + _societyListItems[i].value.toString());
+        }
+        print('size : ' + _societyListItems.length.toString());
+        print('_societyListItems 0 : ' + _societyListItems[0].toString());
+        _selectedItem = _societyListItems[0].value;
+        print('_selectedItem initial : ' + _selectedItem.toString());
+        _selectedSocietyLogin = _societyList[0];
+        _selectedSocietyLogin.PASSWORD = password;
+        GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+      }
+    }).catchError((Object obj) {
+      if(_progressDialog.isShowing()){
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+  }
+
+  void changeDropDownItem(String value) {
+    print('clickable value : ' + value.toString());
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        setState(() {
+          _selectedItem = value;
+          print('_selctedItem:' + _selectedItem.toString());
+          for (int i = 0; i < _societyList.length; i++) {
+            if (_selectedItem == _societyList[i].ID) {
+              _selectedSocietyLogin = _societyList[i];
+              _selectedSocietyLogin.PASSWORD = password;
+              GlobalFunctions.saveDataToSharedPreferences(
+                  _selectedSocietyLogin);
+              print('for _selctedItem:' + _selectedItem);
+              getDuesData();
+              break;
+            }
+          }
+        });
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+  }
+
+  void getExpandableListViewData(BuildContext context) {
+    //   print('AppLocalizations.of(context).translate(my_flat) : '+AppLocalizations.of(context).translate('my_unit').toString());
+    _list = [
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('my_unit'),
+          rootIconData: GlobalVariables.myFlatIconPath,
+          //innerIconData: Icons.,
+          items: [
+            AppLocalizations.of(context).translate("my_dues"),
+            AppLocalizations.of(context).translate("my_household"),
+           // AppLocalizations.of(context).translate("my_documents"),
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('my_complex'),
+          rootIconData: GlobalVariables.myBuildingIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: [
+            AppLocalizations.of(context).translate("announcement"),
+            AppLocalizations.of(context).translate("meetings"),
+            AppLocalizations.of(context).translate("poll_survey"),
+            AppLocalizations.of(context).translate("documents"),
+            AppLocalizations.of(context).translate("directory"),
+            AppLocalizations.of(context).translate("events")
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('discover'),
+          rootIconData: GlobalVariables.myServiceIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: [
+            AppLocalizations.of(context).translate("classified"),
+            AppLocalizations.of(context).translate("services"),
+            AppLocalizations.of(context).translate("near_by_shop"),
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('facilities'),
+          rootIconData: GlobalVariables.myClubIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('my_gate'),
+          rootIconData: GlobalVariables.myGateIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: [
+            AppLocalizations.of(context).translate("my_activities"),
+            AppLocalizations.of(context).translate("helpers"),
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('help_desk'),
+          rootIconData: GlobalVariables.mySupportIconPath,
+          // innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('admin'),
+          rootIconData: GlobalVariables.myAdminIconPath,
+          //  innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('logout'),
+          rootIconData: GlobalVariables.loginIconPath,
+          //  innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+    ];
+  }
+
+  getDrawerItemIndex(int index) {
+    switch (index) {
+      case 0:
+        {
+          //myUnit
+          _currentIndex = 1;
+          _moreIndex = 0;
+        }
+        break;
+      case 1:
+        {
+          //MyComplex
+          _currentIndex = 2;
+          _moreIndex = 1;
+        }
+        break;
+      case 2:
+        {
+          //Discover
+          _currentIndex = 3;
+          _moreIndex = 2;
+        }
+        break;
+      case 3:
+        {
+          //Club Facilities
+          _currentIndex = 4;
+          _moreIndex = 3;
+        }
+        break;
+      case 4:
+        {
+          //myGate
+          _currentIndex = 5;
+          _moreIndex = 4;
+        }
+        break;
+      case 5:
+        {
+          //helpDesk
+          _currentIndex = 5;
+          _moreIndex = 5;
+        }
+        break;
+      case 6:
+        {
+          //admin
+          _currentIndex = 5;
+          _moreIndex = 6;
+        }
+        break;
+    }
+    /*setState(() {
+
+    });*/
+    navigateToPage();
+  }
+
+  getDuesData() async {
+    final dio = Dio();
+    final RestClientERP restClientERP =
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    societyId = await GlobalFunctions.getSocietyId();
+    flat = await GlobalFunctions.getFlat();
+    block = await GlobalFunctions.getBlock();
+    _progressDialog.show();
+    restClientERP.getDuesData(societyId, flat, block).then((value) {
+      print('Response : ' + value.toString());
+      duesRs = value.DUES.toString();
+      duesDate = value.DUE_DATE.toString();
+      if(duesRs.length==0){
+        duesRs="0";
+      }
+      GlobalFunctions.saveDuesDataToSharedPreferences(duesRs, duesDate);
+      _progressDialog.hide();
+
+      if (_dashboardSacfoldKey.currentState != null) {
+        if (_dashboardSacfoldKey.currentState.isDrawerOpen) {
+          Navigator.of(context).pop();
+        }
+      }
+      if (this.mounted){
+        setState((){
+          //Your state change code goes here
+        });
+      }
+    });
+  }
+
+  duesLayout() {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        //color: GlobalVariables.black,
+        width: MediaQuery.of(context).size.width / 0.8,
+        margin: EdgeInsets.fromLTRB(
+            0, MediaQuery.of(context).size.height / 10, 0, 0),
+        child: Card(
+          shape: (RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0))),
+          elevation: 5.0,
+          margin: EdgeInsets.all(20),
+          color: GlobalVariables.white,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SvgPicture.asset(
+                    GlobalVariables.whileBGPath,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('total_due'),
+                          style: TextStyle(
+                              color: GlobalVariables.mediumGreen, fontSize: 14),
+                        ),
+                        Text(
+                          AppLocalizations.of(context).translate('due_date'),
+                          style: TextStyle(
+                            color: GlobalVariables.mediumGreen,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          " Rs. " + duesRs,
+                          style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          duesDate,
+                          style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      color: GlobalVariables.mediumGreen,
+                      margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                      child: Divider(
+                        height: 1,
+                        color: GlobalVariables.mediumGreen,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              //GlobalFunctions.showToast('Transaction');
+                              Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) => BaseLedger()));
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('transaction_history'),
+                              style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              //GlobalFunctions.showToast('Pay Now');
+                              Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));
+                            },
+                            child: Text(
+                              AppLocalizations.of(context).translate('pay_now'),
+                              style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  getDisplayName() {
+    GlobalFunctions.getDisplayName().then((value) {
+      name = value;
+    });
+  }
+
+  getMobile() {
+    GlobalFunctions.getMobile().then((value) {
+      phone = value;
+      getEmail();
+    });
+  }
+
+  getEmail() {
+    GlobalFunctions.getUserId().then((value) {
+      email = value;
+    });
+  }
+
+  void getPhoto() {
+    GlobalFunctions.getPhoto().then((value) {
+      photo = value;
+    });
+  }
+
+  void redirectToPage(String item) {
+    if (item == AppLocalizations.of(context).translate('my_unit')) {
+      //Redirect to my Unit
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseMyUnit(AppLocalizations.of(context).translate('my_unit'))));
+    } else if (item == AppLocalizations.of(context).translate('my_dues')) {
+      //Redirect to  My Dues
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_dues'))));
+    } else if (item == AppLocalizations.of(context).translate('my_household')) {
+      //Redirect to  My Household
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_household'))));
+    } else if (item == AppLocalizations.of(context).translate('my_documents')) {
+      //Redirect to  My Documents
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_documents'))));
+    } else if (item == AppLocalizations.of(context).translate('my_tenants')) {
+      //Redirect to  My Tenants
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_tenants'))));
+    } else if (item == AppLocalizations.of(context).translate('my_complex')) {
+      //Redirect to  My Complex
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('my_complex'))));
+    } else if (item == AppLocalizations.of(context).translate('announcement')) {
+      //Redirect to News Board
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('announcement'))));
+    }else if (item == AppLocalizations.of(context).translate('meetings')) {
+      //Redirect to News Board
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('meetings'))));
+    } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
+      //Redirect to  Poll Survey
+      GlobalFunctions.showToast("Coming Soon...");
+      /* Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('poll_survey'))));*/
+    } else if (item == AppLocalizations.of(context).translate('directory')) {
+      //Redirect to  Directory
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('directory'))));
+    } else if (item == AppLocalizations.of(context).translate('documents')) {
+      //Redirect to  Documents
+      GlobalFunctions.showToast("Coming Soon...");
+      /* Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('documents'))));*/
+    } else if (item == AppLocalizations.of(context).translate('events')) {
+      //Redirect to  Events
+      GlobalFunctions.showToast("Coming Soon...");
+      /* Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('events'))));*/
+    } else if (item == AppLocalizations.of(context).translate('discover')) {
+      //Redirect to  Discover
+      GlobalFunctions.showToast("Coming Soon...");
+      /* Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('discover'))));*/
+    } else if (item == AppLocalizations.of(context).translate('classified')) {
+      //Redirect to  My Dues
+      GlobalFunctions.showToast("Coming Soon...");
+      /*Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('classified'))));*/
+    } else if (item == AppLocalizations.of(context).translate('services')) {
+      //Redirect to  My Dues
+      GlobalFunctions.showToast("Coming Soon...");
+      /* Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('services'))));*/
+    } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
+      //Redirect to  My Dues
+      GlobalFunctions.showToast("Coming Soon...");
+      /*  Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('near_by_shop'))));*/
+    } else if (item == AppLocalizations.of(context).translate('facilities')) {
+      //Redirect to Facilities
+      GlobalFunctions.showToast("Coming Soon...");
+      /*  Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
+    } else if (item == AppLocalizations.of(context).translate('my_gate')) {
+      //Redirect to  My Gate
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_gate'))));
+    } else if (item ==
+        AppLocalizations.of(context).translate('my_activities')) {
+      //Redirect to  My Dues
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_activities'))));
+    } else if (item == AppLocalizations.of(context).translate('helpers')) {
+      //Redirect to  My Dues
+      GlobalFunctions.showToast("Coming Soon...");
+      /*Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyGate(AppLocalizations.of(context).translate('helpers'))));*/
+    } else if (item == AppLocalizations.of(context).translate('help_desk')) {
+      //Redirect to  Help Desk
+      // GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseHelpDesk()));
+    } else if (item == AppLocalizations.of(context).translate('admin')) {
+      //Redirect to  Admin
+      GlobalFunctions.showToast("Coming Soon...");
+      /*Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
+    } else if (item == AppLocalizations.of(context).translate('logout')) {
+     // GlobalFunctions.showToast("Logout");
+
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0)),
+                  child: displayLogoutLayout(),
+                );
+              }));
+
+
+    }
+  }
+
+  displayLogoutLayout() {
+
+    return Container(
+      padding: EdgeInsets.all(20),
+      width: MediaQuery.of(context).size.width / 1.3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Text(
+              AppLocalizations.of(context).translate('sure_logout'),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: GlobalVariables.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        GlobalFunctions.clearSharedPreferenceData();
+                        //Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (BuildContext context) => new BaseLoginPage()),
+                                (Route<dynamic> route) => false);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('yes'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('no'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+
+  }
+}
+
+class RootTitle {
+  String title;
+  String rootIconData;
+
+  //IconData innerIconData;
+  List<String> items;
+
+  RootTitle(
+      {this.title, this.rootIconData, /* this.innerIconData, */ this.items});
+}

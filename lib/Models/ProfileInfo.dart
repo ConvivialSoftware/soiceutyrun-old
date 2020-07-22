@@ -1,0 +1,112 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable()
+class ProfileInfo {
+
+
+    /*{data: [{ID: 2, BLOCK: A, FLAT: 101, TYPE: Owner, LIVES_HERE: Yes, NAME: Mr Raul P More,
+     ALTERNATE_CONTACT1: , ALTERNATE_CONTACT2: , PROFILE_PHOTO: , ADDRESS: Dattaraj Residency, Wakad, Pune,
+     GENDER: Male, DOB: 1985-08-02, ANNIVERSARY_DATE: 2010-08-04, BLOOD_GROUP: A+, OCCUPATION: ,
+     HOBBIES: , LANGUAGES: , FB_PROFILE: , LINKDIN_PROFILE: , INSTAGRAM: , IDENTITY_PROOF: , POLICE_VERIFICATION: ,
+     NOTE: , ROLE: A, PERMISSIONS: addMember,gatepass,classifieds,myUnit,directory,viewFacility,helpDesk,viewDocuments,
+     admin,adminGatepass,adminHelpdesk,userManagement,addCommitee,addPoll,uploadDocuments,AddFacility,addBroadcast,
+     viewReports,vehiclePhone,memberPhone,commiteeEmail,commiteePhone,rentalTenantManagement,Accounting,editVoucher,
+     deleteVoucher,generateBill,generateInvoice,createReceipts,createVoucher,bulkPayment,deletebulkPayment,editBill,
+     deletebulkBill,editPayment, STATUS: A, Staff_QR_Image: , MOBILE: , USER_NAME: socadmin@societyrun.com}],
+     0s.   tatus: true, message: Profile data}*/
+
+
+  String //ID,
+      BLOCK,
+      FLAT,
+      TYPE,
+      LIVES_HERE,
+      NAME,
+      ALTERNATE_CONTACT1,
+      ALTERNATE_CONTACT2,
+      PROFILE_PHOTO,
+      ADDRESS,
+      GENDER,
+      DOB,
+   //   ANNIVERSARY_DATE,
+      BLOOD_GROUP,
+      OCCUPATION,
+    //  HOBBIES,
+    //  LANGUAGES,
+    //  FB_PROFILE,
+   //   LINKDIN_PROFILE,
+    //  INSTAGRAM,
+   //   IDENTITY_PROOF,
+   //   POLICE_VERIFICATION,
+   //   NOTE,
+    //  ROLE,
+    //  PERMISSIONS,
+   //   STATUS,
+   //   Staff_QR_Image,
+      Phone,
+      Email;
+
+  ProfileInfo(
+      {//this.ID,
+      this.BLOCK,
+      this.FLAT,
+      this.TYPE,
+      this.LIVES_HERE,
+      this.NAME,
+      this.ALTERNATE_CONTACT1,
+      this.ALTERNATE_CONTACT2,
+      this.PROFILE_PHOTO,
+      this.ADDRESS,
+      this.GENDER,
+      this.DOB,
+     // this.ANNIVERSARY_DATE,
+      this.BLOOD_GROUP,
+      this.OCCUPATION,
+    /*  this.HOBBIES,
+      this.LANGUAGES,
+      this.FB_PROFILE,
+      this.LINKDIN_PROFILE,
+      this.INSTAGRAM,
+      this.IDENTITY_PROOF,
+      this.POLICE_VERIFICATION,
+      this.NOTE,
+      this.ROLE,
+      this.PERMISSIONS,
+      this.STATUS,
+      this.Staff_QR_Image,*/
+      this.Phone,
+      this.Email});
+
+  factory ProfileInfo.fromJson(Map<String, dynamic> json) {
+    return ProfileInfo(
+       // ID: json["ID"],
+        BLOCK: json["BLOCK"],
+        FLAT: json["FLAT"],
+        TYPE: json["TYPE"],
+        LIVES_HERE: json["LIVES_HERE"],
+        NAME: json["NAME"],
+        ALTERNATE_CONTACT1: json["ALTERNATE_CONTACT1"],
+        ALTERNATE_CONTACT2: json["ALTERNATE_CONTACT2"],
+        PROFILE_PHOTO: json["PROFILE_PHOTO"],
+        ADDRESS: json["ADDRESS"],
+        GENDER: json["GENDER"],
+        DOB: json["DOB"],
+    //    ANNIVERSARY_DATE: json["ANNIVERSARY_DATE"],
+        BLOOD_GROUP: json["BLOOD_GROUP"],
+        OCCUPATION: json["OCCUPATION"],
+      /*  HOBBIES: json["HOBBIES"],
+        LANGUAGES: json["LANGUAGES"],
+        FB_PROFILE: json["FB_PROFILE"],
+        LINKDIN_PROFILE: json["LINKDIN_PROFILE"],
+        INSTAGRAM: json["INSTAGRAM"],
+        IDENTITY_PROOF: json["IDENTITY_PROOF"],
+        POLICE_VERIFICATION: json["POLICE_VERIFICATION"],
+        NOTE: json["NOTE"],
+        ROLE: json["ROLE"],
+        PERMISSIONS: json["PERMISSIONS"],
+        STATUS: json["STATUS"],
+        Staff_QR_Image: json["Staff_QR_Image"],*/
+        Phone: json["Phone"],
+        Email: json["Email"]);
+  }
+}

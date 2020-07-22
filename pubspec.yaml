@@ -1,0 +1,172 @@
+name: societyrun
+description: A new Flutter application.
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  shared_preferences: ^0.4.2
+  fluttertoast: ^3.1.3
+  path_provider: any
+  provider: any
+  retrofit: any
+  json_annotation: any
+  logger: any
+  dio_http_cache: any
+  json_serializable: 3.2.5
+  dio: 2.2.2
+  connectivity: 0.4.8+2
+  flutter_svg: 0.17.3+1
+  pin_entry_text_field: 0.1.4
+  progress_dialog: ^1.2.1
+  file_picker: 1.9.0+1
+  camera: any
+  path: any
+  flutter_downloader: 1.4.4
+  razorpay_flutter: 1.1.0
+  flutter_html: 0.8.2
+  url_launcher: 5.4.10
+  flutter_share: 1.0.2
+  ext_storage: 1.0.3
+  image_picker: any
+  #simple_permissions: 0.1.9
+  permission_handler: 5.0.1
+  clipboard_manager: 0.0.4
+  carousel_slider: 2.2.1
+  flutter_string_encryption: 0.3.1
+  crypto: 2.1.3
+  salt: 0.1.2
+
+
+
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  intl_translation: ^0.17.1
+  flutter_launcher_icons: "^0.7.0"
+  retrofit_generator: any
+  build_runner: any
+
+flutter_icons:
+  ios : true
+  android : true
+  image_path_ios : "assets/images/ic_societyrun.png"
+  image_path_android : "assets/images/ic_societyrun.png"
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  assets:
+    - assets/images/ic_societyrun.png
+    - assets/images/society_run_green.png
+    - assets/images/society_run_green.svg
+    - assets/images/society_run_white.png
+    - assets/images/society_run_white.svg
+    - assets/images/societyrun_icon.png
+    - assets/images/user_profile.jpeg
+    - i18n/en.json
+    - i18n/hi.json
+    - assets/other_assets/component_user_profile.png
+    - assets/other_assets/profile_icon.svg
+    - assets/other_assets/societyrun-logo_colored.svg
+    - assets/other_assets/societyrun-logo.svg
+    - assets/other_assets/Header_bg.svg
+    - assets/other_assets/login_icon.svg
+    - assets/other_assets/mail_icon.svg
+    - assets/other_assets/lock_icon.svg
+    - assets/other_assets/Classified_big_icon.svg
+    - assets/other_assets/Classified_icon.svg
+    - assets/other_assets/Top_breadcrum.svg
+    - assets/other_assets/overview_txt.svg
+    - assets/other_assets/notification_icon.svg
+    - assets/other_assets/building_icon.svg
+    - assets/other_assets/gatePass_icon.svg
+    - assets/other_assets/More_icon.svg
+    - assets/other_assets/Services_icon.svg
+    - assets/other_assets/shopping_icon.svg
+    - assets/other_assets/Shop_icon.svg
+    - assets/other_assets/Support_icon.svg
+    - assets/other_assets/store_icon.svg
+    - assets/other_assets/while_bg.svg
+    - assets/other_assets/water_icon.svg
+    - assets/other_assets/Icon awesome-file-pdf.svg
+    - assets/other_assets/Icon awesome-download.svg
+    - assets/other_assets/icon-pdf.svg
+    - assets/menu_assets/myhome_icon.svg
+    - assets/menu_assets/building_icon_menu.svg
+    - assets/menu_assets/service_icon_menu.svg
+    - assets/menu_assets/club_icon_menu.svg
+    - assets/menu_assets/gatepass_icon_menu.svg
+    - assets/menu_assets/Support_icon_menu.svg
+    - assets/menu_assets/admin_icon_menu.svg
+    - assets/bottom_menu/bottom_bg.svg
+    - assets/bottom_menu/bottom_building_icon.svg
+    - assets/bottom_menu/bottom_club_icon.svg
+    - assets/bottom_menu/bottom_home_icon.svg
+    - assets/bottom_menu/bottom_menu_icon.svg
+    - assets/bottom_menu/bottom_myhome_icon.svg
+    - assets/bottom_menu/bottom_service_icon.svg
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+
+
+  # git clone https://Convivialsoln@bitbucket.org/Convivialsoln/societyrun.git
