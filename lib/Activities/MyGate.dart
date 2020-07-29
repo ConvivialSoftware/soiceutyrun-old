@@ -1,12 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
+import 'package:societyrun/firebase_notification/firebase_notification.dart';
 
 class BaseMyGate extends StatefulWidget {
   String pageName;
@@ -19,8 +24,9 @@ class BaseMyGate extends StatefulWidget {
   }
 }
 
-class MyGateState extends State<BaseMyGate>
+class MyGateState extends BaseStatefulState<BaseMyGate>
     with SingleTickerProviderStateMixin {
+
   TabController _tabController;
   List<ScheduleVisitor> _activitiesList =
       new List<ScheduleVisitor>();
@@ -66,7 +72,35 @@ class MyGateState extends State<BaseMyGate>
             .translate('pls_check_internet_connectivity'));
       }
     });
+  /*  _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        _showItemDialog(message);
+      },
+      onBackgroundMessage: FirebaseNotifications.myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        _showItemDialog(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        _showItemDialog(message);
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      print("Push Messaging token: $token");
+    });
+//    _firebaseMessaging.subscribeToTopic("matchscore");*/
   }
+
 
   @override
   Widget build(BuildContext context) {
