@@ -127,6 +127,9 @@ class GlobalVariables{
   static const staffMobileVerifyAPI = "Staff/mobileverifystaff";
   static const addStaffMemberAPI = "Staff/insertstaff";
 
+  /*GATEPASEE DIALOG API*/
+  static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
+  static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";
 
   static const authorizedTokenERP = "erpadmin:SocERP21run";
   static var AUTHERP="Basic "+base64Url.encode(utf8.encode(authorizedTokenERP));
@@ -265,4 +268,9 @@ class GlobalVariables{
   static const ExpiredTime = "expire_time";
   static const OTP = "otp";
 
+}
+class VisitorStatus{
+  static const REJECTED = "Rejected";
+  static const APPROVED = "Verified";
+  static const LEAVE_AT_GATE = "Leave at gate";
 }

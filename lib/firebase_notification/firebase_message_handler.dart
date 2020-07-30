@@ -42,7 +42,7 @@ class FirebaseMessagingHandler {
   }
 
   void redirectToPage(BuildContext context, Map<String, dynamic> message) {
-    // data
+    _showItemDialog(message, context);
   }
   void _showItemDialog(Map<String, dynamic> message,BuildContext context) {
     showDialog<bool>(

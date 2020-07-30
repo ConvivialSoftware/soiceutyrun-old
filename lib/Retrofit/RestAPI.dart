@@ -13,6 +13,7 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
+import 'package:societyrun/Models/approve_gatepass_request.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'RestClient.dart';
 import 'package:dio/dio.dart';
@@ -1388,6 +1389,23 @@ class RestAPI implements RestClient, RestClientERP {
     final value = _result.data;
     print('value of addStaffMember : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> postApproveGatePass(ApproveGatePassRequest request) async{
+    print('AUTH >>> : ${GlobalVariables.AUTH}');
+    print('REQUEST >>> : ' + request.toJson().toString());
+    final Response _result = await _dio.post(GlobalVariables.approveGatePassAPI,
+        options: RequestOptions(
+          method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: "https://societyrun.com/Android/"),
+        data: request.toJson());
+    final value = _result.data;
+    print('REQUEST >>> : ' + request.toJson().toString());
+    print('RESPONSE >>> : ' + value.toString());
+    return DataResponse.fromJson(value);
   }
 }
 /*    [SOCIETY_ID] => 11133

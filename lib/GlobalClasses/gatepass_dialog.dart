@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:societyrun/Models/approve_gatepass_request.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
 
-import 'AppLocalizations.dart';
 import 'GlobalVariables.dart';
 
 class GatePassDialog extends StatefulWidget {
@@ -13,21 +17,31 @@ class GatePassDialog extends StatefulWidget {
 }
 
 class _GatePassDialogState extends State<GatePassDialog> {
+  ProgressDialog _progressDialog;
   static const double padding = 16.0;
   static const double ovalRadius = 66.0;
   String _from;
   String _block;
   String _visitorName;
+  String _noOfVisitors;
   String _visitorType;
   String _visitorContact;
+  String _societyId;
+  String _vid;
+  String _uid;
+  String _inBy;
+  String _reason;
 
   @override
   void initState() {
     super.initState();
     _handleMessage();
+    _getSocietyData();
   }
+
   @override
   Widget build(BuildContext context) {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Dialog(
       backgroundColor: Colors.transparent,
       elevation: 0.0,
@@ -35,6 +49,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       child: _buildDialogContent(context),
     );
   }
+
   Widget _buildDialogContent(BuildContext context) {
     return Stack(
       children: <Widget>[
@@ -47,8 +62,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
 
   Widget _buildDialogCard() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      width: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.65,
       margin: EdgeInsets.only(top: ovalRadius),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -108,7 +122,10 @@ class _GatePassDialogState extends State<GatePassDialog> {
           SizedBox(
             height: 10,
           ),
-          _getButtonWidget()
+          _getButtonWidget(),
+          SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );
@@ -123,7 +140,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
         width: MediaQuery.of(context).size.width * 0.3,
         height: MediaQuery.of(context).size.width * 0.3,
         decoration:
-        BoxDecoration(color: GlobalVariables.white, shape: BoxShape.circle),
+            BoxDecoration(color: GlobalVariables.white, shape: BoxShape.circle),
         child: Padding(
           padding: EdgeInsets.all(5.0),
           child: ClipOval(child: Container()),
@@ -186,7 +203,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
       ],
     );
   }
-  Widget _getButtonWidget(){
+
+  Widget _getButtonWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -204,8 +222,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
           child: Container(
             width: 48.0,
             height: 48.0,
-            decoration: BoxDecoration(
-                color: Colors.grey[600], shape: BoxShape.circle),
+            decoration:
+                BoxDecoration(color: Colors.grey[600], shape: BoxShape.circle),
             child: Icon(
               Icons.close,
               color: Colors.white,
@@ -213,7 +231,9 @@ class _GatePassDialogState extends State<GatePassDialog> {
             ),
           ),
         ),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         Text(
           'DENY',
           style: TextStyle(
@@ -224,11 +244,14 @@ class _GatePassDialogState extends State<GatePassDialog> {
       ],
     );
   }
+
   Widget _getApproveButton() {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () {},
+          onTap: () {
+            _approveGatePass();
+          },
           child: Container(
             width: 48.0,
             height: 48.0,
@@ -241,7 +264,9 @@ class _GatePassDialogState extends State<GatePassDialog> {
             ),
           ),
         ),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         Text(
           'APPROVE',
           style: TextStyle(
@@ -252,18 +277,61 @@ class _GatePassDialogState extends State<GatePassDialog> {
       ],
     );
   }
-  void _handleMessage(){
+
+  void _handleMessage() {
     if (widget.message.containsKey('data')) {
       final dynamic data = widget.message['data'];
       _from = data['FROM_VISITOR'];
+      _vid = data['VID'];
+      _uid = data['USER_ID'];
       _block = data['REASON'];
       _visitorName = data['VISITOR_NAME'];
       _visitorType = data['TYPE'];
-      _visitorContact = data['94719798961'];
+      _visitorContact = data['CONTACT'];
+      _noOfVisitors = "5";
+      _inBy = data['IN_BY'];
+      _reason = data['REASON'];
     }
 
     if (widget.message.containsKey('notification')) {
       final dynamic notification = widget.message['notification'];
     }
+  }
+
+  void _getSocietyData() async {
+    _societyId = await GlobalFunctions.getSocietyId();
+  }
+
+  void _approveGatePass() {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    ApproveGatePassRequest request = new ApproveGatePassRequest(
+        _vid,
+        _uid,
+        _reason,
+        _noOfVisitors,
+        _from,
+        VisitorStatus.APPROVED,
+        _inBy,
+        _societyId);
+    _progressDialog.show();
+    restClient.postApproveGatePass(request).then((value) {
+      GlobalFunctions.showToast(value.message);
+      _progressDialog.hide();
+      if (value.status) {
+        //todo hide dialog
+      }
+    }).catchError((Object obj) {
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+            _progressDialog.hide();
+          }
+          break;
+        default:
+      }
+    });
   }
 }

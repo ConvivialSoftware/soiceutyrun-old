@@ -6,6 +6,7 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
+import 'package:societyrun/Models/approve_gatepass_request.dart';
 import 'RestAPI.dart';
 
 @RestApi(baseUrl: GlobalVariables.BaseURL)
@@ -192,6 +193,12 @@ abstract class RestClient {
       @Field(GlobalVariables.USER_ID) String userId,@Field(GlobalVariables.ROLE) String role,
       @Field(GlobalVariables.PHOTO) String picture,@Field(GlobalVariables.IDENTITY_PROOF) String identityProof,
       @Field(GlobalVariables.VEHICLE_NO) String vehicleNo);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.approveGatePassAPI)
+  Future<DataResponse> postApproveGatePass(ApproveGatePassRequest request);
+
+
 
 }
 
