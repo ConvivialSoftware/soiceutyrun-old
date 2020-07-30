@@ -259,6 +259,7 @@ class GlobalVariables{
 
 
 
+
   /*Server Response Key*/
 
   static const STATUS = "status";
@@ -269,8 +270,20 @@ class GlobalVariables{
   static const OTP = "otp";
 
 }
-class VisitorStatus{
+class GatePassStatus{
   static const REJECTED = "Rejected";
   static const APPROVED = "Verified";
   static const LEAVE_AT_GATE = "Leave at gate";
+}
+class GatePassFields{
+  static const VID = "VID";
+  static const USER_ID = "USER_ID";
+  static const REASON = "REASON";
+  static const NO_OF_VISITOR = "NO_OF_VISITOR";
+  static const FROM_VISITOR = "FROM_VISITOR";
+  static const VISITOR_STATUS = "VISITOR_STATUS";
+  static const IN_BY = "IN_BY";
+  static const SOCIETY_ID = "SOCIETY_ID";
+  static const IN_DATE = "IN_DATE";
+  static const IN_TIME = "IN_TIME";
 }

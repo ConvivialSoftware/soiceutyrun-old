@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BankResponse.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
@@ -15,8 +16,8 @@ import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
 import 'package:societyrun/Models/approve_gatepass_request.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+
 import 'RestClient.dart';
-import 'package:dio/dio.dart';
 
 class RestAPI implements RestClient, RestClientERP {
   RestAPI(this._dio, {this.baseUrl}) {
@@ -132,22 +133,22 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<StatusMsgResponse> changeNewPassword(String societyId, String userId, String confirmPassword) async {
+  Future<StatusMsgResponse> changeNewPassword(
+      String societyId, String userId, String confirmPassword) async {
 // TODO: implement changeNewPassword
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(confirmPassword, "confirm_pwd");
 
-    FormData formData =
-    FormData.fromMap({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      "confirm_pwd":confirmPassword
+      "confirm_pwd": confirmPassword
     });
     print('baseurl : ' + baseUrl + GlobalVariables.newPasswordAPI);
     final Response _result = await _dio.post(GlobalVariables.newPasswordAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -180,7 +181,6 @@ class RestAPI implements RestClient, RestClientERP {
             }, baseUrl: baseUrl),
         data: formData);
     final value = _result.data;
-
 
     print('value of getAllSocietyData : ' + value.toString());
     return DataResponse.fromJson(value);
@@ -941,9 +941,9 @@ class RestAPI implements RestClient, RestClientERP {
     return DataResponse.fromJson(value);
   }
 
-
   @override
-  Future<LedgerResponse> getLedgerData(String socId, String flat, String block) async {
+  Future<LedgerResponse> getLedgerData(
+      String socId, String flat, String block) async {
     // TODO: implement getLedgerData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -962,30 +962,29 @@ class RestAPI implements RestClient, RestClientERP {
     final Response _result = await _dio.post(GlobalVariables.ledgerAPI,
         options: RequestOptions(
           //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTHERP,
-            },
-            baseUrl: baseUrl,
-       //   contentType: ContentType.parse("application/x-www-form-urlencoded"),
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTHERP,
+          },
+          baseUrl: baseUrl,
+          //   contentType: ContentType.parse("application/x-www-form-urlencoded"),
           //followRedirects: true,
-         // validateStatus: (status){return status<500;}
-
+          // validateStatus: (status){return status<500;}
         ),
         data: formData);
     final value = _result.data;
     //print('runtimeType of getLedgerData : ' + value.runtimeType.toString());
     print('value of getLedgerData : ' + value.toString());
-   // print('value of getLedgerData length : ' + value.toString().length.toString());
+    // print('value of getLedgerData length : ' + value.toString().length.toString());
 
-
-   // var jsons = json.decode(value);
-   // Map<String, dynamic> map = json.decode(jsons);
-   // print('value of getLedgerData : ' + map.toString());
+    // var jsons = json.decode(value);
+    // Map<String, dynamic> map = json.decode(jsons);
+    // print('value of getLedgerData : ' + map.toString());
     return LedgerResponse.fromJson(value);
   }
 
   @override
-  Future<DataResponse> getAllBillData(String socId, String flat, String block) async {
+  Future<DataResponse> getAllBillData(
+      String socId, String flat, String block) async {
     // TODO: implement getAllBillData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1004,13 +1003,13 @@ class RestAPI implements RestClient, RestClientERP {
     final Response _result = await _dio.post(GlobalVariables.viewBillsAPI,
         options: RequestOptions(
           //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTHERP,
-            }, baseUrl: baseUrl,
-        //  contentType: ContentType.parse("application/x-www-form-urlencoded"),
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTHERP,
+          },
+          baseUrl: baseUrl,
+          //  contentType: ContentType.parse("application/x-www-form-urlencoded"),
           //  followRedirects: false,
-           // validateStatus: (status){return status<500;}
-
+          // validateStatus: (status){return status<500;}
         ),
         data: formData);
     final value = _result.data;
@@ -1028,10 +1027,10 @@ class RestAPI implements RestClient, RestClientERP {
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.INVOICE_NO: invoiceNo,
-     // GlobalVariables.block: block
+      // GlobalVariables.block: block
     });
     print(GlobalVariables.societyId + ":" + socId);
-   // print(GlobalVariables.flat + ":" + flat);
+    // print(GlobalVariables.flat + ":" + flat);
     print(GlobalVariables.INVOICE_NO + ":" + invoiceNo);
 
     print('baseurlERP : ' + baseUrl + GlobalVariables.bankAPI);
@@ -1040,11 +1039,11 @@ class RestAPI implements RestClient, RestClientERP {
           //method: GlobalVariables.Post,
           headers: <String, dynamic>{
             "Authorization": GlobalVariables.AUTHERP,
-          }, baseUrl: baseUrl,
-        //  contentType: ContentType.parse("application/x-www-form-urlencoded"),
+          },
+          baseUrl: baseUrl,
+          //  contentType: ContentType.parse("application/x-www-form-urlencoded"),
           //  followRedirects: false,
           // validateStatus: (status){return status<500;}
-
         ),
         data: formData);
     final value = _result.data;
@@ -1053,7 +1052,8 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<BillViewResponse> getBillData(String socId, String flat, String block, String invoiceNo) async {
+  Future<BillViewResponse> getBillData(
+      String socId, String flat, String block, String invoiceNo) async {
     // TODO: implement getBillData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1077,11 +1077,11 @@ class RestAPI implements RestClient, RestClientERP {
           //method: GlobalVariables.Post,
           headers: <String, dynamic>{
             "Authorization": GlobalVariables.AUTHERP,
-          }, baseUrl: baseUrl,
-         // contentType: ContentType.parse("application/x-www-form-urlencoded"),
+          },
+          baseUrl: baseUrl,
+          // contentType: ContentType.parse("application/x-www-form-urlencoded"),
           //  followRedirects: false,
           // validateStatus: (status){return status<500;}
-
         ),
         data: formData);
     final value = _result.data;
@@ -1090,7 +1090,8 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<DataResponse> getReceiptData(String socId, String flat, String block, String receiptNo) async {
+  Future<DataResponse> getReceiptData(
+      String socId, String flat, String block, String receiptNo) async {
     // TODO: implement getReceiptData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1114,11 +1115,11 @@ class RestAPI implements RestClient, RestClientERP {
           //method: GlobalVariables.Post,
           headers: <String, dynamic>{
             "Authorization": GlobalVariables.AUTHERP,
-          }, baseUrl: baseUrl,
+          },
+          baseUrl: baseUrl,
           //contentType: ContentType.parse("application/x-www-form-urlencoded"),
           //  followRedirects: false,
           // validateStatus: (status){return status<500;}
-
         ),
         data: formData);
     final value = _result.data;
@@ -1127,9 +1128,21 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<StatusMsgResponse> addAlreadyPaidPaymentRequest(String socId, String flat, String block, String invoiceNo,
-      String amount, String referenceNo, String transactionMode, String bankAccountNo, String paymentDate,
-      String userId, String narration, String checkBankName, String attachment, String status) async {
+  Future<StatusMsgResponse> addAlreadyPaidPaymentRequest(
+      String socId,
+      String flat,
+      String block,
+      String invoiceNo,
+      String amount,
+      String referenceNo,
+      String transactionMode,
+      String bankAccountNo,
+      String paymentDate,
+      String userId,
+      String narration,
+      String checkBankName,
+      String attachment,
+      String status) async {
     // TODO: implement addAlreadyPaidPaymentRequest
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -1137,7 +1150,8 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
     ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
     ArgumentError.checkNotNull(referenceNo, GlobalVariables.REFERENCE_NO);
-    ArgumentError.checkNotNull(transactionMode, GlobalVariables.TRANSACTION_MODE);
+    ArgumentError.checkNotNull(
+        transactionMode, GlobalVariables.TRANSACTION_MODE);
     ArgumentError.checkNotNull(bankAccountNo, GlobalVariables.BANK_ACCOUNTNO);
     ArgumentError.checkNotNull(paymentDate, GlobalVariables.PAYMENT_DATE);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
@@ -1159,15 +1173,15 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.ATTACHMENT: attachment,
       GlobalVariables.status: status
     });
-    print(GlobalVariables.status+": "+status);
+    print(GlobalVariables.status + ": " + status);
 
     print('baseurl : ' + baseUrl + GlobalVariables.paymentRequestAPI);
 
-   // print("Pic String: " + attachment.toString());
-   // print('attachment lengtth : ' + attachment.length.toString());
+    // print("Pic String: " + attachment.toString());
+    // print('attachment lengtth : ' + attachment.length.toString());
     final Response _result = await _dio.post(GlobalVariables.paymentRequestAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -1177,9 +1191,17 @@ class RestAPI implements RestClient, RestClientERP {
     return StatusMsgResponse.fromJson(value);
   }
 
-
   @override
-  Future<StatusMsgResponse> addOnlinePaymentRequest(String socId, String flat, String block, String invoiceNo, String amount, String referenceNo, String transactionMode, String bankAccountNo, String paymentDate) async {
+  Future<StatusMsgResponse> addOnlinePaymentRequest(
+      String socId,
+      String flat,
+      String block,
+      String invoiceNo,
+      String amount,
+      String referenceNo,
+      String transactionMode,
+      String bankAccountNo,
+      String paymentDate) async {
     // TODO: implement addOnlinePaymentRequest
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -1187,7 +1209,8 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
     ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
     ArgumentError.checkNotNull(referenceNo, GlobalVariables.REFERENCE_NO);
-    ArgumentError.checkNotNull(transactionMode, GlobalVariables.TRANSACTION_MODE);
+    ArgumentError.checkNotNull(
+        transactionMode, GlobalVariables.TRANSACTION_MODE);
     ArgumentError.checkNotNull(bankAccountNo, GlobalVariables.BANK_ACCOUNTNO);
     ArgumentError.checkNotNull(paymentDate, GlobalVariables.PAYMENT_DATE);
 
@@ -1202,7 +1225,7 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
       GlobalVariables.PAYMENT_DATE: paymentDate,
     });
-    print(GlobalVariables.AMOUNT+": "+amount.toString());
+    print(GlobalVariables.AMOUNT + ": " + amount.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.insertPaymentAPI);
 
@@ -1210,7 +1233,7 @@ class RestAPI implements RestClient, RestClientERP {
     // print('attachment lengtth : ' + attachment.length.toString());
     final Response _result = await _dio.post(GlobalVariables.insertPaymentAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -1226,15 +1249,13 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
-    FormData formData = FormData.fromMap({
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.userID: userId
-    });
+    FormData formData = FormData.fromMap(
+        {GlobalVariables.societyId: societyId, GlobalVariables.userID: userId});
 
     print('baseurl : ' + baseUrl + GlobalVariables.profileAPI);
     final Response _result = await _dio.post(GlobalVariables.profileAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -1246,12 +1267,23 @@ class RestAPI implements RestClient, RestClientERP {
     return DataResponse.fromJson(value);
   }
 
-
   @override
-  Future<DataResponse> editProfileInfo(String societyId, String userId,
-      String name, String altCon1, String altCon2, String profilePhoto,
-      String address, String gender, String dob, String bloodGroup, String occupation,
-      String email, String mobileNo,String type,String livesHere) async {
+  Future<DataResponse> editProfileInfo(
+      String societyId,
+      String userId,
+      String name,
+      String altCon1,
+      String altCon2,
+      String profilePhoto,
+      String address,
+      String gender,
+      String dob,
+      String bloodGroup,
+      String occupation,
+      String email,
+      String mobileNo,
+      String type,
+      String livesHere) async {
     // TODO: implement editProfileInfo
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
@@ -1259,17 +1291,17 @@ class RestAPI implements RestClient, RestClientERP {
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.PROFILE_PHOTO:profilePhoto,
-      GlobalVariables.TYPE:type,
-      GlobalVariables.LIVES_HERE:livesHere,
-      GlobalVariables.NAME:name,
-      GlobalVariables.ALTERNATE_CONTACT1:altCon1,
-      GlobalVariables.ALTERNATE_CONTACT2:altCon2,
-      GlobalVariables.GENDER:gender,
-      GlobalVariables.DOB:dob,
-      GlobalVariables.BLOOD_GROUP:bloodGroup,
-      GlobalVariables.OCCUPATION:occupation,
-      GlobalVariables.Email:email
+      GlobalVariables.PROFILE_PHOTO: profilePhoto,
+      GlobalVariables.TYPE: type,
+      GlobalVariables.LIVES_HERE: livesHere,
+      GlobalVariables.NAME: name,
+      GlobalVariables.ALTERNATE_CONTACT1: altCon1,
+      GlobalVariables.ALTERNATE_CONTACT2: altCon2,
+      GlobalVariables.GENDER: gender,
+      GlobalVariables.DOB: dob,
+      GlobalVariables.BLOOD_GROUP: bloodGroup,
+      GlobalVariables.OCCUPATION: occupation,
+      GlobalVariables.Email: email
 
       //GlobalVariables.
     });
@@ -1277,7 +1309,7 @@ class RestAPI implements RestClient, RestClientERP {
     print('baseurl : ' + baseUrl + GlobalVariables.editProfileAPI);
     final Response _result = await _dio.post(GlobalVariables.editProfileAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -1294,14 +1326,13 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getPayOptionData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.fromMap({
-      GlobalVariables.societyId: societyId
-    });
+    FormData formData =
+        FormData.fromMap({GlobalVariables.societyId: societyId});
 
     print('baseurl : ' + baseUrl + GlobalVariables.payOptionAPI);
     final Response _result = await _dio.post(GlobalVariables.payOptionAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -1313,9 +1344,9 @@ class RestAPI implements RestClient, RestClientERP {
     return DataResponse.fromJson(value);
   }
 
-
   @override
-  Future<DataResponse> getStaffMobileVerifyData(societyId, String contact) async {
+  Future<DataResponse> getStaffMobileVerifyData(
+      societyId, String contact) async {
     // TODO: implement getStaffMobileVerifyData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(contact, GlobalVariables.Contact);
@@ -1326,13 +1357,14 @@ class RestAPI implements RestClient, RestClientERP {
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.staffMobileVerifyAPI);
-    final Response _result = await _dio.post(GlobalVariables.staffMobileVerifyAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
-        data: formData);
+    final Response _result =
+        await _dio.post(GlobalVariables.staffMobileVerifyAPI,
+            options: RequestOptions(
+                //method: GlobalVariables.Post,
+                headers: <String, dynamic>{
+                  "Authorization": GlobalVariables.AUTH,
+                }, baseUrl: baseUrl),
+            data: formData);
     final value = _result.data;
 
     print('value of getStaffMobileVerifyData : ' + value.toString());
@@ -1341,9 +1373,22 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<StatusMsgResponse> addStaffMember(String socId, String block, String flat, String name,
-      String gender, String dob, String mobile, String qualification, String address,
-      String notes, String userId, String role, String picture, String identityProof, String vehicleNo) async {
+  Future<StatusMsgResponse> addStaffMember(
+      String socId,
+      String block,
+      String flat,
+      String name,
+      String gender,
+      String dob,
+      String mobile,
+      String qualification,
+      String address,
+      String notes,
+      String userId,
+      String role,
+      String picture,
+      String identityProof,
+      String vehicleNo) async {
     // TODO: implement addStaffMember
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -1357,7 +1402,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(address, GlobalVariables.ADDRESS);
     ArgumentError.checkNotNull(notes, GlobalVariables.NOTES);
     ArgumentError.checkNotNull(role, GlobalVariables.ROLE);
-   // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
+    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
@@ -1381,7 +1426,7 @@ class RestAPI implements RestClient, RestClientERP {
 
     final Response _result = await _dio.post(GlobalVariables.addStaffMemberAPI,
         options: RequestOptions(
-          //method: GlobalVariables.Post,
+            //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -1391,20 +1436,44 @@ class RestAPI implements RestClient, RestClientERP {
     return StatusMsgResponse.fromJson(value);
   }
 
+  /*approve visitor*/
   @override
-  Future<DataResponse> postApproveGatePass(ApproveGatePassRequest request) async{
-    print('AUTH >>> : ${GlobalVariables.AUTH}');
-    print('REQUEST >>> : ' + request.toJson().toString());
-    final Response _result = await _dio.post(GlobalVariables.approveGatePassAPI,
-        options: RequestOptions(
-          method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: "https://societyrun.com/Android/"),
-        data: request.toJson());
+  Future<DataResponse> postApproveGatePass(
+      String vid,
+      String uid,
+      String reason,
+      String noOfVisitors,
+      String fromVisitor,
+      String visitorStatus,
+      String inBy,
+      String societyId,
+      String inDate,
+      String inTime) async {
+    FormData formData = FormData.fromMap({
+      GatePassFields.VID:vid,
+      GatePassFields.USER_ID: uid,
+      GatePassFields.REASON: reason,
+      GatePassFields.NO_OF_VISITOR: noOfVisitors,
+      GatePassFields.FROM_VISITOR: fromVisitor,
+      GatePassFields.VISITOR_STATUS: visitorStatus,
+      GatePassFields.IN_BY: inBy,
+      GatePassFields.SOCIETY_ID: societyId,
+      GatePassFields.IN_DATE: inDate,
+      GatePassFields.IN_TIME: inTime,
+    });
+
+    final Response _result =
+        await _dio.post(GlobalVariables.approveGatePassAPI,
+            options: RequestOptions(
+                method: GlobalVariables.Post,
+                headers: <String, dynamic>{
+                  "Authorization": GlobalVariables.AUTH,
+                }, baseUrl: baseUrl),
+            data: formData);
     final value = _result.data;
-    print('REQUEST >>> : ' + request.toJson().toString());
-    print('RESPONSE >>> : ' + value.toString());
+
+    print('RESPONSE: ' + value.toString());
+
     return DataResponse.fromJson(value);
   }
 }

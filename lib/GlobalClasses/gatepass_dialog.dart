@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
-import 'package:societyrun/Models/approve_gatepass_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'AppLocalizations.dart';
 import 'GlobalVariables.dart';
 
 class GatePassDialog extends StatefulWidget {
@@ -31,6 +31,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
   String _uid;
   String _inBy;
   String _reason;
+  String _inDate;
+  String _inTime;
 
   @override
   void initState() {
@@ -250,7 +252,18 @@ class _GatePassDialogState extends State<GatePassDialog> {
       children: <Widget>[
         InkWell(
           onTap: () {
-            _approveGatePass();
+            GlobalFunctions
+                .checkInternetConnection()
+                .then((internet) {
+              if (internet) {
+               _approveGatePass();
+              } else {
+//                GlobalFunctions.showToast(
+//                    AppLocalizations.of(context)
+//                        .translate(
+//                        'pls_check_internet_connectivity'));
+              }
+            });
           },
           child: Container(
             width: 48.0,
@@ -288,9 +301,11 @@ class _GatePassDialogState extends State<GatePassDialog> {
       _visitorName = data['VISITOR_NAME'];
       _visitorType = data['TYPE'];
       _visitorContact = data['CONTACT'];
-      _noOfVisitors = "5";
+      _noOfVisitors = data['NO_OF_VISITORS'];
       _inBy = data['IN_BY'];
       _reason = data['REASON'];
+      _inDate = data['IN_DATE'];
+      _inTime = data['IN_TIME'];
     }
 
     if (widget.message.containsKey('notification')) {
@@ -305,29 +320,26 @@ class _GatePassDialogState extends State<GatePassDialog> {
   void _approveGatePass() {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-    ApproveGatePassRequest request = new ApproveGatePassRequest(
-        _vid,
-        _uid,
-        _reason,
-        _noOfVisitors,
-        _from,
-        VisitorStatus.APPROVED,
-        _inBy,
-        _societyId);
     _progressDialog.show();
-    restClient.postApproveGatePass(request).then((value) {
+    restClient
+        .postApproveGatePass(_vid, _uid, _reason, _noOfVisitors, _from,
+            GatePassStatus.APPROVED, _inBy, _societyId, _inDate, _inTime)
+        .then((value) {
+      print('status : ' + value.status.toString());
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
-      if (value.status) {
-        //todo hide dialog
-      }
+//      if (value.status) {
+//        Navigator.pop(context);
+//      }
     }).catchError((Object obj) {
+      _progressDialog.hide();
+      print('res : ' + obj.toString());
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            Navigator.pop(context);
           }
           break;
         default:

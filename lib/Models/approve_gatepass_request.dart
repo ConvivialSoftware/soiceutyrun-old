@@ -7,11 +7,22 @@ class ApproveGatePassRequest {
       fromVisitor,
       visitorStatus,
       inBy,
+      inTime,
+      inDate,
       societyId;
 
 
-  ApproveGatePassRequest(this.vid, this.uid, this.reason, this.noOfVisitors,
-      this.fromVisitor, this.visitorStatus, this.inBy, this.societyId);
+  ApproveGatePassRequest(
+      this.vid,
+      this.uid,
+      this.reason,
+      this.noOfVisitors,
+      this.fromVisitor,
+      this.visitorStatus,
+      this.inBy,
+      this.inTime,
+      this.inDate,
+      this.societyId);
 
   ApproveGatePassRequest.fromJson(Map<String, dynamic> json) {
     vid = json['VID'];
@@ -22,6 +33,8 @@ class ApproveGatePassRequest {
     visitorStatus = json['VISITOR_STATUS'];
     inBy = json['IN_BY'];
     societyId = json['SOCIETY_ID'];
+    inDate = json['IN_DATE'];
+    inTime = json['IN_TIME'];
   }
 
   Map<String, dynamic> toJson() {
