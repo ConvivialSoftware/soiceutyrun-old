@@ -1,12 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BankResponse.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
-import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/DuesResponse.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
@@ -14,7 +9,6 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
-import 'package:societyrun/Models/approve_gatepass_request.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 import 'RestClient.dart';
@@ -1450,7 +1444,7 @@ class RestAPI implements RestClient, RestClientERP {
       String inDate,
       String inTime) async {
     FormData formData = FormData.fromMap({
-      GatePassFields.VID:vid,
+      GatePassFields.VID: vid,
       GatePassFields.USER_ID: uid,
       GatePassFields.REASON: reason,
       GatePassFields.NO_OF_VISITOR: noOfVisitors,
@@ -1462,17 +1456,41 @@ class RestAPI implements RestClient, RestClientERP {
       GatePassFields.IN_TIME: inTime,
     });
 
-    final Response _result =
-        await _dio.post(GlobalVariables.approveGatePassAPI,
-            options: RequestOptions(
-                method: GlobalVariables.Post,
-                headers: <String, dynamic>{
-                  "Authorization": GlobalVariables.AUTH,
-                }, baseUrl: baseUrl),
-            data: formData);
+    final Response _result = await _dio.post(GlobalVariables.approveGatePassAPI,
+        options: RequestOptions(
+            method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            },
+            baseUrl: GlobalVariables.BaseURLAndroid),
+        data: formData);
     final value = _result.data;
 
-    print('RESPONSE: ' + value.toString());
+
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> postRejectGatePass (
+      String id, String societyId, String comment, String status)async {
+
+    FormData formData = FormData.fromMap({
+      GatePassFields.ID: id,
+      GatePassFields.SOCIETY_ID: societyId,
+      GatePassFields.COMMENT: comment,
+      GatePassFields.STATUS: status,
+    });
+
+    final Response _result = await _dio.post(GlobalVariables.rejectGatepassAPI,
+        options: RequestOptions(
+            method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            },
+            baseUrl: GlobalVariables.BaseURLAndroid),
+        data: formData);
+    final value = _result.data;
+
 
     return DataResponse.fromJson(value);
   }

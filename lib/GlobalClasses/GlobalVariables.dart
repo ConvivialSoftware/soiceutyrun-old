@@ -93,6 +93,7 @@ class GlobalVariables{
   static const authorizedToken = "admin:1234";
   static var AUTH="Basic "+base64Url.encode(utf8.encode(authorizedToken));
   static const BaseURL = "https://societyrun.com/Flutter/";
+  static const BaseURLAndroid = "https://societyrun.com/Android/";
   /*Api Name for BaseURL*/
   static const LoginAPI = "Api";
   static const AllSocietyAPI = "Api/login";
@@ -286,4 +287,7 @@ class GatePassFields{
   static const SOCIETY_ID = "SOCIETY_ID";
   static const IN_DATE = "IN_DATE";
   static const IN_TIME = "IN_TIME";
+  static const ID = "ID";
+  static const COMMENT = "COMMENT";
+  static const STATUS = "STATUS";
 }

@@ -14,6 +14,8 @@ import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
+import 'base_stateful.dart';
+
 class BaseAlreadyPaid extends StatefulWidget {
   String invoiceNo;
   int amount;
@@ -26,7 +28,7 @@ class BaseAlreadyPaid extends StatefulWidget {
   }
 }
 
-class AlreadyPaidState extends State<BaseAlreadyPaid> {
+class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
 
   List<Bank> _bankList = new List<Bank>();
  // List<BankResponse> _bankResponseList = new List<BankResponse>();

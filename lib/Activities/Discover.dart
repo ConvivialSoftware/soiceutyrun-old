@@ -17,6 +17,8 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
+import 'base_stateful.dart';
+
 class BaseDiscover extends StatefulWidget {
 
   String pageName;
@@ -29,7 +31,7 @@ class BaseDiscover extends StatefulWidget {
   }
 }
 
-class DiscoverState extends State<BaseDiscover>
+class DiscoverState extends BaseStatefulState<BaseDiscover>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<Classified> _classifiedList = new List<Classified>();

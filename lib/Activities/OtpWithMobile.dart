@@ -13,6 +13,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'base_stateful.dart';
+
 class BaseOtpWithMobile extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +23,7 @@ class BaseOtpWithMobile extends StatefulWidget {
   }
 }
 
-class OtpWithMobileState extends State<BaseOtpWithMobile> {
+class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
 
   TextEditingController _mobileController = TextEditingController();
   ProgressDialog _progressDialog;

@@ -14,6 +14,8 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
+import 'base_stateful.dart';
+
 class BaseFacilities extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -22,7 +24,7 @@ class BaseFacilities extends StatefulWidget {
   }
 }
 
-class FacilitiesState extends State<BaseFacilities> {
+class FacilitiesState extends BaseStatefulState<BaseFacilities> {
 
   List<BookingHistory> _bookingHistoryList = List<BookingHistory>();
 

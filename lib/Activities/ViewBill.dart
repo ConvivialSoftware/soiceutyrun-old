@@ -11,6 +11,8 @@ import 'package:societyrun/Models/BillHeads.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
+import 'base_stateful.dart';
+
 class BaseViewBill extends StatefulWidget {
 
   String invoiceNo;
@@ -23,7 +25,7 @@ class BaseViewBill extends StatefulWidget {
   }
 }
 
-class ViewBillState extends State<BaseViewBill> {
+class ViewBillState extends BaseStatefulState<BaseViewBill> {
   List<RecentTransaction> _recentTransactionList = new List<RecentTransaction>();
   BillViewResponse _billViewList = BillViewResponse();
   List<BillDetails> _billDetailsList = new List<BillDetails>();

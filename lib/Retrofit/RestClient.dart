@@ -6,7 +6,6 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
-import 'package:societyrun/Models/gatepass_response.dart';
 
 import 'RestAPI.dart';
 
@@ -277,7 +276,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.approveGatePassAPI)
-  Future<GatePassResponse> postApproveGatePass(
+  Future<DataResponse> postApproveGatePass(
     @Field(GatePassFields.VID) String vid,
     @Field(GatePassFields.USER_ID) String uid,
     @Field(GatePassFields.REASON) String reason,
@@ -289,4 +288,12 @@ abstract class RestClient {
     @Field(GatePassFields.IN_DATE) String inDate,
     @Field(GatePassFields.IN_TIME) String inTime
   );
+  @FormUrlEncoded()
+  @POST(GlobalVariables.rejectGatepassAPI)
+  Future<DataResponse> postRejectGatePass(
+      @Field(GatePassFields.ID) String id,
+      @Field(GatePassFields.SOCIETY_ID) String societyId,
+      @Field(GatePassFields.COMMENT) String comment,
+      @Field(GatePassFields.STATUS) String status
+      );
 }

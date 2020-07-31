@@ -8,6 +8,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'base_stateful.dart';
+
 class BaseAddStaffMember extends StatefulWidget {
 
   //String memberType;
@@ -19,7 +21,7 @@ class BaseAddStaffMember extends StatefulWidget {
   }
 }
 
-class AddStaffMemberState extends State<BaseAddStaffMember> {
+class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
 
   //String memberType;
 

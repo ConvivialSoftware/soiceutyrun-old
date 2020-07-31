@@ -12,6 +12,7 @@ import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'HelpDesk.dart';
+import 'base_stateful.dart';
 
 class BaseRaiseNewTicket extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class BaseRaiseNewTicket extends StatefulWidget {
   }
 }
 
-class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
+class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
 
   List<ComplaintArea> _areaList = new List<ComplaintArea>();
   List<ComplaintCategory> _categoryList = new List<ComplaintCategory>();

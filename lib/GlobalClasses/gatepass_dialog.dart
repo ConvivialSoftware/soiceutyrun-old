@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'AppLocalizations.dart';
 import 'GlobalVariables.dart';
 
 class GatePassDialog extends StatefulWidget {
@@ -33,6 +34,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
   String _reason;
   String _inDate;
   String _inTime;
+  String _visitorImage;
+  String _popupTitle;
 
   @override
   void initState() {
@@ -64,11 +67,10 @@ class _GatePassDialogState extends State<GatePassDialog> {
 
   Widget _buildDialogCard() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.65,
       margin: EdgeInsets.only(top: ovalRadius),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.black26,
@@ -77,56 +79,60 @@ class _GatePassDialogState extends State<GatePassDialog> {
           ),
         ],
       ),
-      child: Column(
+      child: Wrap(
         children: <Widget>[
-          SizedBox(
-            height: 60,
-          ),
-          Text(
-            "from: $_from",
-            style: TextStyle(
-                color: GlobalVariables.green,
-                fontSize: 18,
-                fontWeight: FontWeight.w200),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            "$_block",
-            style: TextStyle(
-                color: Colors.grey[400],
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            'Guest is waiting',
-            style: TextStyle(
-                color: GlobalVariables.green,
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          _buildCallWidget(),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              child: Divider(
-                thickness: 2,
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          _getButtonWidget(),
-          SizedBox(
-            height: 10,
+          Column(
+            children: <Widget>[
+              SizedBox(
+                height: 70,
+              ),
+              Text(
+                "from: $_from",
+                style: TextStyle(
+                    color: GlobalVariables.green,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w200),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "$_block",
+                style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+               _popupTitle,
+                style: TextStyle(
+                    color: GlobalVariables.green,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              _buildCallWidget(),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                  child: Divider(
+                    thickness: 2,
+                  )),
+              SizedBox(
+                height: 10,
+              ),
+              _getButtonWidget(),
+              SizedBox(
+                height: 10,
+              ),
+            ],
           ),
         ],
       ),
@@ -143,10 +149,9 @@ class _GatePassDialogState extends State<GatePassDialog> {
         height: MediaQuery.of(context).size.width * 0.3,
         decoration:
             BoxDecoration(color: GlobalVariables.white, shape: BoxShape.circle),
-        child: Padding(
-          padding: EdgeInsets.all(5.0),
-          child: ClipOval(child: Container()),
-        ),
+        child: CircleAvatar(
+          child: SvgPicture.asset(
+              GlobalVariables.shoppingIconPath),),
       ),
     );
   }
@@ -178,7 +183,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
       children: <Widget>[
         CircleAvatar(
           radius: 24,
-          backgroundImage: AssetImage(GlobalVariables.userProfileIconPath),
+          backgroundColor: Colors.white10,
+          backgroundImage: NetworkImage(_visitorImage),
         ),
         SizedBox(
           width: 20.0,
@@ -199,7 +205,9 @@ class _GatePassDialogState extends State<GatePassDialog> {
             icon: Icon(Icons.call),
             iconSize: 24.0,
             color: GlobalVariables.green,
-            onPressed: () {},
+            onPressed: () {
+              _launchCall();
+            },
           ),
         ),
       ],
@@ -220,7 +228,17 @@ class _GatePassDialogState extends State<GatePassDialog> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () {},
+          onTap: () {
+            GlobalFunctions
+                .checkInternetConnection()
+                .then((internet) {
+              if (internet) {
+                _rejectGatePass();
+              } else {
+
+              }
+            });
+          },
           child: Container(
             width: 48.0,
             height: 48.0,
@@ -258,10 +276,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
               if (internet) {
                _approveGatePass();
               } else {
-//                GlobalFunctions.showToast(
-//                    AppLocalizations.of(context)
-//                        .translate(
-//                        'pls_check_internet_connectivity'));
+
               }
             });
           },
@@ -306,6 +321,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
       _reason = data['REASON'];
       _inDate = data['IN_DATE'];
       _inTime = data['IN_TIME'];
+      _visitorImage = data['IMAGE'];
+      _popupTitle = data['title'];
     }
 
     if (widget.message.containsKey('notification')) {
@@ -326,11 +343,11 @@ class _GatePassDialogState extends State<GatePassDialog> {
             GatePassStatus.APPROVED, _inBy, _societyId, _inDate, _inTime)
         .then((value) {
       print('status : ' + value.status.toString());
-      GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
-//      if (value.status) {
-//        Navigator.pop(context);
-//      }
+      if (value.status) {
+        GlobalFunctions.showToast(value.message);
+        Navigator.pop(context);
+      }
     }).catchError((Object obj) {
       _progressDialog.hide();
       print('res : ' + obj.toString());
@@ -345,5 +362,36 @@ class _GatePassDialogState extends State<GatePassDialog> {
         default:
       }
     });
+  }
+  void _rejectGatePass() {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    _progressDialog.show();
+    restClient
+        .postRejectGatePass(_vid, _societyId, _reason,GatePassStatus.REJECTED)
+        .then((value) {
+      print('status : ' + value.status.toString());
+      _progressDialog.hide();
+      if (value.status) {
+        GlobalFunctions.showToast(value.message);
+        Navigator.pop(context);
+      }
+    }).catchError((Object obj) {
+      _progressDialog.hide();
+      print('res : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+            Navigator.pop(context);
+          }
+          break;
+        default:
+      }
+    });
+  }
+  void _launchCall(){
+    launch("tel:$_visitorContact");
   }
 }

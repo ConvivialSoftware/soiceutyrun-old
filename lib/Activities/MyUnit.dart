@@ -33,6 +33,8 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'base_stateful.dart';
+
 class BaseMyUnit extends StatefulWidget {
   String pageName;
   BaseMyUnit(this.pageName);
@@ -44,7 +46,7 @@ class BaseMyUnit extends StatefulWidget {
   }
 }
 
-class MyUnitState extends State<BaseMyUnit>
+class MyUnitState extends BaseStatefulState<BaseMyUnit>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 

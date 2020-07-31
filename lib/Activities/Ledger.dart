@@ -10,6 +10,8 @@ import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
+import 'base_stateful.dart';
+
 class BaseLedger extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +20,7 @@ class BaseLedger extends StatefulWidget {
   }
 }
 
-class LedgerState extends State<BaseLedger> {
+class LedgerState extends BaseStatefulState<BaseLedger> {
   List<DateTransaction> _dateTransactionList = new List<DateTransaction>();
 
   List<Ledger> _ledgerList = new List<Ledger>();

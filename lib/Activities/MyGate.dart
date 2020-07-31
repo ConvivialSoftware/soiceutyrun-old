@@ -1,20 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
-import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
-import 'package:societyrun/firebase_notification/firebase_notification.dart';
 
 class BaseMyGate extends StatefulWidget {
   String pageName;
+
   BaseMyGate(this.pageName);
 
   @override
@@ -26,42 +22,38 @@ class BaseMyGate extends StatefulWidget {
 
 class MyGateState extends BaseStatefulState<BaseMyGate>
     with SingleTickerProviderStateMixin {
-
   TabController _tabController;
-  List<ScheduleVisitor> _activitiesList =
-      new List<ScheduleVisitor>();
+  List<ScheduleVisitor> _activitiesList = new List<ScheduleVisitor>();
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
   //String _selectedItem,_selectedText="";
-  int position=0;
+  int position = 0;
+
   //List<DropdownMenuItem<String>> _societyListItems = new List<DropdownMenuItem<String>>();
- // List<LoginResponse> _societyList = new List<LoginResponse>();
- // LoginResponse _selectedSocietyLogin ;
+  // List<LoginResponse> _societyList = new List<LoginResponse>();
+  // LoginResponse _selectedSocietyLogin ;
   var username, password;
   ProgressDialog _progressDialog;
 
-
-
-
   List<String> _scheduleList = new List<String>();
-  List<DropdownMenuItem<String>> _scheduleListItems = new List<DropdownMenuItem<String>>();
+  List<DropdownMenuItem<String>> _scheduleListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedSchedule;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
 
   String pageName;
+
   MyGateState(this.pageName);
-
-
 
   @override
   void initState() {
     super.initState();
 
     _tabController = TabController(length: 2, vsync: this);
-   // getTicketDescriptionList();
+    // getTicketDescriptionList();
     //getDocumentDescriptionList();
     getScheduleTimeData();
     GlobalFunctions.checkInternetConnection().then((internet) {
@@ -72,7 +64,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             .translate('pls_check_internet_connectivity'));
       }
     });
-  /*  _firebaseMessaging.configure(
+    /*  _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
         _showItemDialog(message);
@@ -101,14 +93,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 //    _firebaseMessaging.subscribeToTopic("matchscore");*/
   }
 
-
   @override
   Widget build(BuildContext context) {
-      _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-      if (pageName != null) {
-        redirectToPage(pageName);
-
-      }
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    if (pageName != null) {
+      redirectToPage(pageName);
+    }
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -145,13 +135,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       child: TabBar(
         tabs: [
           Container(
-           width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             child: Tab(
               text: AppLocalizations.of(context).translate('my_activities'),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             child: Tab(
               text: AppLocalizations.of(context).translate('helpers'),
             ),
@@ -167,10 +157,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-
-
   getMyActivitiesLayout() {
-   // print('MyTicketLayout Tab Call');
+    // print('MyTicketLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -184,8 +172,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 130.0),
-               // getSocietyDataLayout(),
-             //   activitiesFilterDateLayout(),
+                // getSocietyDataLayout(),
+                //   activitiesFilterDateLayout(),
                 getActivitiesListDataLayout(),
                 addActivitiesFabLayout(),
               ],
@@ -197,7 +185,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   getHelperLayout() {
-  //  print('MyDocumentsLayout Tab Call');
+    //  print('MyDocumentsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -211,15 +199,19 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 130.0), //ticketOpenClosedLayout(),
-             //   getDocumentListDataLayout(),
-      Align(
-        alignment: Alignment.center,
-        child: Container(
-          child: Text('Coming Soon...',style: TextStyle(
-              color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-          ),),
-        ),
-      )
+                //   getDocumentListDataLayout(),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: Text(
+                      'Coming Soon...',
+                      style: TextStyle(
+                          color: GlobalVariables.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -297,9 +289,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 */
 
   activitiesFilterDateLayout() {
-
     TextEditingController _dateController = TextEditingController();
-    _dateController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
+    _dateController.text = DateTime.now().toLocal().day.toString() +
+        "/" +
+        DateTime.now().toLocal().month.toString() +
+        "/" +
+        DateTime.now().toLocal().year.toString();
 
     return Align(
       alignment: Alignment.topRight,
@@ -336,7 +331,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           hintText: "Filter",
                           hintStyle:
-                          TextStyle(color: GlobalVariables.veryLightGray),
+                              TextStyle(color: GlobalVariables.veryLightGray),
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
@@ -365,19 +360,23 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: TextField(
                     controller: _dateController,
                     readOnly: true,
-                    style: TextStyle(
-                      color: GlobalVariables.green
-                    ),
+                    style: TextStyle(color: GlobalVariables.green),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         hintText: "Date",
-                        hintStyle: TextStyle(color: GlobalVariables.veryLightGray),
+                        hintStyle:
+                            TextStyle(color: GlobalVariables.veryLightGray),
                         border: InputBorder.none,
                         suffixIcon: IconButton(
-                          onPressed: (){
-                           // GlobalFunctions.showToast('iDate icon click');
-                            GlobalFunctions.getSelectedDate(context).then((value){
-                              _dateController.text = value.day.toString()+"/"+value.month.toString()+"/"+value.year.toString();
+                          onPressed: () {
+                            // GlobalFunctions.showToast('iDate icon click');
+                            GlobalFunctions.getSelectedDate(context)
+                                .then((value) {
+                              _dateController.text = value.day.toString() +
+                                  "/" +
+                                  value.month.toString() +
+                                  "/" +
+                                  value.year.toString();
                             });
                           },
                           icon: Icon(
@@ -405,18 +404,18 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             child: FloatingActionButton(
               onPressed: () {
                 //GlobalFunctions.showToast('Fab CLick');
-               /* Navigator.push(context, MaterialPageRoute(
+                /* Navigator.push(context, MaterialPageRoute(
                     builder: (context) =>
                         BaseExpectedVisitor()));*/
 
                 Dialog infoDialog = Dialog(
-                  shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0)),
                   child: scheduleVisitorLayout(),
                 );
                 showDialog(
-                    context: context, builder: (BuildContext context) => infoDialog);
-
+                    context: context,
+                    builder: (BuildContext context) => infoDialog);
               },
               child: Icon(
                 Icons.add,
@@ -431,44 +430,55 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   getActivitiesListDataLayout() {
-    return _activitiesList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 6, 20, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: _activitiesList.length,
-                itemBuilder: (context, position) {
-                  return getActivitiesListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-    ) :  Align(
-      alignment: Alignment.center,
-      child: Container(
-        child: Text('Oops.!! No Data Found.',style: TextStyle(
-            color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-        ),),
-      ),
-    );
+    return _activitiesList.length > 0
+        ? Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(
+                20, MediaQuery.of(context).size.height / 6, 20, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: _activitiesList.length,
+                      itemBuilder: (context, position) {
+                        return getActivitiesListItemLayout(position);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : Align(
+            alignment: Alignment.center,
+            child: Container(
+              child: Text(
+                'Oops.!! No Data Found.',
+                style: TextStyle(
+                    color: GlobalVariables.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
   }
 
   getActivitiesListItemLayout(int position) {
-
-    String Time="";
-    String Date="";
+    String Time = "";
+    String Date = "";
     String Image = _activitiesList[position].IMAGE;
-    if(_activitiesList[position].OUT_TIME.length>0){
-      Time = "Valid from "+_activitiesList[position].IN_TIME + " to "+ _activitiesList[position].OUT_TIME;
-    }else{
-      Time = "Valid from "+_activitiesList[position].IN_TIME;
+    if (_activitiesList[position].OUT_TIME.length > 0) {
+      Time = "Valid from " +
+          _activitiesList[position].IN_TIME +
+          " to " +
+          _activitiesList[position].OUT_TIME;
+    } else {
+      Time = "Valid from " + _activitiesList[position].IN_TIME;
     }
 
-    if(_activitiesList[position].OUT_DATE.length>0){
-      Date = "Valid for "+_activitiesList[position].IN_DATE + " to "+_activitiesList[position].OUT_DATE;
-    }else{
-      Date = "Valid for "+_activitiesList[position].IN_DATE;
+    if (_activitiesList[position].OUT_DATE.length > 0) {
+      Date = "Valid for " +
+          _activitiesList[position].IN_DATE +
+          " to " +
+          _activitiesList[position].OUT_DATE;
+    } else {
+      Date = "Valid for " + _activitiesList[position].IN_DATE;
     }
 
     return Container(
@@ -551,8 +561,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.access_time,color: GlobalVariables.mediumGreen,)
-                ),
+                    child: Icon(
+                      Icons.access_time,
+                      color: GlobalVariables.mediumGreen,
+                    )),
                 Container(
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -574,11 +586,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,)
-                ),
+                    child: Icon(
+                      Icons.date_range,
+                      color: GlobalVariables.mediumGreen,
+                    )),
                 Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(5 , 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                   child: Text(
                     Date,
                     style: TextStyle(
@@ -599,8 +613,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   Container(
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Icon(Icons.perm_identity,color: GlobalVariables.mediumGreen,)
-                  ),
+                      child: Icon(
+                        Icons.perm_identity,
+                        color: GlobalVariables.mediumGreen,
+                      )),
                   Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -608,7 +624,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       _activitiesList[position].VISITOR_NAME,
                       style: TextStyle(
                         color: GlobalVariables.green,
-                        fontSize: 12,),
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ],
@@ -630,7 +647,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             visible: false,
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child:Row(
+              child: Row(
                 children: <Widget>[
                   Container(
                     height: 30,
@@ -640,11 +657,17 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       color: GlobalVariables.green,
                     ),
                     child: FlatButton.icon(
-                      onPressed: (){},
-                      icon: Icon(Icons.edit,color: GlobalVariables.white,size: 20,),
-                      label:Text(AppLocalizations.of(context).translate('edit'),style: TextStyle(
-                          color: GlobalVariables.white
-                      ),),),
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.edit,
+                        color: GlobalVariables.white,
+                        size: 20,
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context).translate('edit'),
+                        style: TextStyle(color: GlobalVariables.white),
+                      ),
+                    ),
                   ),
                   Container(
                     height: 30,
@@ -654,9 +677,17 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       borderRadius: BorderRadius.circular(10),
                       color: GlobalVariables.green,
                     ),
-                    child: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.cancel,color: GlobalVariables.white,size: 20,), label:Text(AppLocalizations.of(context).translate('cancel'),style: TextStyle(
-                        color: GlobalVariables.white
-                    ),)),
+                    child: FlatButton.icon(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.cancel,
+                          color: GlobalVariables.white,
+                          size: 20,
+                        ),
+                        label: Text(
+                          AppLocalizations.of(context).translate('cancel'),
+                          style: TextStyle(color: GlobalVariables.white),
+                        )),
                   ),
                 ],
               ),
@@ -755,9 +786,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }*/
 
   scheduleVisitorLayout() {
-
     return Container(
-      width: MediaQuery.of(context).size.width/0.2,
+      width: MediaQuery.of(context).size.width / 0.2,
       height: 400,
 //      height: Med,
       decoration: BoxDecoration(
@@ -807,7 +837,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                               Container(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  AppLocalizations.of(context).translate('visitor_arriving_on'),
+                                  AppLocalizations.of(context)
+                                      .translate('visitor_arriving_on'),
                                   style: TextStyle(
                                       color: GlobalVariables.green,
                                       fontSize: 18,
@@ -827,7 +858,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
-                    )*/),
+                    )*/
+                                  ),
                                   child: ButtonTheme(
                                     child: DropdownButton(
                                       items: _scheduleListItems,
@@ -840,11 +872,15 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       ),
                                       underline: SizedBox(),
                                       hint: Container(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 0, 15, 0),
                                         child: Text(
                                           "",
                                           style: TextStyle(
-                                              color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                                              color:
+                                                  GlobalVariables.mediumGreen,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -860,16 +896,21 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     border: Border.all(
                                       color: GlobalVariables.mediumGreen,
                                       width: 3.0,
-                                    )
-                                ),
+                                    )),
                                 child: TextField(
                                   controller: _nameController,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).translate('name_of_person'),
-                                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                                      border: InputBorder.none,
-                                      suffixIcon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,),
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('name_of_person'),
+                                    hintStyle: TextStyle(
+                                        color: GlobalVariables.lightGray,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    suffixIcon: Icon(
+                                      Icons.contacts,
+                                      color: GlobalVariables.mediumGreen,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -882,19 +923,20 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     border: Border.all(
                                       color: GlobalVariables.mediumGreen,
                                       width: 3.0,
-                                    )
-                                ),
+                                    )),
                                 child: TextField(
                                   controller: _mobileController,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).translate('contact_number'),
-                                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                                      border: InputBorder.none
-                                  ),
+                                      hintText: AppLocalizations.of(context)
+                                          .translate('contact_number'),
+                                      hintStyle: TextStyle(
+                                          color: GlobalVariables.lightGray,
+                                          fontSize: 14),
+                                      border: InputBorder.none),
                                 ),
                               ),
-                          /*    Container(
+                              /*    Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -932,15 +974,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   child: RaisedButton(
                                     color: GlobalVariables.green,
                                     onPressed: () {
-
                                       verifyVisitorDetails();
-
                                     },
                                     textColor: GlobalVariables.white,
                                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                                    ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: GlobalVariables.green)),
                                     child: Text(
                                       AppLocalizations.of(context)
                                           .translate('add'),
@@ -965,7 +1006,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-
   void changeScheduleDropDownItem(String value) {
     print('clickable value : ' + value.toString());
     setState(() {
@@ -975,9 +1015,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   void getScheduleTimeData() {
-
-    _scheduleList = ["Today","Tommorow","Day after tommorow"];
-    for(int i=0;i<_scheduleList.length;i++){
+    _scheduleList = ["Today", "Tommorow", "Day after tommorow"];
+    for (int i = 0; i < _scheduleList.length; i++) {
       _scheduleListItems.add(DropdownMenuItem(
         value: _scheduleList[i],
         child: Text(
@@ -990,26 +1029,18 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   void verifyVisitorDetails() {
-
-    if(_nameController.text.length>0){
-
-      if(_mobileController.text.length>0){
-
+    if (_nameController.text.length > 0) {
+      if (_mobileController.text.length > 0) {
         addScheduleVisitorGatePass();
-
-      }else{
+      } else {
         GlobalFunctions.showToast("Please Enter Contact Number");
       }
-
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Enter Name");
     }
-
-
   }
 
   Future<void> addScheduleVisitorGatePass() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -1018,20 +1049,27 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     String userId = await GlobalFunctions.getUserId();
 
     _progressDialog.show();
-    restClient.addScheduleVisitorGatePass(societyId, block, flat, _nameController.text, _mobileController.text, _selectedSchedule, userId).then((value) {
-      print('add Schedule Visitor value : '+value.toString());
+    restClient
+            .addScheduleVisitorGatePass(
+                societyId,
+                block,
+                flat,
+                _nameController.text,
+                _mobileController.text,
+                _selectedSchedule,
+                userId)
+            .then((value) {
+      print('add Schedule Visitor value : ' + value.toString());
       _progressDialog.hide();
-      if(value.status){
+      if (value.status) {
         Navigator.of(context).pop();
       }
       GlobalFunctions.showToast(value.message);
 
-      print('passCode : '+value.pass_code);
-
+      print('passCode : ' + value.pass_code);
 
       /* {pass_code: 303462, status: true, message: Visitor added successfully}*/
-
-    })/*.catchError((Object obj) {
+    }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -1042,8 +1080,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           break;
         default:
       }
-    })*/;
-
+    })*/
+        ;
   }
 
   Future<void> getScheduleVisitorData() async {
@@ -1057,12 +1095,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       if (value.status) {
         List<dynamic> _list = value.data;
 
-        _activitiesList = List<ScheduleVisitor>.from(_list.map((i) => ScheduleVisitor.fromJson(i)));
-        setState(() {
-        });
+        _activitiesList = List<ScheduleVisitor>.from(
+            _list.map((i) => ScheduleVisitor.fromJson(i)));
+        setState(() {});
       }
 
-     /* restClient.getGatePassScheduleVisitorData(societyId, block, flat).then((value) {
+      /* restClient.getGatePassScheduleVisitorData(societyId, block, flat).then((value) {
         if (value.status) {
           List<dynamic> _list = value.data;
 
@@ -1071,29 +1109,21 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       });*/
       _progressDialog.hide();
     });
-
-
   }
 
   void redirectToPage(String item) {
-
-    if(item==AppLocalizations.of(context).translate('my_gate')){
+    if (item == AppLocalizations.of(context).translate('my_gate')) {
       //Redirect to Discover
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('my_activities')){
+    } else if (item ==
+        AppLocalizations.of(context).translate('my_activities')) {
       //Redirect to  Classified
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('helpers')){
+    } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  Services
       _tabController.animateTo(1);
-    }else{
+    } else {
       _tabController.animateTo(0);
     }
-
-
   }
-
-
 }
-
-

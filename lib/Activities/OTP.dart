@@ -13,6 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'DashBoard.dart';
+import 'base_stateful.dart';
 
 class BaseOtp extends StatefulWidget{
 
@@ -29,7 +30,7 @@ class BaseOtp extends StatefulWidget{
 
 }
 
-class OtpState extends State<BaseOtp>{
+class OtpState extends BaseStatefulState<BaseOtp>{
 
   String entered_pin="";
   String expire_time,otp,mobileNo;

@@ -6,6 +6,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'base_stateful.dart';
+
 class BaseAddVehicle extends StatefulWidget {
 
   //String memberType;
@@ -17,7 +19,7 @@ class BaseAddVehicle extends StatefulWidget {
   }
 }
 
-class AddVehicleState extends State<BaseAddVehicle> {
+class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
 
   TextEditingController _vehicleNoController = TextEditingController();
   TextEditingController _vehicleModelController = TextEditingController();

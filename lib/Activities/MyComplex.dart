@@ -14,6 +14,8 @@ import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'base_stateful.dart';
+
 class BaseMyComplex extends StatefulWidget {
   String pageName;
   BaseMyComplex(this.pageName);
@@ -25,7 +27,7 @@ class BaseMyComplex extends StatefulWidget {
   }
 }
 
-class MyComplexState extends State<BaseMyComplex>
+class MyComplexState extends BaseStatefulState<BaseMyComplex>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   //List<NewsBoard> _newsBoardList = List<NewsBoard>();

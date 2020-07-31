@@ -7,6 +7,8 @@ import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
+import 'base_stateful.dart';
+
 class BaseDescriptionOfHomeService extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +18,7 @@ class BaseDescriptionOfHomeService extends StatefulWidget {
 }
 
 class DescriptionOfHomeServiceState
-    extends State<BaseDescriptionOfHomeService> {
+    extends BaseStatefulState<BaseDescriptionOfHomeService> {
   List<HomeCareDescription> _homeCareList = List<HomeCareDescription>();
 
   var name="",mobile="",mail="";
