@@ -93,6 +93,7 @@ class GlobalVariables{
   static const authorizedToken = "admin:1234";
   static var AUTH="Basic "+base64Url.encode(utf8.encode(authorizedToken));
   static const BaseURL = "https://societyrun.com/Flutter/";
+  static const BaseURLAndroid = "https://societyrun.com/Android/";
   /*Api Name for BaseURL*/
   static const LoginAPI = "Api";
   static const AllSocietyAPI = "Api/login";
@@ -128,6 +129,9 @@ class GlobalVariables{
   static const staffMobileVerifyAPI = "Staff/mobileverifystaff";
   static const addStaffMemberAPI = "Staff/insertstaff";
 
+  /*GATEPASEE DIALOG API*/
+  static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
+  static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";
 
   static const authorizedTokenERP = "erpadmin:SocERP21run";
   static var AUTHERP="Basic "+base64Url.encode(utf8.encode(authorizedTokenERP));
@@ -260,6 +264,7 @@ class GlobalVariables{
 
 
 
+
   /*Server Response Key*/
 
   static const STATUS = "status";
@@ -269,4 +274,24 @@ class GlobalVariables{
   static const ExpiredTime = "expire_time";
   static const OTP = "otp";
 
+}
+class GatePassStatus{
+  static const REJECTED = "Rejected";
+  static const APPROVED = "Verified";
+  static const LEAVE_AT_GATE = "Leave at gate";
+}
+class GatePassFields{
+  static const VID = "VID";
+  static const USER_ID = "USER_ID";
+  static const REASON = "REASON";
+  static const NO_OF_VISITOR = "NO_OF_VISITOR";
+  static const FROM_VISITOR = "FROM_VISITOR";
+  static const VISITOR_STATUS = "VISITOR_STATUS";
+  static const IN_BY = "IN_BY";
+  static const SOCIETY_ID = "SOCIETY_ID";
+  static const IN_DATE = "IN_DATE";
+  static const IN_TIME = "IN_TIME";
+  static const ID = "ID";
+  static const COMMENT = "COMMENT";
+  static const STATUS = "STATUS";
 }

@@ -3,6 +3,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
+import 'base_stateful.dart';
+
 class BaseCreateClassifiedListing extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,7 +13,7 @@ class BaseCreateClassifiedListing extends StatefulWidget {
   }
 }
 
-class CreateClassifiedListingState extends State<BaseCreateClassifiedListing> {
+class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifiedListing> {
   var name="", mobile="", mail="";
 
   @override

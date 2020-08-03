@@ -8,6 +8,8 @@ import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
+import 'base_stateful.dart';
+
 class BaseDelivery extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +18,7 @@ class BaseDelivery extends StatefulWidget {
   }
 }
 
-class DeliveryState extends State<BaseDelivery> {
+class DeliveryState extends BaseStatefulState<BaseDelivery> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

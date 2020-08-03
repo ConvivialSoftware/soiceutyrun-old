@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'DashBoard.dart';
+import 'base_stateful.dart';
 
 class BaseChangePassword extends StatefulWidget {
 
@@ -19,7 +20,7 @@ class BaseChangePassword extends StatefulWidget {
   }
 }
 
-class ChangePasswordState extends State<BaseChangePassword> {
+class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
 
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();

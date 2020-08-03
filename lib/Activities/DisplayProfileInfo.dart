@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -24,7 +25,7 @@ class BaseDisplayProfileInfo extends StatefulWidget {
   }
 }
 
-class DisplayProfileInfoState extends State<BaseDisplayProfileInfo> {
+class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> {
 
 
   ProgressDialog _progressDialog;

@@ -17,6 +17,8 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
+import 'base_stateful.dart';
+
 class BaseExpectedVisitor extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +27,7 @@ class BaseExpectedVisitor extends StatefulWidget {
   }
 }
 
-class ExpectedVisitorState extends State<BaseExpectedVisitor>
+class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<VisitorInfo> _visitorInfoList = new List<VisitorInfo>();
