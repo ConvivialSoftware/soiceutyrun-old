@@ -7,11 +7,15 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
     // Handle data message
     final dynamic data = message['data'];
     print(data);
+    final _fcm = FirebaseMessagingHandler();
+    _fcm.redirectToPage(message);
   }
 
   if (message.containsKey('notification')) {
     // Handle notification message
     final dynamic notification = message['notification'];
+    final _fcm = FirebaseMessagingHandler();
+    _fcm.redirectToPage(message);
   }
 
   // Or do other work.
