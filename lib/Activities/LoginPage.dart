@@ -10,6 +10,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OtpWithMobile.dart';
 import 'package:societyrun/Activities/Register.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
@@ -38,7 +39,7 @@ class LoginPage extends StatefulWidget {
   }
 }
 
-class LoginPageState extends State<LoginPage> {
+class LoginPageState extends BaseStatefulState<LoginPage> {
   bool isLogin = false;
   AppLanguage appLanguage = AppLanguage();
 
