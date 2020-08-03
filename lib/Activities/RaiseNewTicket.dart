@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -23,7 +24,7 @@ class BaseRaiseNewTicket extends StatefulWidget {
 
 class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
-  List<ComplaintArea> _areaList = new List<ComplaintArea>();
+ // List<ComplaintArea> _areaList = new List<ComplaintArea>();
   List<ComplaintCategory> _categoryList = new List<ComplaintCategory>();
   String complaintType="Personal";
   String complaintPriority="No";
@@ -34,8 +35,8 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
 
 
-  List<DropdownMenuItem<String>> __areaListItems = new List<DropdownMenuItem<String>>();
-  String _areaSelectedItem;
+ // List<DropdownMenuItem<String>> __areaListItems = new List<DropdownMenuItem<String>>();
+ // String _areaSelectedItem;
 
 
   List<DropdownMenuItem<String>> __categoryListItems =
@@ -45,20 +46,28 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
   String attachmentFilePath;
   String attachmentFileName;
+  String attachmentCompressFilePath;
 
   ProgressDialog _progressDialog;
+
+  bool isStoragePermission=false;
 
   @override
   void initState() {
     super.initState();
+    GlobalFunctions.checkPermission(Permission.storage).then((value) {
+      isStoragePermission=value;
+    });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getComplaintAreaData();
+        //getComplaintAreaData();
+        getComplaintCategoryData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
       }
     });
+
 
   }
 
@@ -118,7 +127,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   getRaiseTicketLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
@@ -284,7 +293,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                   ],
                 ),
               ),
-              Container(
+          /*    Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -313,7 +322,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -371,50 +380,94 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: FlatButton.icon(
-                        onPressed: () {
+                      width:50,
+                      height: 50,
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      decoration: attachmentFilePath==null ? BoxDecoration(
+                        color: GlobalVariables.mediumGreen,
+                        borderRadius: BorderRadius.circular(25),
 
-                          openFile(context);
-
-                        },
-                        icon: Icon(
-                          Icons.attach_file,
-                          color: GlobalVariables.mediumGreen,
-                        ),
-                        label: Text(
-                          AppLocalizations.of(context).translate('attach_file'),
-                          style: TextStyle(color: GlobalVariables.green),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Text(
-                        'OR',
-                        style: TextStyle(color: GlobalVariables.lightGray),
-                      ),
-                    ),
-                    Container(
-                      child: FlatButton.icon(
-                          onPressed: () {
-
-                            openCamera(context);
-
-                          },
-                          icon: Icon(
-                            Icons.camera_alt,
-                            color: GlobalVariables.mediumGreen,
+                      ) : BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: FileImage(File(attachmentFilePath)),
+                              fit: BoxFit.cover
                           ),
-                          label: Text(
-                            AppLocalizations.of(context)
-                                .translate('take_picture'),
-                            style: TextStyle(color: GlobalVariables.green),
-                          )),
+                          border: Border.all(color: GlobalVariables.green,width: 2.0)
+                      ),
+                      //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                     ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          child: FlatButton.icon(
+                            onPressed: () {
+
+                              if(isStoragePermission) {
+                                openFile(context);
+                              }else{
+                                GlobalFunctions.askPermission(Permission.storage).then((value) {
+                                  if(value){
+                                    openFile(context);
+                                  }else{
+                                    GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                  }
+                                });
+                              }
+
+                            },
+                            icon: Icon(
+                              Icons.attach_file,
+                              color: GlobalVariables.mediumGreen,
+                            ),
+                            label: Text(
+                              AppLocalizations.of(context).translate('attach_photo'),
+                              style: TextStyle(color: GlobalVariables.green),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Text(
+                            'OR',
+                            style: TextStyle(color: GlobalVariables.lightGray),
+                          ),
+                        ),
+                        Container(
+                          child: FlatButton.icon(
+                              onPressed: () {
+
+                                if(isStoragePermission) {
+                                  openCamera(context);
+                                }else{
+                                  GlobalFunctions.askPermission(Permission.storage).then((value) {
+                                    if(value){
+                                      openCamera(context);
+                                    }else{
+                                      GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                    }
+                                  });
+                                }
+
+                              },
+                              icon: Icon(
+                                Icons.camera_alt,
+                                color: GlobalVariables.mediumGreen,
+                              ),
+                              label: Text(
+                                AppLocalizations.of(context)
+                                    .translate('take_picture'),
+                                style: TextStyle(color: GlobalVariables.green),
+                              )),
+                        ),
+                      ],
+                    ),
+
                   ],
                 ),
               ),
-              Container(
+
+           /*   Container(
                 alignment: Alignment.topLeft,
                 child: Text(
                   attachmentFileName==null ? "" : attachmentFileName,
@@ -423,7 +476,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                       fontSize: 14,
                       fontWeight: FontWeight.bold),
                 ),
-              ),
+              ),*/
               Container(
                 margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Row(
@@ -515,6 +568,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     );
   }
 
+/*
 
   void changeAreaDropDownItem(String value) {
     print('clickable value : ' + value.toString());
@@ -524,6 +578,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     });
   }
 
+*/
 
   void changeCategoryDropDownItem(String value) {
     print('clickable value : ' + value.toString());
@@ -532,6 +587,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
       print('_selctedItem:' + _categorySelectedItem.toString());
     });
   }
+/*
 
   void getComplaintAreaData() async{
 
@@ -556,11 +612,12 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
           ));
         }
      //   _areaSelectedItem = __areaListItems[0].value;
-       getComplaintCategoryData();
+
       }
     });
 
   }
+*/
 
 
   void getComplaintCategoryData() async{
@@ -568,6 +625,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
     restClient.getComplaintsCategoryData(societyId).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -590,7 +648,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
       }
       _progressDialog.hide();
     });
-
+//800423_2020\-07\-30_20\:06\:12\.jpg
   }
 
   Future<void> addComplaint() async {
@@ -612,10 +670,11 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentFilePath);
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }
     _progressDialog.show();
-    restClient.addComplaint(societyId, block,flat,userId,complaintSubject.text,complaintType,_areaSelectedItem,_categorySelectedItem,
+    restClient.addComplaint(societyId, block,flat,userId,complaintSubject.text,complaintType,/*_areaSelectedItem,*/_categorySelectedItem,
     complaintDesc.text,complaintPriority,name,attachment,attachmentName,societyName,userEmail,societyEmail).then((value) {
       print("add complaint response : "+ value.toString());
       _progressDialog.hide();
@@ -629,41 +688,34 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     });
   }
 
+
   void openFile(BuildContext context) {
-
-     GlobalFunctions.getFilePath(context).then((value) {
-       attachmentFilePath=value;
-
-       print('file Path : '+attachmentFilePath.toString());
-/*  /storage/emulated/0/Pictures/Screenshots/Screenshot_20200515-105610.jpg   */
-
-     attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-       print('file Name : '+attachmentFileName.toString());
-
-       setState(() {
-       });
-
-// https://societyrun.com//Uploads/278808_2019-08-16_12:45:09.jpg
-
-     });
+    GlobalFunctions.getFilePath(context).then((value) {
+      attachmentFilePath=value;
+      getCompressFilePath();
+    });
 
   }
 
   void openCamera(BuildContext context) {
-
     GlobalFunctions.openCamera().then((value) {
-
       attachmentFilePath=value.path;
-
-      print('file Path : '+attachmentFilePath.toString());
-/*  /storage/emulated/0/Pictures/Screenshots/Screenshot_20200515-105610.jpg   */
-
-      attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-      print('file Name : '+attachmentFileName.toString());
-
+      getCompressFilePath();
     });
+  }
 
-
+  void getCompressFilePath(){
+    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
+    print('file Name : '+attachmentFileName.toString());
+    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+      print('cache file Path : '+value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+        attachmentCompressFilePath = value.toString();
+        print('Cache file path : '+attachmentCompressFilePath);
+        setState(() {
+        });
+      });
+    });
   }
 
   void verifyData() {
@@ -671,7 +723,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
     if(complaintSubject.text.length>0){
 
-      if(_areaSelectedItem!=null){
+    //  if(_areaSelectedItem!=null){
 
         if(_categorySelectedItem!=null){
 
@@ -689,10 +741,10 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
         }
 
 
-      }else{
+     /* }else{
         GlobalFunctions.showToast("Please Select Complaint Area");
       }
-
+*/
     }else{
       GlobalFunctions.showToast("Please Enter Complaint Subject");
     }
