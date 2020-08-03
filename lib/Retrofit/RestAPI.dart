@@ -1458,7 +1458,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(emailId, GlobalVariables.Email_id);
 
     FormData formData =
-    FormData.from({
+    FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.TYPE: type,
       GlobalVariables.NUMBER: number,
@@ -1486,7 +1486,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(otp, "otp");
 
     FormData formData =
-    FormData.from({
+    FormData.fromMap({
       "mobile_no": mobile,
       "Email_id": emailId,
       "otp": otp

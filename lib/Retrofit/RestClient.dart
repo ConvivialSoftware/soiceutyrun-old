@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
