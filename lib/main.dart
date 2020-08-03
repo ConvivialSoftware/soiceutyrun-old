@@ -1,27 +1,37 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
+import 'package:societyrun/Activities/OtpWithMobile.dart';
+import 'package:societyrun/Activities/Register.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-
+import 'package:provider/provider.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:dio/dio.dart';
 import 'Activities/DashBoard.dart';
 
 void main() {
+
+
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]);
   flutterDownloadInitialize();
 
   runApp(BaseSplashScreen());
 }
+
+
 
 Future<void> flutterDownloadInitialize() async {
   await FlutterDownloader.initialize(debug: true);
@@ -46,6 +56,16 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
   bool isLogin = false;
   AppLanguage appLanguage = AppLanguage();
+  Timer _timer;
+
+
+  @override
+  void dispose() {
+
+    super.dispose();
+    if(_timer!=null)
+      _timer.cancel();
+  }
 
   @override
   void initState() {
@@ -55,6 +75,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
 
     return ChangeNotifierProvider<AppLanguage>(
       //builder : (BuildContext context) => appLanguage,
@@ -79,7 +100,7 @@ class SplashScreenState extends State<SplashScreen> {
             startTimer(context);
             return Builder(
               builder: (context) => Scaffold(
-                body: Container(
+                body:   Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   color: GlobalVariables.green,
@@ -104,12 +125,16 @@ class SplashScreenState extends State<SplashScreen> {
         cursorColor: GlobalVariables.mediumGreen);
   }
 
-  startTimer(BuildContext context) {
-    var duration = Duration(seconds: 10);
-    return Timer(duration, navigateToPage(context));
+   startTimer(BuildContext context) {
+
+    var duration = Duration(seconds: 5);
+    _timer = Timer(duration, navigateToPage(context));
+    return _timer;
+
   }
 
-  navigateToPage(BuildContext context) {
+   navigateToPage(BuildContext context) {
+
     GlobalFunctions.getLoginValue().then((val) {
       print('bool value : ' + val.toString());
       isLogin = val;
@@ -117,17 +142,19 @@ class SplashScreenState extends State<SplashScreen> {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => BaseDashBoard()),
-            (Route<dynamic> route) => false);
-        /* SchedulerBinding.instance.addPostFrameCallback((_) {
+                builder: (BuildContext context) =>
+                    BaseDashBoard()),
+                (Route<dynamic> route) => false);
+       /* SchedulerBinding.instance.addPostFrameCallback((_) {
 
         });*/
-      } else {
+      }else{
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => BaseLoginPage()),
-            (Route<dynamic> route) => false);
+                builder: (BuildContext context) =>
+                    BaseLoginPage()),
+                (Route<dynamic> route) => false);
         /*SchedulerBinding.instance.addPostFrameCallback((_) {
 
         });*/

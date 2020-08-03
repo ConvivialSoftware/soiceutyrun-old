@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -5,11 +6,13 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/Directory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Announcement.dart';
 import 'package:societyrun/Models/CommitteeDirectory.dart';
+import 'package:societyrun/Models/Documents.dart';
 import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -53,6 +56,15 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   String pageName;
 
   bool isStoragePermission=false;
+
+  bool isAnnouncementTabAPICall = false;
+  bool isMeetingsTabAPICall = false;
+  bool isPollTabAPICall = false;
+  bool isDocumentsTabAPICall = false;
+  bool isDirectoryTabAPICall = false;
+  bool isEventsTabAPICall = false;
+
+
   MyComplexState(this.pageName);
 
   @override
@@ -64,20 +76,24 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     });
     //flutterDownloadInitialize();
     _tabController = TabController(length: 6, vsync: this);
-   // getNewsBordListData();
-    getPollSurveyListData();
-    getDocumentsListData();
-    //getEventsListData();
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        getAnnouncementData('Announcement');
+    _tabController.addListener(_handleTabSelection);
+    if (pageName == null) {
+      _handleTabSelection();
+    }
 
+
+   // getNewsBordListData();
+    //getPollSurveyListData();
+    //getDocumentsListData();
+    //getEventsListData();
+   /* GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
 
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
       }
-    });
+    });*/
     super.initState();
   }
 
@@ -170,7 +186,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 100.0),
+                    context, 150.0),
                 getNewsBoardListDataLayout(),
               ],
             ),
@@ -184,7 +200,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 20, 20, 0),
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -558,7 +574,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 100.0),
+                    context, 150.0),
                 getMeetingsListDataLayout(),
               ],
             ),
@@ -572,7 +588,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 20, 20, 0),
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -857,7 +873,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 100.0),
+                    context, 150.0),
                 getPollSurveyListDataLayout(),
               ],
             ),
@@ -878,7 +894,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );/*Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 20, 20, 0),
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -1245,7 +1261,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 100.0),
+                    context, 150.0),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
@@ -1257,7 +1273,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: getSearchFilerLayout(),
+                   // child: getSearchFilerLayout(),
                   ),
                 ),
                 getDirectoryListDataLayout(),
@@ -1373,7 +1389,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       // color: GlobalVariables.grey,
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 6, 20, 0),
+          10, MediaQuery.of(context).size.height / 40, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -1399,7 +1415,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           alignment: Alignment.topLeft,
           child: Text(
             type,
-            style: TextStyle(color: GlobalVariables.green, fontSize: 20),
+            style: TextStyle(color: position==0 ? GlobalVariables.white:GlobalVariables.green, fontSize: 20),
           ),
         ),
         Container(
@@ -1431,35 +1447,46 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               position, childPosition,type);
                         })),
               ),
-              Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(
-                      10), //margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  //color: GlobalVariables.white,
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10))),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          type == 'Near By Shops'? 'Coming Soon...' : AppLocalizations.of(context).translate('view_more'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: (){
+                  if(type != 'Near By Shops') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>BaseDirectory(_directoryList[position])));
+                  }
+
+                },
+                child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(
+                        10), //margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    //color: GlobalVariables.white,
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10))),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            type == 'Near By Shops'? 'Coming Soon...' : AppLocalizations.of(context).translate('view_more'),
+                            style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      type != 'Near By Shops' ?Container(
-                        child: Icon(
-                          Icons.fast_forward,
-                          color: GlobalVariables.green,
-                        ),
-                      ) : Container()
-                    ],
-                  )),
+                        type != 'Near By Shops' ?Container(
+                          child: Icon(
+                            Icons.fast_forward,
+                            color: GlobalVariables.green,
+                          ),
+                        ) : Container()
+                      ],
+                    )),
+              ),
             ],
           ),
         )
@@ -1481,7 +1508,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         .directoryTypeWiseList[childPosition].POST;
 
       _directoryList[position]
-          .directoryTypeWiseList[childPosition].EMAIL!= 0 ? email=true : email=false;
+          .directoryTypeWiseList[childPosition].EMAIL.length!= 0 ? email=true : email=false;
 
       _directoryList[position]
           .directoryTypeWiseList[childPosition].PHONE.length != 0 ? phone=true : phone=false;
@@ -1558,8 +1585,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       //color: GlobalVariables.grey,
                       child: Text(
                         name,
-                        style:
-                            TextStyle(color: GlobalVariables.green, fontSize: 16),
+                        style: TextStyle(color: GlobalVariables.green, fontSize: 16,),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     )),
                 Flexible(
@@ -1567,50 +1595,18 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Container(
                     //  color: GlobalVariables.grey,
                       margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                      alignment: Alignment.topCenter, // height: 10,
+                      alignment: Alignment.topRight, // height: 10,
                       //  color: GlobalVariables.lightGreen,
                       child: Text(
                         field,
                         style: TextStyle(
-                            color: GlobalVariables.veryLightGray, fontSize: 14),
+                            color: GlobalVariables.veryLightGray, fontSize: 16
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     )),
-                Flexible(
-                    flex: 1,
-                    child:phone
-                        ? Container(
-                      //color: GlobalVariables.lightGray,
-                            // color: GlobalVariables.black,
-                            // height: 10,
-                            alignment: Alignment.topRight,
-                            margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                            child: Icon(
-                              Icons.call,
-                              color: GlobalVariables.mediumGreen,
-                              size: 24,
-                            ),
-                          )
-                        : Container(
-                     // width: 24,height: 24,
-                    )),
-                Flexible(
-                    flex: 1,
-                    child:email
-                        ? Container(
-                     // color: GlobalVariables.lightGray,
-                      // color: GlobalVariables.black,
-                      // height: 10,
-                      alignment: Alignment.topRight,
-                      margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                      child: Icon(
-                        Icons.email,
-                        color: GlobalVariables.mediumGreen,
-                        size: 24,
-                      ),
-                    )
-                        : Container(
-                     // width: 24,height: 24,
-                    )),
+
               ],
             ),
           ),
@@ -1659,7 +1655,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     ];
   }
 
-  getDocumentsLayout() {
+ /* getDocumentsLayout() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -1672,7 +1668,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 100.0),
+                    context, 150.0),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
@@ -1684,7 +1680,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: getSearchFilerLayout(),
+                    //child: getSearchFilerLayout(),
                   ),
                 ),
                 getDocumentListDataLayout(),
@@ -1694,9 +1690,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         ],
       ),
     );
-  }
+  }*/
 
-  getDocumentListDataLayout() {
+ /* getDocumentListDataLayout() {
     return  Align(
       alignment: Alignment.center,
       child: Container(
@@ -1704,11 +1700,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
         ),),
       ),
-    );/*Container(
+    );*//*Container(
       // color: GlobalVariables.grey,
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 6, 20, 0),
+          10, MediaQuery.of(context).size.height / 6, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -1718,7 +1714,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );*/
+    );*//*
   }
 
   getDocumentListItemLayout(int position) {
@@ -1797,10 +1793,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getDocumentTypeWiseItemLayout(
-    int position,
-    int childPosition,
-  ) {
+  getDocumentTypeWiseItemLayout(int position, int childPosition,) {
     return Container(
       child: Column(
         //crossAxisAlignment: CrossAxisAlignment.start,
@@ -1904,7 +1897,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         ),
       ]),
     ];
-  }
+  }*/
 
   getEventsLayout() {
     return Container(
@@ -1919,7 +1912,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 100.0),
+                    context, 150.0),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
@@ -1931,7 +1924,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: getSearchFilerLayout(),
+                   // child: getSearchFilerLayout(),
                   ),
                 ),
                 getEventsDataLayout(),
@@ -1955,7 +1948,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       //  color: GlobalVariables.grey,
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 7, 20, 0),
+          10, MediaQuery.of(context).size.height / 40, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -2317,8 +2310,11 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
 
       }
+      _progressDialog.hide();
+      setState(() {
+        isAnnouncementTabAPICall=true;
+      });
 
-      getMeetingData('Meeting');
 
     });
   }
@@ -2341,8 +2337,11 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         print("_meetingList length : "+_announcementList.length.toString());
 
       }
-      getEventData('Event');
+      _progressDialog.hide();
+      setState(() {
 
+        isMeetingsTabAPICall=true;
+      });
     });
   }
 
@@ -2359,17 +2358,13 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
         /*{ID: 94, USER_NAME: Pallavi Unde, USER_PHOTO: 278808_2019-08-16_12:45:09.jpg, SUBJECT: test demo, DESCRIPTION: <p>test demo</p>
 I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
-
-
           _eventList = List<Announcement>.from(_list.map((i) =>Announcement.fromJson(i)));
-
-
         print("_eventList length : "+_meetingList.length.toString());
-
-
       }
-      getAnnouncementPollData('Poll');
-
+      _progressDialog.hide();
+      setState(() {
+        isEventsTabAPICall=true;
+      });
     });
   }
 
@@ -2380,6 +2375,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
+    _progressDialog.show();
     restClient.getAnnouncementPollData(societyId, type,block,flat,userId).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -2396,7 +2392,10 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         });*/
       }
 
-      getNeighboursDirectoryData();
+      _progressDialog.hide();
+      setState(() {
+
+      });
     });
   }
 
@@ -2432,6 +2431,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         });*/
         getDirectoryListData();
         setState(() {
+          isDirectoryTabAPICall=true;
         });
       }
       _progressDialog.hide();
@@ -2442,6 +2442,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
     restClient.getNeighboursDirectoryData(societyId).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -2458,6 +2459,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
       }
       getCommitteeDirectoryData();
+
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -2487,7 +2489,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     }else if(item==AppLocalizations.of(context).translate('documents')){
       //Redirect to  Directory
       _tabController.animateTo(3);
-    }else if(item==AppLocalizations.of(context).translate('directory +++++')){
+    }else if(item==AppLocalizations.of(context).translate('directory')){
       //Redirect to  Document
       _tabController.animateTo(4);
     }else if(item==AppLocalizations.of(context).translate('events')){
@@ -2497,9 +2499,436 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
       _tabController.animateTo(0);
     }
 
+    if(pageName!=null) {
+      pageName=null;
+      if(_tabController.index==0){
+        _handleTabSelection();
+      }
+    }
 
 
   }
+
+  void _handleTabSelection() {
+
+
+    print('Call _handleTabSelection');
+    //if(_tabController.indexIsChanging){
+    _callAPI(_tabController.index);
+    //}
+
+  }
+
+  void _callAPI(int index) {
+
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        switch(index){
+          case 0: {
+            if(!isAnnouncementTabAPICall) {
+              getAnnouncementData('Announcement');
+            }
+          }
+          break;
+          case 1: {
+            if(!isMeetingsTabAPICall) {
+              getMeetingData('Meeting');
+            }
+          }
+          break;
+          case 2: {
+            //getAnnouncementPollData('Poll');
+          }
+          break;
+          case 3: {
+
+            if(!isDocumentsTabAPICall){
+              getDocumentData();
+            }
+          }
+          break;
+          case 4: {
+            if(!isDirectoryTabAPICall) {
+              getNeighboursDirectoryData();
+            }
+          }
+          break;
+         case 5: {
+           if(!isEventsTabAPICall) {
+             getEventData('Event');
+           }
+          }
+          break;
+
+        }
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+
+  }
+
+  getDocumentsLayout() {
+    print('MyDocumentsLayout Tab Call');
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: GlobalVariables.veryLightGray,
+      ),
+      child: Column(
+        children: <Widget>[
+          Flexible(
+            child: Stack(
+              children: <Widget>[
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0), //ticketOpenClosedLayout(),
+               // documentOwnCommonLayout(),
+                getDocumentListDataLayout(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  getDocumentListDataLayout() {
+    return Container(
+      //padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(20, 80, 20, 0),
+      child: Builder(
+          builder: (context) => ListView.builder(
+            // scrollDirection: Axis.vertical,
+            itemCount: _documentList.length,
+            itemBuilder: (context, position) {
+              return getDocumentListItemLayout(position);
+            }, //  scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+          )),
+    );
+  }
+
+  getDocumentListItemLayout(int position) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.1,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          color: GlobalVariables.white),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Container(
+                    child: SvgPicture.asset(
+                      GlobalVariables.pdfIconPath,
+                      color: GlobalVariables.mediumGreen,
+                      width: 25,
+                      height: 40,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(
+                        15, 0, 0, 0), //alignment: Alignment.topLeft,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Flexible(
+                                  flex: 2,
+                                  child: Container(
+                                    child: Text(
+                                      _documentList[position].TITLE,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: GlobalVariables.green,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    child: Text(
+                                      _documentList[position].DOCUMENT_CATEGORY,
+                                      style: TextStyle(
+                                          color: GlobalVariables.white,
+                                          fontSize: 12),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: getDocumentTypeColor(
+                                            _documentList[position]
+                                                .DOCUMENT_CATEGORY),
+                                        borderRadius: BorderRadius.circular(8)),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          child: Text(
+                            _documentList[position].DESCRIPTION,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: GlobalVariables.lightGray),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: 1,
+            color: GlobalVariables.mediumGreen,
+            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Divider(
+              height: 1,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+              /*  Visibility(
+                  visible:false,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                          child: SvgPicture.asset(
+                            GlobalVariables.downloadIconPath,
+                            color: GlobalVariables.lightGray,
+                            width: 25,
+                            height: 20,
+                          )),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Text(
+                            "Document Name",
+                            style: TextStyle(color: GlobalVariables.mediumGreen)),
+                      ),
+                    ],
+                  ),
+                ),*/
+                _documentList[position].DOCUMENT.length != null
+                    ? Container(
+                  // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: InkWell(
+                    onTap: () {
+                      print("storagePermiassion : " +
+                          isStoragePermission.toString());
+                      if (isStoragePermission) {
+                        GlobalFunctions.downloadAttachment(
+                            _documentList[position].DOCUMENT, _localPath);
+                      } else {
+                        GlobalFunctions.askPermission(Permission.storage)
+                            .then((value) {
+                          if (value) {
+                            GlobalFunctions.downloadAttachment(
+                                _documentList[position].DOCUMENT,
+                                _localPath);
+                          } else {
+                            GlobalFunctions.showToast(
+                                AppLocalizations.of(context)
+                                    .translate('download_permission'));
+                          }
+                        });
+                      }
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                            child: Icon(
+                              Icons.attach_file,
+                              color: GlobalVariables.mediumGreen,
+                            )),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Text(
+                            "Attachment",
+                            style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 10,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+                    : Container(),
+                Container(
+                  margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  child: Text(
+                      _documentList[position].USER_NAME == null
+                          ? 'Posted By: - '
+                          : 'Posted By: ' + _documentList[position].USER_NAME,
+                      style: TextStyle(color: GlobalVariables.mediumGreen)),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  getDocumentTypeColor(String type) {
+    switch (type.toLowerCase().trim()) {
+      case "others":
+        return GlobalVariables.skyBlue;
+        break;
+      case "financial":
+        return GlobalVariables.orangeYellow;
+        break;
+      case "agm-em":
+        return GlobalVariables.green;
+        break;
+      default:
+        return GlobalVariables.skyBlue;
+        break;
+    }
+  }
+
+  void getDocumentData() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String  societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.getDocumentData(societyId).then((value) {
+        _progressDialog.hide();
+      if (value.status) {
+        List<dynamic> _list = value.data;
+
+        _documentList =
+        List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
+        setState(() {
+          isDocumentsTabAPICall=true;
+        });
+
+      }
+    });
+  }
+
+  /*documentOwnCommonLayout() {
+    return Visibility(
+      visible: false,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          width: MediaQuery.of(context).size.width / 1.1,
+          height: 50,
+          margin: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height / 60, 0, 0),
+          decoration: BoxDecoration(
+            color: GlobalVariables.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: firstDocumentsContainerColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            bottomLeft: Radius.circular(30.0))),
+                    child: ButtonTheme(
+                      minWidth: 190,
+                      height: 50,
+                      child: FlatButton(
+                        //color: GlobalVariables.grey,
+                        child: Text(
+                          AppLocalizations.of(context).translate('own'),
+                          style: TextStyle(
+                              fontSize: 15, color: firstDocumentsTextColor),
+                        ),
+                        onPressed: () {
+                          GlobalFunctions.showToast("OWN Click");
+                          if (!isOpenDocuments) {
+                            isOpenDocuments = true;
+                            isClosedDocuments = false;
+                            firstDocumentsTextColor = GlobalVariables.white;
+                            firstDocumentsContainerColor =
+                                GlobalVariables.mediumGreen;
+                            secondDocumentsTextColor = GlobalVariables.green;
+                            secondDocumentsContainerColor =
+                                GlobalVariables.white;
+                          }
+                          setState(() {});
+                        },
+                      ),
+                    )),
+              ),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: secondDocumentsContainerColor,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0))),
+                    child: ButtonTheme(
+                      minWidth: 190,
+                      height: 50,
+                      child: FlatButton(
+                        child: Text(
+                          AppLocalizations.of(context).translate('common'),
+                          style: TextStyle(
+                              fontSize: 15, color: secondDocumentsTextColor),
+                        ),
+                        onPressed: () {
+                          GlobalFunctions.showToast("COMMON Click");
+                          if (!isClosedDocuments) {
+                            isOpenDocuments = false;
+                            isClosedDocuments = true;
+                            firstDocumentsContainerColor =
+                                GlobalVariables.white;
+                            firstDocumentsTextColor = GlobalVariables.green;
+                            secondDocumentsTextColor = GlobalVariables.white;
+                            secondDocumentsContainerColor =
+                                GlobalVariables.mediumGreen;
+                          }
+                          setState(() {});
+                        },
+                        color: GlobalVariables.transparent,
+                      ),
+                    )),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }*/
+
 }
 
 class NewsBoard {
@@ -2566,12 +2995,12 @@ class DirectoryTypeWiseData {
       this.isFilter});
 }
 
-class Documents {
+/*class Documents {
   String docTypes;
   List<DocumentsTypeWiseData> documentList;
 
   Documents({this.docTypes, this.documentList});
-}
+}*/
 
 class DocumentsTypeWiseData {
   String docTitle, docDesc;

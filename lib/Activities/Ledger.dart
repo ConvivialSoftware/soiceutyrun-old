@@ -96,7 +96,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     context, 200.0),
                 Container(
                   margin: EdgeInsets.fromLTRB(
-                      20, MediaQuery.of(context).size.height / 30, 20, 0),
+                      10, MediaQuery.of(context).size.height / 30, 10, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -120,7 +120,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 ),
                 _ledgerList.length>0 ?  Container(
                   margin: EdgeInsets.fromLTRB(
-                      20, MediaQuery.of(context).size.height / 10, 20,100),
+                      10, MediaQuery.of(context).size.height / 10, 10,100),
                   alignment: Alignment.topLeft,
                //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   // padding: EdgeInsets.all(15),
@@ -132,7 +132,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 _ledgerList.length>0 ? Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),

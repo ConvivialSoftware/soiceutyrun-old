@@ -25,6 +25,8 @@ class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
+  bool _obscureNewPassword = true;
+  bool _obscureConfirmPassword = true;
 
 ProgressDialog _progressDialog;
   @override
@@ -83,7 +85,7 @@ ProgressDialog _progressDialog;
   getChangePasswordLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(20),
        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
@@ -105,12 +107,27 @@ ProgressDialog _progressDialog;
                 ),
                 child: TextField(
                   controller: _newPasswordController,
-                  obscureText: true,
+                  obscureText: _obscureNewPassword,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('new_password'),
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                      onPressed: () {
+                        if (_obscureNewPassword) {
+                          _obscureNewPassword = false;
+                        } else {
+                          _obscureNewPassword = true;
+                        }
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: GlobalVariables.lightGreen,
+                      ),
+                    ),
                   ),
+
                 ),
               ),
               Container(
@@ -126,11 +143,25 @@ ProgressDialog _progressDialog;
                 ),
                 child: TextField(
                   controller: _confirmPasswordController,
-                  obscureText: true,
+                  obscureText: _obscureConfirmPassword,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('confirm_password'),
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
+                      border: InputBorder.none,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        if (_obscureConfirmPassword) {
+                          _obscureConfirmPassword = false;
+                        } else {
+                          _obscureConfirmPassword = true;
+                        }
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: GlobalVariables.lightGreen,
+                      ),
+                    ),
                   ),
                 ),
               ),

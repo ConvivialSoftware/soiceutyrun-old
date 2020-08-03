@@ -95,7 +95,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
           0), //color: GlobalVariables.black,
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+        margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
 
         child: Column(
           children: <Widget>[

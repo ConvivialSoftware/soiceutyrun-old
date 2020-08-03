@@ -106,7 +106,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
+                    context, 180.0),
                 ticketOpenClosedLayout(), //ticketFilterLayout(),
                 getTicketListDataLayout(), addTicketFabLayout(),
               ],
@@ -306,7 +306,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 12, 20, 0),
+          10, MediaQuery.of(context).size.height / 10, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -339,25 +339,59 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             color: GlobalVariables.white),
         child: Column(
           children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                  //margin:EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  child: Text(isOpenTicket ? _openComplaintList[position].CATEGORY : _closedComplaintList[position].CATEGORY,
+                      style: TextStyle(
+                          color: GlobalVariables.green, fontSize: 14)),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: Text(
+                    isOpenTicket ? _openComplaintList[position].STATUS : _closedComplaintList[position].STATUS,
+                    style: TextStyle(
+                        color: GlobalVariables.white,
+                        fontSize: 12),
+                  ),
+                  decoration: BoxDecoration(
+                      color: getTicketCategoryColor(
+                          isOpenTicket ? _openComplaintList[position].STATUS : _closedComplaintList[position].STATUS),
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                Container(
+                  child: Text(
+                    'Ticket No: ' +
+                        ( isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO),
+                    style: TextStyle(
+                        color: GlobalVariables.green,
+                        fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+
             Container(
               child: Row(
                 children: <Widget>[
                   Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          //margin:EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: Text('Category',
-                              style: TextStyle(
-                                  color: GlobalVariables.green, fontSize: 14)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: SvgPicture.asset(
-                            GlobalVariables.waterIconPath,
-                          ),
-                        )
-                      ],
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                     width:50,
+                     height: 50,
+                     decoration: BoxDecoration(
+                       color: GlobalVariables.mediumGreen,
+                       shape: BoxShape.rectangle
+                     ),
+                     /* child:*//* SvgPicture.asset(
+                        GlobalVariables.waterIconPath,
+                      ),*//*CircleAvatar(
+                        radius: 5,
+                        backgroundColor: GlobalVariables.mediumGreen,
+                       // backgroundImage: NetworkImage(_openComplaintList[position]. ),
+                      ),*/
                     ),
                   ),
                   Flexible(
@@ -368,35 +402,15 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          Container(
+                         /* Container(
                               // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: Text(
-                                  isOpenTicket ? _openComplaintList[position].STATUS : _closedComplaintList[position].STATUS,
-                                  style: TextStyle(
-                                      color: GlobalVariables.white,
-                                      fontSize: 12),
-                                ),
-                                decoration: BoxDecoration(
-                                    color: getTicketCategoryColor(
-                                        isOpenTicket ? _openComplaintList[position].STATUS : _closedComplaintList[position].STATUS),
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              Container(
-                                child: Text(
-                                  'Ticket No: ' +
-                                     ( isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 12),
-                                ),
-                              ),
+
+
                             ],
-                          )),
+                          )),*/
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: Text(

@@ -80,7 +80,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
 
   getGuestOthersLayout() {
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 40, 20, 20),
+      margin: EdgeInsets.fromLTRB(10, 40, 10, 20),
       padding: EdgeInsets.all(20),
      // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(

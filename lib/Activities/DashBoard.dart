@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -58,7 +58,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   var email = '', phone = '';
   var photo;
 
-  final cryptor = PlatformStringCryptor();
+
   @override
   void initState() {
     super.initState();
@@ -89,6 +89,19 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
 
 
       }
+    }).catchError((Object obj) {
+      if(_progressDialog.isShowing()){
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
 
   }
@@ -103,9 +116,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
       builder: (context) => Scaffold(
         key: _dashboardSacfoldKey,
         // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
-        body: getBodyLayout(),
+        body: WillPopScope(child: getBodyLayout(), onWillPop: onWillPop),
         drawer: getDrawerLayout(),
-        bottomNavigationBar: getBottomNavigationBar(),
+       // bottomNavigationBar: getBottomNavigationBar(),
       ),
     );
   }
@@ -771,35 +784,39 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   }
 
   getDrawerLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Drawer(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                /*child: Image.asset(GlobalVariables.appLogoPath,
+    return StatefulBuilder(builder: (BuildContext context,
+        StateSetter setState){
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  /*child: Image.asset(GlobalVariables.appLogoPath,
                     width: 250, height: 80, fit: BoxFit.fill),*/
-                margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
-                padding: EdgeInsets.all(5),
-                alignment: Alignment.topLeft,
-                child: SvgPicture.asset(
-                  GlobalVariables.drawerImagePath,
-                  height: 40,
+                  margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
+                  padding: EdgeInsets.all(5),
+                  alignment: Alignment.topLeft,
+                  child: SvgPicture.asset(
+                    GlobalVariables.drawerImagePath,
+                    height: 40,
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                padding: EdgeInsets.all(5),
-                color: GlobalVariables.veryLightGray,
-                child: getHeaderLayout(),
-              ),
-              getListData(),
-            ],
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  padding: EdgeInsets.all(5),
+                  color: GlobalVariables.veryLightGray,
+                  child:
+                  getHeaderLayout(),
+                ),
+                getListData(),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   getHeaderLayout() {
@@ -812,8 +829,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
             children: <Widget>[
               Container(
                 //color:GlobalVariables.white,
-                padding: EdgeInsets.all(5),
-                margin: EdgeInsets.fromLTRB(10, 0, 10,
+              //  padding: EdgeInsets.all(5),
+                margin: EdgeInsets.fromLTRB(5, 0, 5,
                     0), // width: MediaQuery.of(context).size.width / 2.2,
                 //  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                 /*    decoration: BoxDecoration(
@@ -873,63 +890,94 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                               ),
                       )),
                     ),
-                    Container(
-                      alignment: AlignmentDirectional.center,
-                      //color: GlobalVariables.red,
-                      //  padding: EdgeInsets.all(5),
-                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.fromLTRB(
-                                5, 0, 0, 5), //color: GlobalVariables.green,
-                            //TODO : UserName
-                            child: Text(
-                              snapshot.data[GlobalVariables.keyName],
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: GlobalVariables.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                    Flexible(
+                      child: Container(
+                        alignment: AlignmentDirectional.center,
+                        //color: GlobalVariables.red,
+                        //  padding: EdgeInsets.all(5),
+                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  5, 0, 0, 5), //color: GlobalVariables.green,
+                              //TODO : UserName
+                              child: AutoSizeText(
+                                snapshot.data[GlobalVariables.keyName],
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: GlobalVariables.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                                maxLines: 1,
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(
-                                5), //   color: GlobalVariables.green,
-                            //TODO : CustomerID
-                            child: Text(
-                              (AppLocalizations.of(context)
-                                      .translate("str_consumer_id") +
-                                  snapshot.data[GlobalVariables.keyConsumerId]),
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: GlobalVariables.grey, fontSize: 15),
+                            Container(
+                              margin: EdgeInsets.all(
+                                  5), //   color: GlobalVariables.green,
+                              //TODO : CustomerID
+                              child: AutoSizeText(
+                                (AppLocalizations.of(context)
+                                        .translate("str_consumer_id") +
+                                    snapshot.data[GlobalVariables.keyConsumerId]),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: GlobalVariables.grey, fontSize: 15),
+                                maxLines: 1,
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(
-                                5), //  color: GlobalVariables.green,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Visibility(
-                                  visible: false,
-                                  child: InkWell(
-                                    onTap: (){
-                                      GlobalFunctions.showToast("Logout");
-                                      GlobalFunctions.clearSharedPreferenceData();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
+                            Container(
+                              margin: EdgeInsets.all(
+                                  5), //  color: GlobalVariables.green,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Visibility(
+                                    visible: false,
+                                    child: InkWell(
+                                      onTap: (){
+                                        GlobalFunctions.showToast("Logout");
+                                        GlobalFunctions.clearSharedPreferenceData();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              0, 0, 5, 5), //TODO: logout
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: Text(
+                                              'Logout',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: GlobalVariables.grey,
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: false,
+                                    child: Container(
+                                        margin: EdgeInsets.all(5), //TODO: Divider
+                                        height: 20,
+                                        width: 8,
+                                        child: VerticalDivider(
+                                          color: GlobalVariables.black,
+                                        )),
+                                  ),
+                                  Visibility(
+                                    visible: false,
                                     child: Container(
                                         margin: EdgeInsets.fromLTRB(
-                                            0, 0, 5, 5), //TODO: logout
+                                            5, 0, 5, 5), //Todo: setting
                                         child: GestureDetector(
                                           onTap: () {},
                                           child: Text(
-                                            'Logout',
+                                            'Setting',
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                               fontSize: 18,
@@ -937,39 +985,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                             ),
                                           ),
                                         )),
-                                  ),
-                                ),
-                                Visibility(
-                                  visible: false,
-                                  child: Container(
-                                      margin: EdgeInsets.all(5), //TODO: Divider
-                                      height: 20,
-                                      width: 8,
-                                      child: VerticalDivider(
-                                        color: GlobalVariables.black,
-                                      )),
-                                ),
-                                Visibility(
-                                  visible: false,
-                                  child: Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          5, 0, 5, 5), //Todo: setting
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: Text(
-                                          'Setting',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: GlobalVariables.grey,
-                                          ),
-                                        ),
-                                      )),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -1095,7 +1116,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
     String loginId = await GlobalFunctions.getLoginId();
 
 
-    restClient.getAllSocietyData(username, password).then((value) {
+    restClient.getAllSocietyData(username).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -1138,48 +1159,62 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
               " " +
               loginResponse.FLAT);
 
-         /* if (loginId == loginResponse.ID) {
+          if (loginId == loginResponse.ID) {
             if (_societyListItems.length > 0) {
               _societyListItems.insert(
                   0,
                   DropdownMenuItem(
                     value: loginResponse.ID,
-                    child: Text(
-                      loginResponse.Society_Name +
-                          " " +
-                          loginResponse.BLOCK +
-                          " " +
-                          loginResponse.FLAT,
-                      style: TextStyle(color: GlobalVariables.black),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      alignment: Alignment.topLeft,
+                      child: AutoSizeText(
+                        loginResponse.Society_Name +
+                            " " +
+                            loginResponse.BLOCK +
+                            " " +
+                            loginResponse.FLAT,
+                        style: TextStyle(color: GlobalVariables.black,fontSize: 16),
+                        maxLines: 1,
+                      ),
                     ),
                   ));
             } else {
               _societyListItems.add(DropdownMenuItem(
                 value: loginResponse.ID,
-                child: Text(
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  alignment: Alignment.topLeft,
+                  child: AutoSizeText(
+                    loginResponse.Society_Name +
+                        " " +
+                        loginResponse.BLOCK +
+                        " " +
+                        loginResponse.FLAT,
+                    style: TextStyle(color: GlobalVariables.black,fontSize: 16),
+                    maxLines: 1,
+                  ),
+                ),
+              ));
+            }
+          } else {
+            _societyListItems.add(DropdownMenuItem(
+              value: loginResponse.ID,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                alignment: Alignment.topLeft,
+                child: AutoSizeText(
                   loginResponse.Society_Name +
                       " " +
                       loginResponse.BLOCK +
                       " " +
                       loginResponse.FLAT,
-                  style: TextStyle(color: GlobalVariables.black),
+                  style: TextStyle(color: GlobalVariables.black,fontSize: 16),
                   maxLines: 1,
                 ),
-              ));
-            }
-          } else {*/
-            _societyListItems.add(DropdownMenuItem(
-              value: loginResponse.ID,
-              child: Text(
-                loginResponse.Society_Name +
-                    " " +
-                    loginResponse.BLOCK +
-                    " " +
-                    loginResponse.FLAT,
-                style: TextStyle(color: GlobalVariables.black),
               ),
             ));
-         // }
+          }
           print('value: ' + _societyListItems[i].value.toString());
         }
         print('size : ' + _societyListItems.length.toString());
@@ -1381,6 +1416,19 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
         setState((){
           //Your state change code goes here
         });
+      }
+    }).catchError((Object obj) {
+      if(_progressDialog.isShowing()){
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
       }
     });
   }
@@ -1742,6 +1790,19 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
         ],
       ),
     );
+
+  }
+
+  DateTime currentBackPressTime;
+  Future<bool> onWillPop() {
+
+    DateTime now = DateTime.now();
+    if(currentBackPressTime==null || now.difference(currentBackPressTime)>Duration(seconds: 2)){
+      currentBackPressTime=now;
+      GlobalFunctions.showToast(AppLocalizations.of(context).translate('leave_app'));
+      return Future.value(false);
+    }
+    return Future.value(true);
 
   }
 }

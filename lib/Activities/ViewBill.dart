@@ -100,7 +100,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                     context, 150.0),
                 Container(
                   margin: EdgeInsets.fromLTRB(
-                      20, MediaQuery.of(context).size.height / 30, 20, 0),
+                      10, MediaQuery.of(context).size.height / 30, 10, 0),
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -271,36 +271,31 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
           Container(
             padding: EdgeInsets.all(5),
             alignment: Alignment.topLeft,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child:RichText(text: TextSpan(children: [
-                    TextSpan(
-                        text: AppLocalizations.of(context).translate('date'),
-                        style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-                    ),
-                    TextSpan(
-                      text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
-                        style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-                    )
-                  ])),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  child:RichText(text: TextSpan(children: [
-                    TextSpan(
-                        text: AppLocalizations.of(context).translate('due_date'),
-                        style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-                    ),
-                    TextSpan(
-                      text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
-                        style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-                    )
-                  ])),
-                ),
-              ],
-            ),
+            child: RichText(text: TextSpan(children: [
+              TextSpan(
+                  text: AppLocalizations.of(context).translate('date'),
+                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+              ),
+              TextSpan(
+                  text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
+                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
+              )
+            ])),
+          ),
+          getDivider(),
+          Container(
+            padding: EdgeInsets.all(5),
+            alignment: Alignment.topLeft,
+            child: RichText(text: TextSpan(children: [
+              TextSpan(
+                  text: AppLocalizations.of(context).translate('due_date'),
+                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+              ),
+              TextSpan(
+                  text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
+                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
+              )
+            ])),
           ),
           getDivider(),
           Container(
