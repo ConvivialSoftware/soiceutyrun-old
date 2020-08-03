@@ -215,8 +215,8 @@
   "close": "Close",
   "download_permission": "You have to take permission for download attachment",
   "my_profile": "My Profile",
-  "contact1": "Contact Number",
-  "contact2": "Alternative Contact Number",
+  "contact1": "Phone No.",
+  "contact2": "Alternative Phone No",
   "email": "Email Id",
   "gender": "Gender",
   "anniversary_date": "Anniversary Date",
@@ -247,6 +247,13 @@
   "disclaimer": "Disclaimer",
   "proceed": "Proceed",
   "disclaimer_info": "You are being re-directed to a third party site. Please acknowledge the disclaimer before proceeding further.\n\nYou are about to access a site, the accuracy or completeness of the materials or the reliability of any advice, opinion, statement or other information displayed or distributed through it, is not warranted by SocietyRun and shall be solely be construed to be set forth by the third party.\n\nYou will access this site solely for the payment of your bills and you acknowledge that any reliance on any opinion, advice, statement, memorandum, or information available on the site shall be at your sole risk and consequences. \n\nSocietyRun and its affiliates, subsidiaries, employees, officers, directors and agents, expressly disclaim any liability for any deficiency in the services of the service provider whose site you are about to access. Neither SocietyRun nor any of its affiliates nor their directors, officers and employees will be liable to or have any responsibility of any kind for any loss that you incur in the event of any deficiency in the services of the service provider, failure or disruption of the site of the service provider, or resulting from the act or omission of any other party involved in making this site or the data contained therein available to you, or from any other cause relating to your access to, inability to access, or use of the site or these materials in accordance thereto SocietyRun and all its related parties described here in above stand indemnified from all proceedings or matters arising thereto.",
-  "sure_logout": "Are you sure you want to Logout?"
+  "sure_logout": "Are you sure you want to Logout?",
+  "copy": "COPY",
+  "email_bill": "Email Bill",
+  "email_bill_to": "Email bill to",
+  "email_now": "Email Now",
+  "edit_profile": "Edit Profile",
+  "mobile_email_not_found": "Your Mobile and Email ID not found, kindly update your Profile",
+  "leave_app": "Press back again to leave SocietyRun"
 
 }

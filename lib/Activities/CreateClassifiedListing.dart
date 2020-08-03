@@ -74,7 +74,7 @@ class CreateClassifiedListingState extends State<BaseCreateClassifiedListing> {
   getCreateClassifiedListingLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(

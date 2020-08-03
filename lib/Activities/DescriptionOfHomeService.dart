@@ -89,7 +89,7 @@ class DescriptionOfHomeServiceState
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 50, 20, 0),
+          10, MediaQuery.of(context).size.height / 50, 10, 0),
       child: Column(
         children: <Widget>[
           Container(

@@ -98,6 +98,7 @@ class GlobalVariables{
   static const AllSocietyAPI = "Api/login";
   static const SocietyAPI = "Api/mysociety";
   static const otpSendAPI = "Api/otpsend";
+  static const otpReSendAPI = "Api/otp_resend";
   static const otpLoginAPI = "Api/otpLogin";
   static const newPasswordAPI = "Api/newpwd";
   static const unitMemberAPI = "Members";
@@ -140,6 +141,7 @@ class GlobalVariables{
   static const bankAPI = "bank";
   static const insertPaymentAPI = "insertpayment";
   static const paymentRequestAPI = "paymentrequest";
+  static const mailAPI = "mail";
 
 
   /*Routs Variables*/
@@ -253,6 +255,8 @@ class GlobalVariables{
   static const USER_ID='USER_ID';
   static const PHOTO='PHOTO';
   static const ROLE='ROLE';
+  static const NUMBER='NUMBER';
+  static const Email_id='Email_id';
 
 
 

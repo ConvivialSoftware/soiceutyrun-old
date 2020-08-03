@@ -48,6 +48,8 @@ class MyUnitState extends State<BaseMyUnit>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
+
+
   //List<Bills> _billList = new List<Bills>();
 
   List<RecentTransaction> _transactionList = new List<RecentTransaction>();
@@ -90,7 +92,7 @@ class MyUnitState extends State<BaseMyUnit>
   bool isClosedDocuments = false;
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
-  var email, phone,consumerId='';
+  var email='', phone='',consumerId='';
 
   var amount, invoiceNo, referenceNo;
 
@@ -110,32 +112,40 @@ class MyUnitState extends State<BaseMyUnit>
 
   String _selectedPaymentGateway = "PayTM";
 
+  bool isDuesTabAPICall = false;
+  bool isHouseholdTabAPICall = false;
+
   MyUnitState(this.pageName);
+
+  TextEditingController _emailTextController = TextEditingController();
+  bool isEditEmail=false;
 
   @override
   void initState() {
     super.initState();
-    getDisplayName();
+   /* getDisplayName();
     getLocalPath();
+    getDisplayPhoto();
+    getMobile();
+    getEmail();
+    getConsumerID();*/
+    getSharedPreferenceData();
+    getSharedPreferenceDuesData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
     // flutterDownloadInitialize();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+    print(pageName.toString());
+    _handleTabSelection();
+
     // getBillList();
-    getVehicleRecentTransactionList();
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        getPayOption();
-        // getUnitMemberData();
-      } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
-      }
-    });
+   /* getVehicleRecentTransactionList();
+
 
     getTransactionList();
-    getTicketDescriptionList();
+    getTicketDescriptionList();*/
     // getDocumentDescriptionList();
   }
 
@@ -149,6 +159,7 @@ class MyUnitState extends State<BaseMyUnit>
 
   @override
   Widget build(BuildContext context) {
+
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if (pageName != null) {
       redirectToPage(pageName);
@@ -340,6 +351,10 @@ class MyUnitState extends State<BaseMyUnit>
     return PreferredSize(
       preferredSize: Size.fromHeight(40.0),
       child: TabBar(
+      /*  onTap: (index){
+          print('Call onTap');
+          _callAPI(index);
+        },*/
         tabs: [
           Container(
             width: MediaQuery.of(context).size.width / 3,
@@ -533,6 +548,9 @@ class MyUnitState extends State<BaseMyUnit>
   }
 */
   getMyDuesLayout() {
+
+    print('getMyDuesLayout Tab call');
+
     return SingleChildScrollView(
      // scrollDirection: Axis.vertical,
       child: Container(
@@ -563,7 +581,7 @@ class MyUnitState extends State<BaseMyUnit>
                   ),
                   _ledgerList.length > 0 ? Container(
                     alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                    margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
                     child: Text(
                       AppLocalizations.of(context)
                           .translate('recent_transaction'),
@@ -576,7 +594,7 @@ class MyUnitState extends State<BaseMyUnit>
                   ):Container(),
                   _ledgerList.length > 0 ? Container(
                     padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
                     decoration: BoxDecoration(
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.only(
@@ -592,10 +610,10 @@ class MyUnitState extends State<BaseMyUnit>
                               shrinkWrap: true,
                             )),
                   ) : Container(),
-                  Container(
+                  _ledgerList.length>0 ?   Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
                       //color: GlobalVariables.white,
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
@@ -629,7 +647,7 @@ class MyUnitState extends State<BaseMyUnit>
                             )
                           ],
                         ),
-                      )),
+                      )) : Container(),
                 ],
               ),
             ),
@@ -838,7 +856,7 @@ class MyUnitState extends State<BaseMyUnit>
     );
   }
 
-  getMyTicketLayout() {
+  /*getMyTicketLayout() {
     print('MyTicketLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -862,7 +880,7 @@ class MyUnitState extends State<BaseMyUnit>
       ),
     );
   }
-
+*/
   getMyDocumentsLayout() {
     print('MyDocumentsLayout Tab Call');
     return Container(
@@ -878,7 +896,8 @@ class MyUnitState extends State<BaseMyUnit>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0), //ticketOpenClosedLayout(),
-                documentOwnCommonLayout(), getDocumentListDataLayout(),
+                documentOwnCommonLayout(),
+                getDocumentListDataLayout(),
               ],
             ),
           ),
@@ -886,8 +905,7 @@ class MyUnitState extends State<BaseMyUnit>
       ),
     );
   }
-
-  getMyTanentsLayout() {
+ /* getMyTanentsLayout() {
     print('MyTanents Tab Call');
     return Container(
       width: MediaQuery.of(context)
@@ -978,7 +996,7 @@ class MyUnitState extends State<BaseMyUnit>
       ),
     );
   }
-
+*/
   profileLayout() {
     return Align(
       alignment: Alignment.center,
@@ -1038,30 +1056,41 @@ class MyUnitState extends State<BaseMyUnit>
                         color: GlobalVariables.mediumGreen,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              child: Icon(
-                                Icons.share,
-                                color: GlobalVariables.mediumGreen,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate('share_address'),
-                                style: TextStyle(
-                                  color: GlobalVariables.green,
-                                  fontSize: 16,
+                    InkWell(
+                      onTap: (){
+                        if(phone.length>0) {
+                          GlobalFunctions.shareData(name, 'Contact : ' + phone);
+                        } else if(email.length>0){
+                          GlobalFunctions.shareData(name, 'Mail ID : '+email);
+                        }else{
+                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('mobile_email_not_found'));
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                child: Icon(
+                                  Icons.share,
+                                  color: GlobalVariables.mediumGreen,
                                 ),
                               ),
-                            ),
-                          ],
+                              Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('share_address'),
+                                  style: TextStyle(
+                                    color: GlobalVariables.green,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -1075,7 +1104,7 @@ class MyUnitState extends State<BaseMyUnit>
     );
   }
 
-  ticketOpenClosedLayout() {
+  /*ticketOpenClosedLayout() {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
@@ -1257,7 +1286,7 @@ class MyUnitState extends State<BaseMyUnit>
       ),
     );
   }
-
+*/
   getContactListItemLayout(var _list, int position, bool family) {
     var call = '', email = '';
     if (family) {
@@ -1366,7 +1395,7 @@ class MyUnitState extends State<BaseMyUnit>
     );
   }
 
-  getTicketDescListItemLayout(int position) {
+ /* getTicketDescListItemLayout(int position) {
     return InkWell(
       onTap: () {
         GlobalFunctions.showToast(isOpenTicket
@@ -1538,7 +1567,7 @@ class MyUnitState extends State<BaseMyUnit>
       ),
     );
   }
-
+*/
   getDocumentListItemLayout(int position) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
@@ -1638,7 +1667,7 @@ class MyUnitState extends State<BaseMyUnit>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                /*Visibility(
+                Visibility(
                   visible:false,
                   child: Row(
                     children: <Widget>[
@@ -1657,7 +1686,7 @@ class MyUnitState extends State<BaseMyUnit>
                       ),
                     ],
                   ),
-                ),*/
+                ),
                 _documentList[position].DOCUMENT.length != null
                     ? Container(
                         // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -1821,39 +1850,63 @@ class MyUnitState extends State<BaseMyUnit>
     );
   }
 
-  getDisplayName() {
+ /* getDisplayName() async {
+
+
+    name = await GlobalFunctions.getDisplayName();
+
+
     GlobalFunctions.getDisplayName().then((value) {
       name = value;
-      getDisplayPhoto();
-      getSharedPreferenceDuesData();
-    });
-  }
+      print('Name : '+name);
 
+    });
+  }*/
+/*
   getDisplayPhoto() {
     GlobalFunctions.getPhoto().then((value) {
       photo = value;
-      getMobile();
+      print('Photo : '+photo);
+
     });
   }
 
   getMobile() {
     GlobalFunctions.getMobile().then((value) {
       phone = value;
-      getEmail();
+      print('Phone : '+phone);
+
     });
   }
 
   getEmail() {
     GlobalFunctions.getUserId().then((value) {
       email = value;
-      getConsumerID();
+      print('Email ID : '+email);
+
     });
   }
 
   getConsumerID() {
     GlobalFunctions.getConsumerID().then((value) {
       consumerId = value;
+      print('Consumer ID : '+consumerId);
     });
+  }*/
+
+  Future<void> getSharedPreferenceData() async {
+    name = await GlobalFunctions.getDisplayName();
+    photo = await GlobalFunctions.getPhoto();
+    phone = await GlobalFunctions.getMobile();
+    email = await GlobalFunctions.getUserName();
+    consumerId = await GlobalFunctions.getConsumerID();
+
+    print('Name : '+name);
+    print('Photo : '+photo);
+    print('Phone : '+phone);
+    print('EmailId : '+email);
+    print('ConsumerId : '+consumerId);
+
   }
 
   getSharedPreferenceDuesData() {
@@ -1865,7 +1918,7 @@ class MyUnitState extends State<BaseMyUnit>
     });
   }
 
-  getTicketListDataLayout() {
+ /* getTicketListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -1883,7 +1936,7 @@ class MyUnitState extends State<BaseMyUnit>
               )),
     );
   }
-
+*/
   getDocumentListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
@@ -1899,8 +1952,7 @@ class MyUnitState extends State<BaseMyUnit>
               )),
     );
   }
-
-  getTantentsListDataLayout() {
+  /*getTantentsListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -1916,24 +1968,8 @@ class MyUnitState extends State<BaseMyUnit>
                 shrinkWrap: true,
               )),
     );
-  }
+  }*/
 
-  static getTicketCategoryColor(String category) {
-    switch (category.toLowerCase()) {
-      case "new":
-        return GlobalVariables.skyBlue;
-        break;
-      case "in progress":
-        return GlobalVariables.orangeYellow;
-        break;
-      case "reopen":
-        return GlobalVariables.red;
-        break;
-      default:
-        return GlobalVariables.skyBlue;
-        break;
-    }
-  }
 
   getDocumentTypeColor(String type) {
     switch (type.toLowerCase().trim()) {
@@ -1951,6 +1987,23 @@ class MyUnitState extends State<BaseMyUnit>
         break;
     }
   }
+  static getTicketCategoryColor(String category) {
+    switch (category.toLowerCase()) {
+      case "new":
+        return GlobalVariables.skyBlue;
+        break;
+      case "in progress":
+        return GlobalVariables.orangeYellow;
+        break;
+      case "reopen":
+        return GlobalVariables.red;
+        break;
+      default:
+        return GlobalVariables.skyBlue;
+        break;
+    }
+  }
+
 
   Future<void> getUnitMemberData() async {
     //  _progressDialog.show();
@@ -1959,7 +2012,7 @@ class MyUnitState extends State<BaseMyUnit>
     societyId = await GlobalFunctions.getSocietyId();
     block = await GlobalFunctions.getBlock();
     flat = await GlobalFunctions.getFlat();
-    //_progressDialog.show();
+    _progressDialog.show();
     restClient.getMembersData(societyId, block, flat).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -1967,6 +2020,19 @@ class MyUnitState extends State<BaseMyUnit>
         _memberList = List<Member>.from(_list.map((i) => Member.fromJson(i)));
       }
       getUnitStaffData();
+    }).catchError((Object obj) {
+ //     if(_progressDialog.isShowing()){
+  //      _progressDialog.hide();
+  //    }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
   }
 
@@ -1984,6 +2050,19 @@ class MyUnitState extends State<BaseMyUnit>
         _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
       }
       getUnitVehicleData();
+    }).catchError((Object obj) {
+     // if(_progressDialog.isShowing()){
+     //   _progressDialog.hide();
+    //  }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
   }
 
@@ -1995,6 +2074,7 @@ class MyUnitState extends State<BaseMyUnit>
     block = await GlobalFunctions.getBlock();
     flat = await GlobalFunctions.getFlat();
     restClient.getVehicleData(societyId, block, flat).then((value) {
+
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2002,9 +2082,25 @@ class MyUnitState extends State<BaseMyUnit>
             List<Vehicle>.from(_list.map((i) => Vehicle.fromJson(i)));
         print("Vehicle List : " + _list.toString());
       }
+      _progressDialog.hide();
+      setState(() {
+        isHouseholdTabAPICall= true;
+      });
 
-      getAllBillData();
       //  getDocumentData();
+    }).catchError((Object obj) {
+  //    if(_progressDialog.isShowing()){
+   //     _progressDialog.hide();
+   //   }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
   }
 
@@ -2015,7 +2111,7 @@ class MyUnitState extends State<BaseMyUnit>
         // color: GlobalVariables.black,
         //width: MediaQuery.of(context).size.width / 1.2,
         margin:
-            EdgeInsets.fromLTRB(20, 10, 20, 10), //padding: EdgeInsets.all(0),
+            EdgeInsets.fromLTRB(10, 10, 10, 10), //padding: EdgeInsets.all(0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: GlobalVariables.white),
@@ -2199,26 +2295,32 @@ class MyUnitState extends State<BaseMyUnit>
                             ),
                           ),
                         ),
-                        Container(
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Icon(
-                                  Icons.mail,
-                                  color: GlobalVariables.mediumGreen,
+                        InkWell(
+                          onTap : (){
+                            emailBillDialog(context,position);
+                           // getBillMail(_billList[position].INVOICE_NO,_billList[position].TYPE);
+                          },
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  child: Icon(
+                                    Icons.mail,
+                                    color: GlobalVariables.mediumGreen,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('get_bill'),
-                                  style:
-                                      TextStyle(color: GlobalVariables.green),
-                                ),
-                              )
-                            ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('get_bill'),
+                                    style:
+                                        TextStyle(color: GlobalVariables.green),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         InkWell(
@@ -2364,7 +2466,7 @@ class MyUnitState extends State<BaseMyUnit>
     }
   }
 
-  /*void getDocumentData() async {
+  void getDocumentData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
@@ -2379,7 +2481,7 @@ class MyUnitState extends State<BaseMyUnit>
         getAllBillData();
       }
     });
-  }*/
+  }
 
   getAllBillData() async {
     final dio = Dio();
@@ -2396,6 +2498,19 @@ class MyUnitState extends State<BaseMyUnit>
       _billList = List<Bills>.from(_list.map((i) => Bills.fromJson(i)));
 
       getLedgerData();
+    }).catchError((Object obj) {
+    //  if(_progressDialog.isShowing()){
+     //   _progressDialog.hide();
+    //  }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
   }
 
@@ -2419,7 +2534,22 @@ class MyUnitState extends State<BaseMyUnit>
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
       _progressDialog.hide();
-      setState(() {});
+      setState(() {
+        isDuesTabAPICall= true;
+      });
+    }).catchError((Object obj) {
+     // if(_progressDialog.isShowing()){
+     //   _progressDialog.hide();
+    //  }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
   }
 
@@ -2437,6 +2567,9 @@ class MyUnitState extends State<BaseMyUnit>
 
       //getAllBillData();
     }).catchError((Object obj) {
+   //   if(_progressDialog.isShowing()){
+    //    _progressDialog.hide();
+    //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2464,7 +2597,7 @@ class MyUnitState extends State<BaseMyUnit>
         "-" +
         DateTime.now().toLocal().day.toString();
 
-    _progressDialog.show();
+   // _progressDialog.show();
     restClientERP
             .addOnlinePaymentRequest(
                 societyId,
@@ -2478,12 +2611,12 @@ class MyUnitState extends State<BaseMyUnit>
                 paymentDate)
             .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
-      _progressDialog.hide();
+ //     _progressDialog.hide();
       if (value.status) {
         Navigator.of(context).pop();
       }
       GlobalFunctions.showToast(value.message);
-    }) /*.catchError((Object obj) {
+    }) .catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2493,7 +2626,7 @@ class MyUnitState extends State<BaseMyUnit>
           break;
         default:
       }
-    })*/
+    })
         ;
   }
 
@@ -2549,8 +2682,21 @@ class MyUnitState extends State<BaseMyUnit>
                 builder: (context) =>
                     BaseAddStaffMember()));*/
       }
+      getAllBillData();
 
-      getUnitMemberData();
+    }).catchError((Object obj) {
+    //  if(_progressDialog.isShowing()){
+    //    _progressDialog.hide();
+   //   }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
   }
 
@@ -2592,15 +2738,20 @@ class MyUnitState extends State<BaseMyUnit>
   }
 
   void redirectToPage(String item) {
+
+    print('Call redirectToPage');
+
     if (item == AppLocalizations.of(context).translate('my_unit')) {
       //Redirect to my Unit
       _tabController.animateTo(0);
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
       _tabController.animateTo(0);
+      print('redirectToPage '+pageName.toString());
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
       _tabController.animateTo(1);
+      print('redirectToPage '+pageName.toString());
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
       _tabController.animateTo(2);
@@ -2609,6 +2760,13 @@ class MyUnitState extends State<BaseMyUnit>
     } else {
       _tabController.animateTo(0);
     }
+    if(pageName!=null) {
+      pageName=null;
+      if(_tabController.index==0){
+        _handleTabSelection();
+      }
+    }
+
   }
 
   void getLocalPath() {
@@ -2618,8 +2776,7 @@ class MyUnitState extends State<BaseMyUnit>
     });
   }
 
-  getListOfPaymentGateway(
-      BuildContext context, StateSetter setState, int position) {
+  getListOfPaymentGateway(BuildContext context, StateSetter setState, int position) {
     // GlobalFunctions.showToast(_selectedPaymentGateway.toString());
     return Container(
       padding: EdgeInsets.all(15),
@@ -2861,21 +3018,371 @@ class MyUnitState extends State<BaseMyUnit>
             ),),
           ),
           Container(
-            child: IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
-
-              Navigator.of(context).pop();
-              ClipboardManager.copyToClipBoard(consumerId).then((value) {
-                GlobalFunctions.showToast("Copied to Clipboard");
-                launch(_payOptionList[0].PAYTM_URL);
-             });
-
-            }),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
+                  Navigator.of(context).pop();
+                  ClipboardManager.copyToClipBoard(consumerId).then((value) {
+                    GlobalFunctions.showToast("Copied to Clipboard");
+                    launch(_payOptionList[0].PAYTM_URL);
+                 });
+                }),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
+                    fontSize: 12
+                      ,fontWeight: FontWeight.bold,color: GlobalVariables.green
+                  ),),
+                )
+              ],
+            ),
           )
         ],
       ),
 
     );
   }
+
+  void _handleTabSelection() {
+
+
+    if (pageName == null) {
+      print('Call _handleTabSelection');
+      //if(_tabController.indexIsChanging){
+      _callAPI(_tabController.index);
+      //}
+    }/*else{
+      if(!_tabController.indexIsChanging){
+        _callAPI(_tabController.index);
+      }
+    }
+*/
+  }
+
+  void _callAPI(int index) {
+
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        switch(index){
+          case 0: {
+            if(!isDuesTabAPICall) {
+              getPayOption();
+            }
+          }
+          break;
+          case 1: {
+            if(!isHouseholdTabAPICall) {
+              getUnitMemberData();
+            }
+          }
+          break;
+        }
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+
+  }
+
+  Future<void> getBillMail(String invoice_no, String type, String emailId) async {
+    final dio = Dio();
+    final RestClientERP restClientERP = RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClientERP.getBillMail(societyId, type, invoice_no,_emailTextController.text).then((value) {
+      print('Response : ' + value.toString());
+
+      GlobalFunctions.showToast(value.message);
+      _progressDialog.hide();
+
+    }).catchError((Object obj) {
+      if(_progressDialog.isShowing()){
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+  }
+
+
+  void emailBillDialog(BuildContext context,int position){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context,
+                StateSetter _stateState) {
+              isEditEmail ? _emailTextController.text='' :_emailTextController.text = email;
+
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(25.0)),
+                child: Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
+                //  width: MediaQuery.of(context).size.width/2,
+                  //  height: MediaQuery.of(context).size.height/3,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: Text(AppLocalizations.of(context).translate('email_bill'),style: TextStyle(
+                            color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                      Container(
+                        child: Divider(
+                          height: 2,
+                          color: GlobalVariables.lightGray,
+                        ),
+                      ),
+                      Container(margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                        child: Text(GlobalFunctions.convertDateFormat(_billList[position].START_DATE, 'dd-MM-yyyy')
+                            + ' to '
+                            + GlobalFunctions.convertDateFormat(_billList[position].END_DATE, 'dd-MM-yyyy'),style: TextStyle(
+                            color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                      Flexible(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 80,
+                         // color: GlobalVariables.mediumGreen,
+                         // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                           /*   Container(
+                                child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
+                                    color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
+                                ),),
+                              ),*/
+                              Flexible(
+                                flex:3,
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                  child: TextFormField(
+                                    controller: _emailTextController,
+                                    cursorColor: GlobalVariables.black,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      //border: InputBorder.,
+                                     // disabledBorder: InputBorder.none,
+                                     // enabledBorder: InputBorder.none,
+                                     // errorBorder: InputBorder.none,
+                                     // focusedBorder: InputBorder.none,
+                                     // focusedErrorBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.all(5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                flex:1,
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                  child: !isEditEmail ? IconButton(icon: Icon(Icons.edit,color: GlobalVariables.green,size: 24,), onPressed: (){
+                                    _emailTextController.clear();
+                                    isEditEmail= true;
+                                    _stateState(() {});
+
+                                  }) : IconButton(icon: Icon(Icons.cancel,color: GlobalVariables.grey,size: 24,), onPressed: (){
+                                    _emailTextController.clear();
+                                    _emailTextController.text= email;
+                                    isEditEmail= false;
+                                    _stateState(() {});
+                                  }),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 45,
+                        child: ButtonTheme(
+                          minWidth: MediaQuery.of(context).size.width / 3,
+                          child: RaisedButton(
+                            color: GlobalVariables.green,
+                            onPressed: () {
+                              GlobalFunctions
+                                  .checkInternetConnection()
+                                  .then((internet) {
+                                if (internet) {
+                                  if(_emailTextController.text.length>0) {
+                                    Navigator.of(
+                                        context
+                                    ).pop(
+                                    );
+                                    getBillMail(
+                                        _billList[position].INVOICE_NO,
+                                        _billList[position].TYPE,
+                                        _emailTextController.text
+                                    );
+                                  }else{
+                                    GlobalFunctions.showToast('Please Enter Email ID');
+                                  }
+                                } else {
+                                  GlobalFunctions.showToast(
+                                      AppLocalizations.of(context)
+                                          .translate(
+                                          'pls_check_internet_connectivity'));
+                                }
+                              });
+                            },
+                            textColor: GlobalVariables.white,
+                            //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                    color: GlobalVariables.green)),
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('email_now'),
+                              style: TextStyle(
+                                  fontSize: GlobalVariables.largeText),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              );
+            }));
+  }
+
+ /* void emailBillBottomSheet(BuildContext context,int position) {
+
+    showModalBottomSheet(context: context, builder: (BuildContext _context){
+      return StatefulBuilder(builder: (BuildContext context , StateSetter _stateState){
+        return Container(
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(10),
+          width: MediaQuery.of(context).size.width,
+          //  height: MediaQuery.of(context).size.height/3,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                child: Text(AppLocalizations.of(context).translate('email_bill'),style: TextStyle(
+                    color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+                ),),
+              ),
+              Container(
+                child: Divider(
+                  height: 2,
+                  color: GlobalVariables.lightGray,
+                ),
+              ),
+              Container(margin: EdgeInsets.fromLTRB(5, 20, 5, 5),
+                child: Text(GlobalFunctions.convertDateFormat(_billList[position].START_DATE, 'dd-MM-yyyy')
+                    + ' to '
+                    + GlobalFunctions.convertDateFormat(_billList[position].END_DATE, 'dd-MM-yyyy'),style: TextStyle(
+                    color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
+                ),),
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: 100,
+                margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
+                          color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
+                      ),),
+                    ),
+                    Container(
+                      width: 200,
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: TextFormField(
+                        controller: _emailTextController,
+                        cursorColor: GlobalVariables.black,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.all(5),
+                        ),
+                      ),
+                    ),
+                    !isEditEmail ? Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: IconButton(icon: Icon(Icons.edit,color: GlobalVariables.green,size: 24,), onPressed: (){
+                        _emailTextController.clear();
+                        isEditEmail= true;
+                        _stateState(() {});
+
+                      }),
+                    ) : Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: IconButton(icon: Icon(Icons.cancel,color: GlobalVariables.grey,size: 24,), onPressed: (){
+                        _emailTextController.clear();
+                        _emailTextController.text= email;
+                        isEditEmail= false;
+                        _stateState(() {});
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 45,
+                child: ButtonTheme(
+                  minWidth: MediaQuery.of(context).size.width / 3,
+                  child: RaisedButton(
+                    color: GlobalVariables.green,
+                    onPressed: () {
+                      GlobalFunctions
+                          .checkInternetConnection()
+                          .then((internet) {
+                        if (internet) {
+                          Navigator.of(context).pop();
+                          getBillMail(_billList[position].INVOICE_NO,_billList[position].TYPE,_emailTextController.text);
+                        } else {
+                          GlobalFunctions.showToast(
+                              AppLocalizations.of(context)
+                                  .translate(
+                                  'pls_check_internet_connectivity'));
+                        }
+                      });
+                    },
+                    textColor: GlobalVariables.white,
+                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(
+                            color: GlobalVariables.green)),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('email_now'),
+                      style: TextStyle(
+                          fontSize: GlobalVariables.largeText),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+    });
+  }*/
 }
 
 class RecentTransaction {

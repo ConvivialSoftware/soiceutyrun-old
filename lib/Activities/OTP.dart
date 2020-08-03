@@ -1,7 +1,9 @@
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -37,6 +39,9 @@ class OtpState extends State<BaseOtp>{
 
   ProgressDialog _progressDialog;
 
+  Timer _timer;
+  int _start=60;
+  bool isResendEnable=false;
   var displayNumber='';
 
 
@@ -46,8 +51,7 @@ class OtpState extends State<BaseOtp>{
       print('expire_Time: '+expire_time.toString());
       print('OTP : '+otp.toString());
       print('MobileNo : '+mobileNo.toString());
-
-
+      startTimer();
   }
 
   @override
@@ -94,7 +98,7 @@ class OtpState extends State<BaseOtp>{
                     fontSize: 18.0,
                     onSubmit: (String pin){
                       entered_pin=pin;
-                      GlobalFunctions.showToast(entered_pin);
+                     // GlobalFunctions.showToast(entered_pin);
                     },
                   ),
                 ),
@@ -107,6 +111,10 @@ class OtpState extends State<BaseOtp>{
                       color: GlobalVariables.green,
                       onPressed: () {
 
+                        if(_timer!=null){
+                          _timer.cancel();
+                          _start=60;
+                        }
                         verifyOTP();
 
                       },
@@ -126,7 +134,40 @@ class OtpState extends State<BaseOtp>{
                 ),
                 Container(
                   margin: EdgeInsets.all(50),
-                  child: RichText(text: TextSpan(
+                 child: Column(
+                   children: <Widget>[
+                     Container(
+                       alignment: Alignment.center,
+                       child: Text(AppLocalizations.of(context).translate("not_received_otp"),style: TextStyle(
+                           color: GlobalVariables.black,fontSize: 15
+                       )),
+                     ),
+                     InkWell(
+                       onTap: (){
+                         if(isResendEnable) {
+                           isResendEnable=false;
+                           _start=60;
+                           startTimer();
+                           getResendOtp();
+                         }
+                       },
+                       child: Container(
+                         alignment: Alignment.center,
+                         child: Text(AppLocalizations.of(context).translate("resend"),style: TextStyle(
+                             color: isResendEnable ? GlobalVariables.green : GlobalVariables.grey,fontSize: 20,fontWeight: FontWeight.bold,height: 1.5
+                         )),
+                       ),
+                     ),
+                     Container(
+                       alignment: Alignment.center,
+                       child: Text(isResendEnable ? '': ('00:'+_start.toString()),style: TextStyle(
+                           color: GlobalVariables.black,fontSize: 15
+                       )),
+                     ),
+                   ],
+                 ),
+
+                 /* child: RichText(text: TextSpan(
                       children: [
                         TextSpan(
                             text: AppLocalizations.of(context).translate("not_received_otp"),style: TextStyle(
@@ -137,9 +178,12 @@ class OtpState extends State<BaseOtp>{
                             text: ("          "+AppLocalizations.of(context).translate('resend')),style: TextStyle(
                             color: GlobalVariables.green,fontSize: 20,fontWeight: FontWeight.bold,height: 1.5
                         ),
+                          recognizer: TapGestureRecognizer()..onTap=(){
+                            verifyOTP();
+                          }
                         ),
                       ],
-                  )),
+                  )),*/
                 ),
               ],
             ),
@@ -152,6 +196,7 @@ class OtpState extends State<BaseOtp>{
 
   void verifyOTP() {
 
+   //GlobalFunctions.showToast(entered_pin);
     if(entered_pin.length==6){
       getOTPLogin();
     }else{
@@ -168,7 +213,9 @@ class OtpState extends State<BaseOtp>{
     restClient.getOTPLogin(expire_time, otp, entered_pin, mobileNo, "").then((value) {
       print('add member Status value : '+value.toString());
       _progressDialog.hide();
-     // GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message);
+
+
       if (value.status) {
         //value.PASSWORD = password;
         GlobalFunctions.saveDataToSharedPreferences(value);
@@ -176,7 +223,13 @@ class OtpState extends State<BaseOtp>{
             context,
             MaterialPageRoute(
                 builder: (context) =>BaseChangePassword()));
+      }else{
+        setState(() {
+          isResendEnable=true;
+          _start=60;
+        });
       }
+
 
 
     })/*.catchError((Object obj) {
@@ -191,6 +244,62 @@ class OtpState extends State<BaseOtp>{
         default:
       }
     })*/;
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    if(_timer!=null)
+      _timer.cancel();
+
+  }
+
+  void startTimer(){
+    const oneSec = const Duration(seconds: 1);
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      setState(() {
+        if(_start<1){
+          timer.cancel();
+          isResendEnable=true;
+        }else{
+          _start-=1;
+        }
+      });
+
+    });
+
+  }
+
+  Future<void> getResendOtp() async {
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+
+   // _progressDialog.show();
+    restClient.getResendOTP(otp,mobileNo, "").then((value) {
+      print('get OTP value : '+value.toString());
+
+     // GlobalFunctions.showToast('otp : '+value.otp.toString());
+ //     _progressDialog.hide();
+      if(value.status){
+
+      }
+      GlobalFunctions.showToast(value.message);
+
+    })/*.catchError((Object obj) {
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+            _progressDialog.hide();
+          }
+          break;
+        default:
+      }
+    })*/;
+
   }
 
 }

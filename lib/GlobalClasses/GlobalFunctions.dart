@@ -4,11 +4,13 @@ import 'dart:core';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:compressimage/compressimage.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -416,12 +418,49 @@ class GlobalFunctions{
     return str64;
   }
 
+  static void gtFileSize(String path){
+
+    print('Before Compress : '+File(path).lengthSync().toString());
+
+  }
+
+  static Future<String> compressImage(String path) async {
+
+      File _file = File(path);
+      File _imageFile = _file;
+      await CompressImage.compress(imageSrc: _imageFile.path,desiredQuality: 40);
+      print('After Compress : '+_imageFile.lengthSync().toString());
+
+      return _imageFile.path;
+
+  }
+
+  static Future<String> getFilePathOfCompressImage(String path,String targetPath) async {
+
+    var _imageFile = await FlutterImageCompress.compressAndGetFile(path, targetPath,quality: 40,rotate: 360);
+    print('After Compress : '+_imageFile.lengthSync().toString());
+    return _imageFile.path;
+  }
+
+  static removeFileFromDirectory(String path){
+    final dir = Directory(path);
+    dir.deleteSync(recursive: true);
+  }
+
   static Future<String> localPath() async {
     final path = ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
     // For your reference print the AppDoc directory
 
     return path;
   }
+
+  static Future<String> getTemporaryDirectoryPath() async {
+
+    Directory tempDir =  await getTemporaryDirectory();
+
+    return tempDir.path;
+  }
+
 
  /* static Future<bool> isExternalStoragePermission() async {
     PermissionStatus permissionResult = await SimplePermissions.requestPermission(Permission. WriteExternalStorage);

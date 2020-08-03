@@ -59,6 +59,10 @@ abstract class RestClientERP {
       @Field("REFERENCE_NO") String referenceNo,@Field("TRANSACTION_MODE") String transactionMode,
       @Field("BANK_ACCOUNTNO") String bankAccountNo,@Field("PAYMENT_DATE") String paymentDate);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.mailAPI)
+  Future<StatusMsgResponse> getBillMail(@Field("SOCIETY_ID") String socId, @Field("TYPE") String type,
+      @Field("NUMBER") String number,@Field("Email_id") String emailId);
 }
 
 

@@ -57,6 +57,16 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
   bool isLogin = false;
   AppLanguage appLanguage = AppLanguage();
+  Timer _timer;
+
+
+  @override
+  void dispose() {
+
+    super.dispose();
+    if(_timer!=null)
+      _timer.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +123,9 @@ class SplashScreenState extends State<SplashScreen> {
 
    startTimer(BuildContext context) {
 
-    var duration = Duration(seconds: 10);
-    return Timer(duration, navigateToPage(context));
+    var duration = Duration(seconds: 5);
+    _timer = Timer(duration, navigateToPage(context));
+    return _timer;
 
   }
 

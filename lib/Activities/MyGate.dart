@@ -400,7 +400,7 @@ class MyGateState extends State<BaseMyGate>
     return _activitiesList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 6, 20, 0),
+          10, MediaQuery.of(context).size.height / 6, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -26,10 +27,12 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
   String attachmentFilePath;
   String attachmentIdentityProofFilePath;
+  String attachmentCompressFilePath;
 
 
   String attachmentFileName;
   String attachmentIdentityProofFileName;
+  String attachmentIdentityProofCompressFilePath;
 
 
  // AddStaffMemberState(this.memberType);
@@ -58,11 +61,15 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
  // String _selectedOccupation="Software Engg.";
   String _selectedGender="Male";
   ProgressDialog _progressDialog;
+  bool isStoragePermission=false;
 
 
   @override
   void initState() {
     super.initState();
+    GlobalFunctions.checkPermission(Permission.storage).then((value) {
+      isStoragePermission=value;
+    });
     getRoleTypeData();
     //_dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
   }
@@ -125,7 +132,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   getAddStaffMemberLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(20),
        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
@@ -438,26 +445,76 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: FileImage(File(attachmentFilePath)),
-                                    fit: BoxFit.cover
-                                )
+                                    fit: BoxFit.cover,
+                                ),
+                                border: Border.all(color: GlobalVariables.green,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.mediumGreen,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: FlatButton.icon(onPressed: (){
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.mediumGreen,
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: FlatButton.icon(onPressed: (){
 
-                              openFile(context);
+                                  if(isStoragePermission) {
+                                    openFile(context);
+                                  }else{
+                                    GlobalFunctions.askPermission(Permission.storage).then((value) {
+                                      if(value){
+                                        openFile(context);
+                                      }else{
+                                        GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                      }
+                                    });
+                                  }
 
-                            }, icon: Icon(Icons.camera_alt,color: GlobalVariables.white,), label:Text(AppLocalizations.of(context).translate('attach_photo'),style: TextStyle(
-                                color: GlobalVariables.white
-                            ),)),
+                                }, icon: Icon(Icons.camera_alt,color: GlobalVariables.white,),
+                                    label:Text(AppLocalizations.of(context).translate('attach_photo'),style: TextStyle(
+                                    color: GlobalVariables.white
+                                ),)),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                                child: Text(
+                                  'OR',
+                                  style: TextStyle(color: GlobalVariables.lightGray),
+                                ),
+                              ),
+                              Container(
+                                child: FlatButton.icon(
+                                    onPressed: () {
+
+                                      if(isStoragePermission) {
+                                        openCamera(context);
+                                      }else{
+                                        GlobalFunctions.askPermission(Permission.storage).then((value) {
+                                          if(value){
+                                            openCamera(context);
+                                          }else{
+                                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                          }
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: GlobalVariables.mediumGreen,
+                                    ),
+                                    label: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('take_picture'),
+                                      style: TextStyle(color: GlobalVariables.green),
+                                    )),
+                              ),
+                            ],
                           ),
+
                         ],
                       ),
                     ),
@@ -593,13 +650,15 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentFilePath);
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }
 
 
     if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
       attachmentIdentityProofName =  attachmentIdentityProofFileName;
-      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofFilePath);
+      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath);
+      GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
     }
 
    //print('attachment lengtth : '+attachment.length.toString());
@@ -618,45 +677,54 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   void openFile(BuildContext context) {
-
     GlobalFunctions.getFilePath(context).then((value) {
       attachmentFilePath=value;
-
-      print('file Path : '+attachmentFilePath.toString());
-/*  /storage/emulated/0/Pictures/Screenshots/Screenshot_20200515-105610.jpg   */
-
-      attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-      print('file Name : '+attachmentFileName.toString());
-
-      setState(() {
-      });
-
-// https://societyrun.com//Uploads/278808_2019-08-16_12:45:09.jpg
-
+      getCompressFilePath();
     });
-
   }
 
+  void openCamera(BuildContext context) {
+    GlobalFunctions.openCamera().then((value) {
+      attachmentFilePath=value.path;
+      getCompressFilePath();
+    });
+  }
 
-   void openIdentityProofFile(BuildContext context) {
-
+  void openIdentityProofFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentIdentityProofFilePath=value;
-
-      print('file Path : '+attachmentIdentityProofFilePath.toString());
-/*  /storage/emulated/0/Pictures/Screenshots/Screenshot_20200515-105610.jpg   */
-
-      attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(attachmentIdentityProofFilePath.lastIndexOf('/')+1,attachmentIdentityProofFilePath.length);
-      print('file Name : '+attachmentIdentityProofFileName.toString());
-
-      setState(() {
-      });
-
-// https://societyrun.com//Uploads/278808_2019-08-16_12:45:09.jpg
-
+      attachmentFilePath=value;
+      getCompressIdentityProofFilePath();
     });
-
   }
+
+  void getCompressFilePath(){
+    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
+    print('file Name : '+attachmentFileName.toString());
+    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+      print('cache file Path : '+value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+        attachmentCompressFilePath = value.toString();
+        print('Cache file path : '+attachmentCompressFilePath);
+        setState(() {
+        });
+      });
+    });
+  }
+
+  void getCompressIdentityProofFilePath(){
+    attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(attachmentIdentityProofFilePath.lastIndexOf('/')+1,attachmentIdentityProofFilePath.length);
+    print('file Name : '+attachmentIdentityProofFileName.toString());
+    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+      print('cache file Path : '+value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+        attachmentIdentityProofCompressFilePath = value.toString();
+        print('Cache file path : '+attachmentIdentityProofCompressFilePath);
+        setState(() {
+        });
+      });
+    });
+  }
+
 
 
   void getRoleTypeData() {

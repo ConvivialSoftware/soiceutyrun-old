@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -148,6 +155,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
+  compressimage:
+    dependency: "direct main"
+    description:
+      name: compressimage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   connectivity:
     dependency: "direct main"
     description:
@@ -184,7 +198,7 @@ packages:
     source: hosted
     version: "1.0.1"
   crypto:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -272,6 +286,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.2"
+  flutter_image_compress:
+    dependency: "direct main"
+    description:
+      name: flutter_image_compress
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -298,13 +319,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  flutter_string_encryption:
-    dependency: "direct main"
-    description:
-      name: flutter_string_encryption
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -665,13 +679,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
-  salt:
-    dependency: "direct main"
-    description:
-      name: salt
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   shared_preferences:
     dependency: "direct main"
     description:

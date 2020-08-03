@@ -159,17 +159,17 @@ class RestAPI implements RestClient, RestClientERP {
 
   @override
   Future<DataResponse> getAllSocietyData(
-      String username, String password) async {
+      String username/*, String password*/) async {
 // TODO: implement getAllSocietyData
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
-    ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
+    //ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
 
     FormData formData = FormData.from({
       GlobalVariables.keyUsername: username,
-      GlobalVariables.keyPassword: password
+      //GlobalVariables.keyPassword: password
     });
     print('username : ' + username);
-    print('password : ' + password);
+   // print('password : ' + password);
     print('baseurl : ' + baseUrl + GlobalVariables.AllSocietyAPI);
     final Response _result = await _dio.post(GlobalVariables.AllSocietyAPI,
         options: RequestOptions(
@@ -515,7 +515,7 @@ class RestAPI implements RestClient, RestClientERP {
       String userId,
       String subject,
       String type,
-      String area,
+     /* String area,*/
       String category,
       String description,
       String priority,
@@ -532,7 +532,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(subject, GlobalVariables.SUBJECT);
     ArgumentError.checkNotNull(type, GlobalVariables.TYPE);
-    ArgumentError.checkNotNull(area, GlobalVariables.COMPLAINT_AREA);
+  //  ArgumentError.checkNotNull(area, GlobalVariables.COMPLAINT_AREA);
     ArgumentError.checkNotNull(category, GlobalVariables.CATEGORY);
     ArgumentError.checkNotNull(description, GlobalVariables.DESCRIPTION);
     ArgumentError.checkNotNull(priority, GlobalVariables.PRIORITY);
@@ -550,7 +550,7 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.userID: userId,
       GlobalVariables.SUBJECT: subject,
       GlobalVariables.TYPE: type,
-      GlobalVariables.COMPLAINT_AREA: area,
+     // GlobalVariables.COMPLAINT_AREA: area,
       GlobalVariables.CATEGORY: category,
       GlobalVariables.PRIORITY: priority,
       GlobalVariables.DESCRIPTION: description,
@@ -1273,6 +1273,7 @@ class RestAPI implements RestClient, RestClientERP {
       //GlobalVariables.
     });
 
+    print('profilePhoto : ' + profilePhoto.toString());
     print('baseurl : ' + baseUrl + GlobalVariables.editProfileAPI);
     final Response _result = await _dio.post(GlobalVariables.editProfileAPI,
         options: RequestOptions(
@@ -1388,6 +1389,67 @@ class RestAPI implements RestClient, RestClientERP {
     final value = _result.data;
     print('value of addStaffMember : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> getBillMail(String socId, String type, String number,String emailId) async {
+    // TODO: implement getBillMail
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(type, GlobalVariables.TYPE);
+    ArgumentError.checkNotNull(number, GlobalVariables.NUMBER);
+    ArgumentError.checkNotNull(emailId, GlobalVariables.Email_id);
+
+    FormData formData =
+    FormData.from({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.TYPE: type,
+      GlobalVariables.NUMBER: number,
+      GlobalVariables.Email_id: emailId
+    });
+    print('baseurl : ' + baseUrl + GlobalVariables.mailAPI);
+    final Response _result = await _dio.post(GlobalVariables.mailAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getBillMail response : ' + value.toString());
+
+    return StatusMsgResponse.fromJsonWithMessage(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> getResendOTP(String otp, String mobile, String emailId) async {
+    // TODO: implement getResendOTP
+    ArgumentError.checkNotNull(mobile, "mobile_no");
+    ArgumentError.checkNotNull(emailId, "Email_id");
+    ArgumentError.checkNotNull(otp, "otp");
+
+    FormData formData =
+    FormData.from({
+      "mobile_no": mobile,
+      "Email_id": emailId,
+      "otp": otp
+    });
+    print('otp : ' + otp);
+    print('baseurl : ' + baseUrl + GlobalVariables.otpReSendAPI);
+    final Response _result = await _dio.post(GlobalVariables.otpReSendAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getResendOTP response : ' + value.toString());
+
+    /*{status: false, message: Mobile no. not registered with Societyrun}*/
+    /*{status: false, message: Your account is deactivated..!! Please try again..!!}*/
+    /*{expire_time: 2020-05-27 03:01:25, otp: 053287, status: true, message: Otp Send}*/
+
+    return StatusMsgResponse.fromJsonWithOTP(value);
   }
 }
 /*    [SOCIETY_ID] => 11133

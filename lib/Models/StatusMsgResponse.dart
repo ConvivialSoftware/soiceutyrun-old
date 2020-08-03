@@ -21,6 +21,15 @@ class StatusMsgResponse {
 
   }
 
+  factory StatusMsgResponse.fromJsonWithMessage(Map<String, dynamic> map){
+
+    return StatusMsgResponse(
+        status: map[GlobalVariables.STATUS],
+        message: map[GlobalVariables.MESSAGE]
+    );
+
+  }
+
   factory StatusMsgResponse.fromJsonWithPassCode(Map<String, dynamic> map){
 
     return StatusMsgResponse(

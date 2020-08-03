@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -25,8 +26,8 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   String userId,societyId;
 
   String attachmentFilePath;
-
   String attachmentFileName;
+  String attachmentCompressFilePath;
 
   List<ProfileInfo> _profileList = List<ProfileInfo>();
 
@@ -39,6 +40,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   TextEditingController _occupationController = TextEditingController();
   TextEditingController _hobbiesController = TextEditingController();
   TextEditingController _infoController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
   List<String> _bloodGroupList = new List<String>();
   List<DropdownMenuItem<String>> __bloodGroupListItems = new List<DropdownMenuItem<String>>();
@@ -56,6 +58,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
  // String _selectedOccupation="Software Engg.";
   String _selectedGender="Male";
   ProgressDialog _progressDialog;
+  bool isStoragePermission=false;
 
 
   @override
@@ -65,6 +68,9 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     getMembershipTypeData();
     gteLivesHereData();
     _dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
+    GlobalFunctions.checkPermission(Permission.storage).then((value) {
+      isStoragePermission=value;
+    });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getProfileData();
@@ -97,7 +103,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('add_new_member'),
+            AppLocalizations.of(context).translate('edit_profile'),
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -132,7 +138,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   getEditProfileInfoLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(20),
        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
@@ -515,6 +521,32 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                   ),
                 ),
               ),
+              Visibility(
+                visible: true,
+                child: Container(
+                  height: 100,
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: GlobalVariables.mediumGreen,
+                        width: 3.0,
+                      )
+                  ),
+                  child: TextField(
+                    controller: _addressController,
+                    keyboardType: TextInputType.text,
+                    maxLines: 99,
+                    decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context).translate('address'),
+                        hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                        border: InputBorder.none
+                    ),
+                  ),
+                ),
+              ),
               Row(
                 children: <Widget>[
                   Flexible(
@@ -536,24 +568,75 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                                 image: DecorationImage(
                                     image: attachmentFilePath.contains("http") ? NetworkImage(attachmentFilePath) : FileImage(File(attachmentFilePath)) ,
                                     fit: BoxFit.cover
-                                )
+                                ),
+                                border: Border.all(color: GlobalVariables.green,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.mediumGreen,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: FlatButton.icon(onPressed: (){
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                child: FlatButton.icon(
+                                  onPressed: () {
 
-                              openFile(context);
+                                    if(isStoragePermission) {
+                                      openFile(context);
+                                    }else{
+                                      GlobalFunctions.askPermission(Permission.storage).then((value) {
+                                        if(value){
+                                          openFile(context);
+                                        }else{
+                                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                        }
+                                      });
+                                    }
 
-                            }, icon: Icon(Icons.camera_alt,color: GlobalVariables.white,), label:Text(AppLocalizations.of(context).translate('add_photo'),style: TextStyle(
-                              color: GlobalVariables.white
-                            ),)),
+                                  },
+                                  icon: Icon(
+                                    Icons.attach_file,
+                                    color: GlobalVariables.mediumGreen,
+                                  ),
+                                  label: Text(
+                                    AppLocalizations.of(context).translate('attach_photo'),
+                                    style: TextStyle(color: GlobalVariables.green),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                child: Text(
+                                  'OR',
+                                  style: TextStyle(color: GlobalVariables.lightGray),
+                                ),
+                              ),
+                              Container(
+                                child: FlatButton.icon(
+                                    onPressed: () {
+
+                                      if(isStoragePermission) {
+                                        openCamera(context);
+                                      }else{
+                                        GlobalFunctions.askPermission(Permission.storage).then((value) {
+                                          if(value){
+                                            openCamera(context);
+                                          }else{
+                                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                          }
+                                        });
+                                      }
+
+                                    },
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: GlobalVariables.mediumGreen,
+                                    ),
+                                    label: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('take_picture'),
+                                      style: TextStyle(color: GlobalVariables.green),
+                                    )),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -646,68 +729,33 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
   }
 
-  Future<void> addMember() async {
-
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
-
-    String attachmentName;
-    String attachment;
-
-    if(attachmentFileName!=null && attachmentFilePath!=null){
-      attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentFilePath);
-    }
-
-//    print('attachment lengtth : '+attachment.length.toString());
-
-    _progressDialog.show();
-    restClient.addMember(societyId, block, flat, _nameController.text, _selectedGender, _dobController.text, _emailController.text,
-        _mobileController.text, _selectedBloodGroup, _occupationController.text, _hobbiesController.text,_selectedMembershipType,_infoController.text,attachment).then((value) {
-          print('add member Status value : '+value.toString());
-          _progressDialog.hide();
-          if(value.status){
-            Navigator.of(context).pop();
-          }
-          GlobalFunctions.showToast(value.message);
-
-
-    })/*.catchError((Object obj) {
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-            _progressDialog.hide();
-          }
-          break;
-        default:
-      }
-    })*/;
+  void openFile(BuildContext context) {
+    GlobalFunctions.getFilePath(context).then((value) {
+      attachmentFilePath=value;
+      getCompressFilePath();
+    });
 
   }
 
-  void openFile(BuildContext context) {
-
-    GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
-
-      print('file Path : '+attachmentFilePath.toString());
-/*  /storage/emulated/0/Pictures/Screenshots/Screenshot_20200515-105610.jpg   */
-
-      attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-      print('file Name : '+attachmentFileName.toString());
-
-      setState(() {
-      });
-
-// https://societyrun.com//Uploads/278808_2019-08-16_12:45:09.jpg
-
+  void openCamera(BuildContext context) {
+    GlobalFunctions.openCamera().then((value) {
+      attachmentFilePath=value.path;
+      getCompressFilePath();
     });
+  }
 
+  void getCompressFilePath(){
+    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
+    print('file Name : '+attachmentFileName.toString());
+    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+      print('cache file Path : '+value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+        attachmentCompressFilePath = value.toString();
+        print('Cache file path : '+attachmentCompressFilePath);
+        setState(() {
+        });
+      });
+    });
   }
 
 
@@ -804,6 +852,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
           _dobController.text= GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy");
           _selectedGender=_profileList[0].GENDER;
           _emailController.text=_profileList[0].Email;
+          _addressController.text=_profileList[0].ADDRESS;
        //   _hobbiesController.text=_profileList[0].HOBBIES;
           _selectedMembershipType= _profileList[0].TYPE;
 
@@ -812,6 +861,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
             attachmentFilePath=null;
           }
           print('profile pic : '+_profileList[0].PROFILE_PHOTO.toString());
+          print('profile pic : '+attachmentFilePath.toString());
 
         });
 
@@ -832,14 +882,13 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     String attachment;
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentFilePath);
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+     // GlobalFunctions.gtFileSize(attachmentCompressFilePath);
+      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+      print('Remove Image from TempDirectory');
     }
-
-   // print('attachment lengtth : '+attachment.length.toString());
-
-
     _progressDialog.show();
-    restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,"",attachment,"",_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_mobileController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
+    restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,"",attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_mobileController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
       _progressDialog.hide();
       if (value.status) {
         Navigator.of(context).pop();

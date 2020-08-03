@@ -300,7 +300,7 @@ class DiscoverState extends State<BaseDiscover>
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 10, 20, 0),
+          10, MediaQuery.of(context).size.height / 10, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,

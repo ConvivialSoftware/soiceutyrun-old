@@ -26,6 +26,10 @@ abstract class RestClient {
   @POST(GlobalVariables.otpSendAPI)
   Future<StatusMsgResponse> getOTP(@Field("mobile_no") String mobile, @Field("Email_id") String emailId);
 
+@FormUrlEncoded()
+  @POST(GlobalVariables.otpReSendAPI)
+  Future<StatusMsgResponse> getResendOTP(@Field("otp") String otp,@Field("mobile_no") String mobile, @Field("Email_id") String emailId);
+
   @FormUrlEncoded()
   @POST(GlobalVariables.newPasswordAPI)
   Future<StatusMsgResponse> changeNewPassword(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.userID) String userId,
@@ -34,7 +38,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.AllSocietyAPI)
-  Future<DataResponse> getAllSocietyData(@Field("username") String username, @Field("password") String password);
+  Future<DataResponse> getAllSocietyData(@Field("username") String username/*, @Field("password") String password*/);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.profileAPI)
@@ -107,7 +111,7 @@ abstract class RestClient {
   Future<StatusMsgResponse> addComplaint(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.userID) String userId,
       @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.TYPE) String type,
-      @Field(GlobalVariables.COMPLAINT_AREA) String area,@Field(GlobalVariables.CATEGORY) String category,
+      /*@Field(GlobalVariables.COMPLAINT_AREA) String area,*/@Field(GlobalVariables.CATEGORY) String category,
       @Field(GlobalVariables.DESCRIPTION) String description,@Field(GlobalVariables.PRIORITY) String priority,
       @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.ATTACHMENT) String attachment,@Field(GlobalVariables.ATTACHMENT_NAME) String ATTACHMENT_NAME,
       @Field(GlobalVariables.societyName) String socName,@Field(GlobalVariables.userEmail) String eMail,

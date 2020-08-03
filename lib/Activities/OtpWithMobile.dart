@@ -72,6 +72,7 @@ class OtpWithMobileState extends State<BaseOtpWithMobile> {
                         child: TextField(
                           controller: _mobileController,
                           keyboardType: TextInputType.number,
+                          maxLength: 10,
                           style: TextStyle(color: GlobalVariables.black),
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)
@@ -132,7 +133,7 @@ class OtpWithMobileState extends State<BaseOtpWithMobile> {
                                 ),
                               ),
                             ),
-                            Flexible(
+                            /*Flexible(
                               flex: 1,
                               child: Container(
                                 //  height: 45,
@@ -170,11 +171,10 @@ class OtpWithMobileState extends State<BaseOtpWithMobile> {
                                   ],
                                 ),
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
-
                     ],
                   ),
                   Container(
