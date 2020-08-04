@@ -1,3 +1,4 @@
+import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -48,6 +49,9 @@ class MyGateState extends State<BaseMyGate>
   String pageName;
   MyGateState(this.pageName);
 
+  final ContactPicker _contactPicker = ContactPicker();
+  Contact _contact;
+
 
 
   @override
@@ -73,7 +77,11 @@ class MyGateState extends State<BaseMyGate>
       _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
       if (pageName != null) {
         redirectToPage(pageName);
+      }
 
+      if(_contact!=null){
+        _nameController.text = _contact.fullName;
+        _mobileController.text = _contact.phoneNumber.toString();
       }
     // TODO: implement build
     return Builder(
@@ -381,7 +389,9 @@ class MyGateState extends State<BaseMyGate>
                   child: scheduleVisitorLayout(),
                 );
                 showDialog(
-                    context: context, builder: (BuildContext context) => infoDialog);
+                    context: context, builder: (BuildContext context) => StatefulBuilder(builder: (BuildContext context, StateSetter setState){
+                      return infoDialog;
+                }));
 
               },
               child: Icon(
@@ -835,7 +845,16 @@ class MyGateState extends State<BaseMyGate>
                                       hintText: AppLocalizations.of(context).translate('name_of_person'),
                                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
                                       border: InputBorder.none,
-                                      suffixIcon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,),
+                                      suffixIcon: IconButton(
+                                          onPressed: () async {
+                                            Contact contact = await _contactPicker.selectContact();
+                                            setState(() {
+                                              print('contact Name : '+contact.fullName);
+                                              print('contact Number : '+contact.phoneNumber.toString());
+                                              _contact = contact;
+                                            });
+                                          },
+                                          icon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,)),
                                   ),
                                 ),
                               ),

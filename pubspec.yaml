@@ -55,6 +55,7 @@ dependencies:
   auto_size_text: 2.1.0
   compressimage: 0.1.1
   flutter_image_compress: 0.7.0
+  contact_picker: ^0.0.2
 
 
 
