@@ -9,6 +9,8 @@ import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
+import 'base_stateful.dart';
+
 class BaseAddSociety extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +21,7 @@ class BaseAddSociety extends StatefulWidget{
 
 }
 
-class AddSocietyState extends State<BaseAddSociety>{
+class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
 
   var name="";
 

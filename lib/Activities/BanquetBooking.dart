@@ -3,6 +3,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
+import 'base_stateful.dart';
+
 class BaseBanquetBooking extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,7 +13,7 @@ class BaseBanquetBooking extends StatefulWidget {
   }
 }
 
-class BanquetBookingState extends State<BaseBanquetBooking> {
+class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

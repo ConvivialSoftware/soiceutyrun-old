@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
+import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BankResponse.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
-import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/DuesResponse.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
@@ -14,8 +10,8 @@ import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+
 import 'RestClient.dart';
-import 'package:dio/dio.dart';
 
 class RestAPI implements RestClient, RestClientERP {
   RestAPI(this._dio, {this.baseUrl}) {
@@ -56,7 +52,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
       GlobalVariables.keyPassword: password
     });
@@ -84,7 +80,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(mobile_no, "mobile_no");
     ArgumentError.checkNotNull(Email_id, "Email_id");
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       "expire_time": expire_time,
       "otp": otp,
       "send_otp": send_otp,
@@ -111,7 +107,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(emailId, "Email_id");
 
     FormData formData =
-        FormData.from({"mobile_no": mobile, "Email_id": emailId});
+        FormData.fromMap({"mobile_no": mobile, "Email_id": emailId});
     print('baseurl : ' + baseUrl + GlobalVariables.otpSendAPI);
     final Response _result = await _dio.post(GlobalVariables.otpSendAPI,
         options: RequestOptions(
@@ -137,8 +133,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(confirmPassword, "confirm_pwd");
 
-    FormData formData =
-    FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
       "confirm_pwd":confirmPassword
@@ -164,7 +159,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     //ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
       //GlobalVariables.keyPassword: password
     });
@@ -193,7 +188,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(blockflat, GlobalVariables.flat);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: blockflat,
       GlobalVariables.block: block
@@ -225,7 +220,7 @@ class RestAPI implements RestClient, RestClientERP {
 
     Map<String, dynamic> map = {};
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat
@@ -257,7 +252,7 @@ class RestAPI implements RestClient, RestClientERP {
 
     Map<String, dynamic> map = {};
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat
@@ -289,7 +284,7 @@ class RestAPI implements RestClient, RestClientERP {
 
     Map<String, dynamic> map = {};
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat
@@ -322,7 +317,7 @@ class RestAPI implements RestClient, RestClientERP {
 
     Map<String, dynamic> map = {};
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat
@@ -350,7 +345,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(ticketNo, GlobalVariables.ticketNo);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.ticketNo: ticketNo,
     });
@@ -375,7 +370,7 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getDocumentData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
@@ -428,7 +423,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(eMail, GlobalVariables.userEmail);
     ArgumentError.checkNotNull(name, GlobalVariables.NAME);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -465,7 +460,7 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getComplaintsAreaData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
@@ -488,7 +483,7 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getComplaintsCategoryData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
@@ -543,7 +538,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(eMail, GlobalVariables.userEmail);
 
 //SUBJECT,TYPE,COMPLAINT_AREA,CATEGORY,DESCRIPTION,PRIORITY,NAME,ATTACHMENT
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -584,7 +579,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(societyId, GlobalVariables.Type);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.Type: type,
     });
@@ -609,7 +604,7 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getCommitteeDirectoryData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
@@ -633,7 +628,7 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getEmergencyDirectoryData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
@@ -657,7 +652,7 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getNeighboursDirectoryData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
     });
 
@@ -685,7 +680,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(societyId, GlobalVariables.Type);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -741,7 +736,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(hobbies, GlobalVariables.HOBBIES);
     ArgumentError.checkNotNull(membershipType, GlobalVariables.TYPE);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -795,7 +790,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(stickerNo, GlobalVariables.STICKER_NO);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -839,7 +834,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(date, GlobalVariables.DATE);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -873,7 +868,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -911,7 +906,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -948,7 +943,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block
@@ -990,7 +985,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block
@@ -1024,7 +1019,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
     //ArgumentError.checkNotNull(block, GlobalVariables.block);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.INVOICE_NO: invoiceNo,
      // GlobalVariables.block: block
@@ -1059,7 +1054,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block,
@@ -1096,7 +1091,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(receiptNo, GlobalVariables.RECEIPT_NO);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block,
@@ -1142,7 +1137,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(checkBankName, GlobalVariables.CHEQUE_BANKNAME);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -1186,11 +1181,12 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
     ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
     ArgumentError.checkNotNull(referenceNo, GlobalVariables.REFERENCE_NO);
-    ArgumentError.checkNotNull(transactionMode, GlobalVariables.TRANSACTION_MODE);
+    ArgumentError.checkNotNull(
+        transactionMode, GlobalVariables.TRANSACTION_MODE);
     ArgumentError.checkNotNull(bankAccountNo, GlobalVariables.BANK_ACCOUNTNO);
     ArgumentError.checkNotNull(paymentDate, GlobalVariables.PAYMENT_DATE);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -1225,10 +1221,8 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
-    FormData formData = FormData.from({
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.userID: userId
-    });
+    FormData formData = FormData.fromMap(
+        {GlobalVariables.societyId: societyId, GlobalVariables.userID: userId});
 
     print('baseurl : ' + baseUrl + GlobalVariables.profileAPI);
     final Response _result = await _dio.post(GlobalVariables.profileAPI,
@@ -1255,7 +1249,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
       GlobalVariables.PROFILE_PHOTO:profilePhoto,
@@ -1294,9 +1288,8 @@ class RestAPI implements RestClient, RestClientERP {
     // TODO: implement getPayOptionData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
-    FormData formData = FormData.from({
-      GlobalVariables.societyId: societyId
-    });
+    FormData formData =
+        FormData.fromMap({GlobalVariables.societyId: societyId});
 
     print('baseurl : ' + baseUrl + GlobalVariables.payOptionAPI);
     final Response _result = await _dio.post(GlobalVariables.payOptionAPI,
@@ -1320,7 +1313,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(contact, GlobalVariables.Contact);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.Contact: contact
     });
@@ -1359,7 +1352,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(role, GlobalVariables.ROLE);
    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -1391,6 +1384,71 @@ class RestAPI implements RestClient, RestClientERP {
     return StatusMsgResponse.fromJson(value);
   }
 
+  /*approve visitor*/
+  @override
+  Future<DataResponse> postApproveGatePass(
+      String vid,
+      String uid,
+      String reason,
+      String noOfVisitors,
+      String fromVisitor,
+      String visitorStatus,
+      String inBy,
+      String societyId,
+      String inDate,
+      String inTime) async {
+    FormData formData = FormData.fromMap({
+      GatePassFields.VID: vid,
+      GatePassFields.USER_ID: uid,
+      GatePassFields.REASON: reason,
+      GatePassFields.NO_OF_VISITOR: noOfVisitors,
+      GatePassFields.FROM_VISITOR: fromVisitor,
+      GatePassFields.VISITOR_STATUS: visitorStatus,
+      GatePassFields.IN_BY: inBy,
+      GatePassFields.SOCIETY_ID: societyId,
+      GatePassFields.IN_DATE: inDate,
+      GatePassFields.IN_TIME: inTime,
+    });
+
+    final Response _result = await _dio.post(GlobalVariables.approveGatePassAPI,
+        options: RequestOptions(
+            method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            },
+            baseUrl: GlobalVariables.BaseURLAndroid),
+        data: formData);
+    final value = _result.data;
+
+
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> postRejectGatePass (
+      String id, String societyId, String comment, String status)async {
+
+    FormData formData = FormData.fromMap({
+      GatePassFields.ID: id,
+      GatePassFields.SOCIETY_ID: societyId,
+      GatePassFields.COMMENT: comment,
+      GatePassFields.STATUS: status,
+    });
+
+    final Response _result = await _dio.post(GlobalVariables.rejectGatepassAPI,
+        options: RequestOptions(
+            method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            },
+            baseUrl: GlobalVariables.BaseURLAndroid),
+        data: formData);
+    final value = _result.data;
+
+
+    return DataResponse.fromJson(value);
+  }
+
   @override
   Future<StatusMsgResponse> getBillMail(String socId, String type, String number,String emailId) async {
     // TODO: implement getBillMail
@@ -1400,7 +1458,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(emailId, GlobalVariables.Email_id);
 
     FormData formData =
-    FormData.from({
+    FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.TYPE: type,
       GlobalVariables.NUMBER: number,
@@ -1428,7 +1486,7 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(otp, "otp");
 
     FormData formData =
-    FormData.from({
+    FormData.fromMap({
       "mobile_no": mobile,
       "Email_id": emailId,
       "otp": otp

@@ -19,6 +19,8 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'base_stateful.dart';
+
 class BaseHelpDesk extends StatefulWidget {
  // String pageName;
  // BaseHelpDesk(this.pageName);
@@ -30,7 +32,7 @@ class BaseHelpDesk extends StatefulWidget {
   }
 }
 
-class HelpDeskState extends State<BaseHelpDesk> {
+class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
 
   List<Complaints> _complaintList = new List<Complaints>();
   List<Complaints> _openComplaintList = new List<Complaints>();

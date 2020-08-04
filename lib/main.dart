@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/OtpWithMobile.dart';
 import 'package:societyrun/Activities/Register.dart';
@@ -37,7 +37,6 @@ Future<void> flutterDownloadInitialize() async {
   await FlutterDownloader.initialize(debug: true);
 }
 
-
 class BaseSplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -66,6 +65,11 @@ class SplashScreenState extends State<SplashScreen> {
     super.dispose();
     if(_timer!=null)
       _timer.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override

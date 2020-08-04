@@ -10,6 +10,8 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
+import 'base_stateful.dart';
+
 class BaseEditProfileInfo extends StatefulWidget {
 
   String userId,societyId;
@@ -21,7 +23,7 @@ class BaseEditProfileInfo extends StatefulWidget {
   }
 }
 
-class EditProfileInfoState extends State<BaseEditProfileInfo> {
+class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
 
   String userId,societyId;
 

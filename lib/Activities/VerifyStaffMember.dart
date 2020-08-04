@@ -15,6 +15,7 @@ import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'HelpDesk.dart';
+import 'base_stateful.dart';
 
 class BaseVerifyStaffMember extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class BaseVerifyStaffMember extends StatefulWidget {
   }
 }
 
-class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
+class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
   ProgressDialog _progressDialog;
 
   TextEditingController _mobileController = TextEditingController();

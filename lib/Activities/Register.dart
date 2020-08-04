@@ -9,6 +9,8 @@ import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
+import 'base_stateful.dart';
+
 class BaseRegister extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +20,7 @@ class BaseRegister extends StatefulWidget {
   }
 }
 
-class RegisterState extends State<BaseRegister> {
+class RegisterState extends BaseStatefulState<BaseRegister> {
   TextEditingController name = new TextEditingController();
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();

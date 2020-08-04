@@ -1,5 +1,5 @@
-import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
@@ -197,6 +197,28 @@ abstract class RestClient {
       @Field(GlobalVariables.PHOTO) String picture,@Field(GlobalVariables.IDENTITY_PROOF) String identityProof,
       @Field(GlobalVariables.VEHICLE_NO) String vehicleNo);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.approveGatePassAPI)
+  Future<DataResponse> postApproveGatePass(
+    @Field(GatePassFields.VID) String vid,
+    @Field(GatePassFields.USER_ID) String uid,
+    @Field(GatePassFields.REASON) String reason,
+    @Field(GatePassFields.NO_OF_VISITOR) String noOfVisitors,
+    @Field(GatePassFields.FROM_VISITOR) String fromVisitor,
+    @Field(GatePassFields.VISITOR_STATUS) String visitorStatus,
+    @Field(GatePassFields.IN_BY) String inBy,
+    @Field(GatePassFields.SOCIETY_ID) String societyId,
+    @Field(GatePassFields.IN_DATE) String inDate,
+    @Field(GatePassFields.IN_TIME) String inTime
+  );
+  @FormUrlEncoded()
+  @POST(GlobalVariables.rejectGatepassAPI)
+  Future<DataResponse> postRejectGatePass(
+      @Field(GatePassFields.ID) String id,
+      @Field(GatePassFields.SOCIETY_ID) String societyId,
+      @Field(GatePassFields.COMMENT) String comment,
+      @Field(GatePassFields.STATUS) String status
+      );
 }
 
 

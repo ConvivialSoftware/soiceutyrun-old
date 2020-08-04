@@ -18,6 +18,7 @@ import 'package:societyrun/Activities/MyComplex.dart';
 
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -37,7 +38,7 @@ class BaseDashBoard extends StatefulWidget {
   }
 }
 
-class DashBoardState extends State<BaseDashBoard> {
+class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
       new GlobalKey<ScaffoldState>();
 
