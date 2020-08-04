@@ -1,4 +1,4 @@
-package com.convivial.societyrun
+package com.societyrun12
 
 //import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

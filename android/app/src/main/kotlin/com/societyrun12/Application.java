@@ -1,4 +1,6 @@
-package com.convivial.societyrun;
+package com.societyrun12;
+
+import com.societyrun12.FirebaseCloudMessagingPluginRegistrant;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
