@@ -448,10 +448,11 @@ class GlobalFunctions{
   }
 
   static Future<String> localPath() async {
-    final path = ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
-    // For your reference print the AppDoc directory
+    final directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    return directory.path;
 
-    return path;
   }
 
   static Future<String> getTemporaryDirectoryPath() async {
@@ -472,20 +473,27 @@ class GlobalFunctions{
   }
 */
 
-  static Future<void> downloadAttachment(var url,var _localPath) async {
-
+  static Future<String> downloadAttachment(var url,var _localPath) async {
+  String localPath = _localPath + Platform.pathSeparator+"Download";
+  final savedDir = Directory(localPath);
+  bool hasExisted = await savedDir.exists();
+  if (!hasExisted) {
+    savedDir.create();
+  }
+  print("path >>> $localPath");
     final taskId = await FlutterDownloader.enqueue(
       url: url,
-      savedDir: _localPath,
+      savedDir: localPath,
+      headers: {"auth": "test_for_sql_encoding"},
       //fileName: "SocietyRunImage/Document",
       showNotification: true, // show download progress in status bar (for Android)
       openFileFromNotification: true, // click on notification to open downloaded file (for Android)
     );
-    FlutterDownloader.open(taskId: taskId);
-
+    return taskId;
   }
-
-
+  Future<bool> _openDownloadedFile(String id) {
+    return FlutterDownloader.open(taskId: id);
+  }
   static Future<void> shareData(var title, var text) async {
     await FlutterShare.share(title: title, text: text, chooserTitle: title);
   }

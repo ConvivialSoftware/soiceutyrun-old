@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +103,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   var amount, invoiceNo, referenceNo;
 
   var _localPath;
+  ReceivePort _port = ReceivePort();
+  String _taskId;
 
   //var _progressDialog;
 
@@ -141,6 +147,35 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     _tabController.addListener(_handleTabSelection);
     print(pageName.toString());
     _handleTabSelection();
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState((){
+        if(status == DownloadTaskStatus.complete){
+          _progressDialog.hide();
+          print("TASKID >>> $_taskId");
+          _openDownloadedFile(_taskId)
+              .then((success) {
+            if (!success) {
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(
+                  content: Text(
+                      'Cannot open this file')));
+            }
+          });
+        }else{
+          _progressDialog.hide();
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(
+              content: Text(
+                  'Download failed!')));
+        }
+      });
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
 
     // getBillList();
    /* getVehicleRecentTransactionList();
@@ -156,7 +191,41 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     if (_razorpay != null) {
       _razorpay.clear();
     }
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
+  }
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+
+    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+
+    send.send([id, status, progress]);
+
+  }
+
+  void downloadAttachment(var url,var _localPath) async {
+    _progressDialog.show();
+    String localPath = _localPath + Platform.pathSeparator+"Download";
+    final savedDir = Directory(localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+    _taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: localPath,
+      headers: {"auth": "test_for_sql_encoding"},
+      //fileName: "SocietyRunImage/Document",
+      showNotification: true, // show download progress in status bar (for Android)
+      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    );
+
+
+
+  }
+  Future<bool> _openDownloadedFile(String id) {
+    return FlutterDownloader.open(taskId: id);
   }
 
   @override
@@ -2710,7 +2779,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
-    print('Razor Error Response : ' + response.toString());
+    print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
   }
 

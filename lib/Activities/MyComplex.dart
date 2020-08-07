@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +39,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   TabController _tabController;
   //List<NewsBoard> _newsBoardList = List<NewsBoard>();
   List<PollSurvey> _pollSurveyList = List<PollSurvey>();
-  List<Directory> _directoryList = List<Directory>();
+  List<DirectoryType> _directoryList = List<DirectoryType>();
   List<Documents> _documentList = List<Documents>();
 
 //  List<Events> _eventsList = List<Events>();
@@ -47,11 +51,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   List<Announcement> _eventList = List<Announcement>();
 
   var name,_localPath;
+  String _taskId;
+  ReceivePort _port = ReceivePort();
   String _selectedItem;
   List<DropdownMenuItem<String>> _societyListItems =
       new List<DropdownMenuItem<String>>();
 
   ProgressDialog _progressDialog;
+  ProgressDialog _downloadProgress;
 
   String pageName;
 
@@ -82,20 +89,77 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     }
 
 
-   // getNewsBordListData();
-    //getPollSurveyListData();
-    //getDocumentsListData();
-    //getEventsListData();
-   /* GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState((){
 
-      } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
-      }
-    });*/
+        if(status == DownloadTaskStatus.complete){
+          _progressDialog.hide();
+          _openDownloadedFile(_taskId)
+              .then((success) {
+            if (!success) {
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(
+                  content: Text(
+                      'Cannot open this file')));
+            }
+          });
+        }else{
+          _progressDialog.hide();
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(
+              content: Text(
+                  'Download failed!')));
+        }
+      });
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
   }
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+  }
+
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+
+    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+
+    send.send([id, status, progress]);
+
+  }
+
+   void downloadAttachment(var url,var _localPath) async {
+     _progressDialog.show();
+    String localPath = _localPath + Platform.pathSeparator+"Download";
+    final savedDir = Directory(localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+      _taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: localPath,
+      headers: {"auth": "test_for_sql_encoding"},
+      //fileName: "SocietyRunImage/Document",
+      showNotification: true, // show download progress in status bar (for Android)
+      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    );
+
+
+
+  }
+  Future<bool> _openDownloadedFile(String id) {
+    return FlutterDownloader.open(taskId: id);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -423,19 +487,19 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             ),
           ),
           _announcementList[position].ATTACHMENT.length>0 ? InkWell(
-            onTap: (){
+            onTap: () async {
               //: https://societyrun.com//Uploads/fb4c12f20c92a8e63bbaaa8e3f680fd3.jpg,
                String url =_announcementList[position].ATTACHMENT;
 
 
                print("storagePermiassion : "+isStoragePermission.toString());
                if(isStoragePermission) {
-                 GlobalFunctions.downloadAttachment(
+                downloadAttachment(
                      url, _localPath);
                }else{
                  GlobalFunctions.askPermission(Permission.storage).then((value) {
                    if(value){
-                     GlobalFunctions.downloadAttachment(
+                     downloadAttachment(
                          url, _localPath);
                    }else{
                      GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
@@ -816,12 +880,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
               print("storagePermiassion : "+isStoragePermission.toString());
               if(isStoragePermission) {
-                GlobalFunctions.downloadAttachment(
+               downloadAttachment(
                     url, _localPath);
               }else{
                 GlobalFunctions.askPermission(Permission.storage).then((value) {
                   if(value){
-                    GlobalFunctions.downloadAttachment(
+                    downloadAttachment(
                         url, _localPath);
                   }else{
                     GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
@@ -1617,12 +1681,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getDirectoryListData() {
     _directoryList = [
-      Directory(directoryType: "Neighbours", directoryTypeWiseList: _neighbourList),
-      Directory(
+      DirectoryType(directoryType: "Neighbours", directoryTypeWiseList: _neighbourList),
+      DirectoryType(
           directoryType: "Committee", directoryTypeWiseList: _committeeList),
-      Directory(
+      DirectoryType(
           directoryType: "Emergency", directoryTypeWiseList: _emergencyList),
-      Directory(directoryType: "Near By Shops", directoryTypeWiseList: [
+      DirectoryType(directoryType: "Near By Shops", directoryTypeWiseList: [
        /* DirectoryTypeWiseData(
             name: "Arogya Medical",
             field: "Medical",
@@ -2188,12 +2252,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
               print("storagePermiassion : "+isStoragePermission.toString());
               if(isStoragePermission) {
-                GlobalFunctions.downloadAttachment(
+               downloadAttachment(
                     url, _localPath);
               }else{
                 GlobalFunctions.askPermission(Permission.storage).then((value) {
                   if(value){
-                    GlobalFunctions.downloadAttachment(
+                   downloadAttachment(
                         url, _localPath);
                   }else{
                     GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
@@ -2737,13 +2801,13 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                       print("storagePermiassion : " +
                           isStoragePermission.toString());
                       if (isStoragePermission) {
-                        GlobalFunctions.downloadAttachment(
+                        downloadAttachment(
                             _documentList[position].DOCUMENT, _localPath);
                       } else {
                         GlobalFunctions.askPermission(Permission.storage)
                             .then((value) {
                           if (value) {
-                            GlobalFunctions.downloadAttachment(
+                           downloadAttachment(
                                 _documentList[position].DOCUMENT,
                                 _localPath);
                           } else {
@@ -2975,11 +3039,11 @@ class SurveyVoteOption {
   SurveyVoteOption({this.isSelected, this.radioText, this.index});
 }
 
-class Directory {
+class DirectoryType {
   String directoryType;
   List<dynamic> directoryTypeWiseList;
 
-  Directory({this.directoryType, this.directoryTypeWiseList});
+  DirectoryType({this.directoryType, this.directoryTypeWiseList});
 }
 
 class DirectoryTypeWiseData {
