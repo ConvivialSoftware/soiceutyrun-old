@@ -1,37 +1,39 @@
 {
   "project_info": {
-    "project_number": "71894349027",
-    "firebase_url": "https://societyrun-test.firebaseio.com",
-    "project_id": "societyrun-test",
-    "storage_bucket": "societyrun-test.appspot.com"
+    "project_number": "178581095763",
+    "firebase_url": "https://newsocietyrunapp.firebaseio.com",
+    "project_id": "newsocietyrunapp",
+    "storage_bucket": "newsocietyrunapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:71894349027:android:f5623cfbf04aa10e9e81d6",
+        "mobilesdk_app_id": "1:178581095763:android:45747b2b6a483e23",
         "android_client_info": {
-          "package_name": "com.convivial.societyrun"
+          "package_name": "com.societyrun12"
         }
       },
       "oauth_client": [
         {
-          "client_id": "71894349027-29jv8afeav8nmt9qdtq2fv0gpf2sjr3s.apps.googleusercontent.com",
+          "client_id": "178581095763-6fuvbpgii4mijn368g9c7ric2qtid8br.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDdWWRNbs3QZQ3KgGKRK916WS69LO7FPgQ"
+          "current_key": "AIzaSyDO13ly_9rMxnb8VOibtVmCvJ_ym16X8bY"
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 1
+        },
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "71894349027-29jv8afeav8nmt9qdtq2fv0gpf2sjr3s.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
         }
       }
     }
