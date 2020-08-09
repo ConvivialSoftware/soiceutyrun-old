@@ -21,21 +21,21 @@ class _GatePassDialogState extends State<GatePassDialog> {
   ProgressDialog _progressDialog;
   static const double padding = 16.0;
   static const double ovalRadius = 66.0;
-  String _from;
-  String _block;
-  String _visitorName;
-  String _noOfVisitors;
+  String _from="";
+  String _block="";
+  String _visitorName="";
+  String _noOfVisitors="";
   String _visitorType;
-  String _visitorContact;
-  String _societyId;
-  String _vid;
-  String _uid;
-  String _inBy;
-  String _reason;
-  String _inDate;
-  String _inTime;
-  String _visitorImage;
-  String _popupTitle;
+  String _visitorContact="";
+  String _societyId="";
+  String _vid="";
+  String _uid="";
+  String _inBy="";
+  String _reason="";
+  String _inDate="";
+  String _inTime="";
+  String _visitorImage="";
+  String _popupTitle="";
 
   @override
   void initState() {

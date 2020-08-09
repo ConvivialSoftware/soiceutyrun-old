@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
@@ -24,6 +25,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
       message["data"]["title"],
       message["data"]["REASON"], platformChannelSpecifics,
       payload: message["data"]["data"]);
+  AppAvailability.launchApp("com.convivial.societyrun");
+
 
   return Future<void>.value();
 

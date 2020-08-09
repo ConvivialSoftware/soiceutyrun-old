@@ -3,6 +3,7 @@ package com.convivial.societyrun;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin;
 import com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin;
+import com.pichillilorenzo.flutter_appavailability.FlutterAppAvailabilityPlugin;
 
 public final class FirebaseCloudMessagingPluginRegistrant{
     public static void registerWith(PluginRegistry registry) {
@@ -11,6 +12,7 @@ public final class FirebaseCloudMessagingPluginRegistrant{
         }
         FirebaseMessagingPlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin"));
         FlutterLocalNotificationsPlugin.registerWith(registry.registrarFor("com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin"));
+        FlutterAppAvailabilityPlugin.registerWith(registry.registrarFor("com.pichillilorenzo.flutter_appavailability.FlutterAppAvailabilityPlugin"));
     }
 
     private static boolean alreadyRegisteredWith(PluginRegistry registry) {
