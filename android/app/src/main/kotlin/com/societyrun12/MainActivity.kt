@@ -1,4 +1,4 @@
-package com.convivial.societyrun
+package com.societyrun12
 
 import io.flutter.embedding.android.FlutterActivity
 //import io.flutter.embedding.engine.FlutterEngine
