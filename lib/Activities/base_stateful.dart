@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:local_notifications/local_notifications.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -21,12 +22,13 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   var platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics,
       iOSPlatformChannelSpecifics);
-  flutterLocalNotificationsPlugin
-      .show(msgId,
-      message["data"]["title"],
-      message["data"]["REASON"], platformChannelSpecifics,
-      payload: message['data']["data"]);
-  AppAvailability.launchApp("com.convivial.societyrun");
+//  flutterLocalNotificationsPlugin
+//      .show(msgId,
+//      message["data"]["title"],
+//      message["data"]["REASON"], platformChannelSpecifics,
+//      payload: message['data']["data"]);
+
+
 
 
   return Future<void>.value();
