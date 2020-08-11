@@ -12,6 +12,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintArea.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
+import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'HelpDesk.dart';
@@ -31,6 +32,8 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
   TextEditingController _mobileController = TextEditingController();
 
   String _mobileNumber = "";
+
+  List<Staff> _staffList = new List<Staff>();
 
   @override
   void initState() {
@@ -520,10 +523,9 @@ _progressDialog.show();
     restClient.getStaffMobileVerifyData(societyId,_mobileNumber).then((value) {
         _progressDialog.hide();
       if (value.status) {
-       // List<dynamic> _list = value.data;
-        //open dialog for add new flat block  this member
+        List<dynamic> _list = value.data;
 
-
+        _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
         Dialog infoDialog = Dialog(
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
@@ -570,25 +572,45 @@ _progressDialog.show();
                   Container(
                     //   alignment: Alignment.topRight,
                     child: FlatButton(onPressed: (){
-
+                      Navigator.of(context).pop();
                     }, child: Text(AppLocalizations.of(context).translate('no'))),
                   ),
                   Container(
                   //  alignment: Alignment.topRight,
                     child: FlatButton(onPressed: (){
-
+                      Navigator.of(context).pop();
+                      addMember();
                     }, child: Text(AppLocalizations.of(context).translate('yes'))),
                   ),
                 ],
               ),
             ),
           ),
-          
-          
         ],
       ),
-      
     );
-    
   }
+
+  Future<void> addMember() async {
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String block = await GlobalFunctions.getBlock();
+    String flat = await GlobalFunctions.getFlat();
+    String userId = await GlobalFunctions.getUserId();
+
+    _progressDialog.show();
+    restClient.addStaffMember(societyId, block, flat, _staffList[0].STAFF_NAME,  _staffList[0].GENDER,  _staffList[0].DOB, _mobileController.text
+        ,  _staffList[0].QUALIFICATION ,  _staffList[0].ADDRESS,  _staffList[0].NOTES, userId,  _staffList[0].ROLE,  _staffList[0].IMAGE,  _staffList[0].Attachment,  _staffList[0].VEHICLE_NO).then((value) {
+
+      _progressDialog.hide();
+      if(value.status){
+        Navigator.of(context).pop();
+      }
+      GlobalFunctions.showToast(value.message);
+    });
+
+  }
+
 }

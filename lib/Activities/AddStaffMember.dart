@@ -614,8 +614,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
             if(_selectedRoleType!=null || _selectedRoleType.length>0){
 
               if(_addressController.text!=null && _addressController.text.length>0) {
-                addMember(
-                );
+                addMember();
               }else{
                 GlobalFunctions.showToast("Please Enter Address");
               }

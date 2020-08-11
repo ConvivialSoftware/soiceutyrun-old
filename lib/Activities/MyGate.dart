@@ -157,7 +157,7 @@ class MyGateState extends State<BaseMyGate>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0),
+                    context, 150.0),
                // getSocietyDataLayout(),
              //   activitiesFilterDateLayout(),
                 getActivitiesListDataLayout(),
@@ -184,7 +184,7 @@ class MyGateState extends State<BaseMyGate>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0), //ticketOpenClosedLayout(),
+                    context, 150.0), //ticketOpenClosedLayout(),
              //   getDocumentListDataLayout(),
       Align(
         alignment: Alignment.center,
@@ -382,7 +382,6 @@ class MyGateState extends State<BaseMyGate>
                /* Navigator.push(context, MaterialPageRoute(
                     builder: (context) =>
                         BaseExpectedVisitor()));*/
-
                 Dialog infoDialog = Dialog(
                   shape:
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
@@ -410,7 +409,7 @@ class MyGateState extends State<BaseMyGate>
     return _activitiesList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 6, 10, 0),
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -731,6 +730,8 @@ class MyGateState extends State<BaseMyGate>
   }*/
 
   scheduleVisitorLayout() {
+    _nameController.text ='';
+    _mobileController.text='';
 
     return Container(
       width: MediaQuery.of(context).size.width/0.2,
@@ -848,11 +849,10 @@ class MyGateState extends State<BaseMyGate>
                                       suffixIcon: IconButton(
                                           onPressed: () async {
                                             Contact contact = await _contactPicker.selectContact();
-                                            setState(() {
-                                              print('contact Name : '+contact.fullName);
-                                              print('contact Number : '+contact.phoneNumber.toString());
-                                              _contact = contact;
-                                            });
+                                            print('contact Name : '+contact.fullName);
+                                            print('contact Number : '+contact.phoneNumber.toString());
+                                            _contact = contact;
+                                            setState(() {});
                                           },
                                           icon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,)),
                                   ),
