@@ -57,10 +57,26 @@
         <string>You will get zero benefit allowing this app accessing your location. You should never see this alert. If you do alert technical support at https://www.societyrun.com</string>
 
     <key>NSContactsUsageDescription</key>
-            <string>Your contact is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you contact</string>
-     <key>NSCalendarsUsageDescription</key>
-                 <string>Your calender access is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you calender</string>
+    <string>Your contact is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you contact</string>
     <key>NSCalendarsUsageDescription</key>
-                     <string>Your calender access is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you calender</string>
+    <string>Your calender access is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you calender</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Your calender access is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you calender</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to the photo library.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app does not require access to the microphone.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires access to the camera.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires access to the camera.</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Required usage description for a Flutter dependency</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Required usage description for a Flutter dependency</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Required usage description for a Flutter dependency</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Required usage description for a Flutter dependency</string>
 </dict>
 </plist>
