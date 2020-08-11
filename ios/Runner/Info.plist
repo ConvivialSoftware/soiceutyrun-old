@@ -45,6 +45,8 @@
 	<string>Required usage description for a Flutter dependency</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to the photo library.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app does not use speech recognition. This request has popped due to Flutter dependency.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

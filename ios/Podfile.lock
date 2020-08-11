@@ -10,6 +10,10 @@ PODS:
     - Reachability
   - connectivity_macos (0.0.1):
     - Flutter
+  - contact_picker (0.0.1):
+    - Flutter
+  - device_apps (0.0.1):
+    - Flutter
   - DKImagePickerController/Core (4.3.2):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -95,8 +99,6 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.7)
     - Protobuf (>= 3.9.2, ~> 3.9)
   - Flutter (1.0.0)
-  - flutter_appavailability (0.0.1):
-    - Flutter
   - flutter_downloader (0.0.1):
     - Flutter
   - flutter_image_compress (0.0.1):
@@ -204,11 +206,12 @@ DEPENDENCIES:
   - compressimage (from `.symlinks/plugins/compressimage/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
+  - contact_picker (from `.symlinks/plugins/contact_picker/ios`)
+  - device_apps (from `.symlinks/plugins/device_apps/ios`)
   - ext_storage (from `.symlinks/plugins/ext_storage/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
-  - flutter_appavailability (from `.symlinks/plugins/flutter_appavailability/ios`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -266,6 +269,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity/ios"
   connectivity_macos:
     :path: ".symlinks/plugins/connectivity_macos/ios"
+  contact_picker:
+    :path: ".symlinks/plugins/contact_picker/ios"
+  device_apps:
+    :path: ".symlinks/plugins/device_apps/ios"
   ext_storage:
     :path: ".symlinks/plugins/ext_storage/ios"
   file_picker:
@@ -274,8 +281,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
-  flutter_appavailability:
-    :path: ".symlinks/plugins/flutter_appavailability/ios"
   flutter_downloader:
     :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_image_compress:
@@ -319,6 +324,8 @@ SPEC CHECKSUMS:
   compressimage: 4f597b00f6e66bdc43d0aec5f0b9e415f3b03bbd
   connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
+  contact_picker: 57db5d8b410b52a0457d88f7b15de7d3307e8f16
+  device_apps: 099590c646da044f7f410fef63229fc0aedb35a8
   DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   ext_storage: 4eaf3a84d5594106e2ebcc2502248cfde53c8fa1
@@ -332,7 +339,6 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: c4ad474b87787afd27d09541800620993b457d6f
   FirebaseMessaging: 942cfe05b4f53c95ab8959395ca35c200398b2f0
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_appavailability: ebf8f85abea44436d1262fcde8a4e64b2534b01a
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
   flutter_image_compress: 082f8daaf6c1b0c9fe798251c750ef0ecd98d7ae
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
@@ -367,6 +373,6 @@ SPEC CHECKSUMS:
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
 
-PODFILE CHECKSUM: f45d293502bdcca725aca7bc62af43ad173e1292
+PODFILE CHECKSUM: a1c15d4f3dcc70c91f21222186d051abd54e23ef
 
 COCOAPODS: 1.9.3
