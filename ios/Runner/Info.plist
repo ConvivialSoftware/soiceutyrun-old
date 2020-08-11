@@ -51,5 +51,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+        <string>Your location is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you location</string>
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>You will get zero benefit allowing this app accessing your location. You should never see this alert. If you do alert technical support at https://www.societyrun.com</string>
+
+    <key>NSContactsUsageDescription</key>
+            <string>Your contact is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you contact</string>
+     <key>NSCalendarsUsageDescription</key>
+                 <string>Your calender access is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you calender</string>
+    <key>NSCalendarsUsageDescription</key>
+                     <string>Your calender access is not needed. This request has popped up due to a 3rd party framework used by the app in a context that does NOT need you to reveal you calender</string>
 </dict>
 </plist>
