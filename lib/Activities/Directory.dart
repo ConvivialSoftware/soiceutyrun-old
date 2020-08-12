@@ -28,7 +28,7 @@ class BaseDirectory extends StatefulWidget {
  // String pageName;
  // BaseDirectory(this.pageName);
 
-  Directory directory ;
+  DirectoryType directory ;
   BaseDirectory(this.directory);
 
   @override
@@ -44,7 +44,7 @@ class DirectoryState extends State<BaseDirectory> {
   var societyId, flat, block;
 
   ProgressDialog _progressDialog;
-  Directory directory ;
+  DirectoryType directory ;
   DirectoryState(this.directory);
 
   List<NeighboursDirectory> _neighbourList = List<NeighboursDirectory>();
