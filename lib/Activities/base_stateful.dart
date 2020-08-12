@@ -23,10 +23,17 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       '10001', 'societyrun_channel', 'channel_for_gatepass_feature',
-      color: Colors.blue.shade800,
       importance: Importance.Max,
       priority: Priority.High,
-      ticker: 'ticker');
+      ticker: 'ticker',
+      enableLights: true,
+      color: Colors.green,
+      ledColor: const Color.fromARGB(255, 255, 0, 0),
+      ledOnMs: 1000,
+      ledOffMs: 500
+
+
+  );
   var iOSPlatformChannelSpecifics =
   IOSNotificationDetails(presentAlert: true, presentSound: true);
   var platformChannelSpecifics = NotificationDetails(
@@ -111,10 +118,17 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         '10001', 'societyrun_channel', 'channel_for_gatepass_feature',
-        color: Colors.blue.shade800,
         importance: Importance.Max,
         priority: Priority.High,
-        ticker: 'ticker');
+        ticker: 'ticker',
+        enableLights: true,
+        color: Colors.green,
+        ledColor: const Color.fromARGB(255, 255, 0, 0),
+        ledOnMs: 1000,
+        ledOffMs: 500
+
+
+    );
     var iOSPlatformChannelSpecifics =
         IOSNotificationDetails(presentAlert: true, presentSound: true);
     var platformChannelSpecifics = NotificationDetails(
