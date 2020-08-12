@@ -30,7 +30,9 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
       color: Colors.green,
       ledColor: const Color.fromARGB(255, 255, 0, 0),
       ledOnMs: 1000,
-      ledOffMs: 500
+      ledOffMs: 500,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound("noti_ring")
 
 
   );
@@ -125,7 +127,9 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         color: Colors.green,
         ledColor: const Color.fromARGB(255, 255, 0, 0),
         ledOnMs: 1000,
-        ledOffMs: 500
+        ledOffMs: 500,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound("noti_ring")
 
 
     );
