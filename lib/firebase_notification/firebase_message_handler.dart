@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
+import 'package:societyrun/Models/gatepass_payload.dart';
 
 class FirebaseMessagingHandler {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -33,8 +34,8 @@ class FirebaseMessagingHandler {
     });
   }
 
-  void showAlert(BuildContext context, Map<String, dynamic> message) {
-    _showItemDialog(message, context);
+  void showAlert(BuildContext context, GatePassPayload payload) {
+    _showItemDialog(payload, context);
   }
 
   void showErrorDialog(BuildContext context, dynamic error) {
@@ -44,10 +45,10 @@ class FirebaseMessagingHandler {
   void redirectToPage(Map<String, dynamic> message) {
 
   }
-  void _showItemDialog(Map<String, dynamic> message,BuildContext context) {
+  void _showItemDialog(GatePassPayload payload,BuildContext context) {
     showDialog<bool>(
       context: context,
-      builder: (_) =>GatePassDialog(message: message,),
+      builder: (_) =>GatePassDialog(message: payload),
     ).then((bool shouldNavigate) {
       if (shouldNavigate == true) {
 

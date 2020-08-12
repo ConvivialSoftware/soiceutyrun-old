@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'GlobalVariables.dart';
 
 class GatePassDialog extends StatefulWidget {
-  final Map<String, dynamic> message;
+  final GatePassPayload message;
 
   const GatePassDialog({Key key, this.message}) : super(key: key);
 
@@ -307,27 +308,21 @@ class _GatePassDialogState extends State<GatePassDialog> {
   }
 
   void _handleMessage() {
-    if (widget.message.containsKey('data')) {
-      final dynamic data = widget.message['data'];
-      _from = data['FROM_VISITOR'];
-      _vid = data['VID'];
-      _uid = data['USER_ID'];
-      _block = data['REASON'];
-      _visitorName = data['VISITOR_NAME'];
-      _visitorType = data['TYPE'];
-      _visitorContact = data['CONTACT'];
-      _noOfVisitors = data['NO_OF_VISITORS'];
-      _inBy = data['IN_BY'];
-      _reason = data['REASON'];
-      _inDate = data['IN_DATE'];
-      _inTime = data['IN_TIME'];
-      _visitorImage = data['IMAGE'];
-      _popupTitle = data['title'];
-    }
+      _from =widget.message.fROMVISITOR;
+      _vid = widget.message.vID;
+      _uid = widget.message.uSERID;
+      _block = widget.message.rEASON;
+      _visitorName = widget.message.vISITORNAME;
+      _visitorType = widget.message.tYPE;
+      _visitorContact = widget.message.cONTACT;
+      _noOfVisitors = widget.message.nOOFVISITORS;
+      _inBy = widget.message.iNBY;
+      _reason = widget.message.rEASON;
+      _inDate = widget.message.iNDATE;
+      _inTime = widget.message.iNTIME;
+      _visitorImage = widget.message.iMAGE;
+      _popupTitle = widget.message.title;
 
-    if (widget.message.containsKey('notification')) {
-      final dynamic notification = widget.message['notification'];
-    }
   }
 
   void _getSocietyData() async {
