@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:local_notifications/local_notifications.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

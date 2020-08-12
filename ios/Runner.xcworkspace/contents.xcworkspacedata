@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/niroshana/Documents/Flutter Projects/SOCIETYRUN/societyrun-app/ios/Society_Run.xcodeproj">
+      location = "group:/Users/niroshana/Documents/Flutter Projects/SOCIETYRUN/societyrun-app/ios/Runner.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Runner.xcodeproj">
    </FileRef>
 </Workspace>
