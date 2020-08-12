@@ -22,11 +22,11 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   var platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics,
       iOSPlatformChannelSpecifics);
-//  flutterLocalNotificationsPlugin
-//      .show(msgId,
-//      message["data"]["title"],
-//      message["data"]["REASON"], platformChannelSpecifics,
-//      payload: message['data']["data"]);
+  flutterLocalNotificationsPlugin
+      .show(msgId,
+      message["data"]["title"],
+      message["data"]["REASON"], platformChannelSpecifics,
+      payload: message['data']["data"]);
 
 
 
@@ -68,9 +68,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
 
     _fcm.firebaseMessaging.configure(
-      onBackgroundMessage: myBackgroundMessageHandler,
+//      onBackgroundMessage: myBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage >>>> $message");
+        _showNotification(message);
         try {
           _fcm.showAlert(context, message);
         } catch (e) {
@@ -79,6 +80,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch >>>> $message");
+        _showNotification(message);
         try {
           _fcm.showAlert(context, message);
         } catch (e) {
@@ -87,6 +89,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume >>>> $message");
+        _showNotification(message);
         try {
           _fcm.showAlert(context, message);
         } catch (e) {
@@ -97,9 +100,26 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
+    print("TAPPED >>>>");
 
+  }
+  _showNotification(Map<String, dynamic> message){
+    int msgId = int.tryParse(message["data"]["msgId"]
+        .toString()) ?? 0;
+    var androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+        '10001', 'societyrun_channel',
+        'channel_for_gatepass_feature', color: Colors.blue.shade800,
+        importance: Importance.Max,
+        priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true,presentSound: true);
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics,
+        iOSPlatformChannelSpecifics);
+    flutterLocalNotificationsPlugin
+        .show(msgId,
+        message["data"]["title"],
+        message["data"]["REASON"], platformChannelSpecifics,
+        payload: message['data']["data"]);
   }
 }
