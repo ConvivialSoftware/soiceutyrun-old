@@ -1,10 +1,10 @@
 class GatePassPayload {
   String msgID;
   String title;
+  String body;
   String iD;
   String tYPE;
   String sound;
-  String body;
   String vID;
   String rEASON;
   String iNBY;

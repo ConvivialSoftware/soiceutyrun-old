@@ -32,7 +32,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
       ledOnMs: 1000,
       ledOffMs: 500,
       playSound: true,
-      sound: RawResourceAndroidNotificationSound("noti_ring")
+      sound: RawResourceAndroidNotificationSound("noti_ring"),
+
 
 
   );
@@ -41,7 +42,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   var platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
   flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-      gatePassPayload.rEASON, platformChannelSpecifics,
+      gatePassPayload.body, platformChannelSpecifics,
       payload: message['data']['payload']);
 
   return Future<void>.value();
@@ -138,7 +139,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-        gatePassPayload.rEASON, platformChannelSpecifics,
+        gatePassPayload.body, platformChannelSpecifics,
         payload: message['data']['payload']);
   }
 }
