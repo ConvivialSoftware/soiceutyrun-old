@@ -23,7 +23,6 @@ import 'Activities/DashBoard.dart';
 
 void main() {
 
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]);
   flutterDownloadInitialize();
@@ -127,7 +126,7 @@ class SplashScreenState extends State<SplashScreen> {
 
    startTimer(BuildContext context) {
 
-    var duration = Duration(seconds: 5);
+    var duration = Duration(seconds: 0);
     _timer = Timer(duration, navigateToPage(context));
     return _timer;
 

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 class GlobalVariables{
-
+  static var  isAlreadyTapped = false;
   /*Variables for the Web URL*/
   static const termsConditionURL="https://societyrun.com/Terms%20&%20conditions.html";
   static const privacyPolicyURL="https://societyrun.com/Privacy_Policy.html";

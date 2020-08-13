@@ -2,6 +2,7 @@ import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -20,7 +21,7 @@ class BaseMyGate extends StatefulWidget {
   }
 }
 
-class MyGateState extends State<BaseMyGate>
+class MyGateState extends BaseStatefulState<BaseMyGate>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<ScheduleVisitor> _activitiesList =

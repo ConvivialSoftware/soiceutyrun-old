@@ -35,7 +35,7 @@ class FirebaseMessagingHandler {
   }
 
   void showAlert(BuildContext context, GatePassPayload payload) {
-    _showItemDialog(payload, context);
+      _showItemDialog(payload, context);
   }
 
   void showErrorDialog(BuildContext context, dynamic error) {

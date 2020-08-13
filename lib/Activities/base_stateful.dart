@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
@@ -94,12 +95,15 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    try {
-      Map<String, dynamic> temp = json.decode(payload);
-      GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
-      _fcm.showAlert(context, gatePassPayload);
-    } catch (e) {
-      _fcm.showErrorDialog(context, e);
+    if(!GlobalVariables.isAlreadyTapped) {
+      GlobalVariables.isAlreadyTapped = true;
+      try {
+        Map<String, dynamic> temp = json.decode(payload);
+        GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+        _fcm.showAlert(context, gatePassPayload);
+      } catch (e) {
+        _fcm.showErrorDialog(context, e);
+      }
     }
   }
 
