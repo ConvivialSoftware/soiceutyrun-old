@@ -322,7 +322,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                   style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
-                text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + 'To' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy"),
+                text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' To ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy"),
                   style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
               )
             ])),
