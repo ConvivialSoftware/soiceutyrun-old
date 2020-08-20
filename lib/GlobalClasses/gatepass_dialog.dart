@@ -25,7 +25,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
   String _block="";
   String _visitorName="";
   String _noOfVisitors="";
-  String _visitorType;
+  String _notificationType;
   String _visitorContact="";
   String _societyId="";
   String _vid="";
@@ -36,6 +36,9 @@ class _GatePassDialogState extends State<GatePassDialog> {
   String _inTime="";
   String _visitorImage="";
   String _popupTitle="";
+  String _id="";
+  String _message="";
+  bool isVisitor=false;
 
   @override
   void initState() {
@@ -47,12 +50,12 @@ class _GatePassDialogState extends State<GatePassDialog> {
   @override
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    return Dialog(
+    return isVisitor ? Dialog(
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: _buildDialogContent(context),
-    );
+    ):Container();
   }
 
   Widget _buildDialogContent(BuildContext context) {
@@ -307,22 +310,30 @@ class _GatePassDialogState extends State<GatePassDialog> {
   }
 
   void _handleMessage() {
+    print('message : '+widget.message.toString());
     if (widget.message.containsKey('data')) {
       final dynamic data = widget.message['data'];
-      _from = data['FROM_VISITOR'];
-      _vid = data['VID'];
-      _uid = data['USER_ID'];
-      _block = data['REASON'];
-      _visitorName = data['VISITOR_NAME'];
-      _visitorType = data['TYPE'];
-      _visitorContact = data['CONTACT'];
-      _noOfVisitors = data['NO_OF_VISITORS'];
-      _inBy = data['IN_BY'];
-      _reason = data['REASON'];
-      _inDate = data['IN_DATE'];
-      _inTime = data['IN_TIME'];
-      _visitorImage = data['IMAGE'];
+      _notificationType = data['TYPE'];
       _popupTitle = data['title'];
+      _id = data['ID'];
+      _message=data['body'];
+      if(_notificationType=='Visitor' || _notificationType=='Visitor_verify') {
+        isVisitor=true;
+        _from = data['FROM_VISITOR'];
+        _vid = data['VID'];
+        _uid = data['USER_ID'];
+        _block = data['REASON'];
+        _visitorName = data['VISITOR_NAME'];
+        _visitorContact = data['CONTACT'];
+        _noOfVisitors = data['NO_OF_VISITORS'];
+        _inBy = data['IN_BY'];
+        _reason = data['REASON'];
+        _inDate = data['IN_DATE'];
+        _inTime = data['IN_TIME'];
+        _visitorImage = data['IMAGE'];
+      }else{
+        isVisitor=false;
+      }
     }
 
     if (widget.message.containsKey('notification')) {

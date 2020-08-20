@@ -6,6 +6,7 @@ class GlobalVariables{
   /*Variables for the Web URL*/
   static const termsConditionURL="https://societyrun.com/Terms%20&%20conditions.html";
   static const privacyPolicyURL="https://societyrun.com/Privacy_Policy.html";
+  static bool isERPAccount=false;
 
   /*Variables for the SharedPreferences*/
   static var keyIsLogin="isLogin";
@@ -30,6 +31,7 @@ class GlobalVariables{
   static var keyConsumerId="consumer_id";
   static var keyDuesRs="dues_rs";
   static var keyDuesDate="dues_date";
+  static var keyGoogleCoordinate="google_parameter";
 
   static var appLogoPath="assets/images/society_run_green.png";
   static var userProfilePath="assets/images/user_profile.jpeg";
@@ -66,6 +68,8 @@ class GlobalVariables{
   static var pdfIconPath="assets/other_assets/Icon awesome-file-pdf.svg";
   static var downloadIconPath="assets/other_assets/Icon awesome-download.svg";
   static var pdfBackIconPath="assets/other_assets/icon-pdf.svg";
+  static var creditCardPath="assets/other_assets/credit_card.png";
+  static var aboutUsPath="assets/other_assets/about_us.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath = "assets/bottom_menu/bottom_building_icon.svg";
@@ -113,6 +117,7 @@ class GlobalVariables{
   static const ComplaintsAreaAPI = "Helpdesk/area";
   static const ComplaintsCategoryAPI = "Helpdesk/category";
   static const UpdateStatusAPI = "Helpdesk/updatecmtstatus";
+  static const TicketNoComplaintAPI = "Helpdesk/complaints";
   static const DocumentAPI = "Document";
   static const UploadFileAPI = "UploadFile";
   static const CommitteeDirectoryAPI = "View_directory/commitee";
@@ -128,6 +133,8 @@ class GlobalVariables{
   static const payOptionAPI = "Api/payoption";
   static const staffMobileVerifyAPI = "Staff/mobileverifystaff";
   static const addStaffMemberAPI = "Staff/insertstaff";
+  static const bannerAPI = "Api/banner";
+  static const allMemberAPI = "View_directory/all_member";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -273,6 +280,9 @@ class GlobalVariables{
   static const PassCode = "pass_code";
   static const ExpiredTime = "expire_time";
   static const OTP = "otp";
+  static const commitee_member = "commitee_member";
+  static const society_member = "society_member";
+  static const emergency = "emergency";
 
 }
 class GatePassStatus{
@@ -294,4 +304,17 @@ class GatePassFields{
   static const ID = "ID";
   static const COMMENT = "COMMENT";
   static const STATUS = "STATUS";
+}
+
+class SocietyRun{
+  static const companyName="Convivial Software Prv. Ltd.";
+  static const salesContact="+91 8055551809";
+  static const salesContact1="+91 8082697529";
+  static const supportContact="020 46304333";
+  static const webSite="http://www.convivialsolutions.com/";
+  static const salesEmail="Sales@societyrun.com";
+  static const supportEmail="Support@societyrun.com";
+  static const puneAddress="Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
+  static const mumbaiAddress="F70, Haware Fantasia Business Park,Near Vashi Station & Inorbit Mall,Vashi, Navi Mumbai - 400705";
+  static const versionCode="1.0.0";
 }

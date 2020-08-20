@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/AllMemberResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
@@ -79,6 +80,10 @@ abstract class RestClient {
       @Field(GlobalVariables.flat) String flat );
 
   @FormUrlEncoded()
+  @POST(GlobalVariables.TicketNoComplaintAPI)
+  Future<DataResponse> getComplaintDataAgainstTicketNo(@Field(GlobalVariables.societyId) String socId,@Field(GlobalVariables.parentTicket) String ticketNo);
+
+  @FormUrlEncoded()
   @POST(GlobalVariables.CommentAPI)
   Future<DataResponse> getCommentData(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.ticketNo) String ticketNo);
 
@@ -116,6 +121,10 @@ abstract class RestClient {
       @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.ATTACHMENT) String attachment,@Field(GlobalVariables.ATTACHMENT_NAME) String ATTACHMENT_NAME,
       @Field(GlobalVariables.societyName) String socName,@Field(GlobalVariables.userEmail) String eMail,
       @Field(GlobalVariables.societyEmail) String socEmail);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.allMemberAPI)
+  Future<AllMemberResponse> getAllMemberDirectoryData(@Field(GlobalVariables.societyId) String societyId);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.CommitteeDirectoryAPI)
@@ -185,6 +194,9 @@ abstract class RestClient {
   @POST(GlobalVariables.staffMobileVerifyAPI)
   Future<DataResponse> getStaffMobileVerifyData(@Field(GlobalVariables.societyId) societyId, @Field(GlobalVariables.Contact) String contact);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.bannerAPI)
+  Future<DataResponse> getBannerData();
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addStaffMemberAPI)

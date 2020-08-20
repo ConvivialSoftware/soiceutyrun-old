@@ -175,6 +175,15 @@ class GlobalFunctions{
     return "";
   }
 
+  static getGoogleCoordinate() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyGoogleCoordinate)){
+      print('keyGoogleCoordinate : '+sharedPreferences.getString(GlobalVariables.keyGoogleCoordinate));
+      return  sharedPreferences.getString(GlobalVariables.keyGoogleCoordinate);
+    }
+    return "";
+  }
+
   static getAppLanguage() async{
     AppLanguage appLanguage = AppLanguage();
     Locale _appLocale= await appLanguage.fetchLocale();
@@ -220,6 +229,7 @@ class GlobalFunctions{
     sharedPreferences.setString(GlobalVariables.keyPhoto, value.Photo);
     sharedPreferences.setString(GlobalVariables.keyUserPermission, value.Permissions);
     sharedPreferences.setString(GlobalVariables.keyConsumerId, value.Consumer_no);
+    sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
   }
 
   static Future<void> savePasswordToSharedPreferences(String password) async {

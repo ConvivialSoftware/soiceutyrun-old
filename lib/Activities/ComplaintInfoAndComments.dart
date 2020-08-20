@@ -15,8 +15,16 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'HelpDesk.dart';
 
 class BaseComplaintInfoAndComments extends StatefulWidget {
-  final Complaints _complaint;
+
+  Complaints _complaint;
+  //final String ticketId;
   BaseComplaintInfoAndComments(this._complaint);
+
+  BaseComplaintInfoAndComments.ticketNo(String ticketId){
+    print('Ticket No :'+ticketId);
+    _complaint = Complaints();
+    _complaint.TICKET_NO=ticketId;
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -28,6 +36,7 @@ class BaseComplaintInfoAndComments extends StatefulWidget {
 class ComplaintInfoAndCommentsState
     extends State<BaseComplaintInfoAndComments> {
   var userId;
+  List<Complaints> _complaintsList = new List<Complaints>();
   List<Comments> _commentsList = new List<Comments>();
   List<ComplaintStatus> _complaintStatusList = new List<ComplaintStatus>();
   Complaints complaints;
@@ -121,7 +130,7 @@ class ComplaintInfoAndCommentsState
 
   getComplaintInfoCommentLayout() {
     return SingleChildScrollView(
-      child: Container(
+      child: complaints.SUBJECT!=null ? Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 80),
         padding: EdgeInsets.all(0),
       //  height: MediaQuery.of(context).size.height - 210,
@@ -359,7 +368,7 @@ class ComplaintInfoAndCommentsState
             ],
           ),
         ),
-      ),
+      ) : Container(),
     );
   }
 
@@ -598,8 +607,28 @@ class ComplaintInfoAndCommentsState
     restClient.getCommentData(societyId, complaints.TICKET_NO).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
-        _commentsList =
-            List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
+        _commentsList = List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
+        if(complaints.SUBJECT!=null) {
+          setState(() {});
+        }else{
+          getComplaintDataAgainstTicketNo();
+        }
+      }
+      _progressDialog.hide();
+    });
+  }
+
+
+  Future<void> getComplaintDataAgainstTicketNo() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    var societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.getComplaintDataAgainstTicketNo(societyId, complaints.TICKET_NO).then((value) {
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        _complaintsList = List<Complaints>.from(_list.map((e) => Complaints.fromJson(e)));
+        complaints = _complaintsList[0];
         setState(() {});
       }
       _progressDialog.hide();
