@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
@@ -622,7 +623,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     print('getMyDuesLayout Tab call');
 
-    return SingleChildScrollView(
+    return GlobalVariables.isERPAccount ? SingleChildScrollView(
      // scrollDirection: Axis.vertical,
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -725,7 +726,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ],
         ),
       ),
-    );
+    ) : getNoERPAccountLayout();
   }
 
   getMyHouseholdLayout() {
@@ -3138,7 +3139,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         switch(index){
           case 0: {
             if(!isDuesTabAPICall) {
-              getPayOption();
+              if(GlobalVariables.isERPAccount) {
+                getPayOption();
+              }
             }
           }
           break;
@@ -3331,6 +3334,63 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 )
               );
             }));
+  }
+
+  getNoERPAccountLayout() {
+    return Container(
+      padding: EdgeInsets.all(50),
+      //margin: EdgeInsets.all(20),
+      alignment: Alignment.center,
+      color: GlobalVariables.white,
+      //width: MediaQuery.of(context).size.width,
+     // height: MediaQuery.of(context).size.height,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: Image.asset(GlobalVariables.creditCardPath,width: 300,height: 300,fit: BoxFit.fill,),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+            child: Text(AppLocalizations.of(context).translate('erp_acc_not'),
+              style: TextStyle(
+                  color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
+              ),),
+          ),
+          Container(
+            height: 60,
+            width: MediaQuery.of(context).size.width/2,
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: ButtonTheme(
+              //minWidth: MediaQuery.of(context).size.width / 2,
+              child: RaisedButton(
+                color: GlobalVariables.green,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              BaseAboutSocietyRunInfo()));
+                },
+                textColor: GlobalVariables.white,
+                //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                        color: GlobalVariables.green)),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate('i_am_interested'),
+                  style: TextStyle(
+                      fontSize: GlobalVariables.largeText),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
  /* void emailBillBottomSheet(BuildContext context,int position) {
