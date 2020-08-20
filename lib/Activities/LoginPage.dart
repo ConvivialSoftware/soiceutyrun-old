@@ -17,6 +17,7 @@ import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:provider/provider.dart';
+import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:dio/dio.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,7 +49,20 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   bool _obscurePassword = true;
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
+  List<Banners> _bannerList = List<Banners>();
 
+  @override
+  void initState() {
+    super.initState();
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        getBannerData();
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -345,28 +359,32 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                       children: <Widget>[
                         Container(
                           decoration: BoxDecoration(
-                              color: GlobalVariables.lightGreen,
+                              color: GlobalVariables.mediumGreen,
                               borderRadius:
                               BorderRadius.all(Radius.circular(10))),
-                          margin: EdgeInsets.all(20),
-                         // padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-                          child:Container(
-                            color: GlobalVariables.mediumGreen,
-                            child: CarouselSlider.builder(
-                              options: CarouselOptions(height: 150.0,autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 3),
-                                autoPlayAnimationDuration: Duration(milliseconds: 800),
-                              ),
-                              itemCount: 4,
-                              itemBuilder: (BuildContext context, int itemIndex) =>
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Text(itemIndex.toString(),style: TextStyle(
-                                      color: GlobalVariables.black,fontSize: 20
-                                    ),),
-                                  ),
+                          margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                          child: CarouselSlider.builder(
+                            options: CarouselOptions(height: 200.0, autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 3),
+                              viewportFraction: 1.0,
+                              autoPlayAnimationDuration: Duration(
+                                  milliseconds: 800),
                             ),
-                          )
+                            itemCount: _bannerList.length,
+                            itemBuilder: (BuildContext context, int itemIndex) =>
+                            _bannerList.length> 0 ? InkWell(
+                              onTap: (){
+                                launch(_bannerList[itemIndex].Url);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                //color: GlobalVariables.black,
+                                //alignment: Alignment.center,
+                                child: Image.network(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
+                              ),
+                            ): Container(),
+                          ),
                         ),
                         /*Container(
 
@@ -480,15 +498,46 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
         //TODO: send FirebaseToken To Server
 
         //TODO: Navigate To DashBoardPage
-        /*Navigator.pushAndRemoveUntil(
+        Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => new BaseDashBoard()),
-            (Route<dynamic> route) => false);*/
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BaseDashBoard()));
+                builder: (BuildContext context) =>
+                    BaseDashBoard()),
+                (Route<dynamic> route) => false);
       }
 
+    }).catchError((Object obj) {
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+  }
+
+  getBannerData() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    restClient.getBannerData().then((value) {
+      print('Response : ' + value.toString());
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        print('complaint list length : ' + _list.length.toString());
+
+        // print('first complaint : ' + _list[0].toString());
+        // print('first complaint Status : ' + _list[0]['STATUS'].toString());
+
+        _bannerList = List<Banners>.from(_list.map((i) => Banners.fromJson(i)));
+        if (this.mounted) {
+          setState(() {
+            //Your state change code goes here
+          });
+        }
+      }
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:

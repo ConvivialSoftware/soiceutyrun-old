@@ -65,8 +65,7 @@ class DirectoryState extends State<BaseDirectory> {
       isEmergency=false;
       _committeeList.clear();
       _emergencyList.clear();
-      _neighbourList=directory.directoryTypeWiseList;
-
+      getNeighboursDirectoryData();
     }
 
     if(directory.directoryType=='Committee'){
@@ -75,7 +74,7 @@ class DirectoryState extends State<BaseDirectory> {
       isEmergency=false;
       _neighbourList.clear();
       _emergencyList.clear();
-      _committeeList=directory.directoryTypeWiseList;
+      getCommitteeDirectoryData();
 
     }
     if(directory.directoryType=='Emergency'){
@@ -84,8 +83,7 @@ class DirectoryState extends State<BaseDirectory> {
       isEmergency=true;
       _neighbourList.clear();
       _committeeList.clear();
-      _emergencyList=directory.directoryTypeWiseList;
-
+      getEmergencyDirectoryData();
     }
 
   }
@@ -323,4 +321,80 @@ class DirectoryState extends State<BaseDirectory> {
       ),
     );
   }
+
+  Future<void> getNeighboursDirectoryData() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.getNeighboursDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        _neighbourList = List<NeighboursDirectory>.from(_list.map((i) => NeighboursDirectory.fromJson(i)));
+        setState(() {});
+      }
+    }).catchError((Object obj) {
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+  }
+
+Future<void> getCommitteeDirectoryData() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.getCommitteeDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        _committeeList = List<CommitteeDirectory>.from(_list.map((i) => CommitteeDirectory.fromJson(i)));
+        setState(() {});
+      }
+    }).catchError((Object obj) {
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+  }
+
+Future<void> getEmergencyDirectoryData() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.getEmergencyDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        _emergencyList = List<EmergencyDirectory>.from(_list.map((i) => EmergencyDirectory.fromJson(i)));
+        setState(() {});
+      }
+    }).catchError((Object obj) {
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+  }
+
 }
