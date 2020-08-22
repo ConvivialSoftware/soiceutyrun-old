@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
+import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -470,12 +471,21 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: AutoSizeText(AppLocalizations.of(context).translate('bug_suggestion'),style: TextStyle(
-                            color: GlobalVariables.skyBlue,fontSize: 16
-                        ),),
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BaseFeedback()));
+                        },
+                        child: Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          child: AutoSizeText(AppLocalizations.of(context).translate('bug_suggestion'),style: TextStyle(
+                              color: GlobalVariables.skyBlue,fontSize: 16
+                          ),),
+                        ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 20),

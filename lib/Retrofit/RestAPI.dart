@@ -1576,6 +1576,40 @@ class RestAPI implements RestClient, RestClientERP {
     print('value of getAllMemberDirectoryData : ' + value.toString());
     return AllMemberResponse.fromJson(value);
   }
+
+  @override
+  Future<StatusMsgResponse> addFeedback(String socId, String block, String flat, String name, String subject, String description, String attachment) async {
+    // TODO: implement addFeedback
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(block, GlobalVariables.block);
+    ArgumentError.checkNotNull(flat, GlobalVariables.flat);
+    ArgumentError.checkNotNull(name, GlobalVariables.STAFF_NAME);
+    ArgumentError.checkNotNull(subject, 'Subject');
+    ArgumentError.checkNotNull(description, 'Description');
+
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.STAFF_NAME: name,
+      'Subject': subject,
+      'Description': description,
+      'Attachment': attachment,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.feedbackAPI);
+    final Response _result = await _dio.post(GlobalVariables.feedbackAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addFeedback : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
 }
 /*    [SOCIETY_ID] => 11133
  [BLOCK] => A

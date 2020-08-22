@@ -226,8 +226,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                               child: SizedBox(
                                   child: GestureDetector(
                                     onTap: () {
-                                      GlobalFunctions.showToast(
-                                          'Coming Soon...');
+                                      GlobalFunctions.comingSoonDialog(context);
                                     },
                                     child: SvgPicture.asset(
                                       GlobalVariables.notificationBellIconPath,
@@ -643,7 +642,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                GlobalFunctions.showToast("Coming Soon...");
+                                 GlobalFunctions.comingSoonDialog(context);
                               },
                               child: Container(
                                 padding: EdgeInsets.all(15),
@@ -666,7 +665,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                GlobalFunctions.showToast("Coming Soon...");
+                                 GlobalFunctions.comingSoonDialog(context);
                               },
                               child: Container(
                                 padding: EdgeInsets.all(15),
@@ -737,13 +736,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   }
 
   getDiscoverPage() {
-    GlobalFunctions.showToast('Coming Soon...');
+     GlobalFunctions.comingSoonDialog(context);
     /*Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*/
   }
 
   getClubFacilitiesPage() {
-    GlobalFunctions.showToast('Coming Soon...');
+     GlobalFunctions.comingSoonDialog(context);
     /* Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
   }
@@ -754,7 +753,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   }
 
   getMorePage() {
-    GlobalFunctions.showToast('Coming Soon...');
+     GlobalFunctions.comingSoonDialog(context);
     /*Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
   }
@@ -765,7 +764,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   }
 
   getAdminPage() {
-    GlobalFunctions.showToast('Coming Soon...');
+     GlobalFunctions.comingSoonDialog(context);
     /*Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
   }
@@ -830,7 +829,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                             */
                 //TODO : Dropdown
                 child: ButtonTheme(
-                  //alignedDropdown: true,
                   child: DropdownButton(
                     items: _societyListItems,
                     onChanged: changeDropDownItem,
@@ -1133,8 +1131,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
     password = await GlobalFunctions.getPassword();
     societyId = await GlobalFunctions.getSocietyId();
     String loginId = await GlobalFunctions.getLoginId();
-
-
+    int prefPos=0;
     restClient.getAllSocietyData(username).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -1180,13 +1177,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
 
           if (loginId == loginResponse.ID) {
             if (_societyListItems.length > 0) {
+              prefPos=i;
               _societyListItems.insert(
                   0,
                   DropdownMenuItem(
                     value: loginResponse.ID,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      alignment: Alignment.topLeft,
+                    child: Expanded(
                       child: AutoSizeText(
                         loginResponse.Society_Name +
                             " " +
@@ -1202,9 +1198,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
             } else {
               _societyListItems.add(DropdownMenuItem(
                 value: loginResponse.ID,
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  alignment: Alignment.topLeft,
+                child: Expanded(
                   child: AutoSizeText(
                     loginResponse.Society_Name +
                         " " +
@@ -1221,18 +1215,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
           } else {
             _societyListItems.add(DropdownMenuItem(
               value: loginResponse.ID,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                alignment: Alignment.topLeft,
-                child: AutoSizeText(
-                  loginResponse.Society_Name +
-                      " " +
-                      loginResponse.BLOCK +
-                      " " +
-                      loginResponse.FLAT,
-                  style: TextStyle(color: GlobalVariables.black, fontSize: 16),
-                  maxLines: 1,
-                ),
+              child: AutoSizeText(
+                loginResponse.Society_Name +
+                    " " +
+                    loginResponse.BLOCK +
+                    " " +
+                    loginResponse.FLAT,
+                style: TextStyle(color: GlobalVariables.black, fontSize: 16),
+                maxLines: 1,
               ),
             ));
           }
@@ -1242,8 +1232,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
         print('_societyListItems 0 : ' + _societyListItems[0].toString());
         _selectedItem = _societyListItems[0].value;
         print('_selectedItem initial : ' + _selectedItem.toString());
-        _selectedSocietyLogin = _societyList[0];
+        _selectedSocietyLogin = _societyList[prefPos];
         _selectedSocietyLogin.PASSWORD = password;
+        print("Flat"+_selectedSocietyLogin.FLAT.toString());
         GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
       }
     }).catchError((Object obj) {
@@ -1712,6 +1703,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   void getPhoto() {
     GlobalFunctions.getPhoto().then((value) {
       photo = value;
+      print('profile image : '+photo.toString());
     });
   }
 
@@ -1779,7 +1771,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                       AppLocalizations.of(context).translate('meetings'))));
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
-      GlobalFunctions.showToast("Coming Soon...");
+      GlobalFunctions.comingSoonDialog(context);
       /* Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('poll_survey'))));*/
     } else if (item == AppLocalizations.of(context).translate('directory')) {
@@ -1797,32 +1789,32 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
          context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('documents'))));
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /* Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('events'))));*/
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /* Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('discover'))));*/
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('classified'))));*/
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /* Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('services'))));*/
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /*  Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('near_by_shop'))));*/
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /*  Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
     } else if (item == AppLocalizations.of(context).translate('my_gate')) {
@@ -1845,7 +1837,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                           'my_activities'))));
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  My Dues
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyGate(AppLocalizations.of(context).translate('helpers'))));*/
     } else if (item == AppLocalizations.of(context).translate('help_desk')) {
@@ -1855,7 +1847,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
           context, MaterialPageRoute(builder: (context) => BaseHelpDesk()));
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
-      GlobalFunctions.showToast("Coming Soon...");
+       GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
     } else if (item == AppLocalizations.of(context).translate('about_us')) {

@@ -231,6 +231,13 @@ abstract class RestClient {
       @Field(GatePassFields.COMMENT) String comment,
       @Field(GatePassFields.STATUS) String status
       );
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.feedbackAPI)
+  Future<StatusMsgResponse> addFeedback(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
+      @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.societyName) String name,
+      @Field('Subject') String subject, @Field('Description') String description,
+      @Field('Attachment') String attachment);
 }
 
 

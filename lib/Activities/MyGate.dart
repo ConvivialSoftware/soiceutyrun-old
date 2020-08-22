@@ -195,11 +195,26 @@ class MyGateState extends State<BaseMyGate>
                     context, 150.0), //ticketOpenClosedLayout(),
              //   getDocumentListDataLayout(),
       Align(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         child: Container(
-          child: Text('Coming Soon...',style: TextStyle(
-              color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-          ),),
+          // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  margin: EdgeInsets.all(20),
+                  child: Image.asset(GlobalVariables.comingSoonPath,fit: BoxFit.fitWidth,)
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: Text(AppLocalizations.of(context).translate('coming_soon_text'),style: TextStyle(
+                    color: GlobalVariables.black,fontSize: 18
+                ),),
+              )
+            ],
+          ),
         ),
       )
               ],

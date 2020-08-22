@@ -70,6 +70,7 @@ class GlobalVariables{
   static var pdfBackIconPath="assets/other_assets/icon-pdf.svg";
   static var creditCardPath="assets/other_assets/credit_card.png";
   static var aboutUsPath="assets/other_assets/about_us.svg";
+  static var comingSoonPath="assets/other_assets/coming_soon.png";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath = "assets/bottom_menu/bottom_building_icon.svg";
@@ -134,6 +135,7 @@ class GlobalVariables{
   static const staffMobileVerifyAPI = "Staff/mobileverifystaff";
   static const addStaffMemberAPI = "Staff/insertstaff";
   static const bannerAPI = "Api/banner";
+  static const feedbackAPI = "Feedback";
   static const allMemberAPI = "View_directory/all_member";
 
   /*GATEPASEE DIALOG API*/

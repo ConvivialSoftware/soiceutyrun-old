@@ -65,6 +65,8 @@ dependencies:
   flutter_image_compress: 0.7.0
   contact_picker: ^0.0.2
   device_apps: ^1.2.0
+  flutter_launcher_icons: ^0.7.3
+  flutter_launcher_name: ^0.0.1
  # html: 0.14.0+3
 
 
@@ -90,6 +92,8 @@ flutter_icons:
   image_path_ios : "assets/images/ic_societyrun.png"
   image_path_android : "assets/images/ic_societyrun.png"
 
+flutter_launcher_name:
+  name: "SocietyRun"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -149,6 +153,7 @@ flutter:
     - assets/bottom_menu/bottom_service_icon.svg
     - assets/other_assets/credit_card.png
     - assets/other_assets/about_us.svg
+    - assets/other_assets/coming_soon.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

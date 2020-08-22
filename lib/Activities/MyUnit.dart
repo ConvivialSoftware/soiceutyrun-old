@@ -303,14 +303,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  "Rs. " + _ledgerList[position].AMOUNT,
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BaseViewBill(
+                              _ledgerList[position].RECEIPT_NO)));
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    "Rs. " + _ledgerList[position].AMOUNT,
+                    style: TextStyle(
+                        color: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

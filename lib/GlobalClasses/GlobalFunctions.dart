@@ -22,6 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
+import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:intl/intl.dart';
@@ -552,6 +553,41 @@ class GlobalFunctions{
       }
     });
     return status;
+  }
+
+  static comingSoonDialog(BuildContext context){
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context,
+                StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(25.0)),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(20),
+                          child: Image.asset(GlobalVariables.comingSoonPath,fit: BoxFit.fitWidth,)
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: Text(AppLocalizations.of(context).translate('coming_soon_text'),style: TextStyle(
+                            color: GlobalVariables.black,fontSize: 18
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }));
+
   }
 
 }
