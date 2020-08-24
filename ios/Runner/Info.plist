@@ -20,6 +20,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
+	<key>FirebaseScreenReportingEnabled</key>
+	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -27,8 +31,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-    <false/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Required usage description for a Flutter dependency</string>
 	<key>NSCalendarsUsageDescription</key>

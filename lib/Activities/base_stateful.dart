@@ -15,16 +15,15 @@ Map<String, dynamic> receivedMessage;
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
-  GatePassPayloadIos gatePassPayloadIos;
-  if(Platform.isIOS) {
+  if (Platform.isIOS) {
     try {
-      String jsonStr = message["payload"];
+      String jsonStr = message["notification"]["payload"];
       Map<String, dynamic> temp = json.decode(jsonStr);
-      gatePassPayloadIos = GatePassPayloadIos.fromJson(temp);
+      gatePassPayload = GatePassPayload.fromJson(temp);
     } catch (e) {
       print(e);
     }
-  }else{
+  } else {
     try {
       String jsonStr = message["data"]["payload"];
       Map<String, dynamic> temp = json.decode(jsonStr);
@@ -36,34 +35,29 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 
   int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      '10001', 'societyrun_channel', 'channel_for_gatepass_feature',
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'ticker',
-      enableLights: true,
-      color: Colors.green,
-      ledColor: const Color.fromARGB(255, 255, 0, 0),
-      ledOnMs: 1000,
-      ledOffMs: 500,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound("noti_ring"),
-
+    '10001',
+    'societyrun_channel',
+    'channel_for_gatepass_feature',
+    importance: Importance.Max,
+    priority: Priority.High,
+    ticker: 'ticker',
+    enableLights: true,
+    color: Colors.green,
+    ledColor: const Color.fromARGB(255, 255, 0, 0),
+    ledOnMs: 1000,
+    ledOffMs: 500,
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound("noti_ring"),
   );
   var iOSPlatformChannelSpecifics =
-  IOSNotificationDetails(presentAlert: true, presentSound: true);
+      IOSNotificationDetails(presentAlert: true, presentSound: true);
   var platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  if(Platform.isAndroid) {
-    flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-        gatePassPayload.body, platformChannelSpecifics,
-        payload: message['data']['payload']);
-  }else{
-    flutterLocalNotificationsPlugin.show(msgId, gatePassPayloadIos.payload.title,
-        gatePassPayloadIos.payload.body, platformChannelSpecifics,
-        payload: message['payload']);
-  }
-
-
+  flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+      gatePassPayload.body, platformChannelSpecifics,
+      payload: Platform.isAndroid
+          ? message['data']['payload']
+          : message['notification']['payload']);
 
   return Future<void>.value();
 }
@@ -114,7 +108,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    if(!GlobalVariables.isAlreadyTapped) {
+    if (!GlobalVariables.isAlreadyTapped) {
       GlobalVariables.isAlreadyTapped = true;
       try {
         Map<String, dynamic> temp = json.decode(payload);
@@ -128,18 +122,15 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   _showNotification(Map<String, dynamic> message) {
     GatePassPayload gatePassPayload;
-    GatePassPayloadIos gatePassPayloadIos;
-    if(Platform.isIOS) {
+    if (Platform.isIOS) {
       try {
-        String jsonStr = message["payload"];
+        String jsonStr = message["notification"]["payload"];
         Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayloadIos = GatePassPayloadIos.fromJson(temp);
-        print(">>>>>>>>>>${gatePassPayloadIos.payload.tYPE}");
-        gatePassPayload = _mapIosPayload(gatePassPayloadIos);
+        gatePassPayload = GatePassPayload.fromJson(temp);
       } catch (e) {
         print(e);
       }
-    }else{
+    } else {
       try {
         String jsonStr = message["data"]["payload"];
         Map<String, dynamic> temp = json.decode(jsonStr);
@@ -167,48 +158,17 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         ledOnMs: 1000,
         ledOffMs: 500,
         playSound: true,
-        sound: RawResourceAndroidNotificationSound("noti_ring")
-
-
-    );
+        sound: RawResourceAndroidNotificationSound("noti_ring"));
     var iOSPlatformChannelSpecifics =
         IOSNotificationDetails(presentAlert: true, presentSound: true);
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    if(Platform.isAndroid) {
-      flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-          gatePassPayload.body, platformChannelSpecifics,
-          payload: message['data']['payload']);
-    }else{
-      flutterLocalNotificationsPlugin.show(msgId, gatePassPayloadIos.payload.title,
-          gatePassPayloadIos.payload.body, platformChannelSpecifics,
-          payload: message['payload']);
-    }
-
+    flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+        gatePassPayload.body, platformChannelSpecifics,
+        payload: Platform.isAndroid
+            ? message['data']['payload']
+            : message['notification']['payload']);
   }
 
-  GatePassPayload _mapIosPayload(GatePassPayloadIos p){
-
-    GatePassPayload gp;
-    gp.cONTACT = p.payload.cONTACT;
-    gp.iNTIME = p.payload.iNTIME;
-    gp.sound = p.payload.sound;
-    gp.uSERID = p.payload.uSERID;
-    gp.title = p.payload.title;
-    gp.body = p.payload.body;
-    gp.vISITORNAME = p.payload.vISITORNAME;
-    gp.vID = p.payload.vID;
-    gp.iNDATE = p.payload.iNDATE;
-    gp.iMAGE = p.payload.iMAGE;
-    gp.iNBY = p.payload.iNBY;
-    gp.fROMVISITOR = p.payload.fROMVISITOR;
-    gp.nOOFVISITORS = p.payload.nOOFVISITORS;
-    gp.iD = p.payload.iD;
-    gp.dATETIME = p.payload.dATETIME;
-    gp.rEASON = p.payload.rEASON;
-    gp.tYPE = p.payload.tYPE;
-    return gp;
-
-  }
 }
