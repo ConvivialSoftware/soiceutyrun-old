@@ -496,14 +496,11 @@ class ComplaintInfoAndCommentsState
                 ? EdgeInsets.fromLTRB(40, 0, 0, 0)
                 : EdgeInsets.fromLTRB(
                     0, 0, 0, 0), // color: GlobalVariables.black,
-            child: userId != _commentsList[position].USER_ID ? CircleAvatar(
+            child: CircleAvatar(
               radius: 25,
               backgroundColor: GlobalVariables.lightGreen,
-            ) : CircleAvatar(
-              radius: 25,
-              backgroundColor: GlobalVariables.mediumGreen,
-              backgroundImage: NetworkImage(photo),
-            ),
+              backgroundImage: userId != _commentsList[position].USER_ID ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : NetworkImage(photo),
+            )
           ),
           Flexible(
             child: Container(
