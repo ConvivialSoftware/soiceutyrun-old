@@ -101,9 +101,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   bool isClosedDocuments = false;
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
-  var email='', phone='',consumerId='';
+  var email='', phone='',consumerId='',societyName='';
 
-  var amount, invoiceNo, referenceNo;
+  var amount, invoiceNo, referenceNo,billType;
 
   var _localPath;
   ReceivePort _port = ReceivePort();
@@ -2014,6 +2014,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     phone = await GlobalFunctions.getMobile();
     email = await GlobalFunctions.getUserName();
     consumerId = await GlobalFunctions.getConsumerID();
+    societyName = await GlobalFunctions.getSocietyName();
+    flat = await GlobalFunctions.getFlat();
+    block = await GlobalFunctions.getBlock();
 
     print('Name : '+name);
     print('Photo : '+photo);
@@ -2256,7 +2259,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                         child: Text(
                           _billList[position].TYPE != null
-                              ? _billList[position].TYPE=='Bill'? 'Maintanance Bill':_billList[position].TYPE
+                              ? _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE
                               : '',
                           style: TextStyle(
                             color: GlobalVariables.white,
@@ -2824,15 +2827,18 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         "ExternalWallet : " + response.walletName.toString());
   }
 
-  void openCheckOut(int position) {
+  void openCheckOut(int position, String razorKey) {
     amount = _billList[position].AMOUNT;
     invoiceNo = _billList[position].INVOICE_NO;
+    billType = _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE;
+    print('amount : '+amount.toString());
+    print('RazorKey : '+razorKey.toString());
 
     var option = {
-      'key': 'rzp_test_748Ii5uGwgs5cI',
+      'key': razorKey,
       'amount': amount,
-      'name': name,
-      'description': 'RazorPay Testing Through Flutter Code',
+      'name': societyName,
+      'description': flat +' - '+billType,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -3027,7 +3033,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-      openCheckOut(position);
+      openCheckOut(position,_payOptionList[0].KEY_ID);
     }
   }
 
