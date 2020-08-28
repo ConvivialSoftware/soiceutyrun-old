@@ -2837,7 +2837,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     var option = {
       'key': razorKey,
-      'amount': amount,
+      'amount': amount*100,
       'name': societyName,
       'description': flat +' - '+billType,
       'prefill': {'contact': phone, 'email': email}
