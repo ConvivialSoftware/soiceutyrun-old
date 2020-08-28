@@ -186,10 +186,12 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                         )
                     ),
                     child: TextField(
+                      maxLength: 10,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context).translate('phone_number'),
                         hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                        border: InputBorder.none
+                        border: InputBorder.none,
+                        counterText: ''
                       ),
                     ),
                   ),

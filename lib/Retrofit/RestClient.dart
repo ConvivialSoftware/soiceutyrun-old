@@ -70,6 +70,10 @@ abstract class RestClient {
       @Field(GlobalVariables.flat) String flat );
 
   @FormUrlEncoded()
+  @POST(GlobalVariables.unitStaffAPI)
+  Future<DataResponse> getAllSocietyStaffData(@Field(GlobalVariables.societyId) String socId);
+
+  @FormUrlEncoded()
   @POST(GlobalVariables.unitVehicleAPI)
   Future<VehicleResponse> getVehicleData(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat );

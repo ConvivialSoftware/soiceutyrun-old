@@ -71,6 +71,8 @@ class GlobalVariables{
   static var creditCardPath="assets/other_assets/credit_card.png";
   static var aboutUsPath="assets/other_assets/about_us.svg";
   static var comingSoonPath="assets/other_assets/coming_soon.png";
+  static var bikeIconPath="assets/other_assets/bike.svg";
+  static var changePasswordPath="assets/other_assets/change_password.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath = "assets/bottom_menu/bottom_building_icon.svg";
@@ -109,7 +111,7 @@ class GlobalVariables{
   static const newPasswordAPI = "Api/newpwd";
   static const unitMemberAPI = "Members";
   static const unitAddMemberAPI = "Members/insert";
-  static const unitStaffAPI = "Staff";
+  static const unitStaffAPI = "staff/staff_list";
   static const unitVehicleAPI = "Vehicle";
   static const unitAddVehicleAPI = "Vehicle/insert";
   static const ComplaintsAPI = "Helpdesk";
@@ -309,7 +311,7 @@ class GatePassFields{
 }
 
 class SocietyRun{
-  static const companyName="Convivial Software Prv. Ltd.";
+  static const companyName="Convivial Software Pvt. Ltd.";
   static const salesContact="+91 8055551809";
   static const salesContact1="+91 8082697529";
   static const supportContact="020 46304333";

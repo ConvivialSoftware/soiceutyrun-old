@@ -18,10 +18,14 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'HelpDesk.dart';
 
 class BaseDisplayProfileInfo extends StatefulWidget {
+  String userId,societyId;
+
+  BaseDisplayProfileInfo(this.userId, this.societyId);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return DisplayProfileInfoState();
+    return DisplayProfileInfoState(userId,societyId);
   }
 }
 
@@ -32,7 +36,9 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
 
   List<ProfileInfo> _profileList = List<ProfileInfo>();
 
-  var societyId,userId;
+  String userId,societyId;
+
+  DisplayProfileInfoState(this.userId,this.societyId);
 
   @override
   void initState() {
@@ -84,8 +90,6 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-    societyId = await GlobalFunctions.getSocietyId();
-    userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getProfileData(societyId,userId).then((value) {
       //  _progressDialog.hide();
@@ -145,6 +149,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                         margin: EdgeInsets.fromLTRB(0, 0, 0,0),
+                     //   width: 400,
                         //color: GlobalVariables.red,
                         //TODO: userImage
                         child: ClipRRect(
@@ -179,13 +184,16 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child:  AutoSizeText(
-                            _profileList[0].BLOCK+_profileList[0].FLAT,
-                            style: TextStyle(
-                              color: GlobalVariables.grey,
-                              fontSize:16,
+                        Visibility(
+                          visible: true,
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                            child:  AutoSizeText(
+                              _profileList[0].BLOCK+_profileList[0].FLAT,
+                              style: TextStyle(
+                                color: GlobalVariables.grey,
+                                fontSize:16,
+                              ),
                             ),
                           ),
                         ),
@@ -244,7 +252,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     ),
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].Email,style: TextStyle(
+                      child: AutoSizeText(_profileList[0].Email==null ? '': _profileList[0].Email,style: TextStyle(
                           color: GlobalVariables.grey,fontSize: 16
                       ),),
                     )
@@ -299,12 +307,12 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                           color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
-                    Container(
+                    _profileList[0].DOB!=null && _profileList[0].DOB.length!=0 ? Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy"),style: TextStyle(
+                      child: AutoSizeText(_profileList[0].DOB=='0000-00-00' ? '':GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy"),style: TextStyle(
                           color: GlobalVariables.grey,fontSize: 16
                       ),),
-                    )
+                    ):Container()
                   ],
                 ),
               ),

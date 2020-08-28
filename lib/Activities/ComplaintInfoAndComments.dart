@@ -35,7 +35,7 @@ class BaseComplaintInfoAndComments extends StatefulWidget {
 
 class ComplaintInfoAndCommentsState
     extends State<BaseComplaintInfoAndComments> {
-  var userId;
+  var userId,photo="";
   List<Complaints> _complaintsList = new List<Complaints>();
   List<Comments> _commentsList = new List<Comments>();
   List<ComplaintStatus> _complaintStatusList = new List<ComplaintStatus>();
@@ -410,14 +410,17 @@ class ComplaintInfoAndCommentsState
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
-              child: Transform.rotate(
-                  angle: 108 * 3.14 / 600,
-                  child: Icon(
-                    Icons.attach_file,
-                    color: GlobalVariables.mediumGreen,
-                  )),
+            Visibility(
+              visible: false,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
+                child: Transform.rotate(
+                    angle: 108 * 3.14 / 600,
+                    child: Icon(
+                      Icons.attach_file,
+                      color: GlobalVariables.mediumGreen,
+                    )),
+              ),
             ),
             InkWell(
               onTap: () {
@@ -493,9 +496,13 @@ class ComplaintInfoAndCommentsState
                 ? EdgeInsets.fromLTRB(40, 0, 0, 0)
                 : EdgeInsets.fromLTRB(
                     0, 0, 0, 0), // color: GlobalVariables.black,
-            child: CircleAvatar(
+            child: userId != _commentsList[position].USER_ID ? CircleAvatar(
               radius: 25,
               backgroundColor: GlobalVariables.lightGreen,
+            ) : CircleAvatar(
+              radius: 25,
+              backgroundColor: GlobalVariables.mediumGreen,
+              backgroundImage: NetworkImage(photo),
             ),
           ),
           Flexible(
@@ -529,7 +536,7 @@ class ComplaintInfoAndCommentsState
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                     child: Text(
-                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm:ss"),
+                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm"),
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 12),
                     ),
@@ -595,9 +602,17 @@ class ComplaintInfoAndCommentsState
   getUserId() {
     GlobalFunctions.getUserId().then((value) {
       userId = value;
+      getUserPhoto();
+    });
+  }
+
+  getUserPhoto() {
+    GlobalFunctions.getPhoto().then((value) {
+      photo = value;
       setState(() {});
     });
   }
+
 
   Future<void> getUserCommentData() async {
     final dio = Dio();
@@ -655,15 +670,17 @@ class ComplaintInfoAndCommentsState
 
     if (isComment) {
       var currentTime = DateTime.now();
-      String str = currentTime.day.toString() +
+      String str = currentTime.year.toString() +
           "-" +
-          currentTime.month.toString() +
+          currentTime.month.toString().padLeft(2,'0') +
           "-" +
-          currentTime.year.toString() +
+          currentTime.day.toString().padLeft(2,'0') +
           " " +
           currentTime.hour.toString() +
           ':' +
-          currentTime.minute.toString();
+          currentTime.minute.toString()+
+          ':' +
+          currentTime.second.toString();
       Comments comments = Comments(
           PARENT_TICKET: complaints.TICKET_NO,
           USER_ID: userId,

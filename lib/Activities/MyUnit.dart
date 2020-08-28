@@ -16,6 +16,8 @@ import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
+import 'package:societyrun/Activities/DisplayProfileInfo.dart';
+import 'package:societyrun/Activities/EditStaffMember.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
@@ -776,6 +778,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     Container(
                         child: RaisedButton(
                       onPressed: () {
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -829,25 +832,28 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                     ),
-                    Container(
-                        child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BaseVerifyStaffMember()));
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).translate('plus_add'),
-                        style: TextStyle(
-                            color: GlobalVariables.white, fontSize: 12),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    )),
+                    Visibility(
+                      visible: false,
+                      child: Container(
+                          child: RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BaseVerifyStaffMember()));
+                        },
+                        child: Text(
+                          AppLocalizations.of(context).translate('plus_add'),
+                          style: TextStyle(
+                              color: GlobalVariables.white, fontSize: 12),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: GlobalVariables.green)),
+                        textColor: GlobalVariables.white,
+                        color: GlobalVariables.green,
+                      )),
+                    ),
                   ],
                 ),
               ),
@@ -1079,106 +1085,111 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 */
   profileLayout() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        // color: GlobalVariables.black,
-        //width: MediaQuery.of(context).size.width / 1.2,
-        margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30,
-            0, 0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Card(
-          shape: (RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0))),
-          elevation: 1.0,
-          margin: EdgeInsets.all(20),
-          color: GlobalVariables.white,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: SvgPicture.asset(
-                    GlobalVariables.whileBGPath,
+    return InkWell(
+      onTap: (){
+        navigateToProfilePage();
+      },
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          // color: GlobalVariables.black,
+          //width: MediaQuery.of(context).size.width / 1.2,
+          margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30,
+              0, 0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Card(
+            shape: (RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0))),
+            elevation: 1.0,
+            margin: EdgeInsets.all(20),
+            color: GlobalVariables.white,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SvgPicture.asset(
+                      GlobalVariables.whileBGPath,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          // alignment: Alignment.center,
-                          /* decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25)),*/
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundColor: GlobalVariables.mediumGreen,
-                            backgroundImage: NetworkImage(photo),
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            // alignment: Alignment.center,
+                            /* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*/
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundColor: GlobalVariables.mediumGreen,
+                              backgroundImage: NetworkImage(photo),
+                            ),
                           ),
-                        ),
-                        Text(
-                          name,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 20,
+                          Text(
+                            name,
+                            style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      color: GlobalVariables.mediumGreen,
-                      margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                      child: Divider(
-                        height: 1,
-                        color: GlobalVariables.mediumGreen,
+                        ],
                       ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        if(phone.length>0) {
-                          GlobalFunctions.shareData(name, 'Contact : ' + phone);
-                        } else if(email.length>0){
-                          GlobalFunctions.shareData(name, 'Mail ID : '+email);
-                        }else{
-                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('mobile_email_not_found'));
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: Icon(
-                                  Icons.share,
-                                  color: GlobalVariables.mediumGreen,
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('share_address'),
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16,
+                      Container(
+                        color: GlobalVariables.mediumGreen,
+                        margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        child: Divider(
+                          height: 1,
+                          color: GlobalVariables.mediumGreen,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          if(phone.length>0) {
+                            GlobalFunctions.shareData(name,'Name : ' + name+'\nContact : ' + phone);
+                          } else if(email.length>0){
+                            GlobalFunctions.shareData(name, 'Name : ' + name+'\nMail ID : '+email);
+                          }else{
+                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('mobile_email_not_found'));
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: Icon(
+                                    Icons.share,
+                                    color: GlobalVariables.mediumGreen,
                                   ),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('share_address'),
+                                    style: TextStyle(
+                                      color: GlobalVariables.green,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1369,109 +1380,131 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 */
   getContactListItemLayout(var _list, int position, bool family) {
-    var call = '', email = '';
+    var call = '', email = '',userId;
     if (family) {
       call = _list[position].MOBILE.toString();
+      userId = _list[position].ID.toString();
       //    email = _list[position].EMAIL.toString();
     } else {
       call = _list[position].CONTACT.toString();
+      userId = _list[position].SID.toString();
     }
     if (call == 'null') {
       call = '';
     }
 
-    return Container(
-      width: 150,
-      margin: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: family
-                ? _list[position].PROFILE_PHOTO.length == 0
-                    ? Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35),
-                            color: GlobalVariables.lightGreen),
-                      )
-                    : CircleAvatar(
-                        radius: 35,
-                        backgroundImage:
-                            NetworkImage(_list[position].PROFILE_PHOTO),
-                        backgroundColor: GlobalVariables.lightGreen,
-                      )
-                : _list[position].IMAGE.length == 0
-                    ? Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35),
-                            color: GlobalVariables.lightGreen),
-                      )
-                    : CircleAvatar(
-                        radius: 35,
-                        backgroundImage: NetworkImage(_list[position].IMAGE),
-                        backgroundColor: GlobalVariables.lightGreen,
-                      ),
-          ),
-          Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Text(
-                family ? _list[position].NAME : _list[position].STAFF_NAME,
-                maxLines: 1,
-                style: TextStyle(color: GlobalVariables.green, fontSize: 16),
-              )),
-          call.length > 0
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                  child: Divider(
-                    color: GlobalVariables.mediumGreen,
-                    height: 1,
-                  ),
-                )
-              : Container(),
-          call.length > 0
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          launch("tel://" + call);
-                        },
-                        child: Container(
-                            child: Icon(
-                          Icons.call,
-                          color: GlobalVariables.lightGreen,
-                        )),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          String title = '';
-                          String text = 'Contact : ' + call;
-                          family
-                              ? title = _list[position].NAME
-                              : title = _list[position].STAFF_NAME;
-                          print('titlee : ' + title);
-                          GlobalFunctions.shareData(title, text);
-                        },
-                        child: Container(
-                            child: Icon(
-                          Icons.share,
-                          color: GlobalVariables.lightGreen,
-                        )),
-                      )
-                    ],
-                  ),
-                )
-              : Container()
-        ],
+    return InkWell(
+      onTap: (){
+        print('userId : '+userId);
+        print('societyId : '+societyId);
+        if(family) {
+          Navigator.push(
+              context, MaterialPageRoute(
+              builder: (context) =>
+                  BaseDisplayProfileInfo(userId, societyId)));
+        }/*else{
+          print('_list[position] : '+ _list[position].toString());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BaseEditStaffMember(_list[position])));
+        }*/
+      },
+      child: Container(
+        width: 150,
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: GlobalVariables.white),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: family
+                  ? _list[position].PROFILE_PHOTO.length == 0
+                      ? Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(35),
+                              color: GlobalVariables.lightGreen),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundImage:
+                              NetworkImage(_list[position].PROFILE_PHOTO),
+                          backgroundColor: GlobalVariables.lightGreen,
+                        )
+                  : _list[position].IMAGE.length == 0
+                      ? Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(35),
+                              color: GlobalVariables.lightGreen),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundImage: NetworkImage(_list[position].IMAGE),
+                          backgroundColor: GlobalVariables.lightGreen,
+                        ),
+            ),
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Text(
+                  family ? _list[position].NAME : _list[position].STAFF_NAME,
+                  maxLines: 1,
+                  style: TextStyle(color: GlobalVariables.green, fontSize: 16),
+                )),
+            call.length > 0
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                    child: Divider(
+                      color: GlobalVariables.mediumGreen,
+                      height: 1,
+                    ),
+                  )
+                : Container(),
+            call.length > 0
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            launch("tel://" + call);
+                          },
+                          child: Container(
+                              child: Icon(
+                            Icons.call,
+                            color: GlobalVariables.lightGreen,
+                          )),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            String name= family ? _list[position].NAME : _list[position].STAFF_NAME;
+                            String title = '';
+                            String text = 'Name : ' + name+'\nContact : ' + call;
+                            family
+                                ? title = _list[position].NAME
+                                : title = _list[position].STAFF_NAME;
+                            print('titlee : ' + title);
+                            GlobalFunctions.shareData(title, text);
+                          },
+                          child: Container(
+                              child: Icon(
+                            Icons.share,
+                            color: GlobalVariables.lightGreen,
+                          )),
+                        )
+                      ],
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }
@@ -2148,6 +2181,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> getUnitVehicleData() async {
+    print('getUnitVehicleData');
     //  _progressDialog.show();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -2519,31 +2553,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   getIconForVehicle(String vehicleType) {
-    switch (vehicleType) {
-      case "4 Wheeler":
-        {
-          return Icon(
-            Icons.directions_car,
-            color: GlobalVariables.mediumGreen,
-          );
-        }
-        break;
-      case "2 Wheeler":
-        {
-          return Icon(
-            Icons.directions_bike,
-            color: GlobalVariables.mediumGreen,
-          );
-        }
-        break;
-      default:
-        {
-          return Icon(
-            Icons.directions_bike,
-            color: GlobalVariables.mediumGreen,
-          );
-        }
-        break;
+
+    if(vehicleType=='4 Wheeler' || vehicleType=='4' || vehicleType=='four'){
+      return Icon(
+        Icons.directions_car,
+        color: GlobalVariables.mediumGreen,
+      );
+    }else if(vehicleType=='2 Wheeler' || vehicleType=='2' || vehicleType=='two'){
+      return Icon(
+        Icons.motorcycle,
+        color: GlobalVariables.mediumGreen,
+      );
+    }else{
+      return Icon(
+        Icons.motorcycle,
+        color: GlobalVariables.mediumGreen,
+      );
     }
   }
 
@@ -3400,6 +3425,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         ],
       ),
     );
+  }
+
+  Future<void> navigateToProfilePage() async {
+
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
+    Navigator.push(
+        context, MaterialPageRoute(
+        builder: (context) =>
+            BaseDisplayProfileInfo(userId,societyId)));
   }
 
  /* void emailBillBottomSheet(BuildContext context,int position) {

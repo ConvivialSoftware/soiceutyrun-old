@@ -152,10 +152,12 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                         )
                     ),
                     child: TextField(
+                      maxLength: 10,
                       decoration: InputDecoration(
                           hintText: AppLocalizations.of(context).translate('add_name_from_contact'),
                           hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
                           border: InputBorder.none,
+                          counterText: '',
                           suffixIcon: Icon(
                             Icons.contacts,
                             color: GlobalVariables.mediumGreen,

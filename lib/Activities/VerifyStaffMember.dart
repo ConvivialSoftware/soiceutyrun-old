@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/AddStaffMember.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
+import 'package:societyrun/Activities/EditStaffMember.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -61,7 +62,7 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('my_profile'),
+            AppLocalizations.of(context).translate('staff_mobile_no'),
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -100,26 +101,37 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
             children: <Widget>[
               Flexible(
                 flex: 1,
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  margin: EdgeInsets.fromLTRB(30, 10, 30, 20),
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )),
+                child:Container(
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  margin: EdgeInsets.fromLTRB(25, 25, 0, 10),
                   child: TextField(
                     controller: _mobileController,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
+                    maxLength: 10,
+                    style: TextStyle(color: GlobalVariables.black),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)
-                          .translate('enter_staff_mobile_number'),
+                          .translate('enter_mobile_no'),
                       hintStyle: TextStyle(
-                          color: GlobalVariables.grey, fontSize: 16),
-                      border: InputBorder.none,
+                        color: GlobalVariables.lightGray,
+                      ),
+                      suffixIcon: Icon(
+                        Icons.phone_android,
+                        color: GlobalVariables.lightGreen,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: GlobalVariables.green,
+                            width: 2.0,
+                          ),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10.0))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: GlobalVariables.green, width: 2.0),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10.0))),
                     ),
                   ),
                 ),
@@ -526,21 +538,28 @@ _progressDialog.show();
         List<dynamic> _list = value.data;
 
         _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
-        Dialog infoDialog = Dialog(
+        Navigator.of(context).pop();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                   BaseEditStaffMember(_staffList[0])));
+        /*Dialog infoDialog = Dialog(
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           child: getDialogLayout(),
         );
         showDialog(
             context: context, builder: (BuildContext context) => infoDialog);
-        
+*/
 
       }else{
+        Navigator.of(context).pop();
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseAddStaffMember()));
+                    BaseAddStaffMember(_mobileNumber)));
       }
       GlobalFunctions.showToast(value.message);
     });

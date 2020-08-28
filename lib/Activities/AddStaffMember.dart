@@ -12,13 +12,16 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'base_stateful.dart';
 
 class BaseAddStaffMember extends StatefulWidget {
+  String mobileNumber;
+  BaseAddStaffMember(this.mobileNumber);
+
 
   //String memberType;
   //BaseAddStaffMember(this.memberType);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return AddStaffMemberState();
+    return AddStaffMemberState(mobileNumber);
   }
 }
 
@@ -65,6 +68,9 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
   ProgressDialog _progressDialog;
   bool isStoragePermission=false;
 
+  String mobileNumber;
+  AddStaffMemberState(this.mobileNumber);
+
 
   @override
   void initState() {
@@ -81,6 +87,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
 
     //GlobalFunctions.showToast(memberType.toString());
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    _mobileController.text = mobileNumber;
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -178,10 +185,12 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                 child: TextField(
                   controller: _mobileController,
                   keyboardType: TextInputType.number,
+                  maxLength: 10,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('mobile_no'),
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
+                      border: InputBorder.none,
+                    counterText: ''
                   ),
                 ),
               ),
@@ -481,7 +490,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                     color: GlobalVariables.white
                                 ),)),
                               ),
-                              Container(
+                              /*Container(
                                 margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                                 child: Text(
                                   'OR',
@@ -513,7 +522,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                           .translate('take_picture'),
                                       style: TextStyle(color: GlobalVariables.green),
                                     )),
-                              ),
+                              ),*/
                             ],
                           ),
 
@@ -544,7 +553,8 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                 image: DecorationImage(
                                     image: FileImage(File(attachmentIdentityProofFilePath)),
                                     fit: BoxFit.cover
-                                )
+                                ),
+                                border: Border.all(color: GlobalVariables.green,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
@@ -693,7 +703,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
 
   void openIdentityProofFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentIdentityProofFilePath=value;
       getCompressIdentityProofFilePath();
     });
   }
@@ -717,7 +727,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
     print('file Name : '+attachmentIdentityProofFileName.toString());
     GlobalFunctions.getTemporaryDirectoryPath().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(attachmentIdentityProofFilePath, value.toString()+'/'+attachmentIdentityProofFileName).then((value) {
         attachmentIdentityProofCompressFilePath = value.toString();
         print('Cache file path : '+attachmentIdentityProofCompressFilePath);
         setState(() {

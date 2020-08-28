@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
+import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/Facilities.dart';
@@ -243,10 +244,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                   child: GestureDetector(
                                     onTap: () {
                                       // GlobalFunctions.showToast('profile_user');
-                                      Navigator.push(
-                                          context, MaterialPageRoute(
-                                          builder: (context) =>
-                                              BaseDisplayProfileInfo()));
+                                      navigateToProfilePage();
                                     },
                                     child: photo == null
                                         ? Image.asset(
@@ -852,9 +850,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                   children: <Widget>[
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (context) =>
-                            BaseDisplayProfileInfo()));
+                        navigateToProfilePage();
                       },
                       child: Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
@@ -1034,9 +1030,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                               return ExpansionTile(
                                 key: PageStorageKey<String>(_list[i].title),
                                 onExpansionChanged: ((newState) {
+                                  print('root click : '+ _list[i].title);
                                   //GlobalFunctions.showToast(_list[i].title);
                                   if (_list[i].items.length == 0)
                                     redirectToPage(_list[i].title);
+                                  else
+                                    setState(() {
+                                      _activeMeterIndex = _activeMeterIndex == i ? null : i;
+                                    });
                                   //Navigator.of(context).pop();
                                 }),
                                 title: Container(
@@ -1046,14 +1047,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                     children: <Widget>[
                                       SizedBox(
                                           child: SvgPicture.asset(
-                                              _list[i].rootIconData)),
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                        child: Text(
-                                          _list[i].title,
-                                          style: TextStyle(
-                                              color: GlobalVariables.grey,
-                                              fontSize: 16),
+                                              _list[i].rootIconData,color: GlobalVariables.grey,width: 25,height: 25,)),
+                                      Flexible(
+                                        child: Container(
+                                          margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                          child: AutoSizeText(
+                                            _list[i].title,
+                                            style: TextStyle(
+                                                color: GlobalVariables.grey,
+                                                fontSize: 14),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1182,7 +1185,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                   0,
                   DropdownMenuItem(
                     value: loginResponse.ID,
-                    child: Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      alignment: Alignment.topLeft,
                       child: AutoSizeText(
                         loginResponse.Society_Name +
                             " " +
@@ -1198,7 +1203,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
             } else {
               _societyListItems.add(DropdownMenuItem(
                 value: loginResponse.ID,
-                child: Expanded(
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  alignment: Alignment.topLeft,
                   child: AutoSizeText(
                     loginResponse.Society_Name +
                         " " +
@@ -1215,14 +1222,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
           } else {
             _societyListItems.add(DropdownMenuItem(
               value: loginResponse.ID,
-              child: AutoSizeText(
-                loginResponse.Society_Name +
-                    " " +
-                    loginResponse.BLOCK +
-                    " " +
-                    loginResponse.FLAT,
-                style: TextStyle(color: GlobalVariables.black, fontSize: 16),
-                maxLines: 1,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                alignment: Alignment.topLeft,
+                child: AutoSizeText(
+                  loginResponse.Society_Name +
+                      " " +
+                      loginResponse.BLOCK +
+                      " " +
+                      loginResponse.FLAT,
+                  style: TextStyle(color: GlobalVariables.black, fontSize: 16),
+                  maxLines: 1,
+                ),
               ),
             ));
           }
@@ -1337,6 +1348,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
       new RootTitle(
           title: AppLocalizations.of(context).translate('about_us'),
           rootIconData: GlobalVariables.aboutUsPath,
+          //  innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('change_password'),
+          rootIconData: GlobalVariables.changePasswordPath,
           //  innerIconData: GlobalVariables.myFlatIconPath,
           items: []),
       new RootTitle(
@@ -1855,6 +1871,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
     //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo()));
+    }else if (item == AppLocalizations.of(context).translate('change_password')) {
+      //Redirect to  Admin
+    //  GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseChangePassword()));
     } else if (item == AppLocalizations.of(context).translate('logout')) {
       // GlobalFunctions.showToast("Logout");
 
@@ -1951,6 +1972,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  Future<void> navigateToProfilePage() async {
+
+   String societyId = await GlobalFunctions.getSocietyId();
+   String userId = await GlobalFunctions.getUserId();
+   Navigator.push(
+       context, MaterialPageRoute(
+       builder: (context) =>
+           BaseDisplayProfileInfo(userId,societyId)));
   }
 }
 

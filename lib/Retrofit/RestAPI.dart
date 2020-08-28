@@ -244,8 +244,7 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<DataResponse> getStaffData(
-      String socId, String block, String flat) async {
+  Future<DataResponse> getStaffData(String socId, String block, String flat) async {
     // TODO: implement getStaffData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -266,6 +265,29 @@ class RestAPI implements RestClient, RestClientERP {
     final Response _result = await _dio.post(GlobalVariables.unitStaffAPI,
         options: RequestOptions(
             //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getStaffData : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getAllSocietyStaffData(String socId) async {
+    // TODO: implement getStaffData
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId
+    });
+    print(GlobalVariables.societyId + ": " + socId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.unitStaffAPI);
+    final Response _result = await _dio.post(GlobalVariables.unitStaffAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -726,14 +748,14 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
-    ArgumentError.checkNotNull(name, GlobalVariables.NAME);
-    ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
-    ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
-    ArgumentError.checkNotNull(userName, GlobalVariables.USER_NAME);
-    ArgumentError.checkNotNull(mobile, GlobalVariables.MOBILE);
-    ArgumentError.checkNotNull(bloodGroup, GlobalVariables.BLOOD_GROUP);
-    ArgumentError.checkNotNull(occupation, GlobalVariables.OCCUPATION);
-    ArgumentError.checkNotNull(hobbies, GlobalVariables.HOBBIES);
+    //ArgumentError.checkNotNull(name, GlobalVariables.NAME);
+   //ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
+    //ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
+    //ArgumentError.checkNotNull(userName, GlobalVariables.USER_NAME);
+    //ArgumentError.checkNotNull(mobile, GlobalVariables.MOBILE);
+    //ArgumentError.checkNotNull(bloodGroup, GlobalVariables.BLOOD_GROUP);
+    //ArgumentError.checkNotNull(occupation, GlobalVariables.OCCUPATION);
+    //ArgumentError.checkNotNull(hobbies, GlobalVariables.HOBBIES);
     ArgumentError.checkNotNull(membershipType, GlobalVariables.TYPE);
 
     FormData formData = FormData.fromMap({

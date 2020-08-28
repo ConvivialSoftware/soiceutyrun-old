@@ -35,6 +35,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
+  //TextEditingController _alterMobileController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _occupationController = TextEditingController();
   //TextEditingController _hobbiesController = TextEditingController();
@@ -298,16 +299,49 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                       child: TextField(
                         controller: _mobileController,
                         keyboardType: TextInputType.number,
+                        maxLength: 10,
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('mobile_no'),
+                            hintText: AppLocalizations.of(context).translate('contact1'),
                             hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                            border: InputBorder.none
+                            border: InputBorder.none,
+                            counterText: '',
+                          suffixIcon: Icon(
+                            Icons.phone_android,
+                            color: GlobalVariables.lightGreen,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
+              /*Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                decoration: BoxDecoration(
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: GlobalVariables.mediumGreen,
+                      width: 3.0,
+                    )
+                ),
+                child: TextField(
+                  controller: _alterMobileController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).translate('contact2'),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                      border: InputBorder.none,
+                    counterText: '',
+                    suffixIcon: Icon(
+                      Icons.phone_android,
+                      color: GlobalVariables.lightGreen,
+                    ),
+                  ),
+                ),
+              ),*/
               Container(
                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -325,13 +359,16 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('email_id'),
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
+                      border: InputBorder.none,
+                    suffixIcon: Icon(
+                      Icons.email,
+                      color: GlobalVariables.lightGreen,
+                    ),
                   ),
                 ),
               ),
               Row(
                 children: <Widget>[
-
                   Flexible(
                     flex: 2,
                     child: Container(
@@ -641,44 +678,44 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
     if(_nameController.text.length>0){
 
-      if(_dobController.text.length>0){
+     // if(_dobController.text.length>0){
 
-        if(_mobileController.text.length>0){
+      //  if(_mobileController.text.length>0){
 
-          if(_emailController.text.length>0){
+        //  if(_emailController.text.length>0){
 
-            if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
+          //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
 
-              if(_occupationController.text.length>0){
+             // if(_occupationController.text.length>0){
 
                   if(_selectedMembershipType!=null || _selectedMembershipType.length>0) {
 
-                    if(_selectedLivesHere!=null || _selectedLivesHere.length>0) {
+//                    if(_selectedLivesHere!=null || _selectedLivesHere.length>0) {
 
                       addMember();
 
-                    }else{
+                   /* }else{
                       GlobalFunctions.showToast('Please Select Lives Here');
-                    }
+                    }*/
                   }else{
                     GlobalFunctions.showToast('Please Select MemberShip Type');
                   }
 
-              }else{
+             /* }else{
                 GlobalFunctions.showToast('Please Enter Occupation');
-              }
-            }else{
+              }*/
+            /*}else{
               GlobalFunctions.showToast('Please Select BloodGroup');
-            }
-          }else{
+            }*/
+          /*}else{
             GlobalFunctions.showToast('Please Enter EmailId');
-          }
-        }else{
+          }*/
+       /* }else{
           GlobalFunctions.showToast('Please Enter Mobile Number');
-        }
-      }else{
+        }*/
+      /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
-      }
+      }*/
     }else{
       GlobalFunctions.showToast('Please Enter Name');
     }

@@ -4,7 +4,6 @@ import 'dart:core';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:compressimage/compressimage.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:file_picker/file_picker.dart';
@@ -435,20 +434,15 @@ class GlobalFunctions{
 
   }
 
-  static Future<String> compressImage(String path) async {
-
-      File _file = File(path);
-      File _imageFile = _file;
-      await CompressImage.compress(imageSrc: _imageFile.path,desiredQuality: 40);
-      print('After Compress : '+_imageFile.lengthSync().toString());
-
-      return _imageFile.path;
-
-  }
-
   static Future<String> getFilePathOfCompressImage(String path,String targetPath) async {
 
-    var _imageFile = await FlutterImageCompress.compressAndGetFile(path, targetPath,quality: 40,rotate: 360);
+    var _imageFile = await FlutterImageCompress.compressAndGetFile(
+        path,
+        targetPath,
+        quality: 60,
+        rotate: 360,
+        minWidth: 400,
+    );
     print('After Compress : '+_imageFile.lengthSync().toString());
     return _imageFile.path;
   }
@@ -529,7 +523,7 @@ class GlobalFunctions{
 
 
   static Future<File>  openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera,preferredCameraDevice:CameraDevice.rear);
   //  print("picture : "+ picture.path.toString());
    // print("fileString : "+ convertFileToString(picture.path.toString()));
     return picture;
@@ -587,7 +581,5 @@ class GlobalFunctions{
                 ),
               );
             }));
-
   }
-
 }
