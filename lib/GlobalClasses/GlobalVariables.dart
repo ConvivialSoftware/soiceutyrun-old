@@ -73,6 +73,8 @@ class GlobalVariables{
   static var comingSoonPath="assets/other_assets/coming_soon.png";
   static var bikeIconPath="assets/other_assets/bike.svg";
   static var changePasswordPath="assets/other_assets/change_password.svg";
+  static var successIconPath="assets/other_assets/success.svg";
+  static var failureIconPath="assets/other_assets/failure.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath = "assets/bottom_menu/bottom_building_icon.svg";
@@ -272,6 +274,7 @@ class GlobalVariables{
   static const ROLE='ROLE';
   static const NUMBER='NUMBER';
   static const Email_id='Email_id';
+  static const RESPONSE='RESPONSE';
 
 
 

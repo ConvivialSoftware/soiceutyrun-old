@@ -240,7 +240,7 @@
   "add_staff_for_other_flat": "This Staff already added to another flat do you want to add to your flat ?",
   "yes": "Yes",
   "no": "No",
-  "select_payment_option": "Select Payment Option",
+  "select_payment_option": "Select Your Payment Option",
   "pay_tm": "PayTM",
   "razor_pay": "RazorPay",
   "done": "Done",
@@ -277,5 +277,12 @@
   "coming_soon_text": "We are working very hard to give you a delightful new experience soon.",
   "staff_mobile_no": "Staff Mobile Number",
   "change_password": "Change Password",
-  "edit_staff_member": "Edit Staff Member"
+  "edit_staff_member": "Edit Staff Member",
+  "failure_to_pay": "Failure To Pay",
+  "successful_payment": "Successful Payment",
+  "order_amount": "Order Amount",
+  "payment_failed_try_again": "Payment Failed, Please pay again",
+  "order_number": "Order Number",
+  "thank_you_payment": "Thank You for Payment"
+
 }

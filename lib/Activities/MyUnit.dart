@@ -247,7 +247,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           centerTitle: true,
           leading: InkWell(
             onTap: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context,'back');
             },
             child: Icon(
               Icons.arrow_back,
@@ -261,18 +261,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           bottom: getTabLayout(),
           elevation: 0,
         ),
-        body: TabBarView(controller: _tabController, children: <Widget>[
-          Container(
-            color: GlobalVariables.veryLightGray,
-            child: getMyDuesLayout(),
-          ),
-          SingleChildScrollView(
-            child: getMyHouseholdLayout(),
-          ), //  getMyTicketLayout(),
-          /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
+        body:WillPopScope(child:   TabBarView(controller: _tabController, children: <Widget>[
+        Container(
+          color: GlobalVariables.veryLightGray,
+          child: getMyDuesLayout(),
+        ),
+        SingleChildScrollView(
+          child: getMyHouseholdLayout(),
+        ), //  getMyTicketLayout(),
+        /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
             child: getMyTanentsLayout(),
           )*/
-        ]),
+      ]), onWillPop: onWillPop),
+
       ),
     );
   }
@@ -2706,7 +2707,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         "-" +
         DateTime.now().toLocal().day.toString();
 
-   // _progressDialog.show();
+    _progressDialog.show();
     restClientERP
             .addOnlinePaymentRequest(
                 societyId,
@@ -2715,16 +2716,20 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 invoiceNo,
                 amount.toString(),
                 paymentId,
-                "onLine Transaction",
+                "online Transaction",
                 "Razorpay",
                 paymentDate)
             .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
- //     _progressDialog.hide();
+      _progressDialog.hide();
       if (value.status) {
-        Navigator.of(context).pop();
+       // Navigator.of(context).pop('back');
+        isDuesTabAPICall=false;
+        _callAPI(_tabController.index);
+        paymentSuccessDialog(paymentId);
+      }else {
+        GlobalFunctions.showToast(value.message);
       }
-      GlobalFunctions.showToast(value.message);
     }) .catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -2811,14 +2816,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
-    GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-
+   // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
     addOnlinePaymentRequest(response.paymentId);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
     print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
+    paymentFailureDialog();
   }
 
   _handleExternalWallet(ExternalWalletResponse response) {
@@ -2997,7 +3002,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   redirectToPaymentGateway(position);
                 },
                 child: Text(
-                  AppLocalizations.of(context).translate('done'),
+                  AppLocalizations.of(context).translate('proceed'),
                   style: TextStyle(
                       color: GlobalVariables.green,
                       fontSize: 16,
@@ -3564,6 +3569,102 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       });
     });
   }*/
+
+  Future<bool> onWillPop() {
+    Navigator.pop(context,'back');
+    return Future.value(true);
+  }
+
+  paymentSuccessDialog(String paymentId) {
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            StatefulBuilder(builder:
+                (BuildContext context,
+                StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(25.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                 // height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset(
+                            GlobalVariables.successIconPath,width: 50,height: 50,),
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('successful_payment'))),
+
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('order_number')+' : '+paymentId)),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('thank_you_payment'))),
+                    ],
+                  ),
+                ),
+              );
+            }));
+
+  }
+
+   paymentFailureDialog() {
+
+     return showDialog(
+         context: context,
+         builder: (BuildContext context) =>
+             StatefulBuilder(builder:
+                 (BuildContext context,
+                 StateSetter setState) {
+               return Dialog(
+                 shape: RoundedRectangleBorder(
+                     borderRadius:
+
+                     BorderRadius.circular(25.0)),
+                 child: Container(
+                   padding: EdgeInsets.all(20),
+                   color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                   //height: MediaQuery.of(context).size.height/4,
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     children: <Widget>[
+                       Container(
+                         child: SvgPicture.asset(
+                             GlobalVariables.failureIconPath,width: 50,height: 50,),
+                       ),
+                       Container(
+                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                           child: Text(AppLocalizations.of(context)
+                               .translate('failure_to_pay'))),
+
+                      /* Container(
+                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                           child: Text(AppLocalizations.of(context)
+                               .translate('order_amount'))),*/
+                       Container(
+                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                           child: Text(AppLocalizations.of(context)
+                               .translate('payment_failed_try_again'))),
+                     ],
+                   ),
+                   ),
+                 );
+             }));
+
+   }
 }
 
 class RecentTransaction {

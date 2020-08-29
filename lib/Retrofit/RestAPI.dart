@@ -1218,8 +1218,14 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.TRANSACTION_MODE: transactionMode,
       GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
       GlobalVariables.PAYMENT_DATE: paymentDate,
+      GlobalVariables.ATTACHMENT:"",
+      GlobalVariables.RESPONSE:""
+    //  Glo
     });
     print(GlobalVariables.AMOUNT+": "+amount.toString());
+    print(GlobalVariables.societyId+": "+socId.toString());
+    print(GlobalVariables.INVOICE_NO+": "+invoiceNo.toString());
+    print(GlobalVariables.PAYMENT_DATE+": "+paymentDate.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.insertPaymentAPI);
 
@@ -1233,7 +1239,7 @@ class RestAPI implements RestClient, RestClientERP {
             }, baseUrl: baseUrl),
         data: formData);
     final value = _result.data;
-    print('value of addAlreadyPaidPaymentRequest : ' + value.toString());
+    print('value of addOnlinePaymentRequest : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
