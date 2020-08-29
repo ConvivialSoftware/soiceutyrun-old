@@ -85,7 +85,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   List<Complaints> _closedComplaintList = new List<Complaints>();
 
   // ScrollController _scrollController= ScrollController();
-  var firstTicketContainerColor = GlobalVariables.mediumGreen;
+  var firstTicketContainerColor = GlobalVariables.mediumBlue;
   var secondTicketContainerColor = GlobalVariables.white;
   
   var firstTicketTextColor = GlobalVariables.white;
@@ -93,7 +93,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   bool isOpenTicket = true;
   bool isClosedTicket = false;
 
-  var firstDocumentsContainerColor = GlobalVariables.mediumGreen;
+  var firstDocumentsContainerColor = GlobalVariables.mediumBlue;
   var secondDocumentsContainerColor = GlobalVariables.white;
   var firstDocumentsTextColor = GlobalVariables.white;
   var secondDocumentsTextColor = GlobalVariables.darkBlue;
@@ -328,7 +328,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ),
         ),
         Divider(
-          color: GlobalVariables.mediumGreen,
+          color: GlobalVariables.mediumBlue,
           height: 1,
         ),
       ],
@@ -369,12 +369,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         Text(
                           AppLocalizations.of(context).translate('total_due'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 14),
+                              color: GlobalVariables.mediumBlue, fontSize: 14),
                         ),
                         Text(
                           AppLocalizations.of(context).translate('due_date'),
                           style: TextStyle(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             fontSize: 16,
                           ),
                         ),
@@ -400,11 +400,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ],
                     ),
                     Container(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
                       child: Divider(
                         height: 1,
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                       ),
                     ),
                     Container(
@@ -1126,7 +1126,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 borderRadius: BorderRadius.circular(25)),*/
                             child: CircleAvatar(
                               radius: 40,
-                              backgroundColor: GlobalVariables.mediumGreen,
+                              backgroundColor: GlobalVariables.mediumBlue,
                               backgroundImage: NetworkImage(photo),
                             ),
                           ),
@@ -1140,11 +1140,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ],
                       ),
                       Container(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                         child: Divider(
                           height: 1,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                         ),
                       ),
                       InkWell(
@@ -1166,7 +1166,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 Container(
                                   child: Icon(
                                     Icons.share,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                 ),
                                 Container(
@@ -1461,7 +1461,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ? Container(
                     margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
                     child: Divider(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       height: 1,
                     ),
                   )
@@ -1699,7 +1699,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   child: Container(
                     child: SvgPicture.asset(
                       GlobalVariables.pdfIconPath,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 25,
                       height: 40,
                     ),
@@ -1770,7 +1770,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ),
           Container(
             height: 1,
-            color: GlobalVariables.mediumGreen,
+            color: GlobalVariables.mediumBlue,
             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
             child: Divider(
               height: 1,
@@ -1796,7 +1796,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(
                             "Document Name",
-                            style: TextStyle(color: GlobalVariables.mediumGreen)),
+                            style: TextStyle(color: GlobalVariables.mediumBlue)),
                       ),
                     ],
                   ),
@@ -1831,7 +1831,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               Container(
                                   child: Icon(
                                 Icons.attach_file,
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.mediumBlue,
                               )),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -1854,7 +1854,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       _documentList[position].USER_NAME == null
                           ? 'Posted By: - '
                           : 'Posted By: ' + _documentList[position].USER_NAME,
-                      style: TextStyle(color: GlobalVariables.mediumGreen)),
+                      style: TextStyle(color: GlobalVariables.mediumBlue)),
                 ),
               ],
             ),
@@ -1909,7 +1909,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             isClosedDocuments = false;
                             firstDocumentsTextColor = GlobalVariables.white;
                             firstDocumentsContainerColor =
-                                GlobalVariables.mediumGreen;
+                                GlobalVariables.mediumBlue;
                             secondDocumentsTextColor = GlobalVariables.darkBlue;
                             secondDocumentsContainerColor =
                                 GlobalVariables.white;
@@ -1949,7 +1949,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             firstDocumentsTextColor = GlobalVariables.darkBlue;
                             secondDocumentsTextColor = GlobalVariables.white;
                             secondDocumentsContainerColor =
-                                GlobalVariables.mediumGreen;
+                                GlobalVariables.mediumBlue;
                           }
                           setState(() {});
                         },
@@ -2270,7 +2270,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       Text(
                         AppLocalizations.of(context).translate('due_date'),
                         style: TextStyle(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           fontSize: 16,
                         ),
                       ),
@@ -2302,11 +2302,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                   ),
                   Container(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Divider(
                       height: 1,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                   ),
                   Container(
@@ -2329,7 +2329,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Icon(
                                     Icons.visibility,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                 ),
                                 Container(
@@ -2397,7 +2397,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Icon(
                                     Icons.payment,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                 ),
                                 Container(
@@ -2425,7 +2425,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Icon(
                                     Icons.mail,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                 ),
                                 Container(
@@ -2457,7 +2457,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Icon(
                                     Icons.payment,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                 ),
                                 Container(
@@ -2545,7 +2545,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ? Container(
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: Divider(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     height: 2,
                   ),
                 )
@@ -2560,17 +2560,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     if(vehicleType=='4 Wheeler' || vehicleType=='4' || vehicleType=='four'){
       return Icon(
         Icons.directions_car,
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.mediumBlue,
       );
     }else if(vehicleType=='2 Wheeler' || vehicleType=='2' || vehicleType=='two'){
       return Icon(
         Icons.motorcycle,
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.mediumBlue,
       );
     }else{
       return Icon(
         Icons.motorcycle,
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.mediumBlue,
       );
     }
   }
@@ -2930,7 +2930,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           border: Border.all(
                             color: _selectedPaymentGateway == "PayTM"
                                 ? GlobalVariables.darkBlue
-                                : GlobalVariables.mediumGreen,
+                                : GlobalVariables.mediumBlue,
                             width: 2.0,
                           )),
                       child: Icon(Icons.check, color: GlobalVariables.white),
@@ -2972,7 +2972,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           border: Border.all(
                             color: _selectedPaymentGateway != "PayTM"
                                 ? GlobalVariables.darkBlue
-                                : GlobalVariables.mediumGreen,
+                                : GlobalVariables.mediumBlue,
                             width: 2.0,
                           )),
                       child: Icon(Icons.check, color: GlobalVariables.white),

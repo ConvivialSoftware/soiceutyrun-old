@@ -323,7 +323,7 @@ class MyGateState extends State<BaseMyGate>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )),
                   child: Container(
@@ -337,7 +337,7 @@ class MyGateState extends State<BaseMyGate>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           )),
                     ),
                   )),
@@ -353,7 +353,7 @@ class MyGateState extends State<BaseMyGate>
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: Container(
@@ -379,7 +379,7 @@ class MyGateState extends State<BaseMyGate>
                           },
                           icon: Icon(
                             Icons.date_range,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           ),
                         )),
                   ),
@@ -484,7 +484,7 @@ class MyGateState extends State<BaseMyGate>
                 Container(
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: GlobalVariables.mediumGreen,
+                    backgroundColor: GlobalVariables.mediumBlue,
                     backgroundImage: NetworkImage(Image),
                   ),
                 ),
@@ -549,7 +549,7 @@ class MyGateState extends State<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.access_time,color: GlobalVariables.mediumGreen,)
+                    child: Icon(Icons.access_time,color: GlobalVariables.mediumBlue,)
                 ),
                 Container(
                   alignment: Alignment.topLeft,
@@ -572,7 +572,7 @@ class MyGateState extends State<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,)
+                    child: Icon(Icons.date_range,color: GlobalVariables.mediumBlue,)
                 ),
                 Container(
                   alignment: Alignment.topLeft,
@@ -597,7 +597,7 @@ class MyGateState extends State<BaseMyGate>
                   Container(
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Icon(Icons.perm_identity,color: GlobalVariables.mediumGreen,)
+                      child: Icon(Icons.perm_identity,color: GlobalVariables.mediumBlue,)
                   ),
                   Container(
                     alignment: Alignment.topLeft,
@@ -617,7 +617,7 @@ class MyGateState extends State<BaseMyGate>
             visible: false,
             child: Container(
               height: 2,
-              color: GlobalVariables.mediumGreen,
+              color: GlobalVariables.mediumBlue,
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Divider(
                 height: 2,
@@ -836,7 +836,7 @@ class MyGateState extends State<BaseMyGate>
                                       isExpanded: false,
                                       icon: Icon(
                                         Icons.keyboard_arrow_down,
-                                        color: GlobalVariables.mediumGreen,
+                                        color: GlobalVariables.mediumBlue,
                                       ),
                                       underline: SizedBox(),
                                       hint: Container(
@@ -844,7 +844,7 @@ class MyGateState extends State<BaseMyGate>
                                         child: Text(
                                           "",
                                           style: TextStyle(
-                                              color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                                              color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -858,7 +858,7 @@ class MyGateState extends State<BaseMyGate>
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
+                                      color: GlobalVariables.mediumBlue,
                                       width: 3.0,
                                     )
                                 ),
@@ -877,7 +877,7 @@ class MyGateState extends State<BaseMyGate>
                                             _contact = contact;
                                             setState(() {});
                                           },
-                                          icon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,)),
+                                          icon: Icon(Icons.contacts,color: GlobalVariables.mediumBlue,)),
                                   ),
                                 ),
                               ),
@@ -888,7 +888,7 @@ class MyGateState extends State<BaseMyGate>
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
+                                      color: GlobalVariables.mediumBlue,
                                       width: 3.0,
                                     )
                                 ),

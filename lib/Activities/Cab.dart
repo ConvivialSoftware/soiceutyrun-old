@@ -121,7 +121,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                     isExpanded: false,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                     underline: SizedBox(),
                     hint: Container(
@@ -129,7 +129,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                       child: Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -143,7 +143,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -162,7 +162,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -182,7 +182,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )),
               child: ButtonTheme(
@@ -192,7 +192,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                   isExpanded: true,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                   ),
                   underline: SizedBox(),
                   hint: Text(
@@ -270,7 +270,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                     width: 2.0,
                                   )),
                               child: Icon(Icons.check,
@@ -302,7 +302,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: Container(
@@ -316,7 +316,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                         border: InputBorder.none,
                         suffixIcon: Icon(
                           Icons.date_range,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                         )),
                   ),
                 )),

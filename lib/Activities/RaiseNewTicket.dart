@@ -155,7 +155,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -226,7 +226,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                     color: complaintType== "Personal" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: complaintType== "Personal" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: complaintType== "Personal" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -270,7 +270,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                     color: complaintType!= "Personal" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: complaintType!= "Personal" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: complaintType!= "Personal" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -332,7 +332,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: ButtonTheme(
@@ -343,7 +343,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -362,7 +362,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -385,7 +385,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       height: 50,
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       decoration: attachmentFilePath==null ? BoxDecoration(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         borderRadius: BorderRadius.circular(25),
 
                       ) : BoxDecoration(
@@ -419,7 +419,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                             },
                             icon: Icon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                             ),
                             label: Text(
                               AppLocalizations.of(context).translate('attach_photo'),
@@ -453,7 +453,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               },
                               icon: Icon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.mediumBlue,
                               ),
                               label: Text(
                                 AppLocalizations.of(context)
@@ -495,7 +495,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                            color:  complaintPriority=="No" ?  GlobalVariables.white:GlobalVariables.darkBlue,
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
-                              color: complaintPriority=="No" ?  GlobalVariables.mediumGreen : GlobalVariables.transparent,
+                              color: complaintPriority=="No" ?  GlobalVariables.mediumBlue : GlobalVariables.transparent,
                               width: 2.0,
                             )),
                         child: Icon(Icons.check, color: GlobalVariables.white),

@@ -173,7 +173,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                   Expanded(
                     child: Container(
                       child: Text(_homeCareList[position].startPrice,style: TextStyle(
-                          color: GlobalVariables.mediumGreen,fontSize: 16,fontWeight: FontWeight.w400
+                          color: GlobalVariables.mediumBlue,fontSize: 16,fontWeight: FontWeight.w400
                       ),),
                     ),
                   ),
@@ -187,7 +187,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                             child: Icon(
                               Icons.call,
                               color:
-                              GlobalVariables.mediumGreen,
+                              GlobalVariables.mediumBlue,
                               size: 24,
                             )) : Container(),
                         _homeCareList[position].isMail ?
@@ -196,7 +196,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                             child: Icon(
                               Icons.mail_outline,
                               color:
-                              GlobalVariables.mediumGreen,
+                              GlobalVariables.mediumBlue,
                               size: 24,
                             )):Container(),
                       ],

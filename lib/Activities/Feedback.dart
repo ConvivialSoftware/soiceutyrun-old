@@ -121,7 +121,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -143,7 +143,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -166,7 +166,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                       height: 50,
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       decoration: attachmentFilePath == null ? BoxDecoration(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         borderRadius: BorderRadius.circular(25),
 
                       ) : BoxDecoration(
@@ -202,7 +202,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                             },
                             icon: Icon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                             ),
                             label: Text(
                               AppLocalizations.of(context).translate(
@@ -239,7 +239,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                               },
                               icon: Icon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.mediumBlue,
                               ),
                               label: Text(
                                 AppLocalizations.of(context)

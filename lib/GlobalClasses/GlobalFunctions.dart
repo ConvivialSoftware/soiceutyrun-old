@@ -339,7 +339,7 @@ class GlobalFunctions{
     _progressDialog.style(
         message: "      Please Wait",
         borderRadius: 10.0,
-        backgroundColor: GlobalVariables.mediumGreen,
+        backgroundColor: GlobalVariables.mediumBlue,
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(
@@ -359,7 +359,7 @@ class GlobalFunctions{
     _progressDialog.style(
         message: "      Please Wait",
         borderRadius: 10.0,
-        backgroundColor: GlobalVariables.mediumGreen,
+        backgroundColor: GlobalVariables.mediumBlue,
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(

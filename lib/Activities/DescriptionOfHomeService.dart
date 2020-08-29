@@ -370,7 +370,7 @@ class DescriptionOfHomeServiceState
               width: 10,
               height: 10,
               decoration: BoxDecoration(
-                  color: GlobalVariables.mediumGreen,
+                  color: GlobalVariables.mediumBlue,
                   borderRadius: BorderRadius.circular(50)),
             ),
             Container(
@@ -404,7 +404,7 @@ class DescriptionOfHomeServiceState
                         width: 10,
                         height: 10,
                         decoration: BoxDecoration(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             borderRadius: BorderRadius.circular(50)),
                       ),
                       Container(
@@ -420,7 +420,7 @@ class DescriptionOfHomeServiceState
                 Container(
                   child: Text(
                     _homeCareList[0].chargesList[position].chargesPrice,
-                    style: TextStyle(color: GlobalVariables.mediumGreen),
+                    style: TextStyle(color: GlobalVariables.mediumBlue),
                   ),
                 )
               ],

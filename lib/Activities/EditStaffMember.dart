@@ -176,7 +176,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -197,7 +197,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -221,7 +221,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )),
                 child: ButtonTheme(
@@ -232,7 +232,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -265,7 +265,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                                     color:   _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -305,7 +305,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                                     color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -336,7 +336,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -357,7 +357,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -382,7 +382,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )
                       ),
@@ -404,7 +404,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                                   });
 
                                 },
-                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,))
+                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumBlue,))
                         ),
                       ),
                     ),
@@ -418,7 +418,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -440,7 +440,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -468,7 +468,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                               borderRadius: BorderRadius.circular(25),
 
                             ) : BoxDecoration(
@@ -485,7 +485,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                     borderRadius: BorderRadius.circular(10)
                                 ),
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -564,7 +564,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentIdentityProofFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                               borderRadius: BorderRadius.circular(25),
 
                             ) : BoxDecoration(
@@ -579,7 +579,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.mediumBlue,
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),

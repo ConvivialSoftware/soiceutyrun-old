@@ -74,6 +74,6 @@ class BaseAppStart extends StatelessWidget {
         primaryColor: GlobalVariables.darkBlue,
         accentColor: GlobalVariables.white,
         primaryColorDark: GlobalVariables.darkBlue,
-        cursorColor: GlobalVariables.mediumGreen);
+        cursorColor: GlobalVariables.mediumBlue);
   }
 }

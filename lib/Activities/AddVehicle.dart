@@ -102,7 +102,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -141,7 +141,7 @@ ProgressDialog _progressDialog;
                                     color:   _selectedVehicleType== "2 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedVehicleType== "2 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: _selectedVehicleType== "2 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -185,7 +185,7 @@ ProgressDialog _progressDialog;
                                     color:   _selectedVehicleType== "4 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedVehicleType== "4 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: _selectedVehicleType== "4 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -216,7 +216,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -236,7 +236,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),

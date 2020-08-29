@@ -112,7 +112,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                         child: Container(
                           child: Icon(
                             Icons.filter,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           ),
                         ),
                       )

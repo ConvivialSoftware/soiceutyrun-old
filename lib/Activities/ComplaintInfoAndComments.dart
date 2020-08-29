@@ -197,7 +197,7 @@ class ComplaintInfoAndCommentsState
                               child: Text(
                                 complaints.DESCRIPTION,
                                 style:
-                                    TextStyle(color: GlobalVariables.mediumGreen),
+                                    TextStyle(color: GlobalVariables.mediumBlue),
                               ),
                             ),
                             Row(
@@ -216,7 +216,7 @@ class ComplaintInfoAndCommentsState
                                   child: Text(
                                     complaints.CATEGORY,
                                     style: TextStyle(
-                                      color: GlobalVariables.mediumGreen,
+                                      color: GlobalVariables.mediumBlue,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -254,7 +254,7 @@ class ComplaintInfoAndCommentsState
               ),
               Container(
                 height: 1,
-                color: GlobalVariables.mediumGreen,
+                color: GlobalVariables.mediumBlue,
                 margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                 child: Divider(
                   height: 3,
@@ -269,7 +269,7 @@ class ComplaintInfoAndCommentsState
                       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: Text('Issued on: ' + GlobalFunctions.convertDateFormat(complaints.DATE,"dd-MM-yyyy"),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 14)),
+                              color: GlobalVariables.mediumBlue, fontSize: 14)),
                     ),
                   ],
                 ),
@@ -289,7 +289,7 @@ class ComplaintInfoAndCommentsState
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                               width: 3.0,
                             )),
                         child: ButtonTheme(
@@ -300,7 +300,7 @@ class ComplaintInfoAndCommentsState
                             value: _selectedItem,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                             ),
                             underline: SizedBox(),
                             /* hint: Text(
@@ -358,7 +358,7 @@ class ComplaintInfoAndCommentsState
               ),
               Container(
                 height: 1,
-                color: GlobalVariables.mediumGreen,
+                color: GlobalVariables.mediumBlue,
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: Divider(
                   height: 3,
@@ -418,7 +418,7 @@ class ComplaintInfoAndCommentsState
                     angle: 108 * 3.14 / 600,
                     child: Icon(
                       Icons.attach_file,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     )),
               ),
             ),

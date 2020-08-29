@@ -121,7 +121,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                     isExpanded: false,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                     underline: SizedBox(),
                     hint: Container(
@@ -129,7 +129,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                       child:  Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
                       ) ,
                     ),
                   ),
@@ -147,7 +147,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           width: 3.0,
                         )
                     ),
@@ -160,7 +160,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                           counterText: '',
                           suffixIcon: Icon(
                             Icons.contacts,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           )
 
                       ),
@@ -173,7 +173,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                     alignment: Alignment.topRight,
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                     child: Text('OR',style: TextStyle(
-                      color: GlobalVariables.mediumGreen,fontSize: 16
+                      color: GlobalVariables.mediumBlue,fontSize: 16
                     ),),
                   ),
                 )
@@ -186,7 +186,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -205,7 +205,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -284,7 +284,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                     width: 2.0,
                                   )),
                               child: Icon(Icons.check,

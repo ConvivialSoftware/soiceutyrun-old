@@ -403,7 +403,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                      child: Text(
                        _bookingHistoryList[position].date,
                        style: TextStyle(
-                           color: GlobalVariables.mediumGreen, fontSize: 16),
+                           color: GlobalVariables.mediumBlue, fontSize: 16),
                      ),
                    ),
                    Container(
@@ -413,7 +413,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                      child: Text(
                        _bookingHistoryList[position].facilitiesType,
                        style: TextStyle(
-                           color: GlobalVariables.mediumGreen, fontSize: 16),
+                           color: GlobalVariables.mediumBlue, fontSize: 16),
                      ),
                    ),
                  ],
@@ -433,7 +433,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
           ),
         ),
         Divider(
-          color: GlobalVariables.mediumGreen,
+          color: GlobalVariables.mediumBlue,
           height: 1,
         ),
       ],

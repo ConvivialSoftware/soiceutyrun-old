@@ -157,7 +157,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -193,7 +193,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     color:   _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -233,7 +233,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
+                                      color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -268,7 +268,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )
                       ),
@@ -290,7 +290,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                   });
 
                                 },
-                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,))
+                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumBlue,))
                         ),
                       ),
                     ),
@@ -304,7 +304,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )
                       ),
@@ -355,7 +355,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -403,7 +403,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 3.0,
                     )
                 ),
@@ -432,7 +432,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )
                       ),
@@ -457,7 +457,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )),
                       child: ButtonTheme(
@@ -468,7 +468,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           isExpanded: true,
                           icon: Icon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           ),
                           underline: SizedBox(),
                           hint: Text(
@@ -494,7 +494,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )),
                       child: ButtonTheme(
@@ -505,7 +505,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           isExpanded: true,
                           icon: Icon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           ),
                           underline: SizedBox(),
                           hint: Text(
@@ -527,7 +527,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             width: 3.0,
                           )),
                       child: ButtonTheme(
@@ -538,7 +538,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           isExpanded: true,
                           icon: Icon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           ),
                           underline: SizedBox(),
                           hint: Text(
@@ -561,7 +561,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )
                   ),
@@ -586,7 +586,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )
                   ),
@@ -612,7 +612,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )
                   ),
@@ -641,7 +641,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                               borderRadius: BorderRadius.circular(25),
 
                             ) : BoxDecoration(
@@ -675,7 +675,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                   },
                                   icon: Icon(
                                     Icons.attach_file,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                   label: Text(
                                     AppLocalizations.of(context).translate('attach_photo'),
@@ -709,7 +709,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     },
                                     icon: Icon(
                                       Icons.camera_alt,
-                                      color: GlobalVariables.mediumGreen,
+                                      color: GlobalVariables.mediumBlue,
                                     ),
                                     label: Text(
                                       AppLocalizations.of(context)

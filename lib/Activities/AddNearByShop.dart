@@ -106,7 +106,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -130,7 +130,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           width: 3.0,
                         )),
                     child: ButtonTheme(
@@ -140,7 +140,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                         isExpanded: true,
                         icon: Icon(
                           Icons.keyboard_arrow_down,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                         ),
                         underline: SizedBox(),
                         hint: Text(
@@ -181,7 +181,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           width: 3.0,
                         )
                     ),
@@ -221,7 +221,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -240,7 +240,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -262,7 +262,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     decoration: BoxDecoration(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: GlobalVariables.transparent,

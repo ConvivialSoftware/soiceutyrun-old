@@ -350,7 +350,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
 
     return Container(
       child: Divider(
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.mediumBlue,
         height: 3,
       ),
     );

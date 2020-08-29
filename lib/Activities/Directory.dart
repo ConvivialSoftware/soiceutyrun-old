@@ -254,7 +254,7 @@ class DirectoryState extends State<BaseDirectory> {
                             margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                             child: Icon(
                               Icons.call,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                               size: 24,
                             ),
                           ),
@@ -301,7 +301,7 @@ class DirectoryState extends State<BaseDirectory> {
                     margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                     child: Icon(
                       Icons.email,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       size: 24,
                     ),
                   ),

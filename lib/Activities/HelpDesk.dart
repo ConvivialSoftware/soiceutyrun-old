@@ -38,7 +38,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
   List<Complaints> _openComplaintList = new List<Complaints>();
   List<Complaints> _closedComplaintList = new List<Complaints>();
 
-  var firstTicketContainerColor = GlobalVariables.mediumGreen;
+  var firstTicketContainerColor = GlobalVariables.mediumBlue;
   var secondTicketContainerColor = GlobalVariables.white;
   var firstTicketTextColor = GlobalVariables.white;
   var secondTicketTextColor = GlobalVariables.darkBlue;
@@ -160,7 +160,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           isClosedTicket = false;
                           firstTicketTextColor = GlobalVariables.white;
                           firstTicketContainerColor =
-                              GlobalVariables.mediumGreen;
+                              GlobalVariables.mediumBlue;
                           secondTicketTextColor = GlobalVariables.darkBlue;
                           secondTicketContainerColor = GlobalVariables.white;
                         }
@@ -198,7 +198,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           firstTicketTextColor = GlobalVariables.darkBlue;
                           secondTicketTextColor = GlobalVariables.white;
                           secondTicketContainerColor =
-                              GlobalVariables.mediumGreen;
+                              GlobalVariables.mediumBlue;
                         }
                         setState(() {});
                       },
@@ -248,7 +248,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )),
                   child: Container(
@@ -262,7 +262,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           )),
                     ),
                   )),
@@ -382,7 +382,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                      width:50,
                      height: 50,
                      decoration: BoxDecoration(
-                       color: GlobalVariables.mediumGreen,
+                       color: GlobalVariables.mediumBlue,
                        shape: BoxShape.rectangle
                      ),
                      /* child:*//* SvgPicture.asset(
@@ -441,7 +441,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             ),
             Container(
               height: 1,
-              color: GlobalVariables.mediumGreen,
+              color: GlobalVariables.mediumBlue,
               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Divider(
                 height: 1,

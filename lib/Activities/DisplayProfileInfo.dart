@@ -167,7 +167,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                                     ius.circular(25)),*/
                             child: CircleAvatar(
                               radius: 30,
-                              backgroundColor: GlobalVariables.mediumGreen,
+                              backgroundColor: GlobalVariables.mediumBlue,
                               backgroundImage: NetworkImage(_profileList[0].PROFILE_PHOTO),
                             ),
                           ),

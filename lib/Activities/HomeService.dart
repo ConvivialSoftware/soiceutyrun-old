@@ -122,7 +122,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                     isExpanded: false,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                     underline: SizedBox(),
                     hint: Container(
@@ -130,7 +130,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                       child: Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -144,7 +144,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -163,7 +163,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -183,7 +183,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )),
               child: ButtonTheme(
@@ -193,7 +193,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                   isExpanded: true,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                   ),
                   underline: SizedBox(),
                   hint: Text(

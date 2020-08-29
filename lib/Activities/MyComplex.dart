@@ -441,7 +441,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           ),
           _announcementList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
-            color: GlobalVariables.mediumGreen,
+            color: GlobalVariables.mediumBlue,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -455,13 +455,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 children: <Widget>[
                   Container(
                     child: Icon(Icons.mode_comment,
-                        color: GlobalVariables.mediumGreen),
+                        color: GlobalVariables.mediumBlue),
                   ),
                   Container(
                     child: Text(
                       " Likes",
                       style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -470,14 +470,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Icon(
                       Icons.mode_comment,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                   ),
                   Container(
                     child: Text(
                       " Comments",
                       style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -515,7 +515,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   Container(
                       child: Icon(
                         Icons.attach_file,
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -829,7 +829,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           ),
           _meetingList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
-            color: GlobalVariables.mediumGreen,
+            color: GlobalVariables.mediumBlue,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -843,13 +843,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 children: <Widget>[
                   Container(
                     child: Icon(Icons.mode_comment,
-                        color: GlobalVariables.mediumGreen),
+                        color: GlobalVariables.mediumBlue),
                   ),
                   Container(
                     child: Text(
                       " Likes",
                       style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -858,14 +858,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Icon(
                       Icons.mode_comment,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                   ),
                   Container(
                     child: Text(
                       " Comments",
                       style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -902,7 +902,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   Container(
                       child: Icon(
                         Icons.attach_file,
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -1084,7 +1084,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Text(
               _pollSurveyList[position].surveyDesc,
               style: TextStyle(
-                color: GlobalVariables.mediumGreen,
+                color: GlobalVariables.mediumBlue,
                 fontSize: 14,
               ),
               maxLines: 2,
@@ -1156,7 +1156,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                                             true
                                                         ? GlobalVariables.darkBlue
                                                         : GlobalVariables
-                                                            .mediumGreen,
+                                                            .mediumBlue,
                                                     width: 2.0,
                                                   )),
                                               child: Icon(
@@ -1215,7 +1215,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           ),
           Container(
             height: 2,
-            color: GlobalVariables.mediumGreen,
+            color: GlobalVariables.mediumBlue,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -1229,7 +1229,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   child: Text(
                     "Active",
                     style: TextStyle(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       fontSize: 10,
                     ),
                   ),
@@ -1237,7 +1237,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 Container(
                   margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                   width: 1,
-                  color: GlobalVariables.mediumGreen,
+                  color: GlobalVariables.mediumBlue,
                   child: Divider(
                     height: 10,
                   ),
@@ -1247,7 +1247,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   child: Text(
                     "For All members",
                     style: TextStyle(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       fontSize: 10,
                     ),
                   ),
@@ -1383,7 +1383,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )),
                   child: Container(
@@ -1397,7 +1397,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                           )),
                     ),
                   )),
@@ -1413,7 +1413,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         width: 3.0,
                       )),
                   child: Container(
@@ -1428,7 +1428,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         underline: SizedBox(),
                         icon: Icon(
                           Icons.arrow_drop_down,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                         ),
                         isExpanded: true,
                         hint: Text(
@@ -2166,7 +2166,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                         child: Icon(
                           Icons.location_on,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           size: 20,
                         ),
                       ),
@@ -2197,7 +2197,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                         child: Icon(
                           Icons.date_range,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           size: 20,
                         ),
                       ),
@@ -2229,7 +2229,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                         child: Icon(
                           Icons.access_time,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.mediumBlue,
                           size: 20,
                         ),
                       ),
@@ -2259,7 +2259,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           ),
           _eventList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
-            color: GlobalVariables.mediumGreen,
+            color: GlobalVariables.mediumBlue,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -2292,7 +2292,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   Container(
                       child: Icon(
                     Icons.attach_file,
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                   )),
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -2679,7 +2679,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                   child: Container(
                     child: SvgPicture.asset(
                       GlobalVariables.pdfIconPath,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       width: 25,
                       height: 40,
                     ),
@@ -2750,7 +2750,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           ),
           Container(
             height: 1,
-            color: GlobalVariables.mediumGreen,
+            color: GlobalVariables.mediumBlue,
             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
             child: Divider(
               height: 1,
@@ -2811,7 +2811,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                         Container(
                             child: Icon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                             )),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -2834,7 +2834,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                       _documentList[position].USER_NAME == null
                           ? 'Posted By: - '
                           : 'Posted By: ' + _documentList[position].USER_NAME,
-                      style: TextStyle(color: GlobalVariables.mediumGreen)),
+                      style: TextStyle(color: GlobalVariables.mediumBlue)),
                 ),
               ],
             ),

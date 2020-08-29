@@ -359,7 +359,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                       children: <Widget>[
                         Container(
                           decoration: BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.mediumBlue,
                               borderRadius:
                               BorderRadius.all(Radius.circular(10))),
                           margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -556,6 +556,6 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
         primaryColor: GlobalVariables.darkBlue,
         accentColor: GlobalVariables.white,
         primaryColorDark: GlobalVariables.darkBlue,
-        cursorColor: GlobalVariables.mediumGreen);
+        cursorColor: GlobalVariables.mediumBlue);
   }
 }

@@ -260,7 +260,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                       child: CircleAvatar(
                                         radius: 10,
                                         backgroundColor:
-                                        GlobalVariables.mediumGreen,
+                                        GlobalVariables.mediumBlue,
                                         backgroundImage: NetworkImage(photo),
                                       ),
                                     ),
@@ -687,7 +687,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                         borderRadius:
                         BorderRadius.all(Radius.circular(10))),
                     margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -869,7 +869,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                 borderRadius: BorderRadius.circular(25)),*/
                               child: CircleAvatar(
                                 radius: 40,
-                                backgroundColor: GlobalVariables.mediumGreen,
+                                backgroundColor: GlobalVariables.mediumBlue,
                                 backgroundImage: NetworkImage(photo),
                               ),
                             ),
@@ -1551,12 +1551,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                         Text(
                           AppLocalizations.of(context).translate('total_due'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 14),
+                              color: GlobalVariables.mediumBlue, fontSize: 14),
                         ),
                         Text(
                           AppLocalizations.of(context).translate('due_date'),
                           style: TextStyle(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.mediumBlue,
                             fontSize: 16,
                           ),
                         ),
@@ -1583,11 +1583,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                       ],
                     ),
                     Container(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                       margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
                       child: Divider(
                         height: 1,
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.mediumBlue,
                       ),
                     ),
                     Container(

@@ -121,7 +121,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                     isExpanded: false,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.mediumBlue,
                     ),
                     underline: SizedBox(),
                     hint: Container(
@@ -129,7 +129,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                       child:  Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -143,7 +143,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )
               ),
@@ -163,7 +163,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                     width: 3.0,
                   )),
               child: ButtonTheme(
@@ -173,7 +173,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                   isExpanded: true,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.mediumBlue,
                   ),
                   underline: SizedBox(),
                   hint: Text(
@@ -203,7 +203,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                     width: 2.0,
                                   )),
                               child: Icon(Icons.check,
