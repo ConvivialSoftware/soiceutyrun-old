@@ -283,6 +283,7 @@
   "order_amount": "Order Amount",
   "payment_failed_try_again": "Payment Failed, Please pay again",
   "order_number": "Order Number",
-  "thank_you_payment": "Thank You for Payment"
+  "thank_you_payment": "Thank You for Payment",
+  "transaction_id": "Transaction ID"
 
 }

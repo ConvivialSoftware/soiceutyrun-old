@@ -3607,7 +3607,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(AppLocalizations.of(context)
-                              .translate('order_number')+' : '+paymentId)),
+                              .translate('transaction_id')+' : '+paymentId)),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(AppLocalizations.of(context)
