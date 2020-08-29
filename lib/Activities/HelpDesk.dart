@@ -41,7 +41,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
   var firstTicketContainerColor = GlobalVariables.mediumGreen;
   var secondTicketContainerColor = GlobalVariables.white;
   var firstTicketTextColor = GlobalVariables.white;
-  var secondTicketTextColor = GlobalVariables.green;
+  var secondTicketTextColor = GlobalVariables.darkBlue;
   bool isOpenTicket = true;
   bool isClosedTicket = false;
 
@@ -71,7 +71,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
       builder: (context) => Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -161,7 +161,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           firstTicketTextColor = GlobalVariables.white;
                           firstTicketContainerColor =
                               GlobalVariables.mediumGreen;
-                          secondTicketTextColor = GlobalVariables.green;
+                          secondTicketTextColor = GlobalVariables.darkBlue;
                           secondTicketContainerColor = GlobalVariables.white;
                         }
                         setState(() {});
@@ -195,7 +195,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           isOpenTicket = false;
                           isClosedTicket = true;
                           firstTicketContainerColor = GlobalVariables.white;
-                          firstTicketTextColor = GlobalVariables.green;
+                          firstTicketTextColor = GlobalVariables.darkBlue;
                           secondTicketTextColor = GlobalVariables.white;
                           secondTicketContainerColor =
                               GlobalVariables.mediumGreen;
@@ -293,7 +293,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                 Icons.add,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.darkBlue,
             ),
           )
         ],
@@ -346,7 +346,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   //margin:EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: Text(isOpenTicket ? _openComplaintList[position].CATEGORY : _closedComplaintList[position].CATEGORY,
                       style: TextStyle(
-                          color: GlobalVariables.green, fontSize: 14)),
+                          color: GlobalVariables.darkBlue, fontSize: 14)),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -366,7 +366,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                     'Ticket No: ' +
                         ( isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO),
                     style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 12),
                   ),
                 ),
@@ -418,7 +418,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)),
                           ),

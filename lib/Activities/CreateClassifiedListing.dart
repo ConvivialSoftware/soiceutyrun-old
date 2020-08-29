@@ -28,7 +28,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -90,7 +90,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 child: Text(
                   AppLocalizations.of(context).translate('add_new_listing'),
                   style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -130,7 +130,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 child: Text(
                   AppLocalizations.of(context).translate('i_want_to'),
                   style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
                 ),
@@ -150,10 +150,10 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -165,7 +165,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                   AppLocalizations.of(context)
                                       .translate('sell'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -201,7 +201,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                 child: Text(
                                   AppLocalizations.of(context).translate('buy'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -238,7 +238,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                   AppLocalizations.of(context)
                                       .translate('rent'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -275,7 +275,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                   AppLocalizations.of(context)
                                       .translate('giveaway'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -442,7 +442,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                 child: Text(
                                   name,
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -488,7 +488,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         decoration: BoxDecoration(
-                            color:GlobalVariables.green,
+                            color:GlobalVariables.darkBlue,
                             borderRadius: BorderRadius.circular(30)),
                         child:Icon(Icons.edit,color: GlobalVariables.white,size: 20,)
                       ),
@@ -503,13 +503,13 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     onPressed: () {},
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
+                        side: BorderSide(color: GlobalVariables.darkBlue)),
                     child: Text(
                       AppLocalizations.of(context).translate('submit'),
                       style: TextStyle(fontSize: GlobalVariables.largeText),

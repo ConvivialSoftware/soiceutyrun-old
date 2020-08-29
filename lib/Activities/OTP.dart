@@ -109,7 +109,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
                   child: ButtonTheme(
                     minWidth: MediaQuery.of(context).size.width/2,
                     child: RaisedButton(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       onPressed: () {
 
                         if(_timer!=null){
@@ -122,7 +122,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
                       textColor: GlobalVariables.white,
                       //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                          borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
                       ),
                       child: Text(
                         AppLocalizations.of(context)
@@ -155,7 +155,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
                        child: Container(
                          alignment: Alignment.center,
                          child: Text(AppLocalizations.of(context).translate("resend"),style: TextStyle(
-                             color: isResendEnable ? GlobalVariables.green : GlobalVariables.grey,fontSize: 20,fontWeight: FontWeight.bold,height: 1.5
+                             color: isResendEnable ? GlobalVariables.darkBlue : GlobalVariables.grey,fontSize: 20,fontWeight: FontWeight.bold,height: 1.5
                          )),
                        ),
                      ),

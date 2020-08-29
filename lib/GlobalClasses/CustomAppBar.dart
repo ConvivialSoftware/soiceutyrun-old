@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     // TODO: implement build
     return AppBar(
           title: Text(title),
-        backgroundColor: GlobalVariables.green,
+        backgroundColor: GlobalVariables.darkBlue,
         centerTitle: true,
           leading: getIconButton());
 

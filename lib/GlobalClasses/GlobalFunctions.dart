@@ -253,7 +253,7 @@ class GlobalFunctions{
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(Icons.arrow_back,color: GlobalVariables.green,)
+                    child: Icon(Icons.arrow_back,color: GlobalVariables.darkBlue,)
                 )),
           ),
           Expanded(
@@ -265,7 +265,7 @@ class GlobalFunctions{
                 /*child: SvgPicture.asset(
                               GlobalVariables.overviewTxtPath,
                             )*/
-                child: Text(title,style: TextStyle(color: GlobalVariables.green
+                child: Text(title,style: TextStyle(color: GlobalVariables.darkBlue
                     ,fontSize: 18,fontWeight: FontWeight.bold),),
               ),
             ),

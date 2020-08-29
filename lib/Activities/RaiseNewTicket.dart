@@ -80,7 +80,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -142,7 +142,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 child: Text(
                   AppLocalizations.of(context).translate('raise_new_ticket'),
                   style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -223,10 +223,10 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: complaintType== "Personal" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: complaintType== "Personal" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: complaintType== "Personal" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: complaintType== "Personal" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -238,7 +238,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                   AppLocalizations.of(context)
                                       .translate('personal'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -267,10 +267,10 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: complaintType!= "Personal" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: complaintType!= "Personal" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: complaintType!= "Personal" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: complaintType!= "Personal" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -282,7 +282,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                   AppLocalizations.of(context)
                                       .translate('community'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -394,7 +394,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               image: FileImage(File(attachmentFilePath)),
                               fit: BoxFit.cover
                           ),
-                          border: Border.all(color: GlobalVariables.green,width: 2.0)
+                          border: Border.all(color: GlobalVariables.darkBlue,width: 2.0)
                       ),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                     ),
@@ -423,7 +423,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                             ),
                             label: Text(
                               AppLocalizations.of(context).translate('attach_photo'),
-                              style: TextStyle(color: GlobalVariables.green),
+                              style: TextStyle(color: GlobalVariables.darkBlue),
                             ),
                           ),
                         ),
@@ -458,7 +458,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               label: Text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.green),
+                                style: TextStyle(color: GlobalVariables.darkBlue),
                               )),
                         ),
                       ],
@@ -492,7 +492,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                           color:  complaintPriority=="No" ?  GlobalVariables.white:GlobalVariables.green,
+                           color:  complaintPriority=="No" ?  GlobalVariables.white:GlobalVariables.darkBlue,
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
                               color: complaintPriority=="No" ?  GlobalVariables.mediumGreen : GlobalVariables.transparent,
@@ -507,7 +507,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                         AppLocalizations.of(context)
                             .translate('mark_as_urgent'),
                         style: TextStyle(
-                            color: GlobalVariables.green, fontSize: 16),
+                            color: GlobalVariables.darkBlue, fontSize: 16),
                       ),
                     ),
                   ],
@@ -544,7 +544,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     onPressed: () {
 
                       verifyData();
@@ -554,7 +554,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
+                        side: BorderSide(color: GlobalVariables.darkBlue)),
                     child: Text(
                       AppLocalizations.of(context).translate('submit'),
                       style: TextStyle(fontSize: GlobalVariables.largeText),
@@ -638,7 +638,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
             value: _categoryList[i].COMPLAINT_CATEGORY,
             child: Text(
               _categoryList[i].COMPLAINT_CATEGORY,
-              style: TextStyle(color: GlobalVariables.green),
+              style: TextStyle(color: GlobalVariables.darkBlue),
             ),
           ));
         }

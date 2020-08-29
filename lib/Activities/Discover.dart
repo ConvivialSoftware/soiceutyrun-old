@@ -60,7 +60,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -290,7 +290,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 Icons.add,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.darkBlue,
             ),
           )
         ],
@@ -350,7 +350,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               child: Text(
                                 _classifiedList[position].title,
                                 style: TextStyle(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -390,7 +390,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                 child: Text(
                                   _classifiedList[position].rs,
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -445,7 +445,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         return GlobalVariables.skyBlue;
         break;
       case "buy":
-        return GlobalVariables.green;
+        return GlobalVariables.darkBlue;
         break;
       case "rent":
         return GlobalVariables.orangeYellow;
@@ -1031,7 +1031,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               child: Text(
                                 _nearByShopList[position].title,
                                 style: TextStyle(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
                               ),

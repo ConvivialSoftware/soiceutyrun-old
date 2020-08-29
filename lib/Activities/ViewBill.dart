@@ -62,7 +62,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -120,7 +120,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                           alignment: Alignment.topLeft,
                           child: Text(
                             AppLocalizations.of(context).translate('charges'),style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18,
+                            color: GlobalVariables.darkBlue,fontSize: 18,
                           ),),
                         ),
                       ),
@@ -260,7 +260,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                 text: AppLocalizations.of(context).translate('name'),
-                style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                 text: ": "+_billDetailsList[0].NAME,style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
@@ -274,7 +274,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child: RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
@@ -289,7 +289,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child: RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('due_date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
@@ -304,7 +304,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('str_consumer_id'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                 text:  ": "+consumerId,
@@ -319,7 +319,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('bill_period'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                 text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' To ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy"),

@@ -93,7 +93,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -190,10 +190,10 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.white,
+                                    color:   _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -205,7 +205,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                   AppLocalizations.of(context)
                                       .translate('male'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -230,10 +230,10 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -245,7 +245,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                   AppLocalizations.of(context)
                                       .translate('female'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 16),
                                 ),
                               ),
@@ -276,7 +276,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         controller: _dobController,
                         readOnly: true,
                         style: TextStyle(
-                            color: GlobalVariables.green
+                            color: GlobalVariables.darkBlue
                         ),
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).translate('date_of_birth'),
@@ -650,7 +650,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     image: attachmentFilePath.contains("http") ? NetworkImage(attachmentFilePath) : FileImage(File(attachmentFilePath)) ,
                                     fit: BoxFit.cover
                                 ),
-                                border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                border: Border.all(color: GlobalVariables.darkBlue,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
@@ -679,7 +679,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                   ),
                                   label: Text(
                                     AppLocalizations.of(context).translate('attach_photo'),
-                                    style: TextStyle(color: GlobalVariables.green),
+                                    style: TextStyle(color: GlobalVariables.darkBlue),
                                   ),
                                 ),
                               ),
@@ -714,7 +714,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     label: Text(
                                       AppLocalizations.of(context)
                                           .translate('take_picture'),
-                                      style: TextStyle(color: GlobalVariables.green),
+                                      style: TextStyle(color: GlobalVariables.darkBlue),
                                     )),
                               ),
                             ],
@@ -732,7 +732,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                 child: ButtonTheme(
                  // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     onPressed: () {
                       print('call Verify');
                       verifyInfo();
@@ -741,7 +741,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
                     ),
                     child: Text(
                       AppLocalizations.of(context)
@@ -848,7 +848,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         value: _bloodGroupList[i],
         child: Text(
           _bloodGroupList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.darkBlue),
         ),
       ));
     }
@@ -863,7 +863,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         value: _membershipTypeList[i],
         child: Text(
           _membershipTypeList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.darkBlue),
         ),
       ));
     }
@@ -878,7 +878,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         value: _livesHereList[i],
         child: Text(
           _livesHereList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.darkBlue),
         ),
       ));
     }

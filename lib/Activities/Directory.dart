@@ -96,7 +96,7 @@ class DirectoryState extends State<BaseDirectory> {
       builder: (context) => Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           leading: InkWell(
             onTap: () {

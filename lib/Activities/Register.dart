@@ -53,7 +53,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                   TextSpan(
                       text: " " +
                           AppLocalizations.of(context).translate('register'),
-                      style: TextStyle(fontSize: 18, color: GlobalVariables.green)),
+                      style: TextStyle(fontSize: 18, color: GlobalVariables.darkBlue)),
                   TextSpan(
                       text: AppLocalizations.of(context).translate('with_us'),
                       style: TextStyle(
@@ -74,12 +74,12 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                     ),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.darkBlue,
                           width: 2.0,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -99,12 +99,12 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                     ),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.darkBlue,
                           width: 2.0,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -125,10 +125,10 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                       color: GlobalVariables.lightGray,
                     ),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -149,10 +149,10 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                       color: GlobalVariables.lightGray,
                     ),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -171,12 +171,12 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                     ),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.darkBlue,
                           width: 2.0,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.green, width: 2.0),
+                        borderSide: BorderSide(color: GlobalVariables.darkBlue, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -192,7 +192,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                       child: ButtonTheme(
                         minWidth: MediaQuery.of(context).size.width / 2,
                         child: RaisedButton(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.darkBlue,
                           onPressed: () {
 
                             Navigator.push(context, MaterialPageRoute(
@@ -204,7 +204,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                           //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: GlobalVariables.green)),
+                              side: BorderSide(color: GlobalVariables.darkBlue)),
                           child: Text(
                             AppLocalizations.of(context).translate('register'),
                             style:
@@ -235,7 +235,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                                 Navigator.of(context).pop();
                               },
                               style: TextStyle(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.darkBlue,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   height: 1.5)),
@@ -263,7 +263,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                               ),
                               TextSpan(
                                   text: AppLocalizations.of(context).translate('terms_conn'),style: TextStyle(
-                                  color: GlobalVariables.green
+                                  color: GlobalVariables.darkBlue
                               )
                               ),
                             ]
@@ -280,7 +280,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                               ),
                               TextSpan(
                                   text: AppLocalizations.of(context).translate('privacy_statement'),style: TextStyle(
-                                  color: GlobalVariables.green
+                                  color: GlobalVariables.darkBlue
                               )
                               ),
                             ]

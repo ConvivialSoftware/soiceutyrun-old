@@ -34,7 +34,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -125,7 +125,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                   Expanded(
                     child: Container(
                       child: Text(_homeCareList[position].title,style: TextStyle(
-                        color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.w400
+                        color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.w400
                       ),),
                     ),
                   ),

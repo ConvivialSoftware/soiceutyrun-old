@@ -59,7 +59,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   AppLocalizations.of(context)
                                       .translate('login'),
                               style: TextStyle(
-                                  fontSize: 18, color: GlobalVariables.green)),
+                                  fontSize: 18, color: GlobalVariables.darkBlue)),
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate('with_otp'),
@@ -88,14 +88,14 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.darkBlue,
                                   width: 2.0,
                                 ),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.green, width: 2.0),
+                                    color: GlobalVariables.darkBlue, width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
@@ -115,7 +115,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   minWidth:
                                       MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     onPressed: () {
                                       verifyNumber();
                                     },
@@ -124,7 +124,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.green)),
+                                            color: GlobalVariables.darkBlue)),
                                     child: Text(
                                       AppLocalizations.of(context)
                                           .translate('enter'),
@@ -210,7 +210,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                               text: AppLocalizations.of(context)
                                                   .translate('classified_ads'),
                                               style: TextStyle(
-                                                  color: GlobalVariables.green,
+                                                  color: GlobalVariables.darkBlue,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold))),
                                     ),
@@ -240,7 +240,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                             TextSpan(
                                 text: AppLocalizations.of(context)
                                     .translate('terms_conn'),
-                                style: TextStyle(color: GlobalVariables.green)),
+                                style: TextStyle(color: GlobalVariables.darkBlue)),
                           ])),
                         ),
                         Container(
@@ -253,7 +253,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                             TextSpan(
                                 text: AppLocalizations.of(context)
                                     .translate('privacy_statement'),
-                                style: TextStyle(color: GlobalVariables.green)),
+                                style: TextStyle(color: GlobalVariables.darkBlue)),
                           ])),
                         )
                       ],

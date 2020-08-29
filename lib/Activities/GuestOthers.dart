@@ -25,7 +25,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -95,7 +95,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               child: Text(
                 AppLocalizations.of(context).translate('guest_other_arriving_on'),
                 style: TextStyle(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -223,7 +223,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               child: Text(
                 AppLocalizations.of(context).translate('frequently_guest_other_running'),
                 style: TextStyle(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     fontSize: 18,
                     fontWeight: FontWeight.w400),
               ),
@@ -244,10 +244,10 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.darkBlue,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     width: 2.0,
                                   )),
                               child: Icon(Icons.check,
@@ -259,7 +259,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                                 AppLocalizations.of(context)
                                     .translate('once'),
                                 style: TextStyle(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     fontSize: 16),
                               ),
                             ),
@@ -296,7 +296,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                                 AppLocalizations.of(context)
                                     .translate('frequently'),
                                 style: TextStyle(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     fontSize: 16),
                               ),
                             ),
@@ -315,14 +315,14 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               child: ButtonTheme(
                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   onPressed: () {
 
                   },
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
                   ),
                   child: Text(
                     AppLocalizations.of(context)
@@ -482,7 +482,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                 AppLocalizations.of(context)
                     .translate('search_property'),
                 style: TextStyle(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                     fontSize: GlobalVariables.varyLargeText,)),
           )
         ],

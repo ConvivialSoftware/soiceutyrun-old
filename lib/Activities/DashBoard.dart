@@ -289,7 +289,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
       //height: 70,
       // color: GlobalVariables.green,
       decoration: BoxDecoration(
-          color: GlobalVariables.green,
+          color: GlobalVariables.darkBlue,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(50.0), topRight: Radius.circular(50.0))),
       child: BottomNavigationBar(
@@ -1085,7 +1085,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                             width: 10,
                                             height: 10,
                                             decoration: BoxDecoration(
-                                                color: GlobalVariables.green,
+                                                color: GlobalVariables.darkBlue,
                                                 shape: BoxShape.circle),
                                           ),
                                           Container(
@@ -1568,7 +1568,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                         Text(
                           " Rs. " + duesRs,
                           style: TextStyle(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.darkBlue,
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
@@ -1576,7 +1576,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                           duesDate,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.darkBlue,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
@@ -1606,7 +1606,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                               AppLocalizations.of(context)
                                   .translate('transaction_history'),
                               style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 16,
                               ),
                             ),
@@ -1621,7 +1621,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                             child: Text(
                               AppLocalizations.of(context).translate('pay_now'),
                               style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 16,
                               ),
                             ),
@@ -1669,7 +1669,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
               child: RaisedButton(
-                color: GlobalVariables.green,
+                color: GlobalVariables.darkBlue,
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -1682,7 +1682,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide(
-                        color: GlobalVariables.green)),
+                        color: GlobalVariables.darkBlue)),
                 child: Text(
                   AppLocalizations.of(context)
                       .translate('i_am_interested'),
@@ -1934,7 +1934,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                       child: Text(
                         AppLocalizations.of(context).translate('yes'),
                         style: TextStyle(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       )),
@@ -1947,7 +1947,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                       child: Text(
                         AppLocalizations.of(context).translate('no'),
                         style: TextStyle(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       )),

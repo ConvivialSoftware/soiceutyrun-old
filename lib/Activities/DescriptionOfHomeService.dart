@@ -36,7 +36,7 @@ class DescriptionOfHomeServiceState
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -130,7 +130,7 @@ class DescriptionOfHomeServiceState
                   child: Text(
                     'Service Description',
                     style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
                   ),
@@ -176,7 +176,7 @@ class DescriptionOfHomeServiceState
                   child: Text(
                     'Charges',
                     style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
                   ),
@@ -207,7 +207,7 @@ class DescriptionOfHomeServiceState
                   child: Text(
                     'Tell us your requirment',
                     style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
                   ),
@@ -239,7 +239,7 @@ class DescriptionOfHomeServiceState
                   child: Text(
                     'Requester Details',
                     style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
                   ),
@@ -275,7 +275,7 @@ class DescriptionOfHomeServiceState
                                   child: Text(
                                     name,
                                     style: TextStyle(
-                                        color: GlobalVariables.green,
+                                        color: GlobalVariables.darkBlue,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -321,7 +321,7 @@ class DescriptionOfHomeServiceState
                             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                             decoration: BoxDecoration(
-                                color:GlobalVariables.green,
+                                color:GlobalVariables.darkBlue,
                                 borderRadius: BorderRadius.circular(30)),
                             child:Icon(Icons.edit,color: GlobalVariables.white,size: 20,)
                         ),
@@ -339,13 +339,13 @@ class DescriptionOfHomeServiceState
             child: ButtonTheme(
               // minWidth: MediaQuery.of(context).size.width/2,
               child: RaisedButton(
-                color: GlobalVariables.green,
+                color: GlobalVariables.darkBlue,
                 onPressed: () {},
                 textColor: GlobalVariables.white,
                 //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: GlobalVariables.green)),
+                    side: BorderSide(color: GlobalVariables.darkBlue)),
                 child: Text(
                   AppLocalizations.of(context).translate('submit'),
                   style: TextStyle(fontSize: GlobalVariables.largeText),
@@ -377,7 +377,7 @@ class DescriptionOfHomeServiceState
               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
               child: Text(
                 _homeCareList[0].serviceList[position].serviceName,
-                style: TextStyle(color: GlobalVariables.green),
+                style: TextStyle(color: GlobalVariables.darkBlue),
               ),
             )
           ],
@@ -411,7 +411,7 @@ class DescriptionOfHomeServiceState
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         child: Text(
                           _homeCareList[0].chargesList[position].chargesName,
-                          style: TextStyle(color: GlobalVariables.green),
+                          style: TextStyle(color: GlobalVariables.darkBlue),
                         ),
                       ),
                     ],

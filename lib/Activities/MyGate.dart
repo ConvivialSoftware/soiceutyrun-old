@@ -95,7 +95,7 @@ class MyGateState extends State<BaseMyGate>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -363,7 +363,7 @@ class MyGateState extends State<BaseMyGate>
                     controller: _dateController,
                     readOnly: true,
                     style: TextStyle(
-                      color: GlobalVariables.green
+                      color: GlobalVariables.darkBlue
                     ),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -420,7 +420,7 @@ class MyGateState extends State<BaseMyGate>
                 Icons.add,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.darkBlue,
             ),
           )
         ],
@@ -500,7 +500,7 @@ class MyGateState extends State<BaseMyGate>
                           child: Text(
                             _activitiesList[position].VISITOR_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -557,7 +557,7 @@ class MyGateState extends State<BaseMyGate>
                   child: Text(
                     Time,
                     style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 12,
                     ),
                   ),
@@ -580,7 +580,7 @@ class MyGateState extends State<BaseMyGate>
                   child: Text(
                     Date,
                     style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 12,
                     ),
                   ),
@@ -605,7 +605,7 @@ class MyGateState extends State<BaseMyGate>
                     child: Text(
                       _activitiesList[position].VISITOR_NAME,
                       style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 12,),
                     ),
                   ),
@@ -635,7 +635,7 @@ class MyGateState extends State<BaseMyGate>
                     padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                     ),
                     child: FlatButton.icon(
                       onPressed: (){},
@@ -650,7 +650,7 @@ class MyGateState extends State<BaseMyGate>
                     padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                     ),
                     child: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.cancel,color: GlobalVariables.white,size: 20,), label:Text(AppLocalizations.of(context).translate('cancel'),style: TextStyle(
                         color: GlobalVariables.white
@@ -772,7 +772,7 @@ class MyGateState extends State<BaseMyGate>
               alignment: Alignment(1.15, -1.15),
               child: Container(
                 decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: IconButton(
@@ -809,7 +809,7 @@ class MyGateState extends State<BaseMyGate>
                                 child: Text(
                                   AppLocalizations.of(context).translate('visitor_arriving_on'),
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -938,7 +938,7 @@ class MyGateState extends State<BaseMyGate>
                                 child: ButtonTheme(
                                   // minWidth: MediaQuery.of(context).size.width/2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     onPressed: () {
 
                                       verifyVisitorDetails();
@@ -947,7 +947,7 @@ class MyGateState extends State<BaseMyGate>
                                     textColor: GlobalVariables.white,
                                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
                                     ),
                                     child: Text(
                                       AppLocalizations.of(context)
@@ -990,7 +990,7 @@ class MyGateState extends State<BaseMyGate>
         value: _scheduleList[i],
         child: Text(
           _scheduleList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.darkBlue),
         ),
       ));
     }
@@ -1150,7 +1150,7 @@ class MyGateState extends State<BaseMyGate>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.share,color: GlobalVariables.green,), onPressed: (){
+                      IconButton(icon: Icon(Icons.share,color: GlobalVariables.darkBlue,), onPressed: (){
                         Navigator.of(context).pop();
                         GlobalFunctions.shareData('PassCode', parsedString);
                       }),
@@ -1158,7 +1158,7 @@ class MyGateState extends State<BaseMyGate>
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Text(AppLocalizations.of(context).translate('share'),style: TextStyle(
                             fontSize: 12
-                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
+                            ,fontWeight: FontWeight.bold,color: GlobalVariables.darkBlue
                         ),),
                       )
                     ],
@@ -1169,7 +1169,7 @@ class MyGateState extends State<BaseMyGate>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
+                      IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.darkBlue,), onPressed: (){
                         Navigator.of(context).pop();
                         ClipboardManager.copyToClipBoard(pass_code).then((value) {
                           GlobalFunctions.showToast("Copied to Clipboard");
@@ -1179,7 +1179,7 @@ class MyGateState extends State<BaseMyGate>
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
                             fontSize: 12
-                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
+                            ,fontWeight: FontWeight.bold,color: GlobalVariables.darkBlue
                         ),),
                       )
                     ],

@@ -37,7 +37,7 @@ ProgressDialog _progressDialog;
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -172,14 +172,14 @@ ProgressDialog _progressDialog;
                 child: ButtonTheme(
                  // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     onPressed: () {
                       verifyPassword();
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
                     ),
                     child: Text(
                       AppLocalizations.of(context)

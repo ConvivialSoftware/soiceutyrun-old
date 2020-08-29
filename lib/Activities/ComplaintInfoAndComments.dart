@@ -79,7 +79,7 @@ class ComplaintInfoAndCommentsState
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -177,7 +177,7 @@ class ComplaintInfoAndCommentsState
                                   child: Text(
                                     'Ticket No: ' + complaints.TICKET_NO,
                                     style: TextStyle(
-                                        color: GlobalVariables.green,
+                                        color: GlobalVariables.darkBlue,
                                         fontSize: 12),
                                   ),
                                 ),
@@ -188,7 +188,7 @@ class ComplaintInfoAndCommentsState
                               child: AutoSizeText(complaints.SUBJECT,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.darkBlue,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                             ),
@@ -207,7 +207,7 @@ class ComplaintInfoAndCommentsState
                                   child: Text(
                                     'Category: ',
                                     style: TextStyle(
-                                        color: GlobalVariables.green,
+                                        color: GlobalVariables.darkBlue,
                                         fontSize: 14),
                                   ),
                                 ),
@@ -322,7 +322,7 @@ class ComplaintInfoAndCommentsState
                         child: ButtonTheme(
                           // minWidth: MediaQuery.of(context).size.width/2,
                           child: RaisedButton(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             onPressed: () {
                               isComment = false;
                               updateComplaintStatus(context);
@@ -331,7 +331,7 @@ class ComplaintInfoAndCommentsState
                             //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: GlobalVariables.green)),
+                                side: BorderSide(color: GlobalVariables.darkBlue)),
                             child: AutoSizeText(
                               AppLocalizations.of(context).translate('submit'),
                               style:
@@ -351,7 +351,7 @@ class ComplaintInfoAndCommentsState
                 child: Text(
                   AppLocalizations.of(context).translate('comments'),
                   style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
@@ -432,7 +432,7 @@ class ComplaintInfoAndCommentsState
                 padding: EdgeInsets.all(5),
                 margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Icon(
@@ -519,7 +519,7 @@ class ComplaintInfoAndCommentsState
                           child: Text(
                             _commentsList[position].NAME,
                             style: TextStyle(
-                                color: GlobalVariables.green, fontSize: 16),
+                                color: GlobalVariables.darkBlue, fontSize: 16),
                           ),
                         ), /*Container(
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -589,7 +589,7 @@ class ComplaintInfoAndCommentsState
         value: _complaintStatusList[i].complaintStatus,
         child: Text(
           _complaintStatusList[i].complaintStatus,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.darkBlue),
         ),
       ));
     }

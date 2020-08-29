@@ -58,7 +58,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -312,7 +312,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Text("Rs. "+_ledgerList[position].AMOUNT.toString(),style: TextStyle(
-                            color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.green: GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
+                            color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.darkBlue: GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
                         ),),
                       ),
                     )

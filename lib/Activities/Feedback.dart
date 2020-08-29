@@ -50,7 +50,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
       builder: (context) =>
           Scaffold(
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.darkBlue,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -176,7 +176,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                               fit: BoxFit.cover
                           ),
                           border: Border.all(
-                              color: GlobalVariables.green, width: 2.0)
+                              color: GlobalVariables.darkBlue, width: 2.0)
                       ),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                     ),
@@ -207,7 +207,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                             label: Text(
                               AppLocalizations.of(context).translate(
                                   'attach_photo'),
-                              style: TextStyle(color: GlobalVariables.green),
+                              style: TextStyle(color: GlobalVariables.darkBlue),
                             ),
                           ),
                         ),
@@ -244,7 +244,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                               label: Text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.green),
+                                style: TextStyle(color: GlobalVariables.darkBlue),
                               )),
                         ),
                       ],
@@ -260,7 +260,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.darkBlue,
                     onPressed: () {
                       verifyData();
                     },
@@ -268,7 +268,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
+                        side: BorderSide(color: GlobalVariables.darkBlue)),
                     child: Text(
                       AppLocalizations.of(context).translate('submit'),
                       style: TextStyle(fontSize: GlobalVariables.largeText),

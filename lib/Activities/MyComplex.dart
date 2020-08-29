@@ -173,7 +173,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -309,7 +309,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Text(
                             _announcementList[position].USER_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -378,7 +378,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Text(
               _announcementList[position].SUBJECT,
               style: TextStyle(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             //  maxLines: 1,
@@ -522,7 +522,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Text(
                       "Attachment",
                       style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -697,7 +697,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Text(
                             _meetingList[position].USER_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -766,7 +766,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Text(
               _meetingList[position].SUBJECT,
               style: TextStyle(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             //  maxLines: 1,
@@ -909,7 +909,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Text(
                       "Attachment",
                       style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -1020,7 +1020,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Text(
                             _pollSurveyList[position].username,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -1071,7 +1071,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Text(
               _pollSurveyList[position].surveyTitle,
               style: TextStyle(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
               maxLines: 1,
@@ -1142,7 +1142,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                                                   i]
                                                               .isSelected ==
                                                           true
-                                                      ? GlobalVariables.green
+                                                      ? GlobalVariables.darkBlue
                                                       : GlobalVariables
                                                           .transparent,
                                                   borderRadius:
@@ -1154,7 +1154,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                                                     i]
                                                                 .isSelected ==
                                                             true
-                                                        ? GlobalVariables.green
+                                                        ? GlobalVariables.darkBlue
                                                         : GlobalVariables
                                                             .mediumGreen,
                                                     width: 2.0,
@@ -1180,7 +1180,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                                     .radioText,
                                                 style: TextStyle(
                                                     color:
-                                                        GlobalVariables.green,
+                                                        GlobalVariables.darkBlue,
                                                     fontSize: 16),
                                               ),
                                             ),
@@ -1494,7 +1494,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           alignment: Alignment.topLeft,
           child: Text(
             type,
-            style: TextStyle(color: position==0 ? GlobalVariables.white:GlobalVariables.green, fontSize: 20),
+            style: TextStyle(color: position==0 ? GlobalVariables.white:GlobalVariables.darkBlue, fontSize: 20),
           ),
         ),
         Container(
@@ -1552,7 +1552,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Text(
                             type == 'Near By Shops'? 'Coming Soon...' : AppLocalizations.of(context).translate('view_more'),
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -1560,7 +1560,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         type != 'Near By Shops' ?Container(
                           child: Icon(
                             Icons.fast_forward,
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                           ),
                         ) : Container()
                       ],
@@ -1668,7 +1668,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       //color: GlobalVariables.grey,
                       child: Text(
                         name,
-                        style: TextStyle(color: GlobalVariables.green, fontSize: 16,),
+                        style: TextStyle(color: GlobalVariables.darkBlue, fontSize: 16,),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -2078,7 +2078,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Text(
                             _eventList[position].USER_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -2129,7 +2129,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Text(
               _eventList[position].SUBJECT,
               style: TextStyle(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.darkBlue,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
               //maxLines: 1,
@@ -2175,14 +2175,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         child: Text(
                           "Venue : ",
                           style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                              color: GlobalVariables.darkBlue, fontSize: 14),
                         ),
                       ),
                       Container(
                         child: Text(
                           _eventList[position].VENUE,
                           style: TextStyle(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             fontSize: 14,
                           ),
                         ),
@@ -2206,7 +2206,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         child: Text(
                           "Date : ",
                           style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                              color: GlobalVariables.darkBlue, fontSize: 14),
                         ),
                       ),
                       Container(
@@ -2214,7 +2214,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         child: Text(
                           _eventList[position].START_DATE,
                           style: TextStyle(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             fontSize: 14,
                           ),
                         ),
@@ -2238,7 +2238,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         child: Text(
                           "Time : ",
                           style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                              color: GlobalVariables.darkBlue, fontSize: 14),
                         ),
                       ),
                       Container(
@@ -2246,7 +2246,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         child: Text(
                           _eventList[position].Start_Time+' TO '+ _eventList[position].END_TIME,
                           style: TextStyle(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             fontSize: 14,
                           ),
                         ),
@@ -2299,7 +2299,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Text(
                       "Attachment",
                       style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.darkBlue,
                         fontSize: 10,
                       ),
                     ),
@@ -2706,7 +2706,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: GlobalVariables.green,
+                                        color: GlobalVariables.darkBlue,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -2818,7 +2818,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                           child: Text(
                             "Attachment",
                             style: TextStyle(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.darkBlue,
                               fontSize: 10,
                             ),
                           ),
@@ -2853,7 +2853,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         return GlobalVariables.orangeYellow;
         break;
       case "agm-em":
-        return GlobalVariables.green;
+        return GlobalVariables.darkBlue;
         break;
       default:
         return GlobalVariables.skyBlue;
