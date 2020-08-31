@@ -88,8 +88,8 @@ dev_dependencies:
 flutter_icons:
   ios : true
   android : true
-  image_path_ios : "assets/images/svc_logo.jpg"
-  image_path_android : "assets/images/svc_logo.jpg"
+  image_path_ios : "assets/images/svc_app_icon.png"
+  image_path_android : "assets/images/svc_app_icon.png"
 
 flutter_launcher_name:
   name: "SVC"
@@ -102,6 +102,7 @@ flutter:
   assets:
     - assets/audio/
     - assets/images/svc_logo.jpg
+    - assets/images/svc_app_icon.png
     - assets/images/society_run_green.png
     - assets/images/society_run_green.svg
     - assets/images/society_run_white.png

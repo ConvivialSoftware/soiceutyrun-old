@@ -81,7 +81,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
       if (internet) {
         getDuesData();
         getAllSocietyData();
-      //  getBannerData();
+        getBannerData();
         geProfileData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
