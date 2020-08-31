@@ -240,7 +240,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                 Container(
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: GlobalVariables.lightGreen,
+                    backgroundColor: GlobalVariables.lightBlue,
                   ),
                 ),
                 Container(
@@ -250,7 +250,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                       Container(
                           child: Icon(
                         Icons.call,
-                        color: GlobalVariables.lightGreen,
+                        color: GlobalVariables.lightBlue,
                         size: 20,
                       )),
                       Container(
@@ -263,7 +263,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                       Container(
                           child: Icon(
                         Icons.share,
-                        color: GlobalVariables.lightGreen,
+                        color: GlobalVariables.lightBlue,
                         size: 20,
                       )),
                     ],
@@ -740,7 +740,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                                         child: CircleAvatar(
                                           radius: 20,
                                           backgroundColor:
-                                              GlobalVariables.lightGreen,
+                                              GlobalVariables.lightBlue,
                                         ),
                                       ),
                                     ),
@@ -1042,7 +1042,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor:
-                          GlobalVariables.lightGreen,
+                          GlobalVariables.lightBlue,
                         ),
                       ),
                       Container(

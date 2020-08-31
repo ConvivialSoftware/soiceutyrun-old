@@ -307,7 +307,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             counterText: '',
                           suffixIcon: Icon(
                             Icons.phone_android,
-                            color: GlobalVariables.lightGreen,
+                            color: GlobalVariables.lightBlue,
                           ),
                         ),
                       ),
@@ -362,7 +362,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                       border: InputBorder.none,
                     suffixIcon: Icon(
                       Icons.email,
-                      color: GlobalVariables.lightGreen,
+                      color: GlobalVariables.lightBlue,
                     ),
                   ),
                 ),

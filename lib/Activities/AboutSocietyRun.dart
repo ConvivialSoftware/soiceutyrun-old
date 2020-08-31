@@ -150,7 +150,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: GlobalVariables.lightGreen,
+                  color: GlobalVariables.lightBlue,
                   borderRadius:
                   BorderRadius.all(Radius.circular(10))),
               margin: EdgeInsets.all(20),

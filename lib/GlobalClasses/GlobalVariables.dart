@@ -200,7 +200,7 @@ class GlobalVariables{
   static const Color veryLightGray =const Color(0xFFE0E0E0);
   static const Color grey =const Color(0xFF66766F);
   static const Color darkBlue =const Color(0xFF005496);
-  static const Color lightGreen =const Color(0xFFDAF7D5);
+  static const Color lightBlue =const Color(0xFFC7f0FF);
   static const Color mediumBlue =const Color(0xFF00AEEF);
   static const Color transparent =const Color(0xFF00000000);
   static const Color skyBlue =const Color(0xFF64B5F6);

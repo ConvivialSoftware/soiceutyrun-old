@@ -278,7 +278,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(5),
-          color: GlobalVariables.lightGreen,
+          color: GlobalVariables.lightBlue,
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Text(_ledgerList[position].C_DATE,style: TextStyle(
@@ -321,7 +321,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 position!=_ledgerList.length-1 ? Container(
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                   child: Divider(
-                    color: GlobalVariables.lightGreen,
+                    color: GlobalVariables.lightBlue,
                     height: 3,
                   ),
                 ):Container(),

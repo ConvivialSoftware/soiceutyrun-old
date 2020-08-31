@@ -322,7 +322,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           ),
                           suffixIcon: Icon(
                             Icons.phone_android,
-                            color: GlobalVariables.lightGreen,
+                            color: GlobalVariables.lightBlue,
                           ),
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
@@ -373,7 +373,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     ),
                     suffixIcon: Icon(
                       Icons.phone_android,
-                      color: GlobalVariables.lightGreen,
+                      color: GlobalVariables.lightBlue,
                     ),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -416,7 +416,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                       border: InputBorder.none,
                     suffixIcon: Icon(
                       Icons.email,
-                      color: GlobalVariables.lightGreen,
+                      color: GlobalVariables.lightBlue,
                     ),
                   ),
                 ),

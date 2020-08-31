@@ -120,7 +120,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             ),
                             suffixIcon: Icon(
                               Icons.mail,
-                              color: GlobalVariables.lightGreen,
+                              color: GlobalVariables.lightBlue,
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -163,7 +163,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               },
                               icon: Icon(
                                 Icons.remove_red_eye,
-                                color: GlobalVariables.lightGreen,
+                                color: GlobalVariables.lightBlue,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(

@@ -1,4 +1,4 @@
-package com.societyrun12;
+package com.svcpro;
 
 import android.app.ActivityManager;
 import android.content.Context;

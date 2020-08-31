@@ -118,7 +118,7 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                       ),
                       suffixIcon: Icon(
                         Icons.phone_android,
-                        color: GlobalVariables.lightGreen,
+                        color: GlobalVariables.lightBlue,
                       ),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(

@@ -384,7 +384,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightGreen,
+        color: GlobalVariables.lightBlue,
         borderRadius: BorderRadius.circular(10)
       ),
       child: Column(

@@ -646,7 +646,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                 padding: EdgeInsets.all(15),
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.lightGreen,
+                                    color: GlobalVariables.lightBlue,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   mainAxisAlignment:
@@ -669,7 +669,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                                 padding: EdgeInsets.all(15),
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.lightGreen,
+                                    color: GlobalVariables.lightBlue,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   mainAxisAlignment:

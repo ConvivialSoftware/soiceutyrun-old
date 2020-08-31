@@ -498,7 +498,7 @@ class ComplaintInfoAndCommentsState
                     0, 0, 0, 0), // color: GlobalVariables.black,
             child: CircleAvatar(
               radius: 25,
-              backgroundColor: GlobalVariables.lightGreen,
+              backgroundColor: GlobalVariables.lightBlue,
               backgroundImage: userId != _commentsList[position].USER_ID ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : NetworkImage(photo),
             )
           ),

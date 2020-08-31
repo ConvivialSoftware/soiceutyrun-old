@@ -1428,13 +1428,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           height: 70,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(35),
-                              color: GlobalVariables.lightGreen),
+                              color: GlobalVariables.lightBlue),
                         )
                       : CircleAvatar(
                           radius: 35,
                           backgroundImage:
                               NetworkImage(_list[position].PROFILE_PHOTO),
-                          backgroundColor: GlobalVariables.lightGreen,
+                          backgroundColor: GlobalVariables.lightBlue,
                         )
                   : _list[position].IMAGE.length == 0
                       ? Container(
@@ -1442,12 +1442,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           height: 70,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(35),
-                              color: GlobalVariables.lightGreen),
+                              color: GlobalVariables.lightBlue),
                         )
                       : CircleAvatar(
                           radius: 35,
                           backgroundImage: NetworkImage(_list[position].IMAGE),
-                          backgroundColor: GlobalVariables.lightGreen,
+                          backgroundColor: GlobalVariables.lightBlue,
                         ),
             ),
             Container(
@@ -1479,7 +1479,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           child: Container(
                               child: Icon(
                             Icons.call,
-                            color: GlobalVariables.lightGreen,
+                            color: GlobalVariables.lightBlue,
                           )),
                         ),
                         InkWell(
@@ -1496,7 +1496,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           child: Container(
                               child: Icon(
                             Icons.share,
-                            color: GlobalVariables.lightGreen,
+                            color: GlobalVariables.lightBlue,
                           )),
                         )
                       ],

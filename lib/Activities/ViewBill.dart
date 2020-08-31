@@ -384,7 +384,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             position!=_recentTransactionList.length-1 ? Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
               child: Divider(
-                color: GlobalVariables.lightGreen,
+                color: GlobalVariables.lightBlue,
                 height: 3,
               ),
             ):Container(),

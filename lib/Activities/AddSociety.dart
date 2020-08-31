@@ -126,7 +126,7 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
               Container(
                 //   color: GlobalVariables.lightGreen,
                 decoration: BoxDecoration(
-                    color: GlobalVariables.lightGreen,
+                    color: GlobalVariables.lightBlue,
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
                 margin: EdgeInsets.all(20),

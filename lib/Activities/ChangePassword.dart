@@ -123,7 +123,7 @@ ProgressDialog _progressDialog;
                       },
                       icon: Icon(
                         Icons.remove_red_eye,
-                        color: GlobalVariables.lightGreen,
+                        color: GlobalVariables.lightBlue,
                       ),
                     ),
                   ),
@@ -159,7 +159,7 @@ ProgressDialog _progressDialog;
                       },
                       icon: Icon(
                         Icons.remove_red_eye,
-                        color: GlobalVariables.lightGreen,
+                        color: GlobalVariables.lightBlue,
                       ),
                     ),
                   ),

@@ -1,4 +1,4 @@
-package com.societyrun12;
+package com.svcpro;
 
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin;

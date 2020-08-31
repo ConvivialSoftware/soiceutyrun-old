@@ -84,7 +84,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                             ),
                             suffixIcon: Icon(
                               Icons.phone_android,
-                              color: GlobalVariables.lightGreen,
+                              color: GlobalVariables.lightBlue,
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -189,7 +189,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                         Container(
                           //   color: GlobalVariables.lightGreen,
                           decoration: BoxDecoration(
-                              color: GlobalVariables.lightGreen,
+                              color: GlobalVariables.lightBlue,
                               borderRadius:
                               BorderRadius.all(Radius.circular(10))),
                           margin: EdgeInsets.all(20),
