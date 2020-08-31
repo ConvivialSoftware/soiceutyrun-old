@@ -42,7 +42,7 @@ class BaseDashBoard extends StatefulWidget {
   }
 }
 
-class DashBoardState extends BaseStatefulState<BaseDashBoard> {
+class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindingObserver{
   final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
   new GlobalKey<ScaffoldState>();
 
@@ -75,7 +75,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     getPhoto();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -88,6 +88,29 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
             .translate('pls_check_internet_connectivity'));
       }
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed){
+      // user returned to our app
+    //  GlobalFunctions.showToast('Resume');
+    }else if(state == AppLifecycleState.inactive){
+      // app is inactive
+     // GlobalFunctions.showToast('Inactive');
+    }else if(state == AppLifecycleState.paused){
+      // user is about quit our app temporally
+     // GlobalFunctions.showToast('Paused');
+    }else if(state == AppLifecycleState.detached){
+      // user is about quit our app temporally
+    //  GlobalFunctions.showToast('Detached');
+    }
   }
 
   void geProfileData() async {
@@ -723,9 +746,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
     );
   }
 
-  getMyUnitPage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));
+  getMyUnitPage() async {
+    final result = await   Navigator.push(context,
+        MaterialPageRoute(builder: (context) =>
+            BaseMyUnit(null)));
+    print('result back : '+ result.toString());
+    if(result=='back'){
+      getDuesData();
+    }
   }
 
   getMyComplexPage() {
@@ -1724,12 +1752,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
     });
   }
 
-  void redirectToPage(String item) {
+  Future<void> redirectToPage(String item) async {
     if (item == AppLocalizations.of(context).translate('my_unit')) {
       //Redirect to my Unit
-      Navigator.push(context,
+      final result = await   Navigator.push(context,
           MaterialPageRoute(builder: (context) =>
               BaseMyUnit(AppLocalizations.of(context).translate('my_unit'))));
+      print('result back : '+ result.toString());
+      if(result=='back'){
+        getDuesData();
+      }
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
       Navigator.push(

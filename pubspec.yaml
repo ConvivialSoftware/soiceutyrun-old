@@ -156,6 +156,8 @@ flutter:
     - assets/other_assets/coming_soon.png
     - assets/other_assets/bike.svg
     - assets/other_assets/change_password.svg
+    - assets/other_assets/success.svg
+    - assets/other_assets/failure.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
