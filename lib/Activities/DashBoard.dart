@@ -81,7 +81,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
       if (internet) {
         getDuesData();
         getAllSocietyData();
-        getBannerData();
+      //  getBannerData();
         geProfileData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
@@ -782,12 +782,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> {
                 Container(
                   /*child: Image.asset(GlobalVariables.appLogoPath,
                     width: 250, height: 80, fit: BoxFit.fill),*/
-                  margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
-                  padding: EdgeInsets.all(5),
-                  alignment: Alignment.topLeft,
-                  child: SvgPicture.asset(
+                  margin: EdgeInsets.fromLTRB(10, 40, 5, 1),
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  child: Image.asset(
                     GlobalVariables.drawerImagePath,
-                    height: 40,
+                    height: 50,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 Container(

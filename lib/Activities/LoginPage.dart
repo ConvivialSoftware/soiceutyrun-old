@@ -56,7 +56,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
     super.initState();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getBannerData();
+      //  getBannerData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));

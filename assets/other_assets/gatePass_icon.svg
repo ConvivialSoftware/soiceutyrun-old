@@ -1,6 +1,6 @@
 <svg id="Face_Detection" data-name="Face Detection" xmlns="http://www.w3.org/2000/svg" width="23.486" height="30.634" viewBox="0 0 23.486 30.634">
-  <path id="Path_129" data-name="Path 129" d="M24,17.085a4.085,4.085,0,0,1,8.169,0H30.637l-1.021-1.532-2.042,1.532Z" transform="translate(-16.341 -7.384)" fill="#bedcb9"/>
-  <path id="Path_130" data-name="Path 130" d="M32.3,40.87V41.6H18V40.87a3.07,3.07,0,0,1,2.257-2.956L23.616,37a1.532,1.532,0,1,0,3.063,0l3.36.914A3.07,3.07,0,0,1,32.3,40.87Z" transform="translate(-13.405 -19.13)" fill="#bedcb9"/>
+  <path id="Path_129" data-name="Path 129" d="M24,17.085a4.085,4.085,0,0,1,8.169,0H30.637l-1.021-1.532-2.042,1.532Z" transform="translate(-16.341 -7.384)" fill="#00aff0"/>
+  <path id="Path_130" data-name="Path 130" d="M32.3,40.87V41.6H18V40.87a3.07,3.07,0,0,1,2.257-2.956L23.616,37a1.532,1.532,0,1,0,3.063,0l3.36.914A3.07,3.07,0,0,1,32.3,40.87Z" transform="translate(-13.405 -19.13)" fill="#00aff0"/>
   <g id="Group_3" data-name="Group 3">
     <path id="Path_131" data-name="Path 131" d="M29.934,2H11.553A2.556,2.556,0,0,0,9,4.553V30.082a2.556,2.556,0,0,0,2.553,2.553H29.934a2.556,2.556,0,0,0,2.553-2.553V4.553A2.556,2.556,0,0,0,29.934,2Zm1.532,28.082a1.532,1.532,0,0,1-1.532,1.532H11.553a1.532,1.532,0,0,1-1.532-1.532V4.553a1.532,1.532,0,0,1,1.532-1.532H29.934a1.532,1.532,0,0,1,1.532,1.532Z" transform="translate(-9 -2)" fill="#374140"/>
     <path id="Path_132" data-name="Path 132" d="M31,6h1.021V7.021H31Z" transform="translate(-19.767 -3.958)" fill="#374140"/>

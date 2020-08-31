@@ -33,9 +33,9 @@ class GlobalVariables{
   static var keyDuesDate="dues_date";
   static var keyGoogleCoordinate="google_parameter";
 
-  static var appLogoPath="assets/images/society_run_green.png";
+  static var appLogoPath="assets/images/svc_logo.jpg";
   static var userProfilePath="assets/images/user_profile.jpeg";
-  static var drawerImagePath="assets/other_assets/societyrun-logo_colored.svg";
+  static var drawerImagePath="assets/images/svc_logo.jpg";
   static var appIconPath="assets/other_assets/societyrun-logo.svg";
   static var myFlatIconPath="assets/menu_assets/myhome_icon.svg";
   static var myBuildingIconPath="assets/menu_assets/building_icon_menu.svg";
@@ -99,7 +99,7 @@ class GlobalVariables{
 
   static const authorizedToken = "admin:1234";
   static var AUTH="Basic "+base64Url.encode(utf8.encode(authorizedToken));
-  static const BaseURL = "https://societyrun.com/Flutter/";
+  static const BaseURL = "http://svcsocietypro.com/Flutter/";
   static const BaseURLAndroid = "https://societyrun.com/Android/";
   /*Api Name for BaseURL*/
   static const LoginAPI = "Api";
@@ -314,11 +314,11 @@ class SocietyRun{
   static const companyName="Convivial Software Pvt. Ltd.";
   static const salesContact="+91 8055551809";
   static const salesContact1="+91 8082697529";
-  static const supportContact="020 46304333";
+  static const supportContact="022 71991334";
   static const webSite="http://www.convivialsolutions.com/";
   static const salesEmail="Sales@societyrun.com";
-  static const supportEmail="Support@societyrun.com";
+  static const supportEmail="support@svcsocietypro.com";
   static const puneAddress="Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
-  static const mumbaiAddress="F70, Haware Fantasia Business Park,Near Vashi Station & Inorbit Mall,Vashi, Navi Mumbai - 400705";
+  static const mumbaiAddress="Dosti Pinnacle Plot No. E-7, Road No. 22, Wagle Estate, Thane-400604.";
   static const versionCode="1.0.0";
 }

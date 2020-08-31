@@ -214,7 +214,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                      Row(
+                     /* Row(
                         children: [
                           Container(
                             alignment: Alignment.topLeft,
@@ -255,7 +255,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                       Row(
                         children: [
                           Container(
@@ -296,7 +296,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                      Row(
+                     /* Row(
                         children: [
                           Container(
                             alignment: Alignment.topLeft,
@@ -326,7 +326,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                       Row(
                         children: [
                           Container(
@@ -375,7 +375,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                      Row(
+                    /*  Row(
                         children: [
                           Flexible(
                             flex: 1,
@@ -400,7 +400,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                       Container(
                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Row(

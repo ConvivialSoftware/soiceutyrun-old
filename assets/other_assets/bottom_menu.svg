@@ -4,7 +4,7 @@
       <rect width="3" height="15" fill="none"/>
     </clipPath>
   </defs>
-  <path id="Rectangle_192" data-name="Rectangle 192" d="M28,0H347a28,28,0,0,1,28,28V56a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V28A28,28,0,0,1,28,0Z" fill="#2ca01c"/>
+  <path id="Rectangle_192" data-name="Rectangle 192" d="M28,0H347a28,28,0,0,1,28,28V56a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V28A28,28,0,0,1,28,0Z" fill="#00aeef"/>
   <g id="Symbol_25_1" data-name="Symbol 25 – 1" transform="translate(346 21)" opacity="0.3" clip-path="url(#clip-path)">
     <path id="Union_1" data-name="Union 1" d="M0,13.5A1.5,1.5,0,1,1,1.5,15,1.5,1.5,0,0,1,0,13.5Zm0-6A1.5,1.5,0,1,1,1.5,9,1.5,1.5,0,0,1,0,7.5Zm0-6A1.5,1.5,0,1,1,1.5,3,1.5,1.5,0,0,1,0,1.5Z" fill="#fff"/>
   </g>

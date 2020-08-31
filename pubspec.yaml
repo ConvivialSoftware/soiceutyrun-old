@@ -88,11 +88,11 @@ dev_dependencies:
 flutter_icons:
   ios : true
   android : true
-  image_path_ios : "assets/images/ic_societyrun.png"
-  image_path_android : "assets/images/ic_societyrun.png"
+  image_path_ios : "assets/images/svc_logo.jpg"
+  image_path_android : "assets/images/svc_logo.jpg"
 
 flutter_launcher_name:
-  name: "SocietyRun"
+  name: "SVC"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -101,7 +101,7 @@ flutter_launcher_name:
 flutter:
   assets:
     - assets/audio/
-    - assets/images/ic_societyrun.png
+    - assets/images/svc_logo.jpg
     - assets/images/society_run_green.png
     - assets/images/society_run_green.svg
     - assets/images/society_run_white.png
