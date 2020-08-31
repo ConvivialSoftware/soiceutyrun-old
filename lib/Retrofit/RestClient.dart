@@ -15,7 +15,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.LoginAPI)
-  Future<LoginResponse> getLogin(@Field("username") String username, @Field("password") String password);
+  Future<LoginResponse> getLogin(@Field("username") String username, @Field("password") String password,@Field("GCM_ID") String token);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.otpLoginAPI)

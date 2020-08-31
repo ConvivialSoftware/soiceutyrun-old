@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 
@@ -18,7 +19,7 @@ class FirebaseMessagingHandler {
 
   void getToken() {
     firebaseMessaging.getToken().then((token) {
-      print('DeviceToken = $token');
+      GlobalFunctions.saveFCMToken(token);
     });
   }
 
