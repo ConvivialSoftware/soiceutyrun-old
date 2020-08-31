@@ -533,7 +533,7 @@ class ComplaintInfoAndCommentsState
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                     child: Text(
-                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm"),
+                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm aa"),
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 12),
                     ),

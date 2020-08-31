@@ -2843,7 +2843,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       'key': razorKey,
       'amount': amount*100,
       'name': societyName,
-      'description': flat +' - '+billType,
+      'description': block+' '+flat +'-'+invoiceNo+'/'+billType,
+      'payment_capture': 1,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -3577,6 +3578,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   paymentSuccessDialog(String paymentId) {
 
+    print('paymentId : '+paymentId.toString());
     return showDialog(
         context: context,
         builder: (BuildContext context) =>
@@ -3607,7 +3609,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(AppLocalizations.of(context)
-                              .translate('transaction_id')+' : '+paymentId)),
+                              .translate('transaction_id')+' : '+paymentId.toString())),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(AppLocalizations.of(context)
