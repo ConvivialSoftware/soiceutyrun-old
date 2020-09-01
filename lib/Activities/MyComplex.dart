@@ -947,11 +947,26 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getPollSurveyListDataLayout() {
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: Container(
-        child: Text('Coming Soon...',style: TextStyle(
-          color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-        ),),
+       // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.all(30),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+                margin: EdgeInsets.all(20),
+                child: Image.asset(GlobalVariables.comingSoonPath,fit: BoxFit.fitWidth,)
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Text(AppLocalizations.of(context).translate('coming_soon_text'),style: TextStyle(
+                  color: GlobalVariables.black,fontSize: 18
+              ),),
+            )
+          ],
+        ),
       ),
     );/*Container(
       //padding: EdgeInsets.all(10),
@@ -1560,7 +1575,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
    // print('Type : '+type);
 
-    bool phone=false,email=false;
+    //bool phone=false,email=false;
     String name='',field='',permission='';
     if(type=='Committee'){
       name =  _directoryList[position]
@@ -1569,22 +1584,26 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       field =  _directoryList[position]
         .directoryTypeWiseList[childPosition].POST;
 
-      _directoryList[position]
+     /* _directoryList[position]
           .directoryTypeWiseList[childPosition].EMAIL.length!= 0 ? email=true : email=false;
 
       _directoryList[position]
-          .directoryTypeWiseList[childPosition].PHONE.length != 0 ? phone=true : phone=false;
+          .directoryTypeWiseList[childPosition].PHONE.length != 0 ? phone=true : phone=false;*/
     }
 
     if(type=='Emergency'){
       name =  _directoryList[position]
-          .directoryTypeWiseList[childPosition].Address;
-
-      field =  _directoryList[position]
+          .directoryTypeWiseList[childPosition].Name==null ? '':  _directoryList[position]
           .directoryTypeWiseList[childPosition].Name;
 
-      _directoryList[position]
-          .directoryTypeWiseList[childPosition].Contact_No.length != 0 ? phone=true : phone=false;
+      field =  _directoryList[position]
+          .directoryTypeWiseList[childPosition].Category == null ? '': _directoryList[position]
+          .directoryTypeWiseList[childPosition].Category ;
+
+      print('name : '+name);
+      print('field : '+field);
+      /*_directoryList[position]
+          .directoryTypeWiseList[childPosition].Contact_No.length != 0 ? phone=true : phone=false;*/
     }
 
     if(type=='Neighbours'){
@@ -1595,14 +1614,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           .directoryTypeWiseList[childPosition].BLOCK+"-"+_directoryList[position]
           .directoryTypeWiseList[childPosition].FLAT;
 
-      permission = _directoryList[position]
+     /* permission = _directoryList[position]
           .directoryTypeWiseList[childPosition].PERMISSIONS;
-      if(permission.contains('memberPhone')){
+      if(permission!=null && permission.contains('memberPhone')){
         phone = true;
       }else{
         phone = false;
       }
-
+*/
     }
 
     if(type=='Near By Shops'){
@@ -2461,71 +2480,39 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
-  Future<void> getCommitteeDirectoryData() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    restClient.getCommitteeDirectoryData(societyId).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
-/*{ID: 54, POST: Chairman, STATUS: A, C_DATE: 2019-12-30 17:20:39, NAME: Pallavi Unde, BLOCK: Block A, FLAT: 301, INTERCOM: 0, EMAIL: pallaviunde@gmail.com, PHONE: 7620016529, SOCIETY_ID: null}*/
-        _committeeList = List<CommitteeDirectory>.from(
-            _list.map((i) => CommitteeDirectory.fromJson(i)));
-        /*setState(() {
-        });*/
-
-      }
-      getEmergencyDirectoryData();
-    });
-  }
-
-  Future<void> getEmergencyDirectoryData() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    restClient.getEmergencyDirectoryData(societyId).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
-/*{ID: 9, Name: Police, Category: For Any Trouble , Contact_No: 100, Address: Pimpri Police Thane., Sequence: 1, STATUS: P}*/
-        _emergencyList = List<EmergencyDirectory>.from(
-            _list.map((i) => EmergencyDirectory.fromJson(i)));
-        /*setState(() {
-        });*/
-        getDirectoryListData();
-        setState(() {
-          isDirectoryTabAPICall=true;
-        });
-      }
-      _progressDialog.hide();
-    });
-  }
-
-  Future<void> getNeighboursDirectoryData() async {
+  Future<void> getAllMemberDirectoryData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
-    restClient.getNeighboursDirectoryData(societyId).then((value) {
+    restClient.getAllMemberDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
       if (value.status) {
-        List<dynamic> _list = value.data;
-
-        //_documentList = List<Documents>.from(_list.map((i)=>Documents.fromJson(i)));
-        /*setState(() {
-        });*/
-
-        /*ID: 8, BLOCK: Block B, FLAT: 701, TYPE: Owner, NAME: Milind J, PERMISSIONS: , Email: milindj@societyrun.com, Phone: 9527105019*/
+        print('memeber status : '+value.status.toString());
+        List<dynamic> neighbourList = value.neighbour;
+        List<dynamic> committeeList = value.committee;
+        List<dynamic> emergencyList = value.emergency;
 
         _neighbourList = List<NeighboursDirectory>.from(
-            _list.map((i) => NeighboursDirectory.fromJson(i)));
+            neighbourList.map((i) => NeighboursDirectory.fromJson(i)));
 
+        _committeeList = List<CommitteeDirectory>.from(
+            committeeList.map((i) => CommitteeDirectory.fromJson(i)));
+
+        _emergencyList = List<EmergencyDirectory>.from(
+            emergencyList.map((i) => EmergencyDirectory.fromJson(i)));
+        getDirectoryListData();
+        print('list : '+_directoryList.toString());
+        setState(() {
+          isDirectoryTabAPICall=true;
+        });
 
       }
-      getCommitteeDirectoryData();
-
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
+            _progressDialog.hide();
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
           }
@@ -2611,7 +2598,8 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           break;
           case 4: {
             if(!isDirectoryTabAPICall) {
-              getNeighboursDirectoryData();
+              //getNeighboursDirectoryData();
+              getAllMemberDirectoryData();
             }
           }
           break;

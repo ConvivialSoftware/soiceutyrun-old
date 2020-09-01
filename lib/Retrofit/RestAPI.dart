@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/AllMemberResponse.dart';
 import 'package:societyrun/Models/BankResponse.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
@@ -245,8 +246,7 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<DataResponse> getStaffData(
-      String socId, String block, String flat) async {
+  Future<DataResponse> getStaffData(String socId, String block, String flat) async {
     // TODO: implement getStaffData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -267,6 +267,29 @@ class RestAPI implements RestClient, RestClientERP {
     final Response _result = await _dio.post(GlobalVariables.unitStaffAPI,
         options: RequestOptions(
             //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getStaffData : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getAllSocietyStaffData(String socId) async {
+    // TODO: implement getStaffData
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId
+    });
+    print(GlobalVariables.societyId + ": " + socId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.unitStaffAPI);
+    final Response _result = await _dio.post(GlobalVariables.unitStaffAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             }, baseUrl: baseUrl),
@@ -310,8 +333,7 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<DataResponse> getComplaintsData(
-      String socId, String block, String flat) async {
+  Future<DataResponse> getComplaintsData(String socId, String block, String flat) async {
     // TODO: implement getComplaintsData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -728,14 +750,14 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
-    ArgumentError.checkNotNull(name, GlobalVariables.NAME);
-    ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
-    ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
-    ArgumentError.checkNotNull(userName, GlobalVariables.USER_NAME);
-    ArgumentError.checkNotNull(mobile, GlobalVariables.MOBILE);
-    ArgumentError.checkNotNull(bloodGroup, GlobalVariables.BLOOD_GROUP);
-    ArgumentError.checkNotNull(occupation, GlobalVariables.OCCUPATION);
-    ArgumentError.checkNotNull(hobbies, GlobalVariables.HOBBIES);
+    //ArgumentError.checkNotNull(name, GlobalVariables.NAME);
+   //ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
+    //ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
+    //ArgumentError.checkNotNull(userName, GlobalVariables.USER_NAME);
+    //ArgumentError.checkNotNull(mobile, GlobalVariables.MOBILE);
+    //ArgumentError.checkNotNull(bloodGroup, GlobalVariables.BLOOD_GROUP);
+    //ArgumentError.checkNotNull(occupation, GlobalVariables.OCCUPATION);
+    //ArgumentError.checkNotNull(hobbies, GlobalVariables.HOBBIES);
     ArgumentError.checkNotNull(membershipType, GlobalVariables.TYPE);
 
     FormData formData = FormData.fromMap({
@@ -845,8 +867,8 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.DATE: date,
       GlobalVariables.userID: userId,
     });
-    //print(GlobalVariables.societyId+": "+socId);
-    //print(GlobalVariables.ticketNo+": "+ticketNo);
+    print(GlobalVariables.NAME+": "+name);
+    print(GlobalVariables.MOBILE_NO+": "+mobile);
 
     print('baseurl : ' + baseUrl + GlobalVariables.AddGatePassScheduleAPI);
     final Response _result =
@@ -1198,8 +1220,14 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.TRANSACTION_MODE: transactionMode,
       GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
       GlobalVariables.PAYMENT_DATE: paymentDate,
+      GlobalVariables.ATTACHMENT:"",
+      GlobalVariables.RESPONSE:""
+    //  Glo
     });
     print(GlobalVariables.AMOUNT+": "+amount.toString());
+    print(GlobalVariables.societyId+": "+socId.toString());
+    print(GlobalVariables.INVOICE_NO+": "+invoiceNo.toString());
+    print(GlobalVariables.PAYMENT_DATE+": "+paymentDate.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.insertPaymentAPI);
 
@@ -1213,7 +1241,7 @@ class RestAPI implements RestClient, RestClientERP {
             }, baseUrl: baseUrl),
         data: formData);
     final value = _result.data;
-    print('value of addAlreadyPaidPaymentRequest : ' + value.toString());
+    print('value of addOnlinePaymentRequest : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
@@ -1510,6 +1538,107 @@ class RestAPI implements RestClient, RestClientERP {
     /*{expire_time: 2020-05-27 03:01:25, otp: 053287, status: true, message: Otp Send}*/
 
     return StatusMsgResponse.fromJsonWithOTP(value);
+  }
+
+  @override
+  Future<DataResponse> getBannerData() async {
+    // TODO: implement getBannerData
+    print('baseurl : ' + baseUrl + GlobalVariables.bannerAPI);
+    final Response _result = await _dio.post(GlobalVariables.bannerAPI,
+        options: RequestOptions(
+            method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            },
+            baseUrl: GlobalVariables.BaseURL),
+    //    data: formData
+    );
+    final value = _result.data;
+    print('value of getBannerData : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getComplaintDataAgainstTicketNo(String socId, String ticketNo) async {
+    // TODO: implement getComplaintDataAgainstTicketNo
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(ticketNo, GlobalVariables.parentTicket);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.parentTicket: ticketNo
+    });
+    print(GlobalVariables.societyId + ": " + socId);
+    print(GlobalVariables.parentTicket + ": " + ticketNo);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.TicketNoComplaintAPI);
+    final Response _result = await _dio.post(GlobalVariables.TicketNoComplaintAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getComplaintDataAgainstTicketNo : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<AllMemberResponse> getAllMemberDirectoryData(String societyId) async {
+    // TODO: implement getAllMemberDirectoryData
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.allMemberAPI);
+    final Response _result = await _dio.post(GlobalVariables.allMemberAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getAllMemberDirectoryData : ' + value.toString());
+    return AllMemberResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> addFeedback(String socId, String block, String flat, String name, String subject, String description, String attachment) async {
+    // TODO: implement addFeedback
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(block, GlobalVariables.block);
+    ArgumentError.checkNotNull(flat, GlobalVariables.flat);
+    ArgumentError.checkNotNull(name, GlobalVariables.STAFF_NAME);
+    ArgumentError.checkNotNull(subject, 'Subject');
+    ArgumentError.checkNotNull(description, 'Description');
+
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.STAFF_NAME: name,
+      'Subject': subject,
+      'Description': description,
+      'Attachment': attachment,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.feedbackAPI);
+    final Response _result = await _dio.post(GlobalVariables.feedbackAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addFeedback : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
   }
 }
 /*    [SOCIETY_ID] => 11133

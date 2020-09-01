@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -300,11 +301,20 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                         ),),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      child: Text("Rs. "+_ledgerList[position].AMOUNT.toString(),style: TextStyle(
-                          color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.green: GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
-                      ),),
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BaseViewBill(
+                                    _ledgerList[position].RECEIPT_NO)));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        child: Text("Rs. "+_ledgerList[position].AMOUNT.toString(),style: TextStyle(
+                            color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.green: GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
+                        ),),
+                      ),
                     )
                   ],
                 ),

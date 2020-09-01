@@ -1,6 +1,12 @@
+import 'dart:convert';
+
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/parser.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -82,7 +88,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
       if(_contact!=null){
         _nameController.text = _contact.fullName;
-        _mobileController.text = _contact.phoneNumber.toString();
+        String phoneNumber = _contact.phoneNumber.toString().substring(0,_contact.phoneNumber.toString().indexOf('(')-1);
+
+        _mobileController.text = phoneNumber.toString();
       }
     // TODO: implement build
     return Builder(
@@ -158,7 +166,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0),
+                    context, 150.0),
                // getSocietyDataLayout(),
              //   activitiesFilterDateLayout(),
                 getActivitiesListDataLayout(),
@@ -185,14 +193,29 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0), //ticketOpenClosedLayout(),
+                    context, 150.0), //ticketOpenClosedLayout(),
              //   getDocumentListDataLayout(),
       Align(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         child: Container(
-          child: Text('Coming Soon...',style: TextStyle(
-              color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-          ),),
+          // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  margin: EdgeInsets.all(20),
+                  child: Image.asset(GlobalVariables.comingSoonPath,fit: BoxFit.fitWidth,)
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: Text(AppLocalizations.of(context).translate('coming_soon_text'),style: TextStyle(
+                    color: GlobalVariables.black,fontSize: 18
+                ),),
+              )
+            ],
+          ),
         ),
       )
               ],
@@ -383,7 +406,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                /* Navigator.push(context, MaterialPageRoute(
                     builder: (context) =>
                         BaseExpectedVisitor()));*/
-
                 Dialog infoDialog = Dialog(
                   shape:
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
@@ -411,7 +433,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     return _activitiesList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 6, 10, 0),
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -732,6 +754,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }*/
 
   scheduleVisitorLayout() {
+    _nameController.text ='';
+    _mobileController.text='';
 
     return Container(
       width: MediaQuery.of(context).size.width/0.2,
@@ -849,11 +873,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       suffixIcon: IconButton(
                                           onPressed: () async {
                                             Contact contact = await _contactPicker.selectContact();
-                                            setState(() {
-                                              print('contact Name : '+contact.fullName);
-                                              print('contact Number : '+contact.phoneNumber.toString());
-                                              _contact = contact;
-                                            });
+                                            print('contact Name : '+contact.fullName);
+                                            print('contact Number : '+contact.phoneNumber.toString());
+                                            _contact = contact;
+                                            setState(() {});
                                           },
                                           icon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,)),
                                   ),
@@ -1002,6 +1025,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
+    String userName = await GlobalFunctions.getDisplayName();
+    String googleParameter = await GlobalFunctions.getGoogleCoordinate();
 
     _progressDialog.show();
     restClient.addScheduleVisitorGatePass(societyId, block, flat, _nameController.text, _mobileController.text, _selectedSchedule, userId).then((value) {
@@ -1009,6 +1034,18 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       _progressDialog.hide();
       if(value.status){
         Navigator.of(context).pop();
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context,
+                    StateSetter setState) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(25.0)),
+                    child: displayPassCode(value.pass_code,userName,googleParameter),
+                  );
+                }));
       }
       GlobalFunctions.showToast(value.message);
 
@@ -1076,6 +1113,85 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       _tabController.animateTo(0);
     }
 
+
+  }
+
+  displayPassCode(String pass_code, String userName, String googleParameter)  {
+
+
+    DateTime date = DateTime.now();
+   // String strDate = DateFormat("dd-MMM").format(date);//date.day.toString().padLeft(2,'0')+'-'+date.month.toString().padLeft(2,'0')+'-'+date.year.toString();
+    String todayDate = GlobalFunctions.convertDateFormat(date.toIso8601String(), 'dd MMM');
+    //String strTime=date.hour.toString()+'.'+date.minute.toString();
+    String currentTime = GlobalFunctions.convertDateFormat(date.toIso8601String(), 'hh:mm aa');
+
+    String mapUrl = "http://www.google.com/maps/place/"+googleParameter;
+
+    String msg = userName + ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on '+ todayDate + ' between '+currentTime+' - 11: 59 PM. '+'Please use '+pass_code+' as entry code at gate. '+'Google coordinates : <a href='+mapUrl+'>'+mapUrl+'</a>'+'';
+    var document = parse(msg);
+
+    String parsedString = parse(document.body.text).documentElement.text;
+
+    print('msg : '+parsedString);
+    return Container(
+      width: MediaQuery.of(context).size.width/2,
+      padding: EdgeInsets.fromLTRB(25,15,25,15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            child: Text(pass_code,style: TextStyle(
+                color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+            ),),
+          ),
+          Container(
+            child: Row(
+              children: [
+                Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(icon: Icon(Icons.share,color: GlobalVariables.green,), onPressed: (){
+                        Navigator.of(context).pop();
+                        GlobalFunctions.shareData('PassCode', parsedString);
+                      }),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Text(AppLocalizations.of(context).translate('share'),style: TextStyle(
+                            fontSize: 12
+                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
+                        Navigator.of(context).pop();
+                        ClipboardManager.copyToClipBoard(pass_code).then((value) {
+                          GlobalFunctions.showToast("Copied to Clipboard");
+                        });
+                      }),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
+                            fontSize: 12
+                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
 
   }
 

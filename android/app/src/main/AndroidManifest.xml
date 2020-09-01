@@ -9,7 +9,7 @@
 
     <application
         android:name="com.societyrun12.Application"
-        android:label="societyrun"
+        android:label="SocietyRun"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity

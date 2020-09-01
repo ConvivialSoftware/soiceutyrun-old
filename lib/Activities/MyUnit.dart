@@ -11,10 +11,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
+import 'package:societyrun/Activities/DisplayProfileInfo.dart';
+import 'package:societyrun/Activities/EditStaffMember.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
@@ -98,9 +101,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   bool isClosedDocuments = false;
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
-  var email='', phone='',consumerId='';
+  var email='', phone='',consumerId='',societyName='';
 
-  var amount, invoiceNo, referenceNo;
+  var amount, invoiceNo, referenceNo,billType;
 
   var _localPath;
   ReceivePort _port = ReceivePort();
@@ -244,7 +247,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           centerTitle: true,
           leading: InkWell(
             onTap: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context,'back');
             },
             child: Icon(
               Icons.arrow_back,
@@ -258,18 +261,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           bottom: getTabLayout(),
           elevation: 0,
         ),
-        body: TabBarView(controller: _tabController, children: <Widget>[
-          Container(
-            color: GlobalVariables.veryLightGray,
-            child: getMyDuesLayout(),
-          ),
-          SingleChildScrollView(
-            child: getMyHouseholdLayout(),
-          ), //  getMyTicketLayout(),
-          /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
+        body:WillPopScope(child:   TabBarView(controller: _tabController, children: <Widget>[
+        Container(
+          color: GlobalVariables.veryLightGray,
+          child: getMyDuesLayout(),
+        ),
+        SingleChildScrollView(
+          child: getMyHouseholdLayout(),
+        ), //  getMyTicketLayout(),
+        /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
             child: getMyTanentsLayout(),
           )*/
-        ]),
+      ]), onWillPop: onWillPop),
+
       ),
     );
   }
@@ -302,14 +306,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  "Rs. " + _ledgerList[position].AMOUNT,
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BaseViewBill(
+                              _ledgerList[position].RECEIPT_NO)));
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    "Rs. " + _ledgerList[position].AMOUNT,
+                    style: TextStyle(
+                        color: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
@@ -622,7 +635,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     print('getMyDuesLayout Tab call');
 
-    return SingleChildScrollView(
+    return GlobalVariables.isERPAccount ? SingleChildScrollView(
      // scrollDirection: Axis.vertical,
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -725,7 +738,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ],
         ),
       ),
-    );
+    ) : getNoERPAccountLayout();
   }
 
   getMyHouseholdLayout() {
@@ -766,6 +779,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     Container(
                         child: RaisedButton(
                       onPressed: () {
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -819,25 +833,28 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                     ),
-                    Container(
-                        child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BaseVerifyStaffMember()));
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).translate('plus_add'),
-                        style: TextStyle(
-                            color: GlobalVariables.white, fontSize: 12),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    )),
+                    Visibility(
+                      visible: false,
+                      child: Container(
+                          child: RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BaseVerifyStaffMember()));
+                        },
+                        child: Text(
+                          AppLocalizations.of(context).translate('plus_add'),
+                          style: TextStyle(
+                              color: GlobalVariables.white, fontSize: 12),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: GlobalVariables.green)),
+                        textColor: GlobalVariables.white,
+                        color: GlobalVariables.green,
+                      )),
+                    ),
                   ],
                 ),
               ),
@@ -1069,106 +1086,111 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 */
   profileLayout() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        // color: GlobalVariables.black,
-        //width: MediaQuery.of(context).size.width / 1.2,
-        margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30,
-            0, 0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Card(
-          shape: (RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0))),
-          elevation: 1.0,
-          margin: EdgeInsets.all(20),
-          color: GlobalVariables.white,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: SvgPicture.asset(
-                    GlobalVariables.whileBGPath,
+    return InkWell(
+      onTap: (){
+        navigateToProfilePage();
+      },
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          // color: GlobalVariables.black,
+          //width: MediaQuery.of(context).size.width / 1.2,
+          margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30,
+              0, 0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Card(
+            shape: (RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0))),
+            elevation: 1.0,
+            margin: EdgeInsets.all(20),
+            color: GlobalVariables.white,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SvgPicture.asset(
+                      GlobalVariables.whileBGPath,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          // alignment: Alignment.center,
-                          /* decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25)),*/
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundColor: GlobalVariables.mediumGreen,
-                            backgroundImage: NetworkImage(photo),
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            // alignment: Alignment.center,
+                            /* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*/
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundColor: GlobalVariables.mediumGreen,
+                              backgroundImage: NetworkImage(photo),
+                            ),
                           ),
-                        ),
-                        Text(
-                          name,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 20,
+                          Text(
+                            name,
+                            style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      color: GlobalVariables.mediumGreen,
-                      margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                      child: Divider(
-                        height: 1,
-                        color: GlobalVariables.mediumGreen,
+                        ],
                       ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        if(phone.length>0) {
-                          GlobalFunctions.shareData(name, 'Contact : ' + phone);
-                        } else if(email.length>0){
-                          GlobalFunctions.shareData(name, 'Mail ID : '+email);
-                        }else{
-                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('mobile_email_not_found'));
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: Icon(
-                                  Icons.share,
-                                  color: GlobalVariables.mediumGreen,
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('share_address'),
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16,
+                      Container(
+                        color: GlobalVariables.mediumGreen,
+                        margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        child: Divider(
+                          height: 1,
+                          color: GlobalVariables.mediumGreen,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          if(phone.length>0) {
+                            GlobalFunctions.shareData(name,'Name : ' + name+'\nContact : ' + phone);
+                          } else if(email.length>0){
+                            GlobalFunctions.shareData(name, 'Name : ' + name+'\nMail ID : '+email);
+                          }else{
+                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('mobile_email_not_found'));
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: Icon(
+                                    Icons.share,
+                                    color: GlobalVariables.mediumGreen,
                                   ),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('share_address'),
+                                    style: TextStyle(
+                                      color: GlobalVariables.green,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1359,109 +1381,131 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 */
   getContactListItemLayout(var _list, int position, bool family) {
-    var call = '', email = '';
+    var call = '', email = '',userId;
     if (family) {
       call = _list[position].MOBILE.toString();
+      userId = _list[position].ID.toString();
       //    email = _list[position].EMAIL.toString();
     } else {
       call = _list[position].CONTACT.toString();
+      userId = _list[position].SID.toString();
     }
     if (call == 'null') {
       call = '';
     }
 
-    return Container(
-      width: 150,
-      margin: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: family
-                ? _list[position].PROFILE_PHOTO.length == 0
-                    ? Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35),
-                            color: GlobalVariables.lightGreen),
-                      )
-                    : CircleAvatar(
-                        radius: 35,
-                        backgroundImage:
-                            NetworkImage(_list[position].PROFILE_PHOTO),
-                        backgroundColor: GlobalVariables.lightGreen,
-                      )
-                : _list[position].IMAGE.length == 0
-                    ? Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35),
-                            color: GlobalVariables.lightGreen),
-                      )
-                    : CircleAvatar(
-                        radius: 35,
-                        backgroundImage: NetworkImage(_list[position].IMAGE),
-                        backgroundColor: GlobalVariables.lightGreen,
-                      ),
-          ),
-          Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Text(
-                family ? _list[position].NAME : _list[position].STAFF_NAME,
-                maxLines: 1,
-                style: TextStyle(color: GlobalVariables.green, fontSize: 16),
-              )),
-          call.length > 0
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                  child: Divider(
-                    color: GlobalVariables.mediumGreen,
-                    height: 1,
-                  ),
-                )
-              : Container(),
-          call.length > 0
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          launch("tel://" + call);
-                        },
-                        child: Container(
-                            child: Icon(
-                          Icons.call,
-                          color: GlobalVariables.lightGreen,
-                        )),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          String title = '';
-                          String text = 'Contact : ' + call;
-                          family
-                              ? title = _list[position].NAME
-                              : title = _list[position].STAFF_NAME;
-                          print('titlee : ' + title);
-                          GlobalFunctions.shareData(title, text);
-                        },
-                        child: Container(
-                            child: Icon(
-                          Icons.share,
-                          color: GlobalVariables.lightGreen,
-                        )),
-                      )
-                    ],
-                  ),
-                )
-              : Container()
-        ],
+    return InkWell(
+      onTap: (){
+        print('userId : '+userId);
+        print('societyId : '+societyId);
+        if(family) {
+          Navigator.push(
+              context, MaterialPageRoute(
+              builder: (context) =>
+                  BaseDisplayProfileInfo(userId, societyId)));
+        }/*else{
+          print('_list[position] : '+ _list[position].toString());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BaseEditStaffMember(_list[position])));
+        }*/
+      },
+      child: Container(
+        width: 150,
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: GlobalVariables.white),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: family
+                  ? _list[position].PROFILE_PHOTO.length == 0
+                      ? Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(35),
+                              color: GlobalVariables.lightGreen),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundImage:
+                              NetworkImage(_list[position].PROFILE_PHOTO),
+                          backgroundColor: GlobalVariables.lightGreen,
+                        )
+                  : _list[position].IMAGE.length == 0
+                      ? Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(35),
+                              color: GlobalVariables.lightGreen),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundImage: NetworkImage(_list[position].IMAGE),
+                          backgroundColor: GlobalVariables.lightGreen,
+                        ),
+            ),
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Text(
+                  family ? _list[position].NAME : _list[position].STAFF_NAME,
+                  maxLines: 1,
+                  style: TextStyle(color: GlobalVariables.green, fontSize: 16),
+                )),
+            call.length > 0
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                    child: Divider(
+                      color: GlobalVariables.mediumGreen,
+                      height: 1,
+                    ),
+                  )
+                : Container(),
+            call.length > 0
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            launch("tel://" + call);
+                          },
+                          child: Container(
+                              child: Icon(
+                            Icons.call,
+                            color: GlobalVariables.lightGreen,
+                          )),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            String name= family ? _list[position].NAME : _list[position].STAFF_NAME;
+                            String title = '';
+                            String text = 'Name : ' + name+'\nContact : ' + call;
+                            family
+                                ? title = _list[position].NAME
+                                : title = _list[position].STAFF_NAME;
+                            print('titlee : ' + title);
+                            GlobalFunctions.shareData(title, text);
+                          },
+                          child: Container(
+                              child: Icon(
+                            Icons.share,
+                            color: GlobalVariables.lightGreen,
+                          )),
+                        )
+                      ],
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }
@@ -1971,6 +2015,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     phone = await GlobalFunctions.getMobile();
     email = await GlobalFunctions.getUserName();
     consumerId = await GlobalFunctions.getConsumerID();
+    societyName = await GlobalFunctions.getSocietyName();
+    flat = await GlobalFunctions.getFlat();
+    block = await GlobalFunctions.getBlock();
 
     print('Name : '+name);
     print('Photo : '+photo);
@@ -2138,6 +2185,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> getUnitVehicleData() async {
+    print('getUnitVehicleData');
     //  _progressDialog.show();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -2212,7 +2260,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                         child: Text(
                           _billList[position].TYPE != null
-                              ? _billList[position].TYPE=='Bill'? 'Maintanance Bill':_billList[position].TYPE
+                              ? _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE
                               : '',
                           style: TextStyle(
                             color: GlobalVariables.white,
@@ -2509,31 +2557,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   getIconForVehicle(String vehicleType) {
-    switch (vehicleType) {
-      case "4 Wheeler":
-        {
-          return Icon(
-            Icons.directions_car,
-            color: GlobalVariables.mediumGreen,
-          );
-        }
-        break;
-      case "2 Wheeler":
-        {
-          return Icon(
-            Icons.directions_bike,
-            color: GlobalVariables.mediumGreen,
-          );
-        }
-        break;
-      default:
-        {
-          return Icon(
-            Icons.directions_bike,
-            color: GlobalVariables.mediumGreen,
-          );
-        }
-        break;
+
+    if(vehicleType=='4 Wheeler' || vehicleType=='4' || vehicleType=='four'){
+      return Icon(
+        Icons.directions_car,
+        color: GlobalVariables.mediumGreen,
+      );
+    }else if(vehicleType=='2 Wheeler' || vehicleType=='2' || vehicleType=='two'){
+      return Icon(
+        Icons.motorcycle,
+        color: GlobalVariables.mediumGreen,
+      );
+    }else{
+      return Icon(
+        Icons.motorcycle,
+        color: GlobalVariables.mediumGreen,
+      );
     }
   }
 
@@ -2668,7 +2707,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         "-" +
         DateTime.now().toLocal().day.toString();
 
-   // _progressDialog.show();
+    _progressDialog.show();
     restClientERP
             .addOnlinePaymentRequest(
                 societyId,
@@ -2677,16 +2716,20 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 invoiceNo,
                 amount.toString(),
                 paymentId,
-                "onLine Transaction",
+                "online Transaction",
                 "Razorpay",
                 paymentDate)
             .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
- //     _progressDialog.hide();
+      _progressDialog.hide();
       if (value.status) {
-        Navigator.of(context).pop();
+       // Navigator.of(context).pop('back');
+        isDuesTabAPICall=false;
+        _callAPI(_tabController.index);
+        paymentSuccessDialog(paymentId);
+      }else {
+        GlobalFunctions.showToast(value.message);
       }
-      GlobalFunctions.showToast(value.message);
     }) .catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -2773,14 +2816,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
-    GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-
+   // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
     addOnlinePaymentRequest(response.paymentId);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
     print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
+    paymentFailureDialog();
   }
 
   _handleExternalWallet(ExternalWalletResponse response) {
@@ -2789,15 +2832,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         "ExternalWallet : " + response.walletName.toString());
   }
 
-  void openCheckOut(int position) {
+  void openCheckOut(int position, String razorKey) {
     amount = _billList[position].AMOUNT;
     invoiceNo = _billList[position].INVOICE_NO;
+    billType = _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE;
+    print('amount : '+amount.toString());
+    print('RazorKey : '+razorKey.toString());
 
     var option = {
-      'key': 'rzp_test_748Ii5uGwgs5cI',
-      'amount': amount,
-      'name': name,
-      'description': 'RazorPay Testing Through Flutter Code',
+      'key': razorKey,
+      'amount': amount*100,
+      'name': societyName,
+      'description': block+' '+flat +'-'+invoiceNo+'/'+billType,
+      'payment_capture': 1,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -2956,7 +3003,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   redirectToPaymentGateway(position);
                 },
                 child: Text(
-                  AppLocalizations.of(context).translate('done'),
+                  AppLocalizations.of(context).translate('proceed'),
                   style: TextStyle(
                       color: GlobalVariables.green,
                       fontSize: 16,
@@ -2992,7 +3039,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-      openCheckOut(position);
+      openCheckOut(position,_payOptionList[0].KEY_ID);
     }
   }
 
@@ -3138,7 +3185,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         switch(index){
           case 0: {
             if(!isDuesTabAPICall) {
-              getPayOption();
+              if(GlobalVariables.isERPAccount) {
+                getPayOption();
+              }
             }
           }
           break;
@@ -3333,6 +3382,73 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             }));
   }
 
+  getNoERPAccountLayout() {
+    return Container(
+      padding: EdgeInsets.all(50),
+      //margin: EdgeInsets.all(20),
+      alignment: Alignment.center,
+      color: GlobalVariables.white,
+      //width: MediaQuery.of(context).size.width,
+     // height: MediaQuery.of(context).size.height,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: Image.asset(GlobalVariables.creditCardPath,width: 300,height: 300,fit: BoxFit.fill,),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+            child: Text(AppLocalizations.of(context).translate('erp_acc_not'),
+              style: TextStyle(
+                  color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
+              ),),
+          ),
+          Container(
+            height: 60,
+            width: MediaQuery.of(context).size.width/2,
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: ButtonTheme(
+              //minWidth: MediaQuery.of(context).size.width / 2,
+              child: RaisedButton(
+                color: GlobalVariables.green,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              BaseAboutSocietyRunInfo()));
+                },
+                textColor: GlobalVariables.white,
+                //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                        color: GlobalVariables.green)),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate('i_am_interested'),
+                  style: TextStyle(
+                      fontSize: GlobalVariables.largeText),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> navigateToProfilePage() async {
+
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
+    Navigator.push(
+        context, MaterialPageRoute(
+        builder: (context) =>
+            BaseDisplayProfileInfo(userId,societyId)));
+  }
+
  /* void emailBillBottomSheet(BuildContext context,int position) {
 
     showModalBottomSheet(context: context, builder: (BuildContext _context){
@@ -3454,6 +3570,103 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       });
     });
   }*/
+
+  Future<bool> onWillPop() {
+    Navigator.pop(context,'back');
+    return Future.value(true);
+  }
+
+  paymentSuccessDialog(String paymentId) {
+
+    print('paymentId : '+paymentId.toString());
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            StatefulBuilder(builder:
+                (BuildContext context,
+                StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(25.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                 // height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset(
+                            GlobalVariables.successIconPath,width: 50,height: 50,),
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('successful_payment'))),
+
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('transaction_id')+' : '+paymentId.toString())),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('thank_you_payment'))),
+                    ],
+                  ),
+                ),
+              );
+            }));
+
+  }
+
+   paymentFailureDialog() {
+
+     return showDialog(
+         context: context,
+         builder: (BuildContext context) =>
+             StatefulBuilder(builder:
+                 (BuildContext context,
+                 StateSetter setState) {
+               return Dialog(
+                 shape: RoundedRectangleBorder(
+                     borderRadius:
+
+                     BorderRadius.circular(25.0)),
+                 child: Container(
+                   padding: EdgeInsets.all(20),
+                   color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                   //height: MediaQuery.of(context).size.height/4,
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     children: <Widget>[
+                       Container(
+                         child: SvgPicture.asset(
+                             GlobalVariables.failureIconPath,width: 50,height: 50,),
+                       ),
+                       Container(
+                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                           child: Text(AppLocalizations.of(context)
+                               .translate('failure_to_pay'))),
+
+                      /* Container(
+                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                           child: Text(AppLocalizations.of(context)
+                               .translate('order_amount'))),*/
+                       Container(
+                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                           child: Text(AppLocalizations.of(context)
+                               .translate('payment_failed_try_again'))),
+                     ],
+                   ),
+                   ),
+                 );
+             }));
+
+   }
 }
 
 class RecentTransaction {

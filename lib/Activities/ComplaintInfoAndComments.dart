@@ -15,8 +15,16 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'HelpDesk.dart';
 
 class BaseComplaintInfoAndComments extends StatefulWidget {
-  final Complaints _complaint;
+
+  Complaints _complaint;
+  //final String ticketId;
   BaseComplaintInfoAndComments(this._complaint);
+
+  BaseComplaintInfoAndComments.ticketNo(String ticketId){
+    print('Ticket No :'+ticketId);
+    _complaint = Complaints();
+    _complaint.TICKET_NO=ticketId;
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +35,8 @@ class BaseComplaintInfoAndComments extends StatefulWidget {
 
 class ComplaintInfoAndCommentsState
     extends State<BaseComplaintInfoAndComments> {
-  var userId;
+  var userId,photo="";
+  List<Complaints> _complaintsList = new List<Complaints>();
   List<Comments> _commentsList = new List<Comments>();
   List<ComplaintStatus> _complaintStatusList = new List<ComplaintStatus>();
   Complaints complaints;
@@ -121,7 +130,7 @@ class ComplaintInfoAndCommentsState
 
   getComplaintInfoCommentLayout() {
     return SingleChildScrollView(
-      child: Container(
+      child: complaints.SUBJECT!=null ? Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 80),
         padding: EdgeInsets.all(0),
       //  height: MediaQuery.of(context).size.height - 210,
@@ -359,7 +368,7 @@ class ComplaintInfoAndCommentsState
             ],
           ),
         ),
-      ),
+      ) : Container(),
     );
   }
 
@@ -401,14 +410,17 @@ class ComplaintInfoAndCommentsState
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
-              child: Transform.rotate(
-                  angle: 108 * 3.14 / 600,
-                  child: Icon(
-                    Icons.attach_file,
-                    color: GlobalVariables.mediumGreen,
-                  )),
+            Visibility(
+              visible: false,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
+                child: Transform.rotate(
+                    angle: 108 * 3.14 / 600,
+                    child: Icon(
+                      Icons.attach_file,
+                      color: GlobalVariables.mediumGreen,
+                    )),
+              ),
             ),
             InkWell(
               onTap: () {
@@ -487,7 +499,8 @@ class ComplaintInfoAndCommentsState
             child: CircleAvatar(
               radius: 25,
               backgroundColor: GlobalVariables.lightGreen,
-            ),
+              backgroundImage: userId != _commentsList[position].USER_ID ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : NetworkImage(photo),
+            )
           ),
           Flexible(
             child: Container(
@@ -520,7 +533,7 @@ class ComplaintInfoAndCommentsState
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                     child: Text(
-                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm:ss"),
+                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm aa"),
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 12),
                     ),
@@ -586,9 +599,17 @@ class ComplaintInfoAndCommentsState
   getUserId() {
     GlobalFunctions.getUserId().then((value) {
       userId = value;
+      getUserPhoto();
+    });
+  }
+
+  getUserPhoto() {
+    GlobalFunctions.getPhoto().then((value) {
+      photo = value;
       setState(() {});
     });
   }
+
 
   Future<void> getUserCommentData() async {
     final dio = Dio();
@@ -598,8 +619,28 @@ class ComplaintInfoAndCommentsState
     restClient.getCommentData(societyId, complaints.TICKET_NO).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
-        _commentsList =
-            List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
+        _commentsList = List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
+        if(complaints.SUBJECT!=null) {
+          setState(() {});
+        }else{
+          getComplaintDataAgainstTicketNo();
+        }
+      }
+      _progressDialog.hide();
+    });
+  }
+
+
+  Future<void> getComplaintDataAgainstTicketNo() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    var societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.getComplaintDataAgainstTicketNo(societyId, complaints.TICKET_NO).then((value) {
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        _complaintsList = List<Complaints>.from(_list.map((e) => Complaints.fromJson(e)));
+        complaints = _complaintsList[0];
         setState(() {});
       }
       _progressDialog.hide();
@@ -626,15 +667,17 @@ class ComplaintInfoAndCommentsState
 
     if (isComment) {
       var currentTime = DateTime.now();
-      String str = currentTime.day.toString() +
+      String str = currentTime.year.toString() +
           "-" +
-          currentTime.month.toString() +
+          currentTime.month.toString().padLeft(2,'0') +
           "-" +
-          currentTime.year.toString() +
+          currentTime.day.toString().padLeft(2,'0') +
           " " +
           currentTime.hour.toString() +
           ':' +
-          currentTime.minute.toString();
+          currentTime.minute.toString()+
+          ':' +
+          currentTime.second.toString();
       Comments comments = Comments(
           PARENT_TICKET: complaints.TICKET_NO,
           USER_ID: userId,
