@@ -38,6 +38,7 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'base_stateful.dart';
@@ -2693,7 +2694,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-  Future<void> addOnlinePaymentRequest(String paymentId) async {
+  Future<void> addOnlinePaymentRequest(String paymentId, String paymentStatus,String orderId) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -2718,15 +2719,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 paymentId,
                 "online Transaction",
                 "Razorpay",
-                paymentDate)
+                paymentDate,
+                paymentStatus,
+                orderId)
             .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
       _progressDialog.hide();
       if (value.status) {
        // Navigator.of(context).pop('back');
-        isDuesTabAPICall=false;
-        _callAPI(_tabController.index);
-        paymentSuccessDialog(paymentId);
+        if(paymentStatus=='success') {
+          isDuesTabAPICall = false;
+          _callAPI(_tabController.index);
+          paymentSuccessDialog(paymentId);
+        }else{
+          paymentFailureDialog();
+        }
       }else {
         GlobalFunctions.showToast(value.message);
       }
@@ -2740,8 +2747,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           break;
         default:
       }
-    })
-        ;
+    });
   }
 
   Future<void> getPayOption() async {
@@ -2817,22 +2823,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
    // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-    addOnlinePaymentRequest(response.paymentId);
+    addOnlinePaymentRequest(response.paymentId,'success',response.orderId);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
     print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
-    paymentFailureDialog();
+    addOnlinePaymentRequest('','failure','');
   }
 
   _handleExternalWallet(ExternalWalletResponse response) {
     print('Razor ExternalWallet Response : ' + response.toString());
-    GlobalFunctions.showToast(
-        "ExternalWallet : " + response.walletName.toString());
+    GlobalFunctions.showToast("ExternalWallet : " + response.walletName.toString());
   }
 
-  void openCheckOut(int position, String razorKey) {
+  void openCheckOut(int position, String razorKey, String orderId) {
     amount = _billList[position].AMOUNT;
     invoiceNo = _billList[position].INVOICE_NO;
     billType = _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE;
@@ -2843,8 +2848,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       'key': razorKey,
       'amount': amount*100,
       'name': societyName,
+      'order_id':orderId,
       'description': block+' '+flat +'-'+invoiceNo+'/'+billType,
-      'payment_capture': 1,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -3031,15 +3036,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 );
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
-      if (_razorpay != null) {
-        _razorpay.clear();
-      }
-      _razorpay = Razorpay();
-      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-      openCheckOut(position,_payOptionList[0].KEY_ID);
+      getRazorPayOrderID(position,_payOptionList[0].KEY_ID,_payOptionList[0].SECRET_KEY);
+
+
     }
   }
 
@@ -3667,6 +3667,52 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
              }));
 
    }
+
+  void getRazorPayOrderID(int position, String razorKey, String secret_key) {
+    final dio = Dio();
+    final RestClientRazorPay restClientRazorPay =
+    RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
+    amount = _billList[position].AMOUNT;
+    invoiceNo = _billList[position].INVOICE_NO;
+    _progressDialog.show();
+    restClientRazorPay.getRazorPayOrderID(amount.toString(), "INR", block+' '+flat +'-'+invoiceNo, "1",razorKey,secret_key).then((value) {
+      print('getRazorPayOrderID Response : ' + value.toString());
+      String orderId = value['id'];
+      print('id : '+ orderId);
+
+      postRazorPayTransactionOrderID(orderId,amount.toString(),position);
+
+    });
+
+  }
+
+  Future<void> postRazorPayTransactionOrderID(String orderId,String amount, int position) async {
+
+    final dio = Dio();
+    final RestClientERP restClientERP = RestClientERP(dio,baseUrl:GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+     String flat = await GlobalFunctions.getFlat();
+
+    restClientERP.postRazorPayTransactionOrderID(societyId, flat, orderId, amount).then((value) {
+      print('Value : '+value.toString());
+      _progressDialog.hide();
+      if(value.status){
+         if (_razorpay != null) {
+        _razorpay.clear();
+      }
+      _razorpay = Razorpay();
+      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
+      openCheckOut(position,_payOptionList[0].KEY_ID,orderId);
+      }else{
+        GlobalFunctions.showToast(value.message);
+      }
+
+    });
+
+  }
 }
 
 class RecentTransaction {

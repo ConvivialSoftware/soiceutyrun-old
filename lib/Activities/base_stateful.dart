@@ -110,6 +110,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
+    print('isTap : '+GlobalVariables.isAlreadyTapped.toString());
     if (!GlobalVariables.isAlreadyTapped) {
       GlobalVariables.isAlreadyTapped = true;
       try {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/AllMemberResponse.dart';
@@ -11,10 +12,11 @@ import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 
 import 'RestClient.dart';
 
-class RestAPI implements RestClient, RestClientERP {
+class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   RestAPI(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
     this.baseUrl ??= GlobalVariables.BaseURL;
@@ -1199,7 +1201,7 @@ class RestAPI implements RestClient, RestClientERP {
 
 
   @override
-  Future<StatusMsgResponse> addOnlinePaymentRequest(String socId, String flat, String block, String invoiceNo, String amount, String referenceNo, String transactionMode, String bankAccountNo, String paymentDate) async {
+  Future<StatusMsgResponse> addOnlinePaymentRequest(String socId, String flat, String block, String invoiceNo, String amount, String referenceNo, String transactionMode, String bankAccountNo, String paymentDate,String paymentStatus,String orderID) async {
     // TODO: implement addOnlinePaymentRequest
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -1207,10 +1209,10 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
     ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
     ArgumentError.checkNotNull(referenceNo, GlobalVariables.REFERENCE_NO);
-    ArgumentError.checkNotNull(
-        transactionMode, GlobalVariables.TRANSACTION_MODE);
+    ArgumentError.checkNotNull(transactionMode, GlobalVariables.TRANSACTION_MODE);
     ArgumentError.checkNotNull(bankAccountNo, GlobalVariables.BANK_ACCOUNTNO);
     ArgumentError.checkNotNull(paymentDate, GlobalVariables.PAYMENT_DATE);
+    ArgumentError.checkNotNull(orderID, GlobalVariables.orderID);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
@@ -1223,8 +1225,9 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
       GlobalVariables.PAYMENT_DATE: paymentDate,
       GlobalVariables.ATTACHMENT:"",
-      GlobalVariables.RESPONSE:""
-    //  Glo
+      GlobalVariables.RESPONSE:"",
+      GlobalVariables.status:paymentStatus,
+      GlobalVariables.orderID:orderID
     });
     print(GlobalVariables.AMOUNT+": "+amount.toString());
     print(GlobalVariables.societyId+": "+socId.toString());
@@ -1641,6 +1644,66 @@ class RestAPI implements RestClient, RestClientERP {
     final value = _result.data;
     print('value of addFeedback : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<Map<String, dynamic>> getRazorPayOrderID(String amount, String currency, String receipt,String paymentCapture,String razorKey,String secretKey) async {
+    // TODO: implement getRazorPayOrderID
+    ArgumentError.checkNotNull(amount, "amount");
+    ArgumentError.checkNotNull(currency, "currency");
+    ArgumentError.checkNotNull(receipt, "receipt");
+    ArgumentError.checkNotNull(paymentCapture, "payment_capture");
+
+    FormData formData = FormData.fromMap({
+      "amount": amount,
+      "currency": currency,
+      "receipt": receipt,
+      "payment_capture": paymentCapture
+    });
+
+    var authorizedToken = razorKey+":"+secretKey;
+
+    print('baseurl : ' + baseUrl + GlobalVariables.razorPayOrderAPI);
+    final Response _result = await _dio.post(GlobalVariables.razorPayOrderAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": "Basic "+base64Url.encode(utf8.encode(authorizedToken)),
+              "Content-type":"application/json"
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getRazorPayOrderID : ' + value.toString());
+    return value;
+  }
+
+  @override
+  Future<StatusMsgResponse> postRazorPayTransactionOrderID(String socId, String flat, String orderId, String amount) async {
+    // TODO: implement postRazorPayTransactionOrderID
+    ArgumentError.checkNotNull(socId, "SOCIETY_ID");
+    ArgumentError.checkNotNull(flat, "FLAT_NO");
+    ArgumentError.checkNotNull(orderId,"ORDER_ID");
+    ArgumentError.checkNotNull(amount,"AMOUNT");
+
+    FormData formData =
+    FormData.fromMap({
+      "SOCIETY_ID": socId,
+      "FLAT_NO": flat,
+      "ORDER_ID": orderId,
+      "AMOUNT": amount
+    });
+    print('baseurl : ' + baseUrl + GlobalVariables.razorPayTransactionAPI);
+    final Response _result = await _dio.post(GlobalVariables.razorPayTransactionAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getBillMail response : ' + value.toString());
+
+    return StatusMsgResponse.fromJsonWithMessage(value);
   }
 }
 /*    [SOCIETY_ID] => 11133
