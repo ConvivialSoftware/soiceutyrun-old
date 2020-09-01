@@ -48,14 +48,16 @@ class RestAPI implements RestClient, RestClientERP {
   }
 
   @override
-  Future<LoginResponse> getLogin(String username, String password) async {
+  Future<LoginResponse> getLogin(String username, String password,String token) async {
 // TODO: implement getLogin
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
+    ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
-      GlobalVariables.keyPassword: password
+      GlobalVariables.keyPassword: password,
+      GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.LoginAPI);
     final Response _result = await _dio.post(GlobalVariables.LoginAPI,

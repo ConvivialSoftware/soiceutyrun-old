@@ -53,7 +53,7 @@ class GlobalFunctions{
       return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
     }else{
       sharedPreferences.setBool(GlobalVariables.keyIsLogin, false);
-      return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
+      return sharedPreferences.getBool(GlobalVariables. keyIsLogin);
     }
   }
 
@@ -62,6 +62,13 @@ class GlobalFunctions{
     if(sharedPreferences.getKeys().contains(GlobalVariables.keyUsername)){
       print('username : '+sharedPreferences.getString(GlobalVariables.keyUsername));
       return  sharedPreferences.getString(GlobalVariables.keyUsername);
+    }
+    return "";
+  }
+  static getFCMToken() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyToken)){
+      return  sharedPreferences.getString(GlobalVariables.keyToken);
     }
     return "";
   }
@@ -235,6 +242,10 @@ class GlobalFunctions{
   static Future<void> savePasswordToSharedPreferences(String password) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(GlobalVariables.keyPassword, password);
+  }
+  static Future<void> saveFCMToken(String token) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(GlobalVariables.keyToken, token);
   }
 
   static backIconLayoutAndImplementation(BuildContext context,String title){
