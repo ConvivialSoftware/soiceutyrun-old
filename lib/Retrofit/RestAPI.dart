@@ -74,7 +74,7 @@ class RestAPI implements RestClient, RestClientERP {
 
   @override
   Future<LoginResponse> getOTPLogin(String expire_time, String otp,
-      String send_otp, String mobile_no, String Email_id) async {
+      String send_otp, String mobile_no, String Email_id,String token) async {
     // TODO: implement getOTPLogin
 
     ArgumentError.checkNotNull(expire_time, "expire_time");
@@ -82,13 +82,15 @@ class RestAPI implements RestClient, RestClientERP {
     ArgumentError.checkNotNull(send_otp, "send_otp");
     ArgumentError.checkNotNull(mobile_no, "mobile_no");
     ArgumentError.checkNotNull(Email_id, "Email_id");
+    ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
 
     FormData formData = FormData.fromMap({
       "expire_time": expire_time,
       "otp": otp,
       "send_otp": send_otp,
       "mobile_no": mobile_no,
-      "Email_id": Email_id
+      "Email_id": Email_id,
+      GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.otpLoginAPI);
     final Response _result = await _dio.post(GlobalVariables.otpLoginAPI,

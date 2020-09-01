@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
+import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Models/gatepass_payload_ios.dart';
@@ -112,8 +114,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       GlobalVariables.isAlreadyTapped = true;
       try {
         Map<String, dynamic> temp = json.decode(payload);
-        GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
-        _fcm.showAlert(context, gatePassPayload);
+        if(temp['TYPE']=='Visitor' || temp['TYPE']=='Visitor_verify') {
+          GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+          _fcm.showAlert(context, gatePassPayload);
+        }else{
+          navigate(temp);
+        }
       } catch (e) {
         _fcm.showErrorDialog(context, e);
       }
@@ -141,7 +147,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }
 
     try {
-      _fcm.showAlert(context, gatePassPayload);
+      if(gatePassPayload.tYPE=='Visitor' || gatePassPayload.tYPE=='Visitor_verify') {
+        _fcm.showAlert(context, gatePassPayload);
+      }else{
+
+      }
     } catch (e) {
       _fcm.showErrorDialog(context, e);
     }
@@ -169,6 +179,32 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         payload: Platform.isAndroid
             ? message['data']['payload']
             : message['notification']['payload']);
+  }
+
+  Future<void> navigate(Map<String, dynamic> temp) async {
+
+    if(temp['TYPE']=='Complaint' || temp['TYPE']=='AssignComplaint') {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseComplaintInfoAndComments.ticketNo(temp['ID'])));
+      if(result==null){
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  BaseDashBoard()),
+              (Route<dynamic> route) => false);
+    }
   }
 
 }
