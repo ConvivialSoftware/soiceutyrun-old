@@ -1233,6 +1233,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     print(GlobalVariables.societyId+": "+socId.toString());
     print(GlobalVariables.INVOICE_NO+": "+invoiceNo.toString());
     print(GlobalVariables.PAYMENT_DATE+": "+paymentDate.toString());
+    print(GlobalVariables.status+": "+paymentStatus.toString());
+    print(GlobalVariables.orderID+": "+orderID.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.insertPaymentAPI);
 

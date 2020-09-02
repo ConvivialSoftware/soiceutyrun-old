@@ -104,7 +104,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
   var email='', phone='',consumerId='',societyName='';
 
-  var amount, invoiceNo, referenceNo,billType;
+  var amount, invoiceNo, referenceNo,billType,orderId;
 
   var _localPath;
   ReceivePort _port = ReceivePort();
@@ -2704,9 +2704,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     String paymentDate = DateTime.now().toLocal().year.toString() +
         "-" +
-        DateTime.now().toLocal().month.toString() +
+        DateTime.now().toLocal().month.toString().padLeft(2,'0') +
         "-" +
-        DateTime.now().toLocal().day.toString();
+        DateTime.now().toLocal().day.toString().padLeft(2,'0');
 
     _progressDialog.show();
     restClientERP
@@ -2737,6 +2737,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }else {
         GlobalFunctions.showToast(value.message);
       }
+      amount=null;invoiceNo=null;billType=null;orderId=null;
     }) .catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -2829,7 +2830,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   _handlePaymentError(PaymentFailureResponse response) {
     print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
-    addOnlinePaymentRequest('','failure','');
+    addOnlinePaymentRequest('','failure',orderId);
   }
 
   _handleExternalWallet(ExternalWalletResponse response) {
@@ -2837,8 +2838,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     GlobalFunctions.showToast("ExternalWallet : " + response.walletName.toString());
   }
 
-  void openCheckOut(int position, String razorKey, String orderId) {
-    amount = _billList[position].AMOUNT;
+  void openCheckOut(int position, String razorKey, String orderId, String amount) {
+    //amount = _billList[position].AMOUNT;
     invoiceNo = _billList[position].INVOICE_NO;
     billType = _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE;
     print('amount : '+amount.toString());
@@ -2846,7 +2847,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     var option = {
       'key': razorKey,
-      'amount': amount*100,
+      'amount': amount,
       'name': societyName,
       'order_id':orderId,
       'description': block+' '+flat +'-'+invoiceNo+'/'+billType,
@@ -3672,15 +3673,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
     RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
-    amount = _billList[position].AMOUNT;
+    amount = _billList[position].AMOUNT * 100;
     invoiceNo = _billList[position].INVOICE_NO;
     _progressDialog.show();
     restClientRazorPay.getRazorPayOrderID(amount.toString(), "INR", block+' '+flat +'-'+invoiceNo, "1",razorKey,secret_key).then((value) {
       print('getRazorPayOrderID Response : ' + value.toString());
-      String orderId = value['id'];
+      orderId = value['id'];
       print('id : '+ orderId);
 
-      postRazorPayTransactionOrderID(orderId,amount.toString(),position);
+      postRazorPayTransactionOrderID(value['id'],value['amount'].toString(),position);
 
     });
 
@@ -3691,9 +3692,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     final dio = Dio();
     final RestClientERP restClientERP = RestClientERP(dio,baseUrl:GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-     String flat = await GlobalFunctions.getFlat();
+    String block = await GlobalFunctions.getBlock();
+    String flat = await GlobalFunctions.getFlat();
 
-    restClientERP.postRazorPayTransactionOrderID(societyId, flat, orderId, amount).then((value) {
+    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, amount).then((value) {
       print('Value : '+value.toString());
       _progressDialog.hide();
       if(value.status){
@@ -3705,7 +3707,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-      openCheckOut(position,_payOptionList[0].KEY_ID,orderId);
+      openCheckOut(position,_payOptionList[0].KEY_ID,orderId,amount);
       }else{
         GlobalFunctions.showToast(value.message);
       }
