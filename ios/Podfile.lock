@@ -1,9 +1,5 @@
 PODS:
-  - camera (0.0.1):
-    - Flutter
   - clipboard_manager (0.0.3):
-    - Flutter
-  - compressimage (0.0.1):
     - Flutter
   - connectivity (0.0.1):
     - Flutter
@@ -201,9 +197,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - camera (from `.symlinks/plugins/camera/ios`)
   - clipboard_manager (from `.symlinks/plugins/clipboard_manager/ios`)
-  - compressimage (from `.symlinks/plugins/compressimage/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
   - contact_picker (from `.symlinks/plugins/contact_picker/ios`)
@@ -259,12 +253,8 @@ SPEC REPOS:
     - SwiftyGif
 
 EXTERNAL SOURCES:
-  camera:
-    :path: ".symlinks/plugins/camera/ios"
   clipboard_manager:
     :path: ".symlinks/plugins/clipboard_manager/ios"
-  compressimage:
-    :path: ".symlinks/plugins/compressimage/ios"
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
   connectivity_macos:
@@ -319,9 +309,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
-  camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
   clipboard_manager: f4800834e62cc26b1cc4e0a92a35cd452dd8b827
-  compressimage: 4f597b00f6e66bdc43d0aec5f0b9e415f3b03bbd
   connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   contact_picker: 57db5d8b410b52a0457d88f7b15de7d3307e8f16
@@ -350,7 +338,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 345d365fd105e6682bf5084783a5352a3db26820
   GoogleDataTransport: af0c79193dc59acd37630b4833d0dc6912ae6bd5
   GoogleUtilities: e121a3867449ce16b0e35ddf1797ea7a389ffdf2
-  image_picker: 66aa71bc96850a90590a35d4c4a2907b0d823109
+  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   Mantle: 35238ae6f2e2b2d474fa7b67fee82a59fea71915
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
