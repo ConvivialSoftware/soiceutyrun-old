@@ -43,6 +43,7 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends BaseStatefulState<LoginPage> {
   bool isLogin = false;
   AppLanguage appLanguage = AppLanguage();
+  String fcmToken;
 
   ProgressDialog _progressDialog;
 
@@ -50,6 +51,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
   List<Banners> _bannerList = List<Banners>();
+
 
   @override
   void initState() {
@@ -481,13 +483,15 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
     );
   }
 
-  void userLogin(String username, String password, BuildContext context) {
+  void userLogin(String username, String password, BuildContext context) async{
+
+    fcmToken = await GlobalFunctions.getFCMToken();
     final dio = Dio();
     final restClient = RestClient(dio);
     //  var date = GlobalFunctions.getAppLanguage();
 
     _progressDialog.show();
-    restClient.getLogin(username, password).then((value) {
+    restClient.getLogin(username, password,fcmToken).then((value) {
       print('status : ' + value.status.toString());
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();

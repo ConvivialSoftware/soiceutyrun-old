@@ -16,12 +16,12 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.LoginAPI)
-  Future<LoginResponse> getLogin(@Field("username") String username, @Field("password") String password);
+  Future<LoginResponse> getLogin(@Field("username") String username, @Field("password") String password,@Field("GCM_ID") String token);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.otpLoginAPI)
   Future<LoginResponse> getOTPLogin(@Field("expire_time") String expire_time, @Field("otp") String otp,
-      @Field("send_otp") String send_otp, @Field("mobile_no") String mobile_no,@Field("Email_id") String Email_id);
+      @Field("send_otp") String send_otp, @Field("mobile_no") String mobile_no,@Field("Email_id") String Email_id,@Field("GCM_ID") String token);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.otpSendAPI)

@@ -533,7 +533,7 @@ class ComplaintInfoAndCommentsState
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                     child: Text(
-                     GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm aa"),
+                      _commentsList[position].C_WHEN!='0000-00-00 00:00:00' ? GlobalFunctions.convertDateFormat(_commentsList[position].C_WHEN,"dd-MM-yyyy hh:mm aa"): '',
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 12),
                     ),
@@ -673,11 +673,11 @@ class ComplaintInfoAndCommentsState
           "-" +
           currentTime.day.toString().padLeft(2,'0') +
           " " +
-          currentTime.hour.toString() +
+          currentTime.hour.toString().padLeft(2,'0') +
           ':' +
-          currentTime.minute.toString()+
+          currentTime.minute.toString().padLeft(2,'0')+
           ':' +
-          currentTime.second.toString();
+          currentTime.second.toString().padLeft(2,'0');
       Comments comments = Comments(
           PARENT_TICKET: complaints.TICKET_NO,
           USER_ID: userId,

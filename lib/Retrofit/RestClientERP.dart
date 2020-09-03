@@ -57,12 +57,17 @@ abstract class RestClientERP {
   Future<StatusMsgResponse> addOnlinePaymentRequest( @Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
       @Field("BLOCK") String block,@Field("INVOICE_NO") String invoiceNo,@Field("AMOUNT") String amount,
       @Field("REFERENCE_NO") String referenceNo,@Field("TRANSACTION_MODE") String transactionMode,
-      @Field("BANK_ACCOUNTNO") String bankAccountNo,@Field("PAYMENT_DATE") String paymentDate);
+      @Field("BANK_ACCOUNTNO") String bankAccountNo,@Field("PAYMENT_DATE") String paymentDate,@Field("STATUS") String paymentStatus,@Field("ORDER_ID") String orderID);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.mailAPI)
   Future<StatusMsgResponse> getBillMail(@Field("SOCIETY_ID") String socId, @Field("TYPE") String type,
       @Field("NUMBER") String number,@Field("Email_id") String emailId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.razorPayTransactionAPI)
+  Future<StatusMsgResponse> postRazorPayTransactionOrderID(@Field("SOCIETY_ID") String socId, @Field("FLAT_NO") String flat,
+      @Field("ORDER_ID") String orderId,@Field("AMOUNT") String amount);
 }
 
 
