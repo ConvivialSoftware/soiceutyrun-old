@@ -22,31 +22,6 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
       String jsonStr = message["notification"]["payload"];
       Map<String, dynamic> temp = json.decode(jsonStr);
       gatePassPayload = GatePassPayload.fromJson(temp);
-      int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        '10001',
-        'societyrun_channel',
-        'channel_for_gatepass_feature',
-        importance: Importance.Max,
-        priority: Priority.High,
-        ticker: 'ticker',
-        enableLights: true,
-        color: Colors.green,
-        ledColor: const Color.fromARGB(255, 255, 0, 0),
-        ledOnMs: 1000,
-        ledOffMs: 500,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound("noti_ring"),
-      );
-      var iOSPlatformChannelSpecifics =
-      IOSNotificationDetails(presentAlert: true, presentSound: true);
-      var platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-          gatePassPayload.body, platformChannelSpecifics,
-          payload: Platform.isAndroid
-              ? message['data']['payload']
-              : message['notification']['payload']);
     } catch (e) {
       print(e);
     }
@@ -55,36 +30,64 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
       String jsonStr = message["data"]["payload"];
       Map<String, dynamic> temp = json.decode(jsonStr);
       gatePassPayload = GatePassPayload.fromJson(temp);
-      int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        '10002',
-        'societyrun_channel',
-        'channel_for_complaint_feature',
-        importance: Importance.Max,
-        priority: Priority.High,
-        ticker: 'ticker',
-        enableLights: true,
-        color: Colors.green,
-        ledColor: const Color.fromARGB(255, 255, 0, 0),
-        ledOnMs: 1000,
-        ledOffMs: 500,
-        playSound: false,
-        sound: RawResourceAndroidNotificationSound("noti_ring"),
-      );
-      var iOSPlatformChannelSpecifics =
-      IOSNotificationDetails(presentAlert: true, presentSound: true);
-      var platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-          gatePassPayload.body, platformChannelSpecifics,
-          payload: Platform.isAndroid
-              ? message['data']['payload']
-              : message['notification']['payload']);
     } catch (e) {
       print(e);
     }
   }
 
+  if(gatePassPayload.tYPE=='Visitor' || gatePassPayload.tYPE=='Visitor_verify') {
+    int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      '10001',
+      'societyrun_channel',
+      'channel_for_gatepass_feature',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'ticker',
+      enableLights: true,
+      color: Colors.green,
+      ledColor: const Color.fromARGB(255, 255, 0, 0),
+      ledOnMs: 1000,
+      ledOffMs: 500,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound("noti_ring"),
+    );
+    var iOSPlatformChannelSpecifics =
+    IOSNotificationDetails(presentAlert: true, presentSound: true);
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+        gatePassPayload.body, platformChannelSpecifics,
+        payload: Platform.isAndroid
+            ? message['data']['payload']
+            : message['notification']['payload']);
+  }else{
+    int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      '10002',
+      'societyrun_channel',
+      'channel_for_complaint_feature',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'ticker',
+      enableLights: true,
+      color: Colors.green,
+      ledColor: const Color.fromARGB(255, 255, 0, 0),
+      ledOnMs: 1000,
+      ledOffMs: 500,
+      playSound: false,
+      sound: RawResourceAndroidNotificationSound("noti_ring"),
+    );
+    var iOSPlatformChannelSpecifics =
+    IOSNotificationDetails(presentAlert: true, presentSound: true);
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+        gatePassPayload.body, platformChannelSpecifics,
+        payload: Platform.isAndroid
+            ? message['data']['payload']
+            : message['notification']['payload']);
+  }
   return Future<void>.value();
 }
 
