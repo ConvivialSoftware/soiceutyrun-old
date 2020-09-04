@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
+import 'package:societyrun/Activities/MyComplex.dart';
+import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Models/gatepass_payload_ios.dart';
@@ -109,7 +112,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   void firebaseCloudMessagingListeners() {
     var initializationSettingsAndroid =
-        new AndroidInitializationSettings('icon_notif');
+    new AndroidInitializationSettings('icon_notif');
 
     var initializationSettingsIOS = IOSInitializationSettings();
 
@@ -137,21 +140,25 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    print('isTap : '+GlobalVariables.isAlreadyTapped.toString());
-    if (!GlobalVariables.isAlreadyTapped) {
-      GlobalVariables.isAlreadyTapped = true;
-      try {
+    print('isTap : ' + GlobalVariables.isAlreadyTapped.toString());
+    GlobalFunctions.getLoginValue().then((value) {
+      if (value) {
         Map<String, dynamic> temp = json.decode(payload);
-        if(temp['TYPE']=='Visitor' || temp['TYPE']=='Visitor_verify') {
-          GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
-          _fcm.showAlert(context, gatePassPayload);
-        }else{
-          navigate(temp);
+        if (!GlobalVariables.isAlreadyTapped) {
+          GlobalVariables.isAlreadyTapped = true;
+          try {
+            if (temp['TYPE'] == 'Visitor' || temp['TYPE'] == 'Visitor_verify') {
+              GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+              _fcm.showAlert(context, gatePassPayload);
+            } else {
+              navigate(temp);
+            }
+          } catch (e) {
+            _fcm.showErrorDialog(context, e);
+          }
         }
-      } catch (e) {
-        _fcm.showErrorDialog(context, e);
       }
-    }
+    });
   }
 
   _showNotification(Map<String, dynamic> message) {
@@ -175,7 +182,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }
 
     try {
-      if(gatePassPayload.tYPE=='Visitor' || gatePassPayload.tYPE=='Visitor_verify') {
+      if (gatePassPayload.tYPE == 'Visitor' ||
+          gatePassPayload.tYPE == 'Visitor_verify') {
         _fcm.showAlert(context, gatePassPayload);
         int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
         var androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -200,7 +208,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             payload: Platform.isAndroid
                 ? message['data']['payload']
                 : message['notification']['payload']);
-      }else{
+      } else {
         String jsonStr = message["data"]["payload"];
         Map<String, dynamic> temp = json.decode(jsonStr);
         gatePassPayload = GatePassPayload.fromJson(temp);
@@ -236,14 +244,15 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future<void> navigate(Map<String, dynamic> temp) async {
-
-    if(temp['TYPE']=='Complaint' || temp['TYPE']=='AssignComplaint') {
+    print('navigate to page');
+    print(temp['TYPE'].toString());
+    if (temp['TYPE'] == 'Complaint' || temp['TYPE'] == 'AssignComplaint') {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   BaseComplaintInfoAndComments.ticketNo(temp['ID'])));
-      if(result==null){
+      if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
@@ -251,7 +260,52 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                     BaseDashBoard()),
                 (Route<dynamic> route) => false);
       }
-    }else {
+    }
+    else if (temp['TYPE'] == 'Announcement') {
+      final result = await  Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseMyComplex(
+                      AppLocalizations.of(context).translate('announcement'))));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }
+    else if (temp['TYPE'] == 'Event') {
+      final result = await  Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('events'))));
+
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }
+    else if (temp['TYPE'] == 'Meeting') {
+      final result = await   Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseMyComplex(
+                      AppLocalizations.of(context).translate('meetings'))));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else{
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(
@@ -260,5 +314,4 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               (Route<dynamic> route) => false);
     }
   }
-
 }

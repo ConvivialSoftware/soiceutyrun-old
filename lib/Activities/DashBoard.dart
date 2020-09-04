@@ -1837,9 +1837,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
          context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('documents'))));
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
-       GlobalFunctions.comingSoonDialog(context);
-      /* Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('events'))));*/
+     //  GlobalFunctions.comingSoonDialog(context);
+       Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('events'))));
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
        GlobalFunctions.comingSoonDialog(context);
