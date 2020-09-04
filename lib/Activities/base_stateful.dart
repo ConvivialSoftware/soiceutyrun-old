@@ -10,9 +10,12 @@ import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Map<String, dynamic> receivedMessage;
+final String androidChannelId = "1001";
+final String androidChannelName = "societyrun_channel";
+final String androidChannelDesc = "channel_for_gatepass_feature";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
@@ -33,60 +36,31 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
       print(e);
     }
   }
+  int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    androidChannelId,
+    androidChannelName,
+    androidChannelDesc,
+    importance: Importance.Max,
+    priority: Priority.High,
+    ticker: 'ticker',
+    enableLights: true,
+    color: Colors.green,
+    ledColor: const Color.fromARGB(255, 255, 0, 0),
+    ledOnMs: 1000,
+    ledOffMs: 500,
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound("noti_ring"),
+  );
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails(sound: "alert.caf");
+  var platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+      gatePassPayload.body, platformChannelSpecifics,
+      payload: Platform.isAndroid
+          ? message['data']['payload']
+          : message['notification']['payload']);
 
-  if(gatePassPayload.tYPE=='Visitor' || gatePassPayload.tYPE=='Visitor_verify') {
-    int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      '10001',
-      'societyrun_channel',
-      'channel_for_gatepass_feature',
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'ticker',
-      enableLights: true,
-      color: Colors.green,
-      ledColor: const Color.fromARGB(255, 255, 0, 0),
-      ledOnMs: 1000,
-      ledOffMs: 500,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound("noti_ring"),
-    );
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: "alert.caf");
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-        gatePassPayload.body, platformChannelSpecifics,
-        payload: Platform.isAndroid
-            ? message['data']['payload']
-            : message['notification']['payload']);
-  }else{
-    int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      '10002',
-      'societyrun_channel',
-      'channel_for_complaint_feature',
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'ticker',
-      enableLights: true,
-      color: Colors.green,
-      ledColor: const Color.fromARGB(255, 255, 0, 0),
-      ledOnMs: 1000,
-      ledOffMs: 500,
-      playSound: false,
-      sound: RawResourceAndroidNotificationSound("noti_ring"),
-    );
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: "alert.caf");
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-        gatePassPayload.body, platformChannelSpecifics,
-        payload: Platform.isAndroid
-            ? message['data']['payload']
-            : message['notification']['payload']);
-  }
   return Future<void>.value();
 }
 
@@ -108,11 +82,15 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   void firebaseCloudMessagingListeners() {
     var initializationSettingsAndroid =
-    new AndroidInitializationSettings('icon_notif');
+        new AndroidInitializationSettings('icon_notif');
 
-    var initializationSettingsIOS = IOSInitializationSettings(defaultPresentAlert: true,
-    defaultPresentBadge: true,defaultPresentSound: true,requestSoundPermission: true,
-    requestBadgePermission: true,requestAlertPermission: true);
+    var initializationSettingsIOS = IOSInitializationSettings(
+        defaultPresentAlert: true,
+        defaultPresentBadge: true,
+        defaultPresentSound: false,
+        requestSoundPermission: true,
+        requestBadgePermission: true,
+        requestAlertPermission: true);
 
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
@@ -121,7 +99,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         onSelectNotification: selectNotification);
 
     _fcm.firebaseMessaging.configure(
-      onBackgroundMessage: myBackgroundMessageHandler,
+      onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage >>>> $message");
         _showNotification(message);
@@ -138,16 +116,16 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    print('isTap : '+GlobalVariables.isAlreadyTapped.toString());
     if (!GlobalVariables.isAlreadyTapped) {
       GlobalVariables.isAlreadyTapped = true;
       try {
         Map<String, dynamic> temp = json.decode(payload);
-        if(temp['TYPE']=='Visitor' || temp['TYPE']=='Visitor_verify') {
-          GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+        GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+        if (gatePassPayload.tYPE == 'Visitor' ||
+            gatePassPayload.tYPE == 'Visitor_verify') {
           _fcm.showAlert(context, gatePassPayload);
-        }else{
-          navigate(temp);
+        } else {
+          navigate(gatePassPayload);
         }
       } catch (e) {
         _fcm.showErrorDialog(context, e);
@@ -174,94 +152,67 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         print(e);
       }
     }
-
     try {
-      if(gatePassPayload.tYPE=='Visitor' || gatePassPayload.tYPE=='Visitor_verify') {
+      if (gatePassPayload.tYPE == 'Visitor' ||
+          gatePassPayload.tYPE == 'Visitor_verify') {
         _fcm.showAlert(context, gatePassPayload);
-        int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-            '10001', 'societyrun_channel', 'channel_for_gatepass_feature',
-            importance: Importance.Max,
-            priority: Priority.High,
-            ticker: 'ticker',
-            enableLights: true,
-            color: Colors.green,
-            ledColor: const Color.fromARGB(255, 255, 0, 0),
-            ledOnMs: 1000,
-            ledOffMs: 500,
-            playSound: true,
-            sound: RawResourceAndroidNotificationSound("noti_ring"));
-        var iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(presentAlert: true, presentSound: true);
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-        flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-            gatePassPayload.body, platformChannelSpecifics,
-            payload: Platform.isAndroid
-                ? message['data']['payload']
-                : message['notification']['payload']);
-      }else{
-        String jsonStr = message["data"]["payload"];
-        Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayload = GatePassPayload.fromJson(temp);
-        int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          '10002',
-          'societyrun_channel',
-          'channel_for_complaint_feature',
-          importance: Importance.Max,
-          priority: Priority.High,
-          ticker: 'ticker',
-          enableLights: true,
-          color: Colors.green,
-          ledColor: const Color.fromARGB(255, 255, 0, 0),
-          ledOnMs: 1000,
-          ledOffMs: 500,
-          playSound: false,
-          sound: RawResourceAndroidNotificationSound("noti_ring"),
-        );
-
-        var iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(sound: "alert.caf");
-
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-        flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-            gatePassPayload.body, platformChannelSpecifics,
-            payload: Platform.isAndroid
-                ? message['data']['payload']
-                : message['notification']['payload']);
+      } else {
+        navigate(gatePassPayload);
       }
     } catch (e) {
-      _fcm.showErrorDialog(context, e);
+      print(e);
     }
+    int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        androidChannelId, androidChannelName, androidChannelDesc,
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'ticker',
+        enableLights: true,
+        color: Colors.green,
+        ledColor: const Color.fromARGB(255, 255, 0, 0),
+        ledOnMs: 1000,
+        ledOffMs: 500,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound("noti_ring"));
+
+    var iOSPlatformChannelSpecifics =
+        IOSNotificationDetails(sound: "alert.caf");
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    try{
+      flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+          gatePassPayload.body, platformChannelSpecifics,
+          payload: Platform.isAndroid
+              ? message['data']['payload']
+              : message['notification']['payload']);
+    }catch(e){
+      print(e);
+    }
+
   }
 
-  Future<void> navigate(Map<String, dynamic> temp) async {
-
-    if(temp['TYPE']=='Complaint' || temp['TYPE']=='AssignComplaint') {
+  Future<void> navigate(GatePassPayload temp) async {
+    if (temp.tYPE == 'Complaint' || temp.tYPE == 'AssignComplaint') {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp['ID'])));
-      if(result==null){
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD)));
+      if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    BaseDashBoard()),
-                (Route<dynamic> route) => false);
+                builder: (BuildContext context) => BaseDashBoard()),
+            (Route<dynamic> route) => false);
       }
-    }else {
+    } else {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  BaseDashBoard()),
-              (Route<dynamic> route) => false);
+              builder: (BuildContext context) => BaseDashBoard()),
+          (Route<dynamic> route) => false);
     }
   }
-
 }

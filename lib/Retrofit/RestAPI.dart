@@ -60,6 +60,7 @@ class RestAPI implements RestClient, RestClientERP {
       GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.LoginAPI);
+    print('LOGIN TOKEN >>>> $token');
     final Response _result = await _dio.post(GlobalVariables.LoginAPI,
         options: RequestOptions(
             //method: GlobalVariables.Post,
