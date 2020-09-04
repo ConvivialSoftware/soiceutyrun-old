@@ -377,21 +377,24 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
               child: Row(
                 children: <Widget>[
                   Container(
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                     width:50,
-                     height: 50,
-                     decoration: BoxDecoration(
-                       color: GlobalVariables.mediumBlue,
-                       shape: BoxShape.rectangle
-                     ),
-                     /* child:*//* SvgPicture.asset(
-                        GlobalVariables.waterIconPath,
-                      ),*//*CircleAvatar(
-                        radius: 5,
-                        backgroundColor: GlobalVariables.mediumGreen,
-                       // backgroundImage: NetworkImage(_openComplaintList[position]. ),
-                      ),*/
+                    child: Visibility(
+                      visible: false,
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                       width:50,
+                       height: 50,
+                       decoration: BoxDecoration(
+                         color: GlobalVariables.mediumBlue,
+                         shape: BoxShape.rectangle
+                       ),
+                       /* child:*//* SvgPicture.asset(
+                          GlobalVariables.waterIconPath,
+                        ),*//*CircleAvatar(
+                          radius: 5,
+                          backgroundColor: GlobalVariables.mediumGreen,
+                         // backgroundImage: NetworkImage(_openComplaintList[position]. ),
+                        ),*/
+                      ),
                     ),
                   ),
                   Flexible(
