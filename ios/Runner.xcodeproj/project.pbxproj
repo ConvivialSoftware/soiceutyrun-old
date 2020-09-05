@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0864C9CF25024A5E00E1617D /* alert.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0864C9CE25024A5E00E1617D /* alert.caf */; };
 		08728D6D24DBD06C002DAB87 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08728D6C24DBD06C002DAB87 /* GoogleService-Info.plist */; };
 		087B72DB24DC2B1E00F22513 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08728D6E24DBD597002DAB87 /* libsqlite3.tbd */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
@@ -32,6 +33,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0864C9CE25024A5E00E1617D /* alert.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = alert.caf; path = ../../../../../../Desktop/alert.caf; sourceTree = "<group>"; };
 		08728D6C24DBD06C002DAB87 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08728D6E24DBD597002DAB87 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		08C7DC2D24DD5FE3005939A1 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				0864C9CE25024A5E00E1617D /* alert.caf */,
 				08C7DC2D24DD5FE3005939A1 /* Runner.entitlements */,
 				08728D6C24DBD06C002DAB87 /* GoogleService-Info.plist */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -209,6 +212,7 @@
 				08728D6D24DBD06C002DAB87 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				0864C9CF25024A5E00E1617D /* alert.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +396,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.7.2;
+				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.convivial.SocietyRunApp;
 				PRODUCT_NAME = SocietyRun;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -535,7 +539,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.7.2;
+				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.convivial.SocietyRunApp;
 				PRODUCT_NAME = SocietyRun;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -572,7 +576,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.7.2;
+				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.convivial.SocietyRunApp;
 				PRODUCT_NAME = SocietyRun;
 				PROVISIONING_PROFILE_SPECIFIER = "";
