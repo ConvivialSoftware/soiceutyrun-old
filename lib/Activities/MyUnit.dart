@@ -38,6 +38,7 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'base_stateful.dart';
@@ -63,9 +64,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   List<RecentTransaction> _transactionList = new List<RecentTransaction>();
   List<VehicleRecentTransaction> _vehicleTransactionList =
-      new List<VehicleRecentTransaction>();
+  new List<VehicleRecentTransaction>();
   List<TicketDescription> _ticketDescriptionList =
-      new List<TicketDescription>();
+  new List<TicketDescription>();
   List<Documents> _documentList = new List<Documents>();
 
   // List<LedgerResponse> _ledgerResponseList = new List<LedgerResponse>();
@@ -87,7 +88,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   // ScrollController _scrollController= ScrollController();
   var firstTicketContainerColor = GlobalVariables.mediumGreen;
   var secondTicketContainerColor = GlobalVariables.white;
-  
+
   var firstTicketTextColor = GlobalVariables.white;
   var secondTicketTextColor = GlobalVariables.green;
   bool isOpenTicket = true;
@@ -103,7 +104,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
   var email='', phone='',consumerId='',societyName='';
 
-  var amount, invoiceNo, referenceNo,billType;
+  var amount, invoiceNo, referenceNo,billType,orderId;
 
   var _localPath;
   ReceivePort _port = ReceivePort();
@@ -134,7 +135,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   @override
   void initState() {
     super.initState();
-   /* getDisplayName();
+    /* getDisplayName();
     getLocalPath();
     getDisplayPhoto();
     getMobile();
@@ -181,7 +182,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     FlutterDownloader.registerCallback(downloadCallback);
 
     // getBillList();
-   /* getVehicleRecentTransactionList();
+    /* getVehicleRecentTransactionList();
 
 
     getTransactionList();
@@ -262,17 +263,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           elevation: 0,
         ),
         body:WillPopScope(child:   TabBarView(controller: _tabController, children: <Widget>[
-        Container(
-          color: GlobalVariables.veryLightGray,
-          child: getMyDuesLayout(),
-        ),
-        SingleChildScrollView(
-          child: getMyHouseholdLayout(),
-        ), //  getMyTicketLayout(),
-        /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
+          Container(
+            color: GlobalVariables.veryLightGray,
+            child: getMyDuesLayout(),
+          ),
+          SingleChildScrollView(
+            child: getMyHouseholdLayout(),
+          ), //  getMyTicketLayout(),
+          /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
             child: getMyTanentsLayout(),
           )*/
-      ]), onWillPop: onWillPop),
+        ]), onWillPop: onWillPop),
 
       ),
     );
@@ -303,7 +304,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Text(
                   "",
                   style:
-                      TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
+                  TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
                 ),
               ),
               InkWell(
@@ -435,7 +436,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     return PreferredSize(
       preferredSize: Size.fromHeight(40.0),
       child: TabBar(
-      /*  onTap: (index){
+        /*  onTap: (index){
           print('Call onTap');
           _callAPI(index);
         },*/
@@ -528,7 +529,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           maintenanceMonth: "Maintenance for Dec'19",
           maintenanceRs: "Rs. 2466.00",
           maintenanceStatus:
-              ""), /*RecentTransaction(
+          ""), /*RecentTransaction(
           maintenanceMonth: "Maintenance for Nov'20",
           maintenanceRs: "Rs. 2466.00"),
       RecentTransaction(
@@ -544,7 +545,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ticketNo: "123456789",
           ticketTitle: "Water Timing need to Chnage",
           ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
+          "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
           ticketIssuedOn: "15/05/2019",
           chatCount: 2),
       TicketDescription(
@@ -552,7 +553,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ticketNo: "123456789",
           ticketTitle: "Water Timing need to Chnage",
           ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
+          "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
           ticketIssuedOn: "15/05/2019",
           chatCount: 2),
       TicketDescription(
@@ -560,7 +561,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ticketNo: "123456789",
           ticketTitle: "Water Timing need to Chnage",
           ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
+          "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
           ticketIssuedOn: "15/05/2019",
           chatCount: 2),
       TicketDescription(
@@ -568,7 +569,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ticketNo: "123456789",
           ticketTitle: "Water Timing need to Chnage",
           ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
+          "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
           ticketIssuedOn: "15/05/2019",
           chatCount: 2),
       TicketDescription(
@@ -576,7 +577,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ticketNo: "123456789",
           ticketTitle: "Water Timing need to Chnage",
           ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
+          "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
           ticketIssuedOn: "15/05/2019",
           chatCount: 2),
       TicketDescription(
@@ -584,7 +585,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ticketNo: "123456789",
           ticketTitle: "Water Timing need to Chnage",
           ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
+          "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
           ticketIssuedOn: "15/05/2019",
           chatCount: 2)
     ];
@@ -636,7 +637,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     print('getMyDuesLayout Tab call');
 
     return GlobalVariables.isERPAccount ? SingleChildScrollView(
-     // scrollDirection: Axis.vertical,
+      // scrollDirection: Axis.vertical,
       child: Container(
         width: MediaQuery.of(context).size.width,
         //height: MediaQuery.of(context).size.height,
@@ -655,13 +656,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         0, MediaQuery.of(context).size.height / 60, 0, 0),
                     child: Builder(
                         builder: (context) => ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _billList.length,
-                              itemBuilder: (context, position) {
-                                return getBillListItemLayout(position, context);
-                              }, //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _billList.length,
+                          itemBuilder: (context, position) {
+                            return getBillListItemLayout(position, context);
+                          }, //  scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                        )),
                   ),
                   _ledgerList.length > 0 ? Container(
                     alignment: Alignment.topLeft, //color: GlobalVariables.white,
@@ -687,12 +688,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     child: Builder(
                         builder: (context) => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _ledgerList.length,
-                              itemBuilder: (context, position) {
-                                return getListItemLayout(position);
-                              }, //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
+                          itemCount: _ledgerList.length,
+                          itemBuilder: (context, position) {
+                            return getListItemLayout(position);
+                          }, //  scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                        )),
                   ) : Container(),
                   _ledgerList.length>0 ?   Container(
                       width: double.infinity,
@@ -778,25 +779,25 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                         child: RaisedButton(
-                      onPressed: () {
+                          onPressed: () {
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BaseAddNewMember("family")));
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).translate('plus_add'),
-                        style: TextStyle(
-                            color: GlobalVariables.white, fontSize: 12),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    )),
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BaseAddNewMember("family")));
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).translate('plus_add'),
+                            style: TextStyle(
+                                color: GlobalVariables.white, fontSize: 12),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: GlobalVariables.green)),
+                          textColor: GlobalVariables.white,
+                          color: GlobalVariables.green,
+                        )),
                   ],
                 ),
               ),
@@ -807,15 +808,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 height: 190,
                 child: Builder(
                     builder: (context) => ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _memberList.length,
-                          itemBuilder: (context, position) {
-                            return getContactListItemLayout(
-                                _memberList, position, true);
-                          },
-                          //  scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                        )),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _memberList.length,
+                      itemBuilder: (context, position) {
+                        return getContactListItemLayout(
+                            _memberList, position, true);
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
               ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
@@ -837,23 +838,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       visible: false,
                       child: Container(
                           child: RaisedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BaseVerifyStaffMember()));
-                        },
-                        child: Text(
-                          AppLocalizations.of(context).translate('plus_add'),
-                          style: TextStyle(
-                              color: GlobalVariables.white, fontSize: 12),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: GlobalVariables.green)),
-                        textColor: GlobalVariables.white,
-                        color: GlobalVariables.green,
-                      )),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseVerifyStaffMember()));
+                            },
+                            child: Text(
+                              AppLocalizations.of(context).translate('plus_add'),
+                              style: TextStyle(
+                                  color: GlobalVariables.white, fontSize: 12),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(color: GlobalVariables.green)),
+                            textColor: GlobalVariables.white,
+                            color: GlobalVariables.green,
+                          )),
                     ),
                   ],
                 ),
@@ -865,15 +866,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 height: 190,
                 child: Builder(
                     builder: (context) => ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _staffList.length,
-                          itemBuilder: (context, position) {
-                            return getContactListItemLayout(
-                                _staffList, position, false);
-                          },
-                          //  scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                        )),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _staffList.length,
+                      itemBuilder: (context, position) {
+                        return getContactListItemLayout(
+                            _staffList, position, false);
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
               ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
@@ -893,23 +894,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                         child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BaseAddVehicle()));
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).translate('plus_add'),
-                        style: TextStyle(
-                            color: GlobalVariables.white, fontSize: 12),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    )),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BaseAddVehicle()));
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).translate('plus_add'),
+                            style: TextStyle(
+                                color: GlobalVariables.white, fontSize: 12),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: GlobalVariables.green)),
+                          textColor: GlobalVariables.white,
+                          color: GlobalVariables.green,
+                        )),
                   ],
                 ),
               ),
@@ -925,15 +926,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         borderRadius: BorderRadius.circular(10)),
                     child: Builder(
                         builder: (context) => ListView.builder(
-                              physics:
-                                  const NeverScrollableScrollPhysics(), // scrollDirection: Axis.horizontal,
-                              itemCount: _vehicleList.length,
-                              itemBuilder: (context, position) {
-                                return getVehicleRecentTransactionListItemLayout(
-                                    position);
-                              }, //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
+                          physics:
+                          const NeverScrollableScrollPhysics(), // scrollDirection: Axis.horizontal,
+                          itemCount: _vehicleList.length,
+                          itemBuilder: (context, position) {
+                            return getVehicleRecentTransactionListItemLayout(
+                                position);
+                          }, //  scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                        )),
                   ),
                 ],
               ),
@@ -993,7 +994,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       ),
     );
   }
- /* getMyTanentsLayout() {
+  /* getMyTanentsLayout() {
     print('MyTanents Tab Call');
     return Container(
       width: MediaQuery.of(context)
@@ -1424,32 +1425,32 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: family
                   ? _list[position].PROFILE_PHOTO.length == 0
-                      ? Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(35),
-                              color: GlobalVariables.lightGreen),
-                        )
-                      : CircleAvatar(
-                          radius: 35,
-                          backgroundImage:
-                              NetworkImage(_list[position].PROFILE_PHOTO),
-                          backgroundColor: GlobalVariables.lightGreen,
-                        )
+                  ? Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(35),
+                    color: GlobalVariables.lightGreen),
+              )
+                  : CircleAvatar(
+                radius: 35,
+                backgroundImage:
+                NetworkImage(_list[position].PROFILE_PHOTO),
+                backgroundColor: GlobalVariables.lightGreen,
+              )
                   : _list[position].IMAGE.length == 0
-                      ? Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(35),
-                              color: GlobalVariables.lightGreen),
-                        )
-                      : CircleAvatar(
-                          radius: 35,
-                          backgroundImage: NetworkImage(_list[position].IMAGE),
-                          backgroundColor: GlobalVariables.lightGreen,
-                        ),
+                  ? Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(35),
+                    color: GlobalVariables.lightGreen),
+              )
+                  : CircleAvatar(
+                radius: 35,
+                backgroundImage: NetworkImage(_list[position].IMAGE),
+                backgroundColor: GlobalVariables.lightGreen,
+              ),
             ),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -1460,49 +1461,49 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 )),
             call.length > 0
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                    child: Divider(
-                      color: GlobalVariables.mediumGreen,
-                      height: 1,
-                    ),
-                  )
+              margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
+              child: Divider(
+                color: GlobalVariables.mediumGreen,
+                height: 1,
+              ),
+            )
                 : Container(),
             call.length > 0
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            launch("tel://" + call);
-                          },
-                          child: Container(
-                              child: Icon(
-                            Icons.call,
-                            color: GlobalVariables.lightGreen,
-                          )),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            String name= family ? _list[position].NAME : _list[position].STAFF_NAME;
-                            String title = '';
-                            String text = 'Name : ' + name+'\nContact : ' + call;
-                            family
-                                ? title = _list[position].NAME
-                                : title = _list[position].STAFF_NAME;
-                            print('titlee : ' + title);
-                            GlobalFunctions.shareData(title, text);
-                          },
-                          child: Container(
-                              child: Icon(
-                            Icons.share,
-                            color: GlobalVariables.lightGreen,
-                          )),
-                        )
-                      ],
-                    ),
+              margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      launch("tel://" + call);
+                    },
+                    child: Container(
+                        child: Icon(
+                          Icons.call,
+                          color: GlobalVariables.lightGreen,
+                        )),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      String name= family ? _list[position].NAME : _list[position].STAFF_NAME;
+                      String title = '';
+                      String text = 'Name : ' + name+'\nContact : ' + call;
+                      family
+                          ? title = _list[position].NAME
+                          : title = _list[position].STAFF_NAME;
+                      print('titlee : ' + title);
+                      GlobalFunctions.shareData(title, text);
+                    },
+                    child: Container(
+                        child: Icon(
+                          Icons.share,
+                          color: GlobalVariables.lightGreen,
+                        )),
                   )
+                ],
+              ),
+            )
                 : Container()
           ],
         ),
@@ -1510,7 +1511,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
- /* getTicketDescListItemLayout(int position) {
+  /* getTicketDescListItemLayout(int position) {
     return InkWell(
       onTap: () {
         GlobalFunctions.showToast(isOpenTicket
@@ -1715,44 +1716,44 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Container(
-                            // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Flexible(
-                              flex: 2,
-                              child: Container(
-                                child: Text(
-                                  _documentList[position].TITLE,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Flexible(
+                                  flex: 2,
+                                  child: Container(
+                                    child: Text(
+                                      _documentList[position].TITLE,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: GlobalVariables.green,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: Text(
-                                  _documentList[position].DOCUMENT_CATEGORY,
-                                  style: TextStyle(
-                                      color: GlobalVariables.white,
-                                      fontSize: 12),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    child: Text(
+                                      _documentList[position].DOCUMENT_CATEGORY,
+                                      style: TextStyle(
+                                          color: GlobalVariables.white,
+                                          fontSize: 12),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: getDocumentTypeColor(
+                                            _documentList[position]
+                                                .DOCUMENT_CATEGORY),
+                                        borderRadius: BorderRadius.circular(8)),
+                                  ),
                                 ),
-                                decoration: BoxDecoration(
-                                    color: getDocumentTypeColor(
-                                        _documentList[position]
-                                            .DOCUMENT_CATEGORY),
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                            ),
-                          ],
-                        )),
+                              ],
+                            )),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                           child: Text(
@@ -1804,50 +1805,50 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
                 _documentList[position].DOCUMENT.length != null
                     ? Container(
-                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: InkWell(
-                          onTap: () {
-                            print("storagePermiassion : " +
-                                isStoragePermission.toString());
-                            if (isStoragePermission) {
-                              GlobalFunctions.downloadAttachment(
-                                  _documentList[position].DOCUMENT, _localPath);
-                            } else {
-                              GlobalFunctions.askPermission(Permission.storage)
-                                  .then((value) {
-                                if (value) {
-                                  GlobalFunctions.downloadAttachment(
-                                      _documentList[position].DOCUMENT,
-                                      _localPath);
-                                } else {
-                                  GlobalFunctions.showToast(
-                                      AppLocalizations.of(context)
-                                          .translate('download_permission'));
-                                }
-                              });
-                            }
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                  child: Icon(
-                                Icons.attach_file,
-                                color: GlobalVariables.mediumGreen,
-                              )),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                child: Text(
-                                  "Attachment",
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              )
-                            ],
+                  // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: InkWell(
+                    onTap: () {
+                      print("storagePermiassion : " +
+                          isStoragePermission.toString());
+                      if (isStoragePermission) {
+                        GlobalFunctions.downloadAttachment(
+                            _documentList[position].DOCUMENT, _localPath);
+                      } else {
+                        GlobalFunctions.askPermission(Permission.storage)
+                            .then((value) {
+                          if (value) {
+                            GlobalFunctions.downloadAttachment(
+                                _documentList[position].DOCUMENT,
+                                _localPath);
+                          } else {
+                            GlobalFunctions.showToast(
+                                AppLocalizations.of(context)
+                                    .translate('download_permission'));
+                          }
+                        });
+                      }
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                            child: Icon(
+                              Icons.attach_file,
+                              color: GlobalVariables.mediumGreen,
+                            )),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Text(
+                            "Attachment",
+                            style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 10,
+                            ),
                           ),
-                        ),
-                      )
+                        )
+                      ],
+                    ),
+                  ),
+                )
                     : Container(),
                 Container(
                   margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -1965,7 +1966,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
- /* getDisplayName() async {
+  /* getDisplayName() async {
 
 
     name = await GlobalFunctions.getDisplayName();
@@ -2036,7 +2037,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
- /* getTicketListDataLayout() {
+  /* getTicketListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -2061,13 +2062,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       margin: EdgeInsets.fromLTRB(20, 80, 20, 0),
       child: Builder(
           builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: _documentList.length,
-                itemBuilder: (context, position) {
-                  return getDocumentListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
+            // scrollDirection: Axis.vertical,
+            itemCount: _documentList.length,
+            itemBuilder: (context, position) {
+              return getDocumentListItemLayout(position);
+            }, //  scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+          )),
     );
   }
   /*getTantentsListDataLayout() {
@@ -2139,9 +2140,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }
       getUnitStaffData();
     }).catchError((Object obj) {
- //     if(_progressDialog.isShowing()){
-  //      _progressDialog.hide();
-  //    }
+      //     if(_progressDialog.isShowing()){
+      //      _progressDialog.hide();
+      //    }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2169,9 +2170,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }
       getUnitVehicleData();
     }).catchError((Object obj) {
-     // if(_progressDialog.isShowing()){
-     //   _progressDialog.hide();
-    //  }
+      // if(_progressDialog.isShowing()){
+      //   _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2198,7 +2199,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         List<dynamic> _list = value.data;
 
         _vehicleList =
-            List<Vehicle>.from(_list.map((i) => Vehicle.fromJson(i)));
+        List<Vehicle>.from(_list.map((i) => Vehicle.fromJson(i)));
         print("Vehicle List : " + _list.toString());
       }
       _progressDialog.hide();
@@ -2208,9 +2209,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
       //  getDocumentData();
     }).catchError((Object obj) {
-  //    if(_progressDialog.isShowing()){
-   //     _progressDialog.hide();
-   //   }
+      //    if(_progressDialog.isShowing()){
+      //     _progressDialog.hide();
+      //   }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2230,7 +2231,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         // color: GlobalVariables.black,
         //width: MediaQuery.of(context).size.width / 1.2,
         margin:
-            EdgeInsets.fromLTRB(10, 10, 10, 10), //padding: EdgeInsets.all(0),
+        EdgeInsets.fromLTRB(10, 10, 10, 10), //padding: EdgeInsets.all(0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: GlobalVariables.white),
@@ -2292,7 +2293,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         Text(
                           _billList[position].DUE_DATE != null
                               ? GlobalFunctions.convertDateFormat(
-                                  _billList[position].DUE_DATE, "dd-MM-yyyy")
+                              _billList[position].DUE_DATE, "dd-MM-yyyy")
                               : '',
                           style: TextStyle(
                               color: GlobalVariables.green,
@@ -2339,7 +2340,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     AppLocalizations.of(context)
                                         .translate('view'),
                                     style:
-                                        TextStyle(color: GlobalVariables.green),
+                                    TextStyle(color: GlobalVariables.green),
                                   ),
                                 )
                               ],
@@ -2359,11 +2360,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   builder: (BuildContext context) =>
                                       StatefulBuilder(builder:
                                           (BuildContext context,
-                                              StateSetter setState) {
+                                          StateSetter setState) {
                                         return Dialog(
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(25.0)),
+                                              BorderRadius.circular(25.0)),
                                           child: getListOfPaymentGateway(
                                               context, setState, position),
                                         );
@@ -2407,7 +2408,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     AppLocalizations.of(context)
                                         .translate('pay_now'),
                                     style:
-                                        TextStyle(color: GlobalVariables.green),
+                                    TextStyle(color: GlobalVariables.green),
                                   ),
                                 )
                               ],
@@ -2417,7 +2418,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         InkWell(
                           onTap : (){
                             emailBillDialog(context,position);
-                           // getBillMail(_billList[position].INVOICE_NO,_billList[position].TYPE);
+                            // getBillMail(_billList[position].INVOICE_NO,_billList[position].TYPE);
                           },
                           child: Container(
                             child: Column(
@@ -2435,7 +2436,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     AppLocalizations.of(context)
                                         .translate('get_bill'),
                                     style:
-                                        TextStyle(color: GlobalVariables.green),
+                                    TextStyle(color: GlobalVariables.green),
                                   ),
                                 )
                               ],
@@ -2467,7 +2468,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     AppLocalizations.of(context)
                                         .translate('already_paid'),
                                     style:
-                                        TextStyle(color: GlobalVariables.green),
+                                    TextStyle(color: GlobalVariables.green),
                                   ),
                                 )
                               ],
@@ -2529,7 +2530,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   child: Text(
                     _vehicleList[position].MODEL,
                     style:
-                        TextStyle(color: GlobalVariables.green, fontSize: 16),
+                    TextStyle(color: GlobalVariables.green, fontSize: 16),
                   ),
                 ),
               ),
@@ -2544,12 +2545,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ),
           position != _vehicleTransactionList.length - 1
               ? Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  child: Divider(
-                    color: GlobalVariables.mediumGreen,
-                    height: 2,
-                  ),
-                )
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+            child: Divider(
+              color: GlobalVariables.mediumGreen,
+              height: 2,
+            ),
+          )
               : Container(),
         ],
       ),
@@ -2586,7 +2587,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         List<dynamic> _list = value.data;
 
         _documentList =
-            List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
+        List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
 
         getAllBillData();
       }
@@ -2596,7 +2597,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   getAllBillData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
@@ -2609,9 +2610,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
       getLedgerData();
     }).catchError((Object obj) {
-    //  if(_progressDialog.isShowing()){
-     //   _progressDialog.hide();
-    //  }
+      //  if(_progressDialog.isShowing()){
+      //   _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2627,7 +2628,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   getLedgerData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
@@ -2640,7 +2641,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
 
       _ledgerList =
-          List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
+      List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
       _progressDialog.hide();
@@ -2648,9 +2649,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         isDuesTabAPICall= true;
       });
     }).catchError((Object obj) {
-     // if(_progressDialog.isShowing()){
-     //   _progressDialog.hide();
-    //  }
+      // if(_progressDialog.isShowing()){
+      //   _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2666,7 +2667,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   getReceiptData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
@@ -2677,9 +2678,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
       //getAllBillData();
     }).catchError((Object obj) {
-   //   if(_progressDialog.isShowing()){
-    //    _progressDialog.hide();
-    //  }
+      //   if(_progressDialog.isShowing()){
+      //    _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2693,43 +2694,50 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-  Future<void> addOnlinePaymentRequest(String paymentId) async {
+  Future<void> addOnlinePaymentRequest(String paymentId, String paymentStatus,String orderId) async {
     final dio = Dio();
     final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
     String paymentDate = DateTime.now().toLocal().year.toString() +
         "-" +
-        DateTime.now().toLocal().month.toString() +
+        DateTime.now().toLocal().month.toString().padLeft(2,'0') +
         "-" +
-        DateTime.now().toLocal().day.toString();
+        DateTime.now().toLocal().day.toString().padLeft(2,'0');
 
     _progressDialog.show();
     restClientERP
-            .addOnlinePaymentRequest(
-                societyId,
-                flat,
-                block,
-                invoiceNo,
-                amount.toString(),
-                paymentId,
-                "online Transaction",
-                "Razorpay",
-                paymentDate)
-            .then((value) {
+        .addOnlinePaymentRequest(
+        societyId,
+        flat,
+        block,
+        invoiceNo,
+        amount.toString(),
+        paymentId,
+        "online Transaction",
+        "Razorpay",
+        paymentDate,
+        paymentStatus,
+        orderId)
+        .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
       _progressDialog.hide();
       if (value.status) {
-       // Navigator.of(context).pop('back');
-        isDuesTabAPICall=false;
-        _callAPI(_tabController.index);
-        paymentSuccessDialog(paymentId);
+        // Navigator.of(context).pop('back');
+        if(paymentStatus=='success') {
+          isDuesTabAPICall = false;
+          _callAPI(_tabController.index);
+          paymentSuccessDialog(paymentId);
+        }else{
+          paymentFailureDialog();
+        }
       }else {
         GlobalFunctions.showToast(value.message);
       }
+      amount=null;invoiceNo=null;billType=null;orderId=null;
     }) .catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -2740,8 +2748,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           break;
         default:
       }
-    })
-        ;
+    });
   }
 
   Future<void> getPayOption() async {
@@ -2755,7 +2762,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         List<dynamic> _list = value.data;
 
         _payOptionList =
-            List<PayOption>.from(_list.map((i) => PayOption.fromJson(i)));
+        List<PayOption>.from(_list.map((i) => PayOption.fromJson(i)));
         print('before ' + _payOptionList.length.toString());
         //   PayOption payOption = PayOption();
         //   payOption.Status = value.status;
@@ -2799,9 +2806,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       getAllBillData();
 
     }).catchError((Object obj) {
-    //  if(_progressDialog.isShowing()){
-    //    _progressDialog.hide();
-   //   }
+      //  if(_progressDialog.isShowing()){
+      //    _progressDialog.hide();
+      //   }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2816,24 +2823,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
-   // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-    addOnlinePaymentRequest(response.paymentId);
+    // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
+    addOnlinePaymentRequest(response.paymentId,'success',response.orderId);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
     print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
-    paymentFailureDialog();
+    addOnlinePaymentRequest('','failure',orderId);
   }
 
   _handleExternalWallet(ExternalWalletResponse response) {
     print('Razor ExternalWallet Response : ' + response.toString());
-    GlobalFunctions.showToast(
-        "ExternalWallet : " + response.walletName.toString());
+    GlobalFunctions.showToast("ExternalWallet : " + response.walletName.toString());
   }
 
-  void openCheckOut(int position, String razorKey) {
-    amount = _billList[position].AMOUNT;
+  void openCheckOut(int position, String razorKey, String orderId, String amount) {
+    //amount = _billList[position].AMOUNT;
     invoiceNo = _billList[position].INVOICE_NO;
     billType = _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE;
     print('amount : '+amount.toString());
@@ -2841,10 +2847,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     var option = {
       'key': razorKey,
-      'amount': amount*100,
+      'amount': amount,
       'name': societyName,
+      'order_id':orderId,
       'description': block+' '+flat +'-'+invoiceNo+'/'+billType,
-      'payment_capture': 1,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -3018,12 +3024,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   void redirectToPaymentGateway(int position) {
     if (_selectedPaymentGateway == 'PayTM') {
 
-    //Navigator.of(context).pop();
+      //Navigator.of(context).pop();
 
       showDialog(
           context: context,
           builder: (BuildContext context) => StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
+              builder: (BuildContext context, StateSetter setState) {
                 return Dialog(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0)),
@@ -3031,15 +3037,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 );
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
-      if (_razorpay != null) {
-        _razorpay.clear();
-      }
-      _razorpay = Razorpay();
-      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-      openCheckOut(position,_payOptionList[0].KEY_ID);
+      getRazorPayOrderID(position,_payOptionList[0].KEY_ID,_payOptionList[0].SECRET_KEY);
+
+
     }
   }
 
@@ -3084,12 +3085,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => StatefulBuilder(
-                                    builder: (BuildContext context,
-                                        StateSetter setState) {
+                                builder: (BuildContext context,
+                                    StateSetter setState) {
                                   return Dialog(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(25.0)),
+                                        BorderRadius.circular(25.0)),
                                     child: displayConsumerId(),
                                   );
                                 }));
@@ -3132,7 +3133,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         children: <Widget>[
           Container(
             child: Text(consumerId,style: TextStyle(
-              color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+                color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
             ),),
           ),
           Container(
@@ -3144,12 +3145,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ClipboardManager.copyToClipBoard(consumerId).then((value) {
                     GlobalFunctions.showToast("Copied to Clipboard");
                     launch(_payOptionList[0].PAYTM_URL);
-                 });
+                  });
                 }),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                   child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
-                    fontSize: 12
+                      fontSize: 12
                       ,fontWeight: FontWeight.bold,color: GlobalVariables.green
                   ),),
                 )
@@ -3244,140 +3245,140 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               isEditEmail ? _emailTextController.text='' :_emailTextController.text = email;
 
               return Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(25.0)),
-                child: Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(10),
-                //  width: MediaQuery.of(context).size.width/2,
-                  //  height: MediaQuery.of(context).size.height/3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        child: Text(AppLocalizations.of(context).translate('email_bill'),style: TextStyle(
-                            color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                      Container(
-                        child: Divider(
-                          height: 2,
-                          color: GlobalVariables.lightGray,
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.circular(25.0)),
+                  child: Container(
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(10),
+                    //  width: MediaQuery.of(context).size.width/2,
+                    //  height: MediaQuery.of(context).size.height/3,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: Text(AppLocalizations.of(context).translate('email_bill'),style: TextStyle(
+                              color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+                          ),),
                         ),
-                      ),
-                      Container(margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
-                        child: Text(GlobalFunctions.convertDateFormat(_billList[position].START_DATE, 'dd-MM-yyyy')
-                            + ' to '
-                            + GlobalFunctions.convertDateFormat(_billList[position].END_DATE, 'dd-MM-yyyy'),style: TextStyle(
-                            color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                      Flexible(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 80,
-                         // color: GlobalVariables.mediumGreen,
-                         // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                           /*   Container(
+                        Container(
+                          child: Divider(
+                            height: 2,
+                            color: GlobalVariables.lightGray,
+                          ),
+                        ),
+                        Container(margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          child: Text(GlobalFunctions.convertDateFormat(_billList[position].START_DATE, 'dd-MM-yyyy')
+                              + ' to '
+                              + GlobalFunctions.convertDateFormat(_billList[position].END_DATE, 'dd-MM-yyyy'),style: TextStyle(
+                              color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
+                          ),),
+                        ),
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 80,
+                            // color: GlobalVariables.mediumGreen,
+                            // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                /*   Container(
                                 child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
                                     color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
                                 ),),
                               ),*/
-                              Flexible(
-                                flex:3,
-                                child: Container(
-                                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                  child: TextFormField(
-                                    controller: _emailTextController,
-                                    cursorColor: GlobalVariables.black,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      //border: InputBorder.,
-                                     // disabledBorder: InputBorder.none,
-                                     // enabledBorder: InputBorder.none,
-                                     // errorBorder: InputBorder.none,
-                                     // focusedBorder: InputBorder.none,
-                                     // focusedErrorBorder: InputBorder.none,
-                                      contentPadding: EdgeInsets.all(5),
+                                Flexible(
+                                  flex:3,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: TextFormField(
+                                      controller: _emailTextController,
+                                      cursorColor: GlobalVariables.black,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration(
+                                        //border: InputBorder.,
+                                        // disabledBorder: InputBorder.none,
+                                        // enabledBorder: InputBorder.none,
+                                        // errorBorder: InputBorder.none,
+                                        // focusedBorder: InputBorder.none,
+                                        // focusedErrorBorder: InputBorder.none,
+                                        contentPadding: EdgeInsets.all(5),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Flexible(
-                                flex:1,
-                                child: Container(
-                                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                  child: !isEditEmail ? IconButton(icon: Icon(Icons.edit,color: GlobalVariables.green,size: 24,), onPressed: (){
-                                    _emailTextController.clear();
-                                    isEditEmail= true;
-                                    _stateState(() {});
+                                Flexible(
+                                  flex:1,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: !isEditEmail ? IconButton(icon: Icon(Icons.edit,color: GlobalVariables.green,size: 24,), onPressed: (){
+                                      _emailTextController.clear();
+                                      isEditEmail= true;
+                                      _stateState(() {});
 
-                                  }) : IconButton(icon: Icon(Icons.cancel,color: GlobalVariables.grey,size: 24,), onPressed: (){
-                                    _emailTextController.clear();
-                                    _emailTextController.text= email;
-                                    isEditEmail= false;
-                                    _stateState(() {});
-                                  }),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 45,
-                        child: ButtonTheme(
-                          minWidth: MediaQuery.of(context).size.width / 3,
-                          child: RaisedButton(
-                            color: GlobalVariables.green,
-                            onPressed: () {
-                              GlobalFunctions
-                                  .checkInternetConnection()
-                                  .then((internet) {
-                                if (internet) {
-                                  if(_emailTextController.text.length>0) {
-                                    Navigator.of(
-                                        context
-                                    ).pop(
-                                    );
-                                    getBillMail(
-                                        _billList[position].INVOICE_NO,
-                                        _billList[position].TYPE,
-                                        _emailTextController.text
-                                    );
-                                  }else{
-                                    GlobalFunctions.showToast('Please Enter Email ID');
-                                  }
-                                } else {
-                                  GlobalFunctions.showToast(
-                                      AppLocalizations.of(context)
-                                          .translate(
-                                          'pls_check_internet_connectivity'));
-                                }
-                              });
-                            },
-                            textColor: GlobalVariables.white,
-                            //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    color: GlobalVariables.green)),
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('email_now'),
-                              style: TextStyle(
-                                  fontSize: GlobalVariables.largeText),
+                                    }) : IconButton(icon: Icon(Icons.cancel,color: GlobalVariables.grey,size: 24,), onPressed: (){
+                                      _emailTextController.clear();
+                                      _emailTextController.text= email;
+                                      isEditEmail= false;
+                                      _stateState(() {});
+                                    }),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
+                        Container(
+                          height: 45,
+                          child: ButtonTheme(
+                            minWidth: MediaQuery.of(context).size.width / 3,
+                            child: RaisedButton(
+                              color: GlobalVariables.green,
+                              onPressed: () {
+                                GlobalFunctions
+                                    .checkInternetConnection()
+                                    .then((internet) {
+                                  if (internet) {
+                                    if(_emailTextController.text.length>0) {
+                                      Navigator.of(
+                                          context
+                                      ).pop(
+                                      );
+                                      getBillMail(
+                                          _billList[position].INVOICE_NO,
+                                          _billList[position].TYPE,
+                                          _emailTextController.text
+                                      );
+                                    }else{
+                                      GlobalFunctions.showToast('Please Enter Email ID');
+                                    }
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        AppLocalizations.of(context)
+                                            .translate(
+                                            'pls_check_internet_connectivity'));
+                                  }
+                                });
+                              },
+                              textColor: GlobalVariables.white,
+                              //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                      color: GlobalVariables.green)),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('email_now'),
+                                style: TextStyle(
+                                    fontSize: GlobalVariables.largeText),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
               );
             }));
   }
@@ -3389,7 +3390,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       alignment: Alignment.center,
       color: GlobalVariables.white,
       //width: MediaQuery.of(context).size.width,
-     // height: MediaQuery.of(context).size.height,
+      // height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -3449,7 +3450,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             BaseDisplayProfileInfo(userId,societyId)));
   }
 
- /* void emailBillBottomSheet(BuildContext context,int position) {
+  /* void emailBillBottomSheet(BuildContext context,int position) {
 
     showModalBottomSheet(context: context, builder: (BuildContext _context){
       return StatefulBuilder(builder: (BuildContext context , StateSetter _stateState){
@@ -3593,13 +3594,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   padding: EdgeInsets.all(20),
                   color: GlobalVariables.transparent,
                   // width: MediaQuery.of(context).size.width/3,
-                 // height: MediaQuery.of(context).size.height/4,
+                  // height: MediaQuery.of(context).size.height/4,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
                         child: SvgPicture.asset(
-                            GlobalVariables.successIconPath,width: 50,height: 50,),
+                          GlobalVariables.successIconPath,width: 50,height: 50,),
                       ),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -3622,51 +3623,98 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   }
 
-   paymentFailureDialog() {
+  paymentFailureDialog() {
 
-     return showDialog(
-         context: context,
-         builder: (BuildContext context) =>
-             StatefulBuilder(builder:
-                 (BuildContext context,
-                 StateSetter setState) {
-               return Dialog(
-                 shape: RoundedRectangleBorder(
-                     borderRadius:
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            StatefulBuilder(builder:
+                (BuildContext context,
+                StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
 
-                     BorderRadius.circular(25.0)),
-                 child: Container(
-                   padding: EdgeInsets.all(20),
-                   color: GlobalVariables.transparent,
+                    BorderRadius.circular(25.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
                   // width: MediaQuery.of(context).size.width/3,
-                   //height: MediaQuery.of(context).size.height/4,
-                   child: Column(
-                     mainAxisSize: MainAxisSize.min,
-                     children: <Widget>[
-                       Container(
-                         child: SvgPicture.asset(
-                             GlobalVariables.failureIconPath,width: 50,height: 50,),
-                       ),
-                       Container(
-                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                           child: Text(AppLocalizations.of(context)
-                               .translate('failure_to_pay'))),
+                  //height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset(
+                          GlobalVariables.failureIconPath,width: 50,height: 50,),
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('failure_to_pay'))),
 
                       /* Container(
                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                            child: Text(AppLocalizations.of(context)
                                .translate('order_amount'))),*/
-                       Container(
-                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                           child: Text(AppLocalizations.of(context)
-                               .translate('payment_failed_try_again'))),
-                     ],
-                   ),
-                   ),
-                 );
-             }));
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('payment_failed_try_again'))),
+                    ],
+                  ),
+                ),
+              );
+            }));
 
-   }
+  }
+
+  void getRazorPayOrderID(int position, String razorKey, String secret_key) {
+    final dio = Dio();
+    final RestClientRazorPay restClientRazorPay =
+    RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
+    amount = _billList[position].AMOUNT * 100;
+    invoiceNo = _billList[position].INVOICE_NO;
+    _progressDialog.show();
+    restClientRazorPay.getRazorPayOrderID(amount.toString(), "INR", block+' '+flat +'-'+invoiceNo, "1",razorKey,secret_key).then((value) {
+      print('getRazorPayOrderID Response : ' + value.toString());
+      orderId = value['id'];
+      print('id : '+ orderId);
+
+      postRazorPayTransactionOrderID(value['id'],value['amount'].toString(),position);
+
+    });
+
+  }
+
+  Future<void> postRazorPayTransactionOrderID(String orderId,String amount, int position) async {
+
+    final dio = Dio();
+    final RestClientERP restClientERP = RestClientERP(dio,baseUrl:GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String block = await GlobalFunctions.getBlock();
+    String flat = await GlobalFunctions.getFlat();
+
+    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, amount).then((value) {
+      print('Value : '+value.toString());
+      _progressDialog.hide();
+      if(value.status){
+        if (_razorpay != null) {
+          _razorpay.clear();
+        }
+        _razorpay = Razorpay();
+        _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+        _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+        _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
+        openCheckOut(position,_payOptionList[0].KEY_ID,orderId,amount);
+      }else{
+        GlobalFunctions.showToast(value.message);
+      }
+
+    });
+
+  }
 }
 
 class RecentTransaction {
@@ -3688,11 +3736,11 @@ class TicketDescription {
 
   TicketDescription(
       {this.category,
-      this.ticketNo,
-      this.ticketTitle,
-      this.ticketDesc,
-      this.ticketIssuedOn,
-      this.chatCount});
+        this.ticketNo,
+        this.ticketTitle,
+        this.ticketDesc,
+        this.ticketIssuedOn,
+        this.chatCount});
 }
 
 class DocumentDescription {
@@ -3704,10 +3752,10 @@ class DocumentDescription {
 
   DocumentDescription(
       {this.documentTitle,
-      this.documentType,
-      this.documentDesc,
-      this.documentName,
-      this.documentPostBy});
+        this.documentType,
+        this.documentDesc,
+        this.documentName,
+        this.documentPostBy});
 }
 /*
 
@@ -3722,7 +3770,7 @@ class VehicleRecentTransaction {
 
   VehicleRecentTransaction(
       {this.vehicleName,
-      this.vehicleColor,
-      this.vehicleNumber,
-      this.vehicleType});
+        this.vehicleColor,
+        this.vehicleNumber,
+        this.vehicleType});
 }
