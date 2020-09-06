@@ -37,7 +37,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
   String entered_pin="";
   String expire_time,otp,mobileNo;
   OtpState(this.expire_time, this.otp,this.mobileNo);
-
+  String fcmToken;
   ProgressDialog _progressDialog;
 
   Timer _timer;
@@ -209,9 +209,9 @@ class OtpState extends BaseStatefulState<BaseOtp>{
   Future<void> getOTPLogin() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-
+    fcmToken = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
-    restClient.getOTPLogin(expire_time, otp, entered_pin, mobileNo, "").then((value) {
+    restClient.getOTPLogin(expire_time, otp, entered_pin, mobileNo, "",fcmToken).then((value) {
       print('add member Status value : '+value.toString());
       _progressDialog.hide();
       GlobalFunctions.showToast(value.message);

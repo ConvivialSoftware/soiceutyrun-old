@@ -104,6 +104,7 @@ class GlobalVariables{
   static var AUTH="Basic "+base64Url.encode(utf8.encode(authorizedToken));
   static const BaseURL = "https://societyrun.com/Flutter/";
   static const BaseURLAndroid = "https://societyrun.com/Android/";
+  static const BaseRazorPayURL="https://api.razorpay.com/";
   /*Api Name for BaseURL*/
   static const LoginAPI = "Api";
   static const AllSocietyAPI = "Api/login";
@@ -142,6 +143,7 @@ class GlobalVariables{
   static const bannerAPI = "Api/banner";
   static const feedbackAPI = "Feedback";
   static const allMemberAPI = "View_directory/all_member";
+  static const razorPayOrderAPI = "v1/orders";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -157,9 +159,10 @@ class GlobalVariables{
   static const billAPI = "Billview1";
   static const receiptAPI = "receiptview";
   static const bankAPI = "bank";
-  static const insertPaymentAPI = "insertpayment";
+  static const insertPaymentAPI = "insertpayment_razorpay";
   static const paymentRequestAPI = "paymentrequest";
   static const mailAPI = "mail";
+  static const razorPayTransactionAPI = "Razorpay_transaction";
 
 
   /*Routs Variables*/
@@ -276,6 +279,7 @@ class GlobalVariables{
   static const NUMBER='NUMBER';
   static const Email_id='Email_id';
   static const RESPONSE='RESPONSE';
+  static const orderID='ORDER_ID';
 
 
 
