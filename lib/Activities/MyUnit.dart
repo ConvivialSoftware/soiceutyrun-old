@@ -36,6 +36,7 @@ import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Models/PayOption.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Vehicle.dart';
+import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
@@ -962,7 +963,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     context, 150.0),
                 ticketOpenClosedLayout(), //ticketFilterLayout(),
                 getTicketListDataLayout(), addTicketFabLayout(),
-              ],
+              ],`
             ),
           ),
         ],
@@ -2702,6 +2703,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
+    print("AMOUNT>>>>>>>> $amount");
+
     String paymentDate = DateTime.now().toLocal().year.toString() +
         "-" +
         DateTime.now().toLocal().month.toString().padLeft(2,'0') +
@@ -3676,11 +3679,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     amount = _billList[position].AMOUNT * 100;
     invoiceNo = _billList[position].INVOICE_NO;
     _progressDialog.show();
-    restClientRazorPay.getRazorPayOrderID(amount.toString(), "INR", block+' '+flat +'-'+invoiceNo, "1",razorKey,secret_key).then((value) {
+    RazorPayOrderRequest request = new RazorPayOrderRequest(amount: amount,currency: "INR",receipt: block+' '+flat +'-'+invoiceNo,paymentCapture: 1);
+    restClientRazorPay.getRazorPayOrderID(request,razorKey,secret_key).then((value) {
       print('getRazorPayOrderID Response : ' + value.toString());
       orderId = value['id'];
       print('id : '+ orderId);
-
       postRazorPayTransactionOrderID(value['id'],value['amount'].toString(),position);
 
     });
