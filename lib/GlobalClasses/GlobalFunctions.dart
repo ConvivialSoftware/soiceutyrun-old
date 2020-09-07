@@ -6,14 +6,14 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:ext_storage/ext_storage.dart';
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -422,11 +422,11 @@ class GlobalFunctions{
 
   static Future<String> getFilePath(BuildContext context) async {
 
-    // return  await FilePicker.getFilePath(
-    //     type: FileType.any,
-    //     /*allowedExtensions: (_extension?.isNotEmpty ?? false)
-    //         ? _extension?.replaceAll(' ', '')?.split(',')
-    //         : null*/);
+    return  await FilePicker.getFilePath(
+        type: FileType.any,
+        /*allowedExtensions: (_extension?.isNotEmpty ?? false)
+            ? _extension?.replaceAll(' ', '')?.split(',')
+            : null*/);
 
   }
 
@@ -534,10 +534,9 @@ class GlobalFunctions{
 
 
   static Future<File>  openCamera() async {
-  //   var picture = await ImagePicker.pickImage(source: ImageSource.camera,preferredCameraDevice:CameraDevice.rear);
-  // //  print("picture : "+ picture.path.toString());
-  //  // print("fileString : "+ convertFileToString(picture.path.toString()));
-  //   return picture;
+    final picker = ImagePicker();
+    final picture = await picker.getImage(source: ImageSource.camera);
+    return File(picture.path);
   }
 
   static Future<bool> checkPermission(Permission permission) async {
