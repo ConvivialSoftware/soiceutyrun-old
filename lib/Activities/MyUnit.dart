@@ -2456,13 +2456,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                         InkWell(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                          final result = await  Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => BaseAlreadyPaid(
                                         _billList[position].INVOICE_NO,
                                         _billList[position].AMOUNT)));
+                          if(result=='back'){
+                            getAllBillData();
+                          }
                           },
                           child: Container(
                             child: Column(
@@ -3740,14 +3743,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
-    if (days >= 2) {
-      status = "Due  in " + days.toString() + " day";
-    } else if (days==1) {
-      status = "Due in 1 day";
+    if (days>0) {
+      status = "Over Due";
     } else if (days == 0 ) {
       status  = "Due Today";
-    } else if (days > 0 ) {
-      status  = "Over Due by " + days.toString() + " day";
+    }else if(days >=-2 && days <0){
+      status = 'Due in '+ (days*(-1)).toString()+' day';
+    }else{
+      status = 'Due Date';
     }
     return status;
 
@@ -3763,14 +3766,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
-    if (days >= 2) {
+    if (days>0) {
+      return Color(0xFFc0392b);
+    } else if (days == 0 ) {
+      return Color(0xFFf39c12);
+    }else if(days >=-2 && days <0){
+      return Color(0xFFf39c12);
+    }else{
+      return GlobalVariables.mediumGreen;
+    }
+    if (days > 0 ) {
+
+    }else if (days >= 2) {
       return Color(0xFFf39c12);
     } else if (days==1) {
       return Color(0xFFf39c12);
     } else if (days == 0 ) {
       return Color(0xFFf39c12);
-    } else if (days > 0 ) {
-      return Color(0xFFc0392b);
     }
   }
 }

@@ -19,8 +19,10 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Map<String, dynamic> receivedMessage;
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  print('notification : '+ message.toString());
   GatePassPayload gatePassPayload;
-
+  Map<String, dynamic> temp =  Map.from(message['data']);
+  gatePassPayload = GatePassPayload.fromJson(temp);
     try {
       String jsonStr = message["data"];
       Map<String, dynamic> temp = json.decode(jsonStr);
@@ -53,7 +55,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
         gatePassPayload.body, platformChannelSpecifics,
-        payload:  message['data']['payload']);
+        payload:  json.encode(temp));
   }else{
     int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -77,7 +79,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
         gatePassPayload.body, platformChannelSpecifics,
-        payload: message['data']['payload']);
+        payload: json.encode(temp));
   }
   return Future<void>.value();
 }
@@ -138,12 +140,13 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             if (temp['TYPE'] == 'Visitor' || temp['TYPE'] == 'Visitor_verify') {
               GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
               _fcm.showAlert(context, gatePassPayload);
-            } else {
-              navigate(temp);
             }
           } catch (e) {
             _fcm.showErrorDialog(context, e);
           }
+        }
+        if (temp['TYPE'] != 'Visitor'){
+          navigate(temp);
         }
       }
     });

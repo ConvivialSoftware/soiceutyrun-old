@@ -100,7 +100,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
           elevation: 0,
           leading: InkWell(
             onTap: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context,'back');
             },
             child: Icon(
               Icons.arrow_back,

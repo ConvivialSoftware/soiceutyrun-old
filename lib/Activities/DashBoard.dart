@@ -1586,7 +1586,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                           getBillPaymentStatus(),
                           style: TextStyle(
                               color: getBillPaymentStatusColor(),
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ) : Text(
                           'Paid',
@@ -1607,13 +1607,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                        Visibility(
+                          visible: int.parse(duesRs)>0 ? true : false,
+                          child: Text(
+                            GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),
@@ -2034,15 +2037,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+    print('days : '+ days.toString());
+    days = 3;
 
-    if (days >= 2) {
-      status = "Due  in " + days.toString() + " day";
-    } else if (days==1) {
-      status = "Due in 1 day";
+    if (days>0) {
+      status = "Over Due";
     } else if (days == 0 ) {
       status  = "Due Today";
-    } else if (days > 0 ) {
-      status  = "Over Due by " + days.toString() + " day";
+    }else if(days >=-2 && days <0){
+      status = 'Due in '+ (days*(-1)).toString()+' day';
+    }else{
+      status = 'Due Date';
     }
     return status;
 
@@ -2058,14 +2063,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
-    if (days >= 2) {
-      return Color(0xFFf39c12);
-    } else if (days==1) {
-      return Color(0xFFf39c12);
+    if (days>0) {
+      return Color(0xFFc0392b);
     } else if (days == 0 ) {
       return Color(0xFFf39c12);
-    } else if (days > 0 ) {
-      return Color(0xFFc0392b);
+    }else if(days >=-2 && days <0){
+      return Color(0xFFf39c12);
+    }else{
+      return GlobalVariables.mediumGreen;
     }
   }
 }
