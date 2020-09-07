@@ -95,9 +95,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       DownloadTaskStatus status = data[1];
       int progress = data[2];
       setState((){
-
         if(status == DownloadTaskStatus.complete){
-          _progressDialog.hide();
           _openDownloadedFile(_taskId)
               .then((success) {
             if (!success) {
@@ -108,7 +106,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             }
           });
         }else{
-          _progressDialog.hide();
           Scaffold.of(context)
               .showSnackBar(SnackBar(
               content: Text(
@@ -137,7 +134,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   }
 
    void downloadAttachment(var url,var _localPath) async {
-     _progressDialog.show();
+    GlobalFunctions.showToast("Downloading attachment....");
     String localPath = _localPath + Platform.pathSeparator+"Download";
     final savedDir = Directory(localPath);
     bool hasExisted = await savedDir.exists();
@@ -157,6 +154,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   }
   Future<bool> _openDownloadedFile(String id) {
+    GlobalFunctions.showToast("Downloading completed");
     return FlutterDownloader.open(taskId: id);
   }
 
