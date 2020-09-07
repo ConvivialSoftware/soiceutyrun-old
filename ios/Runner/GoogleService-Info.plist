@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>178581095763-7l9bumkpm8l4ja131vt883u2mt4mibsc.apps.googleusercontent.com</string>
+	<string>71894349027-j6r59d0gvkb996t2a200pfso1qth4m80.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.178581095763-7l9bumkpm8l4ja131vt883u2mt4mibsc</string>
+	<string>com.googleusercontent.apps.71894349027-j6r59d0gvkb996t2a200pfso1qth4m80</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDDgyiYkZ5IHgqmy4Tn1ZG501QDre1SLOk</string>
+	<string>AIzaSyDCEy6zfI0reLF3tes9SgFvwt5CXGUzJ_c</string>
 	<key>GCM_SENDER_ID</key>
-	<string>178581095763</string>
+	<string>71894349027</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.convivial.SocietyRunApp</string>
+	<string>com.convivial.societyrun</string>
 	<key>PROJECT_ID</key>
-	<string>newsocietyrunapp</string>
+	<string>societyrun-test</string>
 	<key>STORAGE_BUCKET</key>
-	<string>newsocietyrunapp.appspot.com</string>
+	<string>societyrun-test.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:178581095763:ios:b253924fd92707b1c8cda6</string>
+	<string>1:71894349027:ios:7303395373a904719e81d6</string>
 	<key>DATABASE_URL</key>
-	<string>https://newsocietyrunapp.firebaseio.com</string>
+	<string>https://societyrun-test.firebaseio.com</string>
 </dict>
 </plist>

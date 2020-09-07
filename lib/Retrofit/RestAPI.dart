@@ -11,15 +11,28 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
+import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 
 import 'RestClient.dart';
+const bool kDebugMode = true;
+
 
 class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   RestAPI(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
     this.baseUrl ??= GlobalVariables.BaseURL;
+
+    if (kDebugMode) {
+      _dio.interceptors.add(LogInterceptor(
+          responseBody: true,
+          error: true,
+          requestHeader: true,
+          responseHeader: false,
+          request: true,
+          requestBody: true));
+    }
   }
 
   final Dio _dio;
@@ -47,6 +60,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       requestEncoder: options.requestEncoder,
       responseDecoder: options.responseDecoder,
     );
+
   }
 
   @override
@@ -1650,19 +1664,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<Map<String, dynamic>> getRazorPayOrderID(String amount, String currency, String receipt,String paymentCapture,String razorKey,String secretKey) async {
-    // TODO: implement getRazorPayOrderID
-    ArgumentError.checkNotNull(amount, "amount");
-    ArgumentError.checkNotNull(currency, "currency");
-    ArgumentError.checkNotNull(receipt, "receipt");
-    ArgumentError.checkNotNull(paymentCapture, "payment_capture");
-
-    FormData formData = FormData.fromMap({
-      "amount": amount,
-      "currency": currency,
-      "receipt": receipt,
-      "payment_capture": paymentCapture
-    });
+  Future<Map<String, dynamic>> getRazorPayOrderID(RazorPayOrderRequest request,String razorKey, String secretKey) async {
 
     var authorizedToken = razorKey+":"+secretKey;
 
@@ -1674,7 +1676,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
               "Authorization": "Basic "+base64Url.encode(utf8.encode(authorizedToken)),
               "Content-type":"application/json"
             }, baseUrl: baseUrl),
-        data: formData);
+        data: request);
     final value = _result.data;
     print('value of getRazorPayOrderID : ' + value.toString());
     return value;

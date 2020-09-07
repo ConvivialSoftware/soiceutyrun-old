@@ -20,6 +20,7 @@ class FirebaseMessagingHandler {
   void getToken() {
     firebaseMessaging.getToken().then((token) {
       GlobalFunctions.saveFCMToken(token);
+      print("DEVICE TOKEN >>>> $token");
     });
   }
 
