@@ -20,23 +20,15 @@ Map<String, dynamic> receivedMessage;
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
-  if (Platform.isIOS) {
+
     try {
-      String jsonStr = message["notification"]["payload"];
+      String jsonStr = message["data"];
       Map<String, dynamic> temp = json.decode(jsonStr);
       gatePassPayload = GatePassPayload.fromJson(temp);
     } catch (e) {
       print(e);
     }
-  } else {
-    try {
-      String jsonStr = message["data"]["payload"];
-      Map<String, dynamic> temp = json.decode(jsonStr);
-      gatePassPayload = GatePassPayload.fromJson(temp);
-    } catch (e) {
-      print(e);
-    }
-  }
+
 
   if(gatePassPayload.tYPE=='Visitor' || gatePassPayload.tYPE=='Visitor_verify') {
     int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
@@ -61,9 +53,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
         gatePassPayload.body, platformChannelSpecifics,
-        payload: Platform.isAndroid
-            ? message['data']['payload']
-            : message['notification']['payload']);
+        payload:  message['data']['payload']);
   }else{
     int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -87,9 +77,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
         gatePassPayload.body, platformChannelSpecifics,
-        payload: Platform.isAndroid
-            ? message['data']['payload']
-            : message['notification']['payload']);
+        payload: message['data']['payload']);
   }
   return Future<void>.value();
 }
@@ -163,25 +151,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   _showNotification(Map<String, dynamic> message) {
     GatePassPayload gatePassPayload;
-    if (Platform.isIOS) {
-      try {
-        String jsonStr = message["notification"]["payload"];
-        Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayload = GatePassPayload.fromJson(temp);
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      try {
-        String jsonStr = message["data"]["payload"];
-        Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayload = GatePassPayload.fromJson(temp);
-      } catch (e) {
-        print(e);
-      }
-    }
 
     try {
+      Map<String, dynamic> temp =  Map.from(message['data']);
+      gatePassPayload = GatePassPayload.fromJson(temp);
       if (gatePassPayload.tYPE == 'Visitor' ||
           gatePassPayload.tYPE == 'Visitor_verify') {
         _fcm.showAlert(context, gatePassPayload);
@@ -205,13 +178,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
         flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
             gatePassPayload.body, platformChannelSpecifics,
-            payload: Platform.isAndroid
-                ? message['data']['payload']
-                : message['notification']['payload']);
+            payload: json.encode(temp));
       } else {
-        String jsonStr = message["data"]["payload"];
-        Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayload = GatePassPayload.fromJson(temp);
         int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
         var androidPlatformChannelSpecifics = AndroidNotificationDetails(
           '10002',
@@ -234,9 +202,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
         flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
             gatePassPayload.body, platformChannelSpecifics,
-            payload: Platform.isAndroid
-                ? message['data']['payload']
-                : message['notification']['payload']);
+            payload:json.encode(temp));
       }
     } catch (e) {
       _fcm.showErrorDialog(context, e);

@@ -30,6 +30,7 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/main.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import 'LoginPage.dart';
 
@@ -1581,12 +1582,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                           style: TextStyle(
                               color: GlobalVariables.mediumGreen, fontSize: 14),
                         ),
-                        Text(
-                          AppLocalizations.of(context).translate('due_date'),
+                        int.parse(duesRs)>0 ? Text(
+                          getBillPaymentStatus(),
                           style: TextStyle(
-                            color: GlobalVariables.mediumGreen,
-                            fontSize: 16,
-                          ),
+                              color: getBillPaymentStatusColor(),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ) : Text(
+                          'Paid',
+                          style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -1601,7 +1608,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          duesDate,
+                          GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: GlobalVariables.green,
@@ -2014,6 +2021,52 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
        context, MaterialPageRoute(
        builder: (context) =>
            BaseDisplayProfileInfo(userId,societyId)));
+  }
+
+  String getBillPaymentStatus() {
+
+    String status='';
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(duesDate);
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+
+    if (days >= 2) {
+      status = "Due  in " + days.toString() + " day";
+    } else if (days==1) {
+      status = "Due in 1 day";
+    } else if (days == 0 ) {
+      status  = "Due Today";
+    } else if (days > 0 ) {
+      status  = "Over Due by " + days.toString() + " day";
+    }
+    return status;
+
+  }
+
+  getBillPaymentStatusColor() {
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(duesDate);
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+
+    if (days >= 2) {
+      return Color(0xFFf39c12);
+    } else if (days==1) {
+      return Color(0xFFf39c12);
+    } else if (days == 0 ) {
+      return Color(0xFFf39c12);
+    } else if (days > 0 ) {
+      return Color(0xFFc0392b);
+    }
   }
 }
 

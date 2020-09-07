@@ -1665,6 +1665,12 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
     var authorizedToken = razorKey+":"+secretKey;
 
+    print('amount : ' + amount);
+    print('currency : ' + currency);
+    print('receipt : ' + receipt);
+    print('paymentCapture : ' + paymentCapture.toString());
+    print('razorKey : ' + razorKey.toString());
+    print('secretKey : ' + secretKey.toString());
     print('baseurl : ' + baseUrl + GlobalVariables.razorPayOrderAPI);
     final Response _result = await _dio.post(GlobalVariables.razorPayOrderAPI,
         options: RequestOptions(

@@ -40,6 +40,7 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import 'base_stateful.dart';
 
@@ -2269,13 +2270,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                       ),
-                      Text(
-                        AppLocalizations.of(context).translate('due_date'),
+                      (_billList[position].AMOUNT-_billList[position].RECEIVED) <=0 ? Text(
+                        'Paid',
                         style: TextStyle(
-                          color: GlobalVariables.mediumGreen,
-                          fontSize: 16,
-                        ),
-                      ),
+                            color: GlobalVariables.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ) : Text(
+                        getBillPaymentStatus(position),
+                        style: TextStyle(
+                            color:  getBillPaymentStatusColor(position),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ) ,
                     ],
                   ),
                   Container(
@@ -2284,7 +2291,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "Rs. " + _billList[position].AMOUNT.toString(),
+                          "Rs. " + (_billList[position].AMOUNT-_billList[position].RECEIVED).toString(),
                           style: TextStyle(
                               color: GlobalVariables.green,
                               fontSize: 24,
@@ -2354,42 +2361,47 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             print('hasRazorPayGateway' +
                                 hasRazorPayGateway.toString());
 
-                            if (hasPayTMGateway && hasRazorPayGateway) {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      StatefulBuilder(builder:
-                                          (BuildContext context,
-                                              StateSetter setState) {
-                                        return Dialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(25.0)),
-                                          child: getListOfPaymentGateway(
-                                              context, setState, position),
-                                        );
-                                      }));
-                            } else {
-                              if (_payOptionList[0].Status) {
-                                if (hasRazorPayGateway) {
-                                  _selectedPaymentGateway = 'RazorPay';
-                                  redirectToPaymentGateway(position);
-                                } else if (hasPayTMGateway) {
-                                  //Paytm Payment method execute
+                            if(_billList[position].AMOUNT-_billList[position].RECEIVED>0) {
+                              if (hasPayTMGateway && hasRazorPayGateway) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(builder:
+                                            (BuildContext context,
+                                            StateSetter setState) {
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(25.0)),
+                                            child: getListOfPaymentGateway(
+                                                context, setState, position),
+                                          );
+                                        }));
+                              } else {
+                                if (_payOptionList[0].Status) {
+                                  if (hasRazorPayGateway) {
+                                    _selectedPaymentGateway = 'RazorPay';
+                                    redirectToPaymentGateway(position);
+                                  } else if (hasPayTMGateway) {
+                                    //Paytm Payment method execute
 
-                                  _selectedPaymentGateway = 'PayTM';
-                                  print('_selectedPaymentGateway' +
-                                      _selectedPaymentGateway);
+                                    _selectedPaymentGateway = 'PayTM';
+                                    print('_selectedPaymentGateway' +
+                                        _selectedPaymentGateway);
 
-                                  redirectToPaymentGateway(position);
+                                    redirectToPaymentGateway(position);
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        "Online Payment Option is not available.");
+                                  }
                                 } else {
                                   GlobalFunctions.showToast(
                                       "Online Payment Option is not available.");
                                 }
-                              } else {
-                                GlobalFunctions.showToast(
-                                    "Online Payment Option is not available.");
                               }
+                            }else{
+                              GlobalFunctions.showToast(AppLocalizations.of(context)
+                                  .translate('already_paid'));
                             }
                           },
                           child: Container(
@@ -3714,6 +3726,52 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     });
 
+  }
+
+  String getBillPaymentStatus(int position) {
+
+    String status='';
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(_billList[position].DUE_DATE.toString());
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+
+    if (days >= 2) {
+      status = "Due  in " + days.toString() + " day";
+    } else if (days==1) {
+      status = "Due in 1 day";
+    } else if (days == 0 ) {
+      status  = "Due Today";
+    } else if (days > 0 ) {
+      status  = "Over Due by " + days.toString() + " day";
+    }
+    return status;
+
+  }
+
+  getBillPaymentStatusColor(int position) {
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(_billList[position].DUE_DATE.toString());
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+
+    if (days >= 2) {
+      return Color(0xFFf39c12);
+    } else if (days==1) {
+      return Color(0xFFf39c12);
+    } else if (days == 0 ) {
+      return Color(0xFFf39c12);
+    } else if (days > 0 ) {
+      return Color(0xFFc0392b);
+    }
   }
 }
 
