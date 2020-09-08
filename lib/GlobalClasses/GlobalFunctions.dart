@@ -13,7 +13,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -25,7 +25,6 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:intl/intl.dart';
-
 
 
 
@@ -535,10 +534,9 @@ class GlobalFunctions{
 
 
   static Future<File>  openCamera() async {
-    /*var picture = await ImagePicker.pickImage(source: ImageSource.camera,preferredCameraDevice:CameraDevice.rear);
-  //  print("picture : "+ picture.path.toString());
-   // print("fileString : "+ convertFileToString(picture.path.toString()));
-    return picture;*/
+    final picker = ImagePicker();
+    final picture = await picker.getImage(source: ImageSource.camera);
+    return File(picture.path);
   }
 
   static Future<bool> checkPermission(Permission permission) async {
@@ -593,14 +591,5 @@ class GlobalFunctions{
                 ),
               );
             }));
-  }
-
-  static getDaysFromDate(String fromDate , String toDate){
-
-    DateTime toDateTime = DateTime.parse(toDate);
-    DateTime fromDateTime = DateTime.parse(fromDate);
-    final differenceInDays = fromDateTime.difference(toDateTime).inDays;
-
-    return differenceInDays;
   }
 }
