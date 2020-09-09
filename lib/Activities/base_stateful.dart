@@ -64,7 +64,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   return Future<void>.value();
 }
 
-abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
+abstract class BaseStatefulState<T extends StatefulWidget> extends State<T>  with WidgetsBindingObserver{
   final _fcm = FirebaseMessagingHandler();
 
   BaseStatefulState() {}
@@ -78,6 +78,18 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     super.initState();
     _fcm.setListeners();
     firebaseCloudMessagingListeners();
+    WidgetsBinding.instance.addObserver(this);
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    GlobalVariables.isAlreadyTapped = false;
+    print("STATE >>>> ${state.toString()}");
   }
 
   void firebaseCloudMessagingListeners() {
@@ -101,16 +113,19 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     _fcm.firebaseMessaging.configure(
       onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
+        GlobalVariables.isAlreadyTapped = false;
         print("onMessage >>>> $message");
-        _showNotification(message);
+        _showNotification(message,false);
       },
       onLaunch: (Map<String, dynamic> message) async {
+        GlobalVariables.isAlreadyTapped = false;
         print("onLaunch >>>> $message");
-        _showNotification(message);
+        _showNotification(message,true);
       },
       onResume: (Map<String, dynamic> message) async {
+        GlobalVariables.isAlreadyTapped = false;
         print("onResume >>>> $message");
-        _showNotification(message);
+        _showNotification(message,true);
       },
     );
   }
@@ -133,7 +148,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }
   }
 
-  _showNotification(Map<String, dynamic> message) {
+  _showNotification(Map<String, dynamic> message,bool shouldRedirect) {
     GatePassPayload gatePassPayload;
     if (Platform.isIOS) {
       try {
@@ -157,7 +172,9 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           gatePassPayload.tYPE == 'Visitor_verify') {
         _fcm.showAlert(context, gatePassPayload);
       } else {
-        navigate(gatePassPayload);
+        if(shouldRedirect) {
+          navigate(gatePassPayload);
+        }
       }
     } catch (e) {
       print(e);
