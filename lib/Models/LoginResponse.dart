@@ -30,6 +30,7 @@ class LoginResponse {
   bool status;
   String Staff_QR_Image;
   String google_parameter;
+  String User_Status;
 
   LoginResponse(
       {this.ID,
@@ -59,7 +60,8 @@ class LoginResponse {
       this.Consumer_no,
       this.status,
       this.Staff_QR_Image,
-      this.google_parameter});
+      this.google_parameter,
+      this.User_Status});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
@@ -90,6 +92,7 @@ class LoginResponse {
         Consumer_no: json["Consumer_no"],
         status: json["status"],
         Staff_QR_Image: json["Staff_QR_Image"],
-        google_parameter: json["google_parameter"]);
+        google_parameter: json["google_parameter"],
+        User_Status: json["User_Status"]);
   }
 }

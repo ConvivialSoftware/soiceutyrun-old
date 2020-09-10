@@ -284,6 +284,9 @@
   "payment_failed_try_again": "Payment Failed, Please pay again",
   "order_number": "Order Number",
   "thank_you_payment": "Thank You for Payment",
-  "transaction_id": "Transaction ID"
-
+  "transaction_id": "Transaction ID",
+  "account_deactivate": "Your account has been deactivated. Please Logout. If you have any queries, please contact society admin/manager.",
+  "app_update": "A newer and improved version of SocietyRun application is available. Please update for better experience.",
+  "later": "Later",
+  "update": "Update"
 }

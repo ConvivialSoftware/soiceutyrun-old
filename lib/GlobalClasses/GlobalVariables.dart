@@ -76,6 +76,7 @@ class GlobalVariables{
   static var changePasswordPath="assets/other_assets/change_password.svg";
   static var successIconPath="assets/other_assets/success.svg";
   static var failureIconPath="assets/other_assets/failure.svg";
+  static var deactivateIconPath="assets/other_assets/deactive.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath = "assets/bottom_menu/bottom_building_icon.svg";
@@ -144,6 +145,7 @@ class GlobalVariables{
   static const feedbackAPI = "Feedback";
   static const allMemberAPI = "View_directory/all_member";
   static const razorPayOrderAPI = "v1/orders";
+  static const logoutAPI = "Api/logout";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -273,13 +275,17 @@ class GlobalVariables{
   static const QUALIFICATION="QUALIFICATION";
   static const ADDRESS="ADDRESS";
   static const NOTES='NOTES';
-  static const USER_ID='USER_ID';
   static const PHOTO='PHOTO';
   static const ROLE='ROLE';
   static const NUMBER='NUMBER';
   static const Email_id='Email_id';
   static const RESPONSE='RESPONSE';
   static const orderID='ORDER_ID';
+  static const GCM_ID='gcm_id';
+  static const android_version='android_version';
+  static const android_type='android_type';
+  static const ios_version='ios_version';
+  static const ios_type='ios_type';
 
 
 
@@ -328,5 +334,9 @@ class SocietyRun{
   static const supportEmail="Support@societyrun.com";
   static const puneAddress="Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
   static const mumbaiAddress="F70, Haware Fantasia Business Park,Near Vashi Station & Inorbit Mall,Vashi, Navi Mumbai - 400705";
-  static const versionCode="1.0.0";
+  //static const versionCode="1.0.0";
+}
+
+class AppPackageInfo{
+  static var appName,packageName,version,buildNumber ;
 }

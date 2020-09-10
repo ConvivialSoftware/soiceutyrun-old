@@ -647,7 +647,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   }
 
   getMeetingsListDataLayout() {
-    return Container(
+    return _meetingList.length > 0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
@@ -660,7 +660,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ) : Container();
   }
 
   getMeetingsListItemLayout(var position) {
@@ -706,7 +706,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-    _announcementList[position].BLOCK.length>0 ? _announcementList[position].BLOCK.toString()+_announcementList[position].FLAT.toString() : 'Maintainnance Staff',
+                                  _meetingList[position].BLOCK.length>0 ? _meetingList[position].BLOCK.toString()+_meetingList[position].FLAT.toString() : 'Maintainnance Staff',
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,

@@ -199,7 +199,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
 
     print('value of getAllSocietyData : ' + value.toString());
-    return DataResponse.fromJson(value);
+    return DataResponse.fromJsonWithVersion(value);
   }
 
   @override
@@ -1396,7 +1396,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(name, GlobalVariables.STAFF_NAME);
     ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
     ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
-    ArgumentError.checkNotNull(userId, GlobalVariables.USER_ID);
+    ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(mobile, GlobalVariables.Contact);
     ArgumentError.checkNotNull(qualification, GlobalVariables.QUALIFICATION);
     ArgumentError.checkNotNull(address, GlobalVariables.ADDRESS);
@@ -1411,7 +1411,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.STAFF_NAME: name,
       GlobalVariables.GENDER: gender,
       GlobalVariables.DOB: dob,
-      GlobalVariables.USER_ID: userId,
+      GlobalVariables.userID: userId,
       GlobalVariables.Contact: mobile,
       GlobalVariables.QUALIFICATION: qualification,
       GlobalVariables.ADDRESS: address,
@@ -1706,6 +1706,33 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
         data: formData);
     final value = _result.data;
     print('value of getBillMail response : ' + value.toString());
+
+    return StatusMsgResponse.fromJsonWithMessage(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> userLogout(String societyId, String userId, String gcmId) async {
+    // TODO: implement userLogout
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(userId,GlobalVariables.userID);
+    ArgumentError.checkNotNull(gcmId,GlobalVariables.GCM_ID);
+
+    FormData formData =
+    FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.GCM_ID:gcmId
+    });
+    print('baseurl : ' + baseUrl + GlobalVariables.logoutAPI);
+    final Response _result = await _dio.post(GlobalVariables.logoutAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of userLogout response : ' + value.toString());
 
     return StatusMsgResponse.fromJsonWithMessage(value);
   }

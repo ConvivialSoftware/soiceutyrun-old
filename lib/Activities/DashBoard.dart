@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -78,6 +79,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     getPhoto();
+    GlobalFunctions.getAppPackageInfo();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getDuesData();
@@ -1166,6 +1168,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     int prefPos=0;
     restClient.getAllSocietyData(username).then((value) {
       if (value.status) {
+
         List<dynamic> _list = value.data;
 
         _societyList = List<LoginResponse>.from(
@@ -1207,28 +1210,51 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
               " " +
               loginResponse.FLAT);
 
-          if (loginId == loginResponse.ID) {
-            if (_societyListItems.length > 0) {
-              prefPos=i;
-              _societyListItems.insert(
-                  0,
-                  DropdownMenuItem(
-                    value: loginResponse.ID,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      alignment: Alignment.topLeft,
-                      child: AutoSizeText(
-                        loginResponse.Society_Name +
-                            " " +
-                            loginResponse.BLOCK +
-                            " " +
-                            loginResponse.FLAT,
-                        style: TextStyle(
-                            color: GlobalVariables.black, fontSize: 16),
-                        maxLines: 1,
+          print('User Status : '+ loginResponse.User_Status);
+          //loginResponse.User_Status='C';
+          print('User Status : '+ loginResponse.User_Status);
+          if(loginResponse.User_Status!='C') {
+            if (loginId == loginResponse.ID) {
+              if (_societyListItems.length > 0) {
+                prefPos = i;
+                _societyListItems.insert(
+                    0,
+                    DropdownMenuItem(
+                      value: loginResponse.ID,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        alignment: Alignment.topLeft,
+                        child: AutoSizeText(
+                          loginResponse.Society_Name +
+                              " " +
+                              loginResponse.BLOCK +
+                              " " +
+                              loginResponse.FLAT,
+                          style: TextStyle(
+                              color: GlobalVariables.black, fontSize: 16),
+                          maxLines: 1,
+                        ),
                       ),
+                    ));
+              } else {
+                _societyListItems.add(DropdownMenuItem(
+                  value: loginResponse.ID,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    alignment: Alignment.topLeft,
+                    child: AutoSizeText(
+                      loginResponse.Society_Name +
+                          " " +
+                          loginResponse.BLOCK +
+                          " " +
+                          loginResponse.FLAT,
+                      style: TextStyle(
+                          color: GlobalVariables.black, fontSize: 16),
+                      maxLines: 1,
                     ),
-                  ));
+                  ),
+                ));
+              }
             } else {
               _societyListItems.add(DropdownMenuItem(
                 value: loginResponse.ID,
@@ -1248,34 +1274,37 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                 ),
               ));
             }
-          } else {
-            _societyListItems.add(DropdownMenuItem(
-              value: loginResponse.ID,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                alignment: Alignment.topLeft,
-                child: AutoSizeText(
-                  loginResponse.Society_Name +
-                      " " +
-                      loginResponse.BLOCK +
-                      " " +
-                      loginResponse.FLAT,
-                  style: TextStyle(color: GlobalVariables.black, fontSize: 16),
-                  maxLines: 1,
-                ),
-              ),
-            ));
           }
-          print('value: ' + _societyListItems[i].value.toString());
+          //print('value: ' + _societyListItems[i].value.toString());
         }
         print('size : ' + _societyListItems.length.toString());
-        print('_societyListItems 0 : ' + _societyListItems[0].toString());
-        _selectedItem = _societyListItems[0].value;
-        print('_selectedItem initial : ' + _selectedItem.toString());
-        _selectedSocietyLogin = _societyList[prefPos];
-        _selectedSocietyLogin.PASSWORD = password;
-        print("Flat"+_selectedSocietyLogin.FLAT.toString());
-        GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+        if(_societyListItems.length>0) {
+          print('_societyListItems 0 : ' + _societyListItems[0].toString());
+          _selectedItem = _societyListItems[0].value;
+          print('_selectedItem initial : ' + _selectedItem.toString());
+          _selectedSocietyLogin = _societyList[prefPos];
+          // if(_selectedSocietyLogin.User_Status!='C') {
+          _selectedSocietyLogin.PASSWORD = password;
+          print("Flat" + _selectedSocietyLogin.FLAT.toString());
+          GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+
+          if(Platform.isAndroid){
+            if(value.android_version!=AppPackageInfo.version){
+              //show app update Dialog
+              GlobalFunctions.appUpdateDialog(context,value.android_type);
+            }
+          }else if(Platform.isIOS){
+            if(value.ios_version!=AppPackageInfo.version){
+              //show app update Dialog
+              GlobalFunctions.appUpdateDialog(context,value.android_type);
+            }
+          }
+
+        }else{
+          //show logout Dialog
+          GlobalFunctions.forceLogoutDialog(context);
+        }
+        //}
       }
     }).catchError((Object obj) {
       if (_progressDialog.isShowing()) {
@@ -1540,6 +1569,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   duesLayout() {
+    print('duesDate : '+ duesDate);
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -1610,7 +1640,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                         Visibility(
                           visible: int.parse(duesRs)>0 ? true : false,
                           child: Text(
-                            GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'),
+                            duesDate.length>0 ? GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'): '-',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: GlobalVariables.green,
@@ -1963,15 +1993,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                 Container(
                   child: FlatButton(
                       onPressed: () {
-                        GlobalFunctions.clearSharedPreferenceData();
-                        //Navigator.of(context).pop();
-                        // Navigator.of(context).pop();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (
-                                    BuildContext context) => new BaseLoginPage()),
-                                (Route<dynamic> route) => false);
+                        Navigator.of(context).pop();
+                        logout(context);
                       },
                       child: Text(
                         AppLocalizations.of(context).translate('yes'),
@@ -2038,10 +2061,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
     print('days : '+ days.toString());
-    days = 3;
 
     if (days>0) {
-      status = "Over Due";
+      status = "Overdue";
     } else if (days == 0 ) {
       status  = "Due Today";
     }else if(days >=-2 && days <0){
@@ -2072,6 +2094,46 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     }else{
       return GlobalVariables.mediumGreen;
     }
+  }
+
+   static Future<void> logout(BuildContext context) async {
+
+     ProgressDialog _progressDialog;
+     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
+    String gcmId = await GlobalFunctions.getFCMToken();
+
+      final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    _progressDialog.show();
+    restClient.userLogout(societyId, userId, gcmId).then((value) {
+      print('Response : ' + value.toString());
+      _progressDialog.hide();
+      if (value.status) {
+        GlobalFunctions.clearSharedPreferenceData();
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (
+                    BuildContext context) => new BaseLoginPage()),
+                (Route<dynamic> route) => false);
+      }
+      GlobalFunctions.showToast(value.message);
+    }).catchError((Object obj) {
+      if (_progressDialog.isShowing()) {
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
   }
 }
 

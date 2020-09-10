@@ -2733,7 +2733,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 flat,
                 block,
                 invoiceNo,
-                amount.toString(),
+                (amount/100).toString(),
                 paymentId,
                 "online Transaction",
                 "Razorpay",
@@ -3713,7 +3713,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
-    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, amount).then((value) {
+    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, (int.parse(amount)/100).toString()).then((value) {
       print('Value : '+value.toString());
       _progressDialog.hide();
       if(value.status){
@@ -3747,7 +3747,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
     if (days>0) {
-      status = "Over Due";
+      status = "Overdue";
     } else if (days == 0 ) {
       status  = "Due Today";
     }else if(days >=-2 && days <0){

@@ -209,7 +209,7 @@ abstract class RestClient {
       @Field(GlobalVariables.GENDER) String gender,@Field(GlobalVariables.DOB) String dob,
       @Field(GlobalVariables.Contact) String mobile, @Field(GlobalVariables.QUALIFICATION) String qualification,
       @Field(GlobalVariables.ADDRESS) String address, @Field(GlobalVariables.NOTES) String notes,
-      @Field(GlobalVariables.USER_ID) String userId,@Field(GlobalVariables.ROLE) String role,
+      @Field(GlobalVariables.userID) String userId,@Field(GlobalVariables.ROLE) String role,
       @Field(GlobalVariables.PHOTO) String picture,@Field(GlobalVariables.IDENTITY_PROOF) String identityProof,
       @Field(GlobalVariables.VEHICLE_NO) String vehicleNo);
 
@@ -242,6 +242,11 @@ abstract class RestClient {
       @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.societyName) String name,
       @Field('Subject') String subject, @Field('Description') String description,
       @Field('Attachment') String attachment);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.logoutAPI)
+  Future<StatusMsgResponse> userLogout(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.userID) String userId,
+      @Field(GlobalVariables.GCM_ID) String gcmId);
 }
 
 
