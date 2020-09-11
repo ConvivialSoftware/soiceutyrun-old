@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/AllMemberResponse.dart';
@@ -70,6 +71,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
     ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
 
+    if(Platform.isIOS){
+      GlobalVariables.keyToken =  GlobalVariables.keyTokenIOS;
+    }
     FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
       GlobalVariables.keyPassword: password,

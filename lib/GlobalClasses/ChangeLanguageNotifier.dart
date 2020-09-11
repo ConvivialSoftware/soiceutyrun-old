@@ -121,7 +121,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.MyComplexPage:
       {
-        return BaseMyComplex(null);
+        return BaseMyComplex(null,0);
       }
       break;
     case GlobalVariables.MyDiscoverPage:
