@@ -19,24 +19,19 @@ final String androidChannelDesc = "channel_for_gatepass_feature";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
+  Map data;
   if (Platform.isIOS) {
-    try {
-      String jsonStr = message["notification"]["payload"];
-      Map<String, dynamic> temp = json.decode(jsonStr);
-      gatePassPayload = GatePassPayload.fromJson(temp);
-    } catch (e) {
-      print(e);
-    }
+    data = message;
   } else {
-    try {
-      String jsonStr = message["data"]["payload"];
-      Map<String, dynamic> temp = json.decode(jsonStr);
-      gatePassPayload = GatePassPayload.fromJson(temp);
-    } catch (e) {
-      print(e);
-    }
+    data = message['data'];
   }
-  int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
+  try{
+    String payloadData = data["society"];
+    Map<String, dynamic>  temp = json.decode(payloadData);
+    gatePassPayload = GatePassPayload.fromJson(temp);
+  }catch(e){
+    print(e);
+  }
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
     androidChannelId,
     androidChannelName,
@@ -50,21 +45,20 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
     ledOnMs: 1000,
     ledOffMs: 500,
     playSound: true,
-    sound: RawResourceAndroidNotificationSound("noti_ring"),
+    sound: RawResourceAndroidNotificationSound("alert"),
   );
   var iOSPlatformChannelSpecifics = IOSNotificationDetails(sound: "alert.caf");
+
   var platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
+  flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
       gatePassPayload.body, platformChannelSpecifics,
-      payload: Platform.isAndroid
-          ? message['data']['payload']
-          : message['notification']['payload']);
+      payload: data["society"]);
 
   return Future<void>.value();
 }
 
-abstract class BaseStatefulState<T extends StatefulWidget> extends State<T>  with WidgetsBindingObserver{
+abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   final _fcm = FirebaseMessagingHandler();
 
   BaseStatefulState() {}
@@ -78,19 +72,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T>  wit
     super.initState();
     _fcm.setListeners();
     firebaseCloudMessagingListeners();
-    WidgetsBinding.instance.addObserver(this);
   }
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    GlobalVariables.isAlreadyTapped = false;
-    print("STATE >>>> ${state.toString()}");
-  }
+
 
   void firebaseCloudMessagingListeners() {
     var initializationSettingsAndroid =
@@ -113,19 +96,16 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T>  wit
     _fcm.firebaseMessaging.configure(
       onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
-        GlobalVariables.isAlreadyTapped = false;
         print("onMessage >>>> $message");
-        _showNotification(message,false);
+        _showNotification(message, false);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        GlobalVariables.isAlreadyTapped = false;
         print("onLaunch >>>> $message");
-        _showNotification(message,true);
+        _showNotification(message, true);
       },
       onResume: (Map<String, dynamic> message) async {
-        GlobalVariables.isAlreadyTapped = false;
         print("onResume >>>> $message");
-        _showNotification(message,true);
+        _showNotification(message, true);
       },
     );
   }
@@ -148,38 +128,33 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T>  wit
     }
   }
 
-  _showNotification(Map<String, dynamic> message,bool shouldRedirect) {
+  _showNotification(Map<String, dynamic> message, bool shouldRedirect) {
     GatePassPayload gatePassPayload;
+    Map data;
     if (Platform.isIOS) {
-      try {
-        String jsonStr = message["notification"]["payload"];
-        Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayload = GatePassPayload.fromJson(temp);
-      } catch (e) {
-        print(e);
-      }
+      data = message;
     } else {
-      try {
-        String jsonStr = message["data"]["payload"];
-        Map<String, dynamic> temp = json.decode(jsonStr);
-        gatePassPayload = GatePassPayload.fromJson(temp);
-      } catch (e) {
-        print(e);
-      }
+      data = message['data'] as Map;
+    }
+    try{
+      String payloadData = data["society"];
+      Map<String, dynamic>  temp = jsonDecode(payloadData);
+      gatePassPayload = GatePassPayload.fromJson(temp);
+    }catch(e){
+      print(e);
     }
     try {
       if (gatePassPayload.tYPE == 'Visitor' ||
           gatePassPayload.tYPE == 'Visitor_verify') {
         _fcm.showAlert(context, gatePassPayload);
       } else {
-        if(shouldRedirect) {
+        if (shouldRedirect) {
           navigate(gatePassPayload);
         }
       }
     } catch (e) {
       print(e);
     }
-    int msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         androidChannelId, androidChannelName, androidChannelDesc,
         importance: Importance.Max,
@@ -191,23 +166,23 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T>  wit
         ledOnMs: 1000,
         ledOffMs: 500,
         playSound: true,
-        sound: RawResourceAndroidNotificationSound("noti_ring"));
+        sound: RawResourceAndroidNotificationSound("alert"));
 
     var iOSPlatformChannelSpecifics =
         IOSNotificationDetails(sound: "alert.caf");
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    try{
-      flutterLocalNotificationsPlugin.show(msgId, gatePassPayload.title,
-          gatePassPayload.body, platformChannelSpecifics,
-          payload: Platform.isAndroid
-              ? message['data']['payload']
-              : message['notification']['payload']);
-    }catch(e){
+    try {
+      flutterLocalNotificationsPlugin.show(
+          1,
+          gatePassPayload.title,
+          gatePassPayload.body,
+          platformChannelSpecifics,
+          payload: data["society"]);
+    } catch (e) {
       print(e);
     }
-
   }
 
   Future<void> navigate(GatePassPayload temp) async {
