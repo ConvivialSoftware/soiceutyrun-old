@@ -281,6 +281,7 @@ class GlobalVariables{
   static const Email_id='Email_id';
   static const RESPONSE='RESPONSE';
   static const orderID='ORDER_ID';
+  static const TOKEN_ID='TOKEN_ID';
   static const GCM_ID='gcm_id';
   static const android_version='android_version';
   static const android_type='android_type';

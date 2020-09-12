@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/AllMemberResponse.dart';
@@ -68,12 +69,12 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 // TODO: implement getLogin
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
-    ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
+    ArgumentError.checkNotNull(token, Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
       GlobalVariables.keyPassword: password,
-      GlobalVariables.keyToken:token
+      Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.LoginAPI);
     print('LOGIN TOKEN >>>> $token');
@@ -99,7 +100,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(send_otp, "send_otp");
     ArgumentError.checkNotNull(mobile_no, "mobile_no");
     ArgumentError.checkNotNull(Email_id, "Email_id");
-    ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
+    ArgumentError.checkNotNull(token, Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
 
     FormData formData = FormData.fromMap({
       "expire_time": expire_time,
@@ -107,7 +108,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       "send_otp": send_otp,
       "mobile_no": mobile_no,
       "Email_id": Email_id,
-      GlobalVariables.keyToken:token
+      Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.otpLoginAPI);
     final Response _result = await _dio.post(GlobalVariables.otpLoginAPI,

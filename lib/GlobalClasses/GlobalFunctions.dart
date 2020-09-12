@@ -70,8 +70,8 @@ class GlobalFunctions{
   }
   static getFCMToken() async{
     sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.getKeys().contains(GlobalVariables.keyToken)){
-      return  sharedPreferences.getString(GlobalVariables.keyToken);
+    if(sharedPreferences.getKeys().contains(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken)){
+      return  sharedPreferences.getString(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
     }
     return "";
   }
@@ -248,7 +248,7 @@ class GlobalFunctions{
   }
   static Future<void> saveFCMToken(String token) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(GlobalVariables.keyToken, token);
+    sharedPreferences.setString(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken, token);
   }
 
   static backIconLayoutAndImplementation(BuildContext context,String title){
@@ -713,7 +713,7 @@ class GlobalFunctions{
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Visibility(
-                           //   visible: isCompulsory ? false : true,
+                              visible: isCompulsory ? false : true,
                               child: Container(
                                 height: 50,
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
