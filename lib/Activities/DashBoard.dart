@@ -761,7 +761,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
   getMyComplexPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseMyComplex(null,0)));
+        context, MaterialPageRoute(builder: (context) => BaseMyComplex(null)));
   }
 
   getDiscoverPage() {
@@ -1840,7 +1840,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           MaterialPageRoute(
               builder: (context) =>
                   BaseMyComplex(
-                      AppLocalizations.of(context).translate('my_complex'),0)));
+                      AppLocalizations.of(context).translate('my_complex'))));
     } else if (item == AppLocalizations.of(context).translate('announcement')) {
       //Redirect to News Board
       Navigator.push(
@@ -1848,7 +1848,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           MaterialPageRoute(
               builder: (context) =>
                   BaseMyComplex(
-                      AppLocalizations.of(context).translate('announcement'),0)));
+                      AppLocalizations.of(context).translate('announcement'))));
     } else if (item == AppLocalizations.of(context).translate('meetings')) {
       //Redirect to News Board
       Navigator.push(
@@ -1856,7 +1856,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           MaterialPageRoute(
               builder: (context) =>
                   BaseMyComplex(
-                      AppLocalizations.of(context).translate('meetings'),1)));
+                      AppLocalizations.of(context).translate('meetings'))));
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
       GlobalFunctions.comingSoonDialog(context);
@@ -1869,12 +1869,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           MaterialPageRoute(
               builder: (context) =>
                   BaseMyComplex(
-                      AppLocalizations.of(context).translate('directory'),4)));
+                      AppLocalizations.of(context).translate('directory'))));
     } else if (item == AppLocalizations.of(context).translate('documents')) {
       //Redirect to  Documents
       //GlobalFunctions.showToast("Coming Soon...");
        Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('documents'),3)));
+         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('documents'))));
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
      //  GlobalFunctions.comingSoonDialog(context);

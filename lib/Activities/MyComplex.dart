@@ -25,8 +25,8 @@ import 'base_stateful.dart';
 
 class BaseMyComplex extends StatefulWidget {
   String pageName;
-  final int pageIndex;
-  BaseMyComplex(this.pageName, this.pageIndex);
+  //final int pageIndex;
+  BaseMyComplex(this.pageName);
 
   @override
   State<StatefulWidget> createState() {
@@ -77,7 +77,7 @@ class MyComplexState extends State<BaseMyComplex>
 
   @override
   void initState() {
-    print(">>>>>>>PAGENAME ${widget.pageIndex}");
+    //print(">>>>>>>PAGENAME ${widget.pageIndex}");
     getDisplayName();
     getLocalPath();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -179,9 +179,9 @@ class MyComplexState extends State<BaseMyComplex>
   Widget build(BuildContext context) {
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    if (pageName != null||widget.pageIndex!=null) {
+    if (pageName != null) {
       try{
-        redirectToPage(pageName,widget.pageIndex);
+        redirectToPage(pageName);
       }catch(e){
         print(e);
       }
@@ -2436,7 +2436,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
 
         _meetingList = List<Announcement>.from(_list.map((i) =>Announcement.fromJson(i)));
-        print("_meetingList length : "+_announcementList.length.toString());
+        print("_meetingList length : "+_meetingList.length.toString());
 
       }
       _progressDialog.hide();
@@ -2461,7 +2461,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         /*{ID: 94, USER_NAME: Pallavi Unde, USER_PHOTO: 278808_2019-08-16_12:45:09.jpg, SUBJECT: test demo, DESCRIPTION: <p>test demo</p>
 I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
           _eventList = List<Announcement>.from(_list.map((i) =>Announcement.fromJson(i)));
-        print("_eventList length : "+_meetingList.length.toString());
+        print("_eventList length : "+_eventList.length.toString());
       }
       _progressDialog.hide();
       setState(() {
@@ -2543,15 +2543,15 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
-  void redirectToPage(String item,int index) {
-    print(">>>>>>>${item}");
+  void redirectToPage(String item) {
+   // print(">>>>>>>${item}");
     if(item==AppLocalizations.of(context).translate('my_complex')){
       //Redirect to my Unit
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('announcement') || index == 0){
+    }else if(item==AppLocalizations.of(context).translate('announcement')){
       //Redirect to  NewsBoard
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('meetings')|| index == 1){
+    }else if(item==AppLocalizations.of(context).translate('meetings')){
       //Redirect to  PollSurvey
       _tabController.animateTo(1);
     }else if(item==AppLocalizations.of(context).translate('poll_survey')){
@@ -2563,7 +2563,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     }else if(item==AppLocalizations.of(context).translate('directory')){
       //Redirect to  Document
       _tabController.animateTo(4);
-    }else if(item==AppLocalizations.of(context).translate('events')|| index == 5){
+    }else if(item==AppLocalizations.of(context).translate('events')){
       //Redirect to  Events
       _tabController.animateTo(5);
     }else{
