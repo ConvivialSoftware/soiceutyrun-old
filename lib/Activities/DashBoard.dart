@@ -814,11 +814,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   /*child: Image.asset(GlobalVariables.appLogoPath,
                     width: 250, height: 80, fit: BoxFit.fill),*/
                   margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
-                  padding: EdgeInsets.all(5),
-                  alignment: Alignment.topLeft,
-                  child: SvgPicture.asset(
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.topCenter,
+                  child: Image.asset(
                     GlobalVariables.drawerImagePath,
-                    height: 40,
+                    height: 60,
                   ),
                 ),
                 Container(

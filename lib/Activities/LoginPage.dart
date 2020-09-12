@@ -364,7 +364,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               color: GlobalVariables.mediumBlue,
                               borderRadius:
                               BorderRadius.all(Radius.circular(10))),
-                          margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                          margin: EdgeInsets.fromLTRB(0, 5, 0, 20),
                           child: CarouselSlider.builder(
                             options: CarouselOptions(height: 200.0, autoPlay: true,
                               autoPlayInterval: Duration(seconds: 3),

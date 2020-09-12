@@ -306,19 +306,23 @@ class GlobalFunctions{
 
     return  Stack(
       children: <Widget>[
-        Container(
-          alignment: Alignment.topCenter,
-          //color: GlobalVariables.black,
-          height: MediaQuery.of(context).size.height/4.2,
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SvgPicture.asset(
-                GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,fit: BoxFit.fill)),
+        Visibility(
+          visible: false,
+          child: Container(
+            alignment: Alignment.topCenter,
+            //color: GlobalVariables.black,
+            height: MediaQuery.of(context).size.height/4.2,
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: SvgPicture.asset(
+                  GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,fit: BoxFit.fill)),
+          ),
         ),
         Align(
           child: Container(
-            margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/8, 0, 0),
-            child: SvgPicture.asset(GlobalVariables.appIconPath,),
+            color: GlobalVariables.white,
+            margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/20, 0, 0),
+            child: Image.asset(GlobalVariables.drawerImagePath,width: 200,height: 150,),
           ),
           alignment: AlignmentDirectional.topCenter,
         ),
@@ -701,7 +705,7 @@ class GlobalFunctions{
                       children: [
                         Container(
                           child: Image.asset(
-                            GlobalVariables.appLogoPath,width: 80,height: 80,),
+                            GlobalVariables.appLogoPath,width: 50,height: 50,),
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
@@ -713,7 +717,7 @@ class GlobalFunctions{
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Visibility(
-                              visible: isCompulsory ? false : true,
+                             // visible: isCompulsory ? false : true,
                               child: Container(
                                 height: 50,
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),

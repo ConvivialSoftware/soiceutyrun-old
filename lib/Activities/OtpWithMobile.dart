@@ -179,84 +179,87 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                       ),
                     ],
                   ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/4, 0, 5),
-                    //color: GlobalVariables.orangeAccent,
-                    //margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          //   color: GlobalVariables.lightGreen,
-                          decoration: BoxDecoration(
-                              color: GlobalVariables.lightBlue,
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10))),
-                          margin: EdgeInsets.all(20),
-                          padding: EdgeInsets.fromLTRB(20,30,20,30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: SvgPicture.asset(
-                                    GlobalVariables.classifiedBigIconPath),
-                              ),
-                              Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      child: RichText(
-                                          text: TextSpan(
-                                              text: AppLocalizations.of(context)
-                                                  .translate('classified_ads'),
-                                              style: TextStyle(
-                                                  color: GlobalVariables.darkBlue,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold))),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                      child: RichText(
-                                          text: TextSpan(
-                                              text: AppLocalizations.of(context)
-                                                  .translate('classified_str'),
-                                              style: TextStyle(
-                                                  color: GlobalVariables.black,
-                                                  fontSize: 15))),
-                                    )
-                                  ],
+                  Visibility(
+                    visible: false,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/4, 0, 5),
+                      //color: GlobalVariables.orangeAccent,
+                      //margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            //   color: GlobalVariables.lightGreen,
+                            decoration: BoxDecoration(
+                                color: GlobalVariables.lightBlue,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                            margin: EdgeInsets.all(20),
+                            padding: EdgeInsets.fromLTRB(20,30,20,30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  child: SvgPicture.asset(
+                                      GlobalVariables.classifiedBigIconPath),
                                 ),
-                              )
-                            ],
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        child: RichText(
+                                            text: TextSpan(
+                                                text: AppLocalizations.of(context)
+                                                    .translate('classified_ads'),
+                                                style: TextStyle(
+                                                    color: GlobalVariables.darkBlue,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold))),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                        child: RichText(
+                                            text: TextSpan(
+                                                text: AppLocalizations.of(context)
+                                                    .translate('classified_str'),
+                                                style: TextStyle(
+                                                    color: GlobalVariables.black,
+                                                    fontSize: 15))),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          child: RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('pre_terms_conn'),
-                                style: TextStyle(color: GlobalVariables.black)),
-                            TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('terms_conn'),
-                                style: TextStyle(color: GlobalVariables.darkBlue)),
-                          ])),
-                        ),
-                        Container(
-                          child: RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('pre_privacy_statement'),
-                                style: TextStyle(color: GlobalVariables.black)),
-                            TextSpan(
-                                text: AppLocalizations.of(context)
-                                    .translate('privacy_statement'),
-                                style: TextStyle(color: GlobalVariables.darkBlue)),
-                          ])),
-                        )
-                      ],
+                          Container(
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: AppLocalizations.of(context)
+                                      .translate('pre_terms_conn'),
+                                  style: TextStyle(color: GlobalVariables.black)),
+                              TextSpan(
+                                  text: AppLocalizations.of(context)
+                                      .translate('terms_conn'),
+                                  style: TextStyle(color: GlobalVariables.darkBlue)),
+                            ])),
+                          ),
+                          Container(
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: AppLocalizations.of(context)
+                                      .translate('pre_privacy_statement'),
+                                  style: TextStyle(color: GlobalVariables.black)),
+                              TextSpan(
+                                  text: AppLocalizations.of(context)
+                                      .translate('privacy_statement'),
+                                  style: TextStyle(color: GlobalVariables.darkBlue)),
+                            ])),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],

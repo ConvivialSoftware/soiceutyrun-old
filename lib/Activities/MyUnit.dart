@@ -684,7 +684,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   AppLocalizations.of(context)
                                       .translate('recent_transaction'),
                                   style: TextStyle(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -738,7 +738,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                           AppLocalizations.of(context)
                                               .translate('view_more'),
                                           style: TextStyle(
-                                              color: GlobalVariables.green,
+                                              color: GlobalVariables.darkBlue,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -746,7 +746,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       Container(
                                         child: Icon(
                                           Icons.fast_forward,
-                                          color: GlobalVariables.green,
+                                          color: GlobalVariables.darkBlue,
                                         ),
                                       )
                                     ],
@@ -1833,7 +1833,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text("Document Name",
                             style:
-                                TextStyle(color: GlobalVariables.mediumGreen)),
+                                TextStyle(color: GlobalVariables.mediumBlue)),
                       ),
                     ],
                   ),
@@ -2310,7 +2310,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ? Text(
                               'Paid',
                               style: TextStyle(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.darkBlue,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             )
@@ -2468,7 +2468,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Icon(
                                     Icons.payment,
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.mediumBlue,
                                   ),
                                 ),
                                 Container(
@@ -2477,7 +2477,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     AppLocalizations.of(context)
                                         .translate('pay_now'),
                                     style:
-                                        TextStyle(color: GlobalVariables.green),
+                                        TextStyle(color: GlobalVariables.darkBlue),
                                   ),
                                 )
                               ],
@@ -3227,7 +3227,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 IconButton(
                     icon: Icon(
                       Icons.content_copy,
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -3244,7 +3244,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: GlobalVariables.green),
+                        color: GlobalVariables.darkBlue),
                   ),
                 )
               ],
@@ -3423,7 +3423,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         ? IconButton(
                                             icon: Icon(
                                               Icons.edit,
-                                              color: GlobalVariables.green,
+                                              color: GlobalVariables.darkBlue,
                                               size: 24,
                                             ),
                                             onPressed: () {
@@ -3454,7 +3454,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
                             child: RaisedButton(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.darkBlue,
                               onPressed: () {
                                 GlobalFunctions.checkInternetConnection()
                                     .then((internet) {
@@ -3481,7 +3481,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side:
-                                      BorderSide(color: GlobalVariables.green)),
+                                      BorderSide(color: GlobalVariables.darkBlue)),
                               child: Text(
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
@@ -3878,7 +3878,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     } else if (days >= -2 && days < 0) {
       return Color(0xFFf39c12);
     } else {
-      return GlobalVariables.mediumGreen;
+      return GlobalVariables.mediumBlue;
     }
     if (days > 0) {
     } else if (days >= 2) {

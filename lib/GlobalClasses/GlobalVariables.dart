@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class GlobalVariables{
   static var  isAlreadyTapped = false;
   /*Variables for the Web URL*/
-  static const termsConditionURL="https://societyrun.com/Terms%20&%20conditions.html";
-  static const privacyPolicyURL="https://societyrun.com/Privacy_Policy.html";
+  static const termsConditionURL="https://svcsocietypro.com/term_of_services.html";
+  static const privacyPolicyURL="https://svcsocietypro.com/privacy_policy.html";
   static bool isERPAccount=false;
 
   /*Variables for the SharedPreferences*/
@@ -35,9 +35,9 @@ class GlobalVariables{
   static var keyDuesDate="dues_date";
   static var keyGoogleCoordinate="google_parameter";
 
-  static var appLogoPath="assets/images/svc_logo.jpg";
+  static var appLogoPath="assets/images/svc_app_icon.png";
   static var userProfilePath="assets/images/user_profile.jpeg";
-  static var drawerImagePath="assets/other_assets/societyrun-logo_colored.svg";
+  static var drawerImagePath="assets/images/svc_logo.jpg";
   static var appIconPath="assets/other_assets/societyrun-logo.svg";
   static var myFlatIconPath="assets/menu_assets/myhome_icon.svg";
   static var myBuildingIconPath="assets/menu_assets/building_icon_menu.svg";
