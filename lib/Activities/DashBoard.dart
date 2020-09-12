@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -30,6 +31,7 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/main.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import 'LoginPage.dart';
 
@@ -1165,6 +1167,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     int prefPos=0;
     restClient.getAllSocietyData(username).then((value) {
       if (value.status) {
+
         List<dynamic> _list = value.data;
 
         _societyList = List<LoginResponse>.from(
@@ -1610,9 +1613,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                         int.parse(duesRs)>0 ? Text(
                           getBillPaymentStatus(),
                           style: TextStyle(
-                            color: GlobalVariables.mediumGreen,
-                            fontSize: 16,
-                          ),
+                              color: getBillPaymentStatusColor(),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ) : Text(
+                          'Paid',
+                          style: TextStyle(
+                              color: GlobalVariables.darkBlue,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -1632,7 +1641,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                             duesDate.length>0 ? GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'): '-',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.darkBlue,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -1726,7 +1735,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
               child: RaisedButton(
-                color: GlobalVariables.green,
+                color: GlobalVariables.darkBlue,
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -1739,7 +1748,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide(
-                        color: GlobalVariables.green)),
+                        color: GlobalVariables.darkBlue)),
                 child: Text(
                   AppLocalizations.of(context)
                       .translate('i_am_interested'),
@@ -2081,7 +2090,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     }else if(days >=-2 && days <0){
       return Color(0xFFf39c12);
     }else{
-      return GlobalVariables.mediumGreen;
+      return GlobalVariables.mediumBlue;
     }
   }
 

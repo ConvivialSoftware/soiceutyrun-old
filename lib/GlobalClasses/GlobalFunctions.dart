@@ -642,7 +642,7 @@ class GlobalFunctions{
                           child: ButtonTheme(
                             //minWidth: MediaQuery.of(context).size.width / 2,
                             child: RaisedButton(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.darkBlue,
                               onPressed: () {
                                 DashBoardState.logout(context);
                               },
@@ -651,7 +651,7 @@ class GlobalFunctions{
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide(
-                                      color: GlobalVariables.green)),
+                                      color: GlobalVariables.darkBlue)),
                               child: Text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
@@ -720,7 +720,7 @@ class GlobalFunctions{
                                 child: ButtonTheme(
                                   //minWidth: MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.darkBlue,
                                     onPressed: () {
                                      Navigator.of(context).pop();
                                     },
@@ -729,7 +729,7 @@ class GlobalFunctions{
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.green)),
+                                            color: GlobalVariables.darkBlue)),
                                     child: Text(
                                       AppLocalizations.of(context)
                                           .translate('later'),
@@ -746,7 +746,7 @@ class GlobalFunctions{
                               child: ButtonTheme(
                                 //minWidth: MediaQuery.of(context).size.width / 2,
                                 child: RaisedButton(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.darkBlue,
                                   onPressed: () {
                                     if(!isCompulsory){
                                       Navigator.of(context).pop();
@@ -761,7 +761,7 @@ class GlobalFunctions{
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
-                                          color: GlobalVariables.green)),
+                                          color: GlobalVariables.darkBlue)),
                                   child: Text(
                                     AppLocalizations.of(context)
                                         .translate('update'),

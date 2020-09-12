@@ -1835,7 +1835,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               Container(
                                   child: Icon(
                                 Icons.attach_file,
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.mediumBlue,
                               )),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -2274,16 +2274,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       (_billList[position].AMOUNT-_billList[position].RECEIVED) <=0 ? Text(
                         'Paid',
                         style: TextStyle(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.darkBlue,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ) : Text(
                         getBillPaymentStatus(position),
                         style: TextStyle(
-                          color: GlobalVariables.mediumBlue,
-                          fontSize: 16,
-                        ),
-                      ),
                             color:  getBillPaymentStatusColor(position),
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
@@ -3034,7 +3030,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Text(
                   AppLocalizations.of(context).translate('proceed'),
                   style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.darkBlue,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 )),
@@ -3781,7 +3777,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }else if(days >=-2 && days <0){
       return Color(0xFFf39c12);
     }else{
-      return GlobalVariables.mediumGreen;
+      return GlobalVariables.mediumBlue;
     }
     if (days > 0 ) {
 
