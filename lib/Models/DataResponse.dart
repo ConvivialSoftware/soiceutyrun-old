@@ -5,6 +5,7 @@ import 'Member.dart';
 
 class DataResponse {
   List<dynamic> data;
+  List<dynamic> front;
   String message;
   String android_version;
   String android_type;
@@ -12,7 +13,7 @@ class DataResponse {
   String ios_type;
   bool status;
 
-  DataResponse({this.data, this.message, this.status,this.android_version,this.android_type,this.ios_version,this.ios_type});
+  DataResponse({this.data, this.message, this.status,this.android_version,this.android_type,this.ios_version,this.ios_type,this.front});
 
 
   factory DataResponse.fromJson(Map<String, dynamic> map){
@@ -35,6 +36,17 @@ class DataResponse {
         android_type:map[GlobalVariables.android_type],
         ios_version:map[GlobalVariables.ios_version],
         ios_type:map[GlobalVariables.ios_type]
+    );
+
+  }
+
+  factory DataResponse.fromJsonBanner(Map<String, dynamic> map){
+
+    return DataResponse(
+        data: map[GlobalVariables.DATA],
+        front: map[GlobalVariables.Front],
+        status: map[GlobalVariables.STATUS],
+        message: map[GlobalVariables.MESSAGE]
     );
 
   }

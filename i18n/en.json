@@ -288,5 +288,11 @@
   "account_deactivate": "Your account has been deactivated. Please Logout. If you have any queries, please contact society admin/manager.",
   "app_update": "A newer and improved version of SocietyRun application is available. Please update for better experience.",
   "later": "Later",
-  "update": "Update"
+  "update": "Update",
+  "receipt": "Receipt",
+  "paid_amount": "Paid Amount",
+  "transaction_mode": "TRANSACTION_MODE",
+  "penalty": "PENALTY",
+  "narration": "Narration"
+
 }

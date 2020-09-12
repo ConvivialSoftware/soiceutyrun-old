@@ -529,7 +529,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
     restClient.getBannerData().then((value) {
       print('Response : ' + value.toString());
       if (value.status) {
-        List<dynamic> _list = value.data;
+        List<dynamic> _list = value.front;
         print('complaint list length : ' + _list.length.toString());
 
         // print('first complaint : ' + _list[0].toString());
