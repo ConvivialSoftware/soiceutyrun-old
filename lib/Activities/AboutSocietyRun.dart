@@ -450,7 +450,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: AutoSizeText(SocietyRun.versionCode,style: TextStyle(
+                        child: AutoSizeText(AppPackageInfo.version,style: TextStyle(
                             color: GlobalVariables.grey,fontSize: 16
                         ),),
                       ),

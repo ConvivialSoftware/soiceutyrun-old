@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/AllMemberResponse.dart';
@@ -11,15 +12,28 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
+import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 
 import 'RestClient.dart';
+const bool kDebugMode = true;
+
 
 class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   RestAPI(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
     this.baseUrl ??= GlobalVariables.BaseURL;
+
+    if (kDebugMode) {
+      _dio.interceptors.add(LogInterceptor(
+          responseBody: true,
+          error: true,
+          requestHeader: true,
+          responseHeader: false,
+          request: true,
+          requestBody: true));
+    }
   }
 
   final Dio _dio;
@@ -47,6 +61,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       requestEncoder: options.requestEncoder,
       responseDecoder: options.responseDecoder,
     );
+
   }
 
   @override
@@ -54,14 +69,18 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 // TODO: implement getLogin
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
-    ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
+    ArgumentError.checkNotNull(token, Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
 
+    if(Platform.isIOS){
+      GlobalVariables.keyToken =  GlobalVariables.keyTokenIOS;
+    }
     FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
       GlobalVariables.keyPassword: password,
-      GlobalVariables.keyToken:token
+      Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.LoginAPI);
+    print('LOGIN TOKEN >>>> $token');
     final Response _result = await _dio.post(GlobalVariables.LoginAPI,
         options: RequestOptions(
             //method: GlobalVariables.Post,
@@ -84,7 +103,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(send_otp, "send_otp");
     ArgumentError.checkNotNull(mobile_no, "mobile_no");
     ArgumentError.checkNotNull(Email_id, "Email_id");
-    ArgumentError.checkNotNull(token, GlobalVariables.keyToken);
+    ArgumentError.checkNotNull(token, Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
 
     FormData formData = FormData.fromMap({
       "expire_time": expire_time,
@@ -92,7 +111,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       "send_otp": send_otp,
       "mobile_no": mobile_no,
       "Email_id": Email_id,
-      GlobalVariables.keyToken:token
+      Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:token
     });
     print('baseurl : ' + baseUrl + GlobalVariables.otpLoginAPI);
     final Response _result = await _dio.post(GlobalVariables.otpLoginAPI,
@@ -184,7 +203,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
 
     print('value of getAllSocietyData : ' + value.toString());
-    return DataResponse.fromJson(value);
+    return DataResponse.fromJsonWithVersion(value);
   }
 
   @override
@@ -1381,7 +1400,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(name, GlobalVariables.STAFF_NAME);
     ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
     ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
-    ArgumentError.checkNotNull(userId, GlobalVariables.USER_ID);
+    ArgumentError.checkNotNull(userId, GlobalVariables.userID);
     ArgumentError.checkNotNull(mobile, GlobalVariables.Contact);
     ArgumentError.checkNotNull(qualification, GlobalVariables.QUALIFICATION);
     ArgumentError.checkNotNull(address, GlobalVariables.ADDRESS);
@@ -1396,7 +1415,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.STAFF_NAME: name,
       GlobalVariables.GENDER: gender,
       GlobalVariables.DOB: dob,
-      GlobalVariables.USER_ID: userId,
+      GlobalVariables.userID: userId,
       GlobalVariables.Contact: mobile,
       GlobalVariables.QUALIFICATION: qualification,
       GlobalVariables.ADDRESS: address,
@@ -1649,22 +1668,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<Map<String, dynamic>> getRazorPayOrderID(String amount, String currency, String receipt,String paymentCapture,String razorKey,String secretKey) async {
-    // TODO: implement getRazorPayOrderID
-    ArgumentError.checkNotNull(amount, "amount");
-    ArgumentError.checkNotNull(currency, "currency");
-    ArgumentError.checkNotNull(receipt, "receipt");
-    ArgumentError.checkNotNull(paymentCapture, "payment_capture");
-
-    FormData formData = FormData.fromMap({
-      "amount": amount,
-      "currency": currency,
-      "receipt": receipt,
-      "payment_capture": paymentCapture
-    });
+  Future<Map<String, dynamic>> getRazorPayOrderID(RazorPayOrderRequest request,String razorKey, String secretKey) async {
 
     var authorizedToken = razorKey+":"+secretKey;
-
     print('baseurl : ' + baseUrl + GlobalVariables.razorPayOrderAPI);
     final Response _result = await _dio.post(GlobalVariables.razorPayOrderAPI,
         options: RequestOptions(
@@ -1673,7 +1679,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
               "Authorization": "Basic "+base64Url.encode(utf8.encode(authorizedToken)),
               "Content-type":"application/json"
             }, baseUrl: baseUrl),
-        data: formData);
+        data: request);
     final value = _result.data;
     print('value of getRazorPayOrderID : ' + value.toString());
     return value;
@@ -1704,6 +1710,33 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
         data: formData);
     final value = _result.data;
     print('value of getBillMail response : ' + value.toString());
+
+    return StatusMsgResponse.fromJsonWithMessage(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> userLogout(String societyId, String userId, String gcmId) async {
+    // TODO: implement userLogout
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(userId,GlobalVariables.userID);
+    ArgumentError.checkNotNull(gcmId,GlobalVariables.GCM_ID);
+
+    FormData formData =
+    FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.GCM_ID:gcmId
+    });
+    print('baseurl : ' + baseUrl + GlobalVariables.logoutAPI);
+    final Response _result = await _dio.post(GlobalVariables.logoutAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of userLogout response : ' + value.toString());
 
     return StatusMsgResponse.fromJsonWithMessage(value);
   }

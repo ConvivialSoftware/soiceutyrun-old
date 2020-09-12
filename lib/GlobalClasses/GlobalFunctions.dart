@@ -14,10 +14,12 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:societyrun/Activities/DashBoard.dart';
 
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
@@ -25,6 +27,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 
@@ -67,8 +70,8 @@ class GlobalFunctions{
   }
   static getFCMToken() async{
     sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.getKeys().contains(GlobalVariables.keyToken)){
-      return  sharedPreferences.getString(GlobalVariables.keyToken);
+    if(sharedPreferences.getKeys().contains(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken)){
+      return  sharedPreferences.getString(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
     }
     return "";
   }
@@ -245,7 +248,7 @@ class GlobalFunctions{
   }
   static Future<void> saveFCMToken(String token) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(GlobalVariables.keyToken, token);
+    sharedPreferences.setString(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken, token);
   }
 
   static backIconLayoutAndImplementation(BuildContext context,String title){
@@ -534,10 +537,9 @@ class GlobalFunctions{
 
 
   static Future<File>  openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera,preferredCameraDevice:CameraDevice.rear);
-  //  print("picture : "+ picture.path.toString());
-   // print("fileString : "+ convertFileToString(picture.path.toString()));
-    return picture;
+    final picker = ImagePicker();
+    final picture = await picker.getImage(source: ImageSource.camera);
+    return File(picture.path);
   }
 
   static Future<bool> checkPermission(Permission permission) async {
@@ -593,4 +595,203 @@ class GlobalFunctions{
               );
             }));
   }
+
+  static getDaysFromDate(String fromDate , String toDate){
+
+    DateTime toDateTime = DateTime.parse(toDate);
+    DateTime fromDateTime = DateTime.parse(fromDate);
+    final differenceInDays = fromDateTime.difference(toDateTime).inDays;
+
+    return differenceInDays;
+  }
+
+  static forceLogoutDialog(BuildContext context){
+
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context,
+                StateSetter setState) {
+              return WillPopScope(
+                onWillPop: (){},
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.circular(25.0)),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          child: SvgPicture.asset(
+                            GlobalVariables.deactivateIconPath,width: 60,height: 60,),
+                        ),
+                        Container(
+                            margin: EdgeInsets.fromLTRB(15, 25, 15, 15),
+                            child: Text(AppLocalizations.of(context)
+                                .translate('account_deactivate'),style: TextStyle(
+                              fontSize: 16,color: GlobalVariables.black,
+                            ),)),
+                        Container(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width/2,
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: ButtonTheme(
+                            //minWidth: MediaQuery.of(context).size.width / 2,
+                            child: RaisedButton(
+                              color: GlobalVariables.green,
+                              onPressed: () {
+                                DashBoardState.logout(context);
+                              },
+                              textColor: GlobalVariables.white,
+                              //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                      color: GlobalVariables.green)),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('logout'),
+                                style: TextStyle(
+                                    fontSize: GlobalVariables.largeText),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
+  }
+
+  static appUpdateDialog(BuildContext context, String appType){
+
+    bool isCompulsory=false;
+    if(appType=='Compulsary'){
+      isCompulsory=true;
+    }
+
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context,
+                StateSetter setState) {
+              return WillPopScope(
+                onWillPop: (){
+                  if(!isCompulsory){
+                    Navigator.of(context).pop();
+                  }
+                  return ;
+                },
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.circular(25.0)),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          child: Image.asset(
+                            GlobalVariables.appLogoPath,width: 80,height: 80,),
+                        ),
+                        Container(
+                            margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
+                            child: Text(AppLocalizations.of(context)
+                                .translate('app_update'),style: TextStyle(
+                              fontSize: 16,color: GlobalVariables.black,
+                            ),)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Visibility(
+                              visible: isCompulsory ? false : true,
+                              child: Container(
+                                height: 50,
+                                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: ButtonTheme(
+                                  //minWidth: MediaQuery.of(context).size.width / 2,
+                                  child: RaisedButton(
+                                    color: GlobalVariables.green,
+                                    onPressed: () {
+                                     Navigator.of(context).pop();
+                                    },
+                                    textColor: GlobalVariables.white,
+                                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: GlobalVariables.green)),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('later'),
+                                      style: TextStyle(
+                                          fontSize: GlobalVariables.largeText),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: ButtonTheme(
+                                //minWidth: MediaQuery.of(context).size.width / 2,
+                                child: RaisedButton(
+                                  color: GlobalVariables.green,
+                                  onPressed: () {
+                                    if(!isCompulsory){
+                                      Navigator.of(context).pop();
+                                    }
+                                    String url = 'https://play.google.com/store/apps/details?id=' + AppPackageInfo.packageName;
+                                    //String url = 'market://details?id=" '+ AppPackageInfo.packageName;
+                                    if(canLaunch(url) != null)
+                                      launch(url);
+                                  },
+                                  textColor: GlobalVariables.white,
+                                  //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          color: GlobalVariables.green)),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('update'),
+                                    style: TextStyle(
+                                        fontSize: GlobalVariables.largeText),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
+  }
+
+  static getAppPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    AppPackageInfo.appName = packageInfo.appName;
+    AppPackageInfo.packageName = packageInfo.packageName;
+    AppPackageInfo.version = packageInfo.version;
+    AppPackageInfo.buildNumber = packageInfo.buildNumber;
+    print('appName : '+ AppPackageInfo.appName);
+    print('packageName : '+ AppPackageInfo.packageName);
+    print('version : '+ AppPackageInfo.version);
+    print('buildNumber : '+ AppPackageInfo.buildNumber);
+  }
+
 }

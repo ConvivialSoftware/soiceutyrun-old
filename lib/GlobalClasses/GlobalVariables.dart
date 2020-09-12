@@ -12,6 +12,7 @@ class GlobalVariables{
   static var keyIsLogin="isLogin";
   static var keyUsername="username";
   static var keyToken="GCM_ID";
+  static var keyTokenIOS="TOKEN_ID";
   static var keyPassword="password";
   static var keyLanguageCode="language_code";
   static var keyId="id";
@@ -36,7 +37,7 @@ class GlobalVariables{
 
   static var appLogoPath="assets/images/svc_logo.jpg";
   static var userProfilePath="assets/images/user_profile.jpeg";
-  static var drawerImagePath="assets/images/svc_logo.jpg";
+  static var drawerImagePath="assets/other_assets/societyrun-logo_colored.svg";
   static var appIconPath="assets/other_assets/societyrun-logo.svg";
   static var myFlatIconPath="assets/menu_assets/myhome_icon.svg";
   static var myBuildingIconPath="assets/menu_assets/building_icon_menu.svg";
@@ -76,6 +77,7 @@ class GlobalVariables{
   static var changePasswordPath="assets/other_assets/change_password.svg";
   static var successIconPath="assets/other_assets/success.svg";
   static var failureIconPath="assets/other_assets/failure.svg";
+  static var deactivateIconPath="assets/other_assets/deactive.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath = "assets/bottom_menu/bottom_building_icon.svg";
@@ -144,6 +146,7 @@ class GlobalVariables{
   static const feedbackAPI = "Feedback";
   static const allMemberAPI = "View_directory/all_member";
   static const razorPayOrderAPI = "v1/orders";
+  static const logoutAPI = "Api/logout";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -273,13 +276,18 @@ class GlobalVariables{
   static const QUALIFICATION="QUALIFICATION";
   static const ADDRESS="ADDRESS";
   static const NOTES='NOTES';
-  static const USER_ID='USER_ID';
   static const PHOTO='PHOTO';
   static const ROLE='ROLE';
   static const NUMBER='NUMBER';
   static const Email_id='Email_id';
   static const RESPONSE='RESPONSE';
   static const orderID='ORDER_ID';
+  static const TOKEN_ID='TOKEN_ID';
+  static const GCM_ID='gcm_id';
+  static const android_version='android_version';
+  static const android_type='android_type';
+  static const ios_version='ios_version';
+  static const ios_type='ios_type';
 
 
 
@@ -327,6 +335,12 @@ class SocietyRun{
   static const salesEmail="Sales@societyrun.com";
   static const supportEmail="support@svcsocietypro.com";
   static const puneAddress="Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
+  static const mumbaiAddress="Dosti Pinnacle Plot No. E-7, Road No. 22, Wagle Estate, Thane-400604.";
+  //static const versionCode="1.0.0";
+}
+
+class AppPackageInfo{
+  static var appName,packageName,version,buildNumber ;
   static const mumbaiAddress="Dosti Pinnacle Plot No. E-7, Road No. 22, Wagle Estate, Thane-400604.";
   static const versionCode="1.0.0";
 }

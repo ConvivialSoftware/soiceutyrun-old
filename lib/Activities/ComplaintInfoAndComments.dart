@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -34,7 +35,7 @@ class BaseComplaintInfoAndComments extends StatefulWidget {
 }
 
 class ComplaintInfoAndCommentsState
-    extends State<BaseComplaintInfoAndComments> {
+    extends BaseStatefulState<BaseComplaintInfoAndComments> {
   var userId,photo="";
   List<Complaints> _complaintsList = new List<Complaints>();
   List<Comments> _commentsList = new List<Comments>();

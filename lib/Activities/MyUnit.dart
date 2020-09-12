@@ -36,10 +36,12 @@ import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Models/PayOption.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Vehicle.dart';
+import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import 'base_stateful.dart';
 
@@ -962,7 +964,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     context, 150.0),
                 ticketOpenClosedLayout(), //ticketFilterLayout(),
                 getTicketListDataLayout(), addTicketFabLayout(),
-              ],
+              ],`
             ),
           ),
         ],
@@ -1833,7 +1835,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               Container(
                                   child: Icon(
                                 Icons.attach_file,
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                               )),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -2269,13 +2271,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                       ),
-                      Text(
-                        AppLocalizations.of(context).translate('due_date'),
+                      (_billList[position].AMOUNT-_billList[position].RECEIVED) <=0 ? Text(
+                        'Paid',
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ) : Text(
+                        getBillPaymentStatus(position),
                         style: TextStyle(
                           color: GlobalVariables.mediumBlue,
                           fontSize: 16,
                         ),
                       ),
+                            color:  getBillPaymentStatusColor(position),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ) ,
                     ],
                   ),
                   Container(
@@ -2284,7 +2296,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "Rs. " + _billList[position].AMOUNT.toString(),
+                          "Rs. " + (_billList[position].AMOUNT-_billList[position].RECEIVED).toString(),
                           style: TextStyle(
                               color: GlobalVariables.darkBlue,
                               fontSize: 24,
@@ -2354,42 +2366,47 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             print('hasRazorPayGateway' +
                                 hasRazorPayGateway.toString());
 
-                            if (hasPayTMGateway && hasRazorPayGateway) {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      StatefulBuilder(builder:
-                                          (BuildContext context,
-                                              StateSetter setState) {
-                                        return Dialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(25.0)),
-                                          child: getListOfPaymentGateway(
-                                              context, setState, position),
-                                        );
-                                      }));
-                            } else {
-                              if (_payOptionList[0].Status) {
-                                if (hasRazorPayGateway) {
-                                  _selectedPaymentGateway = 'RazorPay';
-                                  redirectToPaymentGateway(position);
-                                } else if (hasPayTMGateway) {
-                                  //Paytm Payment method execute
+                            if(_billList[position].AMOUNT-_billList[position].RECEIVED>0) {
+                              if (hasPayTMGateway && hasRazorPayGateway) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(builder:
+                                            (BuildContext context,
+                                            StateSetter setState) {
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(25.0)),
+                                            child: getListOfPaymentGateway(
+                                                context, setState, position),
+                                          );
+                                        }));
+                              } else {
+                                if (_payOptionList[0].Status) {
+                                  if (hasRazorPayGateway) {
+                                    _selectedPaymentGateway = 'RazorPay';
+                                    redirectToPaymentGateway(position);
+                                  } else if (hasPayTMGateway) {
+                                    //Paytm Payment method execute
 
-                                  _selectedPaymentGateway = 'PayTM';
-                                  print('_selectedPaymentGateway' +
-                                      _selectedPaymentGateway);
+                                    _selectedPaymentGateway = 'PayTM';
+                                    print('_selectedPaymentGateway' +
+                                        _selectedPaymentGateway);
 
-                                  redirectToPaymentGateway(position);
+                                    redirectToPaymentGateway(position);
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        "Online Payment Option is not available.");
+                                  }
                                 } else {
                                   GlobalFunctions.showToast(
                                       "Online Payment Option is not available.");
                                 }
-                              } else {
-                                GlobalFunctions.showToast(
-                                    "Online Payment Option is not available.");
                               }
+                            }else{
+                              GlobalFunctions.showToast(AppLocalizations.of(context)
+                                  .translate('already_paid'));
                             }
                           },
                           child: Container(
@@ -2444,13 +2461,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                         InkWell(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                          final result = await  Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => BaseAlreadyPaid(
                                         _billList[position].INVOICE_NO,
                                         _billList[position].AMOUNT)));
+                          if(result=='back'){
+                            getAllBillData();
+                          }
                           },
                           child: Container(
                             child: Column(
@@ -2702,6 +2722,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
+    print("AMOUNT>>>>>>>> $amount");
+
     String paymentDate = DateTime.now().toLocal().year.toString() +
         "-" +
         DateTime.now().toLocal().month.toString().padLeft(2,'0') +
@@ -2715,7 +2737,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 flat,
                 block,
                 invoiceNo,
-                amount.toString(),
+                (amount/100).toString(),
                 paymentId,
                 "online Transaction",
                 "Razorpay",
@@ -3012,7 +3034,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Text(
                   AppLocalizations.of(context).translate('proceed'),
                   style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 )),
@@ -3677,11 +3699,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     amount = _billList[position].AMOUNT * 100;
     invoiceNo = _billList[position].INVOICE_NO;
     _progressDialog.show();
-    restClientRazorPay.getRazorPayOrderID(amount.toString(), "INR", block+' '+flat +'-'+invoiceNo, "1",razorKey,secret_key).then((value) {
+    RazorPayOrderRequest request = new RazorPayOrderRequest(amount: amount,currency: "INR",receipt: block+' '+flat +'-'+invoiceNo,paymentCapture: 1);
+    restClientRazorPay.getRazorPayOrderID(request,razorKey,secret_key).then((value) {
       print('getRazorPayOrderID Response : ' + value.toString());
       orderId = value['id'];
       print('id : '+ orderId);
-
       postRazorPayTransactionOrderID(value['id'],value['amount'].toString(),position);
 
     });
@@ -3696,7 +3718,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
-    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, amount).then((value) {
+    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, (int.parse(amount)/100).toString()).then((value) {
       print('Value : '+value.toString());
       _progressDialog.hide();
       if(value.status){
@@ -3715,6 +3737,61 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     });
 
+  }
+
+  String getBillPaymentStatus(int position) {
+
+    String status='';
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(_billList[position].DUE_DATE.toString());
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+
+    if (days>0) {
+      status = "Overdue";
+    } else if (days == 0 ) {
+      status  = "Due Today";
+    }else if(days >=-2 && days <0){
+      status = 'Due in '+ (days*(-1)).toString()+' day';
+    }else{
+      status = 'Due Date';
+    }
+    return status;
+
+  }
+
+  getBillPaymentStatusColor(int position) {
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(_billList[position].DUE_DATE.toString());
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+
+    if (days>0) {
+      return Color(0xFFc0392b);
+    } else if (days == 0 ) {
+      return Color(0xFFf39c12);
+    }else if(days >=-2 && days <0){
+      return Color(0xFFf39c12);
+    }else{
+      return GlobalVariables.mediumGreen;
+    }
+    if (days > 0 ) {
+
+    }else if (days >= 2) {
+      return Color(0xFFf39c12);
+    } else if (days==1) {
+      return Color(0xFFf39c12);
+    } else if (days == 0 ) {
+      return Color(0xFFf39c12);
+    }
   }
 }
 
