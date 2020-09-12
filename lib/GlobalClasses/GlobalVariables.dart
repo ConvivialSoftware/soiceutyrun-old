@@ -160,7 +160,7 @@ class GlobalVariables{
   static const ledgerAPI = "ledger";
   static const viewBillsAPI = "view";
   static const billAPI = "Billview1";
-  static const receiptAPI = "receiptview";
+  static const receiptAPI = "receiptview1";
   static const bankAPI = "bank";
   static const insertPaymentAPI = "insertpayment_razorpay";
   static const paymentRequestAPI = "paymentrequest";
@@ -297,6 +297,7 @@ class GlobalVariables{
   static const STATUS = "status";
   static const MESSAGE = "message";
   static const DATA = "data";
+  static const Front = "front";
   static const PassCode = "pass_code";
   static const ExpiredTime = "expire_time";
   static const OTP = "otp";

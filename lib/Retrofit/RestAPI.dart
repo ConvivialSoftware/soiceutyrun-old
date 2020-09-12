@@ -10,6 +10,7 @@ import 'package:societyrun/Models/DuesResponse.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
+import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
 import 'package:societyrun/Models/razor_pay_order_request.dart';
@@ -1131,7 +1132,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<DataResponse> getReceiptData(String socId, String flat, String block, String receiptNo) async {
+  Future<ReceiptViewResponse> getReceiptData(String socId, String flat, String block, String receiptNo) async {
     // TODO: implement getReceiptData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1164,7 +1165,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
         data: formData);
     final value = _result.data;
     print('value of getReceiptData : ' + value.toString());
-    return DataResponse.fromJson(value);
+    return ReceiptViewResponse.fromJson(value);
   }
 
   @override
@@ -1318,7 +1319,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.DOB:dob,
       GlobalVariables.BLOOD_GROUP:bloodGroup,
       GlobalVariables.OCCUPATION:occupation,
-      GlobalVariables.Email:email
+      GlobalVariables.Email:email,
+      GlobalVariables.ADDRESS:address
 
       //GlobalVariables.
     });
@@ -1581,7 +1583,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     );
     final value = _result.data;
     print('value of getBannerData : ' + value.toString());
-    return DataResponse.fromJson(value);
+    return DataResponse.fromJsonBanner(value);
   }
 
   @override

@@ -1640,7 +1640,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                         Visibility(
                           visible: int.parse(duesRs)>0 ? true : false,
                           child: Text(
-                            duesDate.length>0 ? GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'): '-',
+                            duesDate.length>0 && duesDate!='-' ? GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'): '-',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: GlobalVariables.green,

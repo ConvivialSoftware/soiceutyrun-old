@@ -22,6 +22,7 @@ import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
+import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -47,6 +48,7 @@ import 'base_stateful.dart';
 
 class BaseMyUnit extends StatefulWidget {
   String pageName;
+
   BaseMyUnit(this.pageName);
 
   @override
@@ -59,8 +61,6 @@ class BaseMyUnit extends StatefulWidget {
 class MyUnitState extends BaseStatefulState<BaseMyUnit>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
-
 
   //List<Bills> _billList = new List<Bills>();
 
@@ -90,7 +90,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   // ScrollController _scrollController= ScrollController();
   var firstTicketContainerColor = GlobalVariables.mediumGreen;
   var secondTicketContainerColor = GlobalVariables.white;
-  
+
   var firstTicketTextColor = GlobalVariables.white;
   var secondTicketTextColor = GlobalVariables.green;
   bool isOpenTicket = true;
@@ -104,9 +104,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   bool isClosedDocuments = false;
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
-  var email='', phone='',consumerId='',societyName='';
+  var email = '', phone = '', consumerId = '', societyName = '';
 
-  var amount, invoiceNo, referenceNo,billType,orderId;
+  var amount, invoiceNo, referenceNo, billType, orderId;
 
   var _localPath;
   ReceivePort _port = ReceivePort();
@@ -132,12 +132,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   MyUnitState(this.pageName);
 
   TextEditingController _emailTextController = TextEditingController();
-  bool isEditEmail=false;
+  bool isEditEmail = false;
 
   @override
   void initState() {
     super.initState();
-   /* getDisplayName();
+    /* getDisplayName();
     getLocalPath();
     getDisplayPhoto();
     getMobile();
@@ -153,30 +153,26 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     _tabController.addListener(_handleTabSelection);
     print(pageName.toString());
     _handleTabSelection();
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       String id = data[0];
       DownloadTaskStatus status = data[1];
       int progress = data[2];
-      setState((){
-        if(status == DownloadTaskStatus.complete){
+      setState(() {
+        if (status == DownloadTaskStatus.complete) {
           _progressDialog.hide();
           print("TASKID >>> $_taskId");
-          _openDownloadedFile(_taskId)
-              .then((success) {
+          _openDownloadedFile(_taskId).then((success) {
             if (!success) {
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(
-                  content: Text(
-                      'Cannot open this file')));
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(content: Text('Cannot open this file')));
             }
           });
-        }else{
+        } else {
           _progressDialog.hide();
           Scaffold.of(context)
-              .showSnackBar(SnackBar(
-              content: Text(
-                  'Download failed!')));
+              .showSnackBar(SnackBar(content: Text('Download failed!')));
         }
       });
     });
@@ -184,7 +180,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     FlutterDownloader.registerCallback(downloadCallback);
 
     // getBillList();
-   /* getVehicleRecentTransactionList();
+    /* getVehicleRecentTransactionList();
 
 
     getTransactionList();
@@ -200,19 +196,20 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
 
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
     print(
         'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
 
     send.send([id, status, progress]);
-
   }
 
-  void downloadAttachment(var url,var _localPath) async {
+  void downloadAttachment(var url, var _localPath) async {
     _progressDialog.show();
-    String localPath = _localPath + Platform.pathSeparator+"Download";
+    String localPath = _localPath + Platform.pathSeparator + "Download";
     final savedDir = Directory(localPath);
     bool hasExisted = await savedDir.exists();
     if (!hasExisted) {
@@ -223,20 +220,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       savedDir: localPath,
       headers: {"auth": "test_for_sql_encoding"},
       //fileName: "SocietyRunImage/Document",
-      showNotification: true, // show download progress in status bar (for Android)
-      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+      showNotification: true,
+      // show download progress in status bar (for Android)
+      openFileFromNotification:
+          true, // click on notification to open downloaded file (for Android)
     );
-
-
-
   }
+
   Future<bool> _openDownloadedFile(String id) {
     return FlutterDownloader.open(taskId: id);
   }
 
   @override
   Widget build(BuildContext context) {
-
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if (pageName != null) {
       redirectToPage(pageName);
@@ -250,7 +246,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           centerTitle: true,
           leading: InkWell(
             onTap: () {
-              Navigator.pop(context,'back');
+              Navigator.pop(context, 'back');
             },
             child: Icon(
               Icons.arrow_back,
@@ -264,19 +260,20 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           bottom: getTabLayout(),
           elevation: 0,
         ),
-        body:WillPopScope(child:   TabBarView(controller: _tabController, children: <Widget>[
-        Container(
-          color: GlobalVariables.veryLightGray,
-          child: getMyDuesLayout(),
-        ),
-        SingleChildScrollView(
-          child: getMyHouseholdLayout(),
-        ), //  getMyTicketLayout(),
-        /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
+        body: WillPopScope(
+            child: TabBarView(controller: _tabController, children: <Widget>[
+              Container(
+                color: GlobalVariables.veryLightGray,
+                child: getMyDuesLayout(),
+              ),
+              SingleChildScrollView(
+                child: getMyHouseholdLayout(),
+              ), //  getMyTicketLayout(),
+              /* getMyDocumentsLayout(), */ /*SingleChildScrollView(
             child: getMyTanentsLayout(),
           )*/
-      ]), onWillPop: onWillPop),
-
+            ]),
+            onWillPop: onWillPop),
       ),
     );
   }
@@ -310,12 +307,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BaseViewBill(
-                              _ledgerList[position].RECEIPT_NO)));
+                onTap: () {
+                  if (_ledgerList[position].TYPE.toLowerCase().toString() ==
+                      'bill') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseViewBill(
+                                _ledgerList[position].RECEIPT_NO)));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseViewReceipt(
+                                _ledgerList[position].RECEIPT_NO)));
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5),
@@ -438,7 +444,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     return PreferredSize(
       preferredSize: Size.fromHeight(40.0),
       child: TabBar(
-      /*  onTap: (index){
+        /*  onTap: (index){
           print('Call onTap');
           _callAPI(index);
         },*/
@@ -635,113 +641,126 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 */
   getMyDuesLayout() {
-
     print('getMyDuesLayout Tab call');
 
-    return GlobalVariables.isERPAccount ? SingleChildScrollView(
-     // scrollDirection: Axis.vertical,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        //height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: GlobalVariables.veryLightGray,
-        ),
-        child: Stack(
-          children: <Widget>[
-            GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
-            Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+    return GlobalVariables.isERPAccount
+        ? SingleChildScrollView(
+            // scrollDirection: Axis.vertical,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              //height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                color: GlobalVariables.veryLightGray,
+              ),
+              child: Stack(
                 children: <Widget>[
+                  GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                      context, 150.0),
                   Container(
-                    margin: EdgeInsets.fromLTRB(
-                        0, MediaQuery.of(context).size.height / 60, 0, 0),
-                    child: Builder(
-                        builder: (context) => ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _billList.length,
-                              itemBuilder: (context, position) {
-                                return getBillListItemLayout(position, context);
-                              }, //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
-                  ),
-                  _ledgerList.length > 0 ? Container(
-                    alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                    margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('recent_transaction'),
-                      style: TextStyle(
-                        color: GlobalVariables.green,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ):Container(),
-                  _ledgerList.length > 0 ? Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10))),
-                    child: Builder(
-                        builder: (context) => ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _ledgerList.length,
-                              itemBuilder: (context, position) {
-                                return getListItemLayout(position);
-                              }, //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
-                  ) : Container(),
-                  _ledgerList.length>0 ?   Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                      //color: GlobalVariables.white,
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10))),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BaseLedger()));
-                        },
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate('view_more'),
-                                style: TextStyle(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.fromLTRB(
+                              0, MediaQuery.of(context).size.height / 60, 0, 0),
+                          child: Builder(
+                              builder: (context) => ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: _billList.length,
+                                    itemBuilder: (context, position) {
+                                      return getBillListItemLayout(
+                                          position, context);
+                                    }, //  scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                  )),
+                        ),
+                        _ledgerList.length > 0
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                //color: GlobalVariables.white,
+                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('recent_transaction'),
+                                  style: TextStyle(
                                     color: GlobalVariables.green,
                                     fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              child: Icon(
-                                Icons.fast_forward,
-                                color: GlobalVariables.green,
-                              ),
-                            )
-                          ],
-                        ),
-                      )) : Container(),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        _ledgerList.length > 0
+                            ? Container(
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10))),
+                                child: Builder(
+                                    builder: (context) => ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: _ledgerList.length,
+                                          itemBuilder: (context, position) {
+                                            return getListItemLayout(position);
+                                          }, //  scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                        )),
+                              )
+                            : Container(),
+                        _ledgerList.length > 0
+                            ? Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                //color: GlobalVariables.white,
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.white,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10))),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseLedger()));
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate('view_more'),
+                                          style: TextStyle(
+                                              color: GlobalVariables.green,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: Icon(
+                                          Icons.fast_forward,
+                                          color: GlobalVariables.green,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ))
+                            : Container(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    ) : getNoERPAccountLayout();
+          )
+        : getNoERPAccountLayout();
   }
 
   getMyHouseholdLayout() {
@@ -782,7 +801,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     Container(
                         child: RaisedButton(
                       onPressed: () {
-
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -844,7 +862,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => BaseVerifyStaffMember()));
+                                  builder: (context) =>
+                                      BaseVerifyStaffMember()));
                         },
                         child: Text(
                           AppLocalizations.of(context).translate('plus_add'),
@@ -928,13 +947,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         borderRadius: BorderRadius.circular(10)),
                     child: Builder(
                         builder: (context) => ListView.builder(
-                              physics:
-                                  const NeverScrollableScrollPhysics(), // scrollDirection: Axis.horizontal,
+                              physics: const NeverScrollableScrollPhysics(),
+                              // scrollDirection: Axis.horizontal,
                               itemCount: _vehicleList.length,
                               itemBuilder: (context, position) {
                                 return getVehicleRecentTransactionListItemLayout(
                                     position);
-                              }, //  scrollDirection: Axis.vertical,
+                              },
+                              //  scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                             )),
                   ),
@@ -996,7 +1016,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       ),
     );
   }
- /* getMyTanentsLayout() {
+
+  /* getMyTanentsLayout() {
     print('MyTanents Tab Call');
     return Container(
       width: MediaQuery.of(context)
@@ -1090,7 +1111,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 */
   profileLayout() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         navigateToProfilePage();
       },
       child: Align(
@@ -1098,8 +1119,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         child: Container(
           // color: GlobalVariables.black,
           //width: MediaQuery.of(context).size.width / 1.2,
-          margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30,
-              0, 0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          margin: EdgeInsets.fromLTRB(
+              0,
+              MediaQuery.of(context).size.height / 30,
+              0,
+              0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Card(
             shape: (RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0))),
@@ -1152,13 +1176,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                       InkWell(
-                        onTap: (){
-                          if(phone.length>0) {
-                            GlobalFunctions.shareData(name,'Name : ' + name+'\nContact : ' + phone);
-                          } else if(email.length>0){
-                            GlobalFunctions.shareData(name, 'Name : ' + name+'\nMail ID : '+email);
-                          }else{
-                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('mobile_email_not_found'));
+                        onTap: () {
+                          if (phone.length > 0) {
+                            GlobalFunctions.shareData(name,
+                                'Name : ' + name + '\nContact : ' + phone);
+                          } else if (email.length > 0) {
+                            GlobalFunctions.shareData(name,
+                                'Name : ' + name + '\nMail ID : ' + email);
+                          } else {
+                            GlobalFunctions.showToast(
+                                AppLocalizations.of(context)
+                                    .translate('mobile_email_not_found'));
                           }
                         },
                         child: Container(
@@ -1384,7 +1412,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 */
   getContactListItemLayout(var _list, int position, bool family) {
-    var call = '', email = '',userId;
+    var call = '', email = '', userId;
     if (family) {
       call = _list[position].MOBILE.toString();
       userId = _list[position].ID.toString();
@@ -1398,15 +1426,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
 
     return InkWell(
-      onTap: (){
-        print('userId : '+userId);
-        print('societyId : '+societyId);
-        if(family) {
+      onTap: () {
+        print('userId : ' + userId);
+        print('societyId : ' + societyId);
+        if (family) {
           Navigator.push(
-              context, MaterialPageRoute(
-              builder: (context) =>
-                  BaseDisplayProfileInfo(userId, societyId)));
-        }/*else{
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BaseDisplayProfileInfo(userId, societyId)));
+        }
+        /*else{
           print('_list[position] : '+ _list[position].toString());
           Navigator.push(
               context,
@@ -1488,9 +1518,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                         InkWell(
                           onTap: () {
-                            String name= family ? _list[position].NAME : _list[position].STAFF_NAME;
+                            String name = family
+                                ? _list[position].NAME
+                                : _list[position].STAFF_NAME;
                             String title = '';
-                            String text = 'Name : ' + name+'\nContact : ' + call;
+                            String text =
+                                'Name : ' + name + '\nContact : ' + call;
                             family
                                 ? title = _list[position].NAME
                                 : title = _list[position].STAFF_NAME;
@@ -1513,7 +1546,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
- /* getTicketDescListItemLayout(int position) {
+  /* getTicketDescListItemLayout(int position) {
     return InkWell(
       onTap: () {
         GlobalFunctions.showToast(isOpenTicket
@@ -1786,21 +1819,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Visibility(
-                  visible:false,
+                  visible: false,
                   child: Row(
                     children: <Widget>[
                       Container(
                           child: SvgPicture.asset(
-                            GlobalVariables.downloadIconPath,
-                            color: GlobalVariables.lightGray,
-                            width: 25,
-                            height: 20,
-                          )),
+                        GlobalVariables.downloadIconPath,
+                        color: GlobalVariables.lightGray,
+                        width: 25,
+                        height: 20,
+                      )),
                       Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(
-                            "Document Name",
-                            style: TextStyle(color: GlobalVariables.mediumGreen)),
+                        child: Text("Document Name",
+                            style:
+                                TextStyle(color: GlobalVariables.mediumGreen)),
                       ),
                     ],
                   ),
@@ -1968,7 +2001,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
- /* getDisplayName() async {
+  /* getDisplayName() async {
 
 
     name = await GlobalFunctions.getDisplayName();
@@ -2022,12 +2055,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
 
-    print('Name : '+name);
-    print('Photo : '+photo);
-    print('Phone : '+phone);
-    print('EmailId : '+email);
-    print('ConsumerId : '+consumerId);
-
+    print('Name : ' + name);
+    print('Photo : ' + photo);
+    print('Phone : ' + phone);
+    print('EmailId : ' + email);
+    print('ConsumerId : ' + consumerId);
   }
 
   getSharedPreferenceDuesData() {
@@ -2039,7 +2071,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
- /* getTicketListDataLayout() {
+  /* getTicketListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -2073,6 +2105,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               )),
     );
   }
+
   /*getTantentsListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
@@ -2091,7 +2124,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }*/
 
-
   getDocumentTypeColor(String type) {
     switch (type.toLowerCase().trim()) {
       case "others":
@@ -2108,6 +2140,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         break;
     }
   }
+
   static getTicketCategoryColor(String category) {
     switch (category.toLowerCase()) {
       case "new":
@@ -2125,7 +2158,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
   }
 
-
   Future<void> getUnitMemberData() async {
     //  _progressDialog.show();
     final dio = Dio();
@@ -2142,9 +2174,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }
       getUnitStaffData();
     }).catchError((Object obj) {
- //     if(_progressDialog.isShowing()){
-  //      _progressDialog.hide();
-  //    }
+      //     if(_progressDialog.isShowing()){
+      //      _progressDialog.hide();
+      //    }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2172,9 +2204,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }
       getUnitVehicleData();
     }).catchError((Object obj) {
-     // if(_progressDialog.isShowing()){
-     //   _progressDialog.hide();
-    //  }
+      // if(_progressDialog.isShowing()){
+      //   _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2196,7 +2228,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     block = await GlobalFunctions.getBlock();
     flat = await GlobalFunctions.getFlat();
     restClient.getVehicleData(societyId, block, flat).then((value) {
-
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2206,14 +2237,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }
       _progressDialog.hide();
       setState(() {
-        isHouseholdTabAPICall= true;
+        isHouseholdTabAPICall = true;
       });
 
       //  getDocumentData();
     }).catchError((Object obj) {
-  //    if(_progressDialog.isShowing()){
-   //     _progressDialog.hide();
-   //   }
+      //    if(_progressDialog.isShowing()){
+      //     _progressDialog.hide();
+      //   }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2263,7 +2294,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                         child: Text(
                           _billList[position].TYPE != null
-                              ? _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE
+                              ? _billList[position].TYPE == 'Bill'
+                                  ? 'Maintenance Bill'
+                                  : _billList[position].TYPE
                               : '',
                           style: TextStyle(
                             color: GlobalVariables.white,
@@ -2271,19 +2304,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                       ),
-                      (_billList[position].AMOUNT-_billList[position].RECEIVED) <=0 ? Text(
-                        'Paid',
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ) : Text(
-                        getBillPaymentStatus(position),
-                        style: TextStyle(
-                            color:  getBillPaymentStatusColor(position),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ) ,
+                      (_billList[position].AMOUNT -
+                                  _billList[position].RECEIVED) <=
+                              0
+                          ? Text(
+                              'Paid',
+                              style: TextStyle(
+                                  color: GlobalVariables.green,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          : Text(
+                              getBillPaymentStatus(position),
+                              style: TextStyle(
+                                  color: getBillPaymentStatusColor(position),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
                     ],
                   ),
                   Container(
@@ -2292,7 +2329,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "Rs. " + (_billList[position].AMOUNT-_billList[position].RECEIVED).toString(),
+                          "Rs. " +
+                              (_billList[position].AMOUNT -
+                                      _billList[position].RECEIVED)
+                                  .toString(),
                           style: TextStyle(
                               color: GlobalVariables.green,
                               fontSize: 24,
@@ -2326,11 +2366,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: <Widget>[
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BaseViewBill(
-                                        _billList[position].INVOICE_NO)));
+                            if (_ledgerList[position]
+                                    .TYPE
+                                    .toLowerCase()
+                                    .toString() ==
+                                'bill') {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseViewBill(
+                                          _billList[position].INVOICE_NO)));
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseViewReceipt(
+                                          _billList[position].INVOICE_NO)));
+                            }
                           },
                           child: Container(
                             child: Column(
@@ -2362,18 +2414,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             print('hasRazorPayGateway' +
                                 hasRazorPayGateway.toString());
 
-                            if(_billList[position].AMOUNT-_billList[position].RECEIVED>0) {
+                            if (_billList[position].AMOUNT -
+                                    _billList[position].RECEIVED >
+                                0) {
                               if (hasPayTMGateway && hasRazorPayGateway) {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) =>
                                         StatefulBuilder(builder:
                                             (BuildContext context,
-                                            StateSetter setState) {
+                                                StateSetter setState) {
                                           return Dialog(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(25.0)),
+                                                    BorderRadius.circular(
+                                                        25.0)),
                                             child: getListOfPaymentGateway(
                                                 context, setState, position),
                                           );
@@ -2400,9 +2455,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       "Online Payment Option is not available.");
                                 }
                               }
-                            }else{
-                              GlobalFunctions.showToast(AppLocalizations.of(context)
-                                  .translate('already_paid'));
+                            } else {
+                              GlobalFunctions.showToast(
+                                  AppLocalizations.of(context)
+                                      .translate('already_paid'));
                             }
                           },
                           child: Container(
@@ -2429,9 +2485,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                         InkWell(
-                          onTap : (){
-                            emailBillDialog(context,position);
-                           // getBillMail(_billList[position].INVOICE_NO,_billList[position].TYPE);
+                          onTap: () {
+                            emailBillDialog(context, position);
+                            // getBillMail(_billList[position].INVOICE_NO,_billList[position].TYPE);
                           },
                           child: Container(
                             child: Column(
@@ -2458,15 +2514,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                         InkWell(
                           onTap: () async {
-                          final result = await  Navigator.push(
+                            final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => BaseAlreadyPaid(
                                         _billList[position].INVOICE_NO,
                                         _billList[position].AMOUNT)));
-                          if(result=='back'){
-                            getAllBillData();
-                          }
+                            if (result == 'back') {
+                              getAllBillData();
+                            }
                           },
                           child: Container(
                             child: Column(
@@ -2574,18 +2630,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   getIconForVehicle(String vehicleType) {
-
-    if(vehicleType=='4 Wheeler' || vehicleType=='4' || vehicleType=='four'){
+    if (vehicleType == '4 Wheeler' ||
+        vehicleType == '4' ||
+        vehicleType == 'four') {
       return Icon(
         Icons.directions_car,
         color: GlobalVariables.mediumGreen,
       );
-    }else if(vehicleType=='2 Wheeler' || vehicleType=='2' || vehicleType=='two'){
+    } else if (vehicleType == '2 Wheeler' ||
+        vehicleType == '2' ||
+        vehicleType == 'two') {
       return Icon(
         Icons.motorcycle,
         color: GlobalVariables.mediumGreen,
       );
-    }else{
+    } else {
       return Icon(
         Icons.motorcycle,
         color: GlobalVariables.mediumGreen,
@@ -2626,9 +2685,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
       getLedgerData();
     }).catchError((Object obj) {
-    //  if(_progressDialog.isShowing()){
-     //   _progressDialog.hide();
-    //  }
+      //  if(_progressDialog.isShowing()){
+      //   _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2662,12 +2721,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
       _progressDialog.hide();
       setState(() {
-        isDuesTabAPICall= true;
+        isDuesTabAPICall = true;
       });
     }).catchError((Object obj) {
-     // if(_progressDialog.isShowing()){
-     //   _progressDialog.hide();
-    //  }
+      // if(_progressDialog.isShowing()){
+      //   _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2694,9 +2753,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
       //getAllBillData();
     }).catchError((Object obj) {
-   //   if(_progressDialog.isShowing()){
-    //    _progressDialog.hide();
-    //  }
+      //   if(_progressDialog.isShowing()){
+      //    _progressDialog.hide();
+      //  }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2710,7 +2769,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-  Future<void> addOnlinePaymentRequest(String paymentId, String paymentStatus,String orderId) async {
+  Future<void> addOnlinePaymentRequest(
+      String paymentId, String paymentStatus, String orderId) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -2722,41 +2782,44 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     String paymentDate = DateTime.now().toLocal().year.toString() +
         "-" +
-        DateTime.now().toLocal().month.toString().padLeft(2,'0') +
+        DateTime.now().toLocal().month.toString().padLeft(2, '0') +
         "-" +
-        DateTime.now().toLocal().day.toString().padLeft(2,'0');
+        DateTime.now().toLocal().day.toString().padLeft(2, '0');
 
     _progressDialog.show();
     restClientERP
-            .addOnlinePaymentRequest(
-                societyId,
-                flat,
-                block,
-                invoiceNo,
-                (amount/100).toString(),
-                paymentId,
-                "online Transaction",
-                "Razorpay",
-                paymentDate,
-                paymentStatus,
-                orderId)
-            .then((value) {
+        .addOnlinePaymentRequest(
+            societyId,
+            flat,
+            block,
+            invoiceNo,
+            (amount / 100).toString(),
+            paymentId,
+            "online Transaction",
+            "Razorpay",
+            paymentDate,
+            paymentStatus,
+            orderId)
+        .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
       _progressDialog.hide();
       if (value.status) {
-       // Navigator.of(context).pop('back');
-        if(paymentStatus=='success') {
+        // Navigator.of(context).pop('back');
+        if (paymentStatus == 'success') {
           isDuesTabAPICall = false;
           _callAPI(_tabController.index);
           paymentSuccessDialog(paymentId);
-        }else{
+        } else {
           paymentFailureDialog();
         }
-      }else {
+      } else {
         GlobalFunctions.showToast(value.message);
       }
-      amount=null;invoiceNo=null;billType=null;orderId=null;
-    }) .catchError((Object obj) {
+      amount = null;
+      invoiceNo = null;
+      billType = null;
+      orderId = null;
+    }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2822,11 +2885,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     BaseAddStaffMember()));*/
       }
       getAllBillData();
-
     }).catchError((Object obj) {
-    //  if(_progressDialog.isShowing()){
-    //    _progressDialog.hide();
-   //   }
+      //  if(_progressDialog.isShowing()){
+      //    _progressDialog.hide();
+      //   }
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2841,34 +2903,38 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
-   // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-    addOnlinePaymentRequest(response.paymentId,'success',response.orderId);
+    // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
+    addOnlinePaymentRequest(response.paymentId, 'success', response.orderId);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
     print('Razor Error Response : ' + response.message);
     GlobalFunctions.showToast(" " + response.message.toString());
-    addOnlinePaymentRequest('','failure',orderId);
+    addOnlinePaymentRequest('', 'failure', orderId);
   }
 
   _handleExternalWallet(ExternalWalletResponse response) {
     print('Razor ExternalWallet Response : ' + response.toString());
-    GlobalFunctions.showToast("ExternalWallet : " + response.walletName.toString());
+    GlobalFunctions.showToast(
+        "ExternalWallet : " + response.walletName.toString());
   }
 
-  void openCheckOut(int position, String razorKey, String orderId, String amount) {
+  void openCheckOut(
+      int position, String razorKey, String orderId, String amount) {
     //amount = _billList[position].AMOUNT;
     invoiceNo = _billList[position].INVOICE_NO;
-    billType = _billList[position].TYPE=='Bill'? 'Maintenance Bill':_billList[position].TYPE;
-    print('amount : '+amount.toString());
-    print('RazorKey : '+razorKey.toString());
+    billType = _billList[position].TYPE == 'Bill'
+        ? 'Maintenance Bill'
+        : _billList[position].TYPE;
+    print('amount : ' + amount.toString());
+    print('RazorKey : ' + razorKey.toString());
 
     var option = {
       'key': razorKey,
       'amount': amount,
       'name': societyName,
-      'order_id':orderId,
-      'description': block+' '+flat +'-'+invoiceNo+'/'+billType,
+      'order_id': orderId,
+      'description': block + ' ' + flat + '-' + invoiceNo + '/' + billType,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -2880,7 +2946,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   void redirectToPage(String item) {
-
     print('Call redirectToPage');
 
     if (item == AppLocalizations.of(context).translate('my_unit')) {
@@ -2889,11 +2954,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
       _tabController.animateTo(0);
-      print('redirectToPage '+pageName.toString());
+      print('redirectToPage ' + pageName.toString());
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
       _tabController.animateTo(1);
-      print('redirectToPage '+pageName.toString());
+      print('redirectToPage ' + pageName.toString());
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
       _tabController.animateTo(2);
@@ -2902,13 +2967,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     } else {
       _tabController.animateTo(0);
     }
-    if(pageName!=null) {
-      pageName=null;
-      if(_tabController.index==0){
+    if (pageName != null) {
+      pageName = null;
+      if (_tabController.index == 0) {
         _handleTabSelection();
       }
     }
-
   }
 
   void getLocalPath() {
@@ -2918,7 +2982,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-  getListOfPaymentGateway(BuildContext context, StateSetter setState, int position) {
+  getListOfPaymentGateway(
+      BuildContext context, StateSetter setState, int position) {
     // GlobalFunctions.showToast(_selectedPaymentGateway.toString());
     return Container(
       padding: EdgeInsets.all(15),
@@ -3041,8 +3106,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   void redirectToPaymentGateway(int position) {
     if (_selectedPaymentGateway == 'PayTM') {
-
-    //Navigator.of(context).pop();
+      //Navigator.of(context).pop();
 
       showDialog(
           context: context,
@@ -3055,10 +3119,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 );
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
-
-      getRazorPayOrderID(position,_payOptionList[0].KEY_ID,_payOptionList[0].SECRET_KEY);
-
-
+      getRazorPayOrderID(
+          position, _payOptionList[0].KEY_ID, _payOptionList[0].SECRET_KEY);
     }
   }
 
@@ -3144,52 +3206,63 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   displayConsumerId() {
     return Container(
-      width: MediaQuery.of(context).size.width/2,
-      padding: EdgeInsets.fromLTRB(25,15,25,15),
+      width: MediaQuery.of(context).size.width / 2,
+      padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            child: Text(consumerId,style: TextStyle(
-              color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-            ),),
+            child: Text(
+              consumerId,
+              style: TextStyle(
+                  color: GlobalVariables.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
-                  Navigator.of(context).pop();
-                  ClipboardManager.copyToClipBoard(consumerId).then((value) {
-                    GlobalFunctions.showToast("Copied to Clipboard");
-                    launch(_payOptionList[0].PAYTM_URL);
-                 });
-                }),
+                IconButton(
+                    icon: Icon(
+                      Icons.content_copy,
+                      color: GlobalVariables.green,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      ClipboardManager.copyToClipBoard(consumerId)
+                          .then((value) {
+                        GlobalFunctions.showToast("Copied to Clipboard");
+                        launch(_payOptionList[0].PAYTM_URL);
+                      });
+                    }),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
-                    fontSize: 12
-                      ,fontWeight: FontWeight.bold,color: GlobalVariables.green
-                  ),),
+                  child: Text(
+                    AppLocalizations.of(context).translate('copy'),
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: GlobalVariables.green),
+                  ),
                 )
               ],
             ),
           )
         ],
       ),
-
     );
   }
 
   void _handleTabSelection() {
-
-
     if (pageName == null) {
       print('Call _handleTabSelection');
       //if(_tabController.indexIsChanging){
       _callAPI(_tabController.index);
       //}
-    }/*else{
+    }
+    /*else{
       if(!_tabController.indexIsChanging){
         _callAPI(_tabController.index);
       }
@@ -3198,47 +3271,50 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   void _callAPI(int index) {
-
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        switch(index){
-          case 0: {
-            if(!isDuesTabAPICall) {
-              if(GlobalVariables.isERPAccount) {
-                getPayOption();
+        switch (index) {
+          case 0:
+            {
+              if (!isDuesTabAPICall) {
+                if (GlobalVariables.isERPAccount) {
+                  getPayOption();
+                }
               }
             }
-          }
-          break;
-          case 1: {
-            if(!isHouseholdTabAPICall) {
-              getUnitMemberData();
+            break;
+          case 1:
+            {
+              if (!isHouseholdTabAPICall) {
+                getUnitMemberData();
+              }
             }
-          }
-          break;
+            break;
         }
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
       }
     });
-
   }
 
-  Future<void> getBillMail(String invoice_no, String type, String emailId) async {
+  Future<void> getBillMail(
+      String invoice_no, String type, String emailId) async {
     final dio = Dio();
-    final RestClientERP restClientERP = RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    final RestClientERP restClientERP =
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog.show();
-    restClientERP.getBillMail(societyId, type, invoice_no,_emailTextController.text).then((value) {
+    restClientERP
+        .getBillMail(societyId, type, invoice_no, _emailTextController.text)
+        .then((value) {
       print('Response : ' + value.toString());
 
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
-
     }).catchError((Object obj) {
-      if(_progressDialog.isShowing()){
+      if (_progressDialog.isShowing()) {
         _progressDialog.hide();
       }
       switch (obj.runtimeType) {
@@ -3253,151 +3329,170 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-
-  void emailBillDialog(BuildContext context,int position){
+  void emailBillDialog(BuildContext context, int position) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context,
-                StateSetter _stateState) {
-              isEditEmail ? _emailTextController.text='' :_emailTextController.text = email;
+                builder: (BuildContext context, StateSetter _stateState) {
+              isEditEmail
+                  ? _emailTextController.text = ''
+                  : _emailTextController.text = email;
 
               return Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(25.0)),
-                child: Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(10),
-                //  width: MediaQuery.of(context).size.width/2,
-                  //  height: MediaQuery.of(context).size.height/3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        child: Text(AppLocalizations.of(context).translate('email_bill'),style: TextStyle(
-                            color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                      Container(
-                        child: Divider(
-                          height: 2,
-                          color: GlobalVariables.lightGray,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0)),
+                  child: Container(
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(10),
+                    //  width: MediaQuery.of(context).size.width/2,
+                    //  height: MediaQuery.of(context).size.height/3,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('email_bill'),
+                            style: TextStyle(
+                                color: GlobalVariables.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      Container(margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
-                        child: Text(GlobalFunctions.convertDateFormat(_billList[position].START_DATE, 'dd-MM-yyyy')
-                            + ' to '
-                            + GlobalFunctions.convertDateFormat(_billList[position].END_DATE, 'dd-MM-yyyy'),style: TextStyle(
-                            color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                      Flexible(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 80,
-                         // color: GlobalVariables.mediumGreen,
-                         // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                           /*   Container(
+                        Container(
+                          child: Divider(
+                            height: 2,
+                            color: GlobalVariables.lightGray,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          child: Text(
+                            GlobalFunctions.convertDateFormat(
+                                    _billList[position].START_DATE,
+                                    'dd-MM-yyyy') +
+                                ' to ' +
+                                GlobalFunctions.convertDateFormat(
+                                    _billList[position].END_DATE, 'dd-MM-yyyy'),
+                            style: TextStyle(
+                                color: GlobalVariables.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 80,
+                            // color: GlobalVariables.mediumGreen,
+                            // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                /*   Container(
                                 child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
                                     color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
                                 ),),
                               ),*/
-                              Flexible(
-                                flex:3,
-                                child: Container(
-                                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                  child: TextFormField(
-                                    controller: _emailTextController,
-                                    cursorColor: GlobalVariables.black,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      //border: InputBorder.,
-                                     // disabledBorder: InputBorder.none,
-                                     // enabledBorder: InputBorder.none,
-                                     // errorBorder: InputBorder.none,
-                                     // focusedBorder: InputBorder.none,
-                                     // focusedErrorBorder: InputBorder.none,
-                                      contentPadding: EdgeInsets.all(5),
+                                Flexible(
+                                  flex: 3,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: TextFormField(
+                                      controller: _emailTextController,
+                                      cursorColor: GlobalVariables.black,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration(
+                                        //border: InputBorder.,
+                                        // disabledBorder: InputBorder.none,
+                                        // enabledBorder: InputBorder.none,
+                                        // errorBorder: InputBorder.none,
+                                        // focusedBorder: InputBorder.none,
+                                        // focusedErrorBorder: InputBorder.none,
+                                        contentPadding: EdgeInsets.all(5),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Flexible(
-                                flex:1,
-                                child: Container(
-                                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                  child: !isEditEmail ? IconButton(icon: Icon(Icons.edit,color: GlobalVariables.green,size: 24,), onPressed: (){
-                                    _emailTextController.clear();
-                                    isEditEmail= true;
-                                    _stateState(() {});
-
-                                  }) : IconButton(icon: Icon(Icons.cancel,color: GlobalVariables.grey,size: 24,), onPressed: (){
-                                    _emailTextController.clear();
-                                    _emailTextController.text= email;
-                                    isEditEmail= false;
-                                    _stateState(() {});
-                                  }),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 45,
-                        child: ButtonTheme(
-                          minWidth: MediaQuery.of(context).size.width / 3,
-                          child: RaisedButton(
-                            color: GlobalVariables.green,
-                            onPressed: () {
-                              GlobalFunctions
-                                  .checkInternetConnection()
-                                  .then((internet) {
-                                if (internet) {
-                                  if(_emailTextController.text.length>0) {
-                                    Navigator.of(
-                                        context
-                                    ).pop(
-                                    );
-                                    getBillMail(
-                                        _billList[position].INVOICE_NO,
-                                        _billList[position].TYPE,
-                                        _emailTextController.text
-                                    );
-                                  }else{
-                                    GlobalFunctions.showToast('Please Enter Email ID');
-                                  }
-                                } else {
-                                  GlobalFunctions.showToast(
-                                      AppLocalizations.of(context)
-                                          .translate(
-                                          'pls_check_internet_connectivity'));
-                                }
-                              });
-                            },
-                            textColor: GlobalVariables.white,
-                            //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    color: GlobalVariables.green)),
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('email_now'),
-                              style: TextStyle(
-                                  fontSize: GlobalVariables.largeText),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: !isEditEmail
+                                        ? IconButton(
+                                            icon: Icon(
+                                              Icons.edit,
+                                              color: GlobalVariables.green,
+                                              size: 24,
+                                            ),
+                                            onPressed: () {
+                                              _emailTextController.clear();
+                                              isEditEmail = true;
+                                              _stateState(() {});
+                                            })
+                                        : IconButton(
+                                            icon: Icon(
+                                              Icons.cancel,
+                                              color: GlobalVariables.grey,
+                                              size: 24,
+                                            ),
+                                            onPressed: () {
+                                              _emailTextController.clear();
+                                              _emailTextController.text = email;
+                                              isEditEmail = false;
+                                              _stateState(() {});
+                                            }),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              );
+                        Container(
+                          height: 45,
+                          child: ButtonTheme(
+                            minWidth: MediaQuery.of(context).size.width / 3,
+                            child: RaisedButton(
+                              color: GlobalVariables.green,
+                              onPressed: () {
+                                GlobalFunctions.checkInternetConnection()
+                                    .then((internet) {
+                                  if (internet) {
+                                    if (_emailTextController.text.length > 0) {
+                                      Navigator.of(context).pop();
+                                      getBillMail(
+                                          _billList[position].INVOICE_NO,
+                                          _billList[position].TYPE,
+                                          _emailTextController.text);
+                                    } else {
+                                      GlobalFunctions.showToast(
+                                          'Please Enter Email ID');
+                                    }
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        AppLocalizations.of(context).translate(
+                                            'pls_check_internet_connectivity'));
+                                  }
+                                });
+                              },
+                              textColor: GlobalVariables.white,
+                              //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side:
+                                      BorderSide(color: GlobalVariables.green)),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('email_now'),
+                                style: TextStyle(
+                                    fontSize: GlobalVariables.largeText),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
             }));
   }
 
@@ -3408,24 +3503,32 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       alignment: Alignment.center,
       color: GlobalVariables.white,
       //width: MediaQuery.of(context).size.width,
-     // height: MediaQuery.of(context).size.height,
+      // height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            child: Image.asset(GlobalVariables.creditCardPath,width: 300,height: 300,fit: BoxFit.fill,),
+            child: Image.asset(
+              GlobalVariables.creditCardPath,
+              width: 300,
+              height: 300,
+              fit: BoxFit.fill,
+            ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-            child: Text(AppLocalizations.of(context).translate('erp_acc_not'),
+            child: Text(
+              AppLocalizations.of(context).translate('erp_acc_not'),
               style: TextStyle(
-                  color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-              ),),
+                  color: GlobalVariables.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           Container(
             height: 60,
-            width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
@@ -3435,20 +3538,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              BaseAboutSocietyRunInfo()));
+                          builder: (context) => BaseAboutSocietyRunInfo()));
                 },
                 textColor: GlobalVariables.white,
                 //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                        color: GlobalVariables.green)),
+                    side: BorderSide(color: GlobalVariables.green)),
                 child: Text(
-                  AppLocalizations.of(context)
-                      .translate('i_am_interested'),
-                  style: TextStyle(
-                      fontSize: GlobalVariables.largeText),
+                  AppLocalizations.of(context).translate('i_am_interested'),
+                  style: TextStyle(fontSize: GlobalVariables.largeText),
                 ),
               ),
             ),
@@ -3459,16 +3558,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> navigateToProfilePage() async {
-
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
     Navigator.push(
-        context, MaterialPageRoute(
-        builder: (context) =>
-            BaseDisplayProfileInfo(userId,societyId)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
   }
 
- /* void emailBillBottomSheet(BuildContext context,int position) {
+  /* void emailBillBottomSheet(BuildContext context,int position) {
 
     showModalBottomSheet(context: context, builder: (BuildContext _context){
       return StatefulBuilder(builder: (BuildContext context , StateSetter _stateState){
@@ -3591,44 +3689,44 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }*/
 
   Future<bool> onWillPop() {
-    Navigator.pop(context,'back');
+    Navigator.pop(context, 'back');
     return Future.value(true);
   }
 
   paymentSuccessDialog(String paymentId) {
-
-    print('paymentId : '+paymentId.toString());
+    print('paymentId : ' + paymentId.toString());
     return showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            StatefulBuilder(builder:
-                (BuildContext context,
-                StateSetter setState) {
+        builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(25.0)),
                 child: Container(
                   padding: EdgeInsets.all(20),
                   color: GlobalVariables.transparent,
                   // width: MediaQuery.of(context).size.width/3,
-                 // height: MediaQuery.of(context).size.height/4,
+                  // height: MediaQuery.of(context).size.height/4,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
                         child: SvgPicture.asset(
-                            GlobalVariables.successIconPath,width: 50,height: 50,),
+                          GlobalVariables.successIconPath,
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: Text(AppLocalizations.of(context)
                               .translate('successful_payment'))),
-
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(AppLocalizations.of(context)
-                              .translate('transaction_id')+' : '+paymentId.toString())),
+                                  .translate('transaction_id') +
+                              ' : ' +
+                              paymentId.toString())),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(AppLocalizations.of(context)
@@ -3638,105 +3736,107 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
               );
             }));
-
   }
 
-   paymentFailureDialog() {
-
-     return showDialog(
-         context: context,
-         builder: (BuildContext context) =>
-             StatefulBuilder(builder:
-                 (BuildContext context,
-                 StateSetter setState) {
-               return Dialog(
-                 shape: RoundedRectangleBorder(
-                     borderRadius:
-
-                     BorderRadius.circular(25.0)),
-                 child: Container(
-                   padding: EdgeInsets.all(20),
-                   color: GlobalVariables.transparent,
+  paymentFailureDialog() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
                   // width: MediaQuery.of(context).size.width/3,
-                   //height: MediaQuery.of(context).size.height/4,
-                   child: Column(
-                     mainAxisSize: MainAxisSize.min,
-                     children: <Widget>[
-                       Container(
-                         child: SvgPicture.asset(
-                             GlobalVariables.failureIconPath,width: 50,height: 50,),
-                       ),
-                       Container(
-                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                           child: Text(AppLocalizations.of(context)
-                               .translate('failure_to_pay'))),
+                  //height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset(
+                          GlobalVariables.failureIconPath,
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('failure_to_pay'))),
 
                       /* Container(
                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                            child: Text(AppLocalizations.of(context)
                                .translate('order_amount'))),*/
-                       Container(
-                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                           child: Text(AppLocalizations.of(context)
-                               .translate('payment_failed_try_again'))),
-                     ],
-                   ),
-                   ),
-                 );
-             }));
-
-   }
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('payment_failed_try_again'))),
+                    ],
+                  ),
+                ),
+              );
+            }));
+  }
 
   void getRazorPayOrderID(int position, String razorKey, String secret_key) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
-    RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
+        RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
     amount = _billList[position].AMOUNT * 100;
     invoiceNo = _billList[position].INVOICE_NO;
     _progressDialog.show();
-    RazorPayOrderRequest request = new RazorPayOrderRequest(amount: amount,currency: "INR",receipt: block+' '+flat +'-'+invoiceNo,paymentCapture: 1);
-    restClientRazorPay.getRazorPayOrderID(request,razorKey,secret_key).then((value) {
+    RazorPayOrderRequest request = new RazorPayOrderRequest(
+        amount: amount,
+        currency: "INR",
+        receipt: block + ' ' + flat + '-' + invoiceNo,
+        paymentCapture: 1);
+    restClientRazorPay
+        .getRazorPayOrderID(request, razorKey, secret_key)
+        .then((value) {
       print('getRazorPayOrderID Response : ' + value.toString());
       orderId = value['id'];
-      print('id : '+ orderId);
-      postRazorPayTransactionOrderID(value['id'],value['amount'].toString(),position);
-
+      print('id : ' + orderId);
+      postRazorPayTransactionOrderID(
+          value['id'], value['amount'].toString(), position);
     });
-
   }
 
-  Future<void> postRazorPayTransactionOrderID(String orderId,String amount, int position) async {
-
+  Future<void> postRazorPayTransactionOrderID(
+      String orderId, String amount, int position) async {
     final dio = Dio();
-    final RestClientERP restClientERP = RestClientERP(dio,baseUrl:GlobalVariables.BaseURLERP);
+    final RestClientERP restClientERP =
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
-    restClientERP.postRazorPayTransactionOrderID(societyId, block+' '+flat, orderId, (int.parse(amount)/100).toString()).then((value) {
-      print('Value : '+value.toString());
+    restClientERP
+        .postRazorPayTransactionOrderID(societyId, block + ' ' + flat, orderId,
+            (int.parse(amount) / 100).toString())
+        .then((value) {
+      print('Value : ' + value.toString());
       _progressDialog.hide();
-      if(value.status){
-         if (_razorpay != null) {
-        _razorpay.clear();
-      }
-      _razorpay = Razorpay();
-      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+      if (value.status) {
+        if (_razorpay != null) {
+          _razorpay.clear();
+        }
+        _razorpay = Razorpay();
+        _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+        _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+        _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-      openCheckOut(position,_payOptionList[0].KEY_ID,orderId,amount);
-      }else{
+        openCheckOut(position, _payOptionList[0].KEY_ID, orderId, amount);
+      } else {
         GlobalFunctions.showToast(value.message);
       }
-
     });
-
   }
 
   String getBillPaymentStatus(int position) {
-
-    String status='';
+    String status = '';
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -3746,21 +3846,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
-    if (days>0) {
+    if (days > 0) {
       status = "Overdue";
-    } else if (days == 0 ) {
-      status  = "Due Today";
-    }else if(days >=-2 && days <0){
-      status = 'Due in '+ (days*(-1)).toString()+' day';
-    }else{
+    } else if (days == 0) {
+      status = "Due Today";
+    } else if (days >= -2 && days < 0) {
+      status = 'Due in ' + (days * (-1)).toString() + ' day';
+    } else {
       status = 'Due Date';
     }
     return status;
-
   }
 
   getBillPaymentStatusColor(int position) {
-
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
@@ -3769,22 +3867,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
-    if (days>0) {
+    if (days > 0) {
       return Color(0xFFc0392b);
-    } else if (days == 0 ) {
+    } else if (days == 0) {
       return Color(0xFFf39c12);
-    }else if(days >=-2 && days <0){
+    } else if (days >= -2 && days < 0) {
       return Color(0xFFf39c12);
-    }else{
+    } else {
       return GlobalVariables.mediumGreen;
     }
-    if (days > 0 ) {
-
-    }else if (days >= 2) {
+    if (days > 0) {
+    } else if (days >= 2) {
       return Color(0xFFf39c12);
-    } else if (days==1) {
+    } else if (days == 1) {
       return Color(0xFFf39c12);
-    } else if (days == 0 ) {
+    } else if (days == 0) {
       return Color(0xFFf39c12);
     }
   }

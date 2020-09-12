@@ -6,6 +6,7 @@ import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/DuesResponse.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
+import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'RestAPI.dart';
 
@@ -36,7 +37,7 @@ abstract class RestClientERP {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.receiptAPI)
-  Future<DataResponse> getReceiptData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
+  Future<ReceiptViewResponse> getReceiptData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
       @Field("BLOCK") String block,@Field("RECEIPT_NO") String receiptNo);
 
   @FormUrlEncoded()
