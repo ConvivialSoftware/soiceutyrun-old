@@ -12,6 +12,7 @@ class GlobalVariables{
   static var keyIsLogin="isLogin";
   static var keyUsername="username";
   static var keyToken="GCM_ID";
+  static var keyTokenIOS="TOKEN_ID";
   static var keyPassword="password";
   static var keyLanguageCode="language_code";
   static var keyId="id";

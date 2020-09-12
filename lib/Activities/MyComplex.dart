@@ -25,7 +25,8 @@ import 'base_stateful.dart';
 
 class BaseMyComplex extends StatefulWidget {
   String pageName;
-  BaseMyComplex(this.pageName);
+  final int pageIndex;
+  BaseMyComplex(this.pageName, this.pageIndex);
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +35,7 @@ class BaseMyComplex extends StatefulWidget {
   }
 }
 
-class MyComplexState extends BaseStatefulState<BaseMyComplex>
+class MyComplexState extends State<BaseMyComplex>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   //List<NewsBoard> _newsBoardList = List<NewsBoard>();
@@ -76,6 +77,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   @override
   void initState() {
+    print(">>>>>>>PAGENAME ${widget.pageIndex}");
     getDisplayName();
     getLocalPath();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -87,6 +89,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     if (pageName == null) {
       _handleTabSelection();
     }
+
+
+
 
 
     IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
@@ -121,6 +126,17 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
+  }
+  void _navigateToPage(int index){
+    switch(index){
+      case 0: _tabController.animateTo(0);_callAPI(0);break;
+      case 1: _tabController.animateTo(1);_callAPI(1);break;
+      case 2: _tabController.animateTo(2);_callAPI(2);break;
+      case 3: _tabController.animateTo(3);_callAPI(3);break;
+      case 4: _tabController.animateTo(4);_callAPI(4);break;
+      case 5: _tabController.animateTo(5);_callAPI(5);break;
+    }
+
   }
 
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
@@ -163,8 +179,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   Widget build(BuildContext context) {
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    if (pageName != null) {
-      redirectToPage(pageName);
+    if (pageName != null||widget.pageIndex!=null) {
+      try{
+        redirectToPage(pageName,widget.pageIndex);
+      }catch(e){
+        print(e);
+      }
+
 
     }
     // TODO: implement build
@@ -2522,14 +2543,15 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
-  void redirectToPage(String item) {
+  void redirectToPage(String item,int index) {
+    print(">>>>>>>${item}");
     if(item==AppLocalizations.of(context).translate('my_complex')){
       //Redirect to my Unit
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('announcement')){
+    }else if(item==AppLocalizations.of(context).translate('announcement') || index == 0){
       //Redirect to  NewsBoard
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('meetings')){
+    }else if(item==AppLocalizations.of(context).translate('meetings')|| index == 1){
       //Redirect to  PollSurvey
       _tabController.animateTo(1);
     }else if(item==AppLocalizations.of(context).translate('poll_survey')){
@@ -2541,7 +2563,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     }else if(item==AppLocalizations.of(context).translate('directory')){
       //Redirect to  Document
       _tabController.animateTo(4);
-    }else if(item==AppLocalizations.of(context).translate('events')){
+    }else if(item==AppLocalizations.of(context).translate('events')|| index == 5){
       //Redirect to  Events
       _tabController.animateTo(5);
     }else{

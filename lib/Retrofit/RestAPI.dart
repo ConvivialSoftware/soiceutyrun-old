@@ -71,6 +71,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
     ArgumentError.checkNotNull(token, Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
 
+    if(Platform.isIOS){
+      GlobalVariables.keyToken =  GlobalVariables.keyTokenIOS;
+    }
     FormData formData = FormData.fromMap({
       GlobalVariables.keyUsername: username,
       GlobalVariables.keyPassword: password,
