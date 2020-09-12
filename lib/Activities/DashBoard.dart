@@ -79,6 +79,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     getPhoto();
+    GlobalFunctions.getAppPackageInfo();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getDuesData();
