@@ -347,7 +347,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Text("Rs. "+_ledgerList[position].AMOUNT.toString(),style: TextStyle(
-                            color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.red: GlobalVariables.darkBlue,fontSize: 16,fontWeight: FontWeight.bold
+                            color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.red: GlobalVariables.darkGreen,fontSize: 16,fontWeight: FontWeight.bold
                         ),),
                       ),
                     )

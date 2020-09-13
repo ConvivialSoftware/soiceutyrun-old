@@ -1055,7 +1055,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       dividerColor: GlobalVariables.transparent,
                       children: [
                         ExpansionPanel(
-                            isExpanded: _activeMeterIndex == i,
+                            isExpanded: _list[i].items.length==0 ? false  : _activeMeterIndex == i,
                             headerBuilder: (BuildContext context,
                                 bool isExpanded) {
                               return ExpansionTile(
@@ -1371,7 +1371,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             AppLocalizations.of(context).translate("directory"),
             AppLocalizations.of(context).translate("events")
           ]),
-      new RootTitle(
+      /*new RootTitle(
           title: AppLocalizations.of(context).translate('discover'),
           rootIconData: GlobalVariables.myServiceIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
@@ -1379,7 +1379,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             AppLocalizations.of(context).translate("classified"),
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("near_by_shop"),
-          ]),
+          ]),*/
       new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
           rootIconData: GlobalVariables.myClubIconPath,
@@ -1398,11 +1398,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           rootIconData: GlobalVariables.mySupportIconPath,
           // innerIconData: GlobalVariables.myFlatIconPath,
           items: []),
-      new RootTitle(
+      /*new RootTitle(
           title: AppLocalizations.of(context).translate('admin'),
           rootIconData: GlobalVariables.myAdminIconPath,
           //  innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
+          items: []),*/
       new RootTitle(
           title: AppLocalizations.of(context).translate('about_us'),
           rootIconData: GlobalVariables.aboutUsPath,

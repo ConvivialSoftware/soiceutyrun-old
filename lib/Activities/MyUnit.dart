@@ -327,7 +327,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   child: Text(
                     "Rs. " + _ledgerList[position].AMOUNT,
                     style: TextStyle(
-                        color: GlobalVariables.darkBlue,
+                        color: _ledgerList[position].TYPE.toLowerCase().toString()=='bill' ? GlobalVariables.red: GlobalVariables.darkGreen,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),

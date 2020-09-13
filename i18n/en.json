@@ -293,6 +293,9 @@
   "paid_amount": "Paid Amount",
   "transaction_mode": "TRANSACTION_MODE",
   "penalty": "PENALTY",
-  "narration": "Narration"
+  "narration": "Narration",
+  "bill_prefix": "Bill Prefix",
+  "receipt_prefix": "Receipt Prefix"
+
 
 }

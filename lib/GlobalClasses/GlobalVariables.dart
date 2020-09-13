@@ -215,6 +215,7 @@ class GlobalVariables{
   static const Color skyBlue =const Color(0xFF64B5F6);
   static const Color orangeYellow =const Color(0xFFFFA726);
   static const Color red =const Color(0xFFC62828);
+  static const Color darkGreen =const Color(0xFF2CA01C);
 
   /*Variables for URL FormData Key*/
 

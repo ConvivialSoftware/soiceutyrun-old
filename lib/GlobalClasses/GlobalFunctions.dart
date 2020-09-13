@@ -717,7 +717,7 @@ class GlobalFunctions{
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Visibility(
-                             // visible: isCompulsory ? false : true,
+                              visible: isCompulsory ? false : true,
                               child: Container(
                                 height: 50,
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),

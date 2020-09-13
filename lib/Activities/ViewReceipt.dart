@@ -32,7 +32,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   List<Receipt> _receiptList = new List<Receipt>();
 
   String name="",consumerId="";
-  String invoiceNo;
+  String invoiceNo,receiptPrefix='';
   ViewReceiptState(this.invoiceNo);
 
   ProgressDialog _progressDialog;
@@ -60,7 +60,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.darkBlue,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -73,7 +73,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('receipt')+ ' - '+invoiceNo,
+            receiptPrefix+invoiceNo,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -141,7 +141,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 ),),
                               ),
                               Container(
-                                child: Text('Rs. '+(_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString(),style: TextStyle(
+                                child: Text('Rs. '+_receiptList[0].AMOUNT.toString().toString(),style: TextStyle(
                                     color: GlobalVariables.red,fontSize: 18,fontWeight: FontWeight.bold
                                 ),),
                               )
@@ -176,7 +176,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                 text: AppLocalizations.of(context).translate('name'),
-                style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                 text: ": "+_receiptList[0].NAME,style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
@@ -190,7 +190,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             child: RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy"),
@@ -205,7 +205,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             child: RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('due_date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy"),
@@ -220,7 +220,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('transaction_mode'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                 text: ': '+(_receiptList[0].TRANSACTION_MODE!=null ? _receiptList[0].TRANSACTION_MODE: '-'),
@@ -235,7 +235,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('reference_no'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                 text:  ": "+(_receiptList[0].REFERENCE_NO !=null ? _receiptList[0].REFERENCE_NO: '-'),
@@ -250,25 +250,10 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('narration'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-'),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('penalty'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+_receiptList[0].PENALTY_AMOUNT.toString(),
                   style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
               )
             ])),
@@ -294,7 +279,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
 
     return Container(
       child: Divider(
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.mediumBlue,
         height: 3,
       ),
     );
@@ -313,6 +298,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
       _progressDialog.hide();
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
+      receiptPrefix = value.RECEIPT_PREFIX;
 
       _receiptList = List<Receipt>.from(_list.map((i) => Receipt.fromJson(i)));
 

@@ -2529,7 +2529,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         });
 
       }
-    }).catchError((Object obj) {
+    })/*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2540,7 +2540,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           break;
         default:
       }
-    });
+    })*/;
   }
 
   void redirectToPage(String item) {

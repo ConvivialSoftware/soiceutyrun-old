@@ -32,7 +32,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
   List<BillHeads> _billHeadsList = new List<BillHeads>();
 
   String name="",consumerId="";
-  String invoiceNo;
+  String invoiceNo,billPrefix='';
   double totalAmount=0.0;
   ViewBillState(this.invoiceNo);
 
@@ -75,7 +75,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('bill')+ ' - '+invoiceNo,
+            billPrefix+invoiceNo,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -405,6 +405,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     restClientERP.getBillData(societyId,flat,block,invoiceNo).then((value) {
       print('Response : ' + value.toString());
       _billViewList = value;
+      billPrefix = value.BILL_PREFIX;
       List<dynamic> _listBillDetails = value.BillDetails;
       List<dynamic> _listHeads = value.HEADS;
 
