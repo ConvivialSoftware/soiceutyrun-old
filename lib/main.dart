@@ -71,9 +71,9 @@ class BaseAppStart extends StatelessWidget {
   }
   getThemeData() {
     return ThemeData(
-        primaryColor: GlobalVariables.darkBlue,
+        primaryColor: GlobalVariables.green,
         accentColor: GlobalVariables.white,
-        primaryColorDark: GlobalVariables.darkBlue,
-        cursorColor: GlobalVariables.mediumBlue);
+        primaryColorDark: GlobalVariables.green,
+        cursorColor: GlobalVariables.mediumGreen);
   }
 }

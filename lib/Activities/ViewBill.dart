@@ -32,7 +32,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
   List<BillHeads> _billHeadsList = new List<BillHeads>();
 
   String name="",consumerId="";
-  String invoiceNo,billPrefix='';
+  String invoiceNo;
   double totalAmount=0.0;
   ViewBillState(this.invoiceNo);
 
@@ -62,7 +62,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -75,7 +75,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             ),
           ),
           title: Text(
-            billPrefix+invoiceNo,
+            AppLocalizations.of(context).translate('bill')+ ' - '+invoiceNo,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -120,7 +120,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                           alignment: Alignment.topLeft,
                           child: Text(
                             AppLocalizations.of(context).translate('charges'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,
+                            color: GlobalVariables.green,fontSize: 18,
                           ),),
                         ),
                       ),
@@ -260,7 +260,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                 text: AppLocalizations.of(context).translate('name'),
-                style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
+                style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
                 text: ": "+_billDetailsList[0].NAME,style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
@@ -274,7 +274,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child: RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('date'),
-                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
@@ -289,7 +289,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child: RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('due_date'),
-                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
                   text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
@@ -304,7 +304,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('str_consumer_id'),
-                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
                 text: consumerId,
@@ -319,7 +319,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             child:RichText(text: TextSpan(children: [
               TextSpan(
                   text: AppLocalizations.of(context).translate('bill_period'),
-                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
+                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
                 text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' To ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy"),
@@ -350,7 +350,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
 
     return Container(
       child: Divider(
-        color: GlobalVariables.mediumBlue,
+        color: GlobalVariables.mediumGreen,
         height: 3,
       ),
     );
@@ -384,7 +384,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             position!=_recentTransactionList.length-1 ? Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
               child: Divider(
-                color: GlobalVariables.lightBlue,
+                color: GlobalVariables.lightGreen,
                 height: 3,
               ),
             ):Container(),
@@ -405,7 +405,6 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     restClientERP.getBillData(societyId,flat,block,invoiceNo).then((value) {
       print('Response : ' + value.toString());
       _billViewList = value;
-      billPrefix = value.BILL_PREFIX;
       List<dynamic> _listBillDetails = value.BillDetails;
       List<dynamic> _listHeads = value.HEADS;
 

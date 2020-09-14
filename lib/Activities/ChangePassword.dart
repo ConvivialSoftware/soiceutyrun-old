@@ -37,7 +37,7 @@ ProgressDialog _progressDialog;
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -101,7 +101,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -123,7 +123,7 @@ ProgressDialog _progressDialog;
                       },
                       icon: Icon(
                         Icons.remove_red_eye,
-                        color: GlobalVariables.lightBlue,
+                        color: GlobalVariables.lightGreen,
                       ),
                     ),
                   ),
@@ -137,7 +137,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -159,7 +159,7 @@ ProgressDialog _progressDialog;
                       },
                       icon: Icon(
                         Icons.remove_red_eye,
-                        color: GlobalVariables.lightBlue,
+                        color: GlobalVariables.lightGreen,
                       ),
                     ),
                   ),
@@ -172,14 +172,14 @@ ProgressDialog _progressDialog;
                 child: ButtonTheme(
                  // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     onPressed: () {
                       verifyPassword();
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                     ),
                     child: Text(
                       AppLocalizations.of(context)

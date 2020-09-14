@@ -59,7 +59,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   AppLocalizations.of(context)
                                       .translate('login'),
                               style: TextStyle(
-                                  fontSize: 18, color: GlobalVariables.darkBlue)),
+                                  fontSize: 18, color: GlobalVariables.green)),
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate('with_otp'),
@@ -84,18 +84,18 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                             ),
                             suffixIcon: Icon(
                               Icons.phone_android,
-                              color: GlobalVariables.lightBlue,
+                              color: GlobalVariables.lightGreen,
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: GlobalVariables.darkBlue,
+                                  color: GlobalVariables.green,
                                   width: 2.0,
                                 ),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.darkBlue, width: 2.0),
+                                    color: GlobalVariables.green, width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
@@ -115,7 +115,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   minWidth:
                                       MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     onPressed: () {
                                       verifyNumber();
                                     },
@@ -124,7 +124,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.darkBlue)),
+                                            color: GlobalVariables.green)),
                                     child: Text(
                                       AppLocalizations.of(context)
                                           .translate('enter'),
@@ -179,87 +179,84 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                       ),
                     ],
                   ),
-                  Visibility(
-                    visible: false,
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/4, 0, 5),
-                      //color: GlobalVariables.orangeAccent,
-                      //margin: EdgeInsets.all(20),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            //   color: GlobalVariables.lightGreen,
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.lightBlue,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                            margin: EdgeInsets.all(20),
-                            padding: EdgeInsets.fromLTRB(20,30,20,30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  child: SvgPicture.asset(
-                                      GlobalVariables.classifiedBigIconPath),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/4, 0, 5),
+                    //color: GlobalVariables.orangeAccent,
+                    //margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          //   color: GlobalVariables.lightGreen,
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.lightGreen,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10))),
+                          margin: EdgeInsets.all(20),
+                          padding: EdgeInsets.fromLTRB(20,30,20,30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                child: SvgPicture.asset(
+                                    GlobalVariables.classifiedBigIconPath),
+                              ),
+                              Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      child: RichText(
+                                          text: TextSpan(
+                                              text: AppLocalizations.of(context)
+                                                  .translate('classified_ads'),
+                                              style: TextStyle(
+                                                  color: GlobalVariables.green,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold))),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                      child: RichText(
+                                          text: TextSpan(
+                                              text: AppLocalizations.of(context)
+                                                  .translate('classified_str'),
+                                              style: TextStyle(
+                                                  color: GlobalVariables.black,
+                                                  fontSize: 15))),
+                                    )
+                                  ],
                                 ),
-                                Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        child: RichText(
-                                            text: TextSpan(
-                                                text: AppLocalizations.of(context)
-                                                    .translate('classified_ads'),
-                                                style: TextStyle(
-                                                    color: GlobalVariables.darkBlue,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold))),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                        child: RichText(
-                                            text: TextSpan(
-                                                text: AppLocalizations.of(context)
-                                                    .translate('classified_str'),
-                                                style: TextStyle(
-                                                    color: GlobalVariables.black,
-                                                    fontSize: 15))),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
-                          Container(
-                            child: RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: AppLocalizations.of(context)
-                                      .translate('pre_terms_conn'),
-                                  style: TextStyle(color: GlobalVariables.black)),
-                              TextSpan(
-                                  text: AppLocalizations.of(context)
-                                      .translate('terms_conn'),
-                                  style: TextStyle(color: GlobalVariables.darkBlue)),
-                            ])),
-                          ),
-                          Container(
-                            child: RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: AppLocalizations.of(context)
-                                      .translate('pre_privacy_statement'),
-                                  style: TextStyle(color: GlobalVariables.black)),
-                              TextSpan(
-                                  text: AppLocalizations.of(context)
-                                      .translate('privacy_statement'),
-                                  style: TextStyle(color: GlobalVariables.darkBlue)),
-                            ])),
-                          )
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: AppLocalizations.of(context)
+                                    .translate('pre_terms_conn'),
+                                style: TextStyle(color: GlobalVariables.black)),
+                            TextSpan(
+                                text: AppLocalizations.of(context)
+                                    .translate('terms_conn'),
+                                style: TextStyle(color: GlobalVariables.green)),
+                          ])),
+                        ),
+                        Container(
+                          child: RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: AppLocalizations.of(context)
+                                    .translate('pre_privacy_statement'),
+                                style: TextStyle(color: GlobalVariables.black)),
+                            TextSpan(
+                                text: AppLocalizations.of(context)
+                                    .translate('privacy_statement'),
+                                style: TextStyle(color: GlobalVariables.green)),
+                          ])),
+                        )
+                      ],
                     ),
                   )
                 ],

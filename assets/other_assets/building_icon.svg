@@ -1,8 +1,8 @@
 <svg id="_970645" data-name="970645" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <g id="Group_1" data-name="Group 1" transform="translate(13.333 6.933)">
-    <path id="Path_118" data-name="Path 118" d="M200,104v24.533h7.467v-22.4Z" transform="translate(-200 -104)" fill="#00aeef"/>
-    <path id="Path_119" data-name="Path 119" d="M312,184v19.2h4.267V186.133Z" transform="translate(-304.533 -178.667)" fill="#00aeef"/>
-    <ellipse id="Ellipse_8" data-name="Ellipse 8" cx="1.562" cy="2.343" rx="1.562" ry="2.343" transform="translate(13.782 16.499)" fill="#00aeef"/>
+    <path id="Path_118" data-name="Path 118" d="M200,104v24.533h7.467v-22.4Z" transform="translate(-200 -104)" fill="#b3e3bd"/>
+    <path id="Path_119" data-name="Path 119" d="M312,184v19.2h4.267V186.133Z" transform="translate(-304.533 -178.667)" fill="#b3e3bd"/>
+    <ellipse id="Ellipse_8" data-name="Ellipse 8" cx="1.562" cy="2.343" rx="1.562" ry="2.343" transform="translate(13.782 16.499)" fill="#b3e3bd"/>
   </g>
   <path id="Path_120" data-name="Path 120" d="M29.333,30.933V28.172a2.624,2.624,0,0,0,1.6-2.572A2.448,2.448,0,0,0,28.8,22.933,2.448,2.448,0,0,0,26.667,25.6a2.624,2.624,0,0,0,1.6,2.572v2.762H25.6V14.4a.533.533,0,0,0-.295-.477l-3.972-1.986V9.067a.533.533,0,0,0-.387-.513l-7.08-2.023v-6A.533.533,0,0,0,13.333,0H2.667a.533.533,0,0,0-.533.533v30.4H0V32H32V30.933Zm-1.6-5.333c0-.867.489-1.6,1.067-1.6s1.067.733,1.067,1.6a1.867,1.867,0,0,1-.533,1.371v-.837H28.267v.837A1.864,1.864,0,0,1,27.733,25.6ZM3.2,29.867H8V28.8H3.2V26.667H8V25.6H3.2V23.467H8V22.4H3.2V20.267H8V19.2H3.2V17.067H8V16H3.2V13.867H8V12.8H3.2V10.667H8V9.6H3.2V7.467H8V6.4H3.2V4.267H8V3.2H3.2V1.067h9.6V30.933H3.2Zm10.667,0H17.6V28.8H13.867V26.667H17.6V25.6H13.867V23.467H17.6V22.4H13.867V20.267H17.6V19.2H13.867V17.067H17.6V16H13.867V13.867H17.6V12.8H13.867V10.667H17.6V9.6H13.867V7.641l6.4,1.828V30.933h-6.4Zm7.467,1.067V29.867h1.6V28.8h-1.6V26.667h1.6V25.6h-1.6V23.467h1.6V22.4h-1.6V20.267h1.6V19.2h-1.6V17.067h1.6V16h-1.6V13.13l3.2,1.6v16.2Z" fill="#374140"/>
 </svg>

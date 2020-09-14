@@ -9,7 +9,7 @@
   "pls_enter_valid_username_password" : "Please Enter Valid Username and Password",
   "pls_check_internet_connectivity": "Please Check Internet Connection",
   "overview": "OVERVIEW",
-  "str_consumer_id": "VAN No: ",
+  "str_consumer_id": "CONSUMER ID : ",
   "my_unit": "My Unit",
   "my_complex": "My Complex",
   "discover": "Discover",
@@ -293,9 +293,6 @@
   "paid_amount": "Paid Amount",
   "transaction_mode": "TRANSACTION_MODE",
   "penalty": "PENALTY",
-  "narration": "Narration",
-  "bill_prefix": "Bill Prefix",
-  "receipt_prefix": "Receipt Prefix"
-
+  "narration": "Narration"
 
 }

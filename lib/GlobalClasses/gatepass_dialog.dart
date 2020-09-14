@@ -90,7 +90,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
               Text(
                 "from: $_from",
                 style: TextStyle(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     fontSize: 18,
                     fontWeight: FontWeight.w200),
               ),
@@ -110,7 +110,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
               Text(
                _popupTitle,
                 style: TextStyle(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -165,7 +165,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
           width: 42.0,
           height: 42.0,
           decoration: BoxDecoration(
-              color: GlobalVariables.darkBlue, shape: BoxShape.circle),
+              color: GlobalVariables.green, shape: BoxShape.circle),
           child: InkWell(
             child: Icon(
               Icons.close,
@@ -193,7 +193,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
         Text(
           "$_visitorName",
           style: TextStyle(
-              color: GlobalVariables.darkBlue,
+              color: GlobalVariables.green,
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ),
@@ -205,7 +205,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
           child: IconButton(
             icon: Icon(Icons.call),
             iconSize: 24.0,
-            color: GlobalVariables.darkBlue,
+            color: GlobalVariables.green,
             onPressed: () {
               _launchCall();
             },
@@ -285,7 +285,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
             width: 48.0,
             height: 48.0,
             decoration: BoxDecoration(
-                color: GlobalVariables.darkBlue, shape: BoxShape.circle),
+                color: GlobalVariables.green, shape: BoxShape.circle),
             child: Icon(
               Icons.check,
               color: Colors.white,
@@ -299,7 +299,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
         Text(
           'APPROVE',
           style: TextStyle(
-              color: GlobalVariables.darkBlue,
+              color: GlobalVariables.green,
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ),

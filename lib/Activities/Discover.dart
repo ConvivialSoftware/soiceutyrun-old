@@ -60,7 +60,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -214,7 +214,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -228,7 +228,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -241,7 +241,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 alignment: Alignment.center,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: GlobalVariables.mediumBlue,
+                  color: GlobalVariables.mediumGreen,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Container(
@@ -290,7 +290,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 Icons.add,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.darkBlue,
+              backgroundColor: GlobalVariables.green,
             ),
           )
         ],
@@ -332,7 +332,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       borderRadius: BorderRadius.circular(10)),
                 ),
                 Expanded(
@@ -350,7 +350,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               child: Text(
                                 _classifiedList[position].title,
                                 style: TextStyle(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -390,7 +390,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                 child: Text(
                                   _classifiedList[position].rs,
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -400,7 +400,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
                               padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
                               decoration: BoxDecoration(
-                                  color: GlobalVariables.mediumBlue,
+                                  color: GlobalVariables.mediumGreen,
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
                                 _classifiedList[position].category,
@@ -445,7 +445,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         return GlobalVariables.skyBlue;
         break;
       case "buy":
-        return GlobalVariables.darkBlue;
+        return GlobalVariables.green;
         break;
       case "rent":
         return GlobalVariables.orangeYellow;
@@ -507,7 +507,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -521,7 +521,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -537,7 +537,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -551,7 +551,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -1013,7 +1013,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       borderRadius: BorderRadius.circular(50)),
                 ),
                 Expanded(
@@ -1031,7 +1031,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               child: Text(
                                 _nearByShopList[position].title,
                                 style: TextStyle(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -1047,7 +1047,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                               EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.call,
-                                            color: GlobalVariables.mediumBlue,
+                                            color: GlobalVariables.mediumGreen,
                                             size: 24,
                                           ))
                                       : Container(),
@@ -1057,7 +1057,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                               EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.mail_outline,
-                                            color: GlobalVariables.mediumBlue,
+                                            color: GlobalVariables.mediumGreen,
                                             size: 24,
                                           ))
                                       : Container(),
@@ -1067,7 +1067,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                               EdgeInsets.fromLTRB(5, 0, 5, 0),
                                           child: Icon(
                                             Icons.language,
-                                            color: GlobalVariables.mediumBlue,
+                                            color: GlobalVariables.mediumGreen,
                                             size: 24,
                                           ))
                                       : Container(),

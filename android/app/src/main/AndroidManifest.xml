@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.svcpro">
+    package="com.societyrun12">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -8,13 +8,13 @@
 
 
     <application
-        android:name=".Application"
-        android:label="SVC SocietyPro"
+        android:name="com.societyrun12.Application"
+        android:label="SocietyRun"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity
 
-            android:name=".MainActivity"
+            android:name="com.societyrun12.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

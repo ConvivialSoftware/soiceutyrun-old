@@ -38,7 +38,7 @@ ProgressDialog _progressDialog;
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -102,7 +102,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -138,10 +138,10 @@ ProgressDialog _progressDialog;
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedVehicleType== "2 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.white,
+                                    color:   _selectedVehicleType== "2 Wheeler" ? GlobalVariables.green : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedVehicleType== "2 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
+                                      color: _selectedVehicleType== "2 Wheeler" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -153,7 +153,7 @@ ProgressDialog _progressDialog;
                                   AppLocalizations.of(context)
                                       .translate('2_wheeler'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -182,10 +182,10 @@ ProgressDialog _progressDialog;
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedVehicleType== "4 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.white,
+                                    color:   _selectedVehicleType== "4 Wheeler" ? GlobalVariables.green : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedVehicleType== "4 Wheeler" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
+                                      color: _selectedVehicleType== "4 Wheeler" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -197,7 +197,7 @@ ProgressDialog _progressDialog;
                                   AppLocalizations.of(context)
                                       .translate('4_wheeler'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -216,7 +216,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -236,7 +236,7 @@ ProgressDialog _progressDialog;
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -256,14 +256,14 @@ ProgressDialog _progressDialog;
                 child: ButtonTheme(
                  // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     onPressed: () {
                       verifyVehicle();
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                     ),
                     child: Text(
                       AppLocalizations.of(context)

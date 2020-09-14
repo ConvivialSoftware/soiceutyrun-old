@@ -62,7 +62,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -167,7 +167,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                                     ius.circular(25)),*/
                             child: CircleAvatar(
                               radius: 30,
-                              backgroundColor: GlobalVariables.mediumBlue,
+                              backgroundColor: GlobalVariables.mediumGreen,
                               backgroundImage: NetworkImage(_profileList[0].PROFILE_PHOTO),
                             ),
                           ),
@@ -179,7 +179,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                           child:  AutoSizeText(
                             _profileList[0].NAME,
                             style: TextStyle(
-                              color: GlobalVariables.darkBlue,
+                              color: GlobalVariables.green,
                               fontSize:20,
                             ),
                           ),
@@ -209,7 +209,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('contact1')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     Container(
@@ -228,7 +228,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('contact2')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     Container(
@@ -247,7 +247,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('email')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     Container(
@@ -266,7 +266,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('gender')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     Container(
@@ -285,7 +285,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('blood_group')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     Container(
@@ -304,7 +304,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('date_of_birth')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     _profileList[0].DOB!=null && _profileList[0].DOB.length!=0 ? Container(
@@ -325,7 +325,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     children: <Widget>[
                       Container(
                         child: AutoSizeText(AppLocalizations.of(context).translate('anniversary_date')+ " : ",style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18
+                            color: GlobalVariables.green,fontSize: 18
                         ),),
                       ),
                       Container(
@@ -345,7 +345,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   children: <Widget>[
                     Container(
                       child: AutoSizeText(AppLocalizations.of(context).translate('occupation')+ " : ",style: TextStyle(
-                          color: GlobalVariables.darkBlue,fontSize: 18
+                          color: GlobalVariables.green,fontSize: 18
                       ),),
                     ),
                     Container(
@@ -366,7 +366,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     children: <Widget>[
                       Container(
                         child: AutoSizeText(AppLocalizations.of(context).translate('hobbies')+ " : ",style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18
+                            color: GlobalVariables.green,fontSize: 18
                         ),),
                       ),
                       Container(
@@ -388,7 +388,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     children: <Widget>[
                       Container(
                         child: AutoSizeText(AppLocalizations.of(context).translate('language_known')+ " : ",style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18
+                            color: GlobalVariables.green,fontSize: 18
                         ),),
                       ),
                       Container(
@@ -409,7 +409,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Flexible(
                       child: Container(
                         child: AutoSizeText(AppLocalizations.of(context).translate('address')+ " : ",style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18
+                            color: GlobalVariables.green,fontSize: 18
                         ),),
                       ),
                     ),
@@ -454,7 +454,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 Icons.edit,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.darkBlue,
+              backgroundColor: GlobalVariables.green,
             ),
           )
         ],

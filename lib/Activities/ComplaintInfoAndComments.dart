@@ -80,7 +80,7 @@ class ComplaintInfoAndCommentsState
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -178,7 +178,7 @@ class ComplaintInfoAndCommentsState
                                   child: Text(
                                     'Ticket No: ' + complaints.TICKET_NO,
                                     style: TextStyle(
-                                        color: GlobalVariables.darkBlue,
+                                        color: GlobalVariables.green,
                                         fontSize: 12),
                                   ),
                                 ),
@@ -189,7 +189,7 @@ class ComplaintInfoAndCommentsState
                               child: AutoSizeText(complaints.SUBJECT,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                             ),
@@ -198,7 +198,7 @@ class ComplaintInfoAndCommentsState
                               child: Text(
                                 complaints.DESCRIPTION,
                                 style:
-                                    TextStyle(color: GlobalVariables.mediumBlue),
+                                    TextStyle(color: GlobalVariables.mediumGreen),
                               ),
                             ),
                             Row(
@@ -208,7 +208,7 @@ class ComplaintInfoAndCommentsState
                                   child: Text(
                                     'Category: ',
                                     style: TextStyle(
-                                        color: GlobalVariables.darkBlue,
+                                        color: GlobalVariables.green,
                                         fontSize: 14),
                                   ),
                                 ),
@@ -217,7 +217,7 @@ class ComplaintInfoAndCommentsState
                                   child: Text(
                                     complaints.CATEGORY,
                                     style: TextStyle(
-                                      color: GlobalVariables.mediumBlue,
+                                      color: GlobalVariables.mediumGreen,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -255,7 +255,7 @@ class ComplaintInfoAndCommentsState
               ),
               Container(
                 height: 1,
-                color: GlobalVariables.mediumBlue,
+                color: GlobalVariables.mediumGreen,
                 margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                 child: Divider(
                   height: 3,
@@ -270,7 +270,7 @@ class ComplaintInfoAndCommentsState
                       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: Text('Issued on: ' + GlobalFunctions.convertDateFormat(complaints.DATE,"dd-MM-yyyy"),
                           style: TextStyle(
-                              color: GlobalVariables.mediumBlue, fontSize: 14)),
+                              color: GlobalVariables.mediumGreen, fontSize: 14)),
                     ),
                   ],
                 ),
@@ -290,7 +290,7 @@ class ComplaintInfoAndCommentsState
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                               width: 3.0,
                             )),
                         child: ButtonTheme(
@@ -301,7 +301,7 @@ class ComplaintInfoAndCommentsState
                             value: _selectedItem,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                             ),
                             underline: SizedBox(),
                             /* hint: Text(
@@ -323,7 +323,7 @@ class ComplaintInfoAndCommentsState
                         child: ButtonTheme(
                           // minWidth: MediaQuery.of(context).size.width/2,
                           child: RaisedButton(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             onPressed: () {
                               isComment = false;
                               updateComplaintStatus(context);
@@ -332,7 +332,7 @@ class ComplaintInfoAndCommentsState
                             //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: GlobalVariables.darkBlue)),
+                                side: BorderSide(color: GlobalVariables.green)),
                             child: AutoSizeText(
                               AppLocalizations.of(context).translate('submit'),
                               style:
@@ -352,14 +352,14 @@ class ComplaintInfoAndCommentsState
                 child: Text(
                   AppLocalizations.of(context).translate('comments'),
                   style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
                 height: 1,
-                color: GlobalVariables.mediumBlue,
+                color: GlobalVariables.mediumGreen,
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: Divider(
                   height: 3,
@@ -419,7 +419,7 @@ class ComplaintInfoAndCommentsState
                     angle: 108 * 3.14 / 600,
                     child: Icon(
                       Icons.attach_file,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     )),
               ),
             ),
@@ -433,7 +433,7 @@ class ComplaintInfoAndCommentsState
                 padding: EdgeInsets.all(5),
                 margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Icon(
@@ -499,7 +499,7 @@ class ComplaintInfoAndCommentsState
                     0, 0, 0, 0), // color: GlobalVariables.black,
             child: CircleAvatar(
               radius: 25,
-              backgroundColor: GlobalVariables.lightBlue,
+              backgroundColor: GlobalVariables.lightGreen,
               backgroundImage: userId != _commentsList[position].USER_ID ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : NetworkImage(photo),
             )
           ),
@@ -520,7 +520,7 @@ class ComplaintInfoAndCommentsState
                           child: Text(
                             _commentsList[position].NAME,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue, fontSize: 16),
+                                color: GlobalVariables.green, fontSize: 16),
                           ),
                         ), /*Container(
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -590,7 +590,7 @@ class ComplaintInfoAndCommentsState
         value: _complaintStatusList[i].complaintStatus,
         child: Text(
           _complaintStatusList[i].complaintStatus,
-          style: TextStyle(color: GlobalVariables.darkBlue),
+          style: TextStyle(color: GlobalVariables.green),
         ),
       ));
     }
@@ -618,6 +618,7 @@ class ComplaintInfoAndCommentsState
     var societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getCommentData(societyId, complaints.TICKET_NO).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         _commentsList = List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
@@ -627,7 +628,6 @@ class ComplaintInfoAndCommentsState
           getComplaintDataAgainstTicketNo();
         }
       }
-      _progressDialog.hide();
     });
   }
 
@@ -638,13 +638,13 @@ class ComplaintInfoAndCommentsState
     var societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getComplaintDataAgainstTicketNo(societyId, complaints.TICKET_NO).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         _complaintsList = List<Complaints>.from(_list.map((e) => Complaints.fromJson(e)));
         complaints = _complaintsList[0];
         setState(() {});
       }
-      _progressDialog.hide();
     });
   }
 

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="135" height="68.429" viewBox="0 0 135 68.429">
   <g id="Group_79" data-name="Group 79" transform="translate(-208 -98.571)">
-    <path id="Path_114" data-name="Path 114" d="M-30,10,105-30v17L-30,27Z" transform="translate(238 140)" fill="#C7f0FF" opacity="0.58"/>
-    <path id="Path_115" data-name="Path 115" d="M-30,19,87.918-15.429v7.574L-30,27Z" transform="translate(255 114)" fill="#C7f0FF" opacity="0.58"/>
-    <path id="Path_116" data-name="Path 116" d="M-30,10,33.864-10.208V7.646L-30,27Z" transform="translate(309 130)" fill="#C7f0FF" opacity="0.58"/>
+    <path id="Path_114" data-name="Path 114" d="M-30,10,105-30v17L-30,27Z" transform="translate(238 140)" fill="#daf7d5" opacity="0.58"/>
+    <path id="Path_115" data-name="Path 115" d="M-30,19,87.918-15.429v7.574L-30,27Z" transform="translate(255 114)" fill="#daf7d5" opacity="0.58"/>
+    <path id="Path_116" data-name="Path 116" d="M-30,10,33.864-10.208V7.646L-30,27Z" transform="translate(309 130)" fill="#daf7d5" opacity="0.58"/>
   </g>
 </svg>

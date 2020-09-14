@@ -28,7 +28,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -90,7 +90,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 child: Text(
                   AppLocalizations.of(context).translate('add_new_listing'),
                   style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -103,7 +103,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: ButtonTheme(
@@ -113,7 +113,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -130,7 +130,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 child: Text(
                   AppLocalizations.of(context).translate('i_want_to'),
                   style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
                 ),
@@ -150,10 +150,10 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -165,7 +165,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                   AppLocalizations.of(context)
                                       .translate('sell'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -190,7 +190,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumBlue,
+                                      color: GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -201,7 +201,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                 child: Text(
                                   AppLocalizations.of(context).translate('buy'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -226,7 +226,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumBlue,
+                                      color: GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -238,7 +238,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                   AppLocalizations.of(context)
                                       .translate('rent'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -263,7 +263,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumBlue,
+                                      color: GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -275,7 +275,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                   AppLocalizations.of(context)
                                       .translate('giveaway'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -294,7 +294,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -314,7 +314,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -342,7 +342,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                               width: 3.0,
                             )),
                         child: TextField(
@@ -362,7 +362,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                           width: MediaQuery.of(context).size.width/2,
                         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                         decoration: BoxDecoration(
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: GlobalVariables.transparent,
@@ -391,7 +391,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -417,7 +417,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                        color: GlobalVariables.mediumBlue, width: 3.0)),
+                        color: GlobalVariables.mediumGreen, width: 3.0)),
                 child: Container(
                   padding: EdgeInsets.all(5),
                   child: Row(
@@ -442,7 +442,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                                 child: Text(
                                   name,
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -488,7 +488,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         decoration: BoxDecoration(
-                            color:GlobalVariables.darkBlue,
+                            color:GlobalVariables.green,
                             borderRadius: BorderRadius.circular(30)),
                         child:Icon(Icons.edit,color: GlobalVariables.white,size: 20,)
                       ),
@@ -503,13 +503,13 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     onPressed: () {},
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.darkBlue)),
+                        side: BorderSide(color: GlobalVariables.green)),
                     child: Text(
                       AppLocalizations.of(context).translate('submit'),
                       style: TextStyle(fontSize: GlobalVariables.largeText),

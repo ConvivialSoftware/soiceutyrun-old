@@ -7,8 +7,6 @@ PODS:
   - contact_picker (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.2.2):
-    - Flutter
-  - DKImagePickerController/Core (4.3.2):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
   - DKImagePickerController/ImageDataManager (4.2.2)
@@ -39,7 +37,6 @@ PODS:
   - DKPhotoGallery/Resource (0.0.14):
     - SDWebImage
     - SDWebImageFLPlugin
-    - SwiftyGif
   - ext_storage (0.0.1):
     - Flutter
   - file_picker (0.0.1):
@@ -278,8 +275,6 @@ SPEC CHECKSUMS:
   contact_picker: 57db5d8b410b52a0457d88f7b15de7d3307e8f16
   DKImagePickerController: 4a3e7948a848c4348e600b3fe5ce41478835fa10
   DKPhotoGallery: 0290d32343574f06eaa4c26f8f2f8a1035e916be
-  DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
-  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   ext_storage: 4eaf3a84d5594106e2ebcc2502248cfde53c8fa1
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: 57957c8d6eb3d8b80a560b1dc58be24724b89ff2

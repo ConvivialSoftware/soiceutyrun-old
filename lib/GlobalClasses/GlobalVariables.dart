@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class GlobalVariables{
   static var  isAlreadyTapped = false;
   /*Variables for the Web URL*/
-  static const termsConditionURL="https://svcsocietypro.com/term_of_services.html";
-  static const privacyPolicyURL="https://svcsocietypro.com/privacy_policy.html";
+  static const termsConditionURL="https://societyrun.com/Terms%20&%20conditions.html";
+  static const privacyPolicyURL="https://societyrun.com/Privacy_Policy.html";
   static bool isERPAccount=false;
 
   /*Variables for the SharedPreferences*/
@@ -35,9 +35,9 @@ class GlobalVariables{
   static var keyDuesDate="dues_date";
   static var keyGoogleCoordinate="google_parameter";
 
-  static var appLogoPath="assets/images/svc_app_icon.png";
+  static var appLogoPath="assets/images/society_run_green.png";
   static var userProfilePath="assets/images/user_profile.jpeg";
-  static var drawerImagePath="assets/images/svc_logo.jpg";
+  static var drawerImagePath="assets/other_assets/societyrun-logo_colored.svg";
   static var appIconPath="assets/other_assets/societyrun-logo.svg";
   static var myFlatIconPath="assets/menu_assets/myhome_icon.svg";
   static var myBuildingIconPath="assets/menu_assets/building_icon_menu.svg";
@@ -104,7 +104,7 @@ class GlobalVariables{
 
   static const authorizedToken = "admin:1234";
   static var AUTH="Basic "+base64Url.encode(utf8.encode(authorizedToken));
-  static const BaseURL = "http://svcsocietypro.com/Flutter/";
+  static const BaseURL = "https://societyrun.com/Flutter/";
   static const BaseURLAndroid = "https://societyrun.com/Android/";
   static const BaseRazorPayURL="https://api.razorpay.com/";
   /*Api Name for BaseURL*/
@@ -208,14 +208,13 @@ class GlobalVariables{
   static const Color lightGray =const Color(0xFFD3D3D3);
   static const Color veryLightGray =const Color(0xFFE0E0E0);
   static const Color grey =const Color(0xFF66766F);
-  static const Color darkBlue =const Color(0xFF005496);
-  static const Color lightBlue =const Color(0xFFC7f0FF);
-  static const Color mediumBlue =const Color(0xFF00AEEF);
+  static const Color green =const Color(0xFF2CA01C);
+  static const Color lightGreen =const Color(0xFFDAF7D5);
+  static const Color mediumGreen =const Color(0xFFB3E3BD);
   static const Color transparent =const Color(0xFF00000000);
   static const Color skyBlue =const Color(0xFF64B5F6);
   static const Color orangeYellow =const Color(0xFFFFA726);
   static const Color red =const Color(0xFFC62828);
-  static const Color darkGreen =const Color(0xFF2CA01C);
 
   /*Variables for URL FormData Key*/
 
@@ -332,17 +331,15 @@ class SocietyRun{
   static const companyName="Convivial Software Pvt. Ltd.";
   static const salesContact="+91 8055551809";
   static const salesContact1="+91 8082697529";
-  static const supportContact="022 71991334";
+  static const supportContact="020 46304333";
   static const webSite="http://www.convivialsolutions.com/";
   static const salesEmail="Sales@societyrun.com";
-  static const supportEmail="support@svcsocietypro.com";
+  static const supportEmail="Support@societyrun.com";
   static const puneAddress="Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
-  static const mumbaiAddress="Dosti Pinnacle Plot No. E-7, Road No. 22, Wagle Estate, Thane-400604.";
+  static const mumbaiAddress="F70, Haware Fantasia Business Park,Near Vashi Station & Inorbit Mall,Vashi, Navi Mumbai - 400705";
   //static const versionCode="1.0.0";
 }
 
 class AppPackageInfo{
   static var appName,packageName,version,buildNumber ;
-  static const mumbaiAddress="Dosti Pinnacle Plot No. E-7, Road No. 22, Wagle Estate, Thane-400604.";
-  static const versionCode="1.0.0";
 }

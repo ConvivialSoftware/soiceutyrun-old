@@ -58,7 +58,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -106,10 +106,10 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
         ],
         controller: _tabController,
         unselectedLabelColor: GlobalVariables.grey,
-        indicatorColor: GlobalVariables.darkBlue,
+        indicatorColor: GlobalVariables.green,
         indicatorSize: TabBarIndicatorSize.tab,
         isScrollable: true,
-        labelColor: GlobalVariables.darkBlue,
+        labelColor: GlobalVariables.green,
       ),
     );
   }
@@ -240,7 +240,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                 Container(
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: GlobalVariables.lightBlue,
+                    backgroundColor: GlobalVariables.lightGreen,
                   ),
                 ),
                 Container(
@@ -250,7 +250,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                       Container(
                           child: Icon(
                         Icons.call,
-                        color: GlobalVariables.lightBlue,
+                        color: GlobalVariables.lightGreen,
                         size: 20,
                       )),
                       Container(
@@ -263,7 +263,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                       Container(
                           child: Icon(
                         Icons.share,
-                        color: GlobalVariables.lightBlue,
+                        color: GlobalVariables.lightGreen,
                         size: 20,
                       )),
                     ],
@@ -292,7 +292,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                                     child: Text(
                                       _visitorInfoList[position].visitorName,
                                       style: TextStyle(
-                                          color: GlobalVariables.darkBlue,
+                                          color: GlobalVariables.green,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -350,7 +350,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                     ),
                     Container(
                       height: 2,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Divider(
                         height: 2,
@@ -367,7 +367,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                             child: Text(
                               _visitorInfoList[position].visitorTime,
                               style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 12,
                               ),
                             ),
@@ -378,7 +378,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                             child: Text(
                               _visitorInfoList[position].visitorHours,
                               style: TextStyle(
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                                 fontSize: 12,
                               ),
                             ),
@@ -598,7 +598,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
               20, MediaQuery.of(context).size.height / 2.7, 0, 0),
           child: Text(
             AppLocalizations.of(context).translate('find_helper'),
-            style: TextStyle(color: GlobalVariables.darkBlue, fontSize: 16),
+            style: TextStyle(color: GlobalVariables.green, fontSize: 16),
           ),
         ),
         Align(
@@ -626,7 +626,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                             width: 3.0,
                           )),
                       child: Container(
@@ -640,7 +640,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                               border: InputBorder.none,
                               suffixIcon: Icon(
                                 Icons.search,
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                               )),
                         ),
                       )),
@@ -656,7 +656,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                             width: 3.0,
                           )),
                       child: Container(
@@ -670,7 +670,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                               border: InputBorder.none,
                               suffixIcon: Icon(
                                 Icons.search,
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                               )),
                         ),
                       )),
@@ -697,7 +697,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
             alignment: Alignment(1.15, -1.15),
             child: Container(
               decoration: BoxDecoration(
-                color: GlobalVariables.darkBlue,
+                color: GlobalVariables.green,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: IconButton(
@@ -740,7 +740,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                                         child: CircleAvatar(
                                           radius: 20,
                                           backgroundColor:
-                                              GlobalVariables.lightBlue,
+                                              GlobalVariables.lightGreen,
                                         ),
                                       ),
                                     ),
@@ -761,7 +761,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                                                     .visitorName,
                                                 style: TextStyle(
                                                     color:
-                                                        GlobalVariables.darkBlue,
+                                                        GlobalVariables.green,
                                                     fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -835,7 +835,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                                                           .visitorHours,
                                                       style: TextStyle(
                                                         color: GlobalVariables
-                                                            .mediumBlue,
+                                                            .mediumGreen,
                                                         fontSize: 12,
                                                       ),
                                                     ),
@@ -871,7 +871,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
 
                         child: Icon(
                           Icons.location_on,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                         ),
                       )),
                       Flexible(
@@ -883,7 +883,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                           AppLocalizations.of(context).translate('address') +
                               ":",
                           style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 14,
                           ),
                         ),
@@ -896,7 +896,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                         child: Text(
                           _visitorInfoList[position].visitorAddress,
                           style: TextStyle(
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                             fontSize: 14,
                           ),
                         ),
@@ -909,7 +909,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                   padding: EdgeInsets.all(15),
                   child: Divider(
                     height: 5,
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                   ),
                 ),
                 Container(
@@ -921,7 +921,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                       Container(
                         child: Icon(
                           Icons.phone_android,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                         ),
                       ),
                       Container(
@@ -930,7 +930,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                           AppLocalizations.of(context).translate('mobile') +
                               ":",
                           style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 14,
                           ),
                         ),
@@ -943,7 +943,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                             child: Text(
                               _visitorInfoList[position].visitorMobile,
                               style: TextStyle(
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                                 fontSize: 14,
                               ),
                             ),
@@ -956,7 +956,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                   padding: EdgeInsets.all(15),
                   child: Divider(
                     height: 5,
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                   ),
                 ),
                 Container(
@@ -965,7 +965,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                   child: Text(
                     _visitorInfoList[position].visitorTime,
                     style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 16,
                     ),
                   ),
@@ -992,7 +992,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
             alignment: Alignment(1.15, -1.15),
             child: Container(
               decoration: BoxDecoration(
-                color: GlobalVariables.darkBlue,
+                color: GlobalVariables.green,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: IconButton(
@@ -1026,7 +1026,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                   child: Text(
                     'Guest is waiting at the gate',
                     style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 20,
                       fontWeight: FontWeight.bold
                     ),
@@ -1042,7 +1042,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor:
-                          GlobalVariables.lightBlue,
+                          GlobalVariables.lightGreen,
                         ),
                       ),
                       Container(
@@ -1051,7 +1051,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                         child: Text(
                           _visitorInfoList[position].visitorName,
                           style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 20,
                           ),
                         ),
@@ -1059,7 +1059,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                       Container(
                         child: Icon(
                           Icons.call,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                         ),
                       ),
                     ],
@@ -1070,7 +1070,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                   padding: EdgeInsets.all(15),
                   child: Divider(
                     height: 5,
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                   ),
                 ),
                 Container(
@@ -1106,7 +1106,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
                           Container(
                             child: Icon(
                               Icons.check_circle,
-                              color: GlobalVariables.darkBlue,
+                              color: GlobalVariables.green,
                               size: 50,
                             ),
                           ),

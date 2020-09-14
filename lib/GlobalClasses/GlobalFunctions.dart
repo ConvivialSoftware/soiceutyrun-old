@@ -267,7 +267,7 @@ class GlobalFunctions{
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(Icons.arrow_back,color: GlobalVariables.darkBlue,)
+                    child: Icon(Icons.arrow_back,color: GlobalVariables.green,)
                 )),
           ),
           Expanded(
@@ -279,7 +279,7 @@ class GlobalFunctions{
                 /*child: SvgPicture.asset(
                               GlobalVariables.overviewTxtPath,
                             )*/
-                child: Text(title,style: TextStyle(color: GlobalVariables.darkBlue
+                child: Text(title,style: TextStyle(color: GlobalVariables.green
                     ,fontSize: 18,fontWeight: FontWeight.bold),),
               ),
             ),
@@ -306,23 +306,19 @@ class GlobalFunctions{
 
     return  Stack(
       children: <Widget>[
-        Visibility(
-          visible: false,
-          child: Container(
-            alignment: Alignment.topCenter,
-            //color: GlobalVariables.black,
-            height: MediaQuery.of(context).size.height/4.2,
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: SvgPicture.asset(
-                  GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,fit: BoxFit.fill)),
-          ),
+        Container(
+          alignment: Alignment.topCenter,
+          //color: GlobalVariables.black,
+          height: MediaQuery.of(context).size.height/4.2,
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SvgPicture.asset(
+                GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,fit: BoxFit.fill)),
         ),
         Align(
           child: Container(
-            color: GlobalVariables.white,
-            margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/20, 0, 0),
-            child: Image.asset(GlobalVariables.drawerImagePath,width: 200,height: 150,),
+            margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/8, 0, 0),
+            child: SvgPicture.asset(GlobalVariables.appIconPath,),
           ),
           alignment: AlignmentDirectional.topCenter,
         ),
@@ -357,7 +353,7 @@ class GlobalFunctions{
     _progressDialog.style(
         message: "      Please Wait",
         borderRadius: 10.0,
-        backgroundColor: GlobalVariables.mediumBlue,
+        backgroundColor: GlobalVariables.mediumGreen,
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(
@@ -377,7 +373,7 @@ class GlobalFunctions{
     _progressDialog.style(
         message: "      Please Wait",
         borderRadius: 10.0,
-        backgroundColor: GlobalVariables.mediumBlue,
+        backgroundColor: GlobalVariables.mediumGreen,
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(
@@ -646,7 +642,7 @@ class GlobalFunctions{
                           child: ButtonTheme(
                             //minWidth: MediaQuery.of(context).size.width / 2,
                             child: RaisedButton(
-                              color: GlobalVariables.darkBlue,
+                              color: GlobalVariables.green,
                               onPressed: () {
                                 DashBoardState.logout(context);
                               },
@@ -655,7 +651,7 @@ class GlobalFunctions{
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide(
-                                      color: GlobalVariables.darkBlue)),
+                                      color: GlobalVariables.green)),
                               child: Text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
@@ -705,7 +701,7 @@ class GlobalFunctions{
                       children: [
                         Container(
                           child: Image.asset(
-                            GlobalVariables.appLogoPath,width: 50,height: 50,),
+                            GlobalVariables.appLogoPath,width: 80,height: 80,),
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
@@ -724,7 +720,7 @@ class GlobalFunctions{
                                 child: ButtonTheme(
                                   //minWidth: MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     onPressed: () {
                                      Navigator.of(context).pop();
                                     },
@@ -733,7 +729,7 @@ class GlobalFunctions{
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.darkBlue)),
+                                            color: GlobalVariables.green)),
                                     child: Text(
                                       AppLocalizations.of(context)
                                           .translate('later'),
@@ -750,7 +746,7 @@ class GlobalFunctions{
                               child: ButtonTheme(
                                 //minWidth: MediaQuery.of(context).size.width / 2,
                                 child: RaisedButton(
-                                  color: GlobalVariables.darkBlue,
+                                  color: GlobalVariables.green,
                                   onPressed: () {
                                     if(!isCompulsory){
                                       Navigator.of(context).pop();
@@ -765,7 +761,7 @@ class GlobalFunctions{
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
-                                          color: GlobalVariables.darkBlue)),
+                                          color: GlobalVariables.green)),
                                   child: Text(
                                     AppLocalizations.of(context)
                                         .translate('update'),

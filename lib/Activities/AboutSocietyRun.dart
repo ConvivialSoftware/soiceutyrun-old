@@ -57,7 +57,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -150,7 +150,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: GlobalVariables.lightBlue,
+                  color: GlobalVariables.lightGreen,
                   borderRadius:
                   BorderRadius.all(Radius.circular(10))),
               margin: EdgeInsets.all(20),
@@ -187,7 +187,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(AppLocalizations.of(context).translate('develop_by'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
                       Container(
@@ -211,10 +211,10 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       Container(
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(AppLocalizations.of(context).translate('contact'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                     /* Row(
+                      Row(
                         children: [
                           Container(
                             alignment: Alignment.topLeft,
@@ -255,7 +255,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             ),
                           ),
                         ],
-                      ),*/
+                      ),
                       Row(
                         children: [
                           Container(
@@ -293,10 +293,10 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       Container(
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(AppLocalizations.of(context).translate('_email'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                     /* Row(
+                      Row(
                         children: [
                           Container(
                             alignment: Alignment.topLeft,
@@ -326,7 +326,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             ),
                           ),
                         ],
-                      ),*/
+                      ),
                       Row(
                         children: [
                           Container(
@@ -372,10 +372,10 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       Container(
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(AppLocalizations.of(context).translate('office_address'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
-                    /*  Row(
+                      Row(
                         children: [
                           Flexible(
                             flex: 1,
@@ -400,7 +400,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             ),
                           ),
                         ],
-                      ),*/
+                      ),
                       Container(
                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Row(
@@ -444,7 +444,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       Container(
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(AppLocalizations.of(context).translate('version_code'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
                       Container(
@@ -468,7 +468,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       Container(
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(AppLocalizations.of(context).translate('feedback'),style: TextStyle(
-                            color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.bold
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                         ),),
                       ),
                       InkWell(

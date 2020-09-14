@@ -286,7 +286,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                       child: CircleAvatar(
                                         radius: 10,
                                         backgroundColor:
-                                        GlobalVariables.mediumBlue,
+                                        GlobalVariables.mediumGreen,
                                         backgroundImage: NetworkImage(photo),
                                       ),
                                     ),
@@ -315,7 +315,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
       //height: 70,
       // color: GlobalVariables.green,
       decoration: BoxDecoration(
-          color: GlobalVariables.darkBlue,
+          color: GlobalVariables.green,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(50.0), topRight: Radius.circular(50.0))),
       child: BottomNavigationBar(
@@ -672,7 +672,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                 padding: EdgeInsets.all(15),
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.lightBlue,
+                                    color: GlobalVariables.lightGreen,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   mainAxisAlignment:
@@ -695,7 +695,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                 padding: EdgeInsets.all(15),
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.lightBlue,
+                                    color: GlobalVariables.lightGreen,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   mainAxisAlignment:
@@ -713,7 +713,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         borderRadius:
                         BorderRadius.all(Radius.circular(10))),
                     margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -814,11 +814,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   /*child: Image.asset(GlobalVariables.appLogoPath,
                     width: 250, height: 80, fit: BoxFit.fill),*/
                   margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
+                  padding: EdgeInsets.all(5),
+                  alignment: Alignment.topLeft,
+                  child: SvgPicture.asset(
                     GlobalVariables.drawerImagePath,
-                    height: 60,
+                    height: 40,
                   ),
                 ),
                 Container(
@@ -900,7 +900,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                 borderRadius: BorderRadius.circular(25)),*/
                               child: CircleAvatar(
                                 radius: 40,
-                                backgroundColor: GlobalVariables.mediumBlue,
+                                backgroundColor: GlobalVariables.mediumGreen,
                                 backgroundImage: NetworkImage(photo),
                               ),
                             ),
@@ -1055,7 +1055,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       dividerColor: GlobalVariables.transparent,
                       children: [
                         ExpansionPanel(
-                            isExpanded: _list[i].items.length==0 ? false  : _activeMeterIndex == i,
+                            isExpanded: _activeMeterIndex == i,
                             headerBuilder: (BuildContext context,
                                 bool isExpanded) {
                               return ExpansionTile(
@@ -1116,7 +1116,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                             width: 10,
                                             height: 10,
                                             decoration: BoxDecoration(
-                                                color: GlobalVariables.darkBlue,
+                                                color: GlobalVariables.green,
                                                 shape: BoxShape.circle),
                                           ),
                                           Container(
@@ -1371,7 +1371,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             AppLocalizations.of(context).translate("directory"),
             AppLocalizations.of(context).translate("events")
           ]),
-      /*new RootTitle(
+      new RootTitle(
           title: AppLocalizations.of(context).translate('discover'),
           rootIconData: GlobalVariables.myServiceIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
@@ -1379,7 +1379,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             AppLocalizations.of(context).translate("classified"),
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("near_by_shop"),
-          ]),*/
+          ]),
       new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
           rootIconData: GlobalVariables.myClubIconPath,
@@ -1398,11 +1398,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           rootIconData: GlobalVariables.mySupportIconPath,
           // innerIconData: GlobalVariables.myFlatIconPath,
           items: []),
-      /*new RootTitle(
+      new RootTitle(
           title: AppLocalizations.of(context).translate('admin'),
           rootIconData: GlobalVariables.myAdminIconPath,
           //  innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),*/
+          items: []),
       new RootTitle(
           title: AppLocalizations.of(context).translate('about_us'),
           rootIconData: GlobalVariables.aboutUsPath,
@@ -1569,6 +1569,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   duesLayout() {
+    print('duesDate : '+ duesDate);
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -1609,7 +1610,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                         Text(
                           AppLocalizations.of(context).translate('total_due'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumBlue, fontSize: 14),
+                              color: GlobalVariables.mediumGreen, fontSize: 14),
                         ),
                         int.parse(duesRs)>0 ? Text(
                           getBillPaymentStatus(),
@@ -1620,7 +1621,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                         ) : Text(
                           'Paid',
                           style: TextStyle(
-                              color: GlobalVariables.darkBlue,
+                              color: GlobalVariables.green,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
@@ -1632,7 +1633,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                         Text(
                           " Rs. " + duesRs,
                           style: TextStyle(
-                              color: GlobalVariables.darkBlue,
+                              color: GlobalVariables.green,
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
@@ -1642,7 +1643,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                             duesDate.length>0 && duesDate!='-' ? GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'): '-',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -1650,11 +1651,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       ],
                     ),
                     Container(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
                       child: Divider(
                         height: 1,
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                       ),
                     ),
                     Container(
@@ -1673,7 +1674,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               AppLocalizations.of(context)
                                   .translate('transaction_history'),
                               style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 16,
                               ),
                             ),
@@ -1688,7 +1689,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                             child: Text(
                               AppLocalizations.of(context).translate('pay_now'),
                               style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 16,
                               ),
                             ),
@@ -1736,7 +1737,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
               child: RaisedButton(
-                color: GlobalVariables.darkBlue,
+                color: GlobalVariables.green,
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -1749,7 +1750,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide(
-                        color: GlobalVariables.darkBlue)),
+                        color: GlobalVariables.green)),
                 child: Text(
                   AppLocalizations.of(context)
                       .translate('i_am_interested'),
@@ -1998,7 +1999,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       child: Text(
                         AppLocalizations.of(context).translate('yes'),
                         style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       )),
@@ -2011,7 +2012,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       child: Text(
                         AppLocalizations.of(context).translate('no'),
                         style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       )),
@@ -2091,7 +2092,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     }else if(days >=-2 && days <0){
       return Color(0xFFf39c12);
     }else{
-      return GlobalVariables.mediumBlue;
+      return GlobalVariables.mediumGreen;
     }
   }
 

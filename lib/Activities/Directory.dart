@@ -96,7 +96,7 @@ class DirectoryState extends State<BaseDirectory> {
       builder: (context) => Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -254,7 +254,7 @@ class DirectoryState extends State<BaseDirectory> {
                             margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                             child: Icon(
                               Icons.call,
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                               size: 24,
                             ),
                           ),
@@ -301,7 +301,7 @@ class DirectoryState extends State<BaseDirectory> {
                     margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                     child: Icon(
                       Icons.email,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       size: 24,
                     ),
                   ),

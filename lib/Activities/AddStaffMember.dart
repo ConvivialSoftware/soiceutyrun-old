@@ -92,7 +92,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -157,7 +157,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -178,7 +178,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -202,7 +202,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: ButtonTheme(
@@ -213,7 +213,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -243,10 +243,10 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.white,
+                                    color:   _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Male" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
+                                      color: _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -258,7 +258,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                   AppLocalizations.of(context)
                                       .translate('male'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -283,10 +283,10 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.white,
+                                    color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Female" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
+                                      color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -298,7 +298,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                   AppLocalizations.of(context)
                                       .translate('female'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -317,7 +317,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -338,7 +338,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -363,7 +363,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                             width: 3.0,
                           )
                       ),
@@ -371,7 +371,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                         controller: _dobController,
                         readOnly: true,
                         style: TextStyle(
-                            color: GlobalVariables.darkBlue
+                            color: GlobalVariables.green
                         ),
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).translate('date_of_birth'),
@@ -385,7 +385,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                   });
 
                                 },
-                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumBlue,))
+                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,))
                         ),
                       ),
                     ),
@@ -399,7 +399,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -421,7 +421,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )
                 ),
@@ -449,7 +449,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                               borderRadius: BorderRadius.circular(25),
 
                             ) : BoxDecoration(
@@ -458,7 +458,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                     image: FileImage(File(attachmentFilePath)),
                                     fit: BoxFit.cover,
                                 ),
-                                border: Border.all(color: GlobalVariables.darkBlue,width: 2.0)
+                                border: Border.all(color: GlobalVariables.green,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
@@ -466,7 +466,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                    color: GlobalVariables.mediumBlue,
+                                    color: GlobalVariables.mediumGreen,
                                     borderRadius: BorderRadius.circular(10)
                                 ),
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -545,7 +545,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentIdentityProofFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                               borderRadius: BorderRadius.circular(25),
 
                             ) : BoxDecoration(
@@ -554,13 +554,13 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                                     image: FileImage(File(attachmentIdentityProofFilePath)),
                                     fit: BoxFit.cover
                                 ),
-                                border: Border.all(color: GlobalVariables.darkBlue,width: 2.0)
+                                border: Border.all(color: GlobalVariables.green,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -586,7 +586,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                 child: ButtonTheme(
                  // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     onPressed: () {
 
                       verifyInfo();
@@ -595,7 +595,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                     ),
                     child: Text(
                       AppLocalizations.of(context)
@@ -746,7 +746,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
         value: _roleTypeList[i],
         child: Text(
           _roleTypeList[i],
-          style: TextStyle(color: GlobalVariables.darkBlue),
+          style: TextStyle(color: GlobalVariables.green),
         ),
       ));
     }

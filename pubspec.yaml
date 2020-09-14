@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.1+4
+version: 4.2.7+35
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -89,11 +89,11 @@ dev_dependencies:
 flutter_icons:
   ios : true
   android : true
-  image_path_ios : "assets/images/svc_app_icon.png"
-  image_path_android : "assets/images/svc_app_icon.png"
+  image_path_ios : "assets/images/ic_societyrun.png"
+  image_path_android : "assets/images/ic_societyrun.png"
 
 flutter_launcher_name:
-  name: "SVC SocietyPro"
+  name: "SocietyRun"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -102,8 +102,7 @@ flutter_launcher_name:
 flutter:
   assets:
     - assets/audio/
-    - assets/images/svc_logo.jpg
-    - assets/images/svc_app_icon.png
+    - assets/images/ic_societyrun.png
     - assets/images/society_run_green.png
     - assets/images/society_run_green.svg
     - assets/images/society_run_white.png

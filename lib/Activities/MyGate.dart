@@ -96,7 +96,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -324,7 +324,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -338,7 +338,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -354,7 +354,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: Container(
@@ -364,7 +364,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     controller: _dateController,
                     readOnly: true,
                     style: TextStyle(
-                      color: GlobalVariables.darkBlue
+                      color: GlobalVariables.green
                     ),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -380,7 +380,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           },
                           icon: Icon(
                             Icons.date_range,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           ),
                         )),
                   ),
@@ -421,7 +421,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Icons.add,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.darkBlue,
+              backgroundColor: GlobalVariables.green,
             ),
           )
         ],
@@ -485,7 +485,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: GlobalVariables.mediumBlue,
+                    backgroundColor: GlobalVariables.mediumGreen,
                     backgroundImage: NetworkImage(Image),
                   ),
                 ),
@@ -501,7 +501,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           child: Text(
                             _activitiesList[position].VISITOR_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -550,7 +550,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.access_time,color: GlobalVariables.mediumBlue,)
+                    child: Icon(Icons.access_time,color: GlobalVariables.mediumGreen,)
                 ),
                 Container(
                   alignment: Alignment.topLeft,
@@ -558,7 +558,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: Text(
                     Time,
                     style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 12,
                     ),
                   ),
@@ -573,7 +573,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.date_range,color: GlobalVariables.mediumBlue,)
+                    child: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,)
                 ),
                 Container(
                   alignment: Alignment.topLeft,
@@ -581,7 +581,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: Text(
                     Date,
                     style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 12,
                     ),
                   ),
@@ -598,7 +598,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   Container(
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Icon(Icons.perm_identity,color: GlobalVariables.mediumBlue,)
+                      child: Icon(Icons.perm_identity,color: GlobalVariables.mediumGreen,)
                   ),
                   Container(
                     alignment: Alignment.topLeft,
@@ -606,7 +606,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     child: Text(
                       _activitiesList[position].VISITOR_NAME,
                       style: TextStyle(
-                        color: GlobalVariables.darkBlue,
+                        color: GlobalVariables.green,
                         fontSize: 12,),
                     ),
                   ),
@@ -618,7 +618,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             visible: false,
             child: Container(
               height: 2,
-              color: GlobalVariables.mediumBlue,
+              color: GlobalVariables.mediumGreen,
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Divider(
                 height: 2,
@@ -636,7 +636,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                     ),
                     child: FlatButton.icon(
                       onPressed: (){},
@@ -651,7 +651,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                     ),
                     child: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.cancel,color: GlobalVariables.white,size: 20,), label:Text(AppLocalizations.of(context).translate('cancel'),style: TextStyle(
                         color: GlobalVariables.white
@@ -773,7 +773,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               alignment: Alignment(1.15, -1.15),
               child: Container(
                 decoration: BoxDecoration(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: IconButton(
@@ -810,7 +810,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 child: Text(
                                   AppLocalizations.of(context).translate('visitor_arriving_on'),
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -837,7 +837,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       isExpanded: false,
                                       icon: Icon(
                                         Icons.keyboard_arrow_down,
-                                        color: GlobalVariables.mediumBlue,
+                                        color: GlobalVariables.mediumGreen,
                                       ),
                                       underline: SizedBox(),
                                       hint: Container(
@@ -845,7 +845,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                         child: Text(
                                           "",
                                           style: TextStyle(
-                                              color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
+                                              color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -859,7 +859,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumBlue,
+                                      color: GlobalVariables.mediumGreen,
                                       width: 3.0,
                                     )
                                 ),
@@ -878,7 +878,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                             _contact = contact;
                                             setState(() {});
                                           },
-                                          icon: Icon(Icons.contacts,color: GlobalVariables.mediumBlue,)),
+                                          icon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,)),
                                   ),
                                 ),
                               ),
@@ -889,7 +889,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumBlue,
+                                      color: GlobalVariables.mediumGreen,
                                       width: 3.0,
                                     )
                                 ),
@@ -939,7 +939,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 child: ButtonTheme(
                                   // minWidth: MediaQuery.of(context).size.width/2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     onPressed: () {
 
                                       verifyVisitorDetails();
@@ -948,7 +948,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     textColor: GlobalVariables.white,
                                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                                     ),
                                     child: Text(
                                       AppLocalizations.of(context)
@@ -991,7 +991,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         value: _scheduleList[i],
         child: Text(
           _scheduleList[i],
-          style: TextStyle(color: GlobalVariables.darkBlue),
+          style: TextStyle(color: GlobalVariables.green),
         ),
       ));
     }
@@ -1151,7 +1151,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.share,color: GlobalVariables.darkBlue,), onPressed: (){
+                      IconButton(icon: Icon(Icons.share,color: GlobalVariables.green,), onPressed: (){
                         Navigator.of(context).pop();
                         GlobalFunctions.shareData('PassCode', parsedString);
                       }),
@@ -1159,7 +1159,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Text(AppLocalizations.of(context).translate('share'),style: TextStyle(
                             fontSize: 12
-                            ,fontWeight: FontWeight.bold,color: GlobalVariables.darkBlue
+                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
                         ),),
                       )
                     ],
@@ -1170,7 +1170,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.darkBlue,), onPressed: (){
+                      IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
                         Navigator.of(context).pop();
                         ClipboardManager.copyToClipBoard(pass_code).then((value) {
                           GlobalFunctions.showToast("Copied to Clipboard");
@@ -1180,7 +1180,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
                             fontSize: 12
-                            ,fontWeight: FontWeight.bold,color: GlobalVariables.darkBlue
+                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
                         ),),
                       )
                     ],

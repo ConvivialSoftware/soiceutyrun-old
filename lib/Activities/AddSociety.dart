@@ -79,7 +79,7 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                 child: Text(name,
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: GlobalVariables.darkBlue, fontSize: 25,fontWeight: FontWeight.bold
+                      color: GlobalVariables.green, fontSize: 25,fontWeight: FontWeight.bold
                   ),),
               ),
               Container(
@@ -105,14 +105,14 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                 child: ButtonTheme(
                   minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     onPressed: () {
 
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                     ),
                     child: Text(
                       AppLocalizations.of(context)
@@ -126,7 +126,7 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
               Container(
                 //   color: GlobalVariables.lightGreen,
                 decoration: BoxDecoration(
-                    color: GlobalVariables.lightBlue,
+                    color: GlobalVariables.lightGreen,
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
                 margin: EdgeInsets.all(20),
@@ -144,7 +144,7 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                             child: RichText(text: TextSpan(
                                 text: AppLocalizations.of(context).translate('classified_ads'),
                                 style: TextStyle(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold
                                 )

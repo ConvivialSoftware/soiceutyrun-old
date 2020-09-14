@@ -25,7 +25,7 @@ class CabState extends BaseStatefulState<BaseCab> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -95,7 +95,7 @@ class CabState extends BaseStatefulState<BaseCab> {
               child: Text(
                 AppLocalizations.of(context).translate('cab_arriving_on'),
                 style: TextStyle(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -121,7 +121,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                     isExpanded: false,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
                     hint: Container(
@@ -129,7 +129,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                       child: Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.mediumBlue, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -143,7 +143,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                     width: 3.0,
                   )
               ),
@@ -162,7 +162,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                     width: 3.0,
                   )
               ),
@@ -182,7 +182,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                     width: 3.0,
                   )),
               child: ButtonTheme(
@@ -192,7 +192,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                   isExpanded: true,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                   ),
                   underline: SizedBox(),
                   hint: Text(
@@ -209,7 +209,7 @@ class CabState extends BaseStatefulState<BaseCab> {
               child: Text(
                 AppLocalizations.of(context).translate('frequently_cab_running'),
                 style: TextStyle(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     fontSize: 18,
                     fontWeight: FontWeight.w400),
               ),
@@ -230,10 +230,10 @@ class CabState extends BaseStatefulState<BaseCab> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color: GlobalVariables.darkBlue,
+                                  color: GlobalVariables.green,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     width: 2.0,
                                   )),
                               child: Icon(Icons.check,
@@ -245,7 +245,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                                 AppLocalizations.of(context)
                                     .translate('once'),
                                 style: TextStyle(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     fontSize: 16),
                               ),
                             ),
@@ -270,7 +270,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.mediumBlue,
+                                    color: GlobalVariables.mediumGreen,
                                     width: 2.0,
                                   )),
                               child: Icon(Icons.check,
@@ -282,7 +282,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                                 AppLocalizations.of(context)
                                     .translate('frequently'),
                                 style: TextStyle(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     fontSize: 16),
                               ),
                             ),
@@ -302,7 +302,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: Container(
@@ -316,7 +316,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                         border: InputBorder.none,
                         suffixIcon: Icon(
                           Icons.date_range,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                         )),
                   ),
                 )),
@@ -327,14 +327,14 @@ class CabState extends BaseStatefulState<BaseCab> {
               child: ButtonTheme(
                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   onPressed: () {
 
                   },
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                   ),
                   child: Text(
                     AppLocalizations.of(context)
@@ -477,7 +477,7 @@ class CabState extends BaseStatefulState<BaseCab> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightBlue,
+        color: GlobalVariables.lightGreen,
         borderRadius: BorderRadius.circular(10)
       ),
       child: Column(
@@ -494,7 +494,7 @@ class CabState extends BaseStatefulState<BaseCab> {
                 AppLocalizations.of(context)
                     .translate('search_property'),
                 style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                     fontSize: GlobalVariables.varyLargeText,)),
           )
         ],

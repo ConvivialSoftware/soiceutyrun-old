@@ -38,10 +38,10 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
   List<Complaints> _openComplaintList = new List<Complaints>();
   List<Complaints> _closedComplaintList = new List<Complaints>();
 
-  var firstTicketContainerColor = GlobalVariables.mediumBlue;
+  var firstTicketContainerColor = GlobalVariables.mediumGreen;
   var secondTicketContainerColor = GlobalVariables.white;
   var firstTicketTextColor = GlobalVariables.white;
-  var secondTicketTextColor = GlobalVariables.darkBlue;
+  var secondTicketTextColor = GlobalVariables.green;
   bool isOpenTicket = true;
   bool isClosedTicket = false;
 
@@ -71,7 +71,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
       builder: (context) => Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -160,8 +160,8 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           isClosedTicket = false;
                           firstTicketTextColor = GlobalVariables.white;
                           firstTicketContainerColor =
-                              GlobalVariables.mediumBlue;
-                          secondTicketTextColor = GlobalVariables.darkBlue;
+                              GlobalVariables.mediumGreen;
+                          secondTicketTextColor = GlobalVariables.green;
                           secondTicketContainerColor = GlobalVariables.white;
                         }
                         setState(() {});
@@ -195,10 +195,10 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           isOpenTicket = false;
                           isClosedTicket = true;
                           firstTicketContainerColor = GlobalVariables.white;
-                          firstTicketTextColor = GlobalVariables.darkBlue;
+                          firstTicketTextColor = GlobalVariables.green;
                           secondTicketTextColor = GlobalVariables.white;
                           secondTicketContainerColor =
-                              GlobalVariables.mediumBlue;
+                              GlobalVariables.mediumGreen;
                         }
                         setState(() {});
                       },
@@ -248,7 +248,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -262,7 +262,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -293,7 +293,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                 Icons.add,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.darkBlue,
+              backgroundColor: GlobalVariables.green,
             ),
           )
         ],
@@ -346,7 +346,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   //margin:EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: Text(isOpenTicket ? _openComplaintList[position].CATEGORY : _closedComplaintList[position].CATEGORY,
                       style: TextStyle(
-                          color: GlobalVariables.darkBlue, fontSize: 14)),
+                          color: GlobalVariables.green, fontSize: 14)),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -366,7 +366,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                     'Ticket No: ' +
                         ( isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO),
                     style: TextStyle(
-                        color: GlobalVariables.darkBlue,
+                        color: GlobalVariables.green,
                         fontSize: 12),
                   ),
                 ),
@@ -384,7 +384,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                        width:50,
                        height: 50,
                        decoration: BoxDecoration(
-                         color: GlobalVariables.mediumBlue,
+                         color: GlobalVariables.mediumGreen,
                          shape: BoxShape.rectangle
                        ),
                        /* child:*//* SvgPicture.asset(
@@ -421,7 +421,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: GlobalVariables.darkBlue,
+                                    color: GlobalVariables.green,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)),
                           ),
@@ -444,7 +444,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             ),
             Container(
               height: 1,
-              color: GlobalVariables.mediumBlue,
+              color: GlobalVariables.mediumGreen,
               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Divider(
                 height: 1,
@@ -514,6 +514,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
     flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
     restClient.getComplaintsData(societyId, block, flat).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         print('complaint list length : ' + _list.length.toString());
@@ -539,7 +540,6 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
         setState(() {});
 
       }
-      _progressDialog.hide();
     });
   }
 

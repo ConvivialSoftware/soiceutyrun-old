@@ -95,7 +95,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -170,7 +170,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: Container(
@@ -180,7 +180,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     controller: _dateController,
                     readOnly: true,
                     style: TextStyle(
-                        color: GlobalVariables.darkBlue
+                        color: GlobalVariables.green
                     ),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -197,7 +197,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                           },
                           icon: Icon(
                             Icons.date_range,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           ),
                         )),
                   ),
@@ -228,10 +228,10 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: paymentType== "Cheque" ? GlobalVariables.darkBlue : GlobalVariables.white,
+                                    color: paymentType== "Cheque" ? GlobalVariables.green : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: paymentType== "Cheque" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
+                                      color: paymentType== "Cheque" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -242,7 +242,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                 child: Text(
                                   "Cheque",
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -271,10 +271,10 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: paymentType!= "Cheque" ? GlobalVariables.darkBlue : GlobalVariables.white,
+                                    color: paymentType!= "Cheque" ? GlobalVariables.green : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: paymentType!= "Cheque" ? GlobalVariables.darkBlue : GlobalVariables.mediumBlue,
+                                      color: paymentType!= "Cheque" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -285,7 +285,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                 child: Text(
                                   "NEFT/IMPS",
                                   style: TextStyle(
-                                      color: GlobalVariables.darkBlue,
+                                      color: GlobalVariables.green,
                                       fontSize: 16),
                                 ),
                               ),
@@ -305,7 +305,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: ButtonTheme(
@@ -316,7 +316,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -335,7 +335,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -359,7 +359,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -381,7 +381,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
                 child: TextField(
@@ -404,7 +404,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                       height: 50,
                       margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                       decoration: attachmentFilePath==null ? BoxDecoration(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         borderRadius: BorderRadius.circular(25),
 
                       ) : BoxDecoration(
@@ -413,7 +413,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                               image: FileImage(File(attachmentFilePath)),
                               fit: BoxFit.cover
                           ),
-                          border: Border.all(color: GlobalVariables.darkBlue,width: 2.0)
+                          border: Border.all(color: GlobalVariables.green,width: 2.0)
                       ),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                     ),
@@ -438,11 +438,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                             },
                             icon: Icon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                             ),
                             label: Text(
                               AppLocalizations.of(context).translate('attach_photo'),
-                              style: TextStyle(color: GlobalVariables.darkBlue),
+                              style: TextStyle(color: GlobalVariables.green),
                             ),
                           ),
                         ),
@@ -472,12 +472,12 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                               },
                               icon: Icon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumBlue,
+                                color: GlobalVariables.mediumGreen,
                               ),
                               label: Text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.darkBlue),
+                                style: TextStyle(color: GlobalVariables.green),
                               )),
                         ),
                       ],
@@ -493,7 +493,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     onPressed: () {
 
                       verifyData();
@@ -503,7 +503,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.darkBlue)),
+                        side: BorderSide(color: GlobalVariables.green)),
                     child: Text(
                       AppLocalizations.of(context).translate('submit'),
                       style: TextStyle(fontSize: GlobalVariables.largeText),
@@ -550,7 +550,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
           value: _bankList[i].BANK_NAME,
           child: Text(
             _bankList[i].BANK_NAME,
-            style: TextStyle(color: GlobalVariables.darkBlue),
+            style: TextStyle(color: GlobalVariables.green),
           ),
         ));
       }
@@ -691,7 +691,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             }, child: Text(AppLocalizations.of(context).translate('close'),style: TextStyle(
-              color: GlobalVariables.darkBlue,fontSize: 14
+              color: GlobalVariables.green,fontSize: 14
             ),),),
           ),
         ],

@@ -192,7 +192,7 @@ class MyComplexState extends State<BaseMyComplex>
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -328,7 +328,7 @@ class MyComplexState extends State<BaseMyComplex>
                           child: Text(
                             _announcementList[position].USER_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -397,7 +397,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Text(
               _announcementList[position].SUBJECT,
               style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             //  maxLines: 1,
@@ -460,7 +460,7 @@ class MyComplexState extends State<BaseMyComplex>
           ),
           _announcementList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
-            color: GlobalVariables.mediumBlue,
+            color: GlobalVariables.mediumGreen,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -474,13 +474,13 @@ class MyComplexState extends State<BaseMyComplex>
                 children: <Widget>[
                   Container(
                     child: Icon(Icons.mode_comment,
-                        color: GlobalVariables.mediumBlue),
+                        color: GlobalVariables.mediumGreen),
                   ),
                   Container(
                     child: Text(
                       " Likes",
                       style: TextStyle(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         fontSize: 10,
                       ),
                     ),
@@ -489,14 +489,14 @@ class MyComplexState extends State<BaseMyComplex>
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Icon(
                       Icons.mode_comment,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     ),
                   ),
                   Container(
                     child: Text(
                       " Comments",
                       style: TextStyle(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         fontSize: 10,
                       ),
                     ),
@@ -534,14 +534,14 @@ class MyComplexState extends State<BaseMyComplex>
                   Container(
                       child: Icon(
                         Icons.attach_file,
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Text(
                       "Attachment",
                       style: TextStyle(
-                        color: GlobalVariables.darkBlue,
+                        color: GlobalVariables.green,
                         fontSize: 10,
                       ),
                     ),
@@ -716,7 +716,7 @@ class MyComplexState extends State<BaseMyComplex>
                           child: Text(
                             _meetingList[position].USER_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -785,7 +785,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Text(
               _meetingList[position].SUBJECT,
               style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             //  maxLines: 1,
@@ -848,7 +848,7 @@ class MyComplexState extends State<BaseMyComplex>
           ),
           _meetingList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
-            color: GlobalVariables.mediumBlue,
+            color: GlobalVariables.mediumGreen,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -862,13 +862,13 @@ class MyComplexState extends State<BaseMyComplex>
                 children: <Widget>[
                   Container(
                     child: Icon(Icons.mode_comment,
-                        color: GlobalVariables.mediumBlue),
+                        color: GlobalVariables.mediumGreen),
                   ),
                   Container(
                     child: Text(
                       " Likes",
                       style: TextStyle(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         fontSize: 10,
                       ),
                     ),
@@ -877,14 +877,14 @@ class MyComplexState extends State<BaseMyComplex>
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Icon(
                       Icons.mode_comment,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                     ),
                   ),
                   Container(
                     child: Text(
                       " Comments",
                       style: TextStyle(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         fontSize: 10,
                       ),
                     ),
@@ -921,14 +921,14 @@ class MyComplexState extends State<BaseMyComplex>
                   Container(
                       child: Icon(
                         Icons.attach_file,
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Text(
                       "Attachment",
                       style: TextStyle(
-                        color: GlobalVariables.darkBlue,
+                        color: GlobalVariables.green,
                         fontSize: 10,
                       ),
                     ),
@@ -1039,7 +1039,7 @@ class MyComplexState extends State<BaseMyComplex>
                           child: Text(
                             _pollSurveyList[position].username,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -1090,7 +1090,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Text(
               _pollSurveyList[position].surveyTitle,
               style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
               maxLines: 1,
@@ -1103,7 +1103,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Text(
               _pollSurveyList[position].surveyDesc,
               style: TextStyle(
-                color: GlobalVariables.mediumBlue,
+                color: GlobalVariables.mediumGreen,
                 fontSize: 14,
               ),
               maxLines: 2,
@@ -1161,7 +1161,7 @@ class MyComplexState extends State<BaseMyComplex>
                                                                   i]
                                                               .isSelected ==
                                                           true
-                                                      ? GlobalVariables.darkBlue
+                                                      ? GlobalVariables.green
                                                       : GlobalVariables
                                                           .transparent,
                                                   borderRadius:
@@ -1173,9 +1173,9 @@ class MyComplexState extends State<BaseMyComplex>
                                                                     i]
                                                                 .isSelected ==
                                                             true
-                                                        ? GlobalVariables.darkBlue
+                                                        ? GlobalVariables.green
                                                         : GlobalVariables
-                                                            .mediumBlue,
+                                                            .mediumGreen,
                                                     width: 2.0,
                                                   )),
                                               child: Icon(
@@ -1199,7 +1199,7 @@ class MyComplexState extends State<BaseMyComplex>
                                                     .radioText,
                                                 style: TextStyle(
                                                     color:
-                                                        GlobalVariables.darkBlue,
+                                                        GlobalVariables.green,
                                                     fontSize: 16),
                                               ),
                                             ),
@@ -1234,7 +1234,7 @@ class MyComplexState extends State<BaseMyComplex>
           ),
           Container(
             height: 2,
-            color: GlobalVariables.mediumBlue,
+            color: GlobalVariables.mediumGreen,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -1248,7 +1248,7 @@ class MyComplexState extends State<BaseMyComplex>
                   child: Text(
                     "Active",
                     style: TextStyle(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       fontSize: 10,
                     ),
                   ),
@@ -1256,7 +1256,7 @@ class MyComplexState extends State<BaseMyComplex>
                 Container(
                   margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                   width: 1,
-                  color: GlobalVariables.mediumBlue,
+                  color: GlobalVariables.mediumGreen,
                   child: Divider(
                     height: 10,
                   ),
@@ -1266,7 +1266,7 @@ class MyComplexState extends State<BaseMyComplex>
                   child: Text(
                     "For All members",
                     style: TextStyle(
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       fontSize: 10,
                     ),
                   ),
@@ -1402,7 +1402,7 @@ class MyComplexState extends State<BaseMyComplex>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -1416,7 +1416,7 @@ class MyComplexState extends State<BaseMyComplex>
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
-                            color: GlobalVariables.mediumBlue,
+                            color: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -1432,7 +1432,7 @@ class MyComplexState extends State<BaseMyComplex>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         width: 3.0,
                       )),
                   child: Container(
@@ -1447,7 +1447,7 @@ class MyComplexState extends State<BaseMyComplex>
                         underline: SizedBox(),
                         icon: Icon(
                           Icons.arrow_drop_down,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                         ),
                         isExpanded: true,
                         hint: Text(
@@ -1513,7 +1513,7 @@ class MyComplexState extends State<BaseMyComplex>
           alignment: Alignment.topLeft,
           child: Text(
             type,
-            style: TextStyle(color: position==0 ? GlobalVariables.white:GlobalVariables.darkBlue, fontSize: 20),
+            style: TextStyle(color: position==0 ? GlobalVariables.white:GlobalVariables.green, fontSize: 20),
           ),
         ),
         Container(
@@ -1571,7 +1571,7 @@ class MyComplexState extends State<BaseMyComplex>
                           child: Text(
                             type == 'Near By Shops'? 'Coming Soon...' : AppLocalizations.of(context).translate('view_more'),
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -1579,7 +1579,7 @@ class MyComplexState extends State<BaseMyComplex>
                         type != 'Near By Shops' ?Container(
                           child: Icon(
                             Icons.fast_forward,
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                           ),
                         ) : Container()
                       ],
@@ -1687,7 +1687,7 @@ class MyComplexState extends State<BaseMyComplex>
                       //color: GlobalVariables.grey,
                       child: Text(
                         name,
-                        style: TextStyle(color: GlobalVariables.darkBlue, fontSize: 16,),
+                        style: TextStyle(color: GlobalVariables.green, fontSize: 16,),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -2097,7 +2097,7 @@ class MyComplexState extends State<BaseMyComplex>
                           child: Text(
                             _eventList[position].USER_NAME,
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -2148,7 +2148,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Text(
               _eventList[position].SUBJECT,
               style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
               //maxLines: 1,
@@ -2185,7 +2185,7 @@ class MyComplexState extends State<BaseMyComplex>
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                         child: Icon(
                           Icons.location_on,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                           size: 20,
                         ),
                       ),
@@ -2194,14 +2194,14 @@ class MyComplexState extends State<BaseMyComplex>
                         child: Text(
                           "Venue : ",
                           style: TextStyle(
-                              color: GlobalVariables.darkBlue, fontSize: 14),
+                              color: GlobalVariables.green, fontSize: 14),
                         ),
                       ),
                       Container(
                         child: Text(
                           _eventList[position].VENUE,
                           style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 14,
                           ),
                         ),
@@ -2216,7 +2216,7 @@ class MyComplexState extends State<BaseMyComplex>
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                         child: Icon(
                           Icons.date_range,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                           size: 20,
                         ),
                       ),
@@ -2225,7 +2225,7 @@ class MyComplexState extends State<BaseMyComplex>
                         child: Text(
                           "Date : ",
                           style: TextStyle(
-                              color: GlobalVariables.darkBlue, fontSize: 14),
+                              color: GlobalVariables.green, fontSize: 14),
                         ),
                       ),
                       Container(
@@ -2233,7 +2233,7 @@ class MyComplexState extends State<BaseMyComplex>
                         child: Text(
                           _eventList[position].START_DATE,
                           style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 14,
                           ),
                         ),
@@ -2248,7 +2248,7 @@ class MyComplexState extends State<BaseMyComplex>
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                         child: Icon(
                           Icons.access_time,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                           size: 20,
                         ),
                       ),
@@ -2257,7 +2257,7 @@ class MyComplexState extends State<BaseMyComplex>
                         child: Text(
                           "Time : ",
                           style: TextStyle(
-                              color: GlobalVariables.darkBlue, fontSize: 14),
+                              color: GlobalVariables.green, fontSize: 14),
                         ),
                       ),
                       Container(
@@ -2265,7 +2265,7 @@ class MyComplexState extends State<BaseMyComplex>
                         child: Text(
                           _eventList[position].Start_Time+' TO '+ _eventList[position].END_TIME,
                           style: TextStyle(
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                             fontSize: 14,
                           ),
                         ),
@@ -2278,7 +2278,7 @@ class MyComplexState extends State<BaseMyComplex>
           ),
           _eventList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
-            color: GlobalVariables.mediumBlue,
+            color: GlobalVariables.mediumGreen,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Divider(
               height: 2,
@@ -2311,14 +2311,14 @@ class MyComplexState extends State<BaseMyComplex>
                   Container(
                       child: Icon(
                     Icons.attach_file,
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                   )),
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                     child: Text(
                       "Attachment",
                       style: TextStyle(
-                        color: GlobalVariables.darkBlue,
+                        color: GlobalVariables.green,
                         fontSize: 10,
                       ),
                     ),
@@ -2395,6 +2395,7 @@ class MyComplexState extends State<BaseMyComplex>
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getAnnouncementData(societyId, type).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2412,7 +2413,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
 
       }
-      _progressDialog.hide();
       setState(() {
         isAnnouncementTabAPICall=true;
       });
@@ -2427,6 +2427,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getAnnouncementData(societyId, type).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2439,7 +2440,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         print("_meetingList length : "+_meetingList.length.toString());
 
       }
-      _progressDialog.hide();
       setState(() {
 
         isMeetingsTabAPICall=true;
@@ -2453,6 +2453,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getAnnouncementData(societyId, type).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2463,7 +2464,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           _eventList = List<Announcement>.from(_list.map((i) =>Announcement.fromJson(i)));
         print("_eventList length : "+_eventList.length.toString());
       }
-      _progressDialog.hide();
       setState(() {
         isEventsTabAPICall=true;
       });
@@ -2529,7 +2529,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         });
 
       }
-    })/*.catchError((Object obj) {
+    }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -2540,7 +2540,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           break;
         default:
       }
-    })*/;
+    });
   }
 
   void redirectToPage(String item) {
@@ -2699,7 +2699,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                   child: Container(
                     child: SvgPicture.asset(
                       GlobalVariables.pdfIconPath,
-                      color: GlobalVariables.mediumBlue,
+                      color: GlobalVariables.mediumGreen,
                       width: 25,
                       height: 40,
                     ),
@@ -2726,7 +2726,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: GlobalVariables.darkBlue,
+                                        color: GlobalVariables.green,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -2770,7 +2770,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           ),
           Container(
             height: 1,
-            color: GlobalVariables.mediumBlue,
+            color: GlobalVariables.mediumGreen,
             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
             child: Divider(
               height: 1,
@@ -2831,14 +2831,14 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                         Container(
                             child: Icon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumBlue,
+                              color: GlobalVariables.mediumGreen,
                             )),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: Text(
                             "Attachment",
                             style: TextStyle(
-                              color: GlobalVariables.darkBlue,
+                              color: GlobalVariables.green,
                               fontSize: 10,
                             ),
                           ),
@@ -2854,7 +2854,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                       _documentList[position].USER_NAME == null
                           ? 'Posted By: - '
                           : 'Posted By: ' + _documentList[position].USER_NAME,
-                      style: TextStyle(color: GlobalVariables.mediumBlue)),
+                      style: TextStyle(color: GlobalVariables.mediumGreen)),
                 ),
               ],
             ),
@@ -2873,7 +2873,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         return GlobalVariables.orangeYellow;
         break;
       case "agm-em":
-        return GlobalVariables.darkBlue;
+        return GlobalVariables.green;
         break;
       default:
         return GlobalVariables.skyBlue;

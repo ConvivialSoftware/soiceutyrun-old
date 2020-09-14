@@ -34,7 +34,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -125,7 +125,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                   Expanded(
                     child: Container(
                       child: Text(_homeCareList[position].title,style: TextStyle(
-                        color: GlobalVariables.darkBlue,fontSize: 18,fontWeight: FontWeight.w400
+                        color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.w400
                       ),),
                     ),
                   ),
@@ -173,7 +173,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                   Expanded(
                     child: Container(
                       child: Text(_homeCareList[position].startPrice,style: TextStyle(
-                          color: GlobalVariables.mediumBlue,fontSize: 16,fontWeight: FontWeight.w400
+                          color: GlobalVariables.mediumGreen,fontSize: 16,fontWeight: FontWeight.w400
                       ),),
                     ),
                   ),
@@ -187,7 +187,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                             child: Icon(
                               Icons.call,
                               color:
-                              GlobalVariables.mediumBlue,
+                              GlobalVariables.mediumGreen,
                               size: 24,
                             )) : Container(),
                         _homeCareList[position].isMail ?
@@ -196,7 +196,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
                             child: Icon(
                               Icons.mail_outline,
                               color:
-                              GlobalVariables.mediumBlue,
+                              GlobalVariables.mediumGreen,
                               size: 24,
                             )):Container(),
                       ],

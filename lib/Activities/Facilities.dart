@@ -40,7 +40,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -325,7 +325,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
               child: Text(
                 AppLocalizations.of(context).translate('my_booking_history'),
                 style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
@@ -366,7 +366,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                           child: Text(
                             AppLocalizations.of(context).translate('view_more'),
                             style: TextStyle(
-                                color: GlobalVariables.darkBlue,
+                                color: GlobalVariables.green,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -374,7 +374,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                         Container(
                           child: Icon(
                             Icons.fast_forward,
-                            color: GlobalVariables.darkBlue,
+                            color: GlobalVariables.green,
                           ),
                         )
                       ],
@@ -403,7 +403,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                      child: Text(
                        _bookingHistoryList[position].date,
                        style: TextStyle(
-                           color: GlobalVariables.mediumBlue, fontSize: 16),
+                           color: GlobalVariables.mediumGreen, fontSize: 16),
                      ),
                    ),
                    Container(
@@ -413,7 +413,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                      child: Text(
                        _bookingHistoryList[position].facilitiesType,
                        style: TextStyle(
-                           color: GlobalVariables.mediumBlue, fontSize: 16),
+                           color: GlobalVariables.mediumGreen, fontSize: 16),
                      ),
                    ),
                  ],
@@ -424,7 +424,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
                 child: Text(
                   _bookingHistoryList[position].payPrice,
                   style: TextStyle(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       fontSize: 16,
                       fontWeight: FontWeight.w400),
                 ),
@@ -433,7 +433,7 @@ class FacilitiesState extends BaseStatefulState<BaseFacilities> {
           ),
         ),
         Divider(
-          color: GlobalVariables.mediumBlue,
+          color: GlobalVariables.mediumGreen,
           height: 1,
         ),
       ],

@@ -25,7 +25,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.darkBlue,
+          backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -94,7 +94,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
               child: Text(
                 AppLocalizations.of(context).translate('add_near_by_shop'),
                 style: TextStyle(
-                    color: GlobalVariables.darkBlue,
+                    color: GlobalVariables.green,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -106,7 +106,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                     width: 3.0,
                   )
               ),
@@ -130,7 +130,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                           width: 3.0,
                         )),
                     child: ButtonTheme(
@@ -140,7 +140,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                         isExpanded: true,
                         icon: Icon(
                           Icons.keyboard_arrow_down,
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                         ),
                         underline: SizedBox(),
                         hint: Text(
@@ -159,7 +159,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                     padding: EdgeInsets.all(5),
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                     decoration: BoxDecoration(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Icon(
@@ -181,7 +181,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumBlue,
+                          color: GlobalVariables.mediumGreen,
                           width: 3.0,
                         )
                     ),
@@ -203,7 +203,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                     padding: EdgeInsets.all(5),
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                     decoration: BoxDecoration(
-                      color: GlobalVariables.darkBlue,
+                      color: GlobalVariables.green,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Icon(
@@ -221,7 +221,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                     width: 3.0,
                   )
               ),
@@ -240,7 +240,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumBlue,
+                    color: GlobalVariables.mediumGreen,
                     width: 3.0,
                   )
               ),
@@ -262,7 +262,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     decoration: BoxDecoration(
-                        color: GlobalVariables.mediumBlue,
+                        color: GlobalVariables.mediumGreen,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: GlobalVariables.transparent,
@@ -290,14 +290,14 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
               child: ButtonTheme(
                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                   onPressed: () {
 
                   },
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.darkBlue)
+                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                   ),
                   child: Text(
                     AppLocalizations.of(context)
@@ -440,7 +440,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightBlue,
+        color: GlobalVariables.lightGreen,
         borderRadius: BorderRadius.circular(10)
       ),
       child: Column(
@@ -457,7 +457,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 AppLocalizations.of(context)
                     .translate('search_property'),
                 style: TextStyle(
-                  color: GlobalVariables.darkBlue,
+                  color: GlobalVariables.green,
                     fontSize: GlobalVariables.varyLargeText,)),
           )
         ],
