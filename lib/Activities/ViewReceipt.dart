@@ -249,6 +249,21 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             alignment: Alignment.topLeft,
             child:RichText(text: TextSpan(children: [
               TextSpan(
+                  text: AppLocalizations.of(context).translate('str_consumer_id'),
+                  style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
+              ),
+              TextSpan(
+                  text: consumerId,
+                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
+              )
+            ])),
+          ),
+          getDivider(),
+          Container(
+            padding: EdgeInsets.all(5),
+            alignment: Alignment.topLeft,
+            child:RichText(text: TextSpan(children: [
+              TextSpan(
                   text: AppLocalizations.of(context).translate('narration'),
                   style: TextStyle(color: GlobalVariables.darkBlue,fontSize: 18)
               ),

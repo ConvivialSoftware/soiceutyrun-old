@@ -9,7 +9,7 @@
   "pls_enter_valid_username_password" : "Please Enter Valid Username and Password",
   "pls_check_internet_connectivity": "Please Check Internet Connection",
   "overview": "OVERVIEW",
-  "str_consumer_id": "CONSUMER ID : ",
+  "str_consumer_id": "VAN No: ",
   "my_unit": "My Unit",
   "my_complex": "My Complex",
   "discover": "Discover",
