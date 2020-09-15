@@ -4,7 +4,6 @@ import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/GuestOthers.dart';
 import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
-import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 

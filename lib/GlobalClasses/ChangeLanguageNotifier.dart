@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddSociety.dart';
 import 'package:societyrun/Activities/BanquetBooking.dart';
 import 'package:societyrun/Activities/Cab.dart';
-import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
-import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
 import 'package:societyrun/Activities/Discover.dart';
@@ -22,18 +19,12 @@ import 'package:societyrun/Activities/ListOfHomeService.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
-import 'package:societyrun/Activities/OTP.dart';
 import 'package:societyrun/Activities/OtpWithMobile.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/Register.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
-import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/main.dart';
-
 import 'AppLanguage.dart';
-import 'AppLocalizations.dart';
-import 'GlobalFunctions.dart';
 
 class ChangeLanguageNotifier extends StatelessWidget {
 

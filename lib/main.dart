@@ -1,26 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/LoginPage.dart';
-import 'package:societyrun/Activities/OtpWithMobile.dart';
-import 'package:societyrun/Activities/Register.dart';
 import 'package:societyrun/Activities/splashScreen.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
-import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
-import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:provider/provider.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:dio/dio.dart';
-import 'Activities/DashBoard.dart';
 
 void main() {
 

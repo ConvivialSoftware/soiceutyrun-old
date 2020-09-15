@@ -1,18 +1,14 @@
-import 'dart:convert';
 
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:html/parser.dart';
-import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 

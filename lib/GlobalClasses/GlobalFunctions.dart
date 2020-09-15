@@ -1,11 +1,9 @@
 
 import 'dart:convert';
 import 'dart:core';
-import 'dart:core';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:ext_storage/ext_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';

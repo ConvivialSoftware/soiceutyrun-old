@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
-import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Ledger.dart';
@@ -23,7 +21,6 @@ class BaseLedger extends StatefulWidget {
 }
 
 class LedgerState extends BaseStatefulState<BaseLedger> {
-  List<DateTransaction> _dateTransactionList = new List<DateTransaction>();
 
   List<Ledger> _ledgerList = new List<Ledger>();
 
@@ -235,63 +232,6 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }
 
-  getTransactionList() {
-    _dateTransactionList = [
-      DateTransaction(transactionDate: "17 April 2020", recentTransactionLis: [
-        RecentTransaction(
-          transactionTitle: "Maintenance for March'20",
-          transactionRs: "Rs. 2,564.00",
-          transactionDue: true,
-        ),
-        RecentTransaction(
-          transactionTitle: "Banquet Booking",
-          transactionRs: "Rs. 3,000.00",
-          transactionDue: true,
-        ),
-      ]),
-      DateTransaction(transactionDate: "13 April 2020", recentTransactionLis: [
-        RecentTransaction(
-          transactionTitle: "Maintenance for Feb'20",
-          transactionRs: "Rs. 2,466.00",
-          transactionDue: false,
-        ),
-      ]),
-      DateTransaction(transactionDate: "10 April 2020", recentTransactionLis: [
-        RecentTransaction(
-          transactionTitle: "Club House charges",
-          transactionRs: "Rs. 5,000.00",
-          transactionDue: true,
-        ),
-      ]),
-      DateTransaction(transactionDate: "7 April 2020", recentTransactionLis: [
-        RecentTransaction(
-          transactionTitle: "Water charges",
-          transactionRs: "Rs. 1,500.00",
-          transactionDue: true,
-        ),
-        RecentTransaction(
-          transactionTitle: "Legal charges",
-          transactionRs: "Rs. 500.00",
-          transactionDue: false,
-        ),
-      ]),
-      DateTransaction(transactionDate: "3 April 2020", recentTransactionLis: [
-        RecentTransaction(
-          transactionTitle: "Maintenance for Jan'20",
-          transactionRs: "Rs. 1864.00",
-          transactionDue: false,
-        ),
-      ]),
-      DateTransaction(transactionDate: "1 April 2020", recentTransactionLis: [
-        RecentTransaction(
-          transactionTitle: "Legal charges",
-          transactionRs: "Rs. 500.00",
-          transactionDue: true,
-        ),
-      ])
-    ];
-  }
-
   getDateTransactionItemLayout(int position) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -469,18 +409,3 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
   }
 }
 
-class RecentTransaction {
-  String transactionTitle;
-  String transactionRs;
-  bool transactionDue;
-
-  RecentTransaction(
-      {this.transactionTitle, this.transactionRs, this.transactionDue});
-}
-
-class DateTransaction {
-  String transactionDate;
-  List<RecentTransaction> recentTransactionLis;
-
-  DateTransaction({this.transactionDate, this.recentTransactionLis});
-}

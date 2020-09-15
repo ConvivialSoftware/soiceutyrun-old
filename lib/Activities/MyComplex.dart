@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -20,8 +19,6 @@ import 'package:societyrun/Models/Documents.dart';
 import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-
-import 'base_stateful.dart';
 
 class BaseMyComplex extends StatefulWidget {
   String pageName;
@@ -77,7 +74,7 @@ class MyComplexState extends State<BaseMyComplex>
 
   @override
   void initState() {
-    //print(">>>>>>>PAGENAME ${widget.pageIndex}");
+    print(">>>>>>>PAGENAME $pageName");
     getDisplayName();
     getLocalPath();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -86,13 +83,10 @@ class MyComplexState extends State<BaseMyComplex>
     //flutterDownloadInitialize();
     _tabController = TabController(length: 6, vsync: this);
     _tabController.addListener(_handleTabSelection);
+    print('pageName : '+ pageName.toString());
     if (pageName == null) {
       _handleTabSelection();
     }
-
-
-
-
 
     IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
@@ -126,17 +120,6 @@ class MyComplexState extends State<BaseMyComplex>
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
-  }
-  void _navigateToPage(int index){
-    switch(index){
-      case 0: _tabController.animateTo(0);_callAPI(0);break;
-      case 1: _tabController.animateTo(1);_callAPI(1);break;
-      case 2: _tabController.animateTo(2);_callAPI(2);break;
-      case 3: _tabController.animateTo(3);_callAPI(3);break;
-      case 4: _tabController.animateTo(4);_callAPI(4);break;
-      case 5: _tabController.animateTo(5);_callAPI(5);break;
-    }
-
   }
 
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
@@ -185,9 +168,12 @@ class MyComplexState extends State<BaseMyComplex>
       }catch(e){
         print(e);
       }
-
-
     }
+    if(_progressDialog.isShowing()){
+      print('_progressDialog showing');
+      _progressDialog.hide();
+    }
+    print('_progressDialog Hide');
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -257,6 +243,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getNewsBoardLayout() {
+    print('getNewsBoardLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -280,6 +267,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getNewsBoardListDataLayout() {
+    print('getNewsBoardListDataLayout Tab Call');
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -645,6 +633,7 @@ class MyComplexState extends State<BaseMyComplex>
 */
 
   getMeetingsLayout() {
+    print('getMeetingsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -668,6 +657,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getMeetingsListDataLayout() {
+    print('getMeetingsListDataLayout Tab Call');
     return _meetingList.length > 0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -944,6 +934,7 @@ class MyComplexState extends State<BaseMyComplex>
 
 
   getPollSurveyLayout() {
+    print('getPollSurveyLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -967,6 +958,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getPollSurveyListDataLayout() {
+    print('getPollSurveyListDataLayout Tab Call');
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
@@ -1347,6 +1339,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getDirectoryLayout() {
+    print('getDirectoryLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -1483,7 +1476,8 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getDirectoryListDataLayout() {
-    return Container(
+    print('getDirectoryListDataLayout Tab Call');
+    return _directoryList.length > 0 ? Container(
       // color: GlobalVariables.grey,
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -1497,7 +1491,7 @@ class MyComplexState extends State<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );
+    ):Container();
   }
 
   getDirectoryListItemLayout(int position) {
@@ -2002,6 +1996,7 @@ class MyComplexState extends State<BaseMyComplex>
   }*/
 
   getEventsLayout() {
+    print('getEventsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -2039,6 +2034,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getEventsDataLayout() {
+    print('getEventsDataLayout Tab Call');
     return  /*Align(
       alignment: Alignment.center,
       child: Container(
@@ -2046,7 +2042,7 @@ class MyComplexState extends State<BaseMyComplex>
             color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
         ),),
       ),
-    );*/Container(
+    );*/_eventList.length > 0 ? Container(
       //  color: GlobalVariables.grey,
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -2060,7 +2056,7 @@ class MyComplexState extends State<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );
+    ):Container();
   }
 
   getEventsListItemLayout(var position) {
@@ -2390,6 +2386,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   Future<void> getAnnouncementData(String type) async {
+    isAnnouncementTabAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -2414,7 +2411,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
       }
       setState(() {
-        isAnnouncementTabAPICall=true;
       });
 
 
@@ -2422,6 +2418,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   Future<void> getMeetingData(String type) async {
+    isMeetingsTabAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -2441,13 +2438,12 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
       }
       setState(() {
-
-        isMeetingsTabAPICall=true;
       });
     });
   }
 
   Future<void> getEventData(String type) async {
+    isEventsTabAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -2465,7 +2461,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         print("_eventList length : "+_eventList.length.toString());
       }
       setState(() {
-        isEventsTabAPICall=true;
       });
     });
   }
@@ -2479,6 +2474,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getAnnouncementPollData(societyId, type,block,flat,userId).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2493,8 +2489,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         /*setState(() {
         });*/
       }
-
-      _progressDialog.hide();
       setState(() {
 
       });
@@ -2502,6 +2496,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   Future<void> getAllMemberDirectoryData() async {
+    isDirectoryTabAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -2525,7 +2520,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         getDirectoryListData();
         print('list : '+_directoryList.toString());
         setState(() {
-          isDirectoryTabAPICall=true;
         });
 
       }
@@ -2533,7 +2527,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
       switch (obj.runtimeType) {
         case DioError:
           {
-            _progressDialog.hide();
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
           }
@@ -2591,7 +2584,8 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   void _callAPI(int index) {
-
+    print('_callAPI pageName : '+ pageName.toString());
+    print('_callAPI index : '+ index.toString());
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         switch(index){
@@ -2667,6 +2661,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   getDocumentListDataLayout() {
+    print('getDocumentListDataLayout Tab Call');
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(20, 80, 20, 0),
@@ -2683,6 +2678,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   getDocumentListItemLayout(int position) {
+    print('getDocumentListItemLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(20),
@@ -2882,6 +2878,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   void getDocumentData() async {
+    isDocumentsTabAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String  societyId = await GlobalFunctions.getSocietyId();
@@ -2894,7 +2891,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         _documentList =
         List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
         setState(() {
-          isDocumentsTabAPICall=true;
         });
 
       }

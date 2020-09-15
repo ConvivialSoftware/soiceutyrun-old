@@ -6,7 +6,6 @@ import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -15,23 +14,18 @@ import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
-import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
-import 'package:societyrun/Activities/EditStaffMember.dart';
 import 'package:societyrun/Activities/Ledger.dart';
-import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
-import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bills.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/Documents.dart';
 import 'package:societyrun/Models/Ledger.dart';
-import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/Member.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Models/PayOption.dart';
@@ -61,14 +55,6 @@ class BaseMyUnit extends StatefulWidget {
 class MyUnitState extends BaseStatefulState<BaseMyUnit>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
-  //List<Bills> _billList = new List<Bills>();
-
-  List<RecentTransaction> _transactionList = new List<RecentTransaction>();
-  List<VehicleRecentTransaction> _vehicleTransactionList =
-      new List<VehicleRecentTransaction>();
-  List<TicketDescription> _ticketDescriptionList =
-      new List<TicketDescription>();
   List<Documents> _documentList = new List<Documents>();
 
   // List<LedgerResponse> _ledgerResponseList = new List<LedgerResponse>();
@@ -83,11 +69,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   List<Member> _memberList = new List<Member>();
   List<Staff> _staffList = new List<Staff>();
   List<Vehicle> _vehicleList = new List<Vehicle>();
-  List<Complaints> _complaintList = new List<Complaints>();
-  List<Complaints> _openComplaintList = new List<Complaints>();
-  List<Complaints> _closedComplaintList = new List<Complaints>();
 
-  // ScrollController _scrollController= ScrollController();
   var firstTicketContainerColor = GlobalVariables.mediumGreen;
   var secondTicketContainerColor = GlobalVariables.white;
 
@@ -482,164 +464,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /*getBillList() {
-    _billList = [
-      Bills(
-          billType: "Maintainance Bills",
-          billRs: "6587.00",
-          billDueDate: "25/02/2020"),
-      Bills(
-          billType: "Electricity Bills",
-          billRs: "1343.00",
-          billDueDate: "12/03/2020"),
-      Bills(
-          billType: "Miscellaneous Bills",
-          billRs: "2235.00",
-          billDueDate: "12/03/2020"),
-    ];
-  }*/
-
-  getVehicleRecentTransactionList() {
-    _vehicleTransactionList = [
-      VehicleRecentTransaction(
-          vehicleName: "Ford Figo",
-          vehicleColor: "Rudy Red",
-          vehicleNumber: "MH47-AN1234",
-          vehicleType: "4 Wheeler"),
-      VehicleRecentTransaction(
-          vehicleName: "Honda Activa 5G",
-          vehicleColor: "Gray",
-          vehicleNumber: "MH47-AQ1234",
-          vehicleType: "2 Wheeler"),
-      VehicleRecentTransaction(
-          vehicleName: "Hero Honda Splender",
-          vehicleColor: "",
-          vehicleNumber: "MH02-B1234",
-          vehicleType: "2 Wheeler"),
-    ];
-  }
-
-  getTransactionList() {
-    _transactionList = [
-      RecentTransaction(
-          maintenanceMonth: "Maintenance for March'20",
-          maintenanceRs: "Rs. 2466.00",
-          maintenanceStatus: "Processing"),
-      RecentTransaction(
-          maintenanceMonth: "Maintenance for Feb'20",
-          maintenanceRs: "Rs. 2466.00",
-          maintenanceStatus: ""),
-      RecentTransaction(
-          maintenanceMonth: "Banquet Bill",
-          maintenanceRs: "Rs. 2466.00",
-          maintenanceStatus: "Processing"),
-      RecentTransaction(
-          maintenanceMonth: "Maintenance for Dec'19",
-          maintenanceRs: "Rs. 2466.00",
-          maintenanceStatus:
-              ""), /*RecentTransaction(
-          maintenanceMonth: "Maintenance for Nov'20",
-          maintenanceRs: "Rs. 2466.00"),
-      RecentTransaction(
-          maintenanceMonth: "Maintenance for Oct'20",
-          maintenanceRs: "Rs. 2466.00"),*/
-    ];
-  }
-
-  getTicketDescriptionList() {
-    _ticketDescriptionList = [
-      TicketDescription(
-          category: "New",
-          ticketNo: "123456789",
-          ticketTitle: "Water Timing need to Chnage",
-          ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
-          ticketIssuedOn: "15/05/2019",
-          chatCount: 2),
-      TicketDescription(
-          category: "In-Progress",
-          ticketNo: "123456789",
-          ticketTitle: "Water Timing need to Chnage",
-          ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
-          ticketIssuedOn: "15/05/2019",
-          chatCount: 2),
-      TicketDescription(
-          category: "Re-Open",
-          ticketNo: "123456789",
-          ticketTitle: "Water Timing need to Chnage",
-          ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
-          ticketIssuedOn: "15/05/2019",
-          chatCount: 2),
-      TicketDescription(
-          category: "New",
-          ticketNo: "123456789",
-          ticketTitle: "Water Timing need to Chnage",
-          ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
-          ticketIssuedOn: "15/05/2019",
-          chatCount: 2),
-      TicketDescription(
-          category: "In-Progress",
-          ticketNo: "123456789",
-          ticketTitle: "Water Timing need to Chnage",
-          ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
-          ticketIssuedOn: "15/05/2019",
-          chatCount: 2),
-      TicketDescription(
-          category: "Re-Open",
-          ticketNo: "123456789",
-          ticketTitle: "Water Timing need to Chnage",
-          ticketDesc:
-              "Currently drinking water timing is morning 6.00 am to 9.00 am. This need to chnage..",
-          ticketIssuedOn: "15/05/2019",
-          chatCount: 2)
-    ];
-  }
-
-  /*getDocumentDescriptionList() {
-    _documentDescriptionList = [
-      DocumentDescription(
-          documentTitle: "Rent Agreement",
-          documentType: "Others",
-          documentDesc: "Authorised rent agreement",
-          documentName: "Rent_agreement.pdf",
-          documentPostBy: "ABC"),
-      DocumentDescription(
-          documentTitle: "Annual Financial State",
-          documentType: "Financial",
-          documentDesc: "Authorised rent agreement",
-          documentName: "financial_state18-19.pdf",
-          documentPostBy: "XYZ"),
-      DocumentDescription(
-          documentTitle: "Notice-AGM 2019-20 ",
-          documentType: "AGM-EM",
-          documentDesc: "AGM Notice for the year of 2019-20",
-          documentName: "agm_notice.pdf",
-          documentPostBy: "PQR"),
-      DocumentDescription(
-          documentTitle: "Rent Agreement",
-          documentType: "Others",
-          documentDesc: "Authorised rent agreement",
-          documentName: "Rent_agreement.pdf",
-          documentPostBy: "ABC"),
-      DocumentDescription(
-          documentTitle: "Annual Financial State",
-          documentType: "Financial",
-          documentDesc: "Authorised rent agreement",
-          documentName: "financial_state18-19.pdf",
-          documentPostBy: "XYZ"),
-      DocumentDescription(
-          documentTitle: "Notice-AGM 2019-20 ",
-          documentType: "AGM-EM",
-          documentDesc: "AGM Notice for the year of 2019-20",
-          documentName: "agm_notice.pdf",
-          documentPostBy: "PQR"),
-    ];
-  }
-*/
   getMyDuesLayout() {
     print('getMyDuesLayout Tab call');
 
@@ -967,31 +791,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /*getMyTicketLayout() {
-    print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                ticketOpenClosedLayout(), //ticketFilterLayout(),
-                getTicketListDataLayout(), addTicketFabLayout(),
-              ],`
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-*/
   getMyDocumentsLayout() {
     print('MyDocumentsLayout Tab Call');
     return Container(
@@ -1017,98 +816,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /* getMyTanentsLayout() {
-    print('MyTanents Tab Call');
-    return Container(
-      width: MediaQuery.of(context)
-          .size
-          .width, //height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
-              Column(
-                children: <Widget>[
-                  Container(
-                    //padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                    width: 600,
-                    height: 190,
-                    child: Builder(
-                        builder: (context) => ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _memberList.length,
-                              itemBuilder: (context, position) {
-                                return getContactListItemLayout(
-                                    _memberList, position, true);
-                              },
-                              //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
-                  ),
-                  Container(
-                    alignment:
-                        Alignment.topRight, //color: GlobalVariables.white,
-                    margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: Container(
-                        child: RaisedButton(
-                      onPressed: () {},
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .translate('plus_add_delete'),
-                        style: TextStyle(
-                            color: GlobalVariables.white, fontSize: 12),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    )),
-                  ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
-                    child: Text(
-                      AppLocalizations.of(context).translate('documents'),
-                      style: TextStyle(
-                        color: GlobalVariables.green,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  getTantentsListDataLayout(),
-                  Container(
-                      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      alignment: Alignment.topRight,
-                      child: RaisedButton(
-                        onPressed: () {},
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .translate('request_documents'),
-                          style: TextStyle(
-                              color: GlobalVariables.white, fontSize: 12),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: GlobalVariables.green)),
-                        textColor: GlobalVariables.white,
-                        color: GlobalVariables.green,
-                      )),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-*/
   profileLayout() {
     return InkWell(
       onTap: () {
@@ -1228,189 +935,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /*ticketOpenClosedLayout() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        height: 50,
-        margin: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height / 60, 0, 0),
-        decoration: BoxDecoration(
-          color: GlobalVariables.white,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                  alignment: Alignment.center,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: firstTicketContainerColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0))),
-                  child: ButtonTheme(
-                    minWidth: 190,
-                    height: 50,
-                    child: FlatButton(
-                      //color: GlobalVariables.grey,
-                      child: Text(
-                        AppLocalizations.of(context).translate('open'),
-                        style: TextStyle(
-                            fontSize: 15, color: firstTicketTextColor),
-                      ),
-                      onPressed: () {
-                        GlobalFunctions.showToast("OPEN Click");
-                        if (!isOpenTicket) {
-                          isOpenTicket = true;
-                          isClosedTicket = false;
-                          firstTicketTextColor = GlobalVariables.white;
-                          firstTicketContainerColor =
-                              GlobalVariables.mediumGreen;
-                          secondTicketTextColor = GlobalVariables.green;
-                          secondTicketContainerColor = GlobalVariables.white;
-                        }
-                        setState(() {});
-                      },
-                    ),
-                  )),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                  alignment: Alignment.center,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: secondTicketContainerColor,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomRight: Radius.circular(30.0))),
-                  child: ButtonTheme(
-                    minWidth: 190,
-                    height: 50,
-                    child: FlatButton(
-                      child: Text(
-                        AppLocalizations.of(context).translate('closed'),
-                        style: TextStyle(
-                            fontSize: 15, color: secondTicketTextColor),
-                      ),
-                      onPressed: () {
-                        GlobalFunctions.showToast("CLOSED Click");
-                        if (!isClosedTicket) {
-                          isOpenTicket = false;
-                          isClosedTicket = true;
-                          firstTicketContainerColor = GlobalVariables.white;
-                          firstTicketTextColor = GlobalVariables.green;
-                          secondTicketTextColor = GlobalVariables.white;
-                          secondTicketContainerColor =
-                              GlobalVariables.mediumGreen;
-                        }
-                        setState(() {});
-                      },
-                      color: GlobalVariables.transparent,
-                    ),
-                  )),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  ticketFilterLayout() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        //width: MediaQuery.of(context).size.width / 1.1,
-        height: 50,
-        margin: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height / 12, 0, 0),
-        decoration: BoxDecoration(
-          color: GlobalVariables.transparent,
-          //  borderRadius: BorderRadius.circular(30),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                alignment: Alignment.center,
-                height: 50,
-                color: GlobalVariables.transparent,
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  alignment: Alignment.center,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )),
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          hintText: "Filter",
-                          hintStyle:
-                              TextStyle(color: GlobalVariables.veryLightGray),
-                          border: InputBorder.none,
-                          suffixIcon: Icon(
-                            Icons.search,
-                            color: GlobalVariables.mediumGreen,
-                          )),
-                    ),
-                  )),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  addTicketFabLayout() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(15),
-            child: FloatingActionButton(
-              onPressed: () {
-                //GlobalFunctions.showToast('Fab CLick');
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BaseRaiseNewTicket()));
-              },
-              child: Icon(
-                Icons.add,
-                color: GlobalVariables.white,
-              ),
-              backgroundColor: GlobalVariables.green,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-*/
   getContactListItemLayout(var _list, int position, bool family) {
     var call = '', email = '', userId;
     if (family) {
@@ -1546,179 +1070,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /* getTicketDescListItemLayout(int position) {
-    return InkWell(
-      onTap: () {
-        GlobalFunctions.showToast(isOpenTicket
-            ? _openComplaintList[position].TICKET_NO
-            : _closedComplaintList[position].TICKET_NO);
-        print('_openComplaintList[position].toString()  : ' +
-            _openComplaintList[position].toString());
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BaseComplaintInfoAndComments(isOpenTicket
-                    ? _openComplaintList[position]
-                    : _closedComplaintList[position])));
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: GlobalVariables.white),
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          //margin:EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: Text('Category',
-                              style: TextStyle(
-                                  color: GlobalVariables.green, fontSize: 14)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: SvgPicture.asset(
-                            GlobalVariables.waterIconPath,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(
-                          15, 0, 0, 0), //alignment: Alignment.topLeft,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                              // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: Text(
-                                  isOpenTicket
-                                      ? _openComplaintList[position].STATUS
-                                      : _closedComplaintList[position].STATUS,
-                                  style: TextStyle(
-                                      color: GlobalVariables.white,
-                                      fontSize: 12),
-                                ),
-                                decoration: BoxDecoration(
-                                    color: getTicketCategoryColor(isOpenTicket
-                                        ? _openComplaintList[position].STATUS
-                                        : _closedComplaintList[position]
-                                            .STATUS),
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              Container(
-                                child: Text(
-                                  'Ticket No: ' +
-                                      (isOpenTicket
-                                          ? _openComplaintList[position]
-                                              .TICKET_NO
-                                          : _closedComplaintList[position]
-                                              .TICKET_NO),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 12),
-                                ),
-                              ),
-                            ],
-                          )),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: Text(
-                                isOpenTicket
-                                    ? _openComplaintList[position].SUBJECT
-                                    : _closedComplaintList[position].SUBJECT,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Text(
-                              isOpenTicket
-                                  ? _openComplaintList[position].DESCRIPTION
-                                  : _closedComplaintList[position].DESCRIPTION,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(color: GlobalVariables.mediumGreen),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 1,
-              color: GlobalVariables.mediumGreen,
-              margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-              child: Divider(
-                height: 1,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Text(
-                        'Issued on: ' +
-                            (isOpenTicket
-                                ? _openComplaintList[position].DATE
-                                : _closedComplaintList[position].DATE),
-                        style: TextStyle(color: GlobalVariables.mediumGreen)),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                          child: Icon(
-                        Icons.chat_bubble,
-                        color: GlobalVariables.lightGray,
-                      )),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                        child: Text(
-                            (isOpenTicket
-                                    ? _openComplaintList[position].COMMENT_COUNT
-                                    : _closedComplaintList[position]
-                                        .COMMENT_COUNT) +
-                                ' Comments',
-                            style:
-                                TextStyle(color: GlobalVariables.mediumGreen)),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-*/
   getDocumentListItemLayout(int position) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
@@ -2001,49 +1352,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /* getDisplayName() async {
-
-
-    name = await GlobalFunctions.getDisplayName();
-
-
-    GlobalFunctions.getDisplayName().then((value) {
-      name = value;
-      print('Name : '+name);
-
-    });
-  }*/
-/*
-  getDisplayPhoto() {
-    GlobalFunctions.getPhoto().then((value) {
-      photo = value;
-      print('Photo : '+photo);
-
-    });
-  }
-
-  getMobile() {
-    GlobalFunctions.getMobile().then((value) {
-      phone = value;
-      print('Phone : '+phone);
-
-    });
-  }
-
-  getEmail() {
-    GlobalFunctions.getUserId().then((value) {
-      email = value;
-      print('Email ID : '+email);
-
-    });
-  }
-
-  getConsumerID() {
-    GlobalFunctions.getConsumerID().then((value) {
-      consumerId = value;
-      print('Consumer ID : '+consumerId);
-    });
-  }*/
 
   Future<void> getSharedPreferenceData() async {
     name = await GlobalFunctions.getDisplayName();
@@ -2071,25 +1379,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-  /* getTicketListDataLayout() {
-    return Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 12, 20, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: isOpenTicket
-                    ? _openComplaintList.length
-                    : _closedComplaintList.length,
-                itemBuilder: (context, position) {
-                  return getTicketDescListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-    );
-  }
-*/
   getDocumentListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
@@ -2105,24 +1394,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               )),
     );
   }
-
-  /*getTantentsListDataLayout() {
-    return Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: 3,
-                itemBuilder: (context, position) {
-                  return getDocumentListItemLayout(position);
-                },
-                //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-    );
-  }*/
 
   getDocumentTypeColor(String type) {
     switch (type.toLowerCase().trim()) {
@@ -2159,6 +1430,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> getUnitMemberData() async {
+    isHouseholdTabAPICall = true;
     //  _progressDialog.show();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -2237,7 +1509,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       }
       _progressDialog.hide();
       setState(() {
-        isHouseholdTabAPICall = true;
       });
 
       //  getDocumentData();
@@ -2615,7 +1886,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               )
             ],
           ),
-          position != _vehicleTransactionList.length - 1
+          position != _vehicleList.length - 1
               ? Container(
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: Divider(
@@ -2721,7 +1992,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
       _progressDialog.hide();
       setState(() {
-        isDuesTabAPICall = true;
       });
     }).catchError((Object obj) {
       // if(_progressDialog.isShowing()){
@@ -2833,6 +2103,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> getPayOption() async {
+    isDuesTabAPICall = true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -3875,14 +3146,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       return Color(0xFFf39c12);
     } else {
       return GlobalVariables.mediumGreen;
-    }
-    if (days > 0) {
-    } else if (days >= 2) {
-      return Color(0xFFf39c12);
-    } else if (days == 1) {
-      return Color(0xFFf39c12);
-    } else if (days == 0) {
-      return Color(0xFFf39c12);
     }
   }
 }

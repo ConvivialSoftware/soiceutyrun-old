@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -7,15 +6,8 @@ import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/GuestOthers.dart';
 import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
-import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/LoginResponse.dart';
-import 'package:societyrun/Models/Member.dart';
-import 'package:societyrun/Models/MemberResponse.dart';
-import 'package:societyrun/Models/Staff.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 import 'base_stateful.dart';
 
@@ -34,12 +26,7 @@ class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
-  String _selectedItem, _selectedText = "";
   int position = 0;
-  List<DropdownMenuItem<String>> _societyListItems =
-      new List<DropdownMenuItem<String>>();
-  List<LoginResponse> _societyList = new List<LoginResponse>();
-  LoginResponse _selectedSocietyLogin;
 
   var username, password;
   ProgressDialog _progressDialog;

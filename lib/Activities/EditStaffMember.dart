@@ -55,8 +55,6 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
   List<DropdownMenuItem<String>> __roleTypeListItems = new List<DropdownMenuItem<String>>();
   String _selectedRoleType;
 
-  List<String> _membershipTypeList = new List<String>();
-  List<DropdownMenuItem<String>> __membershipTypeListItems = new List<DropdownMenuItem<String>>();
   String _selectedMembershipType;
 
 

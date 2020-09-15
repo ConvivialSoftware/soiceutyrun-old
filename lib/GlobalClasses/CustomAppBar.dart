@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 
 import 'GlobalVariables.dart';
 

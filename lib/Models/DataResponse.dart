@@ -1,7 +1,5 @@
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/Member.dart';
 
-import 'Member.dart';
 
 class DataResponse {
   List<dynamic> data;

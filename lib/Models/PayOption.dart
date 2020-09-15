@@ -1,7 +1,4 @@
-import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/Member.dart';
 
-import 'Member.dart';
 
 class PayOption {
   String PAYTM_MERCHANT_MID;

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -8,7 +7,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/ComplaintArea.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 

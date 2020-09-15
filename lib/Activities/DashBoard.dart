@@ -1,20 +1,14 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
-import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
-import 'package:societyrun/Activities/Facilities.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
@@ -29,7 +23,6 @@ import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
-import 'package:societyrun/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -85,7 +78,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
         getDuesData();
         getAllSocietyData();
         getBannerData();
-        geProfileData();
+        //geProfileData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -124,7 +117,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     restClient.getProfileData(societyId, userId).then((value) {
       //  _progressDialog.hide();
       if (value.status) {
-        List<dynamic> _list = value.data;
       }
     }).catchError((Object obj) {
       if (_progressDialog.isShowing()) {

@@ -26,7 +26,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(_dio, '_dio');
     this.baseUrl ??= GlobalVariables.BaseURL;
 
-    if (kDebugMode) {
+    /*if (kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
           responseBody: true,
           error: true,
@@ -34,7 +34,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
           responseHeader: false,
           request: true,
           requestBody: true));
-    }
+    }*/
   }
 
   final Dio _dio;
@@ -245,8 +245,6 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
-    Map<String, dynamic> map = {};
-
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
@@ -276,7 +274,6 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
-    Map<String, dynamic> map = {};
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
@@ -331,8 +328,6 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
-    Map<String, dynamic> map = {};
-
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
@@ -362,8 +357,6 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
-
-    Map<String, dynamic> map = {};
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
