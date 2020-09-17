@@ -1423,6 +1423,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       case "reopen":
         return GlobalVariables.red;
         break;
+      case "on hold":
+        return GlobalVariables.orangeYellow;
+        break;
       default:
         return GlobalVariables.skyBlue;
         break;

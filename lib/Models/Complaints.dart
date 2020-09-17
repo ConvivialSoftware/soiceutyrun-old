@@ -19,6 +19,7 @@ class Complaints {
   String EDIT_DATE;
   String PRIORITY;
   String ATTACHMENT_NAME;
+  String NAME;
   String ESCALATION_LEVEL;
 
   Complaints(
@@ -39,31 +40,31 @@ class Complaints {
       this.EDIT_DATE,
       this.PRIORITY,
       this.ATTACHMENT_NAME,
+      this.NAME,
       this.ESCALATION_LEVEL});
 
   factory Complaints.fromJson(Map<String, dynamic> json) {
-
-  //  print('complaint ststus : '+json['STATUS']);
+    //  print('complaint ststus : '+json['STATUS']);
 
     return Complaints(
-      TICKET_NO: json['TICKET_NO'],
-      SUBJECT: json['SUBJECT'],
-      CATEGORY:json['CATEGORY'],
-      COMPLAINT_AREA:json['COMPLAINT_AREA'],
-      NATURE:json['NATURE'],
-      TYPE:json['TYPE'],
-      BLOCK: json['BLOCK'],
-      FLAT: json['FLAT'],
-      DESCRIPTION:json['DESCRIPTION'],
-      ATTACHMENT:json['ATTACHMENT'],
-      DATE:json['DATE'],
-      COMMENT_COUNT:json['COMMENT_COUNT'],
-      STATUS:json['STATUS'],
-      VENDOR:json['VENDOR'],
-      EDIT_DATE:json['EDIT_DATE'],
-      PRIORITY:json['PRIORITY'],
-      ATTACHMENT_NAME: json['ATTACHMENT_NAME'],
-      ESCALATION_LEVEL:json['ESCALATION_LEVEL']
-    );
+        TICKET_NO: json['TICKET_NO'],
+        SUBJECT: json['SUBJECT'],
+        CATEGORY: json['CATEGORY'],
+        COMPLAINT_AREA: json['COMPLAINT_AREA'],
+        NATURE: json['NATURE'],
+        TYPE: json['TYPE'],
+        BLOCK: json['BLOCK'],
+        FLAT: json['FLAT'],
+        DESCRIPTION: json['DESCRIPTION'],
+        ATTACHMENT: json['ATTACHMENT'],
+        DATE: json['DATE'],
+        COMMENT_COUNT: json['COMMENT_COUNT'],
+        STATUS: json['STATUS'],
+        VENDOR: json['VENDOR'],
+        EDIT_DATE: json['EDIT_DATE'],
+        PRIORITY: json['PRIORITY'],
+        ATTACHMENT_NAME: json['ATTACHMENT_NAME'],
+        NAME: json['NAME'],
+        ESCALATION_LEVEL: json['ESCALATION_LEVEL']);
   }
 }

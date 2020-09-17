@@ -680,7 +680,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
       if(value.status){
         Navigator.of(context).pop();
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BaseHelpDesk()));
+            context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
       }
       GlobalFunctions.showToast(value.message);
 

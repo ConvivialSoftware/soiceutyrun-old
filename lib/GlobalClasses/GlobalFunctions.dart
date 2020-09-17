@@ -192,6 +192,24 @@ class GlobalFunctions{
     return "";
   }
 
+   static getSocietyPermission() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keySocietyPermission)){
+      print('keySocietyPermission : '+sharedPreferences.getString(GlobalVariables.keySocietyPermission));
+      return  sharedPreferences.getString(GlobalVariables.keySocietyPermission);
+    }
+    return "";
+  }
+
+   static getUserPermission() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyUserPermission)){
+      print('keyGoogleCoordinate : '+sharedPreferences.getString(GlobalVariables.keyUserPermission));
+      return  sharedPreferences.getString(GlobalVariables.keyUserPermission);
+    }
+    return "";
+  }
+
   static getAppLanguage() async{
     AppLanguage appLanguage = AppLanguage();
     Locale _appLocale= await appLanguage.fetchLocale();

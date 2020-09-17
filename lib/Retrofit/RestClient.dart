@@ -82,7 +82,7 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.ComplaintsAPI)
   Future<DataResponse> getComplaintsData(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
-      @Field(GlobalVariables.flat) String flat );
+      @Field(GlobalVariables.flat) String flat,@Field(GlobalVariables.userID) String userID, bool isAssignComplaint );
 
   @FormUrlEncoded()
   @POST(GlobalVariables.TicketNoComplaintAPI)

@@ -236,12 +236,13 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future<void> navigate(GatePassPayload temp,BuildContext context) async {
+    print('context : '+context.toString());
     if (temp.tYPE == TYPE_COMPLAINT || temp.tYPE == TYPE_ASSIGN_COMPLAINT) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD)));
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD,false)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

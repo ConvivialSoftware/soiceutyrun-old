@@ -352,23 +352,32 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<DataResponse> getComplaintsData(String socId, String block, String flat) async {
+  Future<DataResponse> getComplaintsData(String socId, String block, String flat,String userId,bool isAssignComplaint) async {
     // TODO: implement getComplaintsData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
-    FormData formData = FormData.fromMap({
+    //AppPermission.isUserAdminHelpDeskPermission=false;
+    FormData formData = !AppPermission.isUserAdminHelpDeskPermission ? FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat
+    }):FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.userID: userId
     });
     print(GlobalVariables.societyId + ": " + socId);
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
+    print(GlobalVariables.flat + ": " + flat);
+    print(" isAssignComplaint " + isAssignComplaint.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.ComplaintsAPI);
-    final Response _result = await _dio.post(GlobalVariables.ComplaintsAPI,
+    var url = isAssignComplaint  ? GlobalVariables.assignComplaintsAPI: GlobalVariables.ComplaintsAPI;
+    print('baseurl : ' + baseUrl + url);
+    final Response _result = await _dio.post(url,
         options: RequestOptions(
             //method: GlobalVariables.Post,
             headers: <String, dynamic>{

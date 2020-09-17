@@ -293,6 +293,8 @@
   "paid_amount": "Paid Amount",
   "transaction_mode": "TRANSACTION_MODE",
   "penalty": "PENALTY",
-  "narration": "Narration"
+  "narration": "Narration",
+  "reopen": "Reopen",
+  "assign_helpdesk": "Assign HelpDesk"
 
 }

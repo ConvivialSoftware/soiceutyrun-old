@@ -72,6 +72,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     getPhoto();
+    getAppPermission();
     GlobalFunctions.getAppPackageInfo();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -781,7 +782,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
   getHelpDeskPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseHelpDesk()));
+        context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
   }
 
   getAdminPage() {
@@ -1047,7 +1048,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       dividerColor: GlobalVariables.transparent,
                       children: [
                         ExpansionPanel(
-                            isExpanded: _activeMeterIndex == i,
+                            isExpanded: _list[i].items.length==0 ? false  : _activeMeterIndex == i,
                             headerBuilder: (BuildContext context,
                                 bool isExpanded) {
                               return ExpansionTile(
@@ -1341,76 +1342,146 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
   void getExpandableListViewData(BuildContext context) {
     //   print('AppLocalizations.of(context).translate(my_flat) : '+AppLocalizations.of(context).translate('my_unit').toString());
-    _list = [
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('my_unit'),
-          rootIconData: GlobalVariables.myFlatIconPath,
-          //innerIconData: Icons.,
-          items: [
-            AppLocalizations.of(context).translate("my_dues"),
-            AppLocalizations.of(context).translate("my_household"),
-            // AppLocalizations.of(context).translate("my_documents"),
-          ]),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('my_complex'),
-          rootIconData: GlobalVariables.myBuildingIconPath,
-          //innerIconData: GlobalVariables.myFlatIconPath,
-          items: [
-            AppLocalizations.of(context).translate("announcement"),
-            AppLocalizations.of(context).translate("meetings"),
-            AppLocalizations.of(context).translate("poll_survey"),
-            AppLocalizations.of(context).translate("documents"),
-            AppLocalizations.of(context).translate("directory"),
-            AppLocalizations.of(context).translate("events")
-          ]),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('discover'),
-          rootIconData: GlobalVariables.myServiceIconPath,
-          //innerIconData: GlobalVariables.myFlatIconPath,
-          items: [
-            AppLocalizations.of(context).translate("classified"),
-            AppLocalizations.of(context).translate("services"),
-            AppLocalizations.of(context).translate("near_by_shop"),
-          ]),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('facilities'),
-          rootIconData: GlobalVariables.myClubIconPath,
-          //innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('my_gate'),
-          rootIconData: GlobalVariables.myGateIconPath,
-          //innerIconData: GlobalVariables.myFlatIconPath,
-          items: [
-            AppLocalizations.of(context).translate("my_activities"),
-            AppLocalizations.of(context).translate("helpers"),
-          ]),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('help_desk'),
-          rootIconData: GlobalVariables.mySupportIconPath,
-          // innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('admin'),
-          rootIconData: GlobalVariables.myAdminIconPath,
-          //  innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('about_us'),
-          rootIconData: GlobalVariables.aboutUsPath,
-          //  innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('change_password'),
-          rootIconData: GlobalVariables.changePasswordPath,
-          //  innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
-      new RootTitle(
-          title: AppLocalizations.of(context).translate('logout'),
-          rootIconData: GlobalVariables.loginIconPath,
-          //  innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
-    ];
+     if(AppPermission.isUserAdminHelpDeskPermission){
+       _list = [
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('my_unit'),
+             rootIconData: GlobalVariables.myFlatIconPath,
+             //innerIconData: Icons.,
+             items: [
+               AppLocalizations.of(context).translate("my_dues"),
+               AppLocalizations.of(context).translate("my_household"),
+               // AppLocalizations.of(context).translate("my_documents"),
+             ]),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('my_complex'),
+             rootIconData: GlobalVariables.myBuildingIconPath,
+             //innerIconData: GlobalVariables.myFlatIconPath,
+             items: [
+               AppLocalizations.of(context).translate("announcement"),
+               AppLocalizations.of(context).translate("meetings"),
+               AppLocalizations.of(context).translate("poll_survey"),
+               AppLocalizations.of(context).translate("documents"),
+               AppLocalizations.of(context).translate("directory"),
+               AppLocalizations.of(context).translate("events")
+             ]),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('discover'),
+             rootIconData: GlobalVariables.myServiceIconPath,
+             //innerIconData: GlobalVariables.myFlatIconPath,
+             items: [
+               AppLocalizations.of(context).translate("classified"),
+               AppLocalizations.of(context).translate("services"),
+               AppLocalizations.of(context).translate("near_by_shop"),
+             ]),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('facilities'),
+             rootIconData: GlobalVariables.myClubIconPath,
+             //innerIconData: GlobalVariables.myFlatIconPath,
+             items: []),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('my_gate'),
+             rootIconData: GlobalVariables.myGateIconPath,
+             //innerIconData: GlobalVariables.myFlatIconPath,
+             items: [
+               AppLocalizations.of(context).translate("my_activities"),
+               AppLocalizations.of(context).translate("helpers"),
+             ]),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('help_desk'),
+             rootIconData: GlobalVariables.mySupportIconPath,
+             // innerIconData: GlobalVariables.myFlatIconPath,
+             items: []),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('admin'),
+             rootIconData: GlobalVariables.myAdminIconPath,
+             //  innerIconData: GlobalVariables.myFlatIconPath,
+             items: [
+               AppLocalizations.of(context).translate("assign_helpdesk"),
+             ]),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('about_us'),
+             rootIconData: GlobalVariables.aboutUsPath,
+             //  innerIconData: GlobalVariables.myFlatIconPath,
+             items: []),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('change_password'),
+             rootIconData: GlobalVariables.changePasswordPath,
+             //  innerIconData: GlobalVariables.myFlatIconPath,
+             items: []),
+         new RootTitle(
+             title: AppLocalizations.of(context).translate('logout'),
+             rootIconData: GlobalVariables.loginIconPath,
+             //  innerIconData: GlobalVariables.myFlatIconPath,
+             items: []),
+       ];
+    }else{
+         _list = [
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('my_unit'),
+               rootIconData: GlobalVariables.myFlatIconPath,
+               //innerIconData: Icons.,
+               items: [
+                 AppLocalizations.of(context).translate("my_dues"),
+                 AppLocalizations.of(context).translate("my_household"),
+                 // AppLocalizations.of(context).translate("my_documents"),
+               ]),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('my_complex'),
+               rootIconData: GlobalVariables.myBuildingIconPath,
+               //innerIconData: GlobalVariables.myFlatIconPath,
+               items: [
+                 AppLocalizations.of(context).translate("announcement"),
+                 AppLocalizations.of(context).translate("meetings"),
+                 AppLocalizations.of(context).translate("poll_survey"),
+                 AppLocalizations.of(context).translate("documents"),
+                 AppLocalizations.of(context).translate("directory"),
+                 AppLocalizations.of(context).translate("events")
+               ]),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('discover'),
+               rootIconData: GlobalVariables.myServiceIconPath,
+               //innerIconData: GlobalVariables.myFlatIconPath,
+               items: [
+                 AppLocalizations.of(context).translate("classified"),
+                 AppLocalizations.of(context).translate("services"),
+                 AppLocalizations.of(context).translate("near_by_shop"),
+               ]),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('facilities'),
+               rootIconData: GlobalVariables.myClubIconPath,
+               //innerIconData: GlobalVariables.myFlatIconPath,
+               items: []),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('my_gate'),
+               rootIconData: GlobalVariables.myGateIconPath,
+               //innerIconData: GlobalVariables.myFlatIconPath,
+               items: [
+                 AppLocalizations.of(context).translate("my_activities"),
+                 AppLocalizations.of(context).translate("helpers"),
+               ]),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('help_desk'),
+               rootIconData: GlobalVariables.mySupportIconPath,
+               // innerIconData: GlobalVariables.myFlatIconPath,
+               items: []),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('about_us'),
+               rootIconData: GlobalVariables.aboutUsPath,
+               //  innerIconData: GlobalVariables.myFlatIconPath,
+               items: []),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('change_password'),
+               rootIconData: GlobalVariables.changePasswordPath,
+               //  innerIconData: GlobalVariables.myFlatIconPath,
+               items: []),
+           new RootTitle(
+               title: AppLocalizations.of(context).translate('logout'),
+               rootIconData: GlobalVariables.loginIconPath,
+               //  innerIconData: GlobalVariables.myFlatIconPath,
+               items: []),
+         ];
+     }
   }
 
   getDrawerItemIndex(int index) {
@@ -1924,12 +1995,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseHelpDesk()));
+          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
        GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
+    } else if (item == AppLocalizations.of(context).translate('assign_helpdesk')) {
+      //Redirect to  Help Desk
+      // GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true)));
     } else if (item == AppLocalizations.of(context).translate('about_us')) {
       //Redirect to  Admin
     //  GlobalFunctions.showToast("Coming Soon...");
@@ -2126,6 +2202,35 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
         default:
       }
     });
+  }
+
+  Future<void> getAppPermission() async {
+
+    var societyPermission = await GlobalFunctions.getSocietyPermission();
+    var userPermission = await GlobalFunctions.getUserPermission();
+
+    List<String> _socPermissionList= societyPermission.toString().split(',');
+    List<String> _userPermissionList= userPermission.toString().split(',');
+
+    for(int i=0;i<_socPermissionList.length;i++){
+      if(_socPermissionList[i]==AppPermission.socHelpDeskPermission){
+        AppPermission.isSocHelpDeskPermission=true;
+      }
+    }
+
+    for(int i=0;i<_userPermissionList.length;i++){
+      if(_userPermissionList[i]==AppPermission.userHelpDeskPermission){
+        AppPermission.isUserHelpDeskPermission=true;
+      }
+      if(_userPermissionList[i]==AppPermission.userAdminHelpDeskPermission){
+        AppPermission.isUserAdminHelpDeskPermission=true;
+      }
+      if(_userPermissionList[i]==AppPermission.userAdminPermission){
+        AppPermission.isUserAdminPermission=true;
+      }
+    }
+
+
   }
 }
 

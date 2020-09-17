@@ -148,7 +148,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.HelpDeskPage:
       {
-        return BaseHelpDesk();
+        return BaseHelpDesk(false);
       }
       break;
     case GlobalVariables.RaiseNewTicketPage:
