@@ -1431,7 +1431,6 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     //print(GlobalVariables.societyId+": "+socId);
 
     print('baseurl : ' + baseUrl + GlobalVariables.addStaffMemberAPI);
-
     final Response _result = await _dio.post(GlobalVariables.addStaffMemberAPI,
         options: RequestOptions(
           //method: GlobalVariables.Post,
@@ -1447,28 +1446,18 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   /*approve visitor*/
   @override
   Future<DataResponse> postApproveGatePass(
-      String vid,
-      String uid,
-      String reason,
-      String noOfVisitors,
-      String fromVisitor,
+      String id,
       String visitorStatus,
-      String inBy,
+      String gcmId,
       String societyId,
-      String inDate,
-      String inTime) async {
+      ) async {
     FormData formData = FormData.fromMap({
-      GatePassFields.VID: vid,
-      GatePassFields.USER_ID: uid,
-      GatePassFields.REASON: reason,
-      GatePassFields.NO_OF_VISITOR: noOfVisitors,
-      GatePassFields.FROM_VISITOR: fromVisitor,
+      GatePassFields.ID: id,
       GatePassFields.VISITOR_STATUS: visitorStatus,
-      GatePassFields.IN_BY: inBy,
+      GatePassFields.GCM_ID: gcmId,
       GatePassFields.SOCIETY_ID: societyId,
-      GatePassFields.IN_DATE: inDate,
-      GatePassFields.IN_TIME: inTime,
     });
+    print('baseurl : ' + baseUrl + GlobalVariables.approveGatePassAPI);
 
     final Response _result = await _dio.post(GlobalVariables.approveGatePassAPI,
         options: RequestOptions(
@@ -1476,15 +1465,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             },
-            baseUrl: GlobalVariables.BaseURLAndroid),
+            baseUrl: GlobalVariables.BaseURL),
         data: formData);
     final value = _result.data;
-
-
+    print('value of postApproveGatePass : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
-  @override
+  /*@override
   Future<DataResponse> postRejectGatePass (
       String id, String societyId, String comment, String status)async {
 
@@ -1501,14 +1489,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
             headers: <String, dynamic>{
               "Authorization": GlobalVariables.AUTH,
             },
-            baseUrl: GlobalVariables.BaseURLAndroid),
+            baseUrl: GlobalVariables.BaseURL),
         data: formData);
     final value = _result.data;
 
 
     return DataResponse.fromJson(value);
   }
-
+*/
   @override
   Future<StatusMsgResponse> getBillMail(String socId, String type, String number,String emailId) async {
     // TODO: implement getBillMail
@@ -1744,15 +1732,39 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
     return StatusMsgResponse.fromJsonWithMessage(value);
   }
+
+  @override
+  Future<StatusMsgResponse> addPollVote(String societyId, String userId, String block, String flat, String optionId, String optionText) async {
+    // TODO: implement addPollVote
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(userId,GlobalVariables.userID);
+    ArgumentError.checkNotNull(block,GlobalVariables.block);
+    ArgumentError.checkNotNull(flat,GlobalVariables.flat);
+    ArgumentError.checkNotNull(optionId,GlobalVariables.ID);
+    ArgumentError.checkNotNull(optionText,GlobalVariables.OPTION);
+
+    FormData formData =
+    FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.block:block,
+      GlobalVariables.flat:flat,
+      GlobalVariables.ID:optionId,
+      GlobalVariables.OPTION:optionText
+    });
+    print('ID : ' + optionId);
+    print('OPTION : ' + optionText);
+    print('baseurl : ' + baseUrl + GlobalVariables.pollVoteAPI);
+    final Response _result = await _dio.post(GlobalVariables.pollVoteAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addPollVote response : ' + value.toString());
+
+    return StatusMsgResponse.fromJson(value);
+  }
 }
-/*    [SOCIETY_ID] => 11133
- [BLOCK] => A
- [FLAT] => 101
- [AMOUNT] => 1100
- [REFERENCE_NO] => asdfghjklASSDFGHJKL
- [TRANSACTION_MODE] => Cheque
- [BANK_ACCOUNTNO] => 32
- [PAYMENT_DATE] => 5/6/2020
- [USER_ID] => 2
- [NARRATION] => testing payment request
- [CHEQUE_BANKNAME] => TJSB Bank*/

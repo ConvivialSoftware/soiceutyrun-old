@@ -8,6 +8,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/Directory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -18,6 +19,8 @@ import 'package:societyrun/Models/CommitteeDirectory.dart';
 import 'package:societyrun/Models/Documents.dart';
 import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
+import 'package:societyrun/Models/Poll.dart';
+import 'package:societyrun/Models/PollOption.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 class BaseMyComplex extends StatefulWidget {
@@ -47,6 +50,7 @@ class MyComplexState extends State<BaseMyComplex>
   List<Announcement> _announcementList = List<Announcement>();
   List<Announcement> _meetingList = List<Announcement>();
   List<Announcement> _eventList = List<Announcement>();
+  List<Poll> _pollList = List<Poll>();
 
   var name,_localPath;
   String _taskId;
@@ -71,6 +75,12 @@ class MyComplexState extends State<BaseMyComplex>
 
 
   MyComplexState(this.pageName);
+  Map<String, double> dataMap = {
+    "Flutter": 5,
+    "React": 3,
+    "Xamarin": 2,
+    "Ionic": 2,
+  };
 
   @override
   void initState() {
@@ -959,42 +969,20 @@ class MyComplexState extends State<BaseMyComplex>
 
   getPollSurveyListDataLayout() {
     print('getPollSurveyListDataLayout Tab Call');
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-       // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                margin: EdgeInsets.all(20),
-                child: Image.asset(GlobalVariables.comingSoonPath,fit: BoxFit.fitWidth,)
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: Text(AppLocalizations.of(context).translate('coming_soon_text'),style: TextStyle(
-                  color: GlobalVariables.black,fontSize: 18
-              ),),
-            )
-          ],
-        ),
-      ),
-    );/*Container(
+    return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
-                itemCount: *//*_pollSurveyList.length*//*0,
+                itemCount: _pollList.length,
                 itemBuilder: (context, position) {
                   return getPollSurveyListItemLayout(position);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );*/
+    );
   }
 
   getPollSurveyListItemLayout(var position) {
@@ -1013,10 +1001,14 @@ class MyComplexState extends State<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Image.asset(
+                  child: _pollList[position].USER_PHOTO==null || _pollList[position].USER_PHOTO=="" ? Image.asset(
                     GlobalVariables.componentUserProfilePath,
                     width: 26,
                     height: 26,
+                  ): CircleAvatar(
+                    radius: 13,
+                    backgroundColor: GlobalVariables.mediumGreen,
+                    backgroundImage: NetworkImage(_pollList[position].USER_PHOTO),
                   ),
                 ),
                 Expanded(
@@ -1029,7 +1021,7 @@ class MyComplexState extends State<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _pollSurveyList[position].username,
+                            _pollList[position].USER_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 12,
@@ -1042,7 +1034,7 @@ class MyComplexState extends State<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _pollSurveyList[position].blockFlatNo,
+                                  _pollList[position].BLOCK+' '+_pollList[position].FLAT,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -1059,7 +1051,7 @@ class MyComplexState extends State<BaseMyComplex>
                               ),
                               Container(
                                 child: Text(
-                                  _pollSurveyList[position].date,
+                                  _pollList[position].C_DATE,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -1073,6 +1065,15 @@ class MyComplexState extends State<BaseMyComplex>
                     ),
                   ),
                 ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      0, 8, 0, 8),
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.green,
+                      shape: BoxShape.circle),
+                ),
               ],
             ),
           ),
@@ -1080,150 +1081,25 @@ class MyComplexState extends State<BaseMyComplex>
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Text(
-              _pollSurveyList[position].surveyTitle,
+              _pollList[position].POLL_Q,
               style: TextStyle(
                   color: GlobalVariables.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
             child: Text(
-              _pollSurveyList[position].surveyDesc,
+              _pollList[position].DESCRIPTION,
               style: TextStyle(
-                color: GlobalVariables.mediumGreen,
+                color: GlobalVariables.grey,
                 fontSize: 14,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Flexible(
-                flex: 1,
-                child: Container(
-                  child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount:
-                          _pollSurveyList[position].surveyVoteOptions.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        return Container(
-                          //color: GlobalVariables.veryLightGray,
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Flexible(
-                                    flex: 3,
-                                    fit: FlexFit.loose,
-                                    child: InkWell(
-                                      //  splashColor: GlobalVariables.mediumGreen,
-                                      onTap: () {
-                                        _pollSurveyList[position]
-                                            .surveyVoteOptions
-                                            .forEach((element) {
-                                          element.isSelected = false;
-                                        });
-                                        _pollSurveyList[position]
-                                            .surveyVoteOptions[i]
-                                            .isSelected = true;
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              width: 30,
-                                              height: 30,
-                                              decoration: BoxDecoration(
-                                                  color: _pollSurveyList[
-                                                                  position]
-                                                              .surveyVoteOptions[
-                                                                  i]
-                                                              .isSelected ==
-                                                          true
-                                                      ? GlobalVariables.green
-                                                      : GlobalVariables
-                                                          .transparent,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                    color: _pollSurveyList[
-                                                                    position]
-                                                                .surveyVoteOptions[
-                                                                    i]
-                                                                .isSelected ==
-                                                            true
-                                                        ? GlobalVariables.green
-                                                        : GlobalVariables
-                                                            .mediumGreen,
-                                                    width: 2.0,
-                                                  )),
-                                              child: Icon(
-                                                Icons.check,
-                                                color: _pollSurveyList[position]
-                                                            .surveyVoteOptions[
-                                                                i]
-                                                            .isSelected ==
-                                                        true
-                                                    ? GlobalVariables.white
-                                                    : GlobalVariables
-                                                        .transparent,
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  10, 0, 0, 0),
-                                              child: Text(
-                                                _pollSurveyList[position]
-                                                    .surveyVoteOptions[i]
-                                                    .radioText,
-                                                style: TextStyle(
-                                                    color:
-                                                        GlobalVariables.green,
-                                                    fontSize: 16),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                      child: Text(
-                                        _pollSurveyList[position].surveyVote[i],
-                                        style: TextStyle(
-                                            color:
-                                                GlobalVariables.veryLightGray,
-                                            fontSize: 12),
-                                      ),
-                                      margin: EdgeInsets.fromLTRB(10, 0, 15, 0),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-              ),
-            ],
-          ),
+          getVoteLayout(position),
           Container(
             height: 2,
             color: GlobalVariables.mediumGreen,
@@ -1232,39 +1108,86 @@ class MyComplexState extends State<BaseMyComplex>
               height: 2,
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    "Active",
-                    style: TextStyle(
-                      color: GlobalVariables.mediumGreen,
-                      fontSize: 10,
-                    ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          "Active",
+                          style: TextStyle(
+                            color: GlobalVariables.grey,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        width: 1,
+                        height: 20,
+                        color: GlobalVariables.mediumGreen,
+                        child: Divider(
+                          height: 10,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Text(
+                          "For All members",
+                          style: TextStyle(
+                            color: GlobalVariables.grey,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  width: 1,
-                  color: GlobalVariables.mediumGreen,
-                  child: Divider(
-                    height: 10,
+              ),
+              _pollList[position].SECRET_POLL.toLowerCase()=='no' ?  Container(
+                alignment: Alignment.topRight,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                decoration: BoxDecoration(
+                  color: GlobalVariables.green,
+                  borderRadius: BorderRadius.circular(35),
+                ),
+                child: Icon(
+                  Icons.remove_red_eye,
+                  color: GlobalVariables.white,
+                ),
+              ):Container(),
+              InkWell(
+                onTap: (){
+
+                  String optionText='';
+                  List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
+                  for(int i=0;i<_optionList.length;i++){
+                    if(_optionList[i].ANS_ID==_pollList[position].VOTED_TO){
+                      optionText=_optionList[i].ANS;
+                      break;
+                    }
+                  }
+
+                  addPollVote(_pollList[position].VOTED_TO,optionText);
+
+                },
+                child: Container(
+                  alignment: Alignment.topRight,
+                  padding: EdgeInsets.all(8),
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  decoration: BoxDecoration(
+                    color: GlobalVariables.green,
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                  child: Icon(
+                    Icons.send,
+                    color: GlobalVariables.white,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  child: Text(
-                    "For All members",
-                    style: TextStyle(
-                      color: GlobalVariables.mediumGreen,
-                      fontSize: 10,
-                    ),
-                  ),
-                )
-              ],
-            ),
+              ),
+            ],
           )
         ],
       ),
@@ -2465,7 +2388,10 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
+  String _pollJson = '{"data": [{"ID": "9","BLOCK": "","FLAT": "","USER_NAME": "Poonam Suthar","USER_PHOTO": "278808_2019-08-16_12:45:09.jpg","SUBJECT": "","DESCRIPTION": "आपल्याला काय वाटते हे आम्हाला कळवा","ATTACHMENT": "","CATEGORY": "","EXPIRY_DATE": "2020-07-23","POLL_Q": "आपल्याला काय वाटते हे आम्हाला कळवा","C_DATE": "23 Jul 2020 01:14 pm","table_name": "poll","ANS": [{"ID":"17","Option":"Yes","Vote":"1"},{"ID":"18","Option":"No","Vote":"0"}],"votes": "17:1,18:0","START_DATETIME": "","END_DATETIME": "","Start_Time": "","VENUE": "","ACHIEVER_NAME": "","ALLOW_COMMENT": "","DISPLAY_COMMENT_ALL": "","SEND_TO": "All Owners","SECRET_POLL": "","VOTING_RIGHTS": "Per unit","POST_AS": "","STATUS": "A","Cancel_By": "","Cancel_Date": "0000-00-00 00:00:00","START_DATE": "01 Jan 1970","END_DATE": "01 Jan 1970","START_TIME": "05:30 am","END_TIME": "05:30 am","vote": "No","vote_to": "17","vote_percent": [100,0]}],"message": "Announcement data","status": true}';
+
   Future<void> getAnnouncementPollData(String type) async {
+    isPollTabAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -2477,20 +2403,11 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
       _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
-
-      //  print("announcementPoll data : "+ _list.toString());
-
-        /*{ID: 94, USER_NAME: Pallavi Unde, USER_PHOTO: 278808_2019-08-16_12:45:09.jpg, SUBJECT: test demo, DESCRIPTION: <p>test demo</p>
-I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
-
-      //  _announcementList = List<Announcement>.from(_list.map((i)=>Announcement.fromJson(i)));
+        _pollList = List<Poll>.from(_list.map((i) =>Poll.fromJson(i)));
 
         print("announcementPoll : "+_list.length.toString());
-        /*setState(() {
-        });*/
       }
       setState(() {
-
       });
     });
   }
@@ -2602,7 +2519,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
           }
           break;
           case 2: {
-            //getAnnouncementPollData('Poll');
+            if(!isPollTabAPICall) {
+              getAnnouncementPollData('Poll');
+            }
           }
           break;
           case 3: {
@@ -2897,6 +2816,167 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
+  getVoteLayout(int position) {
+
+    print("_pollList[position].OPTION : "+_pollList[position].OPTION.toString());
+    List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
+    //List<String> _optionList = _pollList[position].ANS.split(',');
+   // print('_optionList : '+_optionList.toString());
+    
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Flexible(
+          flex: 1,
+          child: Container(
+            //color: GlobalVariables.lightGray,
+            child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount:
+                _optionList.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return getPollOptionListItemLayout(position,_optionList[i]);
+                }),
+          ),
+        ),
+        dataMap.length > 0  && _pollList[position].SECRET_POLL.toLowerCase()=='no'? Flexible(
+          flex: 1,
+          child: Container(
+            alignment: Alignment.topRight,
+            //color: GlobalVariables.grey,
+              child: PieChart(
+                dataMap: dataMap,
+                animationDuration: Duration(milliseconds: 800),
+                chartLegendSpacing: 10,
+                chartRadius: 100,
+                initialAngleInDegree: 0,
+                chartType: ChartType.disc,
+                ringStrokeWidth: 20,
+                legendOptions: LegendOptions(
+                  showLegendsInRow: false,
+                  legendPosition: LegendPosition.left,
+                  showLegends: true,
+                  legendTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                chartValuesOptions: ChartValuesOptions(
+                  showChartValueBackground: false,
+                  showChartValues: true,
+                  showChartValuesInPercentage: false,
+                  showChartValuesOutside: false,
+                ),
+              )
+          ),
+        ) : Container()
+      ],
+    );
+
+  }
+
+  getPollOptionListItemLayout(int position,PollOption pollOption){
+
+    if(_pollList[position].VOTE_PERMISSION.toLowerCase()=='yes') {
+      if (_pollList[position].VOTED_TO != null ||
+          _pollList[position].VOTED_TO.length > 0) {
+        if (pollOption.ANS_ID.toString().toLowerCase() ==
+            _pollList[position].VOTED_TO.toLowerCase()) {
+          pollOption.isSelected = true;
+        } else {
+          pollOption.isSelected = false;
+        }
+      } else {
+        pollOption.isSelected = false;
+      }
+    }else{
+      pollOption.isSelected=false;
+    }
+
+    return InkWell(
+      //  splashColor: GlobalVariables.mediumGreen,
+      onTap: () {
+
+        if(_pollList[position].VOTE_PERMISSION.toLowerCase()=='yes') {
+          setState(() {
+            pollOption.isSelected = true;
+            _pollList[position].VOTED_TO = pollOption.ANS_ID;
+          });
+        }
+
+      },
+      child: Container(
+        margin:
+        EdgeInsets.fromLTRB(10, 10, 0, 0),
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              flex: 2,
+              child: Row(
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: pollOption.isSelected
+                                          ==
+                                          true
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.transparent,
+                        borderRadius:
+                        BorderRadius.circular(5),
+                        border: Border.all(
+                          color: pollOption.isSelected ==
+                                            true
+                                            ? GlobalVariables.green
+                                            : GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: Icon(
+                      Icons.check,
+                      color: pollOption.isSelected ==
+                                        true
+                                        ? GlobalVariables.white
+                                        : GlobalVariables.transparent,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(
+                        10, 0, 0, 0),
+                    child: Text(
+                      pollOption.ANS==null? '' :pollOption.ANS,
+                      style: TextStyle(
+                          color:
+                          GlobalVariables.green,
+                          fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> addPollVote(String optionId, String optionText) async {
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String block = await GlobalFunctions.getBlock();
+    String flat = await GlobalFunctions.getFlat();
+    String userId = await GlobalFunctions.getUserId();
+    _progressDialog.show();
+    restClient.addPollVote(societyId, userId, block, flat, optionId, optionText).then((value) {
+      _progressDialog.hide();
+      print('Response : '+ value.toString());
+
+    });
+  }
+
   /*documentOwnCommonLayout() {
     return Visibility(
       visible: false,
@@ -2999,26 +3079,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
 }
 
-class NewsBoard {
-  String username,
-      blockFlatNo,
-      date,
-      newsType,
-      newsTitle,
-      newsDesc,
-      likeCount,
-      commentCount;
-
-  NewsBoard(
-      {this.username,
-      this.blockFlatNo,
-      this.date,
-      this.newsType,
-      this.newsTitle,
-      this.newsDesc,
-      this.likeCount,
-      this.commentCount});
-}
 
 class PollSurvey {
   String username, blockFlatNo, date, surveyTitle, surveyDesc;
@@ -3061,38 +3121,4 @@ class DirectoryTypeWiseData {
       this.isMail,
       this.isSearch,
       this.isFilter});
-}
-
-/*class Documents {
-  String docTypes;
-  List<DocumentsTypeWiseData> documentList;
-
-  Documents({this.docTypes, this.documentList});
-}*/
-
-class DocumentsTypeWiseData {
-  String docTitle, docDesc;
-
-  DocumentsTypeWiseData({this.docTitle, this.docDesc});
-}
-
-class Events {
-  String name,
-      blockFlat,
-      date,
-      eventTitle,
-      eventDesc,
-      eventVenue,
-      eventDate,
-      eventTime;
-
-  Events(
-      {this.name,
-      this.blockFlat,
-      this.date,
-      this.eventTitle,
-      this.eventDesc,
-      this.eventVenue,
-      this.eventDate,
-      this.eventTime});
 }

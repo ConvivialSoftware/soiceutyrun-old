@@ -40,7 +40,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   ProgressDialog _progressDialog;
 
 
-
+  bool isActivitiesAPICall = false;
+  bool isHelperAPICall = false;
 
   List<String> _scheduleList = new List<String>();
   List<DropdownMenuItem<String>> _scheduleListItems = new List<DropdownMenuItem<String>>();
@@ -62,6 +63,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     super.initState();
 
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+    print(pageName.toString());
+    _handleTabSelection();
    // getTicketDescriptionList();
     //getDocumentDescriptionList();
     getScheduleTimeData();
@@ -1066,6 +1070,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   Future<void> getScheduleVisitorData() async {
+    isActivitiesAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
@@ -1191,6 +1196,42 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   }
 
+
+
+  void _handleTabSelection() {
+    if (pageName == null) {
+      print('Call _handleTabSelection');
+      //if(_tabController.indexIsChanging){
+      _callAPI(_tabController.index);
+      //}
+    }
+  }
+
+  void _callAPI(int index) {
+    GlobalFunctions.checkInternetConnection().then((internet) {
+      if (internet) {
+        switch (index) {
+          case 0:
+            {
+              if (!isActivitiesAPICall) {
+
+              }
+            }
+            break;
+          case 1:
+            {
+              if (!isHelperAPICall) {
+
+              }
+            }
+            break;
+        }
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
+  }
 
 }
 

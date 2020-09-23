@@ -1922,9 +1922,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       AppLocalizations.of(context).translate('meetings'))));
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
-      GlobalFunctions.comingSoonDialog(context);
-      /* Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('poll_survey'))));*/
+      //GlobalFunctions.comingSoonDialog(context);
+       Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('poll_survey'))));
     } else if (item == AppLocalizations.of(context).translate('directory')) {
       //Redirect to  Directory
       Navigator.push(

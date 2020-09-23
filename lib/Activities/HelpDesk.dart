@@ -351,13 +351,28 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           isOpenTicket ? _openComplaintList[position].STATUS : _closedComplaintList[position].STATUS),
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                Container(
-                  child: Text(
-                    'Ticket No: ' +
-                        ( isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO),
-                    style: TextStyle(
-                        color: GlobalVariables.green),
-                  ),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        'Ticket No: ' +
+                            ( isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO),
+                        style: TextStyle(
+                            color: GlobalVariables.green),
+                      ),
+                    ),
+                    isAssignComplaint ? Container(
+                      alignment: Alignment.topRight,
+                      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: Text(
+                        'FLAT: '+ (isOpenTicket ? _openComplaintList[position].FLAT : _closedComplaintList[position].FLAT),
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                        TextStyle(color: GlobalVariables.green,fontSize: 12),
+                      ),
+                    ):Container(),
+                  ],
                 ),
               ],
             ),

@@ -20,8 +20,8 @@ class GatePassDialog extends StatefulWidget {
 
 class _GatePassDialogState extends State<GatePassDialog> {
   ProgressDialog _progressDialog;
-  static const double padding = 16.0;
-  static const double ovalRadius = 66.0;
+  static const double padding = 5.0;
+  static const double ovalRadius = 70.0;
   String _from="";
   String _block="";
   String _visitorName="";
@@ -37,6 +37,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
   String _inTime="";
   String _visitorImage="";
   String _popupTitle="";
+  String _id="";
 
   @override
   void initState() {
@@ -48,11 +49,16 @@ class _GatePassDialogState extends State<GatePassDialog> {
   @override
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: _buildDialogContent(context),
+    return WillPopScope(
+      onWillPop: (){
+        return;
+      },
+      child: Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: _buildDialogContent(context),
+      ),
     );
   }
 
@@ -61,7 +67,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       children: <Widget>[
         _buildDialogCard(),
         _buildTopAvatarWidget(),
-        _buildDialogCloseWidget(),
+        //_buildDialogCloseWidget(),
       ],
     );
   }
@@ -85,16 +91,16 @@ class _GatePassDialogState extends State<GatePassDialog> {
           Column(
             children: <Widget>[
               SizedBox(
-                height: 70,
+                height: 80,
               ),
               Text(
-                "from: $_from",
+                "From: $_from",
                 style: TextStyle(
                     color: GlobalVariables.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w200),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w300),
               ),
-              SizedBox(
+             /* SizedBox(
                 height: 20,
               ),
               Text(
@@ -103,7 +109,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
                     color: Colors.grey[400],
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
-              ),
+              ),*/
               SizedBox(
                 height: 20,
               ),
@@ -111,7 +117,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
                _popupTitle,
                 style: TextStyle(
                     color: GlobalVariables.green,
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -141,6 +147,15 @@ class _GatePassDialogState extends State<GatePassDialog> {
   }
 
   Widget _buildTopAvatarWidget() {
+
+    var iconPath =GlobalVariables.visitorIconPath;
+   // _visitorType==GlobalVariables.GatePass_Taxi
+    if(_visitorType==GlobalVariables.GatePass_Taxi){
+      iconPath = GlobalVariables.taxiIconPath;
+    }else if(_visitorType==GlobalVariables.GatePass_Delivery){
+      iconPath = GlobalVariables.deliveryManIconPath;
+    }
+
     return Positioned(
       top: padding,
       left: padding,
@@ -152,7 +167,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
             BoxDecoration(color: GlobalVariables.white, shape: BoxShape.circle),
         child: CircleAvatar(
           child: SvgPicture.asset(
-              GlobalVariables.shoppingIconPath),),
+            iconPath,width: 70,height: 70,color: GlobalVariables.white,),),
       ),
     );
   }
@@ -246,7 +261,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
             decoration:
                 BoxDecoration(color: Colors.grey[600], shape: BoxShape.circle),
             child: Icon(
-              Icons.close,
+              _reason==GlobalVariables.GatePass_Delivery ? Icons.location_city:Icons.close,
               color: Colors.white,
               size: 30,
             ),
@@ -256,7 +271,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
           height: 5,
         ),
         Text(
-          'DENY',
+          _reason==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : 'DENY',
           style: TextStyle(
               color: Colors.grey[600],
               fontSize: 18,
@@ -313,7 +328,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       _uid = widget.message.uSERID;
       _block = widget.message.rEASON;
       _visitorName = widget.message.vISITORNAME;
-      _visitorType = widget.message.tYPE;
+      _visitorType = widget.message.vSITORTYPE;
       _visitorContact = widget.message.cONTACT;
       _noOfVisitors = widget.message.nOOFVISITORS;
       _inBy = widget.message.iNBY;
@@ -322,6 +337,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       _inTime = widget.message.iNTIME;
       _visitorImage = widget.message.iMAGE;
       _popupTitle = widget.message.title;
+      _id = widget.message.iD;
 
   }
 
@@ -329,13 +345,13 @@ class _GatePassDialogState extends State<GatePassDialog> {
     _societyId = await GlobalFunctions.getSocietyId();
   }
 
-  void _approveGatePass() {
+  Future<void> _approveGatePass() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
+    String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postApproveGatePass(_vid, _uid, _reason, _noOfVisitors, _from,
-            GatePassStatus.APPROVED, _inBy, _societyId, _inDate, _inTime)
+        .postApproveGatePass(_id, GatePassStatus.APPROVED, gcmId, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();
@@ -358,12 +374,13 @@ class _GatePassDialogState extends State<GatePassDialog> {
       }
     });
   }
-  void _rejectGatePass() {
+  Future<void> _rejectGatePass() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
+    String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postRejectGatePass(_vid, _societyId, _reason,GatePassStatus.REJECTED)
+        .postApproveGatePass(_id, GatePassStatus.APPROVED, gcmId, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();

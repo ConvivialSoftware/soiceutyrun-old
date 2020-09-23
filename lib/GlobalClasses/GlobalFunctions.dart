@@ -810,4 +810,40 @@ class GlobalFunctions{
     print('buildNumber : '+ AppPackageInfo.buildNumber);
   }
 
+  static isDateGrater(String generateDate){
+
+    DateTime earlier = DateTime.parse(generateDate);
+    earlier = earlier.add(Duration(minutes: 5));
+    print('earlier : '+ earlier.toIso8601String());
+    DateTime now = new DateTime.now();
+
+    print('now : '+ now.toIso8601String());
+    print('isBefore : '+earlier.isBefore(now.toUtc()).toString());
+    //assert(earlier.isBefore(now.toUtc()));
+    //assert(earlier.toUtc().isBefore(now));
+    if(earlier.isBefore(now.toUtc())){
+      return true;
+    }
+
+    return false;
+  }
+
+  static isDateSameOrGrater(String generateDate){
+
+    DateTime earlier = DateTime.parse(generateDate);
+    print('earlier : '+ earlier.toIso8601String());
+    DateTime now = new DateTime.now();
+    print('now : '+ now.toIso8601String());
+    print('isBefore : '+earlier.isBefore(now.toUtc()).toString());
+    if(earlier.isAtSameMomentAs(now.toUtc())){
+      return true;
+    }else {
+      if (earlier.isBefore(now.toUtc())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }

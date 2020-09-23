@@ -6,7 +6,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
+import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
@@ -142,6 +144,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
+    print('isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
     if (!GlobalVariables.isAlreadyTapped) {
       GlobalVariables.isAlreadyTapped = true;
       try {
@@ -149,7 +152,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
         if (gatePassPayload.tYPE == TYPE_VISITOR ||
             gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
-          _fcm.showAlert(context, gatePassPayload);
+          if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+            _fcm.showAlert(context, gatePassPayload);
+          }else{
+            navigate(gatePassPayload,_ctx);
+          }
         } else {
           navigate(gatePassPayload,_ctx);
         }
@@ -177,7 +184,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     try {
       if (gatePassPayload.tYPE == TYPE_VISITOR ||
           gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
-        _fcm.showAlert(context, gatePassPayload);
+        if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+          _fcm.showAlert(context, gatePassPayload);
+        }else{
+          navigate(gatePassPayload,_ctx);
+        }
       } else {
         if (shouldRedirect) {
           navigate(gatePassPayload,_ctx);
@@ -292,7 +303,19 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
       }
-    } else {
+    } else if (temp.tYPE == TYPE_VISITOR || temp.tYPE==TYPE_VISITOR_VERIFY) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>BaseMyGate(AppLocalizations.of(context).translate('my_gate'))));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(

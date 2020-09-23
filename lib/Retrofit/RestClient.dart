@@ -217,17 +217,12 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.approveGatePassAPI)
   Future<DataResponse> postApproveGatePass(
-    @Field(GatePassFields.VID) String vid,
-    @Field(GatePassFields.USER_ID) String uid,
-    @Field(GatePassFields.REASON) String reason,
-    @Field(GatePassFields.NO_OF_VISITOR) String noOfVisitors,
-    @Field(GatePassFields.FROM_VISITOR) String fromVisitor,
+    @Field(GatePassFields.ID) String vid,
     @Field(GatePassFields.VISITOR_STATUS) String visitorStatus,
-    @Field(GatePassFields.IN_BY) String inBy,
+    @Field(GatePassFields.GCM_ID) String gcmId,
     @Field(GatePassFields.SOCIETY_ID) String societyId,
-    @Field(GatePassFields.IN_DATE) String inDate,
-    @Field(GatePassFields.IN_TIME) String inTime
   );
+/*
   @FormUrlEncoded()
   @POST(GlobalVariables.rejectGatepassAPI)
   Future<DataResponse> postRejectGatePass(
@@ -236,6 +231,7 @@ abstract class RestClient {
       @Field(GatePassFields.COMMENT) String comment,
       @Field(GatePassFields.STATUS) String status
       );
+*/
 
   @FormUrlEncoded()
   @POST(GlobalVariables.feedbackAPI)
@@ -248,6 +244,12 @@ abstract class RestClient {
   @POST(GlobalVariables.logoutAPI)
   Future<StatusMsgResponse> userLogout(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.userID) String userId,
       @Field(GlobalVariables.GCM_ID) String gcmId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.pollVoteAPI)
+  Future<StatusMsgResponse> addPollVote(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.userID) String userId,
+      @Field(GlobalVariables.block) String block,@Field(GlobalVariables.flat) String flat,
+      @Field(GlobalVariables.ID) String optionId,@Field(GlobalVariables.OPTION) String optionText);
 }
 
 

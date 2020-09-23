@@ -85,6 +85,9 @@ class GlobalVariables {
   static var successIconPath = "assets/other_assets/success.svg";
   static var failureIconPath = "assets/other_assets/failure.svg";
   static var deactivateIconPath = "assets/other_assets/deactive.svg";
+  static var deliveryManIconPath = "assets/other_assets/delivery_man.svg";
+  static var taxiIconPath = "assets/other_assets/taxi.svg";
+  static var visitorIconPath = "assets/other_assets/visitor.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -111,7 +114,7 @@ class GlobalVariables {
   static const authorizedToken = "admin:1234";
   static var AUTH = "Basic " + base64Url.encode(utf8.encode(authorizedToken));
   static const BaseURL = "https://societyrun.com/Flutter/";
-  static const BaseURLAndroid = "https://societyrun.com/Android/";
+ // static const BaseURLAndroid = "https://societyrun.com/Android/";
   static const BaseRazorPayURL = "https://api.razorpay.com/";
 
   /*Api Name for BaseURL*/
@@ -140,7 +143,8 @@ class GlobalVariables {
   static const NeighboursDirectoryAPI = "View_directory/society_member";
   static const EmergencyDirectoryAPI = "Api/emergency";
   static const AnnouncementAPI = "Announcement";
-  static const AnnouncementPollAPI = "Announcement/Poll";
+  static const AnnouncementPollAPI = "Poll";
+  static const pollVoteAPI = "Dashboard/vote";
   static const GatePassAPI = "Gatepass";
   static const AddGatePassScheduleAPI = "Gatepass/scheduled_visitor";
   static const GetGatePassScheduleAPI = "Gatepass/schedule_visitor";
@@ -158,7 +162,7 @@ class GlobalVariables {
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
-  static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";
+ // static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";
 
   static const authorizedTokenERP = "erpadmin:SocERP21run";
   static var AUTHERP =
@@ -296,6 +300,10 @@ class GlobalVariables {
   static const android_type = 'android_type';
   static const ios_version = 'ios_version';
   static const ios_type = 'ios_type';
+  static const GatePass_Delivery = 'Delivery';
+  static const GatePass_Taxi = 'Taxi';
+  static const ID = 'ID';
+  static const OPTION = 'OPTION';
 
   /*Server Response Key*/
 
@@ -313,7 +321,7 @@ class GlobalVariables {
 
 class GatePassStatus {
   static const REJECTED = "Rejected";
-  static const APPROVED = "Verified";
+  static const APPROVED = "Accepted";
   static const LEAVE_AT_GATE = "Leave at gate";
 }
 
@@ -331,6 +339,7 @@ class GatePassFields {
   static const ID = "ID";
   static const COMMENT = "COMMENT";
   static const STATUS = "STATUS";
+  static const GCM_ID="GCM_ID";
 }
 
 class SocietyRun {

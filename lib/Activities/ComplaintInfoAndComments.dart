@@ -296,6 +296,56 @@ class ComplaintInfoAndCommentsState
                                           color: GlobalVariables.grey),
                                     ),
                                   ),
+                                  complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
+                                    onTap: () {
+                                      if(complaints.ATTACHMENT!=null) {
+                                        String url = complaints.ATTACHMENT;
+                                        if (isStoragePermission) {
+                                          downloadAttachment(
+                                              url, _localPath);
+                                        } else {
+                                          GlobalFunctions.askPermission(
+                                              Permission.storage)
+                                              .then((value) {
+                                            if (value) {
+                                              downloadAttachment(
+                                                  url, _localPath);
+                                            } else {
+                                              GlobalFunctions.showToast(
+                                                  AppLocalizations.of(
+                                                      context)
+                                                      .translate(
+                                                      'download_permission'));
+                                            }
+                                          });
+                                        }
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.topRight,
+                                            margin: EdgeInsets.fromLTRB(
+                                                5, 15, 5, 0),
+                                            child: Icon(
+                                              Icons.attach_file,
+                                              color: GlobalVariables
+                                                  .mediumGreen,
+                                            )),
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
+                                          child: Text(
+                                            "Attachment",
+                                            style: TextStyle(
+                                              color: GlobalVariables.green,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ) : Container(),
                                   isAssignComplaint
                                       ? Container(
                                           height: 1,
@@ -429,40 +479,6 @@ class ComplaintInfoAndCommentsState
                                               ),
                                             ),
                                           ),
-                                          complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
-                                            onTap: () {
-                                             if(complaints.ATTACHMENT!=null) {
-                                               String url = complaints.ATTACHMENT;
-                                               if (isStoragePermission) {
-                                                 downloadAttachment(
-                                                     url, _localPath);
-                                               } else {
-                                                 GlobalFunctions.askPermission(
-                                                     Permission.storage)
-                                                     .then((value) {
-                                                   if (value) {
-                                                     downloadAttachment(
-                                                         url, _localPath);
-                                                   } else {
-                                                     GlobalFunctions.showToast(
-                                                         AppLocalizations.of(
-                                                             context)
-                                                             .translate(
-                                                             'download_permission'));
-                                                   }
-                                                 });
-                                               }
-                                             }
-                                            },
-                                            child: Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    5, 15, 5, 0),
-                                                child: Icon(
-                                                  Icons.attach_file,
-                                                  color: GlobalVariables
-                                                      .mediumGreen,
-                                                )),
-                                          ) : Container(),
                                         ],
                                       ),
                                     ],
@@ -768,7 +784,7 @@ class ComplaintInfoAndCommentsState
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(30),
             border: Border.all(
               color: GlobalVariables.lightGray,
               width: 2,

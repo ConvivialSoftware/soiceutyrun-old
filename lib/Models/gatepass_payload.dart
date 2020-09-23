@@ -17,6 +17,7 @@ class GatePassPayload {
   String cONTACT;
   String nOOFVISITORS;
   String dATETIME;
+  String vSITORTYPE;
 
   GatePassPayload(
       {this.msgID,
@@ -36,7 +37,7 @@ class GatePassPayload {
         this.vISITORNAME,
         this.cONTACT,
         this.nOOFVISITORS,
-        this.dATETIME});
+        this.dATETIME,this.vSITORTYPE});
 
   GatePassPayload.fromJson(Map<String, dynamic> json) {
     msgID = json['msgID'];
@@ -57,6 +58,7 @@ class GatePassPayload {
     cONTACT = json['CONTACT'];
     nOOFVISITORS = json['NO_OF_VISITORS'];
     dATETIME = json['DATE_TIME'];
+    vSITORTYPE = json['Visitor_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +81,7 @@ class GatePassPayload {
     data['CONTACT'] = this.cONTACT;
     data['NO_OF_VISITORS'] = this.nOOFVISITORS;
     data['DATE_TIME'] = this.dATETIME;
+    data['Visitor_type'] = this.vSITORTYPE;
     return data;
   }
 }
