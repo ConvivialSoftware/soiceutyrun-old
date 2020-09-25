@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -987,7 +988,7 @@ class MyComplexState extends State<BaseMyComplex>
 
   getPollSurveyListItemLayout(var position) {
     // int _default;
-
+    _pollList[position].SECRET_POLL='no';
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -1115,29 +1116,27 @@ class MyComplexState extends State<BaseMyComplex>
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Row(
                     children: <Widget>[
-                      Container(
-                        child: Text(
-                          "Active",
-                          style: TextStyle(
-                            color: GlobalVariables.grey,
+                      Visibility(
+                        visible: false,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          width: 1,
+                          height: 20,
+                          color: GlobalVariables.mediumGreen,
+                          child: Divider(
+                            height: 10,
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        width: 1,
-                        height: 20,
-                        color: GlobalVariables.mediumGreen,
-                        child: Divider(
-                          height: 10,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Text(
-                          "For All members",
-                          style: TextStyle(
-                            color: GlobalVariables.grey,
+                      Visibility(
+                        visible: false,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Text(
+                            "For All members",
+                            style: TextStyle(
+                              color: GlobalVariables.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -1145,17 +1144,24 @@ class MyComplexState extends State<BaseMyComplex>
                   ),
                 ),
               ),
-              _pollList[position].SECRET_POLL.toLowerCase()=='no' ?  Container(
-                alignment: Alignment.topRight,
-                padding: EdgeInsets.all(8),
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                decoration: BoxDecoration(
-                  color: GlobalVariables.green,
-                  borderRadius: BorderRadius.circular(35),
-                ),
-                child: Icon(
-                  Icons.remove_red_eye,
-                  color: GlobalVariables.white,
+              _pollList[position].SECRET_POLL.toLowerCase()=='no' ?  InkWell(
+                onTap: (){
+                  _pollList[position].isGraphView=true;
+                  setState(() {
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.topRight,
+                  padding: EdgeInsets.all(8),
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  decoration: BoxDecoration(
+                    color: GlobalVariables.green,
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                  child: Icon(
+                    Icons.remove_red_eye,
+                    color: GlobalVariables.white,
+                  ),
                 ),
               ):Container(),
               InkWell(
@@ -2818,11 +2824,16 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
   getVoteLayout(int position) {
 
+    print("_pollList[position].SECRET_POLL : "+_pollList[position].SECRET_POLL.toString());
     print("_pollList[position].OPTION : "+_pollList[position].OPTION.toString());
     List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
     //List<String> _optionList = _pollList[position].ANS.split(',');
    // print('_optionList : '+_optionList.toString());
-    
+    Map<String, double> dataMap={};
+    for(int j=0;j<_optionList.length;j++){
+      dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES);
+    }
+    print(dataMap.length.toString());
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -2841,7 +2852,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                 }),
           ),
         ),
-        dataMap.length > 0  && _pollList[position].SECRET_POLL.toLowerCase()=='no'? Flexible(
+        dataMap.length > 0  && _pollList[position].SECRET_POLL.toLowerCase()=='no' && _pollList[position].isGraphView ? Flexible(
           flex: 1,
           child: Container(
             alignment: Alignment.topRight,
@@ -2878,7 +2889,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
   getPollOptionListItemLayout(int position,PollOption pollOption){
 
-    if(_pollList[position].VOTE_PERMISSION.toLowerCase()=='yes') {
       if (_pollList[position].VOTED_TO != null ||
           _pollList[position].VOTED_TO.length > 0) {
         if (pollOption.ANS_ID.toString().toLowerCase() ==
@@ -2887,9 +2897,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         } else {
           pollOption.isSelected = false;
         }
-      } else {
-        pollOption.isSelected = false;
-      }
     }else{
       pollOption.isSelected=false;
     }

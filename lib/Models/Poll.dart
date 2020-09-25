@@ -14,6 +14,7 @@ class Poll {
       FLAT,
       VOTE_PERMISSION,
       VOTED_TO;
+      bool isGraphView;
   List<dynamic> OPTION;
 
   Poll(
@@ -29,7 +30,7 @@ class Poll {
         this.BLOCK,
         this.FLAT,
         this.VOTE_PERMISSION,
-        this.VOTED_TO});
+        this.VOTED_TO,this.isGraphView=false});
 
   factory Poll.fromJson(Map<String, dynamic> json) {
     return Poll(
@@ -45,6 +46,7 @@ class Poll {
         BLOCK:json["BLOCK"],
         FLAT: json["FLAT"],
         VOTE_PERMISSION: json["VOTE_PERMISSION"],
-        VOTED_TO: json["VOTED_TO"]);
+        VOTED_TO: json["VOTED_TO"],
+        isGraphView:json["isGraphView"]?? false );
   }
 }
