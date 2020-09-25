@@ -380,7 +380,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
     String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postApproveGatePass(_id, GatePassStatus.APPROVED, gcmId, _societyId)
+        .postApproveGatePass(_id, _reason==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : GatePassStatus.REJECTED, gcmId, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();
