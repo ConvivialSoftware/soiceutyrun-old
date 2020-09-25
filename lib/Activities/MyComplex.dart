@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/Directory.dart';
+import 'package:societyrun/Activities/ViewPollGraph.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -988,7 +989,7 @@ class MyComplexState extends State<BaseMyComplex>
 
   getPollSurveyListItemLayout(var position) {
     // int _default;
-    _pollList[position].SECRET_POLL='no';
+    _pollList[position].SECRET_POLL='No';
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -1072,7 +1073,7 @@ class MyComplexState extends State<BaseMyComplex>
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                      color: GlobalVariables.green,
+                      color: !GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) ? GlobalVariables.green : GlobalVariables.red,
                       shape: BoxShape.circle),
                 ),
               ],
@@ -1147,8 +1148,7 @@ class MyComplexState extends State<BaseMyComplex>
               _pollList[position].SECRET_POLL.toLowerCase()=='no' ?  InkWell(
                 onTap: (){
                   _pollList[position].isGraphView=true;
-                  setState(() {
-                  });
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>BaseViewPollGraph(_pollList[position])));
                 },
                 child: Container(
                   alignment: Alignment.topRight,
@@ -2831,7 +2831,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
    // print('_optionList : '+_optionList.toString());
     Map<String, double> dataMap={};
     for(int j=0;j<_optionList.length;j++){
-      dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES);
+      dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
     }
     print(dataMap.length.toString());
     return Row(
@@ -2980,6 +2980,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     restClient.addPollVote(societyId, userId, block, flat, optionId, optionText).then((value) {
       _progressDialog.hide();
       print('Response : '+ value.toString());
+      GlobalFunctions.showToast(value.message);
 
     });
   }

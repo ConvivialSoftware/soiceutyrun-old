@@ -295,6 +295,7 @@
   "penalty": "PENALTY",
   "narration": "Narration",
   "reopen": "Reopen",
-  "assign_helpdesk": "Assign HelpDesk"
+  "assign_helpdesk": "Assign HelpDesk",
+  "poll_graph": "Poll Graph"
 
 }
