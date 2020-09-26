@@ -988,8 +988,32 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getPollSurveyListItemLayout(var position) {
-    // int _default;
-    _pollList[position].SECRET_POLL='No';
+
+    print('>>>>> '+position.toString());
+
+    print('EXPIRY_DATE : '+GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE).toString());
+    print('SECRET_POLL : '+_pollList[position].SECRET_POLL.toString());
+    print('VOTED_TO : '+_pollList[position].VOTED_TO.length.toString());
+    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 || _pollList[position].VOTED_TO!=null) && _pollList[position].SECRET_POLL.toLowerCase()=='no'){
+      print('>>> 1st');
+      _pollList[position].isGraphView=true;
+    }
+    if(GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE)){
+      print('>>> 2nd');
+      _pollList[position].isGraphView=true;
+    }
+
+    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length==0 || _pollList[position].VOTED_TO==null)){
+      print('>>> 3rd');
+      _pollList[position].isGraphView=false;
+    }
+
+    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 || _pollList[position].VOTED_TO!=null) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') {
+      print('>>> 4th');
+      _pollList[position].isGraphView=false;
+    }
+
+    print('>>>>> '+position.toString());
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -1130,13 +1154,15 @@ class MyComplexState extends State<BaseMyComplex>
                         ),
                       ),
                       Visibility(
-                        visible: false,
+                        visible: !(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 || _pollList[position].VOTED_TO!=null) && _pollList[position].SECRET_POLL.toLowerCase()=='yes'),
                         child: Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: Text(
-                            "For All members",
+                            "VOTED",
                             style: TextStyle(
-                              color: GlobalVariables.grey,
+                              color: GlobalVariables.red,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
@@ -1145,9 +1171,8 @@ class MyComplexState extends State<BaseMyComplex>
                   ),
                 ),
               ),
-              _pollList[position].SECRET_POLL.toLowerCase()=='no' ?  InkWell(
+              _pollList[position].isGraphView ?  InkWell(
                 onTap: (){
-                  _pollList[position].isGraphView=true;
                   Navigator.push(context,MaterialPageRoute(builder: (context)=>BaseViewPollGraph(_pollList[position])));
                 },
                 child: Container(
@@ -1164,9 +1189,8 @@ class MyComplexState extends State<BaseMyComplex>
                   ),
                 ),
               ):Container(),
-              InkWell(
+              _pollList[position].SECRET_POLL.toLowerCase()=='yes' &&  !GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) ? InkWell(
                 onTap: (){
-
                   String optionText='';
                   List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
                   for(int i=0;i<_optionList.length;i++){
@@ -1192,7 +1216,7 @@ class MyComplexState extends State<BaseMyComplex>
                     color: GlobalVariables.white,
                   ),
                 ),
-              ),
+              ):Container(),
             ],
           )
         ],
@@ -2824,16 +2848,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
   getVoteLayout(int position) {
 
-    print("_pollList[position].SECRET_POLL : "+_pollList[position].SECRET_POLL.toString());
-    print("_pollList[position].OPTION : "+_pollList[position].OPTION.toString());
+  //  print("_pollList[position].SECRET_POLL : "+_pollList[position].SECRET_POLL.toString());
+   // print("_pollList[position].OPTION : "+_pollList[position].OPTION.toString());
     List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
-    //List<String> _optionList = _pollList[position].ANS.split(',');
-   // print('_optionList : '+_optionList.toString());
-    Map<String, double> dataMap={};
-    for(int j=0;j<_optionList.length;j++){
-      dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
-    }
-    print(dataMap.length.toString());
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -2852,36 +2869,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                 }),
           ),
         ),
-        dataMap.length > 0  && _pollList[position].SECRET_POLL.toLowerCase()=='no' && _pollList[position].isGraphView ? Flexible(
-          flex: 1,
-          child: Container(
-            alignment: Alignment.topRight,
-            //color: GlobalVariables.grey,
-              child: PieChart(
-                dataMap: dataMap,
-                animationDuration: Duration(milliseconds: 800),
-                chartLegendSpacing: 10,
-                chartRadius: 100,
-                initialAngleInDegree: 0,
-                chartType: ChartType.disc,
-                ringStrokeWidth: 20,
-                legendOptions: LegendOptions(
-                  showLegendsInRow: false,
-                  legendPosition: LegendPosition.left,
-                  showLegends: true,
-                  legendTextStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                chartValuesOptions: ChartValuesOptions(
-                  showChartValueBackground: false,
-                  showChartValues: true,
-                  showChartValuesInPercentage: false,
-                  showChartValuesOutside: false,
-                ),
-              )
-          ),
-        ) : Container()
       ],
     );
 

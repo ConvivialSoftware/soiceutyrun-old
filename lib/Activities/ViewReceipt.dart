@@ -253,21 +253,6 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
               )
             ])),
           ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('penalty'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+_receiptList[0].PENALTY_AMOUNT.toString(),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
         ],
       ),
     ) : Container();

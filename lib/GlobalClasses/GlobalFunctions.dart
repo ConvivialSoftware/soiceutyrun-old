@@ -831,10 +831,10 @@ class GlobalFunctions{
   static isDateSameOrGrater(String generateDate){
 
     DateTime earlier = DateTime.parse(generateDate);
-    print('earlier : '+ earlier.toIso8601String());
+   // print('earlier : '+ earlier.toIso8601String());
     DateTime now = new DateTime.now();
-    print('now : '+ now.toIso8601String());
-    print('isBefore : '+earlier.isBefore(now.toUtc()).toString());
+   // print('now : '+ now.toIso8601String());
+    // print('isBefore : '+earlier.isBefore(now.toUtc()).toString());
     if(earlier.isAtSameMomentAs(now.toUtc())){
       return true;
     }else {

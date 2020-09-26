@@ -310,7 +310,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   child: Text(
                     "Rs. " + _ledgerList[position].AMOUNT,
                     style: TextStyle(
-                        color: GlobalVariables.green,
+                        color: _ledgerList[position].TYPE.toLowerCase().toString() ==
+                            'bill' ? GlobalVariables.red :GlobalVariables.green,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
@@ -528,7 +529,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     builder: (context) => ListView.builder(
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: _ledgerList.length,
+                                          itemCount: _ledgerList.length>10 ? 8 : _ledgerList.length,
                                           itemBuilder: (context, position) {
                                             return getListItemLayout(position);
                                           }, //  scrollDirection: Axis.vertical,
