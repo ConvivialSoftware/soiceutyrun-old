@@ -2977,7 +2977,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         _pollList[position].VOTED_TO=optionId;
         _pollList[position].VOTE_PERMISSION='NO';
 
-        _pollList[position].SECRET_POLL='no';
         if(_pollList[position].SECRET_POLL.toLowerCase()=='yes'){
           setState(() {});
           GlobalFunctions.showToast(value.message + '. You can view result of poll after '+_pollList[position].EXPIRY_DATE);

@@ -1641,7 +1641,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: <Widget>[
                         InkWell(
                           onTap: () {
-                            if (_ledgerList[position]
+                            if (_billList[position]
                                     .TYPE
                                     .toLowerCase()
                                     .toString() ==
