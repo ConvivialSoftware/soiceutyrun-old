@@ -34,6 +34,8 @@ class Poll {
         this.VOTED_TO,this.View_VOTED_TO,this.isGraphView=false});
 
   factory Poll.fromJson(Map<String, dynamic> json) {
+    print('Poll Data : '+json.toString());
+    print('json["OPTION"] Data : '+json["OPTION"].toString());
     return Poll(
         ID: json["ID"],
         USER_NAME: json["USER_NAME"],

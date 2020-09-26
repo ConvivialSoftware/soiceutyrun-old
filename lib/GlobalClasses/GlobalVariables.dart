@@ -348,8 +348,8 @@ class SocietyRun {
   static const salesContact1 = "+91 8082697529";
   static const supportContact = "020 46304333";
   static const webSite = "http://www.convivialsolutions.com/";
-  static const salesEmail = "Sales@societyrun.com";
-  static const supportEmail = "Support@societyrun.com";
+  static const salesEmail = "sales@societyrun.com";
+  static const supportEmail = "support@societyrun.com";
   static const puneAddress =
       "Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
   static const mumbaiAddress =

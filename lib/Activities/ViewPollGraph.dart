@@ -9,17 +9,18 @@ import 'package:societyrun/Models/PollOption.dart';
 class BaseViewPollGraph extends StatefulWidget {
 
   Poll _poll;
-  BaseViewPollGraph(this._poll);
+  List<PollOption> optionList;
+  BaseViewPollGraph(this._poll,this.optionList);
 
   @override
-  ViewPollGraphState createState() => ViewPollGraphState(_poll);
+  ViewPollGraphState createState() => ViewPollGraphState(_poll,optionList);
 }
 
 class ViewPollGraphState extends State<BaseViewPollGraph> {
 
   Poll _poll;
-  ViewPollGraphState(this._poll);
   List<PollOption> _optionList;
+  ViewPollGraphState(this._poll,this._optionList);
   Map<String, double> dataMap={};
   var _totalParticipate=0;
 
@@ -27,7 +28,6 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
   @override
   void initState() {
     super.initState();
-    _optionList  = List<PollOption>.from(_poll.OPTION.map((i) =>PollOption.fromJson(i)));
     for(int j=0;j<_optionList.length;j++){
       dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
       _totalParticipate += int.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
@@ -111,7 +111,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                                   chartValuesOptions: ChartValuesOptions(
                                     showChartValueBackground: false,
                                     showChartValues: true,
-                                    showChartValuesInPercentage: false,
+                                    showChartValuesInPercentage: true,
                                     showChartValuesOutside: false,
                                   ),
                                 )
@@ -191,17 +191,20 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
     return Container(
       padding: EdgeInsets.all(10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            child: Text(
-              (position+1).toString()+')   '+_optionList[position].ANS.toString()+' - ',style: TextStyle(
-                color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
-            ),),
+          Flexible(
+            child: Container(
+              child: Text(
+                (position+1).toString()+')  '+_optionList[position].ANS.toString()+' - ',style: TextStyle(
+                  color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
+              ),),
+            ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Text(
-             _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' Votes',style: TextStyle(
+             _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' votes',style: TextStyle(
                 color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
             ),),
           )

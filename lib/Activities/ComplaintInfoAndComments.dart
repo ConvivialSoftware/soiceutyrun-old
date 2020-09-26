@@ -392,7 +392,7 @@ class ComplaintInfoAndCommentsState
                                                   margin: EdgeInsets.fromLTRB(
                                                       0, 15, 0, 0),
                                                   child: Text(
-                                                    'Block-Flat: ',
+                                                    'Unit No: ',
                                                     style: TextStyle(
                                                         color: GlobalVariables
                                                             .green,
@@ -1155,9 +1155,8 @@ class ComplaintInfoAndCommentsState
               "Your comment has been updated to the complaint log.");
         } else {
           GlobalFunctions.showToast(value.message);
-          Navigator.of(context).pop();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
+          Navigator.pop(context,'back');
+       //   Navigator.push(context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
         }
       }
     });

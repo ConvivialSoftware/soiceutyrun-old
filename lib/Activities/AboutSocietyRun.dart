@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
@@ -215,44 +216,41 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                                 color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.w500
                             ),),
                           ),
-                          InkWell(
-                            onTap: (){
-                              launch("tel://" + SocietyRun.salesContact);
-                            },
-                            child: Container(
-                              alignment: Alignment.topLeft,
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: AutoSizeText(SocietyRun.salesContact,style: TextStyle(
-                                  color: GlobalVariables.skyBlue,fontSize: 16
-                              ),),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.topLeft,
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: AutoSizeText(' / ',style: TextStyle(
-                                color: GlobalVariables.grey,fontSize: 16
-                            ),),
-                          ),
-                          InkWell(
-                            onTap: (){
-                              launch("tel://" + SocietyRun.salesContact1);
-                            },
-                            child: Container(
-                              alignment: Alignment.topLeft,
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: AutoSizeText(SocietyRun.salesContact1,style: TextStyle(
-                                  color: GlobalVariables.skyBlue,fontSize: 16
-                              ),),
-                            ),
-                          ),
+                          Column(
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  launch("tel://" + SocietyRun.salesContact);
+                                },
+                                child: Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                  child: AutoSizeText(SocietyRun.salesContact,style: TextStyle(
+                                      color: GlobalVariables.skyBlue,fontSize: 16
+                                  ),),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: (){
+                                  launch("tel://" + SocietyRun.salesContact1);
+                                },
+                                child: Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                  child: AutoSizeText(SocietyRun.salesContact1,style: TextStyle(
+                                      color: GlobalVariables.skyBlue,fontSize: 16
+                                  ),),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                       Row(
                         children: [
                           Container(
                             alignment: Alignment.topLeft,
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: AutoSizeText(AppLocalizations.of(context).translate('support_contact')+" : ",style: TextStyle(
                                 color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.w500
                             ),),
@@ -263,7 +261,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                             },
                             child: Container(
                               alignment: Alignment.topLeft,
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: AutoSizeText(SocietyRun.supportContact,style: TextStyle(
                                   color: GlobalVariables.skyBlue,fontSize: 16
                               ),),

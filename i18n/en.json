@@ -9,7 +9,7 @@
   "pls_enter_valid_username_password" : "Please Enter Valid Username and Password",
   "pls_check_internet_connectivity": "Please Check Internet Connection",
   "overview": "OVERVIEW",
-  "str_consumer_id": "CONSUMER ID : ",
+  "str_consumer_id": "CONSUMER ID",
   "my_unit": "My Unit",
   "my_complex": "My Complex",
   "discover": "Discover",
@@ -291,11 +291,12 @@
   "update": "Update",
   "receipt": "Receipt",
   "paid_amount": "Paid Amount",
-  "transaction_mode": "TRANSACTION_MODE",
+  "transaction_mode": "Transaction Mode",
   "penalty": "PENALTY",
   "narration": "Narration",
   "reopen": "Reopen",
   "assign_helpdesk": "Assign HelpDesk",
-  "poll_graph": "Poll Graph"
+  "poll_graph": "Poll/Survey Result",
+  "consumer_id": "Consumer ID"
 
 }

@@ -2004,8 +2004,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     } else if (item == AppLocalizations.of(context).translate('assign_helpdesk')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true)));
     } else if (item == AppLocalizations.of(context).translate('about_us')) {
       //Redirect to  Admin
     //  GlobalFunctions.showToast("Coming Soon...");

@@ -1171,7 +1171,8 @@ class MyComplexState extends State<BaseMyComplex>
               ),
               _pollList[position].isGraphView ?  InkWell(
                 onTap: (){
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=>BaseViewPollGraph(_pollList[position])));
+                  List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>BaseViewPollGraph(_pollList[position],_optionList)));
                 },
                 child: Container(
                   alignment: Alignment.topRight,
@@ -1194,11 +1195,12 @@ class MyComplexState extends State<BaseMyComplex>
                   for(int i=0;i<_optionList.length;i++){
                     if(_optionList[i].ANS_ID==_pollList[position].View_VOTED_TO){
                       optionId=_optionList[i].ANS_ID;
+                      _optionList[i].VOTES= (int.parse(_optionList[i].VOTES)+1).toString();
                       break;
                     }
                   }
 
-                  addPollVote(_pollList[position].ID,optionId);
+                  addPollVote(_pollList[position].ID,optionId,position,_optionList);
 
                 },
                 child: Container(
@@ -2937,15 +2939,17 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                                         : GlobalVariables.transparent,
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(
-                        10, 0, 0, 0),
-                    child: Text(
-                      pollOption.ANS==null? '' :pollOption.ANS,
-                      style: TextStyle(
-                          color:
-                          GlobalVariables.green,
-                          fontSize: 16),
+                  Flexible(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(
+                          10, 0, 0, 0),
+                      child: Text(
+                        pollOption.ANS==null? '' :pollOption.ANS,
+                        style: TextStyle(
+                            color:
+                            GlobalVariables.green,
+                            fontSize: 16),
+                      ),
                     ),
                   ),
                 ],
@@ -2957,7 +2961,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     );
   }
 
-  Future<void> addPollVote(String pollId, String optionId) async {
+  Future<void> addPollVote(String pollId, String optionId, int position, List<PollOption> optionList) async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -2966,10 +2970,25 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
-    restClient.addPollVote(societyId, userId, block, flat, pollId, optionId).then((value) {
+    restClient.addPollVote(societyId, userId, block, flat, pollId, optionId).then((value) async {
       _progressDialog.hide();
       print('Response : '+ value.toString());
-      GlobalFunctions.showToast(value.message);
+      if(value.status) {
+        _pollList[position].VOTED_TO=optionId;
+        _pollList[position].VOTE_PERMISSION='NO';
+
+        _pollList[position].SECRET_POLL='no';
+        if(_pollList[position].SECRET_POLL.toLowerCase()=='yes'){
+          setState(() {});
+          GlobalFunctions.showToast(value.message + '. You can view result of poll after '+_pollList[position].EXPIRY_DATE);
+        }else{
+          setState(() {});
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>BaseViewPollGraph(_pollList[position],optionList)));
+        }
+      }else{
+        GlobalFunctions.showToast(value.message);
+      }
+
 
     });
   }

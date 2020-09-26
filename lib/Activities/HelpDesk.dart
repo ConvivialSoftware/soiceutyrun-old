@@ -317,14 +317,17 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
 
   getTicketDescListItemLayout(int position) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
        // GlobalFunctions.showToast(isOpenTicket ? _openComplaintList[position].TICKET_NO : _closedComplaintList[position].TICKET_NO);
         //print('_openComplaintList[position].toString()  : '+ _openComplaintList[position].toString() );
-        Navigator.of(context).pop();
-        Navigator.push(
+       // Navigator.of(context).pop();
+        final result = await  Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => BaseComplaintInfoAndComments(isOpenTicket ? _openComplaintList[position] : _closedComplaintList[position],isAssignComplaint)));
+        if (result != null) {
+          getUnitComplaintData();
+        }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -352,6 +355,8 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       borderRadius: BorderRadius.circular(8)),
                 ),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       alignment: Alignment.topRight,
@@ -366,10 +371,10 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       alignment: Alignment.topRight,
                       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: Text(
-                        'FLAT: '+ (isOpenTicket ? _openComplaintList[position].FLAT : _closedComplaintList[position].FLAT),
+                        'Unit No: '+ (isOpenTicket ? _openComplaintList[position].BLOCK+' '+_openComplaintList[position].FLAT : _closedComplaintList[position].BLOCK+' '+_closedComplaintList[position].FLAT),
                         overflow: TextOverflow.ellipsis,
                         style:
-                        TextStyle(color: GlobalVariables.green,fontSize: 12),
+                        TextStyle(color: GlobalVariables.green),
                       ),
                     ):Container(),
                   ],
@@ -599,7 +604,9 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
 
         // print('first complaint : ' + _list[0].toString());
         // print('first complaint Status : ' + _list[0]['STATUS'].toString());
-
+        _complaintList = new List<Complaints>();
+        _openComplaintList = new List<Complaints>();
+        _closedComplaintList = new List<Complaints>();
         _complaintList = List<Complaints>.from(_list.map((i)=>Complaints.fromJson(i)));
 
         // print("Complaint List : " + _complaintList.toString());
