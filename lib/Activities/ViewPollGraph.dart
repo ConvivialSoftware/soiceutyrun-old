@@ -89,7 +89,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                       children: [
                         Container(
                             alignment: Alignment.topCenter,
-                            child: dataMap.length > 0  && _poll.SECRET_POLL.toLowerCase()=='no' && _poll.isGraphView ? Container(
+                            child: dataMap.length > 0 ? Container(
                                 alignment: Alignment.topCenter,
                                 //color: GlobalVariables.grey,
                                 child: PieChart(

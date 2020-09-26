@@ -28,6 +28,7 @@ const String TYPE_ASSIGN_COMPLAINT = "AssignComplaint";
 const String TYPE_COMPLAINT = "Complaint";
 const String TYPE_VISITOR = "Visitor";
 const String TYPE_VISITOR_VERIFY = "Visitor_verify";
+const String TYPE_POLL = "Poll";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
@@ -186,8 +187,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
         if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
           _fcm.showAlert(context, gatePassPayload);
-        }else{
-          navigate(gatePassPayload,_ctx);
         }
       } else {
         if (shouldRedirect) {
@@ -198,8 +197,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       print(e);
     }
     var androidPlatformChannelSpecifics;
-    if (gatePassPayload.tYPE == TYPE_VISITOR ||
-        gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
+    if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME) && (gatePassPayload.tYPE == TYPE_VISITOR ||
+        gatePassPayload.tYPE == TYPE_VISITOR_VERIFY)) {
       androidPlatformChannelSpecifics = AndroidNotificationDetails(
         androidChannelIdVisitor,
         androidChannelName,
@@ -296,6 +295,20 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               builder: (context) =>
                   BaseMyComplex(
                       AppLocalizations.of(context).translate('events'))));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    } else if (temp.tYPE == TYPE_POLL) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseMyComplex(
+                      AppLocalizations.of(context).translate('poll_survey'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

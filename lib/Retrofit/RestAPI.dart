@@ -1734,14 +1734,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<StatusMsgResponse> addPollVote(String societyId, String userId, String block, String flat, String optionId, String optionText) async {
+  Future<StatusMsgResponse> addPollVote(String societyId, String userId, String block, String flat, String pollId, String optionId) async {
     // TODO: implement addPollVote
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId,GlobalVariables.userID);
     ArgumentError.checkNotNull(block,GlobalVariables.block);
     ArgumentError.checkNotNull(flat,GlobalVariables.flat);
-    ArgumentError.checkNotNull(optionId,GlobalVariables.ID);
-    ArgumentError.checkNotNull(optionText,GlobalVariables.OPTION);
+    ArgumentError.checkNotNull(pollId,GlobalVariables.ID);
+    ArgumentError.checkNotNull(optionId,GlobalVariables.OPTION);
 
     FormData formData =
     FormData.fromMap({
@@ -1749,11 +1749,11 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.userID: userId,
       GlobalVariables.block:block,
       GlobalVariables.flat:flat,
-      GlobalVariables.ID:optionId,
-      GlobalVariables.OPTION:optionText
+      GlobalVariables.ID:pollId,
+      GlobalVariables.OPTION:optionId
     });
-    print('ID : ' + optionId);
-    print('OPTION : ' + optionText);
+    print('ID : ' + pollId);
+    print('OPTION : ' + optionId);
     print('baseurl : ' + baseUrl + GlobalVariables.pollVoteAPI);
     final Response _result = await _dio.post(GlobalVariables.pollVoteAPI,
         options: RequestOptions(

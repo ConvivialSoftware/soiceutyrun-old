@@ -994,7 +994,7 @@ class MyComplexState extends State<BaseMyComplex>
     print('EXPIRY_DATE : '+GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE).toString());
     print('SECRET_POLL : '+_pollList[position].SECRET_POLL.toString());
     print('VOTED_TO : '+_pollList[position].VOTED_TO.length.toString());
-    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 || _pollList[position].VOTED_TO!=null) && _pollList[position].SECRET_POLL.toLowerCase()=='no'){
+    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='no'){
       print('>>> 1st');
       _pollList[position].isGraphView=true;
     }
@@ -1003,17 +1003,18 @@ class MyComplexState extends State<BaseMyComplex>
       _pollList[position].isGraphView=true;
     }
 
-    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length==0 || _pollList[position].VOTED_TO==null)){
+    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length==0 )){
       print('>>> 3rd');
       _pollList[position].isGraphView=false;
     }
 
-    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 || _pollList[position].VOTED_TO!=null) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') {
+    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') {
       print('>>> 4th');
       _pollList[position].isGraphView=false;
     }
 
     print('>>>>> '+position.toString());
+    print('>>>>> _pollList[position].VOTED_TO.length : '+_pollList[position].VOTED_TO.length.toString());
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -1153,20 +1154,17 @@ class MyComplexState extends State<BaseMyComplex>
                           ),
                         ),
                       ),
-                      Visibility(
-                        visible: !(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 || _pollList[position].VOTED_TO!=null) && _pollList[position].SECRET_POLL.toLowerCase()=='yes'),
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text(
-                            "VOTED",
-                            style: TextStyle(
-                              color: GlobalVariables.red,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),
+                      (!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') ? Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Text(
+                          "VOTED",
+                          style: TextStyle(
+                            color: GlobalVariables.red,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
                           ),
                         ),
-                      ),
+                      ):Container(),
                     ],
                   ),
                 ),
@@ -1189,18 +1187,18 @@ class MyComplexState extends State<BaseMyComplex>
                   ),
                 ),
               ):Container(),
-              _pollList[position].SECRET_POLL.toLowerCase()=='yes' &&  !GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) ? InkWell(
+              (_pollList[position].VOTED_TO.length==0 ) && _pollList[position].VOTE_PERMISSION.toLowerCase()=='yes' && !GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) ? InkWell(
                 onTap: (){
-                  String optionText='';
+                  String optionId='';
                   List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
                   for(int i=0;i<_optionList.length;i++){
-                    if(_optionList[i].ANS_ID==_pollList[position].VOTED_TO){
-                      optionText=_optionList[i].ANS;
+                    if(_optionList[i].ANS_ID==_pollList[position].View_VOTED_TO){
+                      optionId=_optionList[i].ANS_ID;
                       break;
                     }
                   }
 
-                  addPollVote(_pollList[position].VOTED_TO,optionText);
+                  addPollVote(_pollList[position].ID,optionId);
 
                 },
                 child: Container(
@@ -2876,10 +2874,14 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
   getPollOptionListItemLayout(int position,PollOption pollOption){
 
-      if (_pollList[position].VOTED_TO != null ||
-          _pollList[position].VOTED_TO.length > 0) {
-        if (pollOption.ANS_ID.toString().toLowerCase() ==
-            _pollList[position].VOTED_TO.toLowerCase()) {
+    if( _pollList[position].VOTED_TO.length>0){
+      if (pollOption.ANS_ID.toString().toLowerCase() == _pollList[position].VOTED_TO.toLowerCase()) {
+        pollOption.isSelected = true;
+      } else {
+        pollOption.isSelected = false;
+      }
+    }else if (_pollList[position].View_VOTED_TO.length > 0) {
+        if (pollOption.ANS_ID.toString().toLowerCase() == _pollList[position].View_VOTED_TO.toLowerCase()) {
           pollOption.isSelected = true;
         } else {
           pollOption.isSelected = false;
@@ -2895,7 +2897,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         if(_pollList[position].VOTE_PERMISSION.toLowerCase()=='yes') {
           setState(() {
             pollOption.isSelected = true;
-            _pollList[position].VOTED_TO = pollOption.ANS_ID;
+            _pollList[position].View_VOTED_TO = pollOption.ANS_ID;
           });
         }
 
@@ -2955,7 +2957,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     );
   }
 
-  Future<void> addPollVote(String optionId, String optionText) async {
+  Future<void> addPollVote(String pollId, String optionId) async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -2964,7 +2966,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
-    restClient.addPollVote(societyId, userId, block, flat, optionId, optionText).then((value) {
+    restClient.addPollVote(societyId, userId, block, flat, pollId, optionId).then((value) {
       _progressDialog.hide();
       print('Response : '+ value.toString());
       GlobalFunctions.showToast(value.message);
