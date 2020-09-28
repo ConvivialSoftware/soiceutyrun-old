@@ -7,6 +7,7 @@ import 'package:societyrun/Models/BankResponse.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/DuesResponse.dart';
+import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
@@ -911,7 +912,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<DataResponse> getGatePassData(
+  Future<GatePassResponse> getGatePassData(
       String societyId, String block, String flat) async {
     // TODO: implement getGatePassData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
@@ -945,7 +946,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       OUT_TIME: , FROM_VISITOR: null, FLAT_NO: Block A 301, STATUS: In, VISITOR_STATUS: , REASON: Driver, TYPE: Staff,
        visitor_info: {VISITOR_NAME: Ashish Tiwari, CONTACT: 9867579867}}, */
 
-    return DataResponse.fromJson(value);
+    return GatePassResponse.fromJson(value);
   }
 
   @override

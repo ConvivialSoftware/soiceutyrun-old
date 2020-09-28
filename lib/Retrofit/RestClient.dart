@@ -4,6 +4,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/AllMemberResponse.dart';
 import 'package:societyrun/Models/DataResponse.dart';
+import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
@@ -183,7 +184,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.GatePassAPI)
-  Future<DataResponse> getGatePassData(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.block) String block,
+  Future<GatePassResponse> getGatePassData(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat);
 
   @FormUrlEncoded()

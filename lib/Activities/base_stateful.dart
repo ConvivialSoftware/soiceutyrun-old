@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
+import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
+import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -29,6 +31,8 @@ const String TYPE_COMPLAINT = "Complaint";
 const String TYPE_VISITOR = "Visitor";
 const String TYPE_VISITOR_VERIFY = "Visitor_verify";
 const String TYPE_POLL = "Poll";
+const String TYPE_BILL = "Bill";
+const String TYPE_RECEIPT = "Receipt";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
@@ -328,7 +332,34 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
       }
-    }else {
+    } else if (temp.tYPE == TYPE_BILL) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseMyUnit(
+                      AppLocalizations.of(context).translate('my_dues'))));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == TYPE_RECEIPT) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseLedger()));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    } else {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(

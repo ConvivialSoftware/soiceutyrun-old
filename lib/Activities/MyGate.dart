@@ -9,8 +9,11 @@ import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
+import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BaseMyGate extends StatefulWidget {
   String pageName;
@@ -26,8 +29,8 @@ class BaseMyGate extends StatefulWidget {
 class MyGateState extends BaseStatefulState<BaseMyGate>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  List<ScheduleVisitor> _activitiesList =
-      new List<ScheduleVisitor>();
+  List<Visitor> _visitorList = new List<Visitor>();
+  List<ScheduleVisitor> _scheduleVisitorList = new List<ScheduleVisitor>();
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
@@ -430,19 +433,59 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   getActivitiesListDataLayout() {
-    return _activitiesList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: _activitiesList.length,
-                itemBuilder: (context, position) {
-                  return getActivitiesListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
+    return _visitorList.length>0 ? SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(
+                10, MediaQuery.of(context).size.height / 20, 10, 0),
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Schedule Visitors',
+              style: TextStyle(color: GlobalVariables.white, fontSize: 20),
+            ),
+          ),
+          Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(
+                10, 10, 10, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                      itemCount: _scheduleVisitorList.length,
+                      itemBuilder: (context, position) {
+                        return getScheduleVisitorListItemLayout(position);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(
+                10, 10, 10, 0),
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Visitors',
+              style: TextStyle(color: GlobalVariables.green, fontSize: 20),
+            ),
+          ),
+          Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(
+                10, 10, 10, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                  // scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _visitorList.length,
+                  itemBuilder: (context, position) {
+                    return getVisitorsListItemLayout(position);
+                  }, //  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                )),
+          ),
+        ],
+      ),
     ) :  Align(
       alignment: Alignment.center,
       child: Container(
@@ -453,21 +496,21 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getActivitiesListItemLayout(int position) {
+  getVisitorsListItemLayout(int position) {
 
     String Time="";
     String Date="";
-    String Image = _activitiesList[position].IMAGE;
-    if(_activitiesList[position].OUT_TIME.length>0){
-      Time = "Valid from "+_activitiesList[position].IN_TIME + " to "+ _activitiesList[position].OUT_TIME;
+    String Image = _visitorList[position].IMAGE;
+    if(_visitorList[position].OUT_TIME.length>0){
+      Time = "Valid from "+_visitorList[position].IN_TIME + " to "+ _visitorList[position].OUT_TIME;
     }else{
-      Time = "Valid from "+_activitiesList[position].IN_TIME;
+      Time = "Valid from "+_visitorList[position].IN_TIME;
     }
 
-    if(_activitiesList[position].OUT_DATE.length>0){
-      Date = "Valid for "+_activitiesList[position].IN_DATE + " to "+_activitiesList[position].OUT_DATE;
+    if(_visitorList[position].OUT_DATE.length>0){
+      Date = "Valid for "+_visitorList[position].IN_DATE + " to "+_visitorList[position].OUT_DATE;
     }else{
-      Date = "Valid for "+_activitiesList[position].IN_DATE;
+      Date = "Valid for "+_visitorList[position].IN_DATE;
     }
 
     return Container(
@@ -499,7 +542,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _activitiesList[position].VISITOR_NAME,
+                            _visitorList[position].VISITOR_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 14,
@@ -512,7 +555,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _activitiesList[position].CONTACT,
+                                  _visitorList[position].CONTACT,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -533,7 +576,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       color: GlobalVariables.skyBlue,
                       borderRadius: BorderRadius.circular(10)),
                   child: Text(
-                    _activitiesList[position].TYPE,
+                    _visitorList[position].TYPE,
                     style: TextStyle(
                       color: GlobalVariables.white,
                       fontSize: 12,
@@ -604,7 +647,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                     child: Text(
-                      _activitiesList[position].VISITOR_NAME,
+                      _visitorList[position].VISITOR_NAME,
                       style: TextStyle(
                         color: GlobalVariables.green,
                         fontSize: 12,),
@@ -661,6 +704,115 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  getScheduleVisitorListItemLayout(int position) {
+
+
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.1,
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: GlobalVariables.white),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                                alignment: Alignment.topLeft,
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Icon(Icons.person,color: GlobalVariables.mediumGreen,)
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Text(
+                                _scheduleVisitorList[position].NAME,
+                                style: TextStyle(
+                                    color: GlobalVariables.green,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          launch('tel://' + _scheduleVisitorList[position].MOBILE_NO);
+                        },
+                        child: Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Icon(Icons.call,color: GlobalVariables.mediumGreen,)
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Icon(Icons.vpn_key,color: GlobalVariables.mediumGreen,)
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        child: Text(
+                          _scheduleVisitorList[position].PASS_CODE,
+                          style: TextStyle(
+                            color: GlobalVariables.black,
+                           // fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,)
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        child: Text(
+                          _scheduleVisitorList[position].DATE,
+                          style: TextStyle(
+                            color: GlobalVariables.black,
+                          //  fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
         ],
       ),
     );
@@ -1079,9 +1231,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     _progressDialog.show();
     restClient.getGatePassData(societyId, block, flat).then((value) {
       if (value.status) {
-        List<dynamic> _list = value.data;
+        List<dynamic> _list = value.visitor;
+        List<dynamic> _scheduleList = value.schedule_visitor;
 
-        _activitiesList = List<ScheduleVisitor>.from(_list.map((i) => ScheduleVisitor.fromJson(i)));
+        _visitorList = List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
+        _scheduleVisitorList = List<ScheduleVisitor>.from(_scheduleList.map((i) => ScheduleVisitor.fromJson(i)));
+
         setState(() {
         });
       }
