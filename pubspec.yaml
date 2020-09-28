@@ -162,6 +162,8 @@ flutter:
     - assets/other_assets/taxi.svg
     - assets/other_assets/visitor.svg
     - assets/other_assets/delivery_man.svg
+    - assets/other_assets/in.svg
+    - assets/other_assets/out.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

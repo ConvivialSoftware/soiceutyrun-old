@@ -88,6 +88,8 @@ class GlobalVariables {
   static var deliveryManIconPath = "assets/other_assets/delivery_man.svg";
   static var taxiIconPath = "assets/other_assets/taxi.svg";
   static var visitorIconPath = "assets/other_assets/visitor.svg";
+  static var inIconPath = "assets/other_assets/in.svg";
+  static var outIconPath = "assets/other_assets/out.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -96,8 +98,7 @@ class GlobalVariables {
   static var bottomHomeIconPath = "assets/bottom_menu/bottom_home_icon.svg";
   static var bottomMenuIconPath = "assets/bottom_menu/bottom_menu_icon.svg";
   static var bottomMyHomeIconPath = "assets/bottom_menu/bottom_myhome_icon.svg";
-  static var bottomServiceIconPath =
-      "assets/bottom_menu/bottom_service_icon.svg";
+  static var bottomServiceIconPath = "assets/bottom_menu/bottom_service_icon.svg";
 
   /*Variable of Text Size */
   static var smallText = 12.0;

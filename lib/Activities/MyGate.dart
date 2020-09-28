@@ -3,6 +3,7 @@ import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
@@ -14,6 +15,7 @@ import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class BaseMyGate extends StatefulWidget {
   String pageName;
@@ -470,9 +472,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             ),
           ),
           Container(
-            //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, 10, 10, 0),
+                10, 10, 10, 60),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
@@ -486,14 +487,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           ),
         ],
       ),
-    ) :  Align(
-      alignment: Alignment.center,
-      child: Container(
-        child: Text('Oops.!! No Data Found.',style: TextStyle(
-            color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-        ),),
-      ),
-    );
+    ) :  Container();
   }
 
   getVisitorsListItemLayout(int position) {
@@ -558,7 +552,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   _visitorList[position].CONTACT,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
-                                    fontSize: 10,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
@@ -569,19 +563,33 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     ),
                   ),
                 ),
-                Container(
-                  // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.skyBlue,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    _visitorList[position].TYPE,
-                    style: TextStyle(
-                      color: GlobalVariables.white,
-                      fontSize: 12,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.skyBlue,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                        _visitorList[position].TYPE,
+                        style: TextStyle(
+                          color: GlobalVariables.white,
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
-                  ),
+                   /* InkWell(
+                      onTap: (){
+                        launch('tel://' + _visitorList[position].CONTACT);
+                      },
+                      child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          child: Icon(Icons.call,color: GlobalVariables.mediumGreen,)
+                      ),
+                    ),*/
+                  ],
                 ),
               ],
             ),
@@ -593,13 +601,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.access_time,color: GlobalVariables.mediumGreen,)
+                    child: SvgPicture.asset(GlobalVariables.inIconPath,width: 24,height: 24,color: GlobalVariables.grey,)
                 ),
                 Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
                   child: Text(
-                    Time,
+                    _visitorList[position].IN_TIME,
                     style: TextStyle(
                       color: GlobalVariables.green,
                       fontSize: 12,
@@ -613,19 +621,28 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
             child: Row(
               children: <Widget>[
-                Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,)
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(5 , 0, 0, 0),
-                  child: Text(
-                    Date,
-                    style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 12,
+                Expanded(
+                  child: Visibility(
+                    visible: _visitorList[position].OUT_TIME.length>0 ? true: false,
+                    child: Row(
+                      children: [
+                        Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: SvgPicture.asset(GlobalVariables.outIconPath,width: 24,height: 24,color: GlobalVariables.grey,)
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.fromLTRB(20 , 0, 0, 0),
+                          child: Text(
+                            _visitorList[position].OUT_TIME,
+                            style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -799,7 +816,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         child: Text(
-                          _scheduleVisitorList[position].DATE,
+                          GlobalFunctions.convertDateFormat(_scheduleVisitorList[position].DATE, 'dd-MM-yyyy'),
                           style: TextStyle(
                             color: GlobalVariables.black,
                           //  fontSize: 14,
@@ -1137,7 +1154,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   void getScheduleTimeData() {
 
-    _scheduleList = ["Today","Tommorow","Day after tommorow"];
+    _scheduleList = ["Today","Tomorrow","Day after tomorrow"];
     for(int i=0;i<_scheduleList.length;i++){
       _scheduleListItems.add(DropdownMenuItem(
         value: _scheduleList[i],
@@ -1195,12 +1212,36 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     shape: RoundedRectangleBorder(
                         borderRadius:
                         BorderRadius.circular(25.0)),
-                    child: displayPassCode(value.pass_code,userName,googleParameter),
+                    child: displayPassCode(value.pass_code,userName,googleParameter,_nameController.text,_mobileController.text),
                   );
                 }));
+
+        ScheduleVisitor scheduleVisitor = ScheduleVisitor();
+        scheduleVisitor.MOBILE_NO=_mobileController.text;
+        scheduleVisitor.NAME=_nameController.text;
+        scheduleVisitor.PASS_CODE=value.pass_code;
+
+        DateTime now = DateTime.now();
+        DateFormat formatter = DateFormat('yyyy-MM-dd');
+        String date = formatter.format(now);
+        if(_selectedSchedule=='Today'){
+        }else if(_selectedSchedule=='Tomorrow'){
+          now = now.add(Duration(days: 1));
+          date = formatter.format(now);
+        }else if(_selectedSchedule=='Day after tomorrow'){
+          now = now.add(Duration(days: 2));
+          date = formatter.format(now);
+        }
+        scheduleVisitor.DATE=date;
+        if(_scheduleVisitorList.length>0) {
+          _scheduleVisitorList.insert(0, scheduleVisitor);
+        }else{
+          _scheduleVisitorList.add(scheduleVisitor);
+        }
+
       }
       GlobalFunctions.showToast(value.message);
-
+      setState(() {});
       print('passCode : '+value.pass_code);
 
 
@@ -1272,7 +1313,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   }
 
-  displayPassCode(String pass_code, String userName, String googleParameter)  {
+  displayPassCode(String pass_code, String userName, String googleParameter, String visitorName,String visitorContact)  {
 
 
     DateTime date = DateTime.now();
@@ -1283,22 +1324,25 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     String mapUrl = "http://www.google.com/maps/place/"+googleParameter;
 
-    String msg = userName + ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on '+ todayDate + ' between '+currentTime+' - 11: 59 PM. '+'Please use '+pass_code+' as entry code at gate. '+'Google coordinates : <a href='+mapUrl+'>'+mapUrl+'</a>'+'';
+   // String msg = userName + ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on '+ todayDate + ' between '+currentTime+' - 11: 59 PM. '+'Please use '+pass_code+' as entry code at gate. '+'Google coordinates : <a href='+mapUrl+'>'+mapUrl+'</a>'+'';
+    String msg = 'Entry code created for \n'+userName+'\n'+pass_code+'\n'+'Please tell this number at security gate hassle free entry at society';
     var document = parse(msg);
 
     String parsedString = parse(document.body.text).documentElement.text;
 
     print('msg : '+parsedString);
     return Container(
-      width: MediaQuery.of(context).size.width/2,
+     // width: MediaQuery.of(context).size.width/4,
       padding: EdgeInsets.fromLTRB(25,15,25,15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            child: Text(pass_code,style: TextStyle(
-                color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-            ),),
+          Flexible(
+            child: Container(
+              child: Text(parsedString,style: TextStyle(
+                  color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
+              ),),
+            ),
           ),
           Container(
             child: Row(
