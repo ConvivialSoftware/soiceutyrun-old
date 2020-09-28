@@ -729,7 +729,7 @@ class MyComplexState extends State<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _meetingList[position].BLOCK.length>0 ? _meetingList[position].BLOCK.toString()+_meetingList[position].FLAT.toString() : 'Maintainnance Staff',
+                                  _meetingList[position].BLOCK.length>0 ? _meetingList[position].BLOCK.toString()+' '+_meetingList[position].FLAT.toString() : 'Maintainnance Staff',
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -811,6 +811,108 @@ class MyComplexState extends State<BaseMyComplex>
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),*/
+          ),
+          Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                        child: Icon(
+                          Icons.location_on,
+                          color: GlobalVariables.mediumGreen,
+                          size: 20,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                        child: Text(
+                          "Venue : ",
+                          style: TextStyle(
+                              color: GlobalVariables.green, fontSize: 14),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          _meetingList[position].VENUE,
+                          style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                        child: Icon(
+                          Icons.date_range,
+                          color: GlobalVariables.mediumGreen,
+                          size: 20,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                        child: Text(
+                          "Date : ",
+                          style: TextStyle(
+                              color: GlobalVariables.green, fontSize: 14),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                        child: Text(
+                          _meetingList[position].START_DATE/*+' to '+ _meetingList[position].END_DATE*/,
+                          style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                        child: Icon(
+                          Icons.access_time,
+                          color: GlobalVariables.mediumGreen,
+                          size: 20,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                        child: Text(
+                          "Time : ",
+                          style: TextStyle(
+                              color: GlobalVariables.green, fontSize: 14),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                        child: Text(
+                          _meetingList[position].START_TIME+' to '+ _meetingList[position].END_TIME,
+                          style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Visibility(
             visible: false,
@@ -2057,7 +2159,7 @@ class MyComplexState extends State<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _eventList[position].BLOCK.length>0 ? _eventList[position].BLOCK+_eventList[position].FLAT: "Maintannance Staff",
+                                  _eventList[position].BLOCK.length>0 ? _eventList[position].BLOCK+' '+_eventList[position].FLAT: "Maintannance Staff",
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -2180,7 +2282,7 @@ class MyComplexState extends State<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _eventList[position].START_DATE,
+                          _eventList[position].START_DATE+' to '+ _eventList[position].END_DATE,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -2212,7 +2314,7 @@ class MyComplexState extends State<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _eventList[position].Start_Time+' TO '+ _eventList[position].END_TIME,
+                          _eventList[position].START_TIME+' tO '+ _eventList[position].END_TIME,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,

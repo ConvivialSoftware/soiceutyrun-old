@@ -22,7 +22,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
   List<PollOption> _optionList;
   ViewPollGraphState(this._poll,this._optionList);
   Map<String, double> dataMap={};
-  var _totalParticipate=0;
+  var _totalParticipants=0;
 
 
   @override
@@ -30,7 +30,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
     super.initState();
     for(int j=0;j<_optionList.length;j++){
       dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
-      _totalParticipate += int.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
+      _totalParticipants += int.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
     }
   }
 
@@ -163,7 +163,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                 child: Text(
-                                  "Total Participate : "+ _totalParticipate.toString(),
+                                  "Total participants : "+ _totalParticipants.toString(),
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 16

@@ -68,6 +68,7 @@ class Announcement {
       this.END_TIME,this.BLOCK,this.FLAT});
 
   factory Announcement.fromJson(Map<String, dynamic> json) {
+      print('meeting : '+ json.toString());
     return Announcement(
         ID: json["ID"],
         USER_NAME: json["USER_NAME"],
