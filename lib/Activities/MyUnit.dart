@@ -1645,7 +1645,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     .TYPE
                                     .toLowerCase()
                                     .toString() ==
-                                'bill') {
+                                'bill' || _billList[position]
+                                .TYPE
+                                .toLowerCase()
+                                .toString() ==
+                                'invoice') {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

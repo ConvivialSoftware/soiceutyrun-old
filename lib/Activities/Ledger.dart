@@ -270,7 +270,11 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                                 .TYPE
                                 .toLowerCase()
                                 .toString() ==
-                            'bill') {
+                            'bill' || _ledgerList[position]
+                            .TYPE
+                            .toLowerCase()
+                            .toString() ==
+                            'invoice') {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

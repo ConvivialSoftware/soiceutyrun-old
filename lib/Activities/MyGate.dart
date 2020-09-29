@@ -1,5 +1,4 @@
 
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ import 'package:intl/intl.dart';
 
 class BaseMyGate extends StatefulWidget {
   String pageName;
+
   BaseMyGate(this.pageName);
 
   @override
@@ -37,31 +37,31 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
   //String _selectedItem,_selectedText="";
-  int position=0;
+  int position = 0;
+
   //List<DropdownMenuItem<String>> _societyListItems = new List<DropdownMenuItem<String>>();
- // List<LoginResponse> _societyList = new List<LoginResponse>();
- // LoginResponse _selectedSocietyLogin ;
+  // List<LoginResponse> _societyList = new List<LoginResponse>();
+  // LoginResponse _selectedSocietyLogin ;
   var username, password;
   ProgressDialog _progressDialog;
-
 
   bool isActivitiesAPICall = false;
   bool isHelperAPICall = false;
 
   List<String> _scheduleList = new List<String>();
-  List<DropdownMenuItem<String>> _scheduleListItems = new List<DropdownMenuItem<String>>();
+  List<DropdownMenuItem<String>> _scheduleListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedSchedule;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
 
   String pageName;
+
   MyGateState(this.pageName);
 
   final ContactPicker _contactPicker = ContactPicker();
   Contact _contact;
-
-
 
   @override
   void initState() {
@@ -71,7 +71,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     _tabController.addListener(_handleTabSelection);
     print(pageName.toString());
     _handleTabSelection();
-   // getTicketDescriptionList();
+    // getTicketDescriptionList();
     //getDocumentDescriptionList();
     getScheduleTimeData();
     GlobalFunctions.checkInternetConnection().then((internet) {
@@ -86,17 +86,19 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   @override
   Widget build(BuildContext context) {
-      _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-      if (pageName != null) {
-        redirectToPage(pageName);
-      }
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    if (pageName != null) {
+      redirectToPage(pageName);
+    }
 
-      if(_contact!=null){
-        _nameController.text = _contact.fullName;
-        String phoneNumber = _contact.phoneNumber.toString().substring(0,_contact.phoneNumber.toString().indexOf('(')-1);
+    if (_contact != null) {
+      _nameController.text = _contact.fullName;
+      String phoneNumber = _contact.phoneNumber
+          .toString()
+          .substring(0, _contact.phoneNumber.toString().indexOf('(') - 1);
 
-        _mobileController.text = phoneNumber.toString();
-      }
+      _mobileController.text = phoneNumber.toString();
+    }
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -133,13 +135,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       child: TabBar(
         tabs: [
           Container(
-           width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             child: Tab(
               text: AppLocalizations.of(context).translate('my_activities'),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             child: Tab(
               text: AppLocalizations.of(context).translate('helpers'),
             ),
@@ -155,10 +157,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-
-
   getMyActivitiesLayout() {
-   // print('MyTicketLayout Tab Call');
+    // print('MyTicketLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -172,8 +172,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-               // getSocietyDataLayout(),
-             //   activitiesFilterDateLayout(),
+                // getSocietyDataLayout(),
+                //   activitiesFilterDateLayout(),
                 getActivitiesListDataLayout(),
                 addActivitiesFabLayout(),
               ],
@@ -185,7 +185,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   getHelperLayout() {
-  //  print('MyDocumentsLayout Tab Call');
+    //  print('MyDocumentsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -199,30 +199,35 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0), //ticketOpenClosedLayout(),
-             //   getDocumentListDataLayout(),
-      Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.all(30),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                  margin: EdgeInsets.all(20),
-                  child: Image.asset(GlobalVariables.comingSoonPath,fit: BoxFit.fitWidth,)
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Text(AppLocalizations.of(context).translate('coming_soon_text'),style: TextStyle(
-                    color: GlobalVariables.black,fontSize: 18
-                ),),
-              )
-            ],
-          ),
-        ),
-      )
+                //   getDocumentListDataLayout(),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.all(20),
+                            child: Image.asset(
+                              GlobalVariables.comingSoonPath,
+                              fit: BoxFit.fitWidth,
+                            )),
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('coming_soon_text'),
+                            style: TextStyle(
+                                color: GlobalVariables.black, fontSize: 18),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -300,9 +305,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 */
 
   activitiesFilterDateLayout() {
-
     TextEditingController _dateController = TextEditingController();
-    _dateController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
+    _dateController.text = DateTime.now().toLocal().day.toString() +
+        "/" +
+        DateTime.now().toLocal().month.toString() +
+        "/" +
+        DateTime.now().toLocal().year.toString();
 
     return Align(
       alignment: Alignment.topRight,
@@ -339,7 +347,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           hintText: "Filter",
                           hintStyle:
-                          TextStyle(color: GlobalVariables.veryLightGray),
+                              TextStyle(color: GlobalVariables.veryLightGray),
                           border: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search,
@@ -368,19 +376,23 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: TextField(
                     controller: _dateController,
                     readOnly: true,
-                    style: TextStyle(
-                      color: GlobalVariables.green
-                    ),
+                    style: TextStyle(color: GlobalVariables.green),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         hintText: "Date",
-                        hintStyle: TextStyle(color: GlobalVariables.veryLightGray),
+                        hintStyle:
+                            TextStyle(color: GlobalVariables.veryLightGray),
                         border: InputBorder.none,
                         suffixIcon: IconButton(
-                          onPressed: (){
-                           // GlobalFunctions.showToast('iDate icon click');
-                            GlobalFunctions.getSelectedDate(context).then((value){
-                              _dateController.text = value.day.toString()+"/"+value.month.toString()+"/"+value.year.toString();
+                          onPressed: () {
+                            // GlobalFunctions.showToast('iDate icon click');
+                            GlobalFunctions.getSelectedDate(context)
+                                .then((value) {
+                              _dateController.text = value.day.toString() +
+                                  "/" +
+                                  value.month.toString() +
+                                  "/" +
+                                  value.year.toString();
                             });
                           },
                           icon: Icon(
@@ -408,19 +420,20 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             child: FloatingActionButton(
               onPressed: () {
                 //GlobalFunctions.showToast('Fab CLick');
-               /* Navigator.push(context, MaterialPageRoute(
+                /* Navigator.push(context, MaterialPageRoute(
                     builder: (context) =>
                         BaseExpectedVisitor()));*/
                 Dialog infoDialog = Dialog(
-                  shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                  //  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                   child: scheduleVisitorLayout(),
+                  //child:  displayPassCode('1234', 'Poonam suthar', 'googleParameter', 'Jay Kishan', '9726197065'),
                 );
                 showDialog(
-                    context: context, builder: (BuildContext context) => StatefulBuilder(builder: (BuildContext context, StateSetter setState){
-                      return infoDialog;
-                }));
-
+                    context: context,
+                    builder: (BuildContext context) => StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
+                          return infoDialog;
+                        }));
               },
               child: Icon(
                 Icons.add,
@@ -435,81 +448,403 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   getActivitiesListDataLayout() {
-    return _visitorList.length>0 ? SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Schedule Visitors',
-              style: TextStyle(color: GlobalVariables.white, fontSize: 20),
+    return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  //padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.fromLTRB(
+                      10, MediaQuery.of(context).size.height / 20, 10, 0),
+                  child: Builder(
+                      builder: (context) => ListView.builder(
+                            // scrollDirection: Axis.vertical,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _scheduleVisitorList.length,
+                            itemBuilder: (context, position) {
+                              return getScheduleVisitorListItemLayout(position);
+                            }, //  scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                          )),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 5, 10, 60),
+                  child: Builder(
+                      builder: (context) => ListView.builder(
+                            // scrollDirection: Axis.vertical,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _visitorList.length,
+                            itemBuilder: (context, position) {
+                              return getVisitorsListItemLayout(position);
+                            }, //  scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                          )),
+                ),
+              ],
             ),
-          ),
-          Container(
-            //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, 10, 10, 0),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                      itemCount: _scheduleVisitorList.length,
-                      itemBuilder: (context, position) {
-                        return getScheduleVisitorListItemLayout(position);
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(
-                10, 10, 10, 0),
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Visitors',
-              style: TextStyle(color: GlobalVariables.green, fontSize: 20),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(
-                10, 10, 10, 60),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                  // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: _visitorList.length,
-                  itemBuilder: (context, position) {
-                    return getVisitorsListItemLayout(position);
-                  }, //  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                )),
-          ),
-        ],
-      ),
-    ) :  Container();
+          );
+
   }
 
   getVisitorsListItemLayout(int position) {
-
-    String Time="";
-    String Date="";
+    String Time = "";
+    String Date = "";
     String Image = _visitorList[position].IMAGE;
-    if(_visitorList[position].OUT_TIME.length>0){
-      Time = "Valid from "+_visitorList[position].IN_TIME + " to "+ _visitorList[position].OUT_TIME;
-    }else{
-      Time = "Valid from "+_visitorList[position].IN_TIME;
+    if (_visitorList[position].OUT_TIME.length > 0) {
+      if(_visitorList[position].STATUS.toLowerCase()=='out') {
+        Time = _visitorList[position].IN_TIME +
+            " - " +
+            _visitorList[position].OUT_TIME;
+      }else{
+        Time = _visitorList[position].IN_TIME;
+      }
+    } else {
+      Time = _visitorList[position].IN_TIME;
     }
 
-    if(_visitorList[position].OUT_DATE.length>0){
-      Date = "Valid for "+_visitorList[position].IN_DATE + " to "+_visitorList[position].OUT_DATE;
-    }else{
-      Date = "Valid for "+_visitorList[position].IN_DATE;
+    if (_visitorList[position].OUT_DATE.length > 0) {
+      if(_visitorList[position].STATUS.toLowerCase()=='out') {
+        Date = _visitorList[position].IN_DATE +
+            " - " +
+            _visitorList[position].OUT_DATE;
+      }else{
+        Date = _visitorList[position].IN_DATE;
+      }
+    } else {
+      Date = _visitorList[position].IN_DATE;
     }
 
+    var visitorStatus = getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS);
+    print('_visitorList[position].VISITOR_STATUS : ' + visitorStatus);
+
+    return InkWell(
+      onTap: (){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) =>
+                StatefulBuilder(builder:
+                    (BuildContext context, StateSetter setState) {
+                  return Dialog(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    child: displayVisitorInfo(position),
+                  );
+                }));
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 1.1,
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: GlobalVariables.white),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: CircleAvatar(
+                      backgroundColor: GlobalVariables.mediumGreen,
+                      child : SvgPicture.asset(
+                        getVisitorStatusIcon(_visitorList[position].TYPE),
+                        width: 20,
+                        height: 20,
+                        color: GlobalVariables.white,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      padding: EdgeInsets.only(left: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              _visitorList[position].VISITOR_NAME,
+                              style: TextStyle(
+                                  color: GlobalVariables.green,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: Text(
+                                    Date + '  ' + Time,
+                                    style: TextStyle(
+                                      color: GlobalVariables.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        decoration: BoxDecoration(
+                            color: _visitorList[position].STATUS.toLowerCase() ==
+                                    'in'
+                                ? GlobalVariables.green
+                                : GlobalVariables.grey,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          _visitorList[position].STATUS.toLowerCase() == 'in'
+                              ? 'Arrived'
+                              : 'Left',
+                          style: TextStyle(
+                            color: GlobalVariables.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      /* InkWell(
+                        onTap: (){
+                          launch('tel://' + _visitorList[position].CONTACT);
+                        },
+                        child: Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: Icon(Icons.call,color: GlobalVariables.mediumGreen,)
+                        ),
+                      ),*/
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                      child: Icon(
+                        Icons.location_on,
+                        color: GlobalVariables.mediumGreen,
+                        size: 25,
+                      )),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                    child: Text(
+                      _visitorList[position].FROM_VISITOR,
+                      style: TextStyle(
+                        color: GlobalVariables.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                      child: Icon(
+                        Icons.person,
+                        color: GlobalVariables.mediumGreen,
+                        size: 25,
+                      )),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                    child: Text(
+                      visitorStatus,
+                      style: TextStyle(
+                        color: GlobalVariables.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 3,
+              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              child: Divider(
+                height: 3,
+                color: GlobalVariables.lightGray,
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: visitorStatus != 'wrong entry'
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.end,
+                children: [
+                  visitorStatus != 'wrong entry'
+                      ? Flexible(
+                          flex: 3,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    child: Icon(
+                                      Icons.block,
+                                      color: GlobalVariables.mediumGreen,
+                                      size: 25,
+                                    )),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: Text(
+                                    'Wrong Entry',
+                                    style: TextStyle(
+                                      color: GlobalVariables.grey,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  visitorStatus != 'wrong entry'
+                      ? Container(
+                          // width: 20,
+                          height: 35,
+                          child: VerticalDivider(
+                            width: 20,
+                            color: GlobalVariables.lightGray,
+                          ),
+                        )
+                      : Container(),
+                  Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.call,
+                          color: GlobalVariables.green,
+                        ),
+                        onPressed: () {
+                          launch('tel://' + _visitorList[position].CONTACT);
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: false,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(50, 5, 0, 0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Icon(
+                          Icons.perm_identity,
+                          color: GlobalVariables.mediumGreen,
+                        )),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      child: Text(
+                        _visitorList[position].VISITOR_NAME,
+                        style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Visibility(
+              visible: false,
+              child: Container(
+                height: 2,
+                color: GlobalVariables.mediumGreen,
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Divider(
+                  height: 2,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: false,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      height: 30,
+                      padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: GlobalVariables.green,
+                      ),
+                      child: FlatButton.icon(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.edit,
+                          color: GlobalVariables.white,
+                          size: 20,
+                        ),
+                        label: Text(
+                          AppLocalizations.of(context).translate('edit'),
+                          style: TextStyle(color: GlobalVariables.white),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 30,
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: GlobalVariables.green,
+                      ),
+                      child: FlatButton.icon(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.cancel,
+                            color: GlobalVariables.white,
+                            size: 20,
+                          ),
+                          label: Text(
+                            AppLocalizations.of(context).translate('cancel'),
+                            style: TextStyle(color: GlobalVariables.white),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  getScheduleVisitorListItemLayout(int position) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(15),
+      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -521,9 +856,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 Container(
                   child: CircleAvatar(
-                    radius: 20,
                     backgroundColor: GlobalVariables.mediumGreen,
-                    backgroundImage: NetworkImage(Image),
+                    child: SvgPicture.asset(
+                      getVisitorStatusIcon('visitor'),
+                      width: 20,
+                      height: 20,
+                      color: GlobalVariables.white,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -536,7 +875,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _visitorList[position].VISITOR_NAME,
+                            _scheduleVisitorList[position].NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 14,
@@ -549,7 +888,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _visitorList[position].CONTACT,
+                                  GlobalFunctions.convertDateFormat(
+                                      _scheduleVisitorList[position].DATE,
+                                      'dd-MM-yyyy'),
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 12,
@@ -573,14 +914,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           color: GlobalVariables.skyBlue,
                           borderRadius: BorderRadius.circular(10)),
                       child: Text(
-                        _visitorList[position].TYPE,
+                        'Expected',
                         style: TextStyle(
                           color: GlobalVariables.white,
                           fontSize: 12,
                         ),
                       ),
                     ),
-                   /* InkWell(
+                    /* InkWell(
                       onTap: (){
                         launch('tel://' + _visitorList[position].CONTACT);
                       },
@@ -594,131 +935,94 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: SvgPicture.asset(GlobalVariables.inIconPath,width: 24,height: 24,color: GlobalVariables.grey,)
-                ),
-                Container(
+          Row(
+            children: <Widget>[
+              Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(
-                    _visitorList[position].IN_TIME,
-                    style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 12,
-                    ),
+                  margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                  child: Icon(
+                    Icons.vpn_key,
+                    color: GlobalVariables.mediumGreen,
+                    size: 25,
+                  )),
+              Container(
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                child: Text(
+                  _scheduleVisitorList[position].PASS_CODE,
+                  style: TextStyle(
+                    color: GlobalVariables.grey,
+                    fontSize: 16,
                   ),
                 ),
-              ],
+              ),
+            ],
+          ),
+          Container(
+            height: 3,
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+            child: Divider(
+              height: 3,
+              color: GlobalVariables.lightGray,
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
             child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Visibility(
-                    visible: _visitorList[position].OUT_TIME.length>0 ? true: false,
-                    child: Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.topLeft,
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset(GlobalVariables.outIconPath,width: 24,height: 24,color: GlobalVariables.grey,)
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.share,
+                          color: GlobalVariables.green,
                         ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin: EdgeInsets.fromLTRB(20 , 0, 0, 0),
-                          child: Text(
-                            _visitorList[position].OUT_TIME,
-                            style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
+                        onPressed: () async {
+                          String googleParameter = await GlobalFunctions.getGoogleCoordinate();
+                          DateTime earlier = DateTime.parse(_scheduleVisitorList[position].DATE);
+
+                          DateTime date = DateTime.now();
+                          String todayDate = GlobalFunctions.convertDateFormat(earlier.toIso8601String(), 'dd MMM');
+                          String currentTime = GlobalFunctions.convertDateFormat(date.toIso8601String(), 'hh:mm aa');
+                          String mapUrl = "http://www.google.com/maps/place/" + googleParameter;
+
+                          String sharedMsg = _scheduleVisitorList[position].NAME  + ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on '+ todayDate + ' between '+currentTime+' - 11: 59 PM. '+'Please use '+ _scheduleVisitorList[position].PASS_CODE+' as entry code at gate. '+'Google coordinates : <a href='+mapUrl+'>'+mapUrl+'</a>'+'';
+                          var sharedDocument = parse(sharedMsg);
+                          String sharedParsedString = parse(sharedDocument.body.text).documentElement.text;
+
+                          GlobalFunctions.shareData('PassCode', sharedParsedString);
+                        }),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: 20,
+                    height: 35,
+                    child: VerticalDivider(
+                      width: 20,
+                      color: GlobalVariables.lightGray,
                     ),
                   ),
                 ),
+                Flexible(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.call,
+                          color: GlobalVariables.green,
+                        ),
+                        onPressed: () {
+                          launch('tel://' +
+                              _scheduleVisitorList[position].MOBILE_NO);
+                        }),
+                  ),
+                ),
               ],
-            ),
-          ),
-          Visibility(
-            visible: false,
-            child: Container(
-              margin: EdgeInsets.fromLTRB(50, 5, 0, 0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Icon(Icons.perm_identity,color: GlobalVariables.mediumGreen,)
-                  ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: Text(
-                      _visitorList[position].VISITOR_NAME,
-                      style: TextStyle(
-                        color: GlobalVariables.green,
-                        fontSize: 12,),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Visibility(
-            visible: false,
-            child: Container(
-              height: 2,
-              color: GlobalVariables.mediumGreen,
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Divider(
-                height: 2,
-              ),
-            ),
-          ),
-          Visibility(
-            visible: false,
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child:Row(
-                children: <Widget>[
-                  Container(
-                    height: 30,
-                    padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: GlobalVariables.green,
-                    ),
-                    child: FlatButton.icon(
-                      onPressed: (){},
-                      icon: Icon(Icons.edit,color: GlobalVariables.white,size: 20,),
-                      label:Text(AppLocalizations.of(context).translate('edit'),style: TextStyle(
-                          color: GlobalVariables.white
-                      ),),),
-                  ),
-                  Container(
-                    height: 30,
-                    margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: GlobalVariables.green,
-                    ),
-                    child: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.cancel,color: GlobalVariables.white,size: 20,), label:Text(AppLocalizations.of(context).translate('cancel'),style: TextStyle(
-                        color: GlobalVariables.white
-                    ),)),
-                  ),
-                ],
-              ),
             ),
           )
         ],
@@ -726,208 +1030,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getScheduleVisitorListItemLayout(int position) {
-
-
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: GlobalVariables.white),
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Container(
-                                alignment: Alignment.topLeft,
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Icon(Icons.person,color: GlobalVariables.mediumGreen,)
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: Text(
-                                _scheduleVisitorList[position].NAME,
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: (){
-                          launch('tel://' + _scheduleVisitorList[position].MOBILE_NO);
-                        },
-                        child: Container(
-                            alignment: Alignment.topLeft,
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Icon(Icons.call,color: GlobalVariables.mediumGreen,)
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                          alignment: Alignment.topLeft,
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Icon(Icons.vpn_key,color: GlobalVariables.mediumGreen,)
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: Text(
-                          _scheduleVisitorList[position].PASS_CODE,
-                          style: TextStyle(
-                            color: GlobalVariables.black,
-                           // fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                          alignment: Alignment.topLeft,
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,)
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: Text(
-                          GlobalFunctions.convertDateFormat(_scheduleVisitorList[position].DATE, 'dd-MM-yyyy'),
-                          style: TextStyle(
-                            color: GlobalVariables.black,
-                          //  fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-        ],
-      ),
-    );
-  }
-
-/*
-  Future<void> getAllSocietyData() async {
-
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    username = await GlobalFunctions.getUserName();
-    password = await GlobalFunctions.getPassword();
-    societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
-    restClient.getAllSocietyData(username, password).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
-
-        _societyList = List<LoginResponse>.from(
-            _list.map((i) => LoginResponse.fromJson(i)));
-
-        for (int i = 0; i < _societyList.length; i++) {
-          LoginResponse loginResponse = _societyList[i];
-          print('"loginResponse.ID : ' + loginResponse.ID);
-
-          print('ShardPref societyId : ' + societyId);
-          print('SocietyId ' + loginResponse.SOCIETY_ID);
-
-          if (societyId == loginResponse.SOCIETY_ID) {
-            if (_societyListItems.length > 0) {
-              _societyListItems.insert(
-                  0,
-                  DropdownMenuItem(
-                    value: loginResponse.ID,
-                    child: Text(
-                      loginResponse.BLOCK+
-                          "-" +
-                          loginResponse.FLAT +
-                          " " +
-                          loginResponse.Society_Name ,
-                      style: TextStyle(color: GlobalVariables.black),
-                    ),
-                  ));
-            } else {
-              _societyListItems.add(DropdownMenuItem(
-                value: loginResponse.ID,
-                child: Text(
-                  loginResponse.BLOCK+
-                      "-" +
-                      loginResponse.FLAT +
-                      " " +
-                      loginResponse.Society_Name ,
-                  style: TextStyle(color: GlobalVariables.black),
-                ),
-              ));
-            }
-          } else {
-            _societyListItems.add(DropdownMenuItem(
-              value: loginResponse.ID,
-              child: Text(
-                loginResponse.BLOCK+
-                    "-" +
-                    loginResponse.FLAT +
-                    " " +
-                    loginResponse.Society_Name ,
-                style: TextStyle(color: GlobalVariables.black),
-              ),
-            ));
-          }
-          print('value: ' + _societyListItems[i].value.toString());
-        }
-        print('size : ' + _societyListItems.length.toString());
-        print('_societyListItems 0 : ' + _societyListItems[0].toString());
-        _selectedItem = _societyListItems[0].value;
-        _selectedSocietyLogin = _societyList[position];
-        _selectedText =  _selectedSocietyLogin.BLOCK+
-            "-" +
-            _selectedSocietyLogin.FLAT +
-            " " +
-            _selectedSocietyLogin.Society_Name;
-        print('_selectedItem initial : ' + _selectedItem.toString());
-        _progressDialog.hide();
-        setState(() {
-        });
-        _selectedSocietyLogin = _societyList[0];
-       // _selectedSocietyLogin.PASSWORD = password;
-       // GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
-      }
-      getScheduleVisitorData();
-    });
-  }*/
-
   scheduleVisitorLayout() {
-    _nameController.text ='';
-    _mobileController.text='';
+    _nameController.text = '';
+    _mobileController.text = '';
 
     return Container(
-      width: MediaQuery.of(context).size.width/0.2,
+      width: MediaQuery.of(context).size.width / 0.2,
       height: 400,
 //      height: Med,
       decoration: BoxDecoration(
@@ -977,7 +1085,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                               Container(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  AppLocalizations.of(context).translate('visitor_arriving_on'),
+                                  AppLocalizations.of(context)
+                                      .translate('visitor_arriving_on'),
                                   style: TextStyle(
                                       color: GlobalVariables.green,
                                       fontSize: 18,
@@ -997,7 +1106,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
-                    )*/),
+                    )*/
+                                  ),
                                   child: ButtonTheme(
                                     child: DropdownButton(
                                       items: _scheduleListItems,
@@ -1010,11 +1120,15 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       ),
                                       underline: SizedBox(),
                                       hint: Container(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 0, 15, 0),
                                         child: Text(
                                           "",
                                           style: TextStyle(
-                                              color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                                              color:
+                                                  GlobalVariables.mediumGreen,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -1030,24 +1144,32 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     border: Border.all(
                                       color: GlobalVariables.mediumGreen,
                                       width: 3.0,
-                                    )
-                                ),
+                                    )),
                                 child: TextField(
                                   controller: _nameController,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).translate('name_of_person'),
-                                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                                      border: InputBorder.none,
-                                      suffixIcon: IconButton(
-                                          onPressed: () async {
-                                            Contact contact = await _contactPicker.selectContact();
-                                            print('contact Name : '+contact.fullName);
-                                            print('contact Number : '+contact.phoneNumber.toString());
-                                            _contact = contact;
-                                            setState(() {});
-                                          },
-                                          icon: Icon(Icons.contacts,color: GlobalVariables.mediumGreen,)),
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('name_of_person'),
+                                    hintStyle: TextStyle(
+                                        color: GlobalVariables.lightGray,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    suffixIcon: IconButton(
+                                        onPressed: () async {
+                                          Contact contact = await _contactPicker
+                                              .selectContact();
+                                          print('contact Name : ' +
+                                              contact.fullName);
+                                          print('contact Number : ' +
+                                              contact.phoneNumber.toString());
+                                          _contact = contact;
+                                          setState(() {});
+                                        },
+                                        icon: Icon(
+                                          Icons.contacts,
+                                          color: GlobalVariables.mediumGreen,
+                                        )),
                                   ),
                                 ),
                               ),
@@ -1060,19 +1182,20 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     border: Border.all(
                                       color: GlobalVariables.mediumGreen,
                                       width: 3.0,
-                                    )
-                                ),
+                                    )),
                                 child: TextField(
                                   controller: _mobileController,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).translate('contact_number'),
-                                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                                      border: InputBorder.none
-                                  ),
+                                      hintText: AppLocalizations.of(context)
+                                          .translate('contact_number'),
+                                      hintStyle: TextStyle(
+                                          color: GlobalVariables.lightGray,
+                                          fontSize: 14),
+                                      border: InputBorder.none),
                                 ),
                               ),
-                          /*    Container(
+                              /*    Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -1110,15 +1233,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   child: RaisedButton(
                                     color: GlobalVariables.green,
                                     onPressed: () {
-
                                       verifyVisitorDetails();
-
                                     },
                                     textColor: GlobalVariables.white,
                                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                                    ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: GlobalVariables.green)),
                                     child: Text(
                                       AppLocalizations.of(context)
                                           .translate('add'),
@@ -1143,7 +1265,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-
   void changeScheduleDropDownItem(String value) {
     print('clickable value : ' + value.toString());
     setState(() {
@@ -1153,9 +1274,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   void getScheduleTimeData() {
-
-    _scheduleList = ["Today","Tomorrow","Day after tomorrow"];
-    for(int i=0;i<_scheduleList.length;i++){
+    _scheduleList = ["Today", "Tomorrow", "Day after tomorrow"];
+    for (int i = 0; i < _scheduleList.length; i++) {
       _scheduleListItems.add(DropdownMenuItem(
         value: _scheduleList[i],
         child: Text(
@@ -1168,26 +1288,18 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   void verifyVisitorDetails() {
-
-    if(_nameController.text.length>0){
-
-      if(_mobileController.text.length>0){
-
+    if (_nameController.text.length > 0) {
+      if (_mobileController.text.length > 0) {
         addScheduleVisitorGatePass();
-
-      }else{
+      } else {
         GlobalFunctions.showToast("Please Enter Contact Number");
       }
-
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Enter Name");
     }
-
-
   }
 
   Future<void> addScheduleVisitorGatePass() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -1198,56 +1310,65 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     String googleParameter = await GlobalFunctions.getGoogleCoordinate();
 
     _progressDialog.show();
-    restClient.addScheduleVisitorGatePass(societyId, block, flat, _nameController.text, _mobileController.text, _selectedSchedule, userId).then((value) {
-      print('add Schedule Visitor value : '+value.toString());
+    restClient
+            .addScheduleVisitorGatePass(
+                societyId,
+                block,
+                flat,
+                _nameController.text,
+                _mobileController.text,
+                _selectedSchedule,
+                userId)
+            .then((value) {
+      print('add Schedule Visitor value : ' + value.toString());
       _progressDialog.hide();
-      if(value.status){
+      if (value.status) {
         Navigator.of(context).pop();
         showDialog(
             context: context,
             builder: (BuildContext context) => StatefulBuilder(
-                builder: (BuildContext context,
-                    StateSetter setState) {
+                    builder: (BuildContext context, StateSetter setState) {
                   return Dialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(25.0)),
-                    child: displayPassCode(value.pass_code,userName,googleParameter,_nameController.text,_mobileController.text),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    child: displayPassCode(
+                        value.pass_code,
+                        userName,
+                        googleParameter,
+                        _nameController.text,
+                        _mobileController.text),
                   );
                 }));
 
         ScheduleVisitor scheduleVisitor = ScheduleVisitor();
-        scheduleVisitor.MOBILE_NO=_mobileController.text;
-        scheduleVisitor.NAME=_nameController.text;
-        scheduleVisitor.PASS_CODE=value.pass_code;
+        scheduleVisitor.MOBILE_NO = _mobileController.text;
+        scheduleVisitor.NAME = _nameController.text;
+        scheduleVisitor.PASS_CODE = value.pass_code;
 
         DateTime now = DateTime.now();
         DateFormat formatter = DateFormat('yyyy-MM-dd');
         String date = formatter.format(now);
-        if(_selectedSchedule=='Today'){
-        }else if(_selectedSchedule=='Tomorrow'){
+        if (_selectedSchedule == 'Today') {
+        } else if (_selectedSchedule == 'Tomorrow') {
           now = now.add(Duration(days: 1));
           date = formatter.format(now);
-        }else if(_selectedSchedule=='Day after tomorrow'){
+        } else if (_selectedSchedule == 'Day after tomorrow') {
           now = now.add(Duration(days: 2));
           date = formatter.format(now);
         }
-        scheduleVisitor.DATE=date;
-        if(_scheduleVisitorList.length>0) {
+        scheduleVisitor.DATE = date;
+        if (_scheduleVisitorList.length > 0) {
           _scheduleVisitorList.insert(0, scheduleVisitor);
-        }else{
+        } else {
           _scheduleVisitorList.add(scheduleVisitor);
         }
-
       }
       GlobalFunctions.showToast(value.message);
       setState(() {});
-      print('passCode : '+value.pass_code);
-
+      print('passCode : ' + value.pass_code);
 
       /* {pass_code: 303462, status: true, message: Visitor added successfully}*/
-
-    })/*.catchError((Object obj) {
+    }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -1258,12 +1379,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           break;
         default:
       }
-    })*/;
-
+    })*/
+        ;
   }
 
   Future<void> getScheduleVisitorData() async {
-    isActivitiesAPICall=true;
+    isActivitiesAPICall = true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
@@ -1275,14 +1396,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         List<dynamic> _list = value.visitor;
         List<dynamic> _scheduleList = value.schedule_visitor;
 
-        _visitorList = List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
-        _scheduleVisitorList = List<ScheduleVisitor>.from(_scheduleList.map((i) => ScheduleVisitor.fromJson(i)));
+        _visitorList =
+            List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
+        print('_visitor length : ' + _visitorList.length.toString());
+        _scheduleVisitorList = List<ScheduleVisitor>.from(
+            _scheduleList.map((i) => ScheduleVisitor.fromJson(i)));
 
-        setState(() {
-        });
+        setState(() {});
       }
 
-     /* restClient.getGatePassScheduleVisitorData(societyId, block, flat).then((value) {
+      /* restClient.getGatePassScheduleVisitorData(societyId, block, flat).then((value) {
         if (value.status) {
           List<dynamic> _list = value.data;
 
@@ -1291,111 +1414,478 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       });*/
       _progressDialog.hide();
     });
-
-
   }
 
   void redirectToPage(String item) {
-
-    if(item==AppLocalizations.of(context).translate('my_gate')){
+    if (item == AppLocalizations.of(context).translate('my_gate')) {
       //Redirect to Discover
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('my_activities')){
+    } else if (item ==
+        AppLocalizations.of(context).translate('my_activities')) {
       //Redirect to  Classified
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('helpers')){
+    } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  Services
       _tabController.animateTo(1);
-    }else{
+    } else {
       _tabController.animateTo(0);
     }
-
-
   }
 
-  displayPassCode(String pass_code, String userName, String googleParameter, String visitorName,String visitorContact)  {
-
-
+  displayPassCode(String pass_code, String userName, String googleParameter,
+      String visitorName, String visitorContact) {
     DateTime date = DateTime.now();
-   // String strDate = DateFormat("dd-MMM").format(date);//date.day.toString().padLeft(2,'0')+'-'+date.month.toString().padLeft(2,'0')+'-'+date.year.toString();
     String todayDate = GlobalFunctions.convertDateFormat(date.toIso8601String(), 'dd MMM');
-    //String strTime=date.hour.toString()+'.'+date.minute.toString();
     String currentTime = GlobalFunctions.convertDateFormat(date.toIso8601String(), 'hh:mm aa');
+    String mapUrl = "http://www.google.com/maps/place/" + googleParameter;
+/*
 
-    String mapUrl = "http://www.google.com/maps/place/"+googleParameter;
-
-   // String msg = userName + ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on '+ todayDate + ' between '+currentTime+' - 11: 59 PM. '+'Please use '+pass_code+' as entry code at gate. '+'Google coordinates : <a href='+mapUrl+'>'+mapUrl+'</a>'+'';
-    String msg = 'Entry code created for \n'+userName+'\n'+pass_code+'\n'+'Please tell this number at security gate hassle free entry at society';
+    String msg = 'Entry code created for \n<p style="color:black">' +
+        visitorName +
+        '</p>' +
+        '\n<p style="color:green";"font-size:20px">' +
+        pass_code +
+        '</p>\n' +
+        '<p style="color:gray">Please tell this number at security gate hassle free entry at society</p>';
     var document = parse(msg);
+    String parsedString = parse(document.body.text).documentElement.text;*/
 
-    String parsedString = parse(document.body.text).documentElement.text;
+    String sharedMsg = userName + ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on '+ todayDate + ' between '+currentTime+' - 11: 59 PM. '+'Please use '+pass_code+' as entry code at gate. '+'Google coordinates : <a href='+mapUrl+'>'+mapUrl+'</a>'+'';
+    var sharedDocument = parse(sharedMsg);
+    String sharedParsedString = parse(sharedDocument.body.text).documentElement.text;
 
-    print('msg : '+parsedString);
-    return Container(
-     // width: MediaQuery.of(context).size.width/4,
-      padding: EdgeInsets.fromLTRB(25,15,25,15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Flexible(
-            child: Container(
-              child: Text(parsedString,style: TextStyle(
-                  color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-              ),),
+    String line1 = "Entry code created for";
+    String line2 = visitorName;
+    String line3 = pass_code;
+    String line4 =
+        "Please tell this number at security gate hassle free entry at society";
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(top: 70.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10.0,
+                      offset: const Offset(0.0, 10.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 80,
+                    ),
+                    Text(
+                      line1,
+                      style: TextStyle(
+                        color: GlobalVariables.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      line2,
+                      style: TextStyle(
+                          color: GlobalVariables.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      line3,
+                      style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      line4,
+                      style: TextStyle(
+                          color: GlobalVariables.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                decoration: BoxDecoration(
+                  color: GlobalVariables.green,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(32.0),
+                      bottomRight: Radius.circular(32.0)),
+                ),
+                child: Container(
+                  child: IconButton(
+                      icon: Icon(
+                        Icons.share,
+                        color: GlobalVariables.white,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        GlobalFunctions.shareData('PassCode', sharedParsedString);
+                      }),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            transform: Matrix4.translationValues(0.0, -130.0, 0.0),
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.width * 0.3,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white, shape: BoxShape.circle),
+            child: CircleAvatar(
+              child: SvgPicture.asset(
+                GlobalVariables.appIconPath,
+                width: 20,
+                height: 20,
+                color: GlobalVariables.white,
+              ),
             ),
           ),
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(icon: Icon(Icons.share,color: GlobalVariables.green,), onPressed: (){
-                        Navigator.of(context).pop();
-                        GlobalFunctions.shareData('PassCode', parsedString);
-                      }),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Text(AppLocalizations.of(context).translate('share'),style: TextStyle(
-                            fontSize: 12
-                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
-                        ),),
-                      )
-                    ],
-                  ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+              transform: Matrix4.translationValues(MediaQuery.of(context).size.width * 0.3, -MediaQuery.of(context).size.width * 0.29, 0.0),
+              width: 42.0,
+              height: 42.0,
+              decoration: BoxDecoration(
+                  color: GlobalVariables.green, shape: BoxShape.circle),
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: GlobalVariables.white,
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(icon: Icon(Icons.content_copy,color: GlobalVariables.green,), onPressed: (){
-                        Navigator.of(context).pop();
-                        ClipboardManager.copyToClipBoard(pass_code).then((value) {
-                          GlobalFunctions.showToast("Copied to Clipboard");
-                        });
-                      }),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Text(AppLocalizations.of(context).translate('copy'),style: TextStyle(
-                            fontSize: 12
-                            ,fontWeight: FontWeight.bold,color: GlobalVariables.green
-                        ),),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              )),
+        ),
+        //_buildDialogCloseWidget(),
+      ],
     );
-
   }
 
+  displayVisitorInfo(int position) {
+    String Time = "";
+    String Date = "";
+   // String image = _visitorList[position].IMAGE;
+    if (_visitorList[position].OUT_TIME.length > 0) {
+      if(_visitorList[position].STATUS.toLowerCase()=='out') {
+        Time = _visitorList[position].IN_TIME +
+            " - " +
+            _visitorList[position].OUT_TIME;
+      }else{
+        Time = _visitorList[position].IN_TIME;
+      }
+    } else {
+      Time = _visitorList[position].IN_TIME;
+    }
 
+    if (_visitorList[position].OUT_DATE.length > 0) {
+      if(_visitorList[position].STATUS.toLowerCase()=='out') {
+        Date = _visitorList[position].IN_DATE +
+            " - " +
+            _visitorList[position].OUT_DATE;
+      }else{
+        Date = _visitorList[position].IN_DATE;
+      }
+    } else {
+      Date = _visitorList[position].IN_DATE;
+    }
+
+    var visitorStatus = getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS);
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                //width: MediaQuery.of(context).size.width ,
+               // padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(top: 90.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      bottomLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10.0,
+                      offset: const Offset(0.0, 10.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 70,
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
+                      decoration: BoxDecoration(
+                          color:  GlobalVariables.skyBlue,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Text(
+                        _visitorList[position].STATUS.toLowerCase() == 'in'
+                            ? 'Arrived'
+                            : 'Left',
+                        style: TextStyle(
+                            color: GlobalVariables.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: (){
+                           // Navigator.of(context).pop();
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(builder:
+                                        (BuildContext context, StateSetter setState) {
+                                      return Dialog(
+                                        backgroundColor: Colors.transparent,
+                                        elevation: 0.0,
+                                        child: Flexible(
+                                          child: Container(
+                                            width: MediaQuery.of(context).size.height/2,
+                                            height: MediaQuery.of(context).size.height/2,
+                                            decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              // borderRadius: BorderRadius.circular(20),
+                                              //borderRadius: BorderRadius.all(Radius.circular(50))
+                                            ),
+                                            child: Image.network(
+                                              _visitorList[position].IMAGE,
+                                              scale: 1.0,
+                                              fit: BoxFit.fill,
+                                              width: MediaQuery.of(context).size.height/2,
+                                              height: MediaQuery.of(context).size.height/2,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }));
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: GlobalVariables.mediumGreen,
+                            backgroundImage:
+                                NetworkImage(_visitorList[position].IMAGE),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          _visitorList[position].VISITOR_NAME,
+                          style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Container(
+                          //margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                          child: IconButton(
+                            icon: Icon(Icons.call),
+                            iconSize: 25.0,
+                            color: GlobalVariables.mediumGreen,
+                            onPressed: () {
+                              launch('tel://' + _visitorList[position].CONTACT);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                        child: Divider(
+                          thickness: 1,
+                          color: GlobalVariables.lightGray,
+                        )),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Icon(
+                                      Icons.access_time,
+                                      color: GlobalVariables.mediumGreen,
+                                      size: 25,
+                                    )),
+                                Flexible(
+                                  child: Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      Date+' '+Time,
+                                      style: TextStyle(
+                                        color: GlobalVariables.black,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Icon(
+                                      Icons.person,
+                                      color: GlobalVariables.mediumGreen,
+                                      size: 25,
+                                    )),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    visitorStatus,
+                                    style: TextStyle(
+                                      color: GlobalVariables.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: GlobalVariables.mediumGreen,
+                                      size: 25,
+                                    )),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    _visitorList[position].FROM_VISITOR,
+                                    style: TextStyle(
+                                      color: GlobalVariables.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            transform: Matrix4.translationValues(0.0, -120.0, 0.0),
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.width * 0.3,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white, shape: BoxShape.circle),
+            child: CircleAvatar(
+              child: SvgPicture.asset(
+                getVisitorStatusIcon(_visitorList[position].TYPE),
+                width: 50,
+                height: 50,
+                color: GlobalVariables.white,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+              transform: Matrix4.translationValues(MediaQuery.of(context).size.width * 0.38, -MediaQuery.of(context).size.width * 0.24, 0.0),
+              width: 42.0,
+              height: 42.0,
+              decoration: BoxDecoration(
+                  color: GlobalVariables.green, shape: BoxShape.circle),
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: GlobalVariables.white,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              )),
+        ),
+        //_buildDialogCloseWidget(),
+      ],
+    );
+  }
 
   void _handleTabSelection() {
     if (pageName == null) {
@@ -1412,16 +1902,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         switch (index) {
           case 0:
             {
-              if (!isActivitiesAPICall) {
-
-              }
+              if (!isActivitiesAPICall) {}
             }
             break;
           case 1:
             {
-              if (!isHelperAPICall) {
-
-              }
+              if (!isHelperAPICall) {}
             }
             break;
         }
@@ -1432,6 +1918,35 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     });
   }
 
+  String getVisitorAllowStatus(String visitorStatus) {
+    String status = "";
+
+    if (visitorStatus.toLowerCase() == 'accepted') {
+      status = "Allowed by you";
+    } else if (visitorStatus.toLowerCase() == 'scheduled') {
+      status = "Pre-approved by you";
+    } else if (visitorStatus.toLowerCase() == 'rejected') {
+      status = "Disallowed by you";
+    } else if (visitorStatus.toLowerCase() == 'leave at gate') {
+      status = "You asked to leave at gate";
+    } else if (visitorStatus.toLowerCase() == 'manual check-in') {
+      status = "Allowed by security";
+    } else if (visitorStatus.toLowerCase() == 'wait at gate') {
+      status = "You asked to wait at gate";
+    } else if (visitorStatus.toLowerCase() == 'wrong entry') {
+      status = "Marked as Wrong Entry by you";
+    }
+
+    return status;
+  }
+
+  String getVisitorStatusIcon(String type) {
+    var icon = GlobalVariables.visitorIconPath;
+    if(type.toLowerCase()=='delivery'){
+      icon = GlobalVariables.deliveryManIconPath;
+    }else if(type.toLowerCase()=='taxi'){
+      icon = GlobalVariables.taxiIconPath;
+    }
+    return icon;
+  }
 }
-
-

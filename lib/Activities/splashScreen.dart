@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: GlobalVariables.green,
       body: Center(
         child: Container(
-          child: SvgPicture.asset(GlobalVariables.appIconPath),
+          child: Image.asset(GlobalVariables.splashIconPath,width: MediaQuery.of(context).size.width/2,),
         ),
       ),
     );

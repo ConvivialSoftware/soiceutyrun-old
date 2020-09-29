@@ -256,7 +256,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD,false)));
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD,temp.tYPE == TYPE_ASSIGN_COMPLAINT ? true : false)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

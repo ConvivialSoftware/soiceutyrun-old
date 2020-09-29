@@ -43,6 +43,7 @@ class GlobalVariables {
   static var drawerImagePath =
       "assets/other_assets/societyrun-logo_colored.svg";
   static var appIconPath = "assets/other_assets/societyrun-logo.svg";
+  static var splashIconPath = "assets/other_assets/splash_socityrun.png";
   static var myFlatIconPath = "assets/menu_assets/myhome_icon.svg";
   static var myBuildingIconPath = "assets/menu_assets/building_icon_menu.svg";
   static var myServiceIconPath = "assets/menu_assets/service_icon_menu.svg";
