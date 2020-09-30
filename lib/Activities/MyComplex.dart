@@ -901,7 +901,7 @@ class MyComplexState extends State<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _meetingList[position].START_TIME+' to '+ _meetingList[position].END_TIME,
+                          _meetingList[position].START_TIME/*+' to '+ _meetingList[position].END_TIME*/,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -1258,13 +1258,28 @@ class MyComplexState extends State<BaseMyComplex>
                       ),
                       (!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') ? Container(
                         margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Text(
-                          "VOTED",
-                          style: TextStyle(
-                            color: GlobalVariables.red,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                         // crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "VOTED",
+                              style: TextStyle(
+                                color: GlobalVariables.red,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            Text(
+                              "  (Result On " + GlobalFunctions.convertDateFormat(_pollList[position].EXPIRY_DATE, "dd MMM yy")+")",
+                              style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
                         ),
                       ):Container(),
                     ],
@@ -2314,7 +2329,7 @@ class MyComplexState extends State<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _eventList[position].START_TIME+' tO '+ _eventList[position].END_TIME,
+                          _eventList[position].START_TIME+' to '+ _eventList[position].END_TIME,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
