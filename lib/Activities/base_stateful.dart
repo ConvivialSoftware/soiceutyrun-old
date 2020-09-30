@@ -251,12 +251,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   Future<void> navigate(GatePassPayload temp,BuildContext context) async {
     print('context : '+context.toString());
-    if (temp.tYPE == TYPE_COMPLAINT || temp.tYPE == TYPE_ASSIGN_COMPLAINT) {
+    if (temp.tYPE == TYPE_COMPLAINT) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD,temp.tYPE == TYPE_ASSIGN_COMPLAINT ? true : false)));
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD,false)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -264,7 +264,20 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
       }
-    } else if (temp.tYPE == TYPE_MEETING) {
+    } else if (temp.tYPE == TYPE_ASSIGN_COMPLAINT) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD,true)));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == TYPE_MEETING) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(

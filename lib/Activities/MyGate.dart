@@ -489,8 +489,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     String Image = _visitorList[position].IMAGE;
     if (_visitorList[position].OUT_TIME.length > 0) {
       if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Time = _visitorList[position].IN_TIME +
-            " - " +
+        Time = /*_visitorList[position].IN_TIME +
+            " - " +*/
             _visitorList[position].OUT_TIME;
       } else {
         Time = _visitorList[position].IN_TIME;
@@ -501,8 +501,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     if (_visitorList[position].OUT_DATE.length > 0) {
       if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Date = _visitorList[position].IN_DATE +
-            " - " +
+        Date = /*_visitorList[position].IN_DATE +
+            " - " +*/
             _visitorList[position].OUT_DATE;
       } else {
         Date = _visitorList[position].IN_DATE;
@@ -1657,8 +1657,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     // String image = _visitorList[position].IMAGE;
     if (_visitorList[position].OUT_TIME.length > 0) {
       if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Time = _visitorList[position].IN_TIME +
-            " - " +
+        Time = /*_visitorList[position].IN_TIME +
+            " - " +*/
             _visitorList[position].OUT_TIME;
       } else {
         Time = _visitorList[position].IN_TIME;
@@ -1669,8 +1669,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     if (_visitorList[position].OUT_DATE.length > 0) {
       if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Date = _visitorList[position].IN_DATE +
-            " - " +
+        Date =/* _visitorList[position].IN_DATE +
+            " - " +*/
             _visitorList[position].OUT_DATE;
       } else {
         Date = _visitorList[position].IN_DATE;
@@ -1717,7 +1717,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     Container(
                       padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
                       decoration: BoxDecoration(
-                          color: GlobalVariables.skyBlue,
+                          color: _visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
                           borderRadius: BorderRadius.circular(25)),
                       child: Text(
                         _visitorList[position].STATUS.toLowerCase() == 'in'

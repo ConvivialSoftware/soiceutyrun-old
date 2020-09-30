@@ -362,7 +362,7 @@ class ComplaintInfoAndCommentsState
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Row(
+                                        /*    Row(
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.fromLTRB(
@@ -385,7 +385,7 @@ class ComplaintInfoAndCommentsState
                                                           fontSize: 14)),
                                                 ),
                                               ],
-                                            ),
+                                            ),*/
                                             Row(
                                               children: <Widget>[
                                                 Container(
@@ -517,7 +517,8 @@ class ComplaintInfoAndCommentsState
                               complaints.STATUS.toLowerCase() == 'reopen' ||
                               complaints.STATUS.toLowerCase() ==
                                   'in progress' ||
-                              complaints.STATUS.toLowerCase() == 'close'
+                              complaints.STATUS.toLowerCase() == 'close' ||
+                              complaints.STATUS.toLowerCase() == 'on hold'
                           ? true
                           : false,
                       child: Container(
@@ -571,7 +572,7 @@ class ComplaintInfoAndCommentsState
                                         complaints.STATUS.toLowerCase() ==
                                             'reopen' ||
                                         complaints.STATUS.toLowerCase() ==
-                                            'in progress'
+                                            'in progress' || complaints.STATUS.toLowerCase() == 'on hold'
                                     ? Flexible(
                                         child: Row(
                                           children: [
@@ -584,7 +585,10 @@ class ComplaintInfoAndCommentsState
                                                             'reopen' ||
                                                         _complaintType
                                                                 .toLowerCase() ==
-                                                            'in progress'
+                                                            'in progress' ||
+                                                    _complaintType
+                                                        .toLowerCase() ==
+                                                        'on hold'
                                                     ? _complaintType = "Close"
                                                     : _complaintType =
                                                         complaints.STATUS;
@@ -602,7 +606,10 @@ class ComplaintInfoAndCommentsState
                                                                 'reopen' ||
                                                             _complaintType
                                                                     .toLowerCase() ==
-                                                                'in progress'
+                                                                'in progress' ||
+                                                        _complaintType
+                                                            .toLowerCase() ==
+                                                            'on hold'
                                                         ? GlobalVariables.white
                                                         : GlobalVariables.green,
                                                     borderRadius:
@@ -617,7 +624,10 @@ class ComplaintInfoAndCommentsState
                                                                   'reopen' ||
                                                               _complaintType
                                                                       .toLowerCase() ==
-                                                                  'in progress'
+                                                                  'in progress'||
+                                                          _complaintType
+                                                              .toLowerCase() ==
+                                                              'on hold'
                                                           ? GlobalVariables
                                                               .mediumGreen
                                                           : GlobalVariables
@@ -708,8 +718,23 @@ class ComplaintInfoAndCommentsState
                                   child: RaisedButton(
                                     color: GlobalVariables.green,
                                     onPressed: () {
-                                      isComment = false;
-                                      updateComplaintStatus(context);
+                                      print('_complaintType : '+_complaintType.toString());
+                                      print('_selectedItem : '+_selectedItem.toString());
+                                      if(isAssignComplaint){
+                                        isComment = false;
+                                        updateComplaintStatus(context);
+                                      }else{
+                                        if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='reopen'){
+                                          if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='completed'){
+                                            GlobalFunctions.showToast('Please Select the Complaint Status');
+                                          }else {
+                                            isComment = false;
+                                            updateComplaintStatus(context);
+                                          }
+                                        }else{
+                                          GlobalFunctions.showToast('Please Select the Complaint Status');
+                                        }
+                                      }
                                     },
                                     textColor: GlobalVariables.white,
                                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
@@ -1008,8 +1033,22 @@ class ComplaintInfoAndCommentsState
         ),
       ));
     }
-    _selectedItem = _complaintStatusListItems[0].value;
-    print('_selectedItem length : ' + _selectedItem.length.toString());
+    for(int i=0;i<_complaintStatusListItems.length;i++){
+      if(_selectedItem==null){
+        if(complaints.STATUS!=null) {
+          if (complaints.STATUS.toLowerCase() ==
+              _complaintStatusListItems[i].value.toLowerCase()) {
+            _selectedItem = _complaintStatusListItems[i].value;
+            break;
+          }
+        }
+
+      }
+    }
+    if(_selectedItem==null) {
+      _selectedItem = _complaintStatusListItems[0].value;
+    }
+    print('_selectedItem length : ' + _selectedItem..toString());
   }
 
   getUserId() {
@@ -1044,6 +1083,7 @@ class ComplaintInfoAndCommentsState
         List<dynamic> _list = value.data;
         _commentsList =
             List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
+        print('complaints.SUBJECT : '+ complaints.SUBJECT.toString());
         if (complaints.SUBJECT != null) {
           setState(() {});
         } else {
