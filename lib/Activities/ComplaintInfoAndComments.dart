@@ -362,7 +362,7 @@ class ComplaintInfoAndCommentsState
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                        /*    Row(
+                                            Row(
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.fromLTRB(
@@ -385,7 +385,7 @@ class ComplaintInfoAndCommentsState
                                                           fontSize: 14)),
                                                 ),
                                               ],
-                                            ),*/
+                                            ),
                                             Row(
                                               children: <Widget>[
                                                 Container(
@@ -512,11 +512,11 @@ class ComplaintInfoAndCommentsState
                         ],
                       ),
                     ),
-                    Visibility(
-                      visible: complaints.STATUS.toLowerCase() == 'new' ||
+                    isAssignComplaint && complaints.STATUS.toLowerCase() == 'close' ? Container()
+                     : Visibility(
+                      visible:complaints.STATUS.toLowerCase() == 'new' ||
                               complaints.STATUS.toLowerCase() == 'reopen' ||
-                              complaints.STATUS.toLowerCase() ==
-                                  'in progress' ||
+                              complaints.STATUS.toLowerCase() == 'in progress' ||
                               complaints.STATUS.toLowerCase() == 'close' ||
                               complaints.STATUS.toLowerCase() == 'on hold'
                           ? true

@@ -418,6 +418,19 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
         double amount = double.parse(_billHeadsList[i].AMOUNT);
         totalAmount+=amount;
       }
+      BillHeads arrearsBillHeads = BillHeads();
+      arrearsBillHeads.AMOUNT = value.ARREARS.toString();
+      arrearsBillHeads.HEAD_NAME="Arrears";
+      totalAmount+= double.parse(value.ARREARS.toString());
+
+      BillHeads penaltyBillHeads = BillHeads();
+      penaltyBillHeads.AMOUNT = value.PENALTY.toString();
+      penaltyBillHeads.HEAD_NAME="Penalty";
+
+      totalAmount+= double.parse(value.PENALTY.toString());
+      _billHeadsList.add(arrearsBillHeads);
+      _billHeadsList.add(penaltyBillHeads);
+
         _progressDialog.hide();
         setState(() {});
 

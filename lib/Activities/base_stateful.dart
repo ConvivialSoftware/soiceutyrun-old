@@ -194,7 +194,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         }
       } else {
         if (shouldRedirect) {
-          navigate(gatePassPayload,_ctx);
+          GlobalVariables.isAlreadyTapped = false;
+         // navigate(gatePassPayload,_ctx);
         }
       }
     } catch (e) {
