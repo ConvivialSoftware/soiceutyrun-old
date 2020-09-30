@@ -1768,4 +1768,31 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
     return StatusMsgResponse.fromJson(value);
   }
+
+  @override
+  Future<StatusMsgResponse> addGatePassWrongEntry(String societyId, String id, String status) async {
+    // TODO: implement addGatePassWrongEntry
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(id,GlobalVariables.ID);
+    ArgumentError.checkNotNull(status,GlobalVariables.status);
+
+    FormData formData =
+    FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+      GlobalVariables.status:status
+    });
+    print('baseurl : ' + baseUrl + GlobalVariables.gatePassWrongEntryAPI);
+    final Response _result = await _dio.post(GlobalVariables.gatePassWrongEntryAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addGatePassWrongEntry response : ' + value.toString());
+
+    return StatusMsgResponse.fromJsonWithMessage(value);
+  }
 }

@@ -161,6 +161,7 @@ class GlobalVariables {
   static const razorPayOrderAPI = "v1/orders";
   static const logoutAPI = "Api/logout";
   static const assignComplaintsAPI = "Helpdesk/assigncomplaints";
+  static const gatePassWrongEntryAPI = "Gatepass/wrong_entry";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";

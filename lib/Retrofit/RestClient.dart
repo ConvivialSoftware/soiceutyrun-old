@@ -251,6 +251,11 @@ abstract class RestClient {
   Future<StatusMsgResponse> addPollVote(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.userID) String userId,
       @Field(GlobalVariables.block) String block,@Field(GlobalVariables.flat) String flat,
       @Field(GlobalVariables.ID) String optionId,@Field(GlobalVariables.OPTION) String optionText);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.gatePassWrongEntryAPI)
+  Future<StatusMsgResponse> addGatePassWrongEntry(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.ID) String id,
+      @Field(GlobalVariables.status) String status);
 }
 
 
