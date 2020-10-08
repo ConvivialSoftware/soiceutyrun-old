@@ -483,7 +483,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   getVisitorsListItemLayout(int position) {
     String Time = "";
     String Date = "";
-    String Image = _visitorList[position].IMAGE;
     if (_visitorList[position].OUT_TIME.length > 0) {
       if (_visitorList[position].STATUS.toLowerCase() == 'out') {
         Time = /*_visitorList[position].IN_TIME +
@@ -540,14 +539,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               child: Row(
                 children: <Widget>[
                   Container(
-                    child: CircleAvatar(
+                    child: _visitorList[position].IMAGE==null || _visitorList[position].IMAGE=="" ? Image.asset(
+                      GlobalVariables.componentUserProfilePath,
+                      width: 26,
+                      height: 26,
+                    ): CircleAvatar(
+                      radius: 20,
                       backgroundColor: GlobalVariables.mediumGreen,
-                      child: SvgPicture.asset(
-                        getVisitorStatusIcon(_visitorList[position].TYPE),
-                        width: 20,
-                        height: 20,
-                        color: GlobalVariables.white,
-                      ),
+                      backgroundImage: NetworkImage(_visitorList[position].IMAGE),
                     ),
                   ),
                   Expanded(
@@ -624,7 +623,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 ],
               ),
             ),
-            Container(
+            _visitorList[position].FROM_VISITOR.length>0 && _visitorList[position].FROM_VISITOR!=null? Container(
               margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
               child: Row(
                 children: <Widget>[
@@ -649,7 +648,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   ),
                 ],
               ),
-            ),
+            ): Container(),
             Container(
               margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
               child: Row(
@@ -714,7 +713,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       alignment: Alignment.topLeft,
                                       // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Icon(
-                                        Icons.block,
+                                       /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
                                         color: GlobalVariables.mediumGreen,
                                         size: 25,
                                       )
@@ -722,7 +721,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                     child: Text(
-                                      'Wrong Entry',
+                                      visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
                                       style: TextStyle(
                                         color: GlobalVariables.grey,
                                         fontSize: 16,

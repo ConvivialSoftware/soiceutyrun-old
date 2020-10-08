@@ -298,7 +298,7 @@
   "assign_helpdesk": "Assign HelpDesk",
   "poll_graph": "Poll/Survey Result",
   "consumer_id": "Consumer ID",
-  "wrong_entry_str": "Are you sure it is wrong entry?",
+  "wrong_entry_str": "Are you sure you want to mark as incorrect entry?",
   "expected_delete": "Are you sure you want to delete?"
 
 }
