@@ -38,6 +38,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
   String _visitorImage="";
   String _popupTitle="";
   String _id="";
+  String _gcm_id="";
 
   @override
   void initState() {
@@ -338,7 +339,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       _visitorImage = widget.message.iMAGE;
       _popupTitle = widget.message.title;
       _id = widget.message.iD;
-
+      _gcm_id = widget.message.GCM_ID;
   }
 
   void _getSocietyData() async {
@@ -348,10 +349,10 @@ class _GatePassDialogState extends State<GatePassDialog> {
   Future<void> _approveGatePass() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-    String gcmId = await GlobalFunctions.getFCMToken();
+    //String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postApproveGatePass(_id, GatePassStatus.APPROVED, gcmId, _societyId)
+        .postApproveGatePass(_id, GatePassStatus.APPROVED, _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();
@@ -377,10 +378,10 @@ class _GatePassDialogState extends State<GatePassDialog> {
   Future<void> _rejectGatePass() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-    String gcmId = await GlobalFunctions.getFCMToken();
+   // String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postApproveGatePass(_id, _reason==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : GatePassStatus.REJECTED, gcmId, _societyId)
+        .postApproveGatePass(_id, _reason==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : GatePassStatus.REJECTED, _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();

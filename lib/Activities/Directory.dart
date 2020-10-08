@@ -167,7 +167,7 @@ class DirectoryState extends State<BaseDirectory> {
 
       field =  _committeeList[position].POST==null ? '' : _committeeList[position].POST;
 
-      flat =   _committeeList[position].FLAT==null ? '' : _committeeList[position].FLAT;
+      flat =   _committeeList[position].FLAT==null ||  _committeeList[position].BLOCK==null ? '' : _committeeList[position].BLOCK+' '+_committeeList[position].FLAT;
 
       _committeeList[position].EMAIL.length!= 0 ? email=true : email=false;
 
@@ -185,7 +185,7 @@ class DirectoryState extends State<BaseDirectory> {
 
       field =  _neighbourList[position].TYPE==null ? '' : _neighbourList[position].TYPE;
 
-      flat =   _neighbourList[position].FLAT ==null ? '' : _neighbourList[position].FLAT;
+      flat =   _neighbourList[position].FLAT==null ||  _neighbourList[position].BLOCK==null ? '' : _neighbourList[position].BLOCK+' '+_neighbourList[position].FLAT;
 
       permission = _neighbourList[position].PERMISSIONS;
       if(_neighbourList[position].Phone!=null) {
@@ -223,7 +223,7 @@ class DirectoryState extends State<BaseDirectory> {
              !isEmergency ?  Expanded(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                  child: Text('FLAT '+flat,style: TextStyle(color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold),),
+                  child: Text(flat,style: TextStyle(color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold),),
                 ),
               ):Container(),
                 phone

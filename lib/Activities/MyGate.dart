@@ -90,14 +90,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       redirectToPage(pageName);
     }
 
-    if (_contact != null) {
-      _nameController.text = _contact.fullName;
-      String phoneNumber = _contact.phoneNumber
-          .toString()
-          .substring(0, _contact.phoneNumber.toString().indexOf('(') - 1);
-
-      _mobileController.text = phoneNumber.toString();
-    }
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -422,16 +414,21 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 /* Navigator.push(context, MaterialPageRoute(
                     builder: (context) =>
                         BaseExpectedVisitor()));*/
-                Dialog infoDialog = Dialog(
-                  //  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                  child: scheduleVisitorLayout(),
-                  //child:  displayPassCode('1234', 'Poonam suthar', 'googleParameter', 'Jay Kishan', '9726197065'),
-                );
+                _nameController.text = '';
+                _mobileController.text = '';
                 showDialog(
                     context: context,
-                    builder: (BuildContext context) => StatefulBuilder(builder:
-                            (BuildContext context, StateSetter setState) {
-                          return infoDialog;
+                    builder: (BuildContext context) =>
+                        StatefulBuilder(builder:
+                            (BuildContext context,
+                            StateSetter setState) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    25.0)),
+                            child: scheduleVisitorLayout(),
+                          );
                         }));
               },
               child: Icon(
@@ -1053,6 +1050,31 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         }),
                   ),
                 ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: 20,
+                    height: 35,
+                    child: VerticalDivider(
+                      width: 20,
+                      color: GlobalVariables.lightGray,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: GlobalVariables.green,
+                        ),
+                        onPressed: () {
+
+                        }),
+                  ),
+                ),
               ],
             ),
           )
@@ -1062,12 +1084,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   scheduleVisitorLayout() {
-    _nameController.text = '';
-    _mobileController.text = '';
 
     return Container(
       width: MediaQuery.of(context).size.width / 0.2,
-      height: 400,
+      //height: 400,
 //      height: Med,
       decoration: BoxDecoration(
         color: GlobalVariables.white,
@@ -1098,6 +1118,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           ),
           Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
                   width: MediaQuery.of(context).size.width / 1.1,
@@ -1139,93 +1160,119 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       width: 3.0,
                     )*/
                                   ),
-                                  child: ButtonTheme(
-                                    child: DropdownButton(
-                                      items: _scheduleListItems,
-                                      value: _selectedSchedule,
-                                      onChanged: changeScheduleDropDownItem,
-                                      isExpanded: false,
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: GlobalVariables.mediumGreen,
-                                      ),
-                                      underline: SizedBox(),
-                                      hint: Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 0, 15, 0),
-                                        child: Text(
-                                          "",
-                                          style: TextStyle(
-                                              color:
-                                                  GlobalVariables.mediumGreen,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
+                                  child: StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState){
+                                      return DropdownButton(
+                                        items: _scheduleListItems,
+                                        value: _selectedSchedule,
+                                        onChanged: (String value){
+                                          print('clickable value : ' + value.toString());
+                                          setState(() {
+                                            _selectedSchedule = value;
+                                            print('_selctedItem:' + _selectedSchedule.toString());
+                                          });
+                                        },
+                                        isExpanded: false,
+                                        icon: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: GlobalVariables.mediumGreen,
+                                        ),
+                                        underline: SizedBox(),
+                                        hint: Container(
+                                          padding:
+                                          EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                          child: Text(
+                                            "",
+                                            style: TextStyle(
+                                                color:
+                                                GlobalVariables.mediumGreen,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState){
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        decoration: BoxDecoration(
+                                            color: GlobalVariables.white,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: GlobalVariables.mediumGreen,
+                                              width: 3.0,
+                                            )),
+                                        child: TextField(
+                                          controller: _nameController,
+                                          keyboardType: TextInputType.text,
+                                          decoration: InputDecoration(
+                                            hintText: AppLocalizations.of(context)
+                                                .translate('name_of_person'),
+                                            hintStyle: TextStyle(
+                                                color: GlobalVariables.lightGray,
+                                                fontSize: 14),
+                                            border: InputBorder.none,
+                                            suffixIcon: IconButton(
+                                                onPressed: () async {
+                                                  Contact contact = await _contactPicker
+                                                      .selectContact();
+                                                  print('contact Name : ' +
+                                                      contact.fullName);
+                                                  print('contact Number : ' +
+                                                      contact.phoneNumber.toString());
+                                                  _contact = contact;
+                                                  setState(() {
+                                                    if (_contact != null) {
+                                                      _nameController.text = _contact.fullName;
+                                                      String phoneNumber = _contact.phoneNumber
+                                                          .toString()
+                                                          .substring(0, _contact.phoneNumber.toString().indexOf('(') - 1);
+                                                      _mobileController.text = phoneNumber.toString();
+                                                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                                                    }
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  Icons.contacts,
+                                                  color: GlobalVariables.mediumGreen,
+                                                )),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        decoration: BoxDecoration(
+                                            color: GlobalVariables.white,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: GlobalVariables.mediumGreen,
+                                              width: 3.0,
+                                            )),
+                                        child: TextField(
+                                          controller: _mobileController,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                              hintText: AppLocalizations.of(context)
+                                                  .translate('contact_number'),
+                                              hintStyle: TextStyle(
+                                                  color: GlobalVariables.lightGray,
+                                                  fontSize: 14),
+                                              border: InputBorder.none),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 3.0,
-                                    )),
-                                child: TextField(
-                                  controller: _nameController,
-                                  keyboardType: TextInputType.text,
-                                  decoration: InputDecoration(
-                                    hintText: AppLocalizations.of(context)
-                                        .translate('name_of_person'),
-                                    hintStyle: TextStyle(
-                                        color: GlobalVariables.lightGray,
-                                        fontSize: 14),
-                                    border: InputBorder.none,
-                                    suffixIcon: IconButton(
-                                        onPressed: () async {
-                                          Contact contact = await _contactPicker
-                                              .selectContact();
-                                          print('contact Name : ' +
-                                              contact.fullName);
-                                          print('contact Number : ' +
-                                              contact.phoneNumber.toString());
-                                          _contact = contact;
-                                          setState(() {});
-                                        },
-                                        icon: Icon(
-                                          Icons.contacts,
-                                          color: GlobalVariables.mediumGreen,
-                                        )),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 3.0,
-                                    )),
-                                child: TextField(
-                                  controller: _mobileController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context)
-                                          .translate('contact_number'),
-                                      hintStyle: TextStyle(
-                                          color: GlobalVariables.lightGray,
-                                          fontSize: 14),
-                                      border: InputBorder.none),
-                                ),
-                              ),
+
                               /*    Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -1298,10 +1345,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   void changeScheduleDropDownItem(String value) {
     print('clickable value : ' + value.toString());
-    setState(() {
-      _selectedSchedule = value;
-      print('_selctedItem:' + _selectedSchedule.toString());
-    });
+    _selectedSchedule = value;
+    print('_selctedItem:' + _selectedSchedule.toString());
+    setState(() {});
   }
 
   void getScheduleTimeData() {
