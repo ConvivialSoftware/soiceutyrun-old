@@ -256,6 +256,10 @@ abstract class RestClient {
   @POST(GlobalVariables.gatePassWrongEntryAPI)
   Future<StatusMsgResponse> addGatePassWrongEntry(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.ID) String id,
       @Field(GlobalVariables.status) String status);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.deleteExpectedVisitorAPI)
+  Future<StatusMsgResponse> deleteExpectedVisitor(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.SR_NO) String srNo);
 }
 
 

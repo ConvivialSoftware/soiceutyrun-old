@@ -1795,4 +1795,29 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
     return StatusMsgResponse.fromJsonWithMessage(value);
   }
+
+  @override
+  Future<StatusMsgResponse> deleteExpectedVisitor(String societyId, String srNo) async {
+    // TODO: implement deleteExpectedVisitor
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(srNo,GlobalVariables.SR_NO);
+
+    FormData formData =
+    FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.SR_NO: srNo
+    });
+    print('baseurl : ' + baseUrl + GlobalVariables.deleteExpectedVisitorAPI);
+    final Response _result = await _dio.post(GlobalVariables.deleteExpectedVisitorAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of deleteExpectedVisitor response : ' + value.toString());
+
+    return StatusMsgResponse.fromJsonWithMessage(value);
+  }
 }

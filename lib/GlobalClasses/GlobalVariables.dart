@@ -162,6 +162,7 @@ class GlobalVariables {
   static const logoutAPI = "Api/logout";
   static const assignComplaintsAPI = "Helpdesk/assigncomplaints";
   static const gatePassWrongEntryAPI = "Gatepass/wrong_entry";
+  static const deleteExpectedVisitorAPI = "Gatepass/schedulevisitor_delete";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -307,6 +308,7 @@ class GlobalVariables {
   static const GatePass_Taxi = 'Taxi';
   static const ID = 'ID';
   static const OPTION = 'OPTION';
+  static const SR_NO = 'SR_NO';
 
   /*Server Response Key*/
 

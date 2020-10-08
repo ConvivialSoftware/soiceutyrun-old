@@ -6,14 +6,17 @@ class ScheduleVisitor {
       NAME,
       MOBILE_NO,
       DATE,
-      PASS_CODE;
+      PASS_CODE,
+      SR_NO;
 
   ScheduleVisitor(
       {this.ADD_FLAT,
       this.NAME,
       this.MOBILE_NO,
       this.DATE,
-      this.PASS_CODE});
+      this.PASS_CODE,
+      this.SR_NO
+      });
 
   factory ScheduleVisitor.fromJson(Map<String, dynamic> json) {
     return ScheduleVisitor(
@@ -21,6 +24,8 @@ class ScheduleVisitor {
         NAME: json["NAME"],
         MOBILE_NO: json["MOBILE_NO"],
         DATE: json["DATE"],
-        PASS_CODE: json["PASS_CODE"]);
+        PASS_CODE: json["PASS_CODE"],
+        SR_NO: json["SR_NO"]
+    );
   }
 }

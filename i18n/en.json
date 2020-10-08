@@ -297,6 +297,8 @@
   "reopen": "Reopen",
   "assign_helpdesk": "Assign HelpDesk",
   "poll_graph": "Poll/Survey Result",
-  "consumer_id": "Consumer ID"
+  "consumer_id": "Consumer ID",
+  "wrong_entry_str": "Are you sure it is wrong entry?",
+  "expected_delete": "Are you sure you want to delete?"
 
 }

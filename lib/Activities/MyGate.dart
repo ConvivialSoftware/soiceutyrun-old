@@ -694,7 +694,17 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                    visible: visitorUserStatus.toLowerCase() != 'wrong entry' ? true : false,
                    child: InkWell(
                             onTap: () {
-                              addGatePassWrongEntry(position);
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      StatefulBuilder(
+                                          builder: (BuildContext context, StateSetter setState) {
+                                            return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(25.0)),
+                                                child: displayWrongEntryLayout(position)
+                                            );
+                                          }));
                             },
                             child: Align(
                               alignment: Alignment.center,
@@ -1071,6 +1081,17 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           color: GlobalVariables.green,
                         ),
                         onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  StatefulBuilder(
+                                      builder: (BuildContext context, StateSetter setState) {
+                                        return Dialog(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25.0)),
+                                          child: displayDeleteExpectedVisitorLayout(position)
+                                        );
+                                      }));
 
                         }),
                   ),
@@ -2077,5 +2098,140 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
     });
+  }
+
+  Future<void> deleteExpectedVisitor(int position) async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    societyId = await GlobalFunctions.getSocietyId();
+    String srNo = _scheduleVisitorList[position].SR_NO;
+    _progressDialog.show();
+    restClient.deleteExpectedVisitor(societyId,srNo).then((value) {
+      _progressDialog.hide();
+      if (value.status) {
+        _scheduleVisitorList.removeAt(position);
+        setState(() {});
+      }
+      GlobalFunctions.showToast(value.message);
+    });
+  }
+
+  displayWrongEntryLayout(int position) {
+    return Container(
+      padding: EdgeInsets.all(15),
+      width: MediaQuery
+          .of(context)
+          .size
+          .width / 1.3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Text(
+              AppLocalizations.of(context).translate('wrong_entry_str'),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: GlobalVariables.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        addGatePassWrongEntry(position);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('yes'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('no'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+
+  displayDeleteExpectedVisitorLayout(int position) {
+    return Container(
+      padding: EdgeInsets.all(15),
+      width: MediaQuery
+          .of(context)
+          .size
+          .width / 1.3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Text(
+              AppLocalizations.of(context).translate('expected_delete'),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: GlobalVariables.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        deleteExpectedVisitor(position);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('yes'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('no'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
