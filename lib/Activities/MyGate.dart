@@ -685,32 +685,29 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             ),
             Container(
               child: Row(
-                mainAxisAlignment: visitorUserStatus.toLowerCase() != 'wrong entry'
-                    ? MainAxisAlignment.spaceAround
-                    : MainAxisAlignment.end,
+                mainAxisAlignment:  MainAxisAlignment.spaceAround,
                 children: [
-                 Visibility(
-                   visible: visitorUserStatus.toLowerCase() != 'wrong entry' ? true : false,
-                   child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      StatefulBuilder(
-                                          builder: (BuildContext context, StateSetter setState) {
-                                            return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(25.0)),
-                                                child: displayWrongEntryLayout(position)
-                                            );
-                                          }));
-                            },
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Row(
+                 Align(
+                   alignment: Alignment.center,
+                   child: Flexible(
+                     flex: 1,
+                     child: InkWell(
+                       onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(
+                                            builder: (BuildContext context, StateSetter setState) {
+                                              return Dialog(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(25.0)),
+                                                  child: displayWrongEntryLayout(position)
+                                              );
+                                            }));
+                              },
+                       child: Row(
                                 children: <Widget>[
                                   Container(
-                                      alignment: Alignment.topLeft,
                                       // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Icon(
                                        /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
@@ -730,14 +727,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
+                     ),
+                   ),
                  ),
-                Visibility(
-                  visible: visitorUserStatus.toLowerCase() != 'wrong entry' ? true : false,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
+                  Align(
+                    alignment: Alignment.center,
+                    child: Flexible(
+                      flex: 1,
+                      child: Container(
                               // width: 20,
                               height: 35,
                               child: VerticalDivider(
@@ -745,16 +742,22 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 color: GlobalVariables.lightGray,
                               ),
                             ),
+                    ),
                   ),
-                ),
-                  IconButton(
-                      icon: Icon(
-                        Icons.call,
-                        color: GlobalVariables.green,
-                      ),
-                      onPressed: () {
-                        launch('tel://' + _visitorList[position].CONTACT);
-                      }),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Flexible(
+                      flex: 1,
+                      child: IconButton(
+                          icon: Icon(
+                            Icons.call,
+                            color: GlobalVariables.green,
+                          ),
+                          onPressed: () {
+                            launch('tel://' + _visitorList[position].CONTACT);
+                          }),
+                    ),
+                  ),
                 ],
               ),
             ),

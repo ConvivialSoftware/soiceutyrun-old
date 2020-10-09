@@ -328,6 +328,7 @@ class GatePassStatus {
   static const REJECTED = "Rejected";
   static const APPROVED = "Accepted";
   static const LEAVE_AT_GATE = "Leave at gate";
+  static const WAIT_AT_GATE = "Wait at gate";
 }
 
 class GatePassFields {

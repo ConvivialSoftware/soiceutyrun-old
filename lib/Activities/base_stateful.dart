@@ -36,6 +36,7 @@ const String TYPE_RECEIPT = "Receipt";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
+  print("onMessage >>>> $message");
   Map data;
   if (Platform.isIOS) {
     data = message;

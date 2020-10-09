@@ -262,7 +262,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
             decoration:
                 BoxDecoration(color: Colors.grey[600], shape: BoxShape.circle),
             child: Icon(
-              _reason==GlobalVariables.GatePass_Delivery ? Icons.location_city:Icons.close,
+              _visitorType==GlobalVariables.GatePass_Delivery ? Icons.location_city:Icons.close,
               color: Colors.white,
               size: 30,
             ),
@@ -272,7 +272,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
           height: 5,
         ),
         Text(
-          _reason==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : 'DENY',
+          _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : _visitorType==GlobalVariables.GatePass_Taxi ? GatePassStatus.WAIT_AT_GATE : 'DENY',
           style: TextStyle(
               color: Colors.grey[600],
               fontSize: 18,
@@ -381,7 +381,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
    // String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postApproveGatePass(_id, _reason==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : GatePassStatus.REJECTED, _gcm_id, _societyId)
+        .postApproveGatePass(_id, _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE :  _visitorType==GlobalVariables.GatePass_Taxi ? GatePassStatus.WAIT_AT_GATE : GatePassStatus.REJECTED, _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();
