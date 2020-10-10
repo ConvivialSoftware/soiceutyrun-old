@@ -213,7 +213,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
 
 
       if (value.status) {
-        //value.PASSWORD = password;
+        value.LoggedUsername = mobileNo;
         GlobalFunctions.saveDataToSharedPreferences(value);
         Navigator.push(
             context,

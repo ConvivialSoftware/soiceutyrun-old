@@ -1154,7 +1154,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     //  _progressDialog.show();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-    username = await GlobalFunctions.getUserName();
+   String  username = await GlobalFunctions.getLoggedUserName();
     password = await GlobalFunctions.getPassword();
     societyId = await GlobalFunctions.getSocietyId();
     String loginId = await GlobalFunctions.getLoginId();
@@ -1278,6 +1278,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           _selectedSocietyLogin = _societyList[prefPos];
           // if(_selectedSocietyLogin.User_Status!='C') {
           _selectedSocietyLogin.PASSWORD = password;
+          _selectedSocietyLogin.LoggedUsername = username;
           print("Flat" + _selectedSocietyLogin.FLAT.toString());
           GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
 

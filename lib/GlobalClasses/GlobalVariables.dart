@@ -37,6 +37,7 @@ class GlobalVariables {
   static var keyDuesRs = "dues_rs";
   static var keyDuesDate = "dues_date";
   static var keyGoogleCoordinate = "google_parameter";
+  static var keyLoggedUsername = "logged_username";
 
   static var appLogoPath = "assets/images/society_run_green.png";
   static var userProfilePath = "assets/images/user_profile.jpeg";

@@ -66,6 +66,17 @@ class GlobalFunctions{
     }
     return "";
   }
+
+  static getLoggedUserName() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyLoggedUsername)){
+      print('keyLoggedUsername : '+sharedPreferences.getString(GlobalVariables.keyLoggedUsername));
+      return  sharedPreferences.getString(GlobalVariables.keyLoggedUsername);
+    }
+    return "";
+  }
+
+
   static getFCMToken() async{
     sharedPreferences = await SharedPreferences.getInstance();
     if(sharedPreferences.getKeys().contains(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken)){
@@ -256,6 +267,7 @@ class GlobalFunctions{
     sharedPreferences.setString(GlobalVariables.keyUserPermission, value.Permissions);
     sharedPreferences.setString(GlobalVariables.keyConsumerId, value.Consumer_no);
     sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
+    sharedPreferences.setString(GlobalVariables.keyLoggedUsername, value.LoggedUsername);
   }
 
   static Future<void> savePasswordToSharedPreferences(String password) async {

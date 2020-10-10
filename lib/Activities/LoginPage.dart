@@ -492,6 +492,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
       _progressDialog.hide();
       if (value.status) {
         value.PASSWORD = password;
+        value.LoggedUsername=username;
         GlobalFunctions.saveDataToSharedPreferences(value);
 
         //TODO: send FirebaseToken To Server
