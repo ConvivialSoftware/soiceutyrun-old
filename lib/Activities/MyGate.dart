@@ -693,25 +693,30 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                      flex: 1,
                      child: InkWell(
                        onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        StatefulBuilder(
-                                            builder: (BuildContext context, StateSetter setState) {
-                                              return Dialog(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(25.0)),
-                                                  child: displayWrongEntryLayout(position)
-                                              );
-                                            }));
-                              },
+                         if (visitorUserStatus.toLowerCase() != 'wrong entry') {
+                           showDialog(
+                               context: context,
+                               builder: (BuildContext context) =>
+                                   StatefulBuilder(
+                                       builder: (BuildContext context,
+                                           StateSetter setState) {
+                                         return Dialog(
+                                             shape: RoundedRectangleBorder(
+                                                 borderRadius: BorderRadius
+                                                     .circular(25.0)),
+                                             child: displayWrongEntryLayout(
+                                                 position)
+                                         );
+                                       }));
+                         }
+                       },
                        child: Row(
                                 children: <Widget>[
                                   Container(
                                       // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Icon(
                                        /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
-                                        color: GlobalVariables.mediumGreen,
+                                        color: visitorUserStatus.toLowerCase() != 'wrong entry' ?  GlobalVariables.mediumGreen : GlobalVariables.lightGreen,
                                         size: 25,
                                       )
                                   ),
@@ -720,7 +725,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     child: Text(
                                       visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
                                       style: TextStyle(
-                                        color: GlobalVariables.grey,
+                                        color: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
                                         fontSize: 16,
                                       ),
                                     ),
@@ -1496,8 +1501,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         List<dynamic> _list = value.visitor;
         List<dynamic> _scheduleList = value.schedule_visitor;
 
-        _visitorList =
-            List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
+        _visitorList = List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
         print('_visitor length : ' + _visitorList.length.toString());
         _scheduleVisitorList = List<ScheduleVisitor>.from(
             _scheduleList.map((i) => ScheduleVisitor.fromJson(i)));

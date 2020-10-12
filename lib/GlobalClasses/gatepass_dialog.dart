@@ -262,7 +262,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
             decoration:
                 BoxDecoration(color: Colors.grey[600], shape: BoxShape.circle),
             child: Icon(
-              _visitorType==GlobalVariables.GatePass_Delivery ? Icons.location_city:Icons.close,
+              _visitorType==GlobalVariables.GatePass_Delivery ? Icons.location_city: _visitorType==GlobalVariables.GatePass_Taxi ? Icons.pan_tool : Icons.close,
               color: Colors.white,
               size: 30,
             ),
