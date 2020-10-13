@@ -1,6 +1,9 @@
 
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -25,12 +28,13 @@ class BaseAboutSocietyRunInfo extends StatefulWidget {
 class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo> {
 
   ProgressDialog _progressDialog;
-  var societyId,userId;
+  var societyId,name,phone,block,flat;
   List<Banners> _bannerList = List<Banners>();
 
   @override
   void initState() {
     super.initState();
+    getSharedPreferencesData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBannerData();
@@ -157,7 +161,23 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                 itemBuilder: (BuildContext context, int itemIndex) =>
                 _bannerList.length> 0 ? InkWell(
                   onTap: (){
-                    launch(_bannerList[itemIndex].Url);
+                    print('SocietyID : '+ societyId);
+                    print('Name : '+ name);
+                    print('Mobile : '+ phone);
+                    print('Unit : '+ block+' '+flat);
+
+                    var societyIdMD5 = md5.convert(utf8.encode(societyId));
+                    var nameMD5 = md5.convert(utf8.encode(name));
+                    var mobileMD5 = md5.convert(utf8.encode(phone));
+                    var unitMD5 = md5.convert(utf8.encode(block+' '+flat));
+
+                    print('societyIdMD5 : '+ societyIdMD5.toString());
+                    print('nameMD5 : '+ nameMD5.toString());
+                    print('mobileMD5 : '+ mobileMD5.toString());
+                    print('unitMD5 : '+ unitMD5.toString());
+
+
+                    launch(_bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -493,6 +513,16 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
         ),
       ),
     ) ;
+  }
+
+  Future<void> getSharedPreferencesData() async {
+
+    societyId = await GlobalFunctions.getSocietyId();
+    name = await GlobalFunctions.getDisplayName();
+    phone = await GlobalFunctions.getMobile();
+    block = await GlobalFunctions.getBlock();
+    flat = await GlobalFunctions.getFlat();
+
   }
 
 }

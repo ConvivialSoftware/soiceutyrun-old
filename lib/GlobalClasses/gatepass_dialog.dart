@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -236,6 +237,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         _getDenyButton(),
+        _getLeaveWaitButton(),
         _getApproveButton(),
       ],
     );
@@ -252,7 +254,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
               if (internet) {
                 _rejectGatePass();
               } else {
-
+                GlobalFunctions.showToast(AppLocalizations.of(context)
+                    .translate('pls_check_internet_connectivity'));
               }
             });
           },
@@ -262,7 +265,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
             decoration:
                 BoxDecoration(color: Colors.grey[600], shape: BoxShape.circle),
             child: Icon(
-              _visitorType==GlobalVariables.GatePass_Delivery ? Icons.location_city: _visitorType==GlobalVariables.GatePass_Taxi ? Icons.pan_tool : Icons.close,
+              Icons.close,
               color: Colors.white,
               size: 30,
             ),
@@ -272,13 +275,58 @@ class _GatePassDialogState extends State<GatePassDialog> {
           height: 5,
         ),
         Text(
-          _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE : _visitorType==GlobalVariables.GatePass_Taxi ? GatePassStatus.WAIT_AT_GATE : 'DENY',
+          'DENY',
           style: TextStyle(
               color: Colors.grey[600],
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ),
       ],
+    );
+  }
+
+  Widget _getLeaveWaitButton() {
+    return Visibility(
+      visible: _visitorType==GlobalVariables.GatePass_Delivery || _visitorType==GlobalVariables.GatePass_Taxi ? true : false,
+      child: Column(
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              GlobalFunctions
+                  .checkInternetConnection()
+                  .then((internet) {
+                if (internet) {
+                  _leaveWaitGatePass();
+                } else {
+                  GlobalFunctions.showToast(AppLocalizations.of(context)
+                      .translate('pls_check_internet_connectivity'));
+                }
+              });
+            },
+            child: Container(
+              width: 48.0,
+              height: 48.0,
+              decoration:
+                  BoxDecoration(color: Colors.orangeAccent, shape: BoxShape.circle),
+              child: Icon(
+                _visitorType==GlobalVariables.GatePass_Delivery ? Icons.location_city : Icons.pan_tool,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE :  GatePassStatus.WAIT_AT_GATE ,
+            style: TextStyle(
+                color: Colors.orangeAccent,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
 
@@ -293,7 +341,8 @@ class _GatePassDialogState extends State<GatePassDialog> {
               if (internet) {
                _approveGatePass();
               } else {
-
+                GlobalFunctions.showToast(AppLocalizations.of(context)
+                    .translate('pls_check_internet_connectivity'));
               }
             });
           },
@@ -375,13 +424,15 @@ class _GatePassDialogState extends State<GatePassDialog> {
       }
     });
   }
+
+
   Future<void> _rejectGatePass() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
    // String gcmId = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
     restClient
-        .postApproveGatePass(_id, _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE :  _visitorType==GlobalVariables.GatePass_Taxi ? GatePassStatus.WAIT_AT_GATE : GatePassStatus.REJECTED, _gcm_id, _societyId)
+        .postApproveGatePass(_id, GatePassStatus.REJECTED, _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
       _progressDialog.hide();
@@ -404,6 +455,38 @@ class _GatePassDialogState extends State<GatePassDialog> {
       }
     });
   }
+
+  Future<void> _leaveWaitGatePass() async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    // String gcmId = await GlobalFunctions.getFCMToken();
+    _progressDialog.show();
+    restClient
+        .postApproveGatePass(_id, _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE :  GatePassStatus.WAIT_AT_GATE , _gcm_id, _societyId)
+        .then((value) {
+      print('status : ' + value.status.toString());
+      _progressDialog.hide();
+      if (value.status) {
+        GlobalFunctions.showToast(value.message);
+        Navigator.pop(context);
+      }
+    }).catchError((Object obj) {
+      _progressDialog.hide();
+      print('res : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+            Navigator.pop(context);
+          }
+          break;
+        default:
+      }
+    });
+  }
+
+
   void _launchCall(){
     launch("tel:$_visitorContact");
   }
