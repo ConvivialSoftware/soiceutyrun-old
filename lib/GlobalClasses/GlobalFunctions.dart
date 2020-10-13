@@ -825,7 +825,7 @@ class GlobalFunctions{
   static isDateGrater(String generateDate){
 
     DateTime earlier = DateTime.parse(generateDate);
-    earlier = earlier.add(Duration(minutes: 5));
+    earlier = earlier.add(Duration(minutes: 1));
     print('earlier : '+ earlier.toIso8601String());
     DateTime now = new DateTime.now();
 

@@ -161,7 +161,7 @@ class DirectoryState extends State<BaseDirectory> {
   getDirectoryDescListItemLayout(int position) {
 
     bool phone=false,email=false;
-    String name='',field='',permission='',flat='',callNumber='',emailId='';
+    String name='',field='',address='',permission='',flat='',callNumber='',emailId='';
     if(directory.directoryType=='Committee'){
       name =  _committeeList[position].NAME==null ? '' : _committeeList[position].NAME;
 
@@ -202,14 +202,16 @@ class DirectoryState extends State<BaseDirectory> {
     }
 
     if(directory.directoryType=='Emergency'){
-      name =  _emergencyList[position].Address ==null ? '' : _emergencyList[position].Address;
+      name =  _emergencyList[position].Name ==null ? '' : _emergencyList[position].Name;
+
+      address =  _emergencyList[position].Address ==null ? '' : _emergencyList[position].Address;
 
       field =  _emergencyList[position].Name ==null ? '' : _emergencyList[position].Name;
 
       _emergencyList[position].Contact_No.length != 0 ? phone=true : phone=false;
     }
 
-    return Container(
+    return directory.directoryType!='Emergency' ? Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -296,6 +298,64 @@ class DirectoryState extends State<BaseDirectory> {
               )
                   : Container(
                 // width: 24,height: 24,
+              ),
+            ],
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
+            child: Text(field,style: TextStyle(color: GlobalVariables.grey,fontSize: 16,),),
+          ),
+        ],
+      ),
+    ) : Container(
+      width: MediaQuery.of(context).size.width / 1.1,
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          color: GlobalVariables.white),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
+                  child: Text(name,style: TextStyle(color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold),),
+                ),
+              ),
+              phone
+                  ? Flexible(
+                child: InkWell(
+                  onTap: () {
+                    print('callNumber : '+callNumber.toString());
+                    launch("tel://" + callNumber);
+                  },
+                  child: Container(
+                    //color: GlobalVariables.lightGray,
+                    // color: GlobalVariables.black,
+                    // height: 10,
+                    alignment: Alignment.topRight,
+                    margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
+                    child: Icon(
+                      Icons.call,
+                      color: GlobalVariables.mediumGreen,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              )
+                  : Container(),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
+                  child: Text(address,style: TextStyle(color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.normal),),
+                ),
               ),
             ],
           ),

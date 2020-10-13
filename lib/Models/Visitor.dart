@@ -55,7 +55,7 @@ class Visitor {
         IN_TIME: json["IN_TIME"],
         OUT_DATE: json["OUT_DATE"],
         OUT_TIME: json["OUT_TIME"],
-        FROM_VISITOR: json["FROM_VISITOR"],
+        FROM_VISITOR: json["FROM_VISITOR"]?? "",
         FLAT_NO: json["FLAT_NO"],
         STATUS: json["STATUS"],
         VISITOR_STATUS: json["VISITOR_STATUS"],

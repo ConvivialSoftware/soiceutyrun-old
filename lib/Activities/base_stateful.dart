@@ -29,6 +29,7 @@ const String TYPE_ANNOUNCEMENT = "Announcement";
 const String TYPE_ASSIGN_COMPLAINT = "AssignComplaint";
 const String TYPE_COMPLAINT = "Complaint";
 const String TYPE_VISITOR = "Visitor";
+const String TYPE_FVISITOR = "FVisitor";
 const String TYPE_VISITOR_VERIFY = "Visitor_verify";
 const String TYPE_POLL = "Poll";
 const String TYPE_BILL = "Bill";
@@ -372,6 +373,19 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == TYPE_FVISITOR) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BaseLedger()));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseMyGate(AppLocalizations.of(context).translate('my_gate'))),
                 (Route<dynamic> route) => false);
       }
     } else {
