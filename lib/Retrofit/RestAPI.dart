@@ -417,14 +417,17 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   }
 
   @override
-  Future<DataResponse> getDocumentData(String societyId) async {
+  Future<DataResponse> getDocumentData(String societyId,String userId) async {
     // TODO: implement getDocumentData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
+    print(GlobalVariables.userID + ": " + userId);
 
     print('baseurl : ' + baseUrl + GlobalVariables.DocumentAPI);
     final Response _result = await _dio.post(GlobalVariables.DocumentAPI,
@@ -625,14 +628,16 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
   @override
   Future<DataResponse> getAnnouncementData(
-      String societyId, String type) async {
+      String societyId, String type,String userId) async {
     // TODO: implement getAnnouncementData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(societyId, GlobalVariables.Type);
+    ArgumentError.checkNotNull(userId, GlobalVariables.userID);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.Type: type,
+      GlobalVariables.userID: userId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
     print(GlobalVariables.Type + ": " + type);

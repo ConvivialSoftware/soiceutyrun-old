@@ -96,7 +96,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.DocumentAPI)
-  Future<DataResponse> getDocumentData(@Field("SOCIETY_ID") String societyId);
+  Future<DataResponse> getDocumentData(@Field("SOCIETY_ID") String societyId,@Field(GlobalVariables.userID) String userId);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.ComplaintsAreaAPI)
@@ -146,7 +146,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.AnnouncementAPI)
-  Future<DataResponse> getAnnouncementData(@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.Type) String type);
+  Future<DataResponse> getAnnouncementData(@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.Type) String type,@Field(GlobalVariables.userID) String userId);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.AnnouncementPollAPI)

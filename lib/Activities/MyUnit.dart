@@ -1931,23 +1931,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
   }
 
-  void getDocumentData() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    societyId = await GlobalFunctions.getSocietyId();
-    restClient.getDocumentData(societyId).then((value) {
-      //  _progressDialog.hide();
-      if (value.status) {
-        List<dynamic> _list = value.data;
-
-        _documentList =
-            List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
-
-        getAllBillData();
-      }
-    });
-  }
-
   getAllBillData() async {
     final dio = Dio();
     final RestClientERP restClientERP =

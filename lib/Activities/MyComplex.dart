@@ -2460,8 +2460,9 @@ class MyComplexState extends State<BaseMyComplex>
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
-    restClient.getAnnouncementData(societyId, type).then((value) {
+    restClient.getAnnouncementData(societyId, type,userId).then((value) {
       _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -2492,8 +2493,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
-    restClient.getAnnouncementData(societyId, type).then((value) {
+    restClient.getAnnouncementData(societyId, type,userId).then((value) {
       _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -2517,8 +2519,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
-    restClient.getAnnouncementData(societyId, type).then((value) {
+    restClient.getAnnouncementData(societyId, type,userId).then((value) {
       _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
@@ -2534,8 +2537,6 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
       });
     });
   }
-
-  String _pollJson = '{"data": [{"ID": "9","BLOCK": "","FLAT": "","USER_NAME": "Poonam Suthar","USER_PHOTO": "278808_2019-08-16_12:45:09.jpg","SUBJECT": "","DESCRIPTION": "आपल्याला काय वाटते हे आम्हाला कळवा","ATTACHMENT": "","CATEGORY": "","EXPIRY_DATE": "2020-07-23","POLL_Q": "आपल्याला काय वाटते हे आम्हाला कळवा","C_DATE": "23 Jul 2020 01:14 pm","table_name": "poll","ANS": [{"ID":"17","Option":"Yes","Vote":"1"},{"ID":"18","Option":"No","Vote":"0"}],"votes": "17:1,18:0","START_DATETIME": "","END_DATETIME": "","Start_Time": "","VENUE": "","ACHIEVER_NAME": "","ALLOW_COMMENT": "","DISPLAY_COMMENT_ALL": "","SEND_TO": "All Owners","SECRET_POLL": "","VOTING_RIGHTS": "Per unit","POST_AS": "","STATUS": "A","Cancel_By": "","Cancel_Date": "0000-00-00 00:00:00","START_DATE": "01 Jan 1970","END_DATE": "01 Jan 1970","START_TIME": "05:30 am","END_TIME": "05:30 am","vote": "No","vote_to": "17","vote_percent": [100,0]}],"message": "Announcement data","status": true}';
 
   Future<void> getAnnouncementPollData(String type) async {
     isPollTabAPICall=true;
@@ -2948,8 +2949,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String  societyId = await GlobalFunctions.getSocietyId();
+    String  userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
-    restClient.getDocumentData(societyId).then((value) {
+    restClient.getDocumentData(societyId,userId).then((value) {
         _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
