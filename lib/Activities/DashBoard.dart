@@ -731,7 +731,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               print('Mobile : '+ phone);
                               print('Unit : '+ block+' '+flat);
 
-                             var societyIdMD5 = md5.convert(utf8.encode(societyId));
+                           /*  var societyIdMD5 = md5.convert(utf8.encode(societyId));
                              var nameMD5 = md5.convert(utf8.encode(name));
                              var mobileMD5 = md5.convert(utf8.encode(phone));
                              var unitMD5 = md5.convert(utf8.encode(block+' '+flat));
@@ -739,10 +739,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               print('societyIdMD5 : '+ societyIdMD5.toString());
                               print('nameMD5 : '+ nameMD5.toString());
                               print('mobileMD5 : '+ mobileMD5.toString());
-                              print('unitMD5 : '+ unitMD5.toString());
+                              print('unitMD5 : '+ unitMD5.toString());*/
 
 
-                              launch(_bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
+                              launch(_bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width,
@@ -1189,6 +1189,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             _list.map((i) => LoginResponse.fromJson(i)));
         print('Societylist length ' + _societyList.length.toString());
         for (int i = 0; i < _societyList.length; i++) {
+          _societyList[i].LoggedUsername=username;
           LoginResponse loginResponse = _societyList[i];
 
           /*    cryptor.generateRandomKey().then((value) async {
@@ -1351,6 +1352,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
               GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
               print('for _selctedItem:' + _selectedItem);
               getDuesData();
+              getDisplayName();
+              getMobile();
+              getPhoto();
               break;
             }
           }

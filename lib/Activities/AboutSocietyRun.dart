@@ -166,7 +166,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                     print('Mobile : '+ phone);
                     print('Unit : '+ block+' '+flat);
 
-                    var societyIdMD5 = md5.convert(utf8.encode(societyId));
+                    /*var societyIdMD5 = md5.convert(utf8.encode(societyId));
                     var nameMD5 = md5.convert(utf8.encode(name));
                     var mobileMD5 = md5.convert(utf8.encode(phone));
                     var unitMD5 = md5.convert(utf8.encode(block+' '+flat));
@@ -174,10 +174,10 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                     print('societyIdMD5 : '+ societyIdMD5.toString());
                     print('nameMD5 : '+ nameMD5.toString());
                     print('mobileMD5 : '+ mobileMD5.toString());
-                    print('unitMD5 : '+ unitMD5.toString());
+                    print('unitMD5 : '+ unitMD5.toString());*/
 
-
-                    launch(_bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
+                    launch(_bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
+                   // launch(_bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
