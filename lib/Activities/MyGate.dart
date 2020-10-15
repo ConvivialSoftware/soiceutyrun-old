@@ -689,79 +689,70 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 children: [
                  Align(
                    alignment: Alignment.center,
-                   child: Flexible(
-                     flex: 1,
-                     child: InkWell(
-                       onTap: () {
-                         if (visitorUserStatus.toLowerCase() != 'wrong entry') {
-                           showDialog(
-                               context: context,
-                               builder: (BuildContext context) =>
-                                   StatefulBuilder(
-                                       builder: (BuildContext context,
-                                           StateSetter setState) {
-                                         return Dialog(
-                                             shape: RoundedRectangleBorder(
-                                                 borderRadius: BorderRadius
-                                                     .circular(25.0)),
-                                             child: displayWrongEntryLayout(
-                                                 position)
-                                         );
-                                       }));
-                         }
-                       },
-                       child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                      child: Icon(
-                                       /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
-                                        color: visitorUserStatus.toLowerCase() != 'wrong entry' ?  GlobalVariables.mediumGreen : GlobalVariables.lightGreen,
-                                        size: 25,
-                                      )
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                    child: Text(
-                                      visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
-                                      style: TextStyle(
-                                        color: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
-                                        fontSize: 16,
-                                      ),
+                   child: InkWell(
+                     onTap: () {
+                       if (visitorUserStatus.toLowerCase() != 'wrong entry') {
+                         showDialog(
+                             context: context,
+                             builder: (BuildContext context) =>
+                                 StatefulBuilder(
+                                     builder: (BuildContext context,
+                                         StateSetter setState) {
+                                       return Dialog(
+                                           shape: RoundedRectangleBorder(
+                                               borderRadius: BorderRadius
+                                                   .circular(25.0)),
+                                           child: displayWrongEntryLayout(
+                                               position)
+                                       );
+                                     }));
+                       }
+                     },
+                     child: Row(
+                              children: <Widget>[
+                                Container(
+                                    // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    child: Icon(
+                                     /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
+                                      color: visitorUserStatus.toLowerCase() != 'wrong entry' ?  GlobalVariables.mediumGreen : GlobalVariables.lightGreen,
+                                      size: 25,
+                                    )
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: Text(
+                                    visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
+                                    style: TextStyle(
+                                      color: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
+                                      fontSize: 16,
                                     ),
                                   ),
-                                ],
-                              ),
-                     ),
+                                ),
+                              ],
+                            ),
                    ),
                  ),
                   Align(
                     alignment: Alignment.center,
-                    child: Flexible(
-                      flex: 1,
-                      child: Container(
-                              // width: 20,
-                              height: 35,
-                              child: VerticalDivider(
-                                width: 20,
-                                color: GlobalVariables.lightGray,
-                              ),
+                    child: Container(
+                            // width: 20,
+                            height: 35,
+                            child: VerticalDivider(
+                              width: 20,
+                              color: GlobalVariables.lightGray,
                             ),
-                    ),
+                          ),
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: Flexible(
-                      flex: 1,
-                      child: IconButton(
-                          icon: Icon(
-                            Icons.call,
-                            color: GlobalVariables.green,
-                          ),
-                          onPressed: () {
-                            launch('tel://' + _visitorList[position].CONTACT);
-                          }),
-                    ),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.call,
+                          color: GlobalVariables.green,
+                        ),
+                        onPressed: () {
+                          launch('tel://' + _visitorList[position].CONTACT);
+                        }),
                   ),
                 ],
               ),

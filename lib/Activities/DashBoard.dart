@@ -950,7 +950,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               //TODO : CustomerID
                               child: AutoSizeText(
                                 (AppLocalizations.of(context)
-                                    .translate("str_consumer_id") +
+                                    .translate("str_consumer_id") +' : '+
                                     snapshot.data[GlobalVariables
                                         .keyConsumerId]),
                                 textAlign: TextAlign.left,
