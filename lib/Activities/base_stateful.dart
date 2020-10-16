@@ -182,8 +182,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       data = message['data'] as Map;
     }
     try {
-      String payloadData = data["society"];
-      Map<String, dynamic> temp = jsonDecode(payloadData);
+      String payloadSData = data["society"];
+      Map<String, dynamic> temp = jsonDecode(payloadSData);
       gatePassPayload = GatePassPayload.fromJson(temp);
     } catch (e) {
       print(e);
