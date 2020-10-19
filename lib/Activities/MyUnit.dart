@@ -625,12 +625,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                         child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
                                     BaseAddNewMember("family")));
+                        print('result back : ' + result.toString());
+                        if (result != 'back') {
+                          getUnitMemberData();
+                        }
                       },
                       child: Text(
                         AppLocalizations.of(context).translate('plus_add'),
@@ -740,11 +744,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                         child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BaseAddVehicle()));
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => BaseAddVehicle()));
+                        print('result back : ' + result.toString());
+                        if (result != 'back') {
+                          getUnitMemberData();
+                        }
                       },
                       child: Text(
                         AppLocalizations.of(context).translate('plus_add'),

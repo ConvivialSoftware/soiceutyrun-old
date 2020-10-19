@@ -7,6 +7,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OtpWithMobile.dart';
 import 'package:societyrun/Activities/Register.dart';
+import 'package:societyrun/Activities/WebViewScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -371,7 +372,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             itemBuilder: (BuildContext context, int itemIndex) =>
                             _bannerList.length> 0 ? InkWell(
                               onTap: (){
-                                launch(_bannerList[itemIndex].Url);
+                                //launch(_bannerList[itemIndex].Url);
+                                Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url)));
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,

@@ -92,6 +92,7 @@ class GlobalVariables {
   static var visitorIconPath = "assets/other_assets/visitor.svg";
   static var inIconPath = "assets/other_assets/in.svg";
   static var outIconPath = "assets/other_assets/out.svg";
+  static var anxietyIconPath = "assets/other_assets/anxiety.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =

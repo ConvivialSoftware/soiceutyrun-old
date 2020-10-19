@@ -2821,7 +2821,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                             _documentList[position].DESCRIPTION,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: GlobalVariables.lightGray),
+                            style: TextStyle(color: GlobalVariables.black),
                           ),
                         ),
                       ],

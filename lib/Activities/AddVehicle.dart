@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -108,6 +109,8 @@ ProgressDialog _progressDialog;
                 ),
                 child: TextField(
                   controller: _vehicleNoController,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),],
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('vehicle_no'),
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
@@ -296,7 +299,7 @@ ProgressDialog _progressDialog;
       print('add vehicle Status value : '+value.toString());
       if(value.status)
       {
-        Navigator.of(context).pop();
+        Navigator.pop(context);
       }
       GlobalFunctions.showToast(value.message);
 

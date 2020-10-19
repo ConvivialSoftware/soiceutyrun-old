@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -66,7 +67,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
-    _dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
+    _dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
     });
@@ -274,7 +275,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 onPressed: (){
 
                                   GlobalFunctions.getSelectedDate(context).then((value){
-                                    _dobController.text = value.day.toString()+"/"+value.month.toString()+"/"+value.year.toString();
+                                    _dobController.text = value.day.toString().padLeft(2, '0')+"/"+value.month.toString().padLeft(2, '0')+"/"+value.year.toString();
                                   });
 
                                 },
@@ -748,6 +749,11 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
           _progressDialog.hide();
           if(value.status){
             Navigator.of(context).pop();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BaseMyUnit(
+                        AppLocalizations.of(context).translate('my_household'))));
           }
           GlobalFunctions.showToast(value.message);
 

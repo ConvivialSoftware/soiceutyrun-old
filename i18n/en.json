@@ -299,6 +299,10 @@
   "poll_graph": "Poll/Survey Result",
   "consumer_id": "Consumer ID",
   "wrong_entry_str": "Are you sure you want to mark as incorrect entry?",
-  "expected_delete": "Are you sure you want to delete?"
+  "expected_delete": "Are you sure you want to delete?",
+  "okay" : "Okay",
+  "oops": "Oops! Something went wrong",
+  "not_allow_run_app": "Please login again to fix the issue.",
+  "invalid_username_password": "Incorrect username or password"
 
 }

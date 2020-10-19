@@ -18,6 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
+import 'package:societyrun/Activities/LoginPage.dart';
 
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
@@ -266,8 +267,8 @@ class GlobalFunctions{
     sharedPreferences.setString(GlobalVariables.keyPhoto, value.Photo);
     sharedPreferences.setString(GlobalVariables.keyUserPermission, value.Permissions);
     sharedPreferences.setString(GlobalVariables.keyConsumerId, value.Consumer_no);
-    sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
     sharedPreferences.setString(GlobalVariables.keyLoggedUsername, value.LoggedUsername);
+    sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
   }
 
   static Future<void> savePasswordToSharedPreferences(String password) async {
@@ -331,7 +332,6 @@ class GlobalFunctions{
   }
 
   static getAppHeaderWidget(BuildContext context){
-
     return  Stack(
       children: <Widget>[
         Container(
@@ -424,16 +424,12 @@ class GlobalFunctions{
   static getSharedPreferenceDuesData() async {
 
     sharedPreferences = await SharedPreferences.getInstance();
-
     Map<String,String> map = Map<String,String>();
-
     map = {
       GlobalVariables.keyDuesRs : sharedPreferences.getString(GlobalVariables.keyDuesRs.toString()),
       GlobalVariables.keyDuesDate : sharedPreferences.getString(GlobalVariables.keyDuesDate.toString()),
     };
-
     print('dues map : '+map.toString());
-
     return map;
   }
 
@@ -859,6 +855,99 @@ class GlobalFunctions{
     }
 
     return false;
+  }
+
+  static isAllowForRunApp() async {
+
+    String username = await getUserName();
+    String mobile = await getMobile();
+    String loggedUsername = await getLoggedUserName();
+
+    if(username.length==0 && mobile.length==0 && loggedUsername.length==0){
+      return false;
+    }
+    return true;
+  }
+
+  static notAllowForRunAppDialog(BuildContext context){
+
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context,
+                StateSetter setState) {
+              return WillPopScope(
+                onWillPop: (){
+                 return ;
+                },
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.circular(25.0)),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          child: SvgPicture.asset(
+                            GlobalVariables.anxietyIconPath,width: 80,height: 80,),
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
+                            child: Text(AppLocalizations.of(context)
+                                .translate('oops'),style: TextStyle(
+                              fontSize: 18,color: GlobalVariables.green,fontWeight: FontWeight.bold
+                            ),)
+                        ),Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 15),
+                            child: Text(AppLocalizations.of(context)
+                                .translate('not_allow_run_app'),style: TextStyle(
+                              fontSize: 16,color: GlobalVariables.black,
+                            ),)
+                        ),
+                        Container(
+                          alignment: Alignment.topRight,
+                          height: 50,
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: ButtonTheme(
+                            //minWidth: MediaQuery.of(context).size.width / 2,
+                            child: RaisedButton(
+                              color: GlobalVariables.green,
+                              onPressed: () {
+                                clearSharedPreferenceData();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            BaseLoginPage()),
+                                        (Route<dynamic> route) => false);
+                              },
+                              textColor: GlobalVariables.white,
+                              //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                      color: GlobalVariables.green)),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('logout'),
+                                style: TextStyle(
+                                    fontSize: GlobalVariables.largeText),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
   }
 
 }

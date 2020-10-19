@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/Feedback.dart';
+import 'package:societyrun/Activities/WebViewScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -176,8 +177,20 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                     print('mobileMD5 : '+ mobileMD5.toString());
                     print('unitMD5 : '+ unitMD5.toString());*/
 
-                    launch(_bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
+                   // launch(_bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
                    // launch(_bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
+                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url +
+                        '?' +
+                        'SID=' +
+                        societyId.toString() +
+                        '&MOBILE=' +
+                        phone.toString() +
+                        '&NAME=' +
+                        name.toString() +
+                        '&UNIT=' +
+                        block.toString() +
+                        ' ' +
+                        flat.toString())));
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

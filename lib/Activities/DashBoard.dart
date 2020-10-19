@@ -29,6 +29,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 import 'LoginPage.dart';
+import 'WebViewScreen.dart';
 
 class BaseDashBoard extends StatefulWidget {
   @override
@@ -39,22 +40,17 @@ class BaseDashBoard extends StatefulWidget {
   }
 }
 
-class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindingObserver{
+class DashBoardState extends BaseStatefulState<BaseDashBoard>
+    with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
-  new GlobalKey<ScaffoldState>();
+      new GlobalKey<ScaffoldState>();
 
   String _selectedItem;
   List<DropdownMenuItem<String>> _societyListItems =
-  new List<DropdownMenuItem<String>>();
+      new List<DropdownMenuItem<String>>();
   List<LoginResponse> _societyList = new List<LoginResponse>();
   LoginResponse _selectedSocietyLogin;
-  var username,
-      password,
-      societyId,
-      flat,
-      block,
-      duesRs = "0",
-      duesDate = "";
+  var username, password, societyId, flat, block, duesRs = "0", duesDate = "";
 
   List<RootTitle> _list = new List<RootTitle>();
   int _currentIndex = 0;
@@ -62,31 +58,35 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   ProgressDialog _progressDialog;
 
   var name = '';
-  var email = '',
-      phone = '';
+  var email = '', phone = '';
   var photo;
 
- List<Banners> _bannerList = List<Banners>();
-
+  List<Banners> _bannerList = List<Banners>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    getDisplayName();
-    getMobile();
-    getPhoto();
-    getAppPermission();
-    GlobalFunctions.getAppPackageInfo();
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        getDuesData();
-        getAllSocietyData();
-        getBannerData();
-        //geProfileData();
+    GlobalFunctions.isAllowForRunApp().then((value) {
+      if (value) {
+        getDisplayName();
+        getMobile();
+        getPhoto();
+        getAppPermission();
+        GlobalFunctions.getAppPackageInfo();
+        GlobalFunctions.checkInternetConnection().then((internet) {
+          if (internet) {
+            getDuesData();
+            getAllSocietyData();
+            getBannerData();
+            //geProfileData();
+          } else {
+            GlobalFunctions.showToast(AppLocalizations.of(context)
+                .translate('pls_check_internet_connectivity'));
+          }
+        });
       } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
+        GlobalFunctions.notAllowForRunAppDialog(context);
       }
     });
   }
@@ -99,18 +99,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       // user returned to our app
-    //  GlobalFunctions.showToast('Resume');
-    }else if(state == AppLifecycleState.inactive){
+      //  GlobalFunctions.showToast('Resume');
+    } else if (state == AppLifecycleState.inactive) {
       // app is inactive
-     // GlobalFunctions.showToast('Inactive');
-    }else if(state == AppLifecycleState.paused){
+      // GlobalFunctions.showToast('Inactive');
+    } else if (state == AppLifecycleState.paused) {
       // user is about quit our app temporally
-     // GlobalFunctions.showToast('Paused');
-    }else if(state == AppLifecycleState.detached){
+      // GlobalFunctions.showToast('Paused');
+    } else if (state == AppLifecycleState.detached) {
       // user is about quit our app temporally
-    //  GlobalFunctions.showToast('Detached');
+      //  GlobalFunctions.showToast('Detached');
     }
   }
 
@@ -121,8 +121,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     String userId = await GlobalFunctions.getUserId();
     restClient.getProfileData(societyId, userId).then((value) {
       //  _progressDialog.hide();
-      if (value.status) {
-      }
+      if (value.status) {}
     }).catchError((Object obj) {
       if (_progressDialog.isShowing()) {
         _progressDialog.hide();
@@ -148,14 +147,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     // TODO: implement build
     //  GlobalFunctions.showToast("Dashboard state page");
     return Builder(
-      builder: (context) =>
-          Scaffold(
-            key: _dashboardSacfoldKey,
-            // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
-            body: WillPopScope(child: getBodyLayout(), onWillPop: onWillPop),
-            drawer: getDrawerLayout(),
-            // bottomNavigationBar: getBottomNavigationBar(),
-          ),
+      builder: (context) => Scaffold(
+        key: _dashboardSacfoldKey,
+        // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
+        body: WillPopScope(child: getBodyLayout(), onWillPop: onWillPop),
+        drawer: getDrawerLayout(),
+        // bottomNavigationBar: getBottomNavigationBar(),
+      ),
     );
   }
 
@@ -163,14 +161,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     return Stack(
       children: <Widget>[
         Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             color: GlobalVariables.white,
           ),
@@ -180,26 +172,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                 children: <Widget>[
                   Container(
                     child: SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         child: SvgPicture.asset(
                           GlobalVariables.headerIconPath,
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
+                          width: MediaQuery.of(context).size.width,
                           fit: BoxFit.fill,
                         )),
                   ),
                   Container(
                     // color: GlobalVariables.black,
                     margin: EdgeInsets.fromLTRB(
-                        0, MediaQuery
-                        .of(context)
-                        .size
-                        .height / 30, 0, 0),
+                        0, MediaQuery.of(context).size.height / 30, 0, 0),
                     child: Row(
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -207,24 +190,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                           //  color: GlobalVariables.grey,
                           child: SizedBox(
                               child: GestureDetector(
-                                onTap: () {
-                                  _dashboardSacfoldKey.currentState
-                                      .openDrawer();
-                                },
-                                child: SvgPicture.asset(
-                                  GlobalVariables.topBreadCrumPath,
-                                ),
-                              )),
+                            onTap: () {
+                              _dashboardSacfoldKey.currentState.openDrawer();
+                            },
+                            child: SvgPicture.asset(
+                              GlobalVariables.topBreadCrumPath,
+                            ),
+                          )),
                         ),
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.fromLTRB(
                                 0,
                                 0,
-                                MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 70,
+                                MediaQuery.of(context).size.width / 70,
                                 0), // color: GlobalVariables.green,
                             alignment: Alignment.center,
                             child: SizedBox(
@@ -249,15 +228,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               margin: EdgeInsets.fromLTRB(0, 10, 20, 0),
                               child: SizedBox(
                                   child: GestureDetector(
-                                    onTap: () {
-                                      GlobalFunctions.comingSoonDialog(context);
-                                    },
-                                    child: SvgPicture.asset(
-                                      GlobalVariables.notificationBellIconPath,
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                  )),
+                                onTap: () {
+                                  GlobalFunctions.comingSoonDialog(context);
+                                },
+                                child: SvgPicture.asset(
+                                  GlobalVariables.notificationBellIconPath,
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              )),
                             ),
                             Container(
                               //  color: GlobalVariables.grey,
@@ -265,29 +244,29 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                   0, 10, 20, 0), // alignment: Alignment
                               child: SizedBox(
                                   child: GestureDetector(
-                                    onTap: () {
-                                      // GlobalFunctions.showToast('profile_user');
-                                      navigateToProfilePage();
-                                    },
-                                    child: photo == null
-                                        ? Image.asset(
-                                      GlobalVariables
-                                          .componentUserProfilePath,
-                                      width: 20,
-                                      height: 20,
-                                    )
-                                        : Container(
-                                      // alignment: Alignment.center,
-                                      /* decoration: BoxDecoration(
+                                onTap: () {
+                                  // GlobalFunctions.showToast('profile_user');
+                                  navigateToProfilePage();
+                                },
+                                child: photo == null
+                                    ? Image.asset(
+                                        GlobalVariables
+                                            .componentUserProfilePath,
+                                        width: 20,
+                                        height: 20,
+                                      )
+                                    : Container(
+                                        // alignment: Alignment.center,
+                                        /* decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25)),*/
-                                      child: CircleAvatar(
-                                        radius: 10,
-                                        backgroundColor:
-                                        GlobalVariables.mediumGreen,
-                                        backgroundImage: NetworkImage(photo),
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor:
+                                              GlobalVariables.mediumGreen,
+                                          backgroundImage: NetworkImage(photo),
+                                        ),
                                       ),
-                                    ),
-                                  )),
+                              )),
                             ),
                           ],
                         ),
@@ -470,16 +449,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           alignment: Alignment.center,
           child: Container(
             // color: GlobalVariables.grey,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width / 1.1,
+            width: MediaQuery.of(context).size.width / 1.1,
             margin: EdgeInsets.fromLTRB(
                 0,
-                MediaQuery
-                    .of(context)
-                    .size
-                    .height / 100,
+                MediaQuery.of(context).size.height / 100,
                 0,
                 0), //color: GlobalVariables.black,
             child: Container(
@@ -663,7 +636,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                 GlobalFunctions.comingSoonDialog(context);
+                                GlobalFunctions.comingSoonDialog(context);
                               },
                               child: Container(
                                 padding: EdgeInsets.all(15),
@@ -673,7 +646,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     SvgPicture.asset(
                                         GlobalVariables.storeIconPath),
@@ -686,7 +659,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                 GlobalFunctions.comingSoonDialog(context);
+                                GlobalFunctions.comingSoonDialog(context);
                               },
                               child: Container(
                                 padding: EdgeInsets.all(15),
@@ -696,7 +669,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     SvgPicture.asset(
                                         GlobalVariables.serviceIconPath),
@@ -711,27 +684,27 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   Container(
                     decoration: BoxDecoration(
                         color: GlobalVariables.mediumGreen,
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10))),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
                     margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: CarouselSlider.builder(
-                      options: CarouselOptions(height: 200.0, autoPlay: true,
+                      options: CarouselOptions(
+                        height: 200.0,
+                        autoPlay: true,
                         autoPlayInterval: Duration(seconds: 3),
                         viewportFraction: 1.0,
-                        autoPlayAnimationDuration: Duration(
-                            milliseconds: 800),
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
                       ),
                       itemCount: _bannerList.length,
                       itemBuilder: (BuildContext context, int itemIndex) =>
-                          _bannerList.length> 0 ? InkWell(
-                            onTap: (){
+                          _bannerList.length > 0
+                              ? InkWell(
+                                  onTap: () {
+                                    print('SocietyID : ' + societyId);
+                                    print('Name : ' + name);
+                                    print('Mobile : ' + phone);
+                                    print('Unit : ' + block + ' ' + flat);
 
-                              print('SocietyID : '+ societyId);
-                              print('Name : '+ name);
-                              print('Mobile : '+ phone);
-                              print('Unit : '+ block+' '+flat);
-
-                           /*  var societyIdMD5 = md5.convert(utf8.encode(societyId));
+                                    /*  var societyIdMD5 = md5.convert(utf8.encode(societyId));
                              var nameMD5 = md5.convert(utf8.encode(name));
                              var mobileMD5 = md5.convert(utf8.encode(phone));
                              var unitMD5 = md5.convert(utf8.encode(block+' '+flat));
@@ -741,17 +714,43 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               print('mobileMD5 : '+ mobileMD5.toString());
                               print('unitMD5 : '+ unitMD5.toString());*/
 
-
-                              launch(_bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              //color: GlobalVariables.black,
-                              //alignment: Alignment.center,
-                              child: Image.network(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
-                            ),
-                          ): Container(),
+                                   /* launch(_bannerList[itemIndex].Url +
+                                        '?' +
+                                        'SID=' +
+                                        societyId.toString() +
+                                        '&MOBILE=' +
+                                        phone.toString() +
+                                        '&NAME=' +
+                                        name.toString() +
+                                        '&UNIT=' +
+                                        block.toString() +
+                                        ' ' +
+                                        flat.toString());*/
+                                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url +
+                                        '?' +
+                                        'SID=' +
+                                        societyId.toString() +
+                                        '&MOBILE=' +
+                                        phone.toString() +
+                                        '&NAME=' +
+                                        name.toString() +
+                                        '&UNIT=' +
+                                        block.toString() +
+                                        ' ' +
+                                        flat.toString())));
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    //color: GlobalVariables.black,
+                                    //alignment: Alignment.center,
+                                    child: Image.network(
+                                      _bannerList[itemIndex].IMAGE,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                     ),
                   ),
                 ],
@@ -764,11 +763,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   getMyUnitPage() async {
-    final result = await   Navigator.push(context,
-        MaterialPageRoute(builder: (context) =>
-            BaseMyUnit(null)));
-    print('result back : '+ result.toString());
-    if(result=='back'){
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));
+    print('result back : ' + result.toString());
+    if (result == 'back') {
       getDuesData();
     }
   }
@@ -779,13 +777,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   getDiscoverPage() {
-     GlobalFunctions.comingSoonDialog(context);
+    GlobalFunctions.comingSoonDialog(context);
     /*Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*/
   }
 
   getClubFacilitiesPage() {
-     GlobalFunctions.comingSoonDialog(context);
+    GlobalFunctions.comingSoonDialog(context);
     /* Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
   }
@@ -796,7 +794,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   getMorePage() {
-     GlobalFunctions.comingSoonDialog(context);
+    GlobalFunctions.comingSoonDialog(context);
     /*Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
   }
@@ -807,19 +805,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   getAdminPage() {
-     GlobalFunctions.comingSoonDialog(context);
+    GlobalFunctions.comingSoonDialog(context);
     /*Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
   }
 
   getDrawerLayout() {
-    return StatefulBuilder(builder: (BuildContext context,
-        StateSetter setState) {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
       return Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.75,
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Drawer(
           child: Container(
             child: Column(
@@ -839,8 +834,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   padding: EdgeInsets.all(5),
                   color: GlobalVariables.veryLightGray,
-                  child:
-                  getHeaderLayout(),
+                  child: getHeaderLayout(),
                 ),
                 getListData(),
               ],
@@ -905,19 +899,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                             borderRadius: BorderRadius.circular(30.0),
                             child: photo == null
                                 ? Image.asset(
-                                GlobalVariables.componentUserProfilePath,
-                                width: 60,
-                                height: 60)
+                                    GlobalVariables.componentUserProfilePath,
+                                    width: 60,
+                                    height: 60)
                                 : Container(
-                              // alignment: Alignment.center,
-                              /* decoration: BoxDecoration(
+                                    // alignment: Alignment.center,
+                                    /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundColor: GlobalVariables.mediumGreen,
-                                backgroundImage: NetworkImage(photo),
-                              ),
-                            ),
+                                    child: CircleAvatar(
+                                      radius: 40,
+                                      backgroundColor:
+                                          GlobalVariables.mediumGreen,
+                                      backgroundImage: NetworkImage(photo),
+                                    ),
+                                  ),
                           )),
                     ),
                     Flexible(
@@ -950,9 +945,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                               //TODO : CustomerID
                               child: AutoSizeText(
                                 (AppLocalizations.of(context)
-                                    .translate("str_consumer_id") +' : '+
-                                    snapshot.data[GlobalVariables
-                                        .keyConsumerId]),
+                                        .translate("str_consumer_id") +
+                                    ' : ' +
+                                    snapshot
+                                        .data[GlobalVariables.keyConsumerId]),
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: GlobalVariables.grey, fontSize: 15),
@@ -1033,8 +1029,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
           );
         } else {
           return Container(
-            // child: CircularProgressIndicator(),
-          );
+              // child: CircularProgressIndicator(),
+              );
         }
       },
     );
@@ -1069,19 +1065,22 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                       dividerColor: GlobalVariables.transparent,
                       children: [
                         ExpansionPanel(
-                            isExpanded: _list[i].items.length==0 ? false  : _activeMeterIndex == i,
-                            headerBuilder: (BuildContext context,
-                                bool isExpanded) {
+                            isExpanded: _list[i].items.length == 0
+                                ? false
+                                : _activeMeterIndex == i,
+                            headerBuilder:
+                                (BuildContext context, bool isExpanded) {
                               return ExpansionTile(
                                 key: PageStorageKey<String>(_list[i].title),
                                 onExpansionChanged: ((newState) {
-                                  print('root click : '+ _list[i].title);
+                                  print('root click : ' + _list[i].title);
                                   //GlobalFunctions.showToast(_list[i].title);
                                   if (_list[i].items.length == 0)
                                     redirectToPage(_list[i].title);
                                   else
                                     setState(() {
-                                      _activeMeterIndex = _activeMeterIndex == i ? null : i;
+                                      _activeMeterIndex =
+                                          _activeMeterIndex == i ? null : i;
                                     });
                                   //Navigator.of(context).pop();
                                 }),
@@ -1092,10 +1091,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                     children: <Widget>[
                                       SizedBox(
                                           child: SvgPicture.asset(
-                                              _list[i].rootIconData,color: GlobalVariables.grey,width: 25,height: 25,)),
+                                        _list[i].rootIconData,
+                                        color: GlobalVariables.grey,
+                                        width: 25,
+                                        height: 25,
+                                      )),
                                       Flexible(
                                         child: Container(
-                                          margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                          margin:
+                                              EdgeInsets.fromLTRB(20, 0, 0, 0),
                                           child: AutoSizeText(
                                             _list[i].title,
                                             style: TextStyle(
@@ -1110,51 +1114,54 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                                 trailing: Icon(null),
                               );
                             },
-                          body: _list[i].items.length>0 ? Container(
-                            child: Column(
-                              children: <Widget>[
-                                for (String item in _list[i].items)
-                                  InkWell(
-                                    onTap: () {
-                                      //GlobalFunctions.showToast(item);
-                                      redirectToPage(item);
-                                    },
-                                    child: Container(
-                                      // color: GlobalVariables.grey,
-                                      margin: EdgeInsets.fromLTRB(55, 0, 0, 0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0, 8, 0, 8),
-                                            width: 10,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                                color: GlobalVariables.green,
-                                                shape: BoxShape.circle),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                20, 8, 0, 8),
-                                            child: Text(
-                                              item,
-                                              style: new TextStyle(
-                                                  fontSize: 16.0,
-                                                  color: GlobalVariables.grey),
+                            body: _list[i].items.length > 0
+                                ? Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        for (String item in _list[i].items)
+                                          InkWell(
+                                            onTap: () {
+                                              //GlobalFunctions.showToast(item);
+                                              redirectToPage(item);
+                                            },
+                                            child: Container(
+                                              // color: GlobalVariables.grey,
+                                              margin: EdgeInsets.fromLTRB(
+                                                  55, 0, 0, 0),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Container(
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        0, 8, 0, 8),
+                                                    width: 10,
+                                                    height: 10,
+                                                    decoration: BoxDecoration(
+                                                        color: GlobalVariables
+                                                            .green,
+                                                        shape: BoxShape.circle),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        20, 8, 0, 8),
+                                                    child: Text(
+                                                      item,
+                                                      style: new TextStyle(
+                                                          fontSize: 16.0,
+                                                          color: GlobalVariables
+                                                              .grey),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                              ],
-                            ),
-                          ) : Container()
-                        )
+                                  )
+                                : Container())
                       ],
                     ),
-                  )
-              );
+                  ));
             }),
       ),
     );
@@ -1175,24 +1182,27 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     //  _progressDialog.show();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-   String  username = await GlobalFunctions.getLoggedUserName();
-    password = await GlobalFunctions.getPassword();
-    societyId = await GlobalFunctions.getSocietyId();
-    String loginId = await GlobalFunctions.getLoginId();
-    int prefPos=0;
-    restClient.getAllSocietyData(username).then((value) {
-      if (value.status) {
 
-        List<dynamic> _list = value.data;
+    String loggedUsername = await GlobalFunctions.getLoggedUserName();
+    if (loggedUsername.length == 0) {
+      GlobalFunctions.notAllowForRunAppDialog(context);
+    } else {
+      password = await GlobalFunctions.getPassword();
+      societyId = await GlobalFunctions.getSocietyId();
+      String loginId = await GlobalFunctions.getLoginId();
+      int prefPos = 0;
+      restClient.getAllSocietyData(loggedUsername).then((value) {
+        if (value.status) {
+          List<dynamic> _list = value.data;
 
-        _societyList = List<LoginResponse>.from(
-            _list.map((i) => LoginResponse.fromJson(i)));
-        print('Societylist length ' + _societyList.length.toString());
-        for (int i = 0; i < _societyList.length; i++) {
-          _societyList[i].LoggedUsername=username;
-          LoginResponse loginResponse = _societyList[i];
+          _societyList = List<LoginResponse>.from(
+              _list.map((i) => LoginResponse.fromJson(i)));
+          print('Societylist length ' + _societyList.length.toString());
+          for (int i = 0; i < _societyList.length; i++) {
+            _societyList[i].LoggedUsername = loggedUsername;
+            LoginResponse loginResponse = _societyList[i];
 
-          /*    cryptor.generateRandomKey().then((value) async {
+            /*    cryptor.generateRandomKey().then((value) async {
             final encrypted =  await cryptor.encrypt(loginResponse.PASSWORD, value);
             final decrypted =  await cryptor.decrypt(loginResponse.PASSWORD, 'incredible');
             print('"loginResponse.ID : ' + loginResponse.ID);
@@ -1203,54 +1213,73 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             print('decrypted PASSWORD ' + decrypted);
 
           });*/
-          /*   var bytes1 = utf8.encode("incredible");         // data being hashed
+            /*   var bytes1 = utf8.encode("incredible");         // data being hashed
           var digest1 = sha1.convert(bytes1);         // Hashing Process
           print("Digest as bytes: ${digest1.bytes}");   // Print Bytes
           print("Digest as hex string: $digest1");*/
-          print('"loginResponse.ID : ' + loginResponse.ID);
-          print('ShardPref societyId : ' + societyId);
-          print('SocietyId ' + loginResponse.SOCIETY_ID);
-          print('PASSWORD ' + loginResponse.PASSWORD);
+            print('"loginResponse.ID : ' + loginResponse.ID);
+            print('ShardPref societyId : ' + societyId);
+            print('SocietyId ' + loginResponse.SOCIETY_ID);
+            print('PASSWORD ' + loginResponse.PASSWORD);
 
+            //  print('SALT KEY '+utf8.encode('incredible').toString());
 
-          //  print('SALT KEY '+utf8.encode('incredible').toString());
+            //   print('ENCRYPTION PASSWORD '+ sha1.convert(utf8.encode('incredible')+utf8.encode(loginResponse.PASSWORD)).toString());
 
-          //   print('ENCRYPTION PASSWORD '+ sha1.convert(utf8.encode('incredible')+utf8.encode(loginResponse.PASSWORD)).toString());
+            //  print('DECRYPTION PASSWORD '+ sha1.convert();
 
-          //  print('DECRYPTION PASSWORD '+ sha1.convert();
+            print('SocietyId ' +
+                loginResponse.Society_Name +
+                " " +
+                loginResponse.BLOCK +
+                " " +
+                loginResponse.FLAT);
 
-          print('SocietyId ' + loginResponse.Society_Name +
-              " " +
-              loginResponse.BLOCK +
-              " " +
-              loginResponse.FLAT);
-
-          print('User Status : '+ loginResponse.User_Status);
-          //loginResponse.User_Status='C';
-          print('User Status : '+ loginResponse.User_Status);
-          if(loginResponse.User_Status!='C') {
-            if (loginId == loginResponse.ID) {
-              if (_societyListItems.length > 0) {
-                prefPos = i;
-                _societyListItems.insert(
-                    0,
-                    DropdownMenuItem(
-                      value: loginResponse.ID,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        alignment: Alignment.topLeft,
-                        child: AutoSizeText(
-                          loginResponse.Society_Name +
-                              " " +
-                              loginResponse.BLOCK +
-                              " " +
-                              loginResponse.FLAT,
-                          style: TextStyle(
-                              color: GlobalVariables.black, fontSize: 16),
-                          maxLines: 1,
+            print('User Status : ' + loginResponse.User_Status);
+            //loginResponse.User_Status='C';
+            print('User Status : ' + loginResponse.User_Status);
+            if (loginResponse.User_Status != 'C') {
+              if (loginId == loginResponse.ID) {
+                if (_societyListItems.length > 0) {
+                  prefPos = i;
+                  _societyListItems.insert(
+                      0,
+                      DropdownMenuItem(
+                        value: loginResponse.ID,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          alignment: Alignment.topLeft,
+                          child: AutoSizeText(
+                            loginResponse.Society_Name +
+                                " " +
+                                loginResponse.BLOCK +
+                                " " +
+                                loginResponse.FLAT,
+                            style: TextStyle(
+                                color: GlobalVariables.black, fontSize: 16),
+                            maxLines: 1,
+                          ),
                         ),
+                      ));
+                } else {
+                  _societyListItems.add(DropdownMenuItem(
+                    value: loginResponse.ID,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      alignment: Alignment.topLeft,
+                      child: AutoSizeText(
+                        loginResponse.Society_Name +
+                            " " +
+                            loginResponse.BLOCK +
+                            " " +
+                            loginResponse.FLAT,
+                        style: TextStyle(
+                            color: GlobalVariables.black, fontSize: 16),
+                        maxLines: 1,
                       ),
-                    ));
+                    ),
+                  ));
+                }
               } else {
                 _societyListItems.add(DropdownMenuItem(
                   value: loginResponse.ID,
@@ -1263,79 +1292,63 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                           loginResponse.BLOCK +
                           " " +
                           loginResponse.FLAT,
-                      style: TextStyle(
-                          color: GlobalVariables.black, fontSize: 16),
+                      style:
+                          TextStyle(color: GlobalVariables.black, fontSize: 16),
                       maxLines: 1,
                     ),
                   ),
                 ));
               }
-            } else {
-              _societyListItems.add(DropdownMenuItem(
-                value: loginResponse.ID,
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  alignment: Alignment.topLeft,
-                  child: AutoSizeText(
-                    loginResponse.Society_Name +
-                        " " +
-                        loginResponse.BLOCK +
-                        " " +
-                        loginResponse.FLAT,
-                    style: TextStyle(
-                        color: GlobalVariables.black, fontSize: 16),
-                    maxLines: 1,
-                  ),
-                ),
-              ));
             }
+            //print('value: ' + _societyListItems[i].value.toString());
           }
-          //print('value: ' + _societyListItems[i].value.toString());
-        }
-        print('size : ' + _societyListItems.length.toString());
-        if(_societyListItems.length>0) {
-          print('_societyListItems 0 : ' + _societyListItems[0].toString());
-          _selectedItem = _societyListItems[0].value;
-          print('_selectedItem initial : ' + _selectedItem.toString());
-          _selectedSocietyLogin = _societyList[prefPos];
-          // if(_selectedSocietyLogin.User_Status!='C') {
-          _selectedSocietyLogin.PASSWORD = password;
-          _selectedSocietyLogin.LoggedUsername = username;
-          print("Flat" + _selectedSocietyLogin.FLAT.toString());
-          GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+          print('size : ' + _societyListItems.length.toString());
+          if (_societyListItems.length > 0) {
+            print('_societyListItems 0 : ' + _societyListItems[0].toString());
+            _selectedItem = _societyListItems[0].value;
+            print('_selectedItem initial : ' + _selectedItem.toString());
+            _selectedSocietyLogin = _societyList[prefPos];
+            // if(_selectedSocietyLogin.User_Status!='C') {
+            _selectedSocietyLogin.PASSWORD = password;
+            _selectedSocietyLogin.LoggedUsername = loggedUsername;
+            print("Flat" + _selectedSocietyLogin.FLAT.toString());
+            GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
 
-          if(Platform.isAndroid){
-            if(value.android_version!=AppPackageInfo.version){
-              //show app update Dialog
-              GlobalFunctions.appUpdateDialog(context,value.android_type);
+            if (Platform.isAndroid) {
+              if (value.android_version != AppPackageInfo.version) {
+                //show app update Dialog
+                GlobalFunctions.appUpdateDialog(context, value.android_type);
+              }
+            } else if (Platform.isIOS) {
+              if (value.ios_version != AppPackageInfo.version) {
+                //show app update Dialog
+                GlobalFunctions.appUpdateDialog(context, value.android_type);
+              }
             }
-          }else if(Platform.isIOS){
-            if(value.ios_version!=AppPackageInfo.version){
-              //show app update Dialog
-              GlobalFunctions.appUpdateDialog(context,value.android_type);
-            }
+          } else {
+            //show logout Dialog
+            GlobalFunctions.forceLogoutDialog(context);
           }
-
         }else{
-          //show logout Dialog
-          GlobalFunctions.forceLogoutDialog(context);
-        }
-        //}
-      }
-    }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
-      }
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
+          if(value.message==AppLocalizations.of(context).translate('invalid_username_password')){
+            GlobalFunctions.notAllowForRunAppDialog(context);
           }
-          break;
-        default:
-      }
-    });
+        }
+      }).catchError((Object obj) {
+        if (_progressDialog.isShowing()) {
+          _progressDialog.hide();
+        }
+        switch (obj.runtimeType) {
+          case DioError:
+            {
+              final res = (obj as DioError).response;
+              print('res : ' + res.toString());
+            }
+            break;
+          default:
+        }
+      });
+    }
   }
 
   void changeDropDownItem(String value) {
@@ -1349,7 +1362,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
             if (_selectedItem == _societyList[i].ID) {
               _selectedSocietyLogin = _societyList[i];
               _selectedSocietyLogin.PASSWORD = password;
-              GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+              GlobalFunctions.saveDataToSharedPreferences(
+                  _selectedSocietyLogin);
               print('for _selctedItem:' + _selectedItem);
               getDuesData();
               getDisplayName();
@@ -1368,146 +1382,146 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
   void getExpandableListViewData(BuildContext context) {
     //   print('AppLocalizations.of(context).translate(my_flat) : '+AppLocalizations.of(context).translate('my_unit').toString());
-     if(AppPermission.isUserAdminHelpDeskPermission){
-       _list = [
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('my_unit'),
-             rootIconData: GlobalVariables.myFlatIconPath,
-             //innerIconData: Icons.,
-             items: [
-               AppLocalizations.of(context).translate("my_dues"),
-               AppLocalizations.of(context).translate("my_household"),
-               // AppLocalizations.of(context).translate("my_documents"),
-             ]),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('my_complex'),
-             rootIconData: GlobalVariables.myBuildingIconPath,
-             //innerIconData: GlobalVariables.myFlatIconPath,
-             items: [
-               AppLocalizations.of(context).translate("announcement"),
-               AppLocalizations.of(context).translate("meetings"),
-               AppLocalizations.of(context).translate("poll_survey"),
-               AppLocalizations.of(context).translate("documents"),
-               AppLocalizations.of(context).translate("directory"),
-               AppLocalizations.of(context).translate("events")
-             ]),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('discover'),
-             rootIconData: GlobalVariables.myServiceIconPath,
-             //innerIconData: GlobalVariables.myFlatIconPath,
-             items: [
-               AppLocalizations.of(context).translate("classified"),
-               AppLocalizations.of(context).translate("services"),
-               AppLocalizations.of(context).translate("near_by_shop"),
-             ]),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('facilities'),
-             rootIconData: GlobalVariables.myClubIconPath,
-             //innerIconData: GlobalVariables.myFlatIconPath,
-             items: []),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('my_gate'),
-             rootIconData: GlobalVariables.myGateIconPath,
-             //innerIconData: GlobalVariables.myFlatIconPath,
-             items: [
-               AppLocalizations.of(context).translate("my_activities"),
-               AppLocalizations.of(context).translate("helpers"),
-             ]),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('help_desk'),
-             rootIconData: GlobalVariables.mySupportIconPath,
-             // innerIconData: GlobalVariables.myFlatIconPath,
-             items: []),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('admin'),
-             rootIconData: GlobalVariables.myAdminIconPath,
-             //  innerIconData: GlobalVariables.myFlatIconPath,
-             items: [
-               AppLocalizations.of(context).translate("assign_helpdesk"),
-             ]),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('about_us'),
-             rootIconData: GlobalVariables.aboutUsPath,
-             //  innerIconData: GlobalVariables.myFlatIconPath,
-             items: []),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('change_password'),
-             rootIconData: GlobalVariables.changePasswordPath,
-             //  innerIconData: GlobalVariables.myFlatIconPath,
-             items: []),
-         new RootTitle(
-             title: AppLocalizations.of(context).translate('logout'),
-             rootIconData: GlobalVariables.loginIconPath,
-             //  innerIconData: GlobalVariables.myFlatIconPath,
-             items: []),
-       ];
-    }else{
-         _list = [
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('my_unit'),
-               rootIconData: GlobalVariables.myFlatIconPath,
-               //innerIconData: Icons.,
-               items: [
-                 AppLocalizations.of(context).translate("my_dues"),
-                 AppLocalizations.of(context).translate("my_household"),
-                 // AppLocalizations.of(context).translate("my_documents"),
-               ]),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('my_complex'),
-               rootIconData: GlobalVariables.myBuildingIconPath,
-               //innerIconData: GlobalVariables.myFlatIconPath,
-               items: [
-                 AppLocalizations.of(context).translate("announcement"),
-                 AppLocalizations.of(context).translate("meetings"),
-                 AppLocalizations.of(context).translate("poll_survey"),
-                 AppLocalizations.of(context).translate("documents"),
-                 AppLocalizations.of(context).translate("directory"),
-                 AppLocalizations.of(context).translate("events")
-               ]),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('discover'),
-               rootIconData: GlobalVariables.myServiceIconPath,
-               //innerIconData: GlobalVariables.myFlatIconPath,
-               items: [
-                 AppLocalizations.of(context).translate("classified"),
-                 AppLocalizations.of(context).translate("services"),
-                 AppLocalizations.of(context).translate("near_by_shop"),
-               ]),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('facilities'),
-               rootIconData: GlobalVariables.myClubIconPath,
-               //innerIconData: GlobalVariables.myFlatIconPath,
-               items: []),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('my_gate'),
-               rootIconData: GlobalVariables.myGateIconPath,
-               //innerIconData: GlobalVariables.myFlatIconPath,
-               items: [
-                 AppLocalizations.of(context).translate("my_activities"),
-                 AppLocalizations.of(context).translate("helpers"),
-               ]),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('help_desk'),
-               rootIconData: GlobalVariables.mySupportIconPath,
-               // innerIconData: GlobalVariables.myFlatIconPath,
-               items: []),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('about_us'),
-               rootIconData: GlobalVariables.aboutUsPath,
-               //  innerIconData: GlobalVariables.myFlatIconPath,
-               items: []),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('change_password'),
-               rootIconData: GlobalVariables.changePasswordPath,
-               //  innerIconData: GlobalVariables.myFlatIconPath,
-               items: []),
-           new RootTitle(
-               title: AppLocalizations.of(context).translate('logout'),
-               rootIconData: GlobalVariables.loginIconPath,
-               //  innerIconData: GlobalVariables.myFlatIconPath,
-               items: []),
-         ];
-     }
+    if (AppPermission.isUserAdminHelpDeskPermission) {
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("assign_helpdesk"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('about_us'),
+            rootIconData: GlobalVariables.aboutUsPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('change_password'),
+            rootIconData: GlobalVariables.changePasswordPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('logout'),
+            rootIconData: GlobalVariables.loginIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+    } else {
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('about_us'),
+            rootIconData: GlobalVariables.aboutUsPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('change_password'),
+            rootIconData: GlobalVariables.changePasswordPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('logout'),
+            rootIconData: GlobalVariables.loginIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+    }
   }
 
   getDrawerItemIndex(int index) {
@@ -1571,7 +1585,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   getDuesData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
@@ -1580,10 +1594,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     restClientERP.getDuesData(societyId, flat, block).then((value) {
       print('Response : ' + value.toString());
 
-      if(value.status){
-        GlobalVariables.isERPAccount=true;
-      }else{
-        GlobalVariables.isERPAccount=false;
+      if (value.status) {
+        GlobalVariables.isERPAccount = true;
+      } else {
+        GlobalVariables.isERPAccount = false;
       }
 
       duesRs = value.DUES.toString();
@@ -1591,8 +1605,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
       if (duesRs.length == 0) {
         duesRs = "0";
       }
-      if(duesDate=='null')
-        duesDate='-';
+      if (duesDate == 'null') duesDate = '-';
       GlobalFunctions.saveDuesDataToSharedPreferences(duesRs, duesDate);
       _progressDialog.hide();
 
@@ -1658,20 +1671,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   duesLayout() {
-    print('duesDate : '+ duesDate);
+    print('duesDate : ' + duesDate);
     return Align(
       alignment: Alignment.center,
       child: Container(
         //color: GlobalVariables.black,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 0.8,
+        width: MediaQuery.of(context).size.width / 0.8,
         margin: EdgeInsets.fromLTRB(
-            0, MediaQuery
-            .of(context)
-            .size
-            .height / 10, 0, 0),
+            0, MediaQuery.of(context).size.height / 10, 0, 0),
         child: Card(
           shape: (RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0))),
@@ -1689,106 +1696,120 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   ),
                 ),
               ),
-              GlobalVariables.isERPAccount ? Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('total_due'),
-                          style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 14),
-                        ),
-                        int.parse(duesRs)>0 ? Text(
-                          getBillPaymentStatus(),
-                          style: TextStyle(
-                              color: getBillPaymentStatusColor(),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ) : Text(
-                          'Paid',
-                          style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          " Rs. " + duesRs,
-                          style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Visibility(
-                          visible: int.parse(duesRs)>0 ? true : false,
-                          child: Text(
-                            duesDate.length>0 && duesDate!='-' ? GlobalFunctions.convertDateFormat(duesDate, 'dd-MM-yyyy'): '-',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      color: GlobalVariables.mediumGreen,
-                      margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                      child: Divider(
-                        height: 1,
-                        color: GlobalVariables.mediumGreen,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              GlobalVariables.isERPAccount
+                  ? Container(
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                      child: Column(
                         children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              //GlobalFunctions.showToast('Transaction');
-                              Navigator.push(
-                                  context, MaterialPageRoute(
-                                  builder: (context) => BaseLedger()));
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('transaction_history'),
-                              style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 16,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('total_due'),
+                                style: TextStyle(
+                                    color: GlobalVariables.mediumGreen,
+                                    fontSize: 14),
                               ),
+                              int.parse(duesRs) > 0
+                                  ? Text(
+                                      getBillPaymentStatus(),
+                                      style: TextStyle(
+                                          color: getBillPaymentStatusColor(),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Text(
+                                      'Paid',
+                                      style: TextStyle(
+                                          color: GlobalVariables.green,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                " Rs. " + duesRs,
+                                style: TextStyle(
+                                    color: GlobalVariables.green,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Visibility(
+                                visible: int.parse(duesRs) > 0 ? true : false,
+                                child: Text(
+                                  duesDate.length > 0 && duesDate != '-'
+                                      ? GlobalFunctions.convertDateFormat(
+                                          duesDate, 'dd-MM-yyyy')
+                                      : '-',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: GlobalVariables.green,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            color: GlobalVariables.mediumGreen,
+                            margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                            child: Divider(
+                              height: 1,
+                              color: GlobalVariables.mediumGreen,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              //GlobalFunctions.showToast('Pay Now');
-                              Navigator.push(
-                                  context, MaterialPageRoute(
-                                  builder: (context) => BaseMyUnit(null)));
-                            },
-                            child: Text(
-                              AppLocalizations.of(context).translate('pay_now'),
-                              style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 16,
-                              ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    //GlobalFunctions.showToast('Transaction');
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseLedger()));
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('transaction_history'),
+                                    style: TextStyle(
+                                      color: GlobalVariables.green,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    //GlobalFunctions.showToast('Pay Now');
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseMyUnit(null)));
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('pay_now'),
+                                    style: TextStyle(
+                                      color: GlobalVariables.green,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     )
-                  ],
-                ),
-              ) : getNoERPAccountLayout(),
+                  : getNoERPAccountLayout(),
             ],
           ),
         ),
@@ -1801,7 +1822,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
       padding: EdgeInsets.all(10),
       //margin: EdgeInsets.all(20),
       alignment: Alignment.center,
-   //   color: GlobalVariables.white,
+      //   color: GlobalVariables.white,
       //width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height,
       child: Column(
@@ -1809,19 +1830,26 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            child: Image.asset(GlobalVariables.creditCardPath,width: 70,height: 70,fit: BoxFit.fill,),
+            child: Image.asset(
+              GlobalVariables.creditCardPath,
+              width: 70,
+              height: 70,
+              fit: BoxFit.fill,
+            ),
           ),
           Container(
-
             margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            child: Text(AppLocalizations.of(context).translate('erp_acc_not'),
+            child: Text(
+              AppLocalizations.of(context).translate('erp_acc_not'),
               style: TextStyle(
-                  color: GlobalVariables.black,fontSize: 18,fontWeight: FontWeight.bold
-              ),),
+                  color: GlobalVariables.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           Container(
             height: 60,
-            width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
@@ -1831,20 +1859,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              BaseAboutSocietyRunInfo()));
+                          builder: (context) => BaseAboutSocietyRunInfo()));
                 },
                 textColor: GlobalVariables.white,
                 //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                        color: GlobalVariables.green)),
+                    side: BorderSide(color: GlobalVariables.green)),
                 child: Text(
-                  AppLocalizations.of(context)
-                      .translate('i_am_interested'),
-                  style: TextStyle(
-                      fontSize: GlobalVariables.largeText),
+                  AppLocalizations.of(context).translate('i_am_interested'),
+                  style: TextStyle(fontSize: GlobalVariables.largeText),
                 ),
               ),
             ),
@@ -1876,18 +1900,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   void getPhoto() {
     GlobalFunctions.getPhoto().then((value) {
       photo = value;
-      print('profile image : '+photo.toString());
+      print('profile image : ' + photo.toString());
     });
   }
 
   Future<void> redirectToPage(String item) async {
     if (item == AppLocalizations.of(context).translate('my_unit')) {
       //Redirect to my Unit
-      final result = await   Navigator.push(context,
-          MaterialPageRoute(builder: (context) =>
-              BaseMyUnit(AppLocalizations.of(context).translate('my_unit'))));
-      print('result back : '+ result.toString());
-      if(result=='back'){
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_unit'))));
+      print('result back : ' + result.toString());
+      if (result == 'back') {
         getDuesData();
       }
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
@@ -1895,103 +1921,104 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyUnit(
-                      AppLocalizations.of(context).translate('my_dues'))));
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_dues'))));
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyUnit(
-                      AppLocalizations.of(context).translate('my_household'))));
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_household'))));
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyUnit(
-                      AppLocalizations.of(context).translate('my_documents'))));
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_documents'))));
     } else if (item == AppLocalizations.of(context).translate('my_tenants')) {
       //Redirect to  My Tenants
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyUnit(
-                      AppLocalizations.of(context).translate('my_tenants'))));
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_tenants'))));
     } else if (item == AppLocalizations.of(context).translate('my_complex')) {
       //Redirect to  My Complex
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('my_complex'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('my_complex'))));
     } else if (item == AppLocalizations.of(context).translate('announcement')) {
       //Redirect to News Board
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('announcement'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('announcement'))));
     } else if (item == AppLocalizations.of(context).translate('meetings')) {
       //Redirect to News Board
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('meetings'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('meetings'))));
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
       //GlobalFunctions.comingSoonDialog(context);
-       Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('poll_survey'))));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('poll_survey'))));
     } else if (item == AppLocalizations.of(context).translate('directory')) {
       //Redirect to  Directory
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('directory'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('directory'))));
     } else if (item == AppLocalizations.of(context).translate('documents')) {
       //Redirect to  Documents
       //GlobalFunctions.showToast("Coming Soon...");
-       Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('documents'))));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('documents'))));
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
-     //  GlobalFunctions.comingSoonDialog(context);
-       Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyComplex(AppLocalizations.of(context).translate('events'))));
+      //  GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('events'))));
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /* Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('discover'))));*/
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('classified'))));*/
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /* Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('services'))));*/
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /*  Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('near_by_shop'))));*/
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /*  Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
     } else if (item == AppLocalizations.of(context).translate('my_gate')) {
@@ -1999,73 +2026,68 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyGate(
-                      AppLocalizations.of(context).translate('my_gate'))));
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_gate'))));
     } else if (item ==
         AppLocalizations.of(context).translate('my_activities')) {
       //Redirect to  My Dues
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyGate(
-                      AppLocalizations.of(context).translate(
-                          'my_activities'))));
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_activities'))));
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  My Dues
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyGate(AppLocalizations.of(context).translate('helpers'))));*/
     } else if (item == AppLocalizations.of(context).translate('help_desk')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
-       GlobalFunctions.comingSoonDialog(context);
+      GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
          context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
-    } else if (item == AppLocalizations.of(context).translate('assign_helpdesk')) {
+    } else if (item ==
+        AppLocalizations.of(context).translate('assign_helpdesk')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true)));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true)));
     } else if (item == AppLocalizations.of(context).translate('about_us')) {
       //Redirect to  Admin
-    //  GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo()));
-    }else if (item == AppLocalizations.of(context).translate('change_password')) {
+      //  GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo()));
+    } else if (item ==
+        AppLocalizations.of(context).translate('change_password')) {
       //Redirect to  Admin
-    //  GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseChangePassword()));
+      //  GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseChangePassword()));
     } else if (item == AppLocalizations.of(context).translate('logout')) {
       // GlobalFunctions.showToast("Logout");
 
-
       showDialog(
           context: context,
-          builder: (BuildContext context) =>
-              StatefulBuilder(
+          builder: (BuildContext context) => StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      child: displayLogoutLayout(),
-                    );
-                  }));
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0)),
+                  child: displayLogoutLayout(),
+                );
+              }));
     }
   }
 
   displayLogoutLayout() {
     return Container(
       padding: EdgeInsets.all(20),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.3,
+      width: MediaQuery.of(context).size.width / 1.3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -2133,18 +2155,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   Future<void> navigateToProfilePage() async {
-
-   String societyId = await GlobalFunctions.getSocietyId();
-   String userId = await GlobalFunctions.getUserId();
-   Navigator.push(
-       context, MaterialPageRoute(
-       builder: (context) =>
-           BaseDisplayProfileInfo(userId,societyId)));
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
   }
 
   String getBillPaymentStatus() {
-
-    String status='';
+    String status = '';
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -2153,23 +2173,21 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
-    print('days : '+ days.toString());
+    print('days : ' + days.toString());
 
-    if (days>0) {
+    if (days > 0) {
       status = "Overdue";
-    } else if (days == 0 ) {
-      status  = "Due Today";
-    }else if(days >=-2 && days <0){
-      status = 'Due in '+ (days*(-1)).toString()+' day';
-    }else{
+    } else if (days == 0) {
+      status = "Due Today";
+    } else if (days >= -2 && days < 0) {
+      status = 'Due in ' + (days * (-1)).toString() + ' day';
+    } else {
       status = 'Due Date';
     }
     return status;
-
   }
 
   getBillPaymentStatusColor() {
-
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
@@ -2178,26 +2196,25 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
-    if (days>0) {
+    if (days > 0) {
       return Color(0xFFc0392b);
-    } else if (days == 0 ) {
+    } else if (days == 0) {
       return Color(0xFFf39c12);
-    }else if(days >=-2 && days <0){
+    } else if (days >= -2 && days < 0) {
       return Color(0xFFf39c12);
-    }else{
+    } else {
       return GlobalVariables.mediumGreen;
     }
   }
 
-   static Future<void> logout(BuildContext context) async {
-
-     ProgressDialog _progressDialog;
-     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+  static Future<void> logout(BuildContext context) async {
+    ProgressDialog _progressDialog;
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
     String gcmId = await GlobalFunctions.getFCMToken();
 
-      final dio = Dio();
+    final dio = Dio();
     final RestClient restClient = RestClient(dio);
     _progressDialog.show();
     restClient.userLogout(societyId, userId, gcmId).then((value) {
@@ -2208,9 +2225,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
-                builder: (
-                    BuildContext context) => new BaseLoginPage()),
-                (Route<dynamic> route) => false);
+                builder: (BuildContext context) => new BaseLoginPage()),
+            (Route<dynamic> route) => false);
       }
       GlobalFunctions.showToast(value.message);
     }).catchError((Object obj) {
@@ -2230,32 +2246,29 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard> with WidgetsBindin
   }
 
   Future<void> getAppPermission() async {
-
     var societyPermission = await GlobalFunctions.getSocietyPermission();
     var userPermission = await GlobalFunctions.getUserPermission();
 
-    List<String> _socPermissionList= societyPermission.toString().split(',');
-    List<String> _userPermissionList= userPermission.toString().split(',');
+    List<String> _socPermissionList = societyPermission.toString().split(',');
+    List<String> _userPermissionList = userPermission.toString().split(',');
 
-    for(int i=0;i<_socPermissionList.length;i++){
-      if(_socPermissionList[i]==AppPermission.socHelpDeskPermission){
-        AppPermission.isSocHelpDeskPermission=true;
+    for (int i = 0; i < _socPermissionList.length; i++) {
+      if (_socPermissionList[i] == AppPermission.socHelpDeskPermission) {
+        AppPermission.isSocHelpDeskPermission = true;
       }
     }
 
-    for(int i=0;i<_userPermissionList.length;i++){
-      if(_userPermissionList[i]==AppPermission.userHelpDeskPermission){
-        AppPermission.isUserHelpDeskPermission=true;
+    for (int i = 0; i < _userPermissionList.length; i++) {
+      if (_userPermissionList[i] == AppPermission.userHelpDeskPermission) {
+        AppPermission.isUserHelpDeskPermission = true;
       }
-      if(_userPermissionList[i]==AppPermission.userAdminHelpDeskPermission){
-        AppPermission.isUserAdminHelpDeskPermission=true;
+      if (_userPermissionList[i] == AppPermission.userAdminHelpDeskPermission) {
+        AppPermission.isUserAdminHelpDeskPermission = true;
       }
-      if(_userPermissionList[i]==AppPermission.userAdminPermission){
-        AppPermission.isUserAdminPermission=true;
+      if (_userPermissionList[i] == AppPermission.userAdminPermission) {
+        AppPermission.isUserAdminPermission = true;
       }
     }
-
-
   }
 }
 
