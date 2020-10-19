@@ -17,6 +17,7 @@ import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:dio/dio.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 
 
 
@@ -36,7 +37,13 @@ class LoginPage extends StatefulWidget {
   }
 }
 
-class LoginPageState extends BaseStatefulState<LoginPage> {
+class LoginPageState extends BaseStatefulState<LoginPage> with WidgetsBindingObserver{
+  Future<String> permissionStatusFuture;
+
+  var permGranted = "granted";
+  var permDenied = "denied";
+  var permUnknown = "unknown";
+  var permProvisional = "provisional";
   bool isLogin = false;
   AppLanguage appLanguage = AppLanguage();
   String fcmToken;
@@ -44,6 +51,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   ProgressDialog _progressDialog;
 
   bool _obscurePassword = true;
+  bool _isNotificationDenied = false;
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
   List<Banners> _bannerList = List<Banners>();
@@ -52,6 +60,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   @override
   void initState() {
     super.initState();
+    permissionStatusFuture = getCheckNotificationPermStatus();
+    WidgetsBinding.instance.addObserver(this);
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBannerData();
@@ -61,6 +71,34 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
       }
     });
   }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        permissionStatusFuture = getCheckNotificationPermStatus();
+      });
+    }
+  }
+  /// Checks the notification permission status
+  Future<String> getCheckNotificationPermStatus() {
+    return NotificationPermissions.getNotificationPermissionStatus()
+        .then((status) {
+          print("status>>>>>>$status");
+      switch (status) {
+        case PermissionStatus.denied:
+          return permDenied;
+        case PermissionStatus.granted:
+          return permGranted;
+        case PermissionStatus.unknown:
+          return permUnknown;
+        case PermissionStatus.provisional:
+          return permProvisional;
+        default:
+          return null;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -202,8 +240,17 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                             .checkInternetConnection()
                                             .then((internet) {
                                           if (internet) {
-                                            userLogin(username.text,
-                                                password.text, context);
+                                            NotificationPermissions.getNotificationPermissionStatus().then((status){
+                                              if(status == PermissionStatus.denied || status == PermissionStatus.unknown){
+                                                NotificationPermissions.requestNotificationPermissions().then((status){
+
+                                                });
+                                              }else{
+                                                userLogin(username.text,
+                                                    password.text, context);
+                                              }
+                                            });
+
                                           } else {
                                             GlobalFunctions.showToast(
                                                 AppLocalizations.of(context)

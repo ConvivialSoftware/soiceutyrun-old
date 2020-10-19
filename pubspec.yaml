@@ -55,6 +55,7 @@ dependencies:
   #firebase
   firebase_messaging: ^6.0.16
   flutter_local_notifications: ^1.4.4+2
+  notification_permissions: ^0.4.8
 
   #applaunch
   #flutter_string_encryption: 0.3.1
