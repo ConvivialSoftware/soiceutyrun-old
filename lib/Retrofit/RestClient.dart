@@ -50,15 +50,14 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.editProfileAPI)
   Future<DataResponse> editProfileInfo(@Field("SOCIETY_ID") String socId, @Field("USER_ID") String userId,
-      @Field("NAME") String name, @Field("ALTERNATE_CONTACT1") String altCon1,
-      @Field("ALTERNATE_CONTACT2") String altCon2, @Field("PROFILE_PHOTO") String profilePhoto,
+      @Field("NAME") String name, @Field("MOBILE") String phone,
+      @Field("ALTERNATE_CONTACT1") String altCon1, @Field("PROFILE_PHOTO") String profilePhoto,
       @Field("ADDRESS") String address, @Field("GENDER") String gender,
       @Field("DOB") String dob,/* @Field("ANNIVERSARY_DATE") String anniverDate,*/
       @Field("BLOOD_GROUP") String bloodGroup, @Field("OCCUPATION") String occupation,
       /*@Field("HOBBIES") String hobbies, @Field("LANGUAGES") String language,
       @Field("FB_PROFILE") String fbProfile, @Field("LINKDIN_PROFILE") String linkDinProfile,
-      @Field("INSTAGRAM") String instagram,*/ @Field("USER_NAME") String userName,
-      @Field("MOBILE") String mobileNo,@Field("TYPE") String type,@Field("LIVES_HERE") String livesHere);
+      @Field("INSTAGRAM") String instagram,*/ @Field("USER_NAME") String userName,@Field("TYPE") String type,@Field("LIVES_HERE") String livesHere);
 
 
   @FormUrlEncoded()

@@ -380,7 +380,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseLedger()));
+                  BaseMyGate(AppLocalizations.of(context).translate('my_gate'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

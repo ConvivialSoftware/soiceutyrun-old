@@ -1307,9 +1307,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
   @override
   Future<DataResponse> editProfileInfo(String societyId, String userId,
-      String name, String altCon1, String altCon2, String profilePhoto,
+      String name, String phone, String altCon1, String profilePhoto,
       String address, String gender, String dob, String bloodGroup, String occupation,
-      String email, String mobileNo,String type,String livesHere) async {
+      String email, String type,String livesHere) async {
     // TODO: implement editProfileInfo
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
@@ -1321,8 +1321,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.TYPE:type,
       GlobalVariables.LIVES_HERE:livesHere,
       GlobalVariables.NAME:name,
+      GlobalVariables.MOBILE:phone,
       GlobalVariables.ALTERNATE_CONTACT1:altCon1,
-      GlobalVariables.ALTERNATE_CONTACT2:altCon2,
       GlobalVariables.GENDER:gender,
       GlobalVariables.DOB:dob,
       GlobalVariables.BLOOD_GROUP:bloodGroup,
@@ -1332,6 +1332,10 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
       //GlobalVariables.
     });
+
+    print('DOB : '+dob);
+    print('phone : '+phone);
+    print('Address : '+address);
 
     print('profilePhoto : ' + profilePhoto.toString());
     print('baseurl : ' + baseUrl + GlobalVariables.editProfileAPI);

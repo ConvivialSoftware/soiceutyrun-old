@@ -1322,7 +1322,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             } else if (Platform.isIOS) {
               if (value.ios_version != AppPackageInfo.version) {
                 //show app update Dialog
-                GlobalFunctions.appUpdateDialog(context, value.android_type);
+                GlobalFunctions.appUpdateDialog(context, value.ios_type);
               }
             }
           } else {

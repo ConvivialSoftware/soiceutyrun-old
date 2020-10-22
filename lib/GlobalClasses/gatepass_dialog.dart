@@ -199,10 +199,13 @@ class _GatePassDialogState extends State<GatePassDialog> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircleAvatar(
+        _visitorImage!=null ? CircleAvatar(
           radius: 24,
           backgroundColor: Colors.white10,
           backgroundImage: NetworkImage(_visitorImage),
+        ):CircleAvatar(
+          radius: 24,
+          backgroundColor: GlobalVariables.lightGreen,
         ),
         SizedBox(
           width: 20.0,

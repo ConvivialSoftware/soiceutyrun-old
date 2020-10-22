@@ -857,7 +857,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
 
   void getMembershipTypeData() {
 
-    _membershipTypeList = ["Owner","Owner Family"];
+    _membershipTypeList = ["Owner","Owner Family","Tenant"];
     for(int i=0;i<_membershipTypeList.length;i++){
       __membershipTypeListItems.add(DropdownMenuItem(
         value: _membershipTypeList[i],
@@ -926,8 +926,8 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         setState(() {
 
           _nameController.text=_profileList[0].NAME;
-          _mobileController.text=_profileList[0].ALTERNATE_CONTACT1;
-          _alterMobileController.text=_profileList[0].ALTERNATE_CONTACT2;
+          _mobileController.text=_profileList[0].Phone;
+          _alterMobileController.text=_profileList[0].ALTERNATE_CONTACT1;
           _selectedLivesHere=_profileList[0].LIVES_HERE.isEmpty ? null : _profileList[0].LIVES_HERE;
           _selectedBloodGroup=_profileList[0].BLOOD_GROUP.isEmpty ? null : _profileList[0].BLOOD_GROUP;
           _occupationController.text =_profileList[0].OCCUPATION;
@@ -937,7 +937,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
           _emailController.text=_profileList[0].Email;
           _addressController.text=_profileList[0].ADDRESS;
        //   _hobbiesController.text=_profileList[0].HOBBIES;
-          _selectedMembershipType= _profileList[0].TYPE.isEmpty ? null : _profileList[0].TYPE;
+          _selectedMembershipType= _profileList[0].TYPE.isEmpty ? _membershipTypeList[0] : _profileList[0].TYPE;
 
           attachmentFilePath = _profileList[0].PROFILE_PHOTO;
           if(attachmentFilePath!=null && attachmentFilePath.length==0){
@@ -971,7 +971,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
       print('Remove Image from TempDirectory');
     }
     _progressDialog.show();
-    restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_mobileController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
+    restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
       _progressDialog.hide();
       if (value.status) {
         Navigator.of(context).pop();

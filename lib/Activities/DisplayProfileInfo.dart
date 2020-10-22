@@ -208,7 +208,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     ),
                     Container(
                    //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].ALTERNATE_CONTACT1,style: TextStyle(
+                      child: AutoSizeText(_profileList[0].Phone,style: TextStyle(
                           color: GlobalVariables.grey,fontSize: 16
                       ),),
                     )
@@ -227,7 +227,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     ),
                     Container(
                      // margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].ALTERNATE_CONTACT2,style: TextStyle(
+                      child: AutoSizeText(_profileList[0].ALTERNATE_CONTACT1,style: TextStyle(
                           color: GlobalVariables.grey,fontSize: 16
                       ),),
                     )
