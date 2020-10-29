@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
+import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
@@ -1998,24 +1999,24 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   AppLocalizations.of(context).translate('events'))));
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
-      GlobalFunctions.comingSoonDialog(context);
-      /* Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('discover'))));*/
+      //GlobalFunctions.comingSoonDialog(context);
+       Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('discover'))));
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /*Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('classified'))));*/
+      //GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('classified'))));
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /* Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('services'))));*/
+      //GlobalFunctions.comingSoonDialog(context);
+       Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('services'))));
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /*  Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('near_by_shop'))));*/
+      //GlobalFunctions.comingSoonDialog(context);
+        Navigator.push(
+         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('near_by_shop'))));
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
       GlobalFunctions.comingSoonDialog(context);
