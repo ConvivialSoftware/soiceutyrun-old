@@ -61,7 +61,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   var name = '';
   var email = '', phone = '';
-  var photo;
+  var photo='';
 
   List<Banners> _bannerList = List<Banners>();
 
@@ -254,7 +254,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   // GlobalFunctions.showToast('profile_user');
                                   navigateToProfilePage();
                                 },
-                                child: photo == null
+                                child: photo.length==0
                                     ? Image.asset(
                                         GlobalVariables
                                             .componentUserProfilePath,
@@ -2163,10 +2163,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   Future<void> navigateToProfilePage() async {
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    Navigator.push(
+    var result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
+    if(result=='profile'){
+      geProfileData();
+    }
   }
 
   String getBillPaymentStatus() {
