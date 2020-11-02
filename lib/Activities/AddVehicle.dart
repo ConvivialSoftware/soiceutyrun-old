@@ -324,11 +324,11 @@ ProgressDialog _progressDialog;
 
     if(_vehicleNoController.text.length>0){
       if(_vehicleModelController.text.length>0){
-        if(_vehicleStickerController.text.length>0){
+       // if(_vehicleStickerController.text.length>0){
           addVehicle();
-        }else{
+       /* }else{
           GlobalFunctions.showToast("Please Enter Sticker");
-        }
+        }*/
       }else{
         GlobalFunctions.showToast("Please Enter ModelName");
       }
