@@ -31,6 +31,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
   List<ProfileInfo> _profileList = List<ProfileInfo>();
 
   String userId,societyId;
+  bool isEdit=false;
 
   DisplayProfileInfoState(this.userId,this.societyId);
 
@@ -61,7 +62,11 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
           elevation: 0,
           leading: InkWell(
             onTap: () {
-              Navigator.of(context).pop();
+              if(!isEdit) {
+                Navigator.of(context).pop();
+              }else{
+                Navigator.of(context).pop('profile');
+              }
             },
             child: Icon(
               Icons.arrow_back,
@@ -73,7 +78,14 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
-        body: getBaseLayout(),
+        body: WillPopScope(child: getBaseLayout(), onWillPop: (){
+          if(!isEdit) {
+            Navigator.of(context).pop();
+          }else{
+            Navigator.of(context).pop('profile');
+          }
+          return;
+        }),
       ),
     );
   }
@@ -81,21 +93,17 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
 
 
   void geProfileData() async{
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     _progressDialog.show();
     restClient.getProfileData(societyId,userId).then((value) {
-      //  _progressDialog.hide();
+        _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
-
         _profileList = List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
         setState(() {
         });
-
       }
-      _progressDialog.hide();
     });
 
   }
@@ -148,7 +156,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                         //TODO: userImage
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(30.0),
-                          child: _profileList[0].PROFILE_PHOTO == null
+                          child: _profileList[0].PROFILE_PHOTO == ""
                               ? Image.asset(
                               GlobalVariables.componentUserProfilePath,
                               width: 60,
@@ -166,32 +174,34 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                             ),
                           ),
                         )),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child:  AutoSizeText(
-                            _profileList[0].NAME,
-                            style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize:20,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: true,
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                    Flexible(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                             child:  AutoSizeText(
-                              _profileList[0].BLOCK+_profileList[0].FLAT,
+                              _profileList[0].NAME,
                               style: TextStyle(
-                                color: GlobalVariables.grey,
-                                fontSize:16,
+                                color: GlobalVariables.green,
+                                fontSize:20,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          Visibility(
+                            visible: true,
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                              child:  AutoSizeText(
+                                _profileList[0].BLOCK+_profileList[0].FLAT,
+                                style: TextStyle(
+                                  color: GlobalVariables.grey,
+                                  fontSize:16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -435,14 +445,19 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
           Container(
             padding: EdgeInsets.all(15),
             child: FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
                 //GlobalFunctions.showToast('Fab CLick');
 
-                Navigator.of(context).pop();
-                Navigator.push(
+               // Navigator.of(context).pop('profile');
+              var result = await  Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => BaseEditProfileInfo(userId,societyId)));
+
+              if(result=='profile'){
+                isEdit=true;
+                geProfileData();
+              }
               },
               child: Icon(
                 Icons.edit,

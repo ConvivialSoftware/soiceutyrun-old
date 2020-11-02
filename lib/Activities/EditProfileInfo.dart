@@ -974,7 +974,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
       _progressDialog.hide();
       if (value.status) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop('profile');
       }
       GlobalFunctions.showToast(value.message);
     });

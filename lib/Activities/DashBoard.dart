@@ -24,6 +24,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
+import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -122,11 +123,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     String userId = await GlobalFunctions.getUserId();
     restClient.getProfileData(societyId, userId).then((value) {
       //  _progressDialog.hide();
-      if (value.status) {}
-    }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (value.status) {
+        setState(() {
+          List<dynamic> _list = value.data;
+          List<ProfileInfo>   _profileList = List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
+          photo=_profileList[0].PROFILE_PHOTO;
+          name = _profileList[0].NAME;
+        });
       }
+    }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
