@@ -489,7 +489,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           ),
                           underline: SizedBox(),
                           hint: Text(
-                            AppLocalizations.of(context).translate('membership_type'),
+                            AppLocalizations.of(context).translate('membership_type')+'*',
                             style: TextStyle(
                                 color: GlobalVariables.lightGray, fontSize: 12),
                           ),
@@ -689,7 +689,8 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
              // if(_occupationController.text.length>0){
 
-                  if(_selectedMembershipType!=null || _selectedMembershipType.length>0) {
+                print('_selectedMembershipType : '+_selectedMembershipType.toString());
+                  if(_selectedMembershipType!=null) {
 
 //                    if(_selectedLivesHere!=null || _selectedLivesHere.length>0) {
 
