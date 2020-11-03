@@ -362,7 +362,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                   //maxLines: 99,
                   decoration: InputDecoration(
                       hintText:
-                      AppLocalizations.of(context).translate('reference_no'),
+                      AppLocalizations.of(context).translate('reference_no')+'*',
                       hintStyle: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                       border: InputBorder.none),

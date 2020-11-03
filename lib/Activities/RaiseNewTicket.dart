@@ -161,7 +161,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   //maxLines: 99,
                   decoration: InputDecoration(
                       hintText:
-                          AppLocalizations.of(context).translate('subject'),
+                          AppLocalizations.of(context).translate('subject')+'*',
                       hintStyle: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                       border: InputBorder.none),
@@ -368,7 +368,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   maxLines: 99,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)
-                          .translate('complaint_desc'),
+                          .translate('complaint_desc')+'*',
                       hintStyle: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                       border: InputBorder.none),

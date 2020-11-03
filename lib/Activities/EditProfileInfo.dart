@@ -165,7 +165,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                   controller: _nameController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('name'),
+                      hintText: AppLocalizations.of(context).translate('name')+'*',
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
                       border: InputBorder.none
                   ),

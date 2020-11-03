@@ -112,7 +112,7 @@ ProgressDialog _progressDialog;
                   textCapitalization: TextCapitalization.characters,
                   inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),],
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('vehicle_no'),
+                      hintText: AppLocalizations.of(context).translate('vehicle_no')+'*',
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
                       border: InputBorder.none
                   ),
@@ -226,7 +226,7 @@ ProgressDialog _progressDialog;
                 child: TextField(
                   controller: _vehicleModelController,
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('model_name'),
+                      hintText: AppLocalizations.of(context).translate('model_name')+'*',
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
                       border: InputBorder.none
                   ),
