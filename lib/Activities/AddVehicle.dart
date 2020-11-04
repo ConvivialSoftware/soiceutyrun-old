@@ -28,9 +28,8 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
 
   String _selectedVehicleType="2 Wheeler";
 
+  ProgressDialog _progressDialog;
 
-
-ProgressDialog _progressDialog;
   @override
   Widget build(BuildContext context) {
 

@@ -315,7 +315,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('select_bank'),
+                      AppLocalizations.of(context).translate('select_bank')+'*',
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                     ),

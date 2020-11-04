@@ -302,7 +302,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                         keyboardType: TextInputType.number,
                         maxLength: 10,
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('contact1'),
+                            hintText: AppLocalizations.of(context).translate('contact1')+'*',
                             hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
                             border: InputBorder.none,
                             counterText: '',
@@ -371,31 +371,40 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               Row(
                 children: <Widget>[
                   Flexible(
-                    flex: 2,
+                    flex: 3,
                     child: Container(
+                      width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 20, 5, 0),
+                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
                             width: 3.0,
-                          )
-                      ),
-                      child: TextField(
-                        controller: _occupationController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('occupation'),
-                            hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                            border: InputBorder.none
+                          )),
+                      child: ButtonTheme(
+                        child: DropdownButton(
+                          items: __membershipTypeListItems,
+                          value: _selectedMembershipType,
+                          onChanged: changeMembershipTypeDropDownItem,
+                          isExpanded: true,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: GlobalVariables.mediumGreen,
+                          ),
+                          underline: SizedBox(),
+                          hint: Text(
+                            AppLocalizations.of(context).translate('membership_type')+'*',
+                            style: TextStyle(
+                                color: GlobalVariables.lightGray, fontSize: 16),
+                          ),
                         ),
                       ),
                     ),
                   ),
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -419,9 +428,9 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           ),
                           underline: SizedBox(),
                           hint: Text(
-                            AppLocalizations.of(context).translate('lives_here'),
+                            AppLocalizations.of(context).translate('lives_here')+'*',
                             style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 12),
+                                color: GlobalVariables.lightGray, fontSize: 16),
                           ),
                         ),
                       ),
@@ -432,11 +441,35 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               Row(
                 children: <Widget>[
                   Flexible(
-                    flex: 1,
+                    flex: 3,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: GlobalVariables.mediumGreen,
+                            width: 3.0,
+                          )
+                      ),
+                      child: TextField(
+                        controller: _occupationController,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context).translate('occupation'),
+                            hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                            border: InputBorder.none
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 20, 5, 0),
+                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
@@ -458,40 +491,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           hint: Text(
                             AppLocalizations.of(context).translate('blood_group'),
                             style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 12),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 3.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButton(
-                          items: __membershipTypeListItems,
-                          value: _selectedMembershipType,
-                          onChanged: changeMembershipTypeDropDownItem,
-                          isExpanded: true,
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
-                          ),
-                          underline: SizedBox(),
-                          hint: Text(
-                            AppLocalizations.of(context).translate('membership_type')+'*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 12),
+                                color: GlobalVariables.lightGray, fontSize: 16),
                           ),
                         ),
                       ),
@@ -681,7 +681,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
      // if(_dobController.text.length>0){
 
-      //  if(_mobileController.text.length>0){
+        if(_mobileController.text.length>0){
 
         //  if(_emailController.text.length>0){
 
@@ -689,16 +689,15 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
              // if(_occupationController.text.length>0){
 
-                print('_selectedMembershipType : '+_selectedMembershipType.toString());
                   if(_selectedMembershipType!=null) {
 
-//                    if(_selectedLivesHere!=null || _selectedLivesHere.length>0) {
+                    if(_selectedLivesHere!=null) {
 
                       addMember();
 
-                   /* }else{
+                    }else{
                       GlobalFunctions.showToast('Please Select Lives Here');
-                    }*/
+                    }
                   }else{
                     GlobalFunctions.showToast('Please Select MemberShip Type');
                   }
@@ -712,9 +711,9 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
           /*}else{
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
-       /* }else{
+        }else{
           GlobalFunctions.showToast('Please Enter Mobile Number');
-        }*/
+        }
       /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
       }*/

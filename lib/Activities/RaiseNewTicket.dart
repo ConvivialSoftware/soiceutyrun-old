@@ -345,7 +345,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('select_category'),
+                      AppLocalizations.of(context).translate('select_category')+'*',
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                     ),
