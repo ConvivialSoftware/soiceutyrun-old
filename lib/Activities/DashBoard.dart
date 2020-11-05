@@ -12,6 +12,7 @@ import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
+import 'package:societyrun/Activities/Expense.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
@@ -1439,6 +1440,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
         new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
             title: AppLocalizations.of(context).translate('admin'),
             rootIconData: GlobalVariables.myAdminIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
@@ -1509,6 +1515,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         new RootTitle(
             title: AppLocalizations.of(context).translate('help_desk'),
             rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
         new RootTitle(
@@ -2052,6 +2063,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
+    }else if (item == AppLocalizations.of(context).translate('expense')) {
+      //Redirect to  Help Desk
+      // GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseExpense()));
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
       GlobalFunctions.comingSoonDialog(context);

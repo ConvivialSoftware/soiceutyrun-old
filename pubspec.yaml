@@ -168,6 +168,7 @@ flutter:
     - assets/other_assets/out.svg
     - assets/other_assets/splash_socityrun.png
     - assets/other_assets/anxiety.svg
+    - assets/other_assets/expense.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

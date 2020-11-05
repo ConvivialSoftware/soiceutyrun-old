@@ -52,6 +52,7 @@
   "pay_now": "Pay Now",
   "more": "More",
   "recent_transaction": "Recent Transaction",
+  "pending_transaction": "Pending Transaction",
   "share_address": "Share Address",
   "view_more":"View more",
   "my_family": "My Family",
@@ -303,6 +304,12 @@
   "okay" : "Okay",
   "oops": "Oops! Something went wrong",
   "not_allow_run_app": "Please login again to fix the issue.",
-  "invalid_username_password": "Incorrect username or password"
+  "invalid_username_password": "Incorrect username or password",
+  "add_expense": "Add Expense",
+  "expense": "Expense",
+  "payment_date": "Payment Date",
+  "paid_by": "Paid By",
+  "from_account": "From Account",
+  "ledger_account": "Ledger Account"
 
 }

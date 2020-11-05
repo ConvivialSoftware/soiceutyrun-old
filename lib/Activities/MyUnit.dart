@@ -59,6 +59,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   // List<LedgerResponse> _ledgerResponseList = new List<LedgerResponse>();
   List<Ledger> _ledgerList = new List<Ledger>();
+  List<Ledger> _pendingList = new List<Ledger>();
   List<PayOption> _payOptionList = new List<PayOption>();
   bool hasPayTMGateway = false;
   bool hasRazorPayGateway = false;
@@ -529,7 +530,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     builder: (context) => ListView.builder(
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: _ledgerList.length>10 ? 8 : _ledgerList.length,
+                                          itemCount: _ledgerList.length>=3 ? 3 : _ledgerList.length,
                                           itemBuilder: (context, position) {
                                             return getListItemLayout(position);
                                           }, //  scrollDirection: Axis.vertical,
@@ -577,6 +578,84 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     ],
                                   ),
                                 ))
+                            : Container(),
+                        _ledgerList.length > 0
+                            ? Container(
+                          alignment: Alignment.topLeft,
+                          //color: GlobalVariables.white,
+                          margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('pending_transaction'),
+                            style: TextStyle(
+                              color: GlobalVariables.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                            : Container(),
+                        _ledgerList.length > 0
+                            ? Container(
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10))),
+                          child: Builder(
+                              builder: (context) => ListView.builder(
+                                physics:
+                                const NeverScrollableScrollPhysics(),
+                                itemCount: _ledgerList.length>=3 ? 3 : _ledgerList.length,
+                                itemBuilder: (context, position) {
+                                  return getListItemLayout(position);
+                                }, //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                        )
+                            : Container(),
+                        _ledgerList.length > 0
+                            ? Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                            //color: GlobalVariables.white,
+                            decoration: BoxDecoration(
+                                color: GlobalVariables.white,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10))),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BaseLedger()));
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('view_more'),
+                                      style: TextStyle(
+                                          color: GlobalVariables.green,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Icon(
+                                      Icons.fast_forward,
+                                      color: GlobalVariables.green,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ))
                             : Container(),
                       ],
                     ),
