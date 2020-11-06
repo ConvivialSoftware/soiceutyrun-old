@@ -1291,18 +1291,33 @@ class MyComplexState extends State<BaseMyComplex>
                   List<PollOption> _optionList  = List<PollOption>.from(_pollList[position].OPTION.map((i) =>PollOption.fromJson(i)));
                   Navigator.push(context,MaterialPageRoute(builder: (context)=>BaseViewPollGraph(_pollList[position],_optionList)));
                 },
-                child: Container(
-                  alignment: Alignment.topRight,
-                  padding: EdgeInsets.all(8),
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  decoration: BoxDecoration(
-                    color: GlobalVariables.green,
-                    borderRadius: BorderRadius.circular(35),
-                  ),
-                  child: Icon(
-                    Icons.remove_red_eye,
-                    color: GlobalVariables.white,
-                  ),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) ? Text(
+                        "See Poll Result",
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ) : Container(),
+                    ),
+                    Container(
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.all(8),
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      decoration: BoxDecoration(
+                        color: GlobalVariables.green,
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                      child: Icon(
+                        Icons.remove_red_eye,
+                        color: GlobalVariables.white,
+                      ),
+                    ),
+                  ],
                 ),
               ):Container(),
               (_pollList[position].VOTED_TO.length==0 ) && _pollList[position].VOTE_PERMISSION.toLowerCase()=='yes' && !GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) ? InkWell(
