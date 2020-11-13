@@ -34,6 +34,7 @@
   "privacy_statement": "Privacy Statement",
   "otp_header_str": "We have sent 6 digit OTP to your\n",
   "otp_header_str_with_mobile":"mobile number ",
+  "otp_header_str_with_email":"Email ID ",
   "enter_otp": "Enter OTP",
   "not_received_otp": "You haven't received OTP?\n",
   "resend": "Resend",
@@ -310,6 +311,11 @@
   "payment_date": "Payment Date",
   "paid_by": "Paid By",
   "from_account": "From Account",
-  "ledger_account": "Ledger Account"
+  "ledger_account": "Ledger",
+  "opt_on_mail": "OTP on Email",
+  "opt_on_mobile": "OTP on Mobile",
+  "bank": "Bank",
+  "reference_number": "Reference No.",
+  "enter_email_id": "Enter Email ID"
 
 }

@@ -131,8 +131,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   @override
   Future<StatusMsgResponse> getOTP(String mobile, String emailId) async {
 // TODO: implement getOTP
-    ArgumentError.checkNotNull(mobile, "mobile_no");
-    ArgumentError.checkNotNull(emailId, "Email_id");
+    //ArgumentError.checkNotNull(mobile, "mobile_no");
+    //ArgumentError.checkNotNull(emailId, "Email_id");
 
     FormData formData =
         FormData.fromMap({"mobile_no": mobile, "Email_id": emailId});
@@ -1072,7 +1072,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
   Future<BankResponse> getBankData(String socId, String invoiceNo) async {
     // TODO: implement getBankData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
-    ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
+   // ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
     //ArgumentError.checkNotNull(block, GlobalVariables.block);
 
     FormData formData = FormData.fromMap({
@@ -1082,7 +1082,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     });
     print(GlobalVariables.societyId + ":" + socId);
    // print(GlobalVariables.flat + ":" + flat);
-    print(GlobalVariables.INVOICE_NO + ":" + invoiceNo);
+    print(GlobalVariables.INVOICE_NO + ":" + invoiceNo.toString());
 
     print('baseurlERP : ' + baseUrl + GlobalVariables.bankAPI);
     final Response _result = await _dio.post(GlobalVariables.bankAPI,
@@ -1650,7 +1650,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
-      GlobalVariables.STAFF_NAME: name,
+      GlobalVariables.societyName: name,
       'Subject': subject,
       'Description': description,
       'Attachment': attachment,
@@ -1828,5 +1828,115 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     print('value of deleteExpectedVisitor response : ' + value.toString());
 
     return StatusMsgResponse.fromJsonWithMessage(value);
+  }
+
+  @override
+  Future<DataResponse> getExpenseAccountLedger(String societyId) async {
+    // TODO: implement getExpenseAccountLedger
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.accountLedgerAPI);
+    final Response _result = await _dio.post(GlobalVariables.accountLedgerAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getExpenseAccountLedger : ' + value.toString());
+    return DataResponse.fromJsonExpense(value);
+  }
+
+  @override
+  Future<DataResponse> getExpenseData(String societyId) async {
+    // TODO: implement getExpenseData
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.expenseAPI);
+    final Response _result = await _dio.post(GlobalVariables.expenseAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getExpenseData : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getExpenseBankAccount(String societyId) async {
+    // TODO: implement getExpenseBankAccount
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.expenseBankAPI);
+    final Response _result = await _dio.post(GlobalVariables.expenseBankAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getExpenseBankAccount : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> addExpense(String societyId, String amount, String referenceNo,
+      String transactionType, String bank, String ledgerId, String date, String narration, String attachment) async {
+    // TODO: implement addExpense
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
+    ArgumentError.checkNotNull(referenceNo, GlobalVariables.REFERENCE_NO);
+    ArgumentError.checkNotNull(transactionType, GlobalVariables.TRANSACTION_TYPE);
+    ArgumentError.checkNotNull(bank, GlobalVariables.BANK);
+    ArgumentError.checkNotNull(date, GlobalVariables.DATE);
+    ArgumentError.checkNotNull(ledgerId, GlobalVariables.LEDGER_ID);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.AMOUNT: amount,
+      GlobalVariables.REFERENCE_NO: referenceNo,
+      GlobalVariables.TRANSACTION_TYPE: transactionType,
+      GlobalVariables.BANK: bank,
+      GlobalVariables.DATE: date,
+      GlobalVariables.LEDGER_ID: ledgerId,
+      GlobalVariables.NARRATION: narration,
+      GlobalVariables.ATTACHMENT: attachment
+    });
+    print(GlobalVariables.societyId+": "+societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.addExpenseAPI);
+
+    // print("Pic String: " + attachment.toString());
+    // print('attachment lengtth : ' + attachment.length.toString());
+    final Response _result = await _dio.post(GlobalVariables.addExpenseAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addExpense : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
   }
 }

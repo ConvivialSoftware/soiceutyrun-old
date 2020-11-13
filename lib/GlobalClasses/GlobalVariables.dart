@@ -174,19 +174,23 @@ class GlobalVariables {
   static const authorizedTokenERP = "erpadmin:SocERP21run";
   static var AUTHERP =
       "Basic " + base64Url.encode(utf8.encode(authorizedTokenERP));
-  static const BaseURLERP = "https://housingsocietyerp.com/AndroidApi/";
+  static const BaseURLERP = "https://housingsocietyerp.com/";
 
   /*Api Name for BaseURLERP*/
-  static const duesAPI = "dues";
-  static const ledgerAPI = "ledger";
-  static const viewBillsAPI = "view";
-  static const billAPI = "Billview1";
-  static const receiptAPI = "receiptview1";
-  static const bankAPI = "bank";
-  static const insertPaymentAPI = "insertpayment_razorpay";
-  static const paymentRequestAPI = "paymentrequest";
-  static const mailAPI = "mail";
-  static const razorPayTransactionAPI = "Razorpay_transaction";
+  static const duesAPI = "AndroidApi/dues";
+  static const ledgerAPI = "AndroidApi/ledger";
+  static const viewBillsAPI = "AndroidApi/view";
+  static const billAPI = "AndroidApi/Billview1";
+  static const receiptAPI = "AndroidApi/receiptview1";
+  static const bankAPI = "AndroidApi/bank";
+  static const insertPaymentAPI = "AndroidApi/insertpayment_razorpay";
+  static const paymentRequestAPI = "AndroidApi/paymentrequest";
+  static const mailAPI = "AndroidApi/mail";
+  static const razorPayTransactionAPI = "AndroidApi/Razorpay_transaction";
+  static const accountLedgerAPI = "Androidexpense/account_ledger";
+  static const expenseAPI = "Androidexpense/all_expense";
+  static const expenseBankAPI = "Androidexpense/bank";
+  static const addExpenseAPI = "Androidexpense/Add";
 
   /*Routs Variables*/
   static const LoginPage = "Login";
@@ -281,7 +285,10 @@ class GlobalVariables {
   static const AMOUNT = "AMOUNT";
   static const REFERENCE_NO = "REFERENCE_NO";
   static const TRANSACTION_MODE = "TRANSACTION_MODE";
+  static const TRANSACTION_TYPE = "TRANSACTION_TYPE";
   static const BANK_ACCOUNTNO = "BANK_ACCOUNTNO";
+  static const BANK = "BANK";
+  static const LEDGER_ID = "LEDGER_ID";
   static const PAYMENT_DATE = "PAYMENT_DATE";
   static const NARRATION = "NARRATION";
   static const CHEQUE_BANKNAME = "CHEQUE_BANKNAME";
@@ -319,6 +326,7 @@ class GlobalVariables {
   static const MESSAGE = "message";
   static const DATA = "data";
   static const Front = "front";
+  static const bank = "bank";
   static const PassCode = "pass_code";
   static const ExpiredTime = "expire_time";
   static const OTP = "otp";

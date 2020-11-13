@@ -21,7 +21,16 @@ class BaseOtpWithMobile extends StatefulWidget {
 class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
 
   TextEditingController _mobileController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   ProgressDialog _progressDialog;
+
+  bool isEmail=false;
+
+  @override
+  void initState() {
+    super.initState();
+    //GlobalFunctions.showToast(AppLocalizations.of(context).translate('opt_not_on_mail'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,36 +72,91 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   color: GlobalVariables.lightGray))
                         ])),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 1.1,
-                        margin: EdgeInsets.fromLTRB(25, 25, 25, 10),
-                        child: TextField(
-                          controller: _mobileController,
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                          style: TextStyle(color: GlobalVariables.black),
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                .translate('enter_mobile_no'),
-                            hintStyle: TextStyle(
-                              color: GlobalVariables.lightGray,
-                            ),
-                            suffixIcon: Icon(
-                              Icons.phone_android,
-                              color: GlobalVariables.lightGreen,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: GlobalVariables.green,
-                                  width: 2.0,
+                      Visibility(
+                        visible: !isEmail,
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: InkWell(
+                                onTap: () {
+                                },
+                                child: Text(
+                                  '+91',
+                                  style: TextStyle(
+                                      color: GlobalVariables.green,
+                                      fontSize: 18),
                                 ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: GlobalVariables.green, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.3,
+                              margin: EdgeInsets.fromLTRB(10, 25, 25, 10),
+                              child: TextField(
+                                controller: _mobileController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 10,
+                                style: TextStyle(color: GlobalVariables.black),
+                                decoration: InputDecoration(
+                                  hintText:  AppLocalizations.of(context)
+                                      .translate('enter_mobile_no'),
+                                  hintStyle: TextStyle(
+                                    color: GlobalVariables.lightGray,
+                                  ),
+                                  suffixIcon: Icon(
+                                    Icons.phone_android,
+                                    color: GlobalVariables.lightGreen,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: GlobalVariables.green,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10.0))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: GlobalVariables.green, width: 2.0),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10.0))),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: isEmail,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 1.2,
+                          margin: EdgeInsets.fromLTRB(10, 25, 25, 10),
+                          child: TextField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            style: TextStyle(color: GlobalVariables.black),
+                            decoration: InputDecoration(
+                              hintText:  AppLocalizations.of(context)
+                                  .translate('enter_email_id'),
+                              hintStyle: TextStyle(
+                                color: GlobalVariables.lightGray,
+                              ),
+                              suffixIcon: Icon(
+                                Icons.mail,
+                                color: GlobalVariables.lightGreen,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: GlobalVariables.green,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: GlobalVariables.green, width: 2.0),
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                            ),
                           ),
                         ),
                       ),
@@ -107,8 +171,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                 height: 45,
                                 margin: EdgeInsets.fromLTRB(0, 0, 50, 0),
                                 child: ButtonTheme(
-                                  minWidth:
-                                      MediaQuery.of(context).size.width / 2,
+                                  minWidth: MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
                                     color: GlobalVariables.green,
                                     onPressed: () {
@@ -126,6 +189,28 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                       style: TextStyle(
                                           fontSize: GlobalVariables.largeText),
                                     ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    if(isEmail)
+                                      isEmail=false;
+                                    else
+                                      isEmail=true;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    isEmail ? AppLocalizations.of(context)
+                                        .translate('opt_on_mobile') : AppLocalizations.of(context)
+                                        .translate('opt_on_mail'),
+                                    style: TextStyle(
+                                        color: GlobalVariables.green,
+                                        fontSize: 18),
                                   ),
                                 ),
                               ),
@@ -263,18 +348,18 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
 
   void verifyNumber() {
 
-    if(_mobileController.text.length>0){
-
-      getOtp();
-
-     /* Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  BaseOtp()));*/
-    }else{
-
-      GlobalFunctions.showToast("Please Enter mobile Number");
+    if(isEmail){
+      if(_emailController.text.length>0){
+        getOtp();
+      }else{
+        GlobalFunctions.showToast("Please Enter Email ID");
+      }
+    }else {
+      if (_mobileController.text.length == 10) {
+        getOtp();
+      }else{
+        GlobalFunctions.showToast("Please Enter mobile Number");
+      }
     }
 
 
@@ -286,7 +371,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
     final RestClient restClient = RestClient(dio);
 
     _progressDialog.show();
-    restClient.getOTP(_mobileController.text, "").then((value) {
+    restClient.getOTP(isEmail ? "" : _mobileController.text, isEmail ? _emailController.text : "").then((value) {
       print('get OTP value : '+value.toString());
       _progressDialog.hide();
       if(value.status){
@@ -294,7 +379,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseOtp(value.expire_time,value.otp,_mobileController.text)));
+                    BaseOtp(value.expire_time,value.otp,isEmail ? _emailController.text : _mobileController.text)));
       }
       GlobalFunctions.showToast(value.message);
 

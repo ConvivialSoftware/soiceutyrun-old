@@ -1699,7 +1699,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         child: Card(
           shape: (RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0))),
-          elevation: 5.0,
+          elevation: 20.0,
+          shadowColor: GlobalVariables.green.withOpacity(0.3),
           margin: EdgeInsets.all(20),
           color: GlobalVariables.white,
           child: Stack(

@@ -505,7 +505,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             ? Container(
                                 alignment: Alignment.topLeft,
                                 //color: GlobalVariables.white,
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                                 child: Text(
                                   AppLocalizations.of(context)
                                       .translate('recent_transaction'),
@@ -542,7 +542,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             ? Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                                 //color: GlobalVariables.white,
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
@@ -583,7 +583,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             ? Container(
                           alignment: Alignment.topLeft,
                           //color: GlobalVariables.white,
-                          margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                          margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Text(
                             AppLocalizations.of(context)
                                 .translate('pending_transaction'),
@@ -688,7 +688,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             children: <Widget>[
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -748,7 +748,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -807,7 +807,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 140, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

@@ -8,12 +8,14 @@ import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/Bank.dart';
+import 'package:societyrun/Models/LedgerAccount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 import 'base_stateful.dart';
 
 class BaseAddExpense extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -22,50 +24,58 @@ class BaseAddExpense extends StatefulWidget {
 }
 
 class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
-
-
   String attachmentFilePath;
   String attachmentFileName;
   String attachmentCompressFilePath;
-
 
   TextEditingController _paymentDateController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   TextEditingController _referenceController = TextEditingController();
   TextEditingController _noteController = TextEditingController();
 
-
-  List<String> _ledgerAccountList = new List<String>();
-  List<DropdownMenuItem<String>> _ledgerAccountListItems = new List<DropdownMenuItem<String>>();
+  List<LedgerAccount> _ledgerAccountList = new List<LedgerAccount>();
+  List<DropdownMenuItem<String>> _ledgerAccountListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedLedgerAccount;
 
-
   List<String> _paidByList = new List<String>();
-  List<DropdownMenuItem<String>> _paidByListItems = new List<DropdownMenuItem<String>>();
+  List<DropdownMenuItem<String>> _paidByListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedPaidBy;
 
-  List<String> _fromAccountList = new List<String>();
-  List<DropdownMenuItem<String>> _fromAccountListItems = new List<DropdownMenuItem<String>>();
-  String _selectedFromAccount;
-
+  List<Bank> _bankList = new List<Bank>();
+  List<DropdownMenuItem<String>> _bankAccountListItems =
+      new List<DropdownMenuItem<String>>();
+  String _selectedBankAccount;
 
   ProgressDialog _progressDialog;
-  bool isStoragePermission=false;
-
+  bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
     getPaidByData();
-    _paymentDateController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().year.toString();
+    _paymentDateController.text =
+        DateTime.now().toLocal().day.toString().padLeft(2, '0') +
+            "/" +
+            DateTime.now().toLocal().month.toString().padLeft(2, '0') +
+            "/" +
+            DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission=value;
+      isStoragePermission = value;
+    });
+    GlobalFunctions.checkInternetConnection().then((value) {
+      if (value) {
+        getExpenseAccountLedger();
+      } else {
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     //GlobalFunctions.showToast(memberType.toString());
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
@@ -122,7 +132,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
       child: Container(
         margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
         padding: EdgeInsets.all(20),
-       // height: MediaQuery.of(context).size.height / 0.5,
+        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -130,7 +140,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
           child: Column(
             children: <Widget>[
               Container(
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
@@ -138,28 +148,33 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _paymentDateController,
                   readOnly: true,
-                  style: TextStyle(
-                      color: GlobalVariables.green
-                  ),
+                  style: TextStyle(color: GlobalVariables.green),
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('payment_date'),
-                      hintStyle: TextStyle(color: GlobalVariables.veryLightGray ,fontSize: 16),
+                      hintText: AppLocalizations.of(context)
+                          .translate('payment_date'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.veryLightGray, fontSize: 16),
                       border: InputBorder.none,
                       suffixIcon: IconButton(
-                          onPressed: (){
-
-                            GlobalFunctions.getSelectedDate(context).then((value){
-                              _paymentDateController.text = value.day.toString().padLeft(2, '0')+"/"+value.month.toString().padLeft(2, '0')+"/"+value.year.toString();
+                          onPressed: () {
+                            GlobalFunctions.getSelectedDate(context)
+                                .then((value) {
+                              _paymentDateController.text =
+                                  value.day.toString().padLeft(2, '0') +
+                                      "/" +
+                                      value.month.toString().padLeft(2, '0') +
+                                      "/" +
+                                      value.year.toString();
                             });
-
                           },
-                          icon: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,))
-                  ),
+                          icon: Icon(
+                            Icons.date_range,
+                            color: GlobalVariables.mediumGreen,
+                          ))),
                 ),
               ),
               Container(
@@ -185,7 +200,8 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('ledger_account')+'*',
+                      AppLocalizations.of(context).translate('ledger_account') +
+                          '*',
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 16),
                     ),
@@ -210,7 +226,8 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                   //maxLines: 99,
                   decoration: InputDecoration(
                       hintText:
-                      AppLocalizations.of(context).translate('amount')+'*',
+                          AppLocalizations.of(context).translate('amount') +
+                              '*',
                       hintStyle: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                       border: InputBorder.none),
@@ -243,7 +260,8 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                           ),
                           underline: SizedBox(),
                           hint: Text(
-                            AppLocalizations.of(context).translate('paid_by')+'*',
+                            AppLocalizations.of(context).translate('paid_by') +
+                                '*',
                             style: TextStyle(
                                 color: GlobalVariables.lightGray, fontSize: 16),
                           ),
@@ -268,8 +286,9 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                         controller: _referenceController,
                         //maxLines: 99,
                         decoration: InputDecoration(
-                            hintText:
-                            AppLocalizations.of(context).translate('reference_no')+'*',
+                            hintText: AppLocalizations.of(context)
+                                    .translate('reference_no') +
+                                '*',
                             hintStyle: TextStyle(
                                 color: GlobalVariables.lightGray, fontSize: 14),
                             border: InputBorder.none),
@@ -291,8 +310,8 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     )),
                 child: ButtonTheme(
                   child: DropdownButton(
-                    items: _fromAccountListItems,
-                    value: _selectedFromAccount,
+                    items: _bankAccountListItems,
+                    value: _selectedBankAccount,
                     onChanged: changeFromAccountDropDownItem,
                     isExpanded: true,
                     icon: Icon(
@@ -301,7 +320,8 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('from_account')+'*',
+                      AppLocalizations.of(context).translate('from_account') +
+                          '*',
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 16),
                     ),
@@ -310,25 +330,25 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
               ),
               Container(
                 height: 100,
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(10),
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _noteController,
                   keyboardType: TextInputType.text,
                   maxLines: 99,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('enter_note'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                    border: InputBorder.none
-                  ),
+                      hintText:
+                          AppLocalizations.of(context).translate('enter_note'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray, fontSize: 16),
+                      border: InputBorder.none),
                 ),
               ),
               Row(
@@ -340,23 +360,24 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width:50,
+                            width: 50,
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
-                              borderRadius: BorderRadius.circular(25),
-                           //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-
-                            ) : BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: FileImage(File(attachmentFilePath)),
-                                    fit: BoxFit.cover
-                                ),
-                                border: Border.all(color: GlobalVariables.green,width: 2.0)
-
-                            ),
+                            decoration: attachmentFilePath == null
+                                ? BoxDecoration(
+                                    color: GlobalVariables.mediumGreen,
+                                    borderRadius: BorderRadius.circular(25),
+                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                  )
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image:
+                                            FileImage(File(attachmentFilePath)),
+                                        fit: BoxFit.cover),
+                                    border: Border.all(
+                                        color: GlobalVariables.green,
+                                        width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
                           Column(
@@ -364,27 +385,32 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                               Container(
                                 child: FlatButton.icon(
                                   onPressed: () {
-
-                                    if(isStoragePermission) {
+                                    if (isStoragePermission) {
                                       openFile(context);
-                                    }else{
-                                      GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                        if(value){
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                              Permission.storage)
+                                          .then((value) {
+                                        if (value) {
                                           openFile(context);
-                                        }else{
-                                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                      'download_permission'));
                                         }
                                       });
                                     }
-
                                   },
                                   icon: Icon(
                                     Icons.attach_file,
                                     color: GlobalVariables.mediumGreen,
                                   ),
                                   label: Text(
-                                    AppLocalizations.of(context).translate('attach_photo'),
-                                    style: TextStyle(color: GlobalVariables.green),
+                                    AppLocalizations.of(context)
+                                        .translate('attach_photo'),
+                                    style:
+                                        TextStyle(color: GlobalVariables.green),
                                   ),
                                 ),
                               ),
@@ -392,21 +418,26 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 child: Text(
                                   'OR',
-                                  style: TextStyle(color: GlobalVariables.lightGray),
+                                  style: TextStyle(
+                                      color: GlobalVariables.lightGray),
                                 ),
                               ),
                               Container(
                                 child: FlatButton.icon(
                                     onPressed: () {
-
-                                      if(isStoragePermission) {
+                                      if (isStoragePermission) {
                                         openCamera(context);
-                                      }else{
-                                        GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                          if(value){
+                                      } else {
+                                        GlobalFunctions.askPermission(
+                                                Permission.storage)
+                                            .then((value) {
+                                          if (value) {
                                             openCamera(context);
-                                          }else{
-                                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                          } else {
+                                            GlobalFunctions.showToast(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'download_permission'));
                                           }
                                         });
                                       }
@@ -416,13 +447,14 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                       color: GlobalVariables.mediumGreen,
                                     ),
                                     label: Text(
-                                      AppLocalizations.of(context).translate('take_picture'),
-                                      style: TextStyle(color: GlobalVariables.green),
+                                      AppLocalizations.of(context)
+                                          .translate('take_picture'),
+                                      style: TextStyle(
+                                          color: GlobalVariables.green),
                                     )),
                               ),
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -434,24 +466,20 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: ButtonTheme(
-                 // minWidth: MediaQuery.of(context).size.width/2,
+                  // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
                     color: GlobalVariables.green,
                     onPressed: () {
-
                       verifyInfo();
-
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: GlobalVariables.green)),
                     child: Text(
-                      AppLocalizations.of(context)
-                          .translate('submit'),
-                      style: TextStyle(
-                          fontSize: GlobalVariables.largeText),
+                      AppLocalizations.of(context).translate('submit'),
+                      style: TextStyle(fontSize: GlobalVariables.largeText),
                     ),
                   ),
                 ),
@@ -464,61 +492,38 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
   }
 
   void verifyInfo() {
+    if (_selectedLedgerAccount != null) {
 
-  /*  if(_nameController.text.length>0){
+      if (_amountController.text.length > 0) {
 
-     // if(_dobController.text.length>0){
+        if (_selectedPaidBy != null) {
+          if(_referenceController.text.length>0) {
+            if (_selectedBankAccount != null) {
 
-        if(_mobileController.text.length>0){
+              addExpense();
 
-        //  if(_emailController.text.length>0){
-
-          //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
-
-             // if(_occupationController.text.length>0){
-
-                  if(_selectedMembershipType!=null) {
-
-                    if(_selectedLivesHere!=null) {
-
-                      //addMember();
-
-                    }else{
-                      GlobalFunctions.showToast('Please Select Lives Here');
-                    }
-                  }else{
-                    GlobalFunctions.showToast('Please Select MemberShip Type');
-                  }
-
-             *//* }else{
-                GlobalFunctions.showToast('Please Enter Occupation');
-              }*//*
-            *//*}else{
-              GlobalFunctions.showToast('Please Select BloodGroup');
-            }*//*
-          *//*}else{
-            GlobalFunctions.showToast('Please Enter EmailId');
-          }*//*
-        }else{
-          GlobalFunctions.showToast('Please Enter Mobile Number');
+            } else {
+              GlobalFunctions.showToast('Please Select From Account');
+            }
+          }else{
+            GlobalFunctions.showToast('Please Enter Reference Number');
+          }
+        } else {
+          GlobalFunctions.showToast('Please Select PaidBy');
         }
-      *//*}else{
-        GlobalFunctions.showToast('Please Select Date of Birth');
-      }*//*
-    }else{
-      GlobalFunctions.showToast('Please Enter Name');
-    }*/
-
+      } else {
+        GlobalFunctions.showToast('Please Enter Amount');
+      }
+    } else {
+      GlobalFunctions.showToast('Please Select Ledger Account');
+    }
   }
 
-/*  Future<void> addMember() async {
+  Future<void> addExpense() async {
 
     final dio = Dio();
-    final RestClient restClient = RestClient(dio);
+    final RestClientERP restClientERP = RestClientERP(dio,baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
-
     String attachmentName;
     String attachment;
 
@@ -531,22 +536,16 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
     print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog.show();
-    restClient.addMember(societyId, block, flat, _nameController.text, _selectedGender, _dobController.text, _emailController.text,
-        _mobileController.text, _selectedBloodGroup, _occupationController.text, '',_selectedMembershipType,_infoController.text,attachment).then((value) {
+    restClientERP.addExpense(societyId, _amountController.text, _referenceController.text,
+        _selectedPaidBy, _selectedBankAccount, _selectedLedgerAccount, _paymentDateController.text,
+        _noteController.text, attachment).then((value) {
           print('add member Status value : '+value.toString());
           _progressDialog.hide();
           if(value.status){
             Navigator.of(context).pop();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BaseMyUnit(
-                        AppLocalizations.of(context).translate('my_household'))));
           }
           GlobalFunctions.showToast(value.message);
-
-
-    })*//*.catchError((Object obj) {
+    }) .catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -557,43 +556,43 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
           break;
         default:
       }
-    })*//*;
+    }) ;
 
-  }*/
+  }
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentFilePath = value;
       getCompressFilePath();
     });
-
   }
 
   void openCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath=value.path;
+      attachmentFilePath = value.path;
       getCompressFilePath();
     });
   }
 
-  void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-    print('file Name : '+attachmentFileName.toString());
+  void getCompressFilePath() {
+    attachmentFileName = attachmentFilePath.substring(
+        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentFilePath, value.toString() + '/' + attachmentFileName)
+          .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
-        setState(() {
-        });
+        print('Cache file path : ' + attachmentCompressFilePath);
+        setState(() {});
       });
     });
   }
 
-
   void getPaidByData() {
-    _paidByList = ["Cash","Cheque","NEFT/IMPS/UPI"];
-    for(int i=0;i<_paidByList.length;i++){
+    _paidByList = ["Cash", "Cheque", "NEFT/IMPS/UPI"];
+    for (int i = 0; i < _paidByList.length; i++) {
       _paidByListItems.add(DropdownMenuItem(
         value: _paidByList[i],
         child: Text(
@@ -603,7 +602,6 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
       ));
     }
   }
-
 
   void changeLedgerAccountDropDownItem(String value) {
     print('clickable value : ' + value.toString());
@@ -624,11 +622,70 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
   void changeFromAccountDropDownItem(String value) {
     print('clickable value : ' + value.toString());
     setState(() {
-      _selectedFromAccount = value;
-      print('_selctedItem:' + _selectedFromAccount.toString());
+      _selectedBankAccount = value;
+      print('_selctedItem:' + _selectedBankAccount.toString());
     });
   }
 
+  getExpenseAccountLedger() async {
+    final dio = Dio();
+    final RestClientERP restClientERP =
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClientERP.getExpenseAccountLedger(societyId).then((value) {
+      print('Response : ' + value.toString());
+      List<dynamic> _list = value.data;
+      List<dynamic> _listBank = value.bank;
 
+      _ledgerAccountList = List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
 
+      for (int i = 0; i < _ledgerAccountList.length; i++) {
+        LedgerAccount _ledgerAccount = _ledgerAccountList[i];
+        _ledgerAccountListItems.add(DropdownMenuItem(
+          value: _ledgerAccount.id,
+          child: FittedBox(
+            fit: BoxFit.contain,
+            alignment: Alignment.topLeft,
+            child: Text(
+              _ledgerAccount.name,
+              style: TextStyle(color: GlobalVariables.black, fontSize: 16),
+              maxLines: 1,
+            ),
+          ),
+        ));
+      }
+
+      _bankList = List<Bank>.from(_listBank.map((i) => Bank.fromJson(i)));
+      for (int i = 0; i < _bankList.length; i++) {
+        _bankAccountListItems.add(DropdownMenuItem(
+          value: _bankList[i].ID,
+          child: Text(
+            _bankList[i].BANK_NAME,
+            style: TextStyle(color: GlobalVariables.green),
+          ),
+        ));
+      }
+      print('bsnk list lenght : ' + _bankList.length.toString());
+      //_categorySelectedItem = __categoryListItems[0].value;
+      _progressDialog.hide();
+      setState(() {});
+
+    }) /*.catchError((Object obj) {
+      //   if(_progressDialog.isShowing()){
+      //    _progressDialog.hide();
+      //  }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+            //getAllBillData();
+          }
+          break;
+        default:
+      }
+    })*/
+        ;
+  }
 }

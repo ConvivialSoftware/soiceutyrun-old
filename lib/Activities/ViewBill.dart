@@ -113,7 +113,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                       getBillDetailsLayout(),
                       Container(
                         margin: EdgeInsets.fromLTRB(
-                            0, 20, 0, 0),
+                            0, 10, 0, 0),
                         child: Container(
                           alignment: Alignment.topLeft,
                           child: Text(
@@ -128,7 +128,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),

@@ -204,8 +204,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       print(e);
     }
     var androidPlatformChannelSpecifics;
-    if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME) && (gatePassPayload.tYPE == TYPE_VISITOR ||
-        gatePassPayload.tYPE == TYPE_VISITOR_VERIFY)) {
+    if ((gatePassPayload.tYPE == TYPE_VISITOR || gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) &&
+        !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME) ) {
       androidPlatformChannelSpecifics = AndroidNotificationDetails(
         androidChannelIdVisitor,
         androidChannelName,

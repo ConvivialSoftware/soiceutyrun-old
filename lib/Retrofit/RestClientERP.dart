@@ -69,6 +69,26 @@ abstract class RestClientERP {
   @POST(GlobalVariables.razorPayTransactionAPI)
   Future<StatusMsgResponse> postRazorPayTransactionOrderID(@Field("SOCIETY_ID") String socId, @Field("FLAT_NO") String flat,
       @Field("ORDER_ID") String orderId,@Field("AMOUNT") String amount);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.expenseAPI)
+  Future<DataResponse> getExpenseData(@Field("SOCIETY_ID") String socId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.accountLedgerAPI)
+  Future<DataResponse> getExpenseAccountLedger(@Field("SOCIETY_ID") String socId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.expenseBankAPI)
+  Future<DataResponse> getExpenseBankAccount(@Field("SOCIETY_ID") String socId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.addExpenseAPI)
+  Future<StatusMsgResponse> addExpense( @Field("SOCIETY_ID") String socId,@Field("AMOUNT") String amount,
+      @Field("REFERENCE_NO") String referenceNo,@Field("TRANSACTION_TYPE") String transactionType,
+      @Field("BANK") String bank,@Field("LEDGER_ID") String ledgerId,@Field("DATE") String date,
+      @Field("NARRATION") String narration, @Field("ATTACHMENT") String attachment);
+
 }
 
 

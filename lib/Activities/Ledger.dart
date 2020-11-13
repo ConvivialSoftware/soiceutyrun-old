@@ -121,7 +121,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 _ledgerList.length > 0
                     ? Container(
                         margin: EdgeInsets.fromLTRB(10,
-                            MediaQuery.of(context).size.height / 10, 10, 100),
+                            MediaQuery.of(context).size.height / 12, 10, 100),
                         alignment: Alignment.topLeft,
                         //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                         // padding: EdgeInsets.all(15),

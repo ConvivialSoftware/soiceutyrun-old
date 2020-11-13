@@ -14,15 +14,15 @@ import 'base_stateful.dart';
 
 class BaseOtp extends StatefulWidget{
 
-  String expire_time,otp,mobileNo;
+  String expire_time,otp,username;
 
-  BaseOtp(this.expire_time,this.otp, this.mobileNo);
+  BaseOtp(this.expire_time,this.otp, this.username);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
    // GlobalFunctions.showToast("OTP page");
-    return OtpState(expire_time,otp,mobileNo);
+    return OtpState(expire_time,otp,username);
   }
 
 }
@@ -30,8 +30,8 @@ class BaseOtp extends StatefulWidget{
 class OtpState extends BaseStatefulState<BaseOtp>{
 
   String entered_pin="";
-  String expire_time,otp,mobileNo;
-  OtpState(this.expire_time, this.otp,this.mobileNo);
+  String expire_time,otp,username;
+  OtpState(this.expire_time, this.otp,this.username);
   String fcmToken;
   ProgressDialog _progressDialog;
 
@@ -39,6 +39,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
   int _start=60;
   bool isResendEnable=false;
   var displayNumber='';
+  bool isEmail=false;
 
 
   @override
@@ -46,8 +47,15 @@ class OtpState extends BaseStatefulState<BaseOtp>{
       super.initState();
       print('expire_Time: '+expire_time.toString());
       print('OTP : '+otp.toString());
-      print('MobileNo : '+mobileNo.toString());
+      print('MobileNo : '+username.toString());
       startTimer();
+      if(username.contains('@')){
+        displayNumber = username.replaceRange(2, 8, "*" * 6);
+        isEmail=true;
+      }else {
+        displayNumber = username.replaceRange(2, 8, "*" * 6);
+        isEmail=false;
+      }
   }
 
   @override
@@ -56,7 +64,7 @@ class OtpState extends BaseStatefulState<BaseOtp>{
  //   GlobalFunctions.showToast("Otpstate page");
   //  var otp_mobile_text=AppLocalizations.of(context).translate('')
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    displayNumber = mobileNo.replaceRange(2, 8, "*" * 6);
+
     return Builder(
       builder: (context) => Scaffold(
         body: Container(
@@ -206,14 +214,12 @@ class OtpState extends BaseStatefulState<BaseOtp>{
     final RestClient restClient = RestClient(dio);
     fcmToken = await GlobalFunctions.getFCMToken();
     _progressDialog.show();
-    restClient.getOTPLogin(expire_time, otp, entered_pin, mobileNo, "",fcmToken).then((value) {
+    restClient.getOTPLogin(expire_time, otp, entered_pin, isEmail?"":username,isEmail? username:"",fcmToken).then((value) {
       print('add member Status value : '+value.toString());
       _progressDialog.hide();
       GlobalFunctions.showToast(value.message);
-
-
       if (value.status) {
-        value.LoggedUsername = mobileNo;
+        value.LoggedUsername = username;
         GlobalFunctions.saveDataToSharedPreferences(value);
         Navigator.push(
             context,
@@ -273,13 +279,13 @@ class OtpState extends BaseStatefulState<BaseOtp>{
     final RestClient restClient = RestClient(dio);
 
    // _progressDialog.show();
-    restClient.getResendOTP(otp,mobileNo, "").then((value) {
+    restClient.getResendOTP(otp,isEmail ? "" : username,isEmail ? username : "").then((value) {
       print('get OTP value : '+value.toString());
-
      // GlobalFunctions.showToast('otp : '+value.otp.toString());
  //     _progressDialog.hide();
       if(value.status){
-
+        expire_time=value.expire_time;
+        otp=value.otp;
       }
       GlobalFunctions.showToast(value.message);
 

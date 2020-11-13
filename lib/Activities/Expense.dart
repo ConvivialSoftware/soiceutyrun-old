@@ -8,7 +8,9 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
+import 'package:societyrun/Models/Expense.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 import 'base_stateful.dart';
 
@@ -28,9 +30,19 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
 
   ProgressDialog _progressDialog;
 
+  List<Expense> _expenseList = List<Expense>();
+
   @override
   void initState() {
     super.initState();
+    GlobalFunctions.checkInternetConnection().then((value) {
+      if(value){
+        getExpenseData();
+      }else{
+        GlobalFunctions.showToast(AppLocalizations.of(context)
+            .translate('pls_check_internet_connectivity'));
+      }
+    });
   }
 
   @override
@@ -116,20 +128,20 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
   }
 
   getExpenseListDataLayout() {
-    return Container(
+    return _expenseList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: 4,
+            itemCount: _expenseList.length,
             itemBuilder: (context, position) {
               return getExpenseDescListItemLayout(position);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ):Container();
   }
 
   getExpenseDescListItemLayout(int position) {
@@ -151,31 +163,42 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.date_range,color: GlobalVariables.lightGreen,),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            child: Text('date',style: TextStyle(
-                                color: GlobalVariables.black,fontSize: 14
-                            ),),
-                          )
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Text('amount',style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 16
-                        ),),
-                      ),
-                    ],
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.date_range,color: GlobalVariables.mediumGreen,),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE, "dd-MM-yyyy"),style: TextStyle(
+                                  color: GlobalVariables.black,fontSize: 16
+                              ),),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            //Icon(Icons.attach_money,color: GlobalVariables.lightGreen,),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text('Rs. '+_expenseList[position].AMOUNT,style: TextStyle(
+                                color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Container(
-                    child: Text('ledger Account',style: TextStyle(
-                        color: GlobalVariables.black,fontSize: 16
-                    ),),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      child: Text(/*AppLocalizations.of(context).translate('ledger_account')+' : '+*/_expenseList[position].name,style: TextStyle(
+                          color: GlobalVariables.black,fontSize: 16
+                      ),),
+                    ),
                   )
                 ],
               )
@@ -192,22 +215,22 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 children: [
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 5, 5, 0),
-                    child: Text('bank Account',style: TextStyle(
-                        color: GlobalVariables.black,fontSize: 14
+                    child: Text(/*AppLocalizations.of(context).translate('bank')+' : '+*/_expenseList[position].BANK_NAME,style: TextStyle(
+                        color: GlobalVariables.skyBlue,fontSize: 16
                     ),),
                   ),
                   Container(
                     child: Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                          child: Text('reference Number',style: TextStyle(
-                              color: GlobalVariables.black,fontSize: 14
+                          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                          child: Text(AppLocalizations.of(context).translate('reference_number')+' : '+_expenseList[position].REFERENCE_NO,style: TextStyle(
+                              color: GlobalVariables.orangeYellow,fontSize: 16
                           ),),
                         ),
                         Container(
                           alignment: Alignment.topRight,
-                          padding: EdgeInsets.all(8),
+                          padding: EdgeInsets.all(5),
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                           decoration: BoxDecoration(
                             color: GlobalVariables.green,
@@ -216,6 +239,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                           child: Icon(
                             Icons.remove_red_eye,
                             color: GlobalVariables.white,
+                            size: 20,
                           ),
                         ),
                       ],
@@ -229,4 +253,37 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
       ),
     );
   }
+
+  getExpenseData() async {
+
+    final dio = Dio();
+    final RestClientERP restClientERP =
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClientERP.getExpenseData(societyId).then((value) {
+      _progressDialog.hide();
+      print('Response : ' + value.toString());
+      List<dynamic> _list = value.data;
+
+      _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
+
+      setState(() {});
+    })/*.catchError((Object obj) {
+      //   if(_progressDialog.isShowing()){
+      //    _progressDialog.hide();
+      //  }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+            //getAllBillData();
+          }
+          break;
+        default:
+      }
+    })*/;
+  }
+
 }
