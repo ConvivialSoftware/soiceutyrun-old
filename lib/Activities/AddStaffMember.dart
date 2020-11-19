@@ -660,14 +660,12 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }
 
 
     if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
       attachmentIdentityProofName =  attachmentIdentityProofFileName;
       attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
     }
 
    //print('attachment lengtth : '+attachment.length.toString());
@@ -678,6 +676,12 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
 
          _progressDialog.hide();
          if(value.status){
+           if(attachmentFileName!=null && attachmentFilePath!=null){
+             GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+           }
+           if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
+             GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
+           }
            Navigator.of(context).pop();
          }
          GlobalFunctions.showToast(value.message);

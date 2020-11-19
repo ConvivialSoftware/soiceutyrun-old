@@ -737,7 +737,6 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }
 
     print('attachment lengtth : '+attachment.length.toString());
@@ -748,6 +747,9 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
           print('add member Status value : '+value.toString());
           _progressDialog.hide();
           if(value.status){
+            if(attachmentFileName!=null && attachmentFilePath!=null){
+              GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+            }
             Navigator.of(context).pop();
             Navigator.push(
                 context,

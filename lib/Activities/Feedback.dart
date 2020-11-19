@@ -290,9 +290,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
     _progressDialog.show();
     if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
-      attachment =
-          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
     }
 
     restClient.addFeedback(
@@ -305,6 +303,9 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
         attachment).then((value) {
       _progressDialog.hide();
       if (value.status) {
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+        }
         Navigator.of(context).pop();
       }
       GlobalFunctions.showToast(value.message);

@@ -574,7 +574,6 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }else{
       attachmentName="";
       attachment="";
@@ -590,6 +589,9 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
       _progressDialog.hide();
       if(value.status){
      //   Navigator.of(context).pop();
+        if(attachmentFileName!=null && attachmentFilePath!=null){
+          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+        }
         Dialog infoDialog = Dialog(
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),

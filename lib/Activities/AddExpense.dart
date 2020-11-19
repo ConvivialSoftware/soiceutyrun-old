@@ -530,7 +530,6 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }
 
     print('attachment lengtth : '+attachment.length.toString());
@@ -542,6 +541,9 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
           print('add member Status value : '+value.toString());
           _progressDialog.hide();
           if(value.status){
+            if(attachmentFileName!=null && attachmentFilePath!=null){
+              GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+            }
             Navigator.of(context).pop();
           }
           GlobalFunctions.showToast(value.message);

@@ -670,7 +670,6 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-      GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
     }
     _progressDialog.show();
     restClient.addComplaint(societyId, block,flat,userId,complaintSubject.text,complaintType,/*_areaSelectedItem,*/_categorySelectedItem,
@@ -678,6 +677,9 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
       print("add complaint response : "+ value.toString());
       _progressDialog.hide();
       if(value.status){
+        if(attachmentFileName!=null && attachmentFilePath!=null){
+          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+        }
         Navigator.of(context).pop();
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
