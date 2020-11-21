@@ -957,7 +957,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     // String societyId = await GlobalFunctions.getSocietyId();
-     String  userId = await GlobalFunctions.getUserId();
+     //String  userId = await GlobalFunctions.getUserId();
 
     String attachmentName;
     String attachment;

@@ -161,8 +161,8 @@ abstract class RestClient {
       @Field(GlobalVariables.GENDER) String gender,@Field(GlobalVariables.DOB) String dob,
       @Field(GlobalVariables.USER_NAME) String userName,@Field(GlobalVariables.MOBILE) String mobile,
       @Field(GlobalVariables.BLOOD_GROUP) String bloodGroup,@Field(GlobalVariables.OCCUPATION) String occupation,
-      @Field(GlobalVariables.HOBBIES) String hobbies,@Field(GlobalVariables.TYPE) String membershipType,
-      @Field(GlobalVariables.NOTE) String additionalInfo,@Field(GlobalVariables.IDENTITY_PROOF) String profilePic);
+      @Field(GlobalVariables.LIVES_HERE) String hobbies,@Field(GlobalVariables.TYPE) String membershipType,
+      @Field(GlobalVariables.ADDRESS) String additionalInfo,@Field(GlobalVariables.PROFILE_PHOTO) String profilePic);
 
 
   @FormUrlEncoded()

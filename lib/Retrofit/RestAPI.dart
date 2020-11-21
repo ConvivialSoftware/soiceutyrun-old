@@ -774,9 +774,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       String mobile,
       String bloodGroup,
       String occupation,
-      String hobbies,
+      String livesHere,
       String membershipType,
-      String additionalInfo,
+      String address,
       String profilePic) async {
     // TODO: implement addMember
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
@@ -803,10 +803,10 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
       GlobalVariables.MOBILE: mobile,
       GlobalVariables.BLOOD_GROUP: bloodGroup,
       GlobalVariables.OCCUPATION: occupation,
-      GlobalVariables.HOBBIES: hobbies,
+      GlobalVariables.LIVES_HERE: livesHere,
       GlobalVariables.TYPE: membershipType,
-      GlobalVariables.NOTE: additionalInfo,
-      GlobalVariables.IDENTITY_PROOF: profilePic,
+      GlobalVariables.ADDRESS: address,
+      GlobalVariables.PROFILE_PHOTO: profilePic,
     });
     //print(GlobalVariables.societyId+": "+socId);
 

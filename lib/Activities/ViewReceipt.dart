@@ -188,7 +188,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                   style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
-                  text:  ": "+GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy"),
+                  text:  ": "+ (_receiptList[0].PAYMENT_DATE.length > 0 ? GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") : "" ),
                   style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
               )
             ])),
@@ -203,7 +203,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                   style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
-                  text:  ": "+GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy"),
+                  text:  ": "+(_receiptList[0].PAYMENT_DATE.length > 0 ? GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") : "" ),
                   style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
               )
             ])),

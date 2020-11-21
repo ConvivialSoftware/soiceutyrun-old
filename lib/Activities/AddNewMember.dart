@@ -40,7 +40,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _occupationController = TextEditingController();
   //TextEditingController _hobbiesController = TextEditingController();
-  TextEditingController _infoController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
   List<String> _bloodGroupList = new List<String>();
   List<DropdownMenuItem<String>> __bloodGroupListItems = new List<DropdownMenuItem<String>>();
@@ -533,7 +533,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                     )
                 ),
                 child: TextField(
-                  controller: _infoController,
+                  controller: _addressController,
                   keyboardType: TextInputType.text,
                   maxLines: 99,
                   decoration: InputDecoration(
@@ -743,7 +743,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
     _progressDialog.show();
     restClient.addMember(societyId, block, flat, _nameController.text, _selectedGender, _dobController.text, _emailController.text,
-        _mobileController.text, _selectedBloodGroup, _occupationController.text, '',_selectedMembershipType,_infoController.text,attachment).then((value) {
+        _mobileController.text, _selectedBloodGroup, _occupationController.text, _selectedLivesHere,_selectedMembershipType,_addressController.text,attachment).then((value) {
           print('add member Status value : '+value.toString());
           _progressDialog.hide();
           if(value.status){

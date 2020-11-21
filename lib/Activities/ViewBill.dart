@@ -310,8 +310,8 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
               )
             ])),
           ),
-          getDivider(),
-          Container(
+          //getDivider(),
+          /*Container(
             padding: EdgeInsets.all(5),
             alignment: Alignment.topLeft,
             child:RichText(text: TextSpan(children: [
@@ -324,7 +324,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                   style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
               )
             ])),
-          ),
+          ),*/
         ],
       ),
     ) : Container();

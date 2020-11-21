@@ -29,6 +29,7 @@ import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/Member.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Models/PayOption.dart';
+import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Models/razor_pay_order_request.dart';
@@ -58,8 +59,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   List<Documents> _documentList = new List<Documents>();
 
   // List<LedgerResponse> _ledgerResponseList = new List<LedgerResponse>();
-  List<Ledger> _ledgerList = new List<Ledger>();
-  List<Ledger> _pendingList = new List<Ledger>();
+ // List<Ledger> _ledgerList = new List<Ledger>();
+  List<Receipt> _pendingList = new List<Receipt>();
   List<PayOption> _payOptionList = new List<PayOption>();
   bool hasPayTMGateway = false;
   bool hasRazorPayGateway = false;
@@ -261,9 +262,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  getListItemLayout(var position) {
-    print("_ledgerList[position].LEDGER : " +
-        _ledgerList[position].LEDGER.toString());
+  /*getListItemLayout(var position) {
+
     return Column(
       children: <Widget>[
         Container(
@@ -313,6 +313,73 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     style: TextStyle(
                         color: _ledgerList[position].TYPE.toLowerCase().toString() ==
                             'bill' ? GlobalVariables.red :GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Divider(
+          color: GlobalVariables.mediumRed,
+          height: 1,
+        ),
+      ],
+    );
+  }*/
+
+  getPendingListItemLayout(var position) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        _pendingList[position].NARRATION,
+                        style: TextStyle(color: GlobalVariables.grey, fontSize: 16),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        _pendingList[position].PAYMENT_DATE.length>0 ?  GlobalFunctions.convertDateFormat(_pendingList[position].PAYMENT_DATE, 'dd-MM-yyyy'):"",
+                        style:
+                        TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.topRight,
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  "",
+                  style:
+                  TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    "Rs. " + _pendingList[position].AMOUNT.toString(),
+                    style: TextStyle(
+                        color: /*_ledgerList[position].TYPE.toLowerCase().toString() ==
+                            'bill' ? GlobalVariables.red :*/GlobalVariables.green,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
@@ -501,7 +568,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     shrinkWrap: true,
                                   )),
                         ),
-                        _ledgerList.length > 0
+                        /*   _ledgerList.length > 0
                             ? Container(
                                 alignment: Alignment.topLeft,
                                 //color: GlobalVariables.white,
@@ -578,8 +645,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     ],
                                   ),
                                 ))
-                            : Container(),
-                        _ledgerList.length > 0
+                            : Container(),*/
+                        _pendingList.length > 0
                             ? Container(
                           alignment: Alignment.topLeft,
                           //color: GlobalVariables.white,
@@ -595,7 +662,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         )
                             : Container(),
-                        _ledgerList.length > 0
+                        _pendingList.length > 0
                             ? Container(
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
@@ -608,15 +675,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               builder: (context) => ListView.builder(
                                 physics:
                                 const NeverScrollableScrollPhysics(),
-                                itemCount: _ledgerList.length>=3 ? 3 : _ledgerList.length,
+                                itemCount: _pendingList.length>=3 ? 3 : _pendingList.length,
                                 itemBuilder: (context, position) {
-                                  return getListItemLayout(position);
+                                  return getPendingListItemLayout(position);
                                 }, //  scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                               )),
                         )
                             : Container(),
-                        _ledgerList.length > 0
+                        _pendingList.length > 0
                             ? Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(10),
@@ -945,7 +1012,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             // alignment: Alignment.center,
                             /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                            child: CircleAvatar(
+                            child: photo.length==0
+                                ? Image.asset(
+                              GlobalVariables
+                                  .componentUserProfilePath,
+                              width: 80,
+                              height: 80,
+                            )
+                                : CircleAvatar(
                               radius: 40,
                               backgroundColor: GlobalVariables.mediumGreen,
                               backgroundImage: NetworkImage(photo),
@@ -2058,12 +2132,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     restClientERP.getLedgerData(societyId, flat, block).then((value) {
       print('Response : ' + value.toString());
       List<dynamic> _listLedger = value.ledger;
+      List<dynamic> _listLedgerPending = value.pending_request;
       List<dynamic> _listOpeningBalance = value.openingBalance;
 
       //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
 
-      _ledgerList =
-          List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
+      //_ledgerList = List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
+      _pendingList = List<Receipt>.from(_listLedgerPending.map((i) => Receipt.fromJson(i)));
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
       _progressDialog.hide();

@@ -62,7 +62,7 @@ class Receipt {
         TRANSACTION_MODE: json['TRANSACTION_MODE'],
         REFERENCE_NO: json['REFERENCE_NO'],
         BANK_ACCOUNTNO: json['BANK_ACCOUNTNO'],
-        PAYMENT_DATE: json['PAYMENT_DATE'],
+        PAYMENT_DATE: json['PAYMENT_DATE']??"",
         CLEARANCE_DATE: json['CLEARANCE_DATE'],
         ATTACHMENT: json['ATTACHMENT'],
         NARRATION: json['NARRATION'],
