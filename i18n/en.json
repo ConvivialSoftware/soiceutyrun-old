@@ -316,6 +316,7 @@
   "opt_on_mobile": "OTP on Mobile",
   "bank": "Bank",
   "reference_number": "Reference No.",
-  "enter_email_id": "Enter Email ID"
-
+  "enter_email_id": "Enter Email ID",
+  "change_amount": "You can change the amount",
+  "staff_category": "Staff Category"
 }

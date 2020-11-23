@@ -116,7 +116,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   MyUnitState(this.pageName);
 
   TextEditingController _emailTextController = TextEditingController();
+  TextEditingController _amountTextController = TextEditingController();
   bool isEditEmail = false;
+  bool isEditAmount = false;
 
   @override
   void initState() {
@@ -1851,7 +1853,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 'hasPayTMGateway' + hasPayTMGateway.toString());
                             print('hasRazorPayGateway' +
                                 hasRazorPayGateway.toString());
-
+                            _amountTextController.text=(_billList[position].AMOUNT-_billList[position].RECEIVED).toString();
+                            amount = _amountTextController.text;
                             if (_billList[position].AMOUNT -
                                     _billList[position].RECEIVED >
                                 0) {
@@ -1875,7 +1878,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 if (_payOptionList[0].Status) {
                                   if (hasRazorPayGateway) {
                                     _selectedPaymentGateway = 'RazorPay';
-                                    redirectToPaymentGateway(position);
+                                    //redirectToPaymentGateway(position);
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            StatefulBuilder(builder:
+                                                (BuildContext context,
+                                                StateSetter setState) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        25.0)),
+                                                child: getListOfPaymentGateway(
+                                                    context, setState, position),
+                                              );
+                                            }));
                                   } else if (hasPayTMGateway) {
                                     //Paytm Payment method execute
 
@@ -1883,7 +1901,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     print('_selectedPaymentGateway' +
                                         _selectedPaymentGateway);
 
-                                    redirectToPaymentGateway(position);
+                                    //redirectToPaymentGateway(position);
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            StatefulBuilder(builder:
+                                                (BuildContext context,
+                                                StateSetter setState) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        25.0)),
+                                                child: getListOfPaymentGateway(
+                                                    context, setState, position),
+                                              );
+                                            }));
                                   } else {
                                     GlobalFunctions.showToast(
                                         "Online Payment Option is not available.");
@@ -2417,6 +2450,81 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           Container(
             alignment: Alignment.topLeft,
             child: Text(
+              AppLocalizations.of(context).translate('change_amount'),
+              style: TextStyle(color: GlobalVariables.green, fontSize: 18),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              alignment: Alignment.center,
+              height: 80,
+              // color: GlobalVariables.mediumGreen,
+              // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  /*   Container(
+                                child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
+                                    color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
+                                ),),
+                              ),*/
+                  Flexible(
+                    flex: 3,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: TextFormField(
+                        controller: _amountTextController,
+                        cursorColor: GlobalVariables.black,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          //border: InputBorder.,
+                          // disabledBorder: InputBorder.none,
+                          // enabledBorder: InputBorder.none,
+                          // errorBorder: InputBorder.none,
+                          // focusedBorder: InputBorder.none,
+                          // focusedErrorBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.all(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: !isEditAmount
+                          ? IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: GlobalVariables.green,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            _amountTextController.clear();
+                            isEditAmount = true;
+                            setState(() {});
+                          })
+                          : IconButton(
+                          icon: Icon(
+                            Icons.cancel,
+                            color: GlobalVariables.grey,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            _amountTextController.clear();
+                            _amountTextController.text = amount;
+                            isEditAmount = false;
+                            setState(() {});
+                          }),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Text(
               AppLocalizations.of(context).translate('select_payment_option'),
               style: TextStyle(color: GlobalVariables.black, fontSize: 18),
             ),
@@ -2427,7 +2535,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               //  splashColor: GlobalVariables.mediumGreen,
               onTap: () {
                 _selectedPaymentGateway = "PayTM";
-
                 //   getListOfPaymentGateway();
                 setState(() {});
               },
@@ -2453,11 +2560,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text(
+                      child:  Image.asset(GlobalVariables.payTMIconPath,height: 20,width: 80,)/*Text(
                         AppLocalizations.of(context).translate('pay_tm'),
                         style: TextStyle(
                             color: GlobalVariables.green, fontSize: 16),
-                      ),
+                      ),*/
                     ),
                   ],
                 ),
@@ -2495,11 +2602,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text(
+                      child: Image.asset(GlobalVariables.razorPayIconPath,height: 40,width: 100,)/*Text(
                         AppLocalizations.of(context).translate('razor_pay'),
                         style: TextStyle(
                             color: GlobalVariables.green, fontSize: 16),
-                      ),
+                      ),*/
                     ),
                   ],
                 ),
@@ -2510,8 +2617,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             alignment: Alignment.bottomRight,
             child: FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
-                  redirectToPaymentGateway(position);
+                  if(int.parse(_amountTextController.text)>(_billList[position].AMOUNT-_billList[position].RECEIVED)){
+                    GlobalFunctions.showToast('Amount must be lesser equal to bill amount');
+                  }else {
+                    Navigator.of(context).pop();
+                    redirectToPaymentGateway(position, _amountTextController.text);
+                  }
                 },
                 child: Text(
                   AppLocalizations.of(context).translate('proceed'),
@@ -2526,7 +2637,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  void redirectToPaymentGateway(int position) {
+  void redirectToPaymentGateway(int position, String textAmount) {
     if (_selectedPaymentGateway == 'PayTM') {
       //Navigator.of(context).pop();
 
@@ -2542,7 +2653,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
       getRazorPayOrderID(
-          position, _payOptionList[0].KEY_ID, _payOptionList[0].SECRET_KEY);
+          position, _payOptionList[0].KEY_ID, _payOptionList[0].SECRET_KEY,int.parse(textAmount));
     }
   }
 
@@ -3203,11 +3314,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             }));
   }
 
-  void getRazorPayOrderID(int position, String razorKey, String secret_key) {
+  void getRazorPayOrderID(int position, String razorKey, String secret_key, int textAmount) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
         RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
-    amount = _billList[position].AMOUNT * 100;
+    amount = textAmount * 100;
     invoiceNo = _billList[position].INVOICE_NO;
     _progressDialog.show();
     RazorPayOrderRequest request = new RazorPayOrderRequest(
