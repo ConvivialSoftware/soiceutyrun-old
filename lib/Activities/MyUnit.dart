@@ -15,6 +15,7 @@ import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
+import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
@@ -59,7 +60,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   List<Documents> _documentList = new List<Documents>();
 
   // List<LedgerResponse> _ledgerResponseList = new List<LedgerResponse>();
- // List<Ledger> _ledgerList = new List<Ledger>();
+  List<Ledger> _ledgerList = new List<Ledger>();
   List<Receipt> _pendingList = new List<Receipt>();
   List<PayOption> _payOptionList = new List<PayOption>();
   bool hasPayTMGateway = false;
@@ -87,7 +88,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   bool isOpenDocuments = true;
   bool isClosedDocuments = false;
 
-  var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
+  var userId = "",
+      name = "",
+      photo = "",
+      societyId,
+      flat,
+      block,
+      duesRs = "",
+      duesDate = "";
   var email = '', phone = '', consumerId = '', societyName = '';
 
   var amount, invoiceNo, referenceNo, billType, orderId;
@@ -108,7 +116,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   bool isStoragePermission = false;
 
-  String _selectedPaymentGateway = "PayTM";
+  String _selectedPaymentGateway = "RazorPay";
 
   bool isDuesTabAPICall = false;
   bool isHouseholdTabAPICall = false;
@@ -264,8 +272,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  /*getListItemLayout(var position) {
-
+  getListItemLayout(var position) {
     return Column(
       children: <Widget>[
         Container(
@@ -313,8 +320,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   child: Text(
                     "Rs. " + _ledgerList[position].AMOUNT,
                     style: TextStyle(
-                        color: _ledgerList[position].TYPE.toLowerCase().toString() ==
-                            'bill' ? GlobalVariables.red :GlobalVariables.green,
+                        color: _ledgerList[position]
+                                    .TYPE
+                                    .toLowerCase()
+                                    .toString() ==
+                                'bill'
+                            ? GlobalVariables.red
+                            : GlobalVariables.green,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
@@ -324,12 +336,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ),
         ),
         Divider(
-          color: GlobalVariables.mediumRed,
+          color: GlobalVariables.mediumGreen,
           height: 1,
         ),
       ],
     );
-  }*/
+  }
 
   getPendingListItemLayout(var position) {
     return Column(
@@ -343,22 +355,30 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.topLeft,
+                      //padding: EdgeInsets.all(5),
                       child: Text(
                         _pendingList[position].NARRATION,
-                        style: TextStyle(color: GlobalVariables.grey, fontSize: 16),
+                        style: TextStyle(
+                            color: GlobalVariables.grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     Container(
-                      alignment: Alignment.topRight,
-                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      // padding: EdgeInsets.all(5),
                       child: Text(
-                        _pendingList[position].PAYMENT_DATE.length>0 ?  GlobalFunctions.convertDateFormat(_pendingList[position].PAYMENT_DATE, 'dd-MM-yyyy'):"",
-                        style:
-                        TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
+                        _pendingList[position].PAYMENT_DATE.length > 0
+                            ? GlobalFunctions.convertDateFormat(
+                                _pendingList[position].PAYMENT_DATE,
+                                'dd-MM-yyyy')
+                            : "",
+                        style: TextStyle(
+                            color: GlobalVariables.grey, fontSize: 16),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -368,20 +388,20 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Text(
                   "",
                   style:
-                  TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
+                      TextStyle(color: GlobalVariables.lightGray, fontSize: 14),
                 ),
               ),
               InkWell(
-                onTap: () {
-
-                },
+                onTap: () {},
                 child: Container(
                   padding: EdgeInsets.all(5),
                   child: Text(
                     "Rs. " + _pendingList[position].AMOUNT.toString(),
                     style: TextStyle(
-                        color: /*_ledgerList[position].TYPE.toLowerCase().toString() ==
-                            'bill' ? GlobalVariables.red :*/GlobalVariables.green,
+                        color:
+                            /*_ledgerList[position].TYPE.toLowerCase().toString() ==
+                            'bill' ? GlobalVariables.red :*/
+                            GlobalVariables.green,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
@@ -537,7 +557,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
   getMyDuesLayout() {
     print('getMyDuesLayout Tab call');
-
     return GlobalVariables.isERPAccount
         ? SingleChildScrollView(
             // scrollDirection: Axis.vertical,
@@ -570,11 +589,93 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     shrinkWrap: true,
                                   )),
                         ),
-                        /*   _ledgerList.length > 0
+                        _pendingList.length > 0
                             ? Container(
                                 alignment: Alignment.topLeft,
                                 //color: GlobalVariables.white,
                                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('pending_transaction'),
+                                  style: TextStyle(
+                                    color: GlobalVariables.green,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        _pendingList.length > 0
+                            ? Container(
+                                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10))),
+                                child: Builder(
+                                    builder: (context) => ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: _pendingList.length >= 3
+                                              ? 3
+                                              : _pendingList.length,
+                                          itemBuilder: (context, position) {
+                                            return getPendingListItemLayout(
+                                                position);
+                                          }, //  scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                        )),
+                              )
+                            : Container(),
+                        _pendingList.length > 0
+                            ? Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                //color: GlobalVariables.white,
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.white,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10))),
+                                /*child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BaseLedger()));
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('view_more'),
+                                      style: TextStyle(
+                                          color: GlobalVariables.darkRed,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Icon(
+                                      Icons.fast_forward,
+                                      color: GlobalVariables.darkRed,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )*/
+                              )
+                            : Container(),
+                        _ledgerList.length > 0
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                //color: GlobalVariables.white,
+                                margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                                 child: Text(
                                   AppLocalizations.of(context)
                                       .translate('recent_transaction'),
@@ -589,7 +690,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         _ledgerList.length > 0
                             ? Container(
                                 padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
@@ -599,7 +700,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     builder: (context) => ListView.builder(
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: _ledgerList.length>=3 ? 3 : _ledgerList.length,
+                                          itemCount: _ledgerList.length >= 3
+                                              ? 3
+                                              : _ledgerList.length,
                                           itemBuilder: (context, position) {
                                             return getListItemLayout(position);
                                           }, //  scrollDirection: Axis.vertical,
@@ -611,7 +714,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             ? Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
                                 //color: GlobalVariables.white,
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
@@ -647,84 +750,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     ],
                                   ),
                                 ))
-                            : Container(),*/
-                        _pendingList.length > 0
-                            ? Container(
-                          alignment: Alignment.topLeft,
-                          //color: GlobalVariables.white,
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate('pending_transaction'),
-                            style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                            : Container(),
-                        _pendingList.length > 0
-                            ? Container(
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                          decoration: BoxDecoration(
-                              color: GlobalVariables.white,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          child: Builder(
-                              builder: (context) => ListView.builder(
-                                physics:
-                                const NeverScrollableScrollPhysics(),
-                                itemCount: _pendingList.length>=3 ? 3 : _pendingList.length,
-                                itemBuilder: (context, position) {
-                                  return getPendingListItemLayout(position);
-                                }, //  scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                              )),
-                        )
-                            : Container(),
-                        _pendingList.length > 0
-                            ? Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                            //color: GlobalVariables.white,
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.white,
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10))),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            BaseLedger()));
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .translate('view_more'),
-                                      style: TextStyle(
-                                          color: GlobalVariables.green,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Icon(
-                                      Icons.fast_forward,
-                                      color: GlobalVariables.green,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ))
                             : Container(),
                       ],
                     ),
@@ -798,23 +823,35 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ],
                 ),
               ),
-              Container(
-                //padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                width: 600,
-                height: 190,
-                child: Builder(
-                    builder: (context) => ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _memberList.length,
-                          itemBuilder: (context, position) {
-                            return getContactListItemLayout(
-                                _memberList, position, true);
-                          },
-                          //  scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                        )),
-              ),
+              _memberList.length > 0
+                  ? Container(
+                      //padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                      width: 600,
+                      height: 190,
+                      child: Builder(
+                          builder: (context) => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _memberList.length,
+                                itemBuilder: (context, position) {
+                                  return getContactListItemLayout(
+                                      _memberList, position, true);
+                                },
+                                //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                    )
+                  : Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('add_family_details'),
+                        style: TextStyle(
+                          color: GlobalVariables.grey,
+                        ),
+                      ),
+                    ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -857,26 +894,37 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ],
                 ),
               ),
-              Container(
-                //padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                width: 600,
-                height: 190,
-                child: Builder(
-                    builder: (context) => ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _staffList.length,
-                          itemBuilder: (context, position) {
-                            return getContactListItemLayout(
-                                _staffList, position, false);
-                          },
-                          //  scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                        )),
-              ),
+              _staffList.length > 0
+                  ? Container(
+                      //padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                      width: 600,
+                      height: 190,
+                      child: Builder(
+                          builder: (context) => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _staffList.length,
+                                itemBuilder: (context, position) {
+                                  return getContactListItemLayout(
+                                      _staffList, position, false);
+                                },
+                                //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                    )
+                  : Container(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('add_staff_details'),
+                        style: TextStyle(
+                          color: GlobalVariables.grey,
+                        ),
+                      ),
+                    ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 140, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -894,7 +942,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         child: RaisedButton(
                       onPressed: () async {
                         final result = await Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => BaseAddVehicle()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BaseAddVehicle()));
                         print('result back : ' + result.toString());
                         if (result != 'back') {
                           getUnitMemberData();
@@ -917,26 +967,38 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(
-                    //height: 500,
-                    //padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Builder(
-                        builder: (context) => ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              // scrollDirection: Axis.horizontal,
-                              itemCount: _vehicleList.length,
-                              itemBuilder: (context, position) {
-                                return getVehicleRecentTransactionListItemLayout(
-                                    position);
-                              },
-                              //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )),
-                  ),
+                  _vehicleList.length > 0
+                      ? Container(
+                          //height: 500,
+                          //padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Builder(
+                              builder: (context) => ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    // scrollDirection: Axis.horizontal,
+                                    itemCount: _vehicleList.length,
+                                    itemBuilder: (context, position) {
+                                      return getVehicleRecentTransactionListItemLayout(
+                                          position);
+                                    },
+                                    //  scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                  )),
+                        )
+                      : Container(
+                          padding: EdgeInsets.all(20),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('add_vehicle_details'),
+                            style: TextStyle(
+                              color: GlobalVariables.grey,
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ],
@@ -989,7 +1051,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           child: Card(
             shape: (RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0))),
-            elevation: 1.0,
+            elevation: 15.0,
+            shadowColor: GlobalVariables.green.withOpacity(0.3),
             margin: EdgeInsets.all(20),
             color: GlobalVariables.white,
             child: Stack(
@@ -1011,22 +1074,28 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Container(
-                            // alignment: Alignment.center,
-                            /* decoration: BoxDecoration(
+                              // alignment: Alignment.center,
+                              /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                            child: photo.length==0
-                                ? Image.asset(
-                              GlobalVariables
-                                  .componentUserProfilePath,
-                              width: 80,
-                              height: 80,
-                            )
-                                : CircleAvatar(
-                              radius: 40,
-                              backgroundColor: GlobalVariables.mediumGreen,
-                              backgroundImage: NetworkImage(photo),
-                            ),
-                          ),
+                              child: photo.length == 0
+                                  ? Image.asset(
+                                      GlobalVariables.componentUserProfilePath,
+                                      width: 80,
+                                      height: 80,
+                                    )
+                                  : Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: NetworkImage(photo),
+                                              fit: BoxFit.cover),
+                                          border: Border.all(
+                                              color:
+                                                  GlobalVariables.mediumGreen,
+                                              width: 2.0)),
+                                    )),
                           Text(
                             name,
                             style: TextStyle(
@@ -1038,7 +1107,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ),
                       Container(
                         color: GlobalVariables.mediumGreen,
-                        margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Divider(
                           height: 1,
                           color: GlobalVariables.mediumGreen,
@@ -1100,7 +1169,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   getContactListItemLayout(var _list, int position, bool family) {
     var call = '', email = '', userId;
     if (family) {
-      call = _list[position].MOBILE.toString();
+      call = _list[position].Phone.toString();
       userId = _list[position].ID.toString();
       //    email = _list[position].EMAIL.toString();
     } else {
@@ -1140,36 +1209,59 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: family
-                  ? _list[position].PROFILE_PHOTO.length == 0
-                      ? Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(35),
-                              color: GlobalVariables.lightGreen),
-                        )
-                      : CircleAvatar(
-                          radius: 35,
-                          backgroundImage:
-                              NetworkImage(_list[position].PROFILE_PHOTO),
-                          backgroundColor: GlobalVariables.lightGreen,
-                        )
-                  : _list[position].IMAGE.length == 0
-                      ? Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(35),
-                              color: GlobalVariables.lightGreen),
-                        )
-                      : CircleAvatar(
-                          radius: 35,
-                          backgroundImage: NetworkImage(_list[position].IMAGE),
-                          backgroundColor: GlobalVariables.lightGreen,
-                        ),
-            ),
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: family
+                    ? _list[position].PROFILE_PHOTO.length == 0
+                        ? Container(
+                            child: Image.asset(
+                                GlobalVariables.componentUserProfilePath),
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(35),
+                                border: Border.all(
+                                    color: GlobalVariables.mediumGreen,
+                                    width: 2.0),
+                                color: GlobalVariables.lightGreen),
+                          )
+                        : Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        _list[position].PROFILE_PHOTO),
+                                    fit: BoxFit.cover),
+                                border: Border.all(
+                                    color: GlobalVariables.mediumGreen,
+                                    width: 2.0)),
+                          )
+                    : _list[position].IMAGE.length == 0
+                        ? Container(
+                            child: Image.asset(
+                                GlobalVariables.componentUserProfilePath),
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(35),
+                                border: Border.all(
+                                    color: GlobalVariables.mediumGreen,
+                                    width: 2.0),
+                                color: GlobalVariables.lightGreen),
+                          )
+                        : Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(_list[position].IMAGE),
+                                    fit: BoxFit.cover),
+                                border: Border.all(
+                                    color: GlobalVariables.mediumGreen,
+                                    width: 2.0)),
+                          )),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(
@@ -1177,15 +1269,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   maxLines: 1,
                   style: TextStyle(color: GlobalVariables.green, fontSize: 16),
                 )),
-            call.length > 0
-                ? Container(
-                    margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                    child: Divider(
-                      color: GlobalVariables.mediumGreen,
-                      height: 1,
-                    ),
-                  )
-                : Container(),
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
+              child: Divider(
+                color: GlobalVariables.mediumGreen,
+                height: 1,
+              ),
+            ),
             call.length > 0
                 ? Container(
                     margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
@@ -1225,7 +1315,33 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ],
                     ),
                   )
-                : Container()
+                : family
+                    ? InkWell(
+                        onTap: () async {
+                          var result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BaseEditProfileInfo(userId, societyId)));
+                          if (result == 'profile') {
+                            getUnitMemberData();
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '+ ' +
+                                AppLocalizations.of(context)
+                                    .translate('add_phone'),
+                            style: TextStyle(
+                                color: GlobalVariables.mediumGreen,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      )
+                    : Container()
           ],
         ),
       ),
@@ -1514,8 +1630,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-
   Future<void> getSharedPreferenceData() async {
+    userId = await GlobalFunctions.getUserId();
     name = await GlobalFunctions.getDisplayName();
     photo = await GlobalFunctions.getPhoto();
     phone = await GlobalFunctions.getMobile();
@@ -1525,6 +1641,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
 
+    print('UserId : ' + userId);
     print('Name : ' + name);
     print('Photo : ' + photo);
     print('Phone : ' + phone);
@@ -1608,6 +1725,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         List<dynamic> _list = value.data;
 
         _memberList = List<Member>.from(_list.map((i) => Member.fromJson(i)));
+
+        for (int i = 0; i < _memberList.length; i++) {
+          if (_memberList[i].ID == userId) {
+            _memberList.removeAt(i);
+            break;
+          }
+        }
       }
       getUnitStaffData();
     }).catchError((Object obj) {
@@ -1673,8 +1797,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         print("Vehicle List : " + _list.toString());
       }
       _progressDialog.hide();
-      setState(() {
-      });
+      setState(() {});
 
       //  getDocumentData();
     }).catchError((Object obj) {
@@ -1803,14 +1926,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         InkWell(
                           onTap: () {
                             if (_billList[position]
-                                    .TYPE
-                                    .toLowerCase()
-                                    .toString() ==
-                                'bill' || _billList[position]
-                                .TYPE
-                                .toLowerCase()
-                                .toString() ==
-                                'invoice') {
+                                        .TYPE
+                                        .toLowerCase()
+                                        .toString() ==
+                                    'bill' ||
+                                _billList[position]
+                                        .TYPE
+                                        .toLowerCase()
+                                        .toString() ==
+                                    'invoice') {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -1853,7 +1977,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 'hasPayTMGateway' + hasPayTMGateway.toString());
                             print('hasRazorPayGateway' +
                                 hasRazorPayGateway.toString());
-                            _amountTextController.text=(_billList[position].AMOUNT-_billList[position].RECEIVED).toString();
+                            _amountTextController.text =
+                                (_billList[position].AMOUNT -
+                                        _billList[position].RECEIVED)
+                                    .toString();
                             amount = _amountTextController.text;
                             if (_billList[position].AMOUNT -
                                     _billList[position].RECEIVED >
@@ -1866,10 +1993,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                             (BuildContext context,
                                                 StateSetter setState) {
                                           return Dialog(
-                                            shape: RoundedRectangleBorder(
+                                            /*shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(
-                                                        25.0)),
+                                                        25.0)),*/
+                                            backgroundColor: Colors.transparent,
+                                            elevation: 0.0,
                                             child: getListOfPaymentGateway(
                                                 context, setState, position),
                                           );
@@ -1884,14 +2013,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         builder: (BuildContext context) =>
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
-                                                StateSetter setState) {
+                                                    StateSetter setState) {
                                               return Dialog(
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        25.0)),
+                                                        BorderRadius.circular(
+                                                            25.0)),
                                                 child: getListOfPaymentGateway(
-                                                    context, setState, position),
+                                                    context,
+                                                    setState,
+                                                    position),
                                               );
                                             }));
                                   } else if (hasPayTMGateway) {
@@ -1907,14 +2038,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         builder: (BuildContext context) =>
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
-                                                StateSetter setState) {
+                                                    StateSetter setState) {
                                               return Dialog(
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        25.0)),
+                                                        BorderRadius.circular(
+                                                            25.0)),
                                                 child: getListOfPaymentGateway(
-                                                    context, setState, position),
+                                                    context,
+                                                    setState,
+                                                    position),
                                               );
                                             }));
                                   } else {
@@ -2171,12 +2304,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
 
       //_ledgerList = List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
-      _pendingList = List<Receipt>.from(_listLedgerPending.map((i) => Receipt.fromJson(i)));
+      _pendingList = List<Receipt>.from(
+          _listLedgerPending.map((i) => Receipt.fromJson(i)));
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
       _progressDialog.hide();
-      setState(() {
-      });
+      setState(() {});
     }).catchError((Object obj) {
       // if(_progressDialog.isShowing()){
       //   _progressDialog.hide();
@@ -2440,200 +2573,425 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   getListOfPaymentGateway(
       BuildContext context, StateSetter setState, int position) {
     // GlobalFunctions.showToast(_selectedPaymentGateway.toString());
-    return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-      width: MediaQuery.of(context).size.width / 2,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topLeft,
-            child: Text(
-              AppLocalizations.of(context).translate('change_amount'),
-              style: TextStyle(color: GlobalVariables.green, fontSize: 18),
-            ),
-          ),
-          Flexible(
-            child: Container(
-              alignment: Alignment.center,
-              height: 80,
-              // color: GlobalVariables.mediumGreen,
-              // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  /*   Container(
-                                child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
-                                    color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
-                                ),),
-                              ),*/
-                  Flexible(
-                    flex: 3,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: TextFormField(
-                        controller: _amountTextController,
-                        cursorColor: GlobalVariables.black,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          //border: InputBorder.,
-                          // disabledBorder: InputBorder.none,
-                          // enabledBorder: InputBorder.none,
-                          // errorBorder: InputBorder.none,
-                          // focusedBorder: InputBorder.none,
-                          // focusedErrorBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.all(5),
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(top: 70.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10.0,
+                      offset: const Offset(0.0, 10.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      child: Text(
+                        AppLocalizations.of(context).translate('change_amount'),
+                        style: TextStyle(
+                            color: GlobalVariables.black, fontSize: 18),
+                      ),
+                    ),
+                    Container(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: Container(),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Rs. ',
+                                      style: TextStyle(
+                                          color: GlobalVariables.green,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      child: TextFormField(
+                                        controller: _amountTextController,
+                                        readOnly: isEditAmount ? false : true,
+                                        cursorColor: GlobalVariables.green,
+                                        keyboardType: TextInputType.number,
+                                        style: TextStyle(
+                                            color: GlobalVariables.green,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                        decoration: InputDecoration(
+                                          counterText: "",
+                                          border: isEditAmount
+                                              ? new UnderlineInputBorder(
+                                                  borderSide: new BorderSide(
+                                                      color: Colors.green))
+                                              : InputBorder.none,
+                                          // disabledBorder: InputBorder.none,
+                                          // enabledBorder: InputBorder.none,
+                                          // errorBorder: InputBorder.none,
+                                          // focusedBorder: InputBorder.none,
+                                          // focusedErrorBorder: InputBorder.none,
+                                          // contentPadding: EdgeInsets.all(5),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                    child: !isEditAmount
+                                        ? IconButton(
+                                            icon: Icon(
+                                              Icons.edit,
+                                              color: GlobalVariables.green,
+                                              size: 24,
+                                            ),
+                                            onPressed: () {
+                                              _amountTextController.clear();
+                                              isEditAmount = true;
+                                              setState(() {});
+                                            })
+                                        : IconButton(
+                                            icon: Icon(
+                                              Icons.cancel,
+                                              color: GlobalVariables.grey,
+                                              size: 24,
+                                            ),
+                                            onPressed: () {
+                                              _amountTextController.clear();
+                                              _amountTextController.text =
+                                                  amount;
+                                              isEditAmount = false;
+                                              setState(() {});
+                                            }),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            /* Flexible(
+                            flex: 1,
+                            child: Container(
+                              child: AutoSizeTextField(
+                                controller: _amountTextController,
+                                readOnly: isEditAmount ? false : true,
+                                cursorColor:  GlobalVariables.black,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(color: GlobalVariables.green,fontSize: 20 ,fontWeight: FontWeight.bold),
+                                decoration: InputDecoration(
+                                  counterText: "",
+                                  border: isEditAmount ? new UnderlineInputBorder(
+                                      borderSide: new BorderSide(
+                                          color: Colors.black
+                                      )
+                                  ): InputBorder.none,
+                                  // disabledBorder: InputBorder.none,
+                                  // enabledBorder: InputBorder.none,
+                                  // errorBorder: InputBorder.none,
+                                  // focusedBorder: InputBorder.none,
+                                  // focusedErrorBorder: InputBorder.none,
+                                  // contentPadding: EdgeInsets.all(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: !isEditAmount
+                                  ? IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: GlobalVariables.green,
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    _amountTextController.clear();
+                                    isEditAmount = true;
+                                    setState(() {});
+                                  })
+                                  : IconButton(
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: GlobalVariables.grey,
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    _amountTextController.clear();
+                                    _amountTextController.text = amount;
+                                    isEditAmount = false;
+                                    setState(() {});
+                                  }),
+                            ),
+                          )*/
+                          ],
+                        )),
+                    /* Container(
+                      //height: 60,
+                      //alignment: Alignment.center,
+                      // color: GlobalVariables.mediumGreen,
+                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Text('Rs. ',style: TextStyle(
+                                color: GlobalVariables.green,fontSize: 20,fontWeight: FontWeight.bold
+                            ),),
+                          ),
+                          Flexible(
+                            //flex: 3,
+                            child: Container(
+                              child: TextFormField(
+                                controller: _amountTextController,
+                                readOnly: isEditAmount ? false : true,
+                                cursorColor:  GlobalVariables.black,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(color: GlobalVariables.green,fontSize: 20 ,fontWeight: FontWeight.bold),
+                                decoration: InputDecoration(
+                                  border: isEditAmount ? new UnderlineInputBorder(
+                                      borderSide: new BorderSide(
+                                          color: Colors.black
+                                      )
+                                  ): InputBorder.none,
+                                  // disabledBorder: InputBorder.none,
+                                  // enabledBorder: InputBorder.none,
+                                  // errorBorder: InputBorder.none,
+                                  // focusedBorder: InputBorder.none,
+                                  // focusedErrorBorder: InputBorder.none,
+                                  // contentPadding: EdgeInsets.all(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            //flex: 1,
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              child: !isEditAmount
+                                  ? IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: GlobalVariables.green,
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    _amountTextController.clear();
+                                    isEditAmount = true;
+                                    setState(() {});
+                                  })
+                                  : IconButton(
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: GlobalVariables.grey,
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    _amountTextController.clear();
+                                    _amountTextController.text = amount;
+                                    isEditAmount = false;
+                                    setState(() {});
+                                  }),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),*/
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('select_payment_option'),
+                        style: TextStyle(
+                            color: GlobalVariables.black, fontSize: 18),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: InkWell(
+                        //  splashColor: GlobalVariables.mediumGreen,
+                        onTap: () {
+                          _selectedPaymentGateway = "RazorPay";
+                          setState(() {});
+                          // getListOfPaymentGateway();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: _selectedPaymentGateway != "PayTM"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: _selectedPaymentGateway != "PayTM"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
+                                      width: 2.0,
+                                    )),
+                                child: Icon(Icons.check,
+                                    color: GlobalVariables.white),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Image.asset(
+                                  GlobalVariables.razorPayIconPath,
+                                  height: 40,
+                                  width: 100,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: !isEditAmount
-                          ? IconButton(
-                          icon: Icon(
-                            Icons.edit,
-                            color: GlobalVariables.green,
-                            size: 24,
-                          ),
-                          onPressed: () {
-                            _amountTextController.clear();
-                            isEditAmount = true;
-                            setState(() {});
-                          })
-                          : IconButton(
-                          icon: Icon(
-                            Icons.cancel,
-                            color: GlobalVariables.grey,
-                            size: 24,
-                          ),
-                          onPressed: () {
-                            _amountTextController.clear();
-                            _amountTextController.text = amount;
-                            isEditAmount = false;
-                            setState(() {});
-                          }),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.topLeft,
-            child: Text(
-              AppLocalizations.of(context).translate('select_payment_option'),
-              style: TextStyle(color: GlobalVariables.black, fontSize: 18),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: InkWell(
-              //  splashColor: GlobalVariables.mediumGreen,
-              onTap: () {
-                _selectedPaymentGateway = "PayTM";
-                //   getListOfPaymentGateway();
-                setState(() {});
-              },
-              child: Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: _selectedPaymentGateway == "PayTM"
-                              ? GlobalVariables.green
-                              : GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: _selectedPaymentGateway == "PayTM"
-                                ? GlobalVariables.green
-                                : GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
-                      child: Icon(Icons.check, color: GlobalVariables.white),
-                    ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child:  Image.asset(GlobalVariables.payTMIconPath,height: 20,width: 80,)/*Text(
-                        AppLocalizations.of(context).translate('pay_tm'),
+                      child: InkWell(
+                        //  splashColor: GlobalVariables.mediumGreen,
+                        onTap: () {
+                          _selectedPaymentGateway = "PayTM";
+                          //   getListOfPaymentGateway();
+                          setState(() {});
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: _selectedPaymentGateway == "PayTM"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: _selectedPaymentGateway == "PayTM"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
+                                      width: 2.0,
+                                    )),
+                                child: Icon(Icons.check,
+                                    color: GlobalVariables.white),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Image.asset(
+                                  GlobalVariables.payTMIconPath,
+                                  height: 20,
+                                  width: 80,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(10, 15, 0, 5),
+                      child: Text(
+                        AppLocalizations.of(context).translate('trans_charges'),
                         style: TextStyle(
-                            color: GlobalVariables.green, fontSize: 16),
-                      ),*/
+                            color: GlobalVariables.grey, fontSize: 18),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: InkWell(
-              //  splashColor: GlobalVariables.mediumGreen,
-              onTap: () {
-                _selectedPaymentGateway = "RazorPay";
-                setState(() {});
-                // getListOfPaymentGateway();
-              },
-              child: Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: _selectedPaymentGateway != "PayTM"
-                              ? GlobalVariables.green
-                              : GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: _selectedPaymentGateway != "PayTM"
-                                ? GlobalVariables.green
-                                : GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
-                      child: Icon(Icons.check, color: GlobalVariables.white),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Image.asset(GlobalVariables.razorPayIconPath,height: 40,width: 100,)/*Text(
-                        AppLocalizations.of(context).translate('razor_pay'),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                decoration: BoxDecoration(
+                  color: GlobalVariables.green,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(32.0),
+                      bottomRight: Radius.circular(32.0)),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    if (int.parse(_amountTextController.text) >
+                        (_billList[position].AMOUNT -
+                            _billList[position].RECEIVED)) {
+                      GlobalFunctions.showToast(
+                          'Amount must be lesser equal to bill amount');
+                    } else {
+                      Navigator.of(context).pop();
+                      redirectToPaymentGateway(
+                          position, _amountTextController.text);
+                    }
+                  },
+                  child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        AppLocalizations.of(context).translate('proceed'),
                         style: TextStyle(
-                            color: GlobalVariables.green, fontSize: 16),
-                      ),*/
-                    ),
-                  ],
+                            color: GlobalVariables.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      )),
                 ),
               ),
-            ),
+            ],
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: FlatButton(
-                onPressed: () {
-                  if(int.parse(_amountTextController.text)>(_billList[position].AMOUNT-_billList[position].RECEIVED)){
-                    GlobalFunctions.showToast('Amount must be lesser equal to bill amount');
-                  }else {
-                    Navigator.of(context).pop();
-                    redirectToPaymentGateway(position, _amountTextController.text);
-                  }
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+              transform: Matrix4.translationValues(
+                  MediaQuery.of(context).size.width * 0.38,
+                  -MediaQuery.of(context).size.width * 0.28,
+                  0.0),
+              width: 42.0,
+              height: 42.0,
+              decoration: BoxDecoration(
+                  color: GlobalVariables.green, shape: BoxShape.circle),
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: GlobalVariables.white,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
                 },
-                child: Text(
-                  AppLocalizations.of(context).translate('proceed'),
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                )),
-          )
-        ],
-      ),
+              )),
+        ),
+        //_buildDialogCloseWidget(),
+      ],
     );
   }
 
@@ -2652,8 +3010,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 );
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
-      getRazorPayOrderID(
-          position, _payOptionList[0].KEY_ID, _payOptionList[0].SECRET_KEY,int.parse(textAmount));
+      getRazorPayOrderID(position, _payOptionList[0].KEY_ID,
+          _payOptionList[0].SECRET_KEY, int.parse(textAmount));
     }
   }
 
@@ -3314,7 +3672,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             }));
   }
 
-  void getRazorPayOrderID(int position, String razorKey, String secret_key, int textAmount) {
+  void getRazorPayOrderID(
+      int position, String razorKey, String secret_key, int textAmount) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
         RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);

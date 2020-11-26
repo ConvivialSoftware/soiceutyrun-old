@@ -317,6 +317,8 @@
   "bank": "Bank",
   "reference_number": "Reference No.",
   "enter_email_id": "Enter Email ID",
-  "change_amount": "You can change the amount",
-  "staff_category": "Staff Category"
+  "change_amount": "Total amount Payable",
+  "staff_category": "Staff Category",
+  "trans_charges": "* Transaction Charges Applicable",
+  "add_phone": "Add Phone"
 }
