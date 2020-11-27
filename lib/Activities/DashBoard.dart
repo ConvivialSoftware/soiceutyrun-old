@@ -256,23 +256,31 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   navigateToProfilePage();
                                 },
                                 child: photo.length==0
-                                    ? Image.asset(
-                                        GlobalVariables
-                                            .componentUserProfilePath,
-                                        width: 20,
-                                        height: 20,
-                                      )
+                                    ? Container(
+                                  child: Image.asset(
+                                      GlobalVariables.componentUserProfilePath),
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(35),
+                                      border: Border.all(
+                                          color: GlobalVariables.mediumGreen,
+                                          width: 1.0),
+                                      color: GlobalVariables.lightGreen),
+                                )
                                     : Container(
-                                        // alignment: Alignment.center,
-                                        /* decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25)),*/
-                                        child: CircleAvatar(
-                                          radius: 10,
-                                          backgroundColor:
-                                              GlobalVariables.mediumGreen,
-                                          backgroundImage: NetworkImage(photo),
-                                        ),
-                                      ),
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              photo),
+                                          fit: BoxFit.cover),
+                                      border: Border.all(
+                                          color: GlobalVariables.mediumGreen,
+                                          width: 1.0)),
+                                )
                               )),
                             ),
                           ],
@@ -905,21 +913,31 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30.0),
                             child: photo == null
-                                ? Image.asset(
-                                    GlobalVariables.componentUserProfilePath,
-                                    width: 60,
-                                    height: 60)
+                                ? Container(
+                              child: Image.asset(
+                                  GlobalVariables.componentUserProfilePath),
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(35),
+                                  border: Border.all(
+                                      color: GlobalVariables.mediumGreen,
+                                      width: 2.0),
+                                  color: GlobalVariables.lightGreen),
+                            )
                                 : Container(
-                                    // alignment: Alignment.center,
-                                    /* decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25)),*/
-                                    child: CircleAvatar(
-                                      radius: 40,
-                                      backgroundColor:
-                                          GlobalVariables.mediumGreen,
-                                      backgroundImage: NetworkImage(photo),
-                                    ),
-                                  ),
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          photo),
+                                      fit: BoxFit.cover),
+                                  border: Border.all(
+                                      color: GlobalVariables.mediumGreen,
+                                      width: 2.0)),
+                            )
                           )),
                     ),
                     Flexible(

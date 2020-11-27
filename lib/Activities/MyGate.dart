@@ -597,7 +597,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 _visitorList[position].STATUS.toLowerCase() ==
                                         'in'
                                     ? GlobalVariables.green
-                                    : GlobalVariables.grey,
+                                    : GlobalVariables.red,
                             borderRadius: BorderRadius.circular(10)),
                         child: Text(
                           _visitorList[position].STATUS.toLowerCase() == 'in'

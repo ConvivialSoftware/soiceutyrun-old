@@ -424,7 +424,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                             ],
                           )),*/
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Text(
                                 isOpenTicket ? _openComplaintList[position].SUBJECT : _closedComplaintList[position].SUBJECT,
                                 maxLines: 1,
@@ -435,7 +435,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                                     fontWeight: FontWeight.bold)),
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                             child: Text(
                               isOpenTicket ? _openComplaintList[position].DESCRIPTION : _closedComplaintList[position].DESCRIPTION,
                               maxLines: 2,
@@ -525,13 +525,13 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             Container(
               height: 1,
               color: GlobalVariables.mediumGreen,
-              margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Divider(
                 height: 1,
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

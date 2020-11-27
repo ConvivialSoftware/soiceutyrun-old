@@ -280,7 +280,7 @@ class ComplaintInfoAndCommentsState
                                     ],
                                   )),
                                   Container(
-                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     child: AutoSizeText(complaints.SUBJECT,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -289,7 +289,7 @@ class ComplaintInfoAndCommentsState
                                             fontWeight: FontWeight.bold)),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                     child: Text(
                                       complaints.DESCRIPTION,
                                       style: TextStyle(
@@ -434,7 +434,7 @@ class ComplaintInfoAndCommentsState
                                         children: [
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
-                                                0, 15, 0, 0),
+                                                0, 10, 0, 0),
                                             child: Text(
                                               'Issued on: ',
                                               style: TextStyle(
@@ -444,7 +444,7 @@ class ComplaintInfoAndCommentsState
                                           ),
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
-                                                0, 15, 0, 0),
+                                                0, 10, 0, 0),
                                             child: Text(
                                                 GlobalFunctions
                                                     .convertDateFormat(
@@ -460,7 +460,7 @@ class ComplaintInfoAndCommentsState
                                         children: <Widget>[
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
-                                                0, 15, 0, 0),
+                                                0, 10, 0, 0),
                                             child: Text(
                                               'Category: ',
                                               style: TextStyle(
@@ -470,7 +470,7 @@ class ComplaintInfoAndCommentsState
                                           ),
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
-                                                0, 15, 0, 0),
+                                                0, 10, 0, 0),
                                             child: Text(
                                               complaints.CATEGORY,
                                               style: TextStyle(
@@ -767,7 +767,7 @@ class ComplaintInfoAndCommentsState
                             child: Column(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                                  margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     AppLocalizations.of(context)

@@ -53,7 +53,7 @@
   "pay_now": "Pay Now",
   "more": "More",
   "recent_transaction": "Recent Transaction",
-  "pending_transaction": "Pending Transaction",
+  "pending_transaction": "Unapproved Receipt",
   "share_address": "Share Address",
   "view_more":"View more",
   "my_family": "My Family",
@@ -252,6 +252,7 @@
   "sure_logout": "Are you sure you want to Logout?",
   "copy": "COPY",
   "email_bill": "Email Bill",
+  "email_receipt": "Email Receipt",
   "email_bill_to": "Email bill to",
   "email_now": "Email Now",
   "edit_profile": "Edit Profile",
@@ -317,8 +318,8 @@
   "bank": "Bank",
   "reference_number": "Reference No.",
   "enter_email_id": "Enter Email ID",
-  "change_amount": "Total amount Payable",
-  "staff_category": "Staff Category",
-  "trans_charges": "* Transaction Charges Applicable",
+  "add_family_details": "Give your family member access of app. They can view announcement, participate in Poll, Pay bills and get notified on each activity in the Society.",
+  "add_staff_details": "Add Details of Daily Help coming to your Society. Get Notification of their Entry, Exit & Track Attendance of Daily Help Through GatePass.",
+  "add_vehicle_details": "Add Your Vehicle for Easy Identification in Society.",
   "add_phone": "Add Phone"
 }

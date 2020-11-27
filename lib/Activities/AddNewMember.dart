@@ -36,7 +36,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
-  //TextEditingController _alterMobileController = TextEditingController();
+  TextEditingController _alterMobileController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _occupationController = TextEditingController();
   //TextEditingController _hobbiesController = TextEditingController();
@@ -252,7 +252,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                     flex: 1,
                     child: Container(
                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
@@ -284,7 +284,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                       ),
                     ),
                   ),
-                  Flexible(
+                  /*Flexible(
                     flex: 1,
                     child: Container(
                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -313,10 +313,37 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
-              /*Container(
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                decoration: BoxDecoration(
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: GlobalVariables.mediumGreen,
+                      width: 3.0,
+                    )
+                ),
+                child: TextField(
+                  controller: _mobileController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).translate('contact1')+'*',
+                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                    border: InputBorder.none,
+                    counterText: '',
+                    suffixIcon: Icon(
+                      Icons.phone_android,
+                      color: GlobalVariables.lightGreen,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
@@ -342,7 +369,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                     ),
                   ),
                 ),
-              ),*/
+              ),
               Container(
                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),

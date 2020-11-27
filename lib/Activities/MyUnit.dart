@@ -612,15 +612,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10))),
+                                        topLeft: Radius.circular(25),
+                                        topRight: Radius.circular(25))),
                                 child: Builder(
                                     builder: (context) => ListView.builder(
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: _pendingList.length >= 3
+                                          itemCount: /*_pendingList.length >= 3
                                               ? 3
-                                              : _pendingList.length,
+                                              : */_pendingList.length,
                                           itemBuilder: (context, position) {
                                             return getPendingListItemLayout(
                                                 position);
@@ -638,8 +638,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10))),
+                                        bottomLeft: Radius.circular(25),
+                                        bottomRight: Radius.circular(25))),
                                 /*child: InkWell(
                               onTap: () {
                                 Navigator.push(
@@ -694,8 +694,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10))),
+                                        topLeft: Radius.circular(25),
+                                        topRight: Radius.circular(25))),
                                 child: Builder(
                                     builder: (context) => ListView.builder(
                                           physics:
@@ -719,8 +719,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10))),
+                                        bottomLeft: Radius.circular(25),
+                                        bottomRight: Radius.circular(25))),
                                 child: InkWell(
                                   onTap: () {
                                     Navigator.push(
@@ -766,7 +766,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     return Container(
       width: MediaQuery.of(context)
           .size
-          .width, //height: MediaQuery.of(context).size.height,
+          .width,
+      //height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: GlobalVariables.veryLightGray,
       ),
@@ -1270,7 +1271,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   style: TextStyle(color: GlobalVariables.green, fontSize: 16),
                 )),
             Container(
-              margin: EdgeInsets.fromLTRB(5, 10, 5, 0),
+              margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: Divider(
                 color: GlobalVariables.mediumGreen,
                 height: 1,
@@ -1278,8 +1279,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             ),
             call.length > 0
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                    child: Row(
+                    margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                    child: /*Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         InkWell(
@@ -1313,7 +1314,40 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           )),
                         )
                       ],
-                    ),
+                    ),*/Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex:1,
+                          child: Container(
+                            width: double.infinity,
+                              child: Icon(
+                                Icons.call,
+                                color: GlobalVariables.green,
+                              ),
+                          ),
+                        ),
+                        Container(
+                            //TODO: Divider
+                            height: 30,
+                            width: 8,
+                            child: VerticalDivider(
+                              color: GlobalVariables.lightGray,
+                            )
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                            width: double.infinity,
+                            child: Icon(
+                              Icons.share,
+                              color: GlobalVariables.grey,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   )
                 : family
                     ? InkWell(
@@ -1335,9 +1369,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 AppLocalizations.of(context)
                                     .translate('add_phone'),
                             style: TextStyle(
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.lightGray,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.normal),
                           ),
                         ),
                       )
@@ -2303,7 +2337,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
       //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
 
-      //_ledgerList = List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
+      _ledgerList = List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
       _pendingList = List<Receipt>.from(
           _listLedgerPending.map((i) => Receipt.fromJson(i)));
       _openingBalanceList = List<OpeningBalance>.from(

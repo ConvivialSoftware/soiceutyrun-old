@@ -370,7 +370,7 @@ class MyComplexState extends State<BaseMyComplex>
                     ),
                   ),
                 ),
-                Visibility(
+             /*   Visibility(
                   visible: false,
                   child: Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -387,7 +387,7 @@ class MyComplexState extends State<BaseMyComplex>
                       ),
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -422,7 +422,7 @@ class MyComplexState extends State<BaseMyComplex>
               overflow: TextOverflow.ellipsis,
             ),*/
           ),
-          Visibility(
+          /*Visibility(
             visible: false,
             child: Container(
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -430,7 +430,7 @@ class MyComplexState extends State<BaseMyComplex>
                   children: <Widget>[
                     Container(
                       child: Text(
-                        /*_newsBoardList[position].likeCount +*/ " Likes",
+                        *//*_newsBoardList[position].likeCount +*//* " Likes",
                         style: TextStyle(
                           color: GlobalVariables.lightGray,
                           fontSize: 10,
@@ -448,7 +448,7 @@ class MyComplexState extends State<BaseMyComplex>
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       child: Text(
-                        /*_newsBoardList[position].commentCount +*/ " Comments",
+                        *//*_newsBoardList[position].commentCount +*//* " Comments",
                         style: TextStyle(
                           color: GlobalVariables.lightGray,
                           fontSize: 10,
@@ -457,7 +457,7 @@ class MyComplexState extends State<BaseMyComplex>
                     )
                   ],
                 )),
-          ),
+          ),*/
           _announcementList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
             color: GlobalVariables.mediumGreen,
@@ -466,7 +466,7 @@ class MyComplexState extends State<BaseMyComplex>
               height: 2,
             ),
           ) : Container(),
-          Visibility(
+         /* Visibility(
             visible: false,
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -504,7 +504,7 @@ class MyComplexState extends State<BaseMyComplex>
                 ],
               ),
             ),
-          ),
+          ),*/
           _announcementList[position].ATTACHMENT.length>0 ? InkWell(
             onTap: () async {
               //: https://societyrun.com//Uploads/fb4c12f20c92a8e63bbaaa8e3f680fd3.jpg,
@@ -760,7 +760,7 @@ class MyComplexState extends State<BaseMyComplex>
                     ),
                   ),
                 ),
-                Visibility(
+               /* Visibility(
                   visible: false,
                   child: Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -777,7 +777,7 @@ class MyComplexState extends State<BaseMyComplex>
                       ),
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -914,7 +914,7 @@ class MyComplexState extends State<BaseMyComplex>
               ],
             ),
           ),
-          Visibility(
+         /* Visibility(
             visible: false,
             child: Container(
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -922,7 +922,7 @@ class MyComplexState extends State<BaseMyComplex>
                   children: <Widget>[
                     Container(
                       child: Text(
-                        /*_newsBoardList[position].likeCount +*/ " Likes",
+                        *//*_newsBoardList[position].likeCount +*//* " Likes",
                         style: TextStyle(
                           color: GlobalVariables.lightGray,
                           fontSize: 10,
@@ -940,7 +940,7 @@ class MyComplexState extends State<BaseMyComplex>
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       child: Text(
-                        /*_newsBoardList[position].commentCount +*/ " Comments",
+                        *//*_newsBoardList[position].commentCount +*//* " Comments",
                         style: TextStyle(
                           color: GlobalVariables.lightGray,
                           fontSize: 10,
@@ -949,7 +949,7 @@ class MyComplexState extends State<BaseMyComplex>
                     )
                   ],
                 )),
-          ),
+          ),*/
           _meetingList[position].ATTACHMENT.length>0 ? Container(
             height: 2,
             color: GlobalVariables.mediumGreen,
@@ -958,7 +958,7 @@ class MyComplexState extends State<BaseMyComplex>
               height: 2,
             ),
           ) : Container(),
-          Visibility(
+          /*Visibility(
             visible: false,
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -996,7 +996,7 @@ class MyComplexState extends State<BaseMyComplex>
                 ],
               ),
             ),
-          ),
+          ),*/
           _meetingList[position].ATTACHMENT.length>0 ? InkWell(
             onTap: (){
               String url =_meetingList[position].ATTACHMENT;
@@ -1244,7 +1244,7 @@ class MyComplexState extends State<BaseMyComplex>
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Row(
                     children: <Widget>[
-                      Visibility(
+                    /*  Visibility(
                         visible: false,
                         child: Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -1255,7 +1255,7 @@ class MyComplexState extends State<BaseMyComplex>
                             height: 10,
                           ),
                         ),
-                      ),
+                      ),*/
                       (!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') ? Container(
                         margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                         child: Row(
