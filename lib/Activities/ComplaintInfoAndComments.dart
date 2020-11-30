@@ -88,6 +88,7 @@ class ComplaintInfoAndCommentsState
     if (complaints.SUBJECT != null) {
       _complaintType = complaints.STATUS;
     }
+    print('_complaintType : '+_complaintType.toString());
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
@@ -724,13 +725,13 @@ class ComplaintInfoAndCommentsState
                                         isComment = false;
                                         updateComplaintStatus(context);
                                       }else{
-                                        if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='reopen'){
-                                          if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='completed'){
+                                        if(_complaintType.toLowerCase()!='close' || _complaintType.toLowerCase()!='reopen'){
+                                          /*if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='completed'){
                                             GlobalFunctions.showToast('Please Select the Complaint Status');
-                                          }else {
+                                          }else {*/
                                             isComment = false;
                                             updateComplaintStatus(context);
-                                          }
+                                         // }
                                         }else{
                                           GlobalFunctions.showToast('Please Select the Complaint Status');
                                         }

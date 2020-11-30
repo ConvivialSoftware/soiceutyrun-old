@@ -993,6 +993,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         onPressed: () async {
                           String googleParameter =
                               await GlobalFunctions.getGoogleCoordinate();
+                          String userName = await GlobalFunctions.getDisplayName();
                           DateTime earlier = DateTime.parse(
                               _scheduleVisitorList[position].DATE);
 
@@ -1005,8 +1006,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           String mapUrl = "http://www.google.com/maps/place/" +
                               googleParameter;
 
-                          String sharedMsg = _scheduleVisitorList[position]
-                                  .NAME +
+                          String sharedMsg = userName +
                               ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
                               todayDate +
                               ' between ' +

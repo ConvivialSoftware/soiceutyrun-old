@@ -214,24 +214,24 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 5, 5, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                     child: Text(/*AppLocalizations.of(context).translate('bank')+' : '+*/_expenseList[position].BANK_NAME,style: TextStyle(
-                        color: GlobalVariables.skyBlue,fontSize: 16
+                        color: GlobalVariables.skyBlue,fontSize: 14
                     ),),
                   ),
                   Container(
                     child: Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: Text(AppLocalizations.of(context).translate('reference_number')+' : '+_expenseList[position].REFERENCE_NO,style: TextStyle(
-                              color: GlobalVariables.orangeYellow,fontSize: 16
+                              color: GlobalVariables.orangeYellow,fontSize: 14
                           ),),
                         ),
                         Container(
                           alignment: Alignment.topRight,
                           padding: EdgeInsets.all(5),
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           decoration: BoxDecoration(
                             color: GlobalVariables.green,
                             borderRadius: BorderRadius.circular(35),
@@ -239,7 +239,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                           child: Icon(
                             Icons.remove_red_eye,
                             color: GlobalVariables.white,
-                            size: 20,
+                            size: 18,
                           ),
                         ),
                       ],

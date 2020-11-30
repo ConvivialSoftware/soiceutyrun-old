@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -34,9 +35,10 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
   TextEditingController _noteController = TextEditingController();
 
   List<LedgerAccount> _ledgerAccountList = new List<LedgerAccount>();
-  List<DropdownMenuItem<String>> _ledgerAccountListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedLedgerAccount;
+  List<String> _ledgerAccountStringList = new List<String>();
+  List<DropdownMenuItem<LedgerAccount>> _ledgerAccountListItems =
+      new List<DropdownMenuItem<LedgerAccount>>();
+  LedgerAccount _selectedLedgerAccount;
 
   List<String> _paidByList = new List<String>();
   List<DropdownMenuItem<String>> _paidByListItems =
@@ -50,6 +52,9 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
 
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
+
+  String currentLedgerAccountText='';
+  String currentLedgerAccountTextID='';
 
   @override
   void initState() {
@@ -188,26 +193,58 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
                     )),
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: _ledgerAccountListItems,
-                    value: _selectedLedgerAccount,
-                    onChanged: changeLedgerAccountDropDownItem,
-                    isExpanded: true,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('ledger_account') +
-                          '*',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
-                    ),
+                child: SearchableDropdown(
+                  items: _ledgerAccountList.map((item) {
+                    return new DropdownMenuItem<LedgerAccount>(
+                        child: Text(item.name), value: item);
+                  }).toList(),
+                  value: _selectedLedgerAccount,
+                  onChanged: changeLedgerAccountDropDownItem,
+                  isExpanded: true,
+                  isCaseSensitiveSearch: true,
+                  icon: Icon(null
+                    /*Icons.keyboard_arrow_down,
+                    color: GlobalVariables.mediumRed,*/
+                  ),
+                  underline: SizedBox(),
+                  hint: Text(
+                    AppLocalizations.of(context).translate('ledger_account')+
+                        '*',
+                    style: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 16),
                   ),
                 ),
               ),
+            /*  Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                decoration: BoxDecoration(
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: GlobalVariables.mediumRed,
+                      width: 3.0,
+                    )),
+                child: SimpleAutoCompleteTextField(
+                  //key: key,
+                  decoration: new InputDecoration(errorText: "Beans"),
+                  controller: TextEditingController(text: "Starting Text"),
+                  suggestions: _ledgerAccountStringList,
+                  textChanged: (text) => currentLedgerAccountText = text,
+                  clearOnSubmit: true,
+                  textSubmitted: (text) => setState(() {
+                    if (text != "") {
+                      for (int i = 0; i < _ledgerAccountList.length; i++) {
+                        LedgerAccount _ledgerAccount = _ledgerAccountList[i];
+                        if(text==_ledgerAccount.name){
+                          currentLedgerAccountTextID=_ledgerAccount.id;
+                        }
+                      }
+                    }
+                  }),
+                ),
+              ),*/
               Container(
                 //  height: 150,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -536,7 +573,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
 
     _progressDialog.show();
     restClientERP.addExpense(societyId, _amountController.text, _referenceController.text,
-        _selectedPaidBy, _selectedBankAccount, _selectedLedgerAccount, _paymentDateController.text,
+        _selectedPaidBy, _selectedBankAccount, _selectedLedgerAccount.id, _paymentDateController.text,
         _noteController.text, attachment).then((value) {
           print('add member Status value : '+value.toString());
           _progressDialog.hide();
@@ -605,11 +642,14 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
     }
   }
 
-  void changeLedgerAccountDropDownItem(String value) {
+
+  void changeLedgerAccountDropDownItem(LedgerAccount value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedLedgerAccount = value;
-      print('_selctedItem:' + _selectedLedgerAccount.toString());
+      print('_selctedItem: ' + _selectedLedgerAccount.toString());
+      print('_selctedItem name: ' + _selectedLedgerAccount.name.toString());
+      print('_selctedItem value: ' + _selectedLedgerAccount.id.toString());
     });
   }
 
@@ -644,8 +684,10 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
 
       for (int i = 0; i < _ledgerAccountList.length; i++) {
         LedgerAccount _ledgerAccount = _ledgerAccountList[i];
-        _ledgerAccountListItems.add(DropdownMenuItem(
-          value: _ledgerAccount.id,
+
+        _ledgerAccountStringList.add(_ledgerAccount.name);
+        /*_ledgerAccountListItems.add(DropdownMenuItem(
+          value: _ledgerAccount,
           child: FittedBox(
             fit: BoxFit.contain,
             alignment: Alignment.topLeft,
@@ -655,7 +697,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
               maxLines: 1,
             ),
           ),
-        ));
+        ));*/
       }
 
       _bankList = List<Bank>.from(_listBank.map((i) => Bank.fromJson(i)));

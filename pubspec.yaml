@@ -71,9 +71,7 @@ dependencies:
   package_info: 0.4.3
   pie_chart: 4.0.1
   flutter_webview_plugin: 0.3.11
-
-
-
+  searchable_dropdown: 1.1.3
 
 
 
