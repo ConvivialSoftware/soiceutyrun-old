@@ -72,7 +72,7 @@ dependencies:
   pie_chart: 4.0.1
   flutter_webview_plugin: 0.3.11
   searchable_dropdown: 1.1.3
-
+  custom_switch: 0.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -144,6 +144,7 @@ flutter:
     - assets/menu_assets/gatepass_icon_menu.svg
     - assets/menu_assets/Support_icon_menu.svg
     - assets/menu_assets/admin_icon_menu.svg
+    - assets/menu_assets/settings.svg
     - assets/bottom_menu/bottom_bg.svg
     - assets/bottom_menu/bottom_building_icon.svg
     - assets/bottom_menu/bottom_club_icon.svg
@@ -169,6 +170,11 @@ flutter:
     - assets/other_assets/expense.svg
     - assets/other_assets/paytm.png
     - assets/other_assets/razorpay.png
+    - assets/other_assets/app_settings.svg
+    - assets/other_assets/in_app_call.svg
+    - assets/other_assets/daily_helps.svg
+    - assets/other_assets/logout_icon.svg
+    - assets/other_assets/guest.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

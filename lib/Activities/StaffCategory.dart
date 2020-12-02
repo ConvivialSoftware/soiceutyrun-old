@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
+import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -93,11 +94,16 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 10, 10, 0),
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
+      padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
+      decoration: BoxDecoration(
+          color: GlobalVariables.white,
+          borderRadius: BorderRadius.circular(20)),
+
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: 0,
+            itemCount: 3,
             itemBuilder: (context, position) {
               return getStaffCategoryListItemLayout(position);
             }, //  scrollDirection: Axis.vertical,
@@ -109,27 +115,44 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
   getStaffCategoryListItemLayout(int position) {
     return InkWell(
       onTap: () async {
-
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BaseStaffListPerCategory()));
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: GlobalVariables.white),
-        child: Row(
+        child: Column(
           children: [
-            Expanded(
-              child: Container(
-                child: Text('Maid'),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: Text('Maid'),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Text('20'),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Icon(Icons.arrow_forward_ios,color: GlobalVariables.lightGray,),
+                ),
+              ],
+            ),
+            Container(
+              //color: GlobalVariables.black,
+              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              child: Divider(
+                thickness: 1,
+                color: GlobalVariables.lightGray,
               ),
-            ),
-            Container(
-              child: Text('20'),
-            ),
-            Container(
-              child: Icon(Icons.arrow_forward_ios),
             ),
           ],
         ),

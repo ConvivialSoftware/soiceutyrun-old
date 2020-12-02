@@ -321,5 +321,16 @@
   "add_family_details": "Give your family member access of app. They can view announcement, participate in Poll, Pay bills and get notified on each activity in the Society.",
   "add_staff_details": "Add Details of Daily Help coming to your Society. Get Notification of their Entry, Exit & Track Attendance of Daily Help Through GatePass.",
   "add_vehicle_details": "Add Your Vehicle for Easy Identification in Society.",
-  "add_phone": "Add Phone"
+  "add_phone": "Add Phone",
+  "settings": "Settings",
+  "app_notification_settings": "App Notification Settings",
+  "in_app_call": "In App Call",
+  "in_app_call_text": "Notification and In app call when there's a visitor at gate",
+  "daily_helps": "Daily Helps",
+  "daily_helps_example": "Maid,Driver,Cook,etc..",
+  "entry_notification": "Entry Notification",
+  "exit_notification": "Exit Notification",
+  "your_guest": "Your Guest",
+  "staff_category": "Staff Category",
+  "staff_info": "Staff Information"
 }

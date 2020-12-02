@@ -52,6 +52,7 @@ class GlobalVariables {
   static var myGateIconPath = "assets/menu_assets/gatepass_icon_menu.svg";
   static var mySupportIconPath = "assets/menu_assets/Support_icon_menu.svg";
   static var myAdminIconPath = "assets/menu_assets/admin_icon_menu.svg";
+  static var settingsIconPath = "assets/menu_assets/settings.svg";
   static var headerIconPath = "assets/other_assets/Header_bg.svg";
   static var loginIconPath = "assets/other_assets/login_icon.svg";
   static var mailIconPath = "assets/other_assets/mail_icon.svg";
@@ -96,6 +97,11 @@ class GlobalVariables {
   static var expenseIconPath = "assets/other_assets/expense.svg";
   static var payTMIconPath = "assets/other_assets/paytm.png";
   static var razorPayIconPath = "assets/other_assets/razorpay.png";
+  static var appSettingsIconPath = "assets/other_assets/app_settings.svg";
+  static var inAppCallIconPath = "assets/other_assets/in_app_call.svg";
+  static var dailyHelpsIconPath = "assets/other_assets/daily_helps.svg";
+  static var logoutIconPath = "assets/other_assets/logout_icon.svg";
+  static var guestIconPath = "assets/other_assets/guest.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =

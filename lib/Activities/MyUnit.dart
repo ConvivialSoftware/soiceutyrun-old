@@ -17,6 +17,7 @@ import 'package:societyrun/Activities/AlreadyPaid.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Ledger.dart';
+import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
@@ -870,7 +871,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ),
                     ),
                     Visibility(
-                      visible: false,
+                      visible: true,
                       child: Container(
                           child: RaisedButton(
                         onPressed: () {
@@ -878,7 +879,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      BaseVerifyStaffMember()));
+                                      BaseStaffCategory()));
                         },
                         child: Text(
                           AppLocalizations.of(context).translate('plus_add'),

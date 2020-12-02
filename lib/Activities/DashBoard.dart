@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
+import 'package:societyrun/Activities/AppSettings.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
@@ -1469,7 +1470,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             items: [
               AppLocalizations.of(context).translate("assign_helpdesk"),
             ]),
-        new RootTitle(
+        /*new RootTitle(
             title: AppLocalizations.of(context).translate('about_us'),
             rootIconData: GlobalVariables.aboutUsPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
@@ -1482,6 +1483,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         new RootTitle(
             title: AppLocalizations.of(context).translate('logout'),
             rootIconData: GlobalVariables.loginIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),*/
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
       ];
@@ -1540,7 +1546,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.expenseIconPath,
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
-        new RootTitle(
+      /*  new RootTitle(
             title: AppLocalizations.of(context).translate('about_us'),
             rootIconData: GlobalVariables.aboutUsPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
@@ -1553,6 +1559,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         new RootTitle(
             title: AppLocalizations.of(context).translate('logout'),
             rootIconData: GlobalVariables.loginIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),*/
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
       ];
@@ -2109,9 +2120,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => BaseChangePassword()));
+    } else if (item ==
+        AppLocalizations.of(context).translate('settings')) {
+      //Redirect to  Admin
+      //  GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseAppSettings()));
     } else if (item == AppLocalizations.of(context).translate('logout')) {
       // GlobalFunctions.showToast("Logout");
-
       showDialog(
           context: context,
           builder: (BuildContext context) => StatefulBuilder(
