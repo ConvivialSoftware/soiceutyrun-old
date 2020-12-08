@@ -38,6 +38,8 @@ class GlobalVariables {
   static var keyDuesDate = "dues_date";
   static var keyGoogleCoordinate = "google_parameter";
   static var keyLoggedUsername = "logged_username";
+  static var keyDailyEntryNotification = "daily_entry_notification";
+  static var keyGuestEntryNotification = "guest_entry_notification";
 
   static var appLogoPath = "assets/images/society_run_green.png";
   static var userProfilePath = "assets/images/user_profile.jpeg";
@@ -174,6 +176,11 @@ class GlobalVariables {
   static const assignComplaintsAPI = "Helpdesk/assigncomplaints";
   static const gatePassWrongEntryAPI = "Gatepass/wrong_entry";
   static const deleteExpectedVisitorAPI = "Gatepass/schedulevisitor_delete";
+  static const staffCountAPI = "staff/staffcnt";
+  static const staffRoleDetailsAPI = "staff/staffrole";
+  static const addStaffRattingAPI = "staff/add_rating";
+  static const addHouseholdAPI = "staff/add_household";
+  static const removeHouseholdAPI = "staff/household_remove";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -194,6 +201,7 @@ class GlobalVariables {
   static const insertPaymentAPI = "AndroidApi/insertpayment_razorpay";
   static const paymentRequestAPI = "AndroidApi/paymentrequest";
   static const mailAPI = "AndroidApi/mail";
+  static const receiptMailAPI = "AndroidApi/receipt_mail";
   static const razorPayTransactionAPI = "AndroidApi/Razorpay_transaction";
   static const accountLedgerAPI = "Androidexpense/account_ledger";
   static const expenseAPI = "Androidexpense/all_expense";
@@ -327,6 +335,9 @@ class GlobalVariables {
   static const ID = 'ID';
   static const OPTION = 'OPTION';
   static const SR_NO = 'SR_NO';
+  static const EMAIL_ID = 'EMAIL_ID';
+  static const SID = 'SID';
+  static const Rate = 'Rate';
 
   /*Server Response Key*/
 
@@ -335,6 +346,7 @@ class GlobalVariables {
   static const DATA = "data";
   static const Front = "front";
   static const bank = "bank";
+  static const head_details = "head_details";
   static const PassCode = "pass_code";
   static const ExpiredTime = "expire_time";
   static const OTP = "otp";

@@ -8,6 +8,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
+import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'base_stateful.dart';
@@ -24,13 +25,14 @@ class BaseStaffCategory extends StatefulWidget {
 class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
 
   ProgressDialog _progressDialog;
+  List<StaffCount> _staffListCount = List<StaffCount>();
 
   @override
   void initState() {
     super.initState();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getUnitComplaintData();
+        getStaffCountData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -91,7 +93,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
   }
 
   getStaffCategoryListDataLayout() {
-    return Container(
+    return _staffListCount.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
@@ -103,13 +105,13 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: 3,
+            itemCount: _staffListCount.length,
             itemBuilder: (context, position) {
               return getStaffCategoryListItemLayout(position);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ):Container();
   }
 
   getStaffCategoryListItemLayout(int position) {
@@ -119,7 +121,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseStaffListPerCategory()));
+                    BaseStaffListPerCategory(_staffListCount[position].ROLE)));
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -133,12 +135,12 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
               children: [
                 Expanded(
                   child: Container(
-                    child: Text('Maid'),
+                    child: Text(_staffListCount[position].ROLE),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text('20'),
+                  child: Text(_staffListCount[position].Role_count),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -160,9 +162,18 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     );
   }
 
-  Future<void> getUnitComplaintData() async {
+  Future<void> getStaffCountData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClient.staffCount(societyId).then((value) {
+      _progressDialog.hide();
+      List<dynamic> _list = value.data;
+      _staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
+      setState(() {});
+    });
 
   }
 

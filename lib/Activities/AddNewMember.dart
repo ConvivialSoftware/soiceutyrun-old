@@ -770,7 +770,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
     _progressDialog.show();
     restClient.addMember(societyId, block, flat, _nameController.text, _selectedGender, _dobController.text, _emailController.text,
-        _mobileController.text, _selectedBloodGroup, _occupationController.text, _selectedLivesHere,_selectedMembershipType,_addressController.text,attachment).then((value) {
+        _mobileController.text, _alterMobileController.text,_selectedBloodGroup, _occupationController.text, _selectedLivesHere,_selectedMembershipType,_addressController.text,attachment).then((value) {
           print('add member Status value : '+value.toString());
           _progressDialog.hide();
           if(value.status){

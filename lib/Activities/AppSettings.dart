@@ -13,7 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BaseAppSettings extends StatefulWidget {
+class  BaseAppSettings extends StatefulWidget {
   @override
   _BaseAppSettingsState createState() => _BaseAppSettingsState();
 }

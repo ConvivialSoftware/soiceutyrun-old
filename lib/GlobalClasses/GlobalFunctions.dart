@@ -55,7 +55,7 @@ class GlobalFunctions{
       return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
     }else{
       sharedPreferences.setBool(GlobalVariables.keyIsLogin, false);
-      return sharedPreferences.getBool(GlobalVariables. keyIsLogin);
+      return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
     }
   }
 
@@ -220,6 +220,34 @@ class GlobalFunctions{
       return  sharedPreferences.getString(GlobalVariables.keyUserPermission);
     }
     return "";
+  }
+
+  static getDailyEntryNotification() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyDailyEntryNotification)){
+      print('keyDailyEntryNotification : '+sharedPreferences.getBool(GlobalVariables.keyDailyEntryNotification).toString());
+      return  sharedPreferences.getBool(GlobalVariables.keyDailyEntryNotification);
+    }
+    return false;
+  }
+
+  static getGuestEntryNotification() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyGuestEntryNotification)){
+      print('keyGuestEntryNotification : '+sharedPreferences.getBool(GlobalVariables.keyGuestEntryNotification).toString());
+      return  sharedPreferences.getBool(GlobalVariables.keyGuestEntryNotification);
+    }
+    return false;
+  }
+
+  static Future<void> setDailyEntryNotification(bool dailyEntryNotification) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool(GlobalVariables.keyDailyEntryNotification, dailyEntryNotification);
+  }
+
+  static Future<void> setGuestEntryNotification(bool guestEntryNotification) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool(GlobalVariables.keyGuestEntryNotification, guestEntryNotification);
   }
 
   static getAppLanguage() async{

@@ -1,6 +1,7 @@
-import 'package:custom_switch/custom_switch.dart';
+//import 'package:custom_switch/custom_switch.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_switch/flutter_custom_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
@@ -29,9 +30,9 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
 
   bool isInAppCall= false;
   bool isDailyEntryNotification= false;
-  bool isDailyExitNotification= false;
+  //bool isDailyExitNotification= false;
   bool isGuestEntryNotification= false;
-  bool isGuestExitNotification= false;
+  //bool isGuestExitNotification= false;
 
 
   @override
@@ -104,13 +105,16 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
     societyId = await GlobalFunctions.getSocietyId();
-
+    isDailyEntryNotification = await GlobalFunctions.getDailyEntryNotification();
+    isGuestEntryNotification = await GlobalFunctions.getGuestEntryNotification();
     print('UserId : ' + userId);
     print('Name : ' + name);
     print('Photo : ' + photo);
     print('Phone : ' + phone);
     print('EmailId : ' + email);
     print('ConsumerId : ' + consumerId);
+    print('isDailyEntryNotification : ' + isDailyEntryNotification.toString());
+    print('isGuestEntryNotification : ' + isGuestEntryNotification.toString());
     setState(() {});
   }
 
@@ -158,7 +162,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                     ),
                   ),
                   Container(
-                    child: CustomSwitch(
+                    child: FlutterCustomSwitch(
                       activeColor: GlobalVariables.green,
                       value: isInAppCall,
                       onChanged: (value) {
@@ -186,6 +190,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
   }
 
   dailyHelps() {
+    print('isDailyEntryNotification1 : '+isDailyEntryNotification.toString());
     return Container(
       //margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
       child: Card(
@@ -252,13 +257,14 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                       ),
                     ),
                     Container(
-                      child: CustomSwitch(
+                      child: FlutterCustomSwitch(
                         activeColor: GlobalVariables.green,
                         value: isDailyEntryNotification,
                         onChanged: (value) {
                           print("VALUE : $value");
                           setState(() {
                             isDailyEntryNotification = value;
+                            GlobalFunctions.setDailyEntryNotification(isDailyEntryNotification);
                           });
                         },
                       ),
@@ -266,7 +272,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   ],
                 ),
               ),
-              Container(
+              /*Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,7 +303,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                     )
                   ],
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
@@ -306,6 +312,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
   }
 
   yourGuest() {
+    print('isGuestEntryNotification1 : '+isGuestEntryNotification.toString());
     return Container(
       //margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
       child: Card(
@@ -363,13 +370,15 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                       ),
                     ),
                     Container(
-                      child: CustomSwitch(
+                      child: FlutterCustomSwitch(
                         activeColor: GlobalVariables.green,
-                        value: isGuestEntryNotification,
+                        value:
+                        isGuestEntryNotification,
                         onChanged: (value) {
                           print("VALUE : $value");
                           setState(() {
                             isGuestEntryNotification = value;
+                            GlobalFunctions.setGuestEntryNotification(isGuestEntryNotification);
                           });
                         },
                       ),
@@ -377,7 +386,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   ],
                 ),
               ),
-              Container(
+           /*   Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,7 +417,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                     )
                   ],
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

@@ -332,5 +332,11 @@
   "exit_notification": "Exit Notification",
   "your_guest": "Your Guest",
   "staff_category": "Staff Category",
-  "staff_info": "Staff Information"
+  "staff_info": "Staff Information",
+  "change_amount": "Total amount Payable",
+  "trans_charges": "*Transaction Charges Applicable",
+  "expense_voucher": "Expense Voucher",
+  "voucher_number": "Voucher No.",
+  "Vendor_name": "Vendor Name",
+  "transaction_number": "Transaction No."
 }

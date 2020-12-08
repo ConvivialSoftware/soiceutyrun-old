@@ -18,11 +18,11 @@ class Expense {
   String ADDED_BY;
   String name;
   String BANK_NAME;
-
+  List<dynamic> head_details;
   Expense({this.ID, this.VOUCHER_NO, this.VOUCHER_REFENCE_NO, this.AMOUNT,
     this.TRANSACTION_TYPE, this.REFERENCE_NO, this.BANK, this.STATUS,
     this.ATTACHMENT, this.REMARK, this.PAYMENT_DATE, this.CHEQUE_CLEARANCE_DATE,
-    this.C_DATE, this.ADDED_BY,this.name,this.BANK_NAME});
+    this.C_DATE, this.ADDED_BY,this.name,this.BANK_NAME,this.head_details});
 
 
   factory Expense.fromJson(Map<String, dynamic> json){
@@ -43,6 +43,7 @@ class Expense {
         ADDED_BY: json['ADDED_BY'],
         name: json['name'],
         BANK_NAME: json['BANK_NAME'],
+        head_details: json['head_details'],
 
     );
   }

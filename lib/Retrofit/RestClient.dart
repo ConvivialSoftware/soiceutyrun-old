@@ -159,7 +159,7 @@ abstract class RestClient {
   Future<StatusMsgResponse> addMember(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.NAME) String name,
       @Field(GlobalVariables.GENDER) String gender,@Field(GlobalVariables.DOB) String dob,
-      @Field(GlobalVariables.USER_NAME) String userName,@Field(GlobalVariables.MOBILE) String mobile,
+      @Field(GlobalVariables.USER_NAME) String userName,@Field(GlobalVariables.MOBILE) String mobile,@Field(GlobalVariables.ALTERNATE_CONTACT1) String alternateNumber,
       @Field(GlobalVariables.BLOOD_GROUP) String bloodGroup,@Field(GlobalVariables.OCCUPATION) String occupation,
       @Field(GlobalVariables.LIVES_HERE) String hobbies,@Field(GlobalVariables.TYPE) String membershipType,
       @Field(GlobalVariables.ADDRESS) String additionalInfo,@Field(GlobalVariables.PROFILE_PHOTO) String profilePic);
@@ -259,6 +259,33 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.deleteExpectedVisitorAPI)
   Future<StatusMsgResponse> deleteExpectedVisitor(@Field(GlobalVariables.societyId) String societyId, @Field(GlobalVariables.SR_NO) String srNo);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.staffCountAPI)
+  Future<DataResponse> staffCount(@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.staffRoleDetailsAPI)
+  Future<DataResponse> staffRoleDetails(@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.ROLE) String role);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.addStaffRattingAPI)
+  Future<StatusMsgResponse> addStaffRatting(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.block) String block,@Field(GlobalVariables.flat) String flat,
+      @Field(GlobalVariables.SID) String staffId,@Field(GlobalVariables.Rate) String rate);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.addHouseholdAPI)
+  Future<StatusMsgResponse> addHouseHold(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.block) String block,@Field(GlobalVariables.flat) String flat,
+      @Field(GlobalVariables.SID) String staffId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.removeHouseholdAPI)
+  Future<StatusMsgResponse> removeHouseHold(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.block) String block,@Field(GlobalVariables.flat) String flat,
+      @Field(GlobalVariables.SID) String staffId);
+
 }
 
 

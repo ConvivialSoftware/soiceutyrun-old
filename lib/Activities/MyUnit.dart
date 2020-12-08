@@ -2675,6 +2675,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         controller: _amountTextController,
                                         readOnly: isEditAmount ? false : true,
                                         cursorColor: GlobalVariables.green,
+                                        showCursor: isEditAmount ? true : false,
                                         keyboardType: TextInputType.number,
                                         style: TextStyle(
                                             color: GlobalVariables.green,
@@ -3268,31 +3269,28 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0)),
                   child: Container(
-                    margin: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(10),
                     padding: EdgeInsets.all(10),
                     //  width: MediaQuery.of(context).size.width/2,
                     //  height: MediaQuery.of(context).size.height/3,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Container(
+                        /*Container(
+                          margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                          alignment: Alignment.topLeft,
                           child: Text(
                             AppLocalizations.of(context)
                                 .translate('email_bill'),
                             style: TextStyle(
-                                color: GlobalVariables.black,
-                                fontSize: 16,
+                                color: GlobalVariables.green,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
-                        ),
+                        ),*/
                         Container(
-                          child: Divider(
-                            height: 2,
-                            color: GlobalVariables.lightGray,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: Text(
                             GlobalFunctions.convertDateFormat(
                                     _billList[position].START_DATE,
@@ -3301,15 +3299,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 GlobalFunctions.convertDateFormat(
                                     _billList[position].END_DATE, 'dd-MM-yyyy'),
                             style: TextStyle(
-                                color: GlobalVariables.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                                color: GlobalVariables.green,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: Divider(
+                            thickness: 1.5,
+                            color: GlobalVariables.grey,
                           ),
                         ),
                         Flexible(
                           child: Container(
                             alignment: Alignment.center,
-                            height: 80,
+                            height: 60,
                             // color: GlobalVariables.mediumGreen,
                             // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
                             child: Row(
@@ -3326,15 +3331,15 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
                                       controller: _emailTextController,
-                                      cursorColor: GlobalVariables.black,
+                                      cursorColor: GlobalVariables.green,
                                       keyboardType: TextInputType.emailAddress,
+                                      showCursor: isEditEmail ? true : false,
                                       decoration: InputDecoration(
-                                        //border: InputBorder.,
-                                        // disabledBorder: InputBorder.none,
-                                        // enabledBorder: InputBorder.none,
-                                        // errorBorder: InputBorder.none,
-                                        // focusedBorder: InputBorder.none,
-                                        // focusedErrorBorder: InputBorder.none,
+                                          border: isEditEmail
+                                              ? new UnderlineInputBorder(
+                                              borderSide: new BorderSide(
+                                                  color: Colors.green))
+                                              : InputBorder.none,
                                         contentPadding: EdgeInsets.all(5),
                                       ),
                                     ),
@@ -3375,10 +3380,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                         Container(
-                          height: 45,
+                          margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          alignment: Alignment.topRight,
+                          //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
                             child: RaisedButton(
+                              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                               color: GlobalVariables.green,
                               onPressed: () {
                                 GlobalFunctions.checkInternetConnection()

@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
+import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,6 +49,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   bool isActivitiesAPICall = false;
   bool isHelperAPICall = false;
 
+  List<Staff> _staffList = new List<Staff>();
   List<String> _scheduleList = new List<String>();
   List<DropdownMenuItem<String>> _scheduleListItems =
       new List<DropdownMenuItem<String>>();
@@ -75,7 +78,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     getScheduleTimeData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getScheduleVisitorData();
+        //getScheduleVisitorData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -190,8 +193,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0), //ticketOpenClosedLayout(),
-                //   getDocumentListDataLayout(),
-                Align(
+                getHelperListDataLayout(),
+                /*Align(
                   alignment: Alignment.topCenter,
                   child: Container(
                     // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
@@ -218,7 +221,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       ],
                     ),
                   ),
-                )
+                )*/
               ],
             ),
           ),
@@ -2032,12 +2035,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         switch (index) {
           case 0:
             {
-              if (!isActivitiesAPICall) {}
+              if (!isActivitiesAPICall) {
+                getScheduleVisitorData();
+              }
             }
             break;
           case 1:
             {
-              if (!isHelperAPICall) {}
+              if (!isHelperAPICall) {
+                getStaffRoleDetailsData();
+              }
             }
             break;
         }
@@ -2172,7 +2179,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-
   displayDeleteExpectedVisitorLayout(int position) {
     return Container(
       padding: EdgeInsets.all(15),
@@ -2230,5 +2236,196 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         ],
       ),
     );
+  }
+
+  getHelperListDataLayout() {
+    return _staffList.length>0 ? Container(
+      //padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(
+          10, MediaQuery.of(context).size.height / 20, 10, 0),
+      padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
+      decoration: BoxDecoration(
+          color: GlobalVariables.white,
+          borderRadius: BorderRadius.circular(20)),
+
+      child: Builder(
+          builder: (context) => ListView.builder(
+            // scrollDirection: Axis.vertical,
+            itemCount: _staffList.length,
+            itemBuilder: (context, position) {
+              return getHelperListItemLayout(position);
+            }, //  scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+          )),
+    ):Container();
+  }
+
+  getHelperListItemLayout(int position) {
+    List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
+
+    var staffImage = _staffList[position].IMAGE;
+
+    var notes = _staffList[position].NOTES;
+    bool isRattingDone = false;
+    double totalRate = 0.0;
+
+    List<String> _unitRateList = List<String>();
+
+    if (notes.contains(':')) {
+      isRattingDone = true;
+    }
+    if (isRattingDone) {
+      _unitRateList = _staffList[position].NOTES.split(',');
+      for (int i = 0; i < _unitRateList.length; i++) {
+        List<String> _rate = List<String>();
+        _rate = _unitRateList[i].split(':');
+        print('_rate[1] : ' + _rate[1]);
+        totalRate += int.parse(_rate[1]);
+        print('totalRate : ' + totalRate.toString());
+      }
+      totalRate = totalRate / _unitRateList.length;
+    }
+
+    return InkWell(
+      onTap: () async {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BaseStaffDetails(_staffList[position])));
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 1.1,
+        // padding: EdgeInsets.all(10),
+        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: GlobalVariables.white),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                //profileLayout(),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    // alignment: Alignment.center,
+                    /* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*/
+                    child: staffImage.length == 0
+                        ? Image.asset(
+                      GlobalVariables.componentUserProfilePath,
+                      width: 60,
+                      height: 60,
+                    )
+                        : Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: NetworkImage(staffImage),
+                              fit: BoxFit.cover),
+                          border: Border.all(
+                              color:
+                              GlobalVariables.mediumGreen,
+                              width: 2.0)),
+                    )),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            _staffList[position].STAFF_NAME,
+                            style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                  child: Icon(
+                                    Icons.star,
+                                    color: GlobalVariables.skyBlue,
+                                    size: 15,
+                                  )
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Text(
+                                  totalRate.toString(),
+                                  style: TextStyle(
+                                    color: GlobalVariables.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                  child: Icon(
+                                    Icons.fiber_manual_record,
+                                    color: GlobalVariables.orangeYellow,
+                                    size: 10,
+                                  )
+                              ),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Text(
+                                  _workHouseList.length.toString()+' House',
+                                  style: TextStyle(
+                                    color: GlobalVariables.green,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Icon(Icons.arrow_forward_ios,color: GlobalVariables.lightGray,),
+                ),
+              ],
+            ),
+            position !=_staffList.length-1? Container(
+              //color: GlobalVariables.black,
+              //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              child: Divider(
+                thickness: 1,
+                color: GlobalVariables.lightGray,
+              ),
+            ):Container(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> getStaffRoleDetailsData() async {
+    isHelperAPICall=true;
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClient.staffRoleDetails(societyId,'').then((value) {
+      _progressDialog.hide();
+      List<dynamic> _list = value.data;
+      _staffList = List<Staff>.from(_list.map((i)=>Staff.fromJson(i)));
+      setState(() {});
+
+    });
+
   }
 }

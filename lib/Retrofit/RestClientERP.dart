@@ -89,6 +89,10 @@ abstract class RestClientERP {
       @Field("BANK") String bank,@Field("LEDGER_ID") String ledgerId,@Field("DATE") String date,
       @Field("NARRATION") String narration, @Field("ATTACHMENT") String attachment);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.receiptMailAPI)
+  Future<StatusMsgResponse> getReceiptMail(@Field("SOCIETY_ID") String socId,@Field("RECEIPT_NO") String receiptNo,@Field("Email_id") String emailId);
+
 }
 
 

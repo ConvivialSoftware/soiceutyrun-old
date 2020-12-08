@@ -9,16 +9,22 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
+import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 import 'base_stateful.dart';
 
 class BaseStaffListPerCategory extends StatefulWidget {
 
+  String _roleName;
+
+  BaseStaffListPerCategory(this._roleName);
+
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return StaffListPerCategoryState();
+    return StaffListPerCategoryState(_roleName);
   }
 }
 
@@ -32,13 +38,18 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
       flat="",
       block="";
   var email = '', phone = '', consumerId = '', societyName = '';
+  String _roleName;
+  StaffListPerCategoryState(this._roleName);
+
+  List<Staff> _staffList = List<Staff>();
+
   @override
   void initState() {
     super.initState();
     getSharedPreferenceData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getUnitComplaintData();
+        getStaffRoleDetailsData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -66,7 +77,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('staff_category'),
+            _roleName,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -99,7 +110,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
   }
 
   getStaffListPerCategoryListDataLayout() {
-    return Container(
+    return _staffList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
@@ -111,23 +122,56 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: 3,
+            itemCount: _staffList.length,
             itemBuilder: (context, position) {
               return getStaffListPerCategoryListItemLayout(position);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ):Container();
   }
 
   getStaffListPerCategoryListItemLayout(int position) {
+
+    List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
+
+    var staffImage = _staffList[position].IMAGE;
+
+    var notes = _staffList[position].NOTES;
+    bool isRattingDone = false;
+    double totalRate = 0.0;
+
+    List<String> _unitRateList = List<String>();
+
+    if (notes.contains(':')) {
+      isRattingDone = true;
+    }
+    if (isRattingDone) {
+      _unitRateList = _staffList[position].NOTES.split(',');
+      for (int i = 0; i < _unitRateList.length; i++) {
+        List<String> _rate = List<String>();
+        _rate = _unitRateList[i].split(':');
+        if(_rate.length==2) {
+          print('_rate[1] : ' + _rate[1]);
+          if(_rate[1].isEmpty)
+            _rate[1]='0.0';
+          totalRate += double.parse(_rate[1]);
+          print('totalRate : ' + totalRate.toString());
+        }
+      }
+      totalRate = totalRate / _unitRateList.length;
+    }
+
     return InkWell(
       onTap: () async {
-        Navigator.push(
+       var result = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseStaffDetails()));
+                    BaseStaffDetails(_staffList[position])));
+       if(result=='back'){
+         getStaffRoleDetailsData();
+       }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -146,7 +190,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                     // alignment: Alignment.center,
                     /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                    child: photo.length == 0
+                    child: staffImage.length == 0
                         ? Image.asset(
                       GlobalVariables.componentUserProfilePath,
                       width: 60,
@@ -158,7 +202,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: NetworkImage(photo),
+                              image: NetworkImage(staffImage),
                               fit: BoxFit.cover),
                           border: Border.all(
                               color:
@@ -174,7 +218,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                       children: [
                         Container(
                           child: Text(
-                            'Archana Nilesh Suryavanshi',
+                            _staffList[position].STAFF_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 16,
@@ -195,7 +239,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 child: Text(
-                                  '4.3',
+                                  totalRate.toStringAsFixed(1).toString(),
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 12,
@@ -214,7 +258,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                                 alignment: Alignment.topLeft,
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 child: Text(
-                                  '3 House',
+                                  _workHouseList.length.toString()+' House',
                                   style: TextStyle(
                                     color: GlobalVariables.green,
                                     fontSize: 12,
@@ -233,14 +277,14 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                 ),
               ],
             ),
-            Container(
+            position !=_staffList.length-1? Container(
               //color: GlobalVariables.black,
               //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
               child: Divider(
                 thickness: 1,
                 color: GlobalVariables.lightGray,
               ),
-            ),
+            ):Container(),
           ],
         ),
       ),
@@ -268,9 +312,19 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
     setState(() {});
   }
 
-  Future<void> getUnitComplaintData() async {
+  Future<void> getStaffRoleDetailsData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClient.staffRoleDetails(societyId,_roleName).then((value) {
+      _progressDialog.hide();
+      List<dynamic> _list = value.data;
+      _staffList = List<Staff>.from(_list.map((i)=>Staff.fromJson(i)));
+      setState(() {});
+
+    });
 
   }
 

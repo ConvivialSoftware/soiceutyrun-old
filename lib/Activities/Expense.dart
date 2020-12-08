@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
+import 'package:societyrun/Activities/ExpenseVoucher.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/Expense.dart';
+import 'package:societyrun/Models/VoucherAmount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
@@ -145,8 +147,21 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
   }
 
   getExpenseDescListItemLayout(int position) {
+
+    List<VoucherAmount> _voucherAmountList = List<VoucherAmount>();
+    _voucherAmountList = List<VoucherAmount>.from(_expenseList[position].head_details.map((i) => VoucherAmount.fromJson(i)));
+    double _voucherAmount;
+    for(int i=0;i<_voucherAmountList.length;i++){
+      _voucherAmount +=double.parse(_voucherAmountList[i].amount);
+    }
+
     return InkWell(
       onTap: () async {
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BaseExpenseVoucher(_expenseList[position])));
 
       },
       child: Container(
@@ -183,7 +198,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                             //Icon(Icons.attach_money,color: GlobalVariables.lightGreen,),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Text('Rs. '+_expenseList[position].AMOUNT,style: TextStyle(
+                              child: Text('Rs. '+_voucherAmount.toString(),style: TextStyle(
                                 color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                               ),),
                             ),
@@ -265,8 +280,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
       _progressDialog.hide();
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
-
-      _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
+     _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
 
       setState(() {});
     })/*.catchError((Object obj) {

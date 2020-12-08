@@ -54,7 +54,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   var androidPlatformChannelSpecifics;
   if (gatePassPayload.tYPE == TYPE_VISITOR ||
       gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
-    androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      androidPlatformChannelSpecifics = AndroidNotificationDetails(
       androidChannelIdVisitor,
       androidChannelName,
       androidChannelDesc,
@@ -99,7 +99,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   final _fcm = FirebaseMessagingHandler();
   BuildContext _ctx;
-
+  bool isDailyEntryNotification= false;
+  bool isGuestEntryNotification= false;
   void baseMethod() {
 
   }
@@ -108,13 +109,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   void initState() {
     super.initState();
     _fcm.setListeners();
-    setState(() {
+    setState(()  {
       _ctx = context;
     });
     firebaseCloudMessagingListeners();
   }
 
-  void firebaseCloudMessagingListeners() {
+  Future<void> firebaseCloudMessagingListeners() async {
+
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('icon_notif');
 
@@ -173,7 +175,9 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }
   }
 
-  _showNotification(Map<String, dynamic> message, bool shouldRedirect) {
+  _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
+    isGuestEntryNotification = await GlobalFunctions.getGuestEntryNotification();
+    isDailyEntryNotification = await GlobalFunctions.getDailyEntryNotification();
     GatePassPayload gatePassPayload;
     Map data;
     if (Platform.isIOS) {
@@ -192,7 +196,13 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       if (gatePassPayload.tYPE == TYPE_VISITOR ||
           gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
         if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
-          _fcm.showAlert(context, gatePassPayload);
+          if((gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Taxi || gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Delivery))  {
+            _fcm.showAlert(context, gatePassPayload);
+          }else{
+            if(isGuestEntryNotification){
+              _fcm.showAlert(context, gatePassPayload);
+            }
+          }
         }
       } else {
         if (shouldRedirect) {
@@ -206,50 +216,103 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     var androidPlatformChannelSpecifics;
     if ((gatePassPayload.tYPE == TYPE_VISITOR || gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) &&
         !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME) ) {
-      androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        androidChannelIdVisitor,
-        androidChannelName,
-        androidChannelDesc,
-        importance: Importance.Max,
-        priority: Priority.High,
-        ticker: 'ticker',
-        enableLights: true,
-        color: Colors.green,
-        ledColor: const Color.fromARGB(255, 255, 0, 0),
-        ledOnMs: 1000,
-        ledOffMs: 500,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound("alert"),
-      );
-    } else {
-      androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        androidChannelIdOther,
-        androidChannelName,
-        androidChannelDesc,
-        importance: Importance.Max,
-        priority: Priority.High,
-        ticker: 'ticker',
-        enableLights: true,
-        color: Colors.green,
-        ledColor: const Color.fromARGB(255, 255, 0, 0),
-        ledOnMs: 1000,
-        ledOffMs: 500,
-        playSound: true,
-      );
-    }
-
-    var iOSPlatformChannelSpecifics =
+      print('if showGuestNotification');
+      if((gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Taxi || gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Delivery)) {
+        androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          androidChannelIdVisitor,
+          androidChannelName,
+          androidChannelDesc,
+          importance: Importance.Max,
+          priority: Priority.High,
+          ticker: 'ticker',
+          enableLights: true,
+          color: Colors.green,
+          ledColor: const Color.fromARGB(255, 255, 0, 0),
+          ledOnMs: 1000,
+          ledOffMs: 500,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound("alert"),
+        );
+        var iOSPlatformChannelSpecifics =
         IOSNotificationDetails(sound: "alert.caf");
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        var platformChannelSpecifics = NotificationDetails(
+            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    try {
-      flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
-          gatePassPayload.body, platformChannelSpecifics,
-          payload: data["society"]);
-    } catch (e) {
-      print(e);
+        try {
+          flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+              gatePassPayload.body, platformChannelSpecifics,
+              payload: data["society"]);
+        } catch (e) {
+          print(e);
+        }
+      }else{
+        print('else showGuestNotification');
+        if(isGuestEntryNotification){
+          print('else showGuestNotification');
+          androidPlatformChannelSpecifics = AndroidNotificationDetails(
+            androidChannelIdVisitor,
+            androidChannelName,
+            androidChannelDesc,
+            importance: Importance.Max,
+            priority: Priority.High,
+            ticker: 'ticker',
+            enableLights: true,
+            color: Colors.green,
+            ledColor: const Color.fromARGB(255, 255, 0, 0),
+            ledOnMs: 1000,
+            ledOffMs: 500,
+            playSound: true,
+            sound: RawResourceAndroidNotificationSound("alert"),
+          );
+          print('else showGuestNotification Alert');
+          var iOSPlatformChannelSpecifics =
+          IOSNotificationDetails(sound: "alert.caf");
+          var platformChannelSpecifics = NotificationDetails(
+              androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+          try {
+            print('else showGuestNotification TRY');
+            flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                gatePassPayload.body, platformChannelSpecifics,
+                payload: data["society"]);
+          } catch (e) {
+            print('else showGuestNotification CATCH');
+            print(e);
+          }
+        }
+      }
+    } else {
+      if(isDailyEntryNotification) {
+        print('if showDailyNotification');
+        androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          androidChannelIdOther,
+          androidChannelName,
+          androidChannelDesc,
+          importance: Importance.Max,
+          priority: Priority.High,
+          ticker: 'ticker',
+          enableLights: true,
+          color: Colors.green,
+          ledColor: const Color.fromARGB(255, 255, 0, 0),
+          ledOnMs: 1000,
+          ledOffMs: 500,
+          playSound: true,
+        );
+        var iOSPlatformChannelSpecifics =
+        IOSNotificationDetails(sound: "alert.caf");
+        var platformChannelSpecifics = NotificationDetails(
+            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+        try {
+          flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+              gatePassPayload.body, platformChannelSpecifics,
+              payload: data["society"]);
+        } catch (e) {
+          print(e);
+        }
+      }
     }
+
   }
 
   Future<void> navigate(GatePassPayload temp,BuildContext context) async {

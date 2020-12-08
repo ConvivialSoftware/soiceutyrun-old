@@ -29,12 +29,16 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
   List<BillDetails> _billDetailsList = new List<BillDetails>();
   List<BillHeads> _billHeadsList = new List<BillHeads>();
 
-  String name="",consumerId="";
+  String name="",consumerId="",email="";
   String invoiceNo;
   double totalAmount=0.0;
   ViewBillState(this.invoiceNo);
 
   ProgressDialog _progressDialog;
+
+  TextEditingController _emailTextController = TextEditingController();
+  bool isEditEmail = false;
+
 
   @override
   void initState() {
@@ -63,6 +67,11 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
+          actions: [
+            IconButton(icon: Icon(Icons.mail), onPressed: (){
+              emailBillDialog(context);
+            }),
+          ],
           leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
@@ -310,8 +319,8 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
               )
             ])),
           ),
-          //getDivider(),
-          /*Container(
+          getDivider(),
+          Container(
             padding: EdgeInsets.all(5),
             alignment: Alignment.topLeft,
             child:RichText(text: TextSpan(children: [
@@ -320,28 +329,25 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                   style: TextStyle(color: GlobalVariables.green,fontSize: 18)
               ),
               TextSpan(
-                text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy"),
+                text: _billDetailsList[0]
+                    .TYPE
+                    .toLowerCase()
+                    .toString() ==
+                    'invoice' ?  ": "+'NA': ": "+(GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
                   style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
               )
             ])),
-          ),*/
+          ),
         ],
       ),
     ) : Container();
   }
 
-  void getSharedPrefData() {
-
-    GlobalFunctions.getDisplayName().then((value){
-      name = value;
-      GlobalFunctions.getConsumerID().then((val){
-        consumerId=val;
-        setState(() {
-        });
-      });
-    });
-
-
+  Future<void> getSharedPrefData() async {
+    email = await GlobalFunctions.getUserName();
+    name = await GlobalFunctions.getDisplayName();
+    consumerId = await GlobalFunctions.getConsumerID();
+    setState(() {});
   }
 
   getDivider() {
@@ -445,6 +451,204 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
         default:
       }
     })*/;
+  }
+
+
+  void emailBillDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter _stateState) {
+              isEditEmail
+                  ? _emailTextController.text = ''
+                  : _emailTextController.text = email;
+
+              return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0)),
+                  child: Container(
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(10),
+                    //  width: MediaQuery.of(context).size.width/2,
+                    //  height: MediaQuery.of(context).size.height/3,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('email_bill'),
+                            style: TextStyle(
+                                color: GlobalVariables.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          child: Divider(
+                            height: 2,
+                            color: GlobalVariables.lightGray,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          child: Text(
+                            GlobalFunctions.convertDateFormat(
+                                _billDetailsList[0].START_DATE,
+                                'dd-MM-yyyy') +
+                                ' to ' +
+                                GlobalFunctions.convertDateFormat(
+                                    _billDetailsList[0].END_DATE, 'dd-MM-yyyy'),
+                            style: TextStyle(
+                                color: GlobalVariables.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 80,
+                            // color: GlobalVariables.mediumGreen,
+                            // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                /*   Container(
+                                child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
+                                    color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
+                                ),),
+                              ),*/
+                                Flexible(
+                                  flex: 3,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: TextFormField(
+                                      controller: _emailTextController,
+                                      cursorColor: GlobalVariables.black,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration(
+                                        //border: InputBorder.,
+                                        // disabledBorder: InputBorder.none,
+                                        // enabledBorder: InputBorder.none,
+                                        // errorBorder: InputBorder.none,
+                                        // focusedBorder: InputBorder.none,
+                                        // focusedErrorBorder: InputBorder.none,
+                                        contentPadding: EdgeInsets.all(5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    child: !isEditEmail
+                                        ? IconButton(
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: GlobalVariables.green,
+                                          size: 24,
+                                        ),
+                                        onPressed: () {
+                                          _emailTextController.clear();
+                                          isEditEmail = true;
+                                          _stateState(() {});
+                                        })
+                                        : IconButton(
+                                        icon: Icon(
+                                          Icons.cancel,
+                                          color: GlobalVariables.grey,
+                                          size: 24,
+                                        ),
+                                        onPressed: () {
+                                          _emailTextController.clear();
+                                          _emailTextController.text = email;
+                                          isEditEmail = false;
+                                          _stateState(() {});
+                                        }),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 45,
+                          child: ButtonTheme(
+                            minWidth: MediaQuery.of(context).size.width / 3,
+                            child: RaisedButton(
+                              color: GlobalVariables.green,
+                              onPressed: () {
+                                GlobalFunctions.checkInternetConnection()
+                                    .then((internet) {
+                                  if (internet) {
+                                    if (_emailTextController.text.length > 0) {
+                                      Navigator.of(context).pop();
+                                      getBillMail(
+                                          _billDetailsList[0].INVOICE_NO,
+                                          _billDetailsList[0].TYPE,
+                                          _emailTextController.text);
+                                    } else {
+                                      GlobalFunctions.showToast(
+                                          'Please Enter Email ID');
+                                    }
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        AppLocalizations.of(context).translate(
+                                            'pls_check_internet_connectivity'));
+                                  }
+                                });
+                              },
+                              textColor: GlobalVariables.white,
+                              //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side:
+                                  BorderSide(color: GlobalVariables.green)),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('email_now'),
+                                style: TextStyle(
+                                    fontSize: GlobalVariables.largeText),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
+            }));
+  }
+
+  Future<void> getBillMail(String invoice_no, String type, String emailId) async {
+    final dio = Dio();
+    final RestClientERP restClientERP =
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+   String societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClientERP
+        .getBillMail(societyId, type, invoice_no, _emailTextController.text)
+        .then((value) {
+      print('Response : ' + value.toString());
+
+      GlobalFunctions.showToast(value.message);
+      _progressDialog.hide();
+    }).catchError((Object obj) {
+      if (_progressDialog.isShowing()) {
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
   }
 
 }

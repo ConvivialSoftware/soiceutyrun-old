@@ -21,7 +21,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  shared_preferences: ^0.4.2
+  shared_preferences: ^0.5.7
   fluttertoast: ^3.1.3
   path_provider: ^1.6.11
   provider: any
@@ -72,8 +72,9 @@ dependencies:
   pie_chart: 4.0.1
   flutter_webview_plugin: 0.3.11
   searchable_dropdown: 1.1.3
-  custom_switch: 0.0.1
-
+  flutter_custom_switch: 0.0.2
+  rate_my_app: 0.7.2
+  flutter_rating_bar: 3.2.0+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

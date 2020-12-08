@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AppSettings.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
@@ -66,6 +67,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   var photo='';
 
   List<Banners> _bannerList = List<Banners>();
+
+  RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 2,
+    minLaunches: 2,
+    remindDays: 2,
+    remindLaunches: 2,
+    googlePlayIdentifier: AppPackageInfo.packageName,
+  );
+
 
   @override
   void initState() {
@@ -256,7 +267,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   // GlobalFunctions.showToast('profile_user');
                                   navigateToProfilePage();
                                 },
-                                child: photo.length==0
+                                child: photo.isEmpty
                                     ? Container(
                                   child: Image.asset(
                                       GlobalVariables.componentUserProfilePath),
@@ -913,7 +924,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           //TODO: userImage
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30.0),
-                            child: photo == null
+                            child: photo.isEmpty
                                 ? Container(
                               child: Image.asset(
                                   GlobalVariables.componentUserProfilePath),
@@ -1360,6 +1371,42 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             GlobalFunctions.notAllowForRunAppDialog(context);
           }
         }
+
+        _rateMyApp.init().then((_){
+          //if(_rateMyApp.shouldOpenDialog){ //conditions check if user already rated the app
+          _rateMyApp.showRateDialog(
+            context,
+            title: 'Rate this app', // The dialog title.
+            message: 'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.', // The dialog message.
+            rateButton: 'RATE', // The dialog "rate" button text.
+            noButton: 'NO THANKS', // The dialog "no" button text.
+            laterButton: 'MAYBE LATER', // The dialog "later" button text.
+            listener: (button) { // The button click listener (useful if you want to cancel the click event).
+              switch(button) {
+                case RateMyAppDialogButton.rate:
+                  print('Clicked on "Rate".');
+                  break;
+                case RateMyAppDialogButton.later:
+                  print('Clicked on "Later".');
+                  break;
+                case RateMyAppDialogButton.no:
+                  print('Clicked on "No".');
+                  break;
+              }
+
+              return true; // Return false if you want to cancel the click event.
+            },
+            ignoreNativeDialog: Platform.isAndroid, // Set to false if you want to show the Apple's native app rating dialog on iOS or Google's native app rating dialog (depends on the current Platform).
+            dialogStyle: DialogStyle(), // Custom dialog styles.
+            onDismissed: () => _rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed), // Called when the user dismissed the dialog (either by taping outside or by pressing the "back" button).
+            // contentBuilder: (context, defaultContent) => content, // This one allows you to change the default dialog content.
+            // actionsBuilder: (context) => [], // This one allows you to use your own buttons.
+          );
+
+        }
+          // }
+        );
+
       }).catchError((Object obj) {
         if (_progressDialog.isShowing()) {
           _progressDialog.hide();
