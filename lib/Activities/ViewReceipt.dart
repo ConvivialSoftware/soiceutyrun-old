@@ -340,23 +340,8 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate('email_receipt'),
-                            style: TextStyle(
-                                color: GlobalVariables.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Container(
-                          child: Divider(
-                            height: 2,
-                            color: GlobalVariables.lightGray,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: Text(
                             GlobalFunctions.convertDateFormat(
                                 _receiptList[0].PAYMENT_DATE,
@@ -365,15 +350,22 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 GlobalFunctions.convertDateFormat(
                                     _receiptList[0].END_DATE, 'dd-MM-yyyy')*/,
                             style: TextStyle(
-                                color: GlobalVariables.black,
+                                color: GlobalVariables.green,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: Divider(
+                            thickness: 1.5,
+                            color: GlobalVariables.grey,
                           ),
                         ),
                         Flexible(
                           child: Container(
                             alignment: Alignment.center,
-                            height: 80,
+                            height: 60,
                             // color: GlobalVariables.mediumGreen,
                             // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
                             child: Row(
@@ -390,15 +382,15 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
                                       controller: _emailTextController,
-                                      cursorColor: GlobalVariables.black,
+                                      cursorColor: GlobalVariables.green,
                                       keyboardType: TextInputType.emailAddress,
+                                      showCursor: isEditEmail ? true : false,
                                       decoration: InputDecoration(
-                                        //border: InputBorder.,
-                                        // disabledBorder: InputBorder.none,
-                                        // enabledBorder: InputBorder.none,
-                                        // errorBorder: InputBorder.none,
-                                        // focusedBorder: InputBorder.none,
-                                        // focusedErrorBorder: InputBorder.none,
+                                        border: isEditEmail
+                                            ? new UnderlineInputBorder(
+                                            borderSide: new BorderSide(
+                                                color: Colors.green))
+                                            : InputBorder.none,
                                         contentPadding: EdgeInsets.all(5),
                                       ),
                                     ),
@@ -439,7 +431,8 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                           ),
                         ),
                         Container(
-                          height: 45,
+                          alignment: Alignment.topRight,
+                          //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
                             child: RaisedButton(

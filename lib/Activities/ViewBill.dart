@@ -475,23 +475,8 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate('email_bill'),
-                            style: TextStyle(
-                                color: GlobalVariables.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Container(
-                          child: Divider(
-                            height: 2,
-                            color: GlobalVariables.lightGray,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: Text(
                             GlobalFunctions.convertDateFormat(
                                 _billDetailsList[0].START_DATE,
@@ -500,15 +485,22 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                 GlobalFunctions.convertDateFormat(
                                     _billDetailsList[0].END_DATE, 'dd-MM-yyyy'),
                             style: TextStyle(
-                                color: GlobalVariables.black,
+                                color: GlobalVariables.green,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: Divider(
+                            thickness: 1.5,
+                            color: GlobalVariables.grey,
                           ),
                         ),
                         Flexible(
                           child: Container(
                             alignment: Alignment.center,
-                            height: 80,
+                            height: 60,
                             // color: GlobalVariables.mediumGreen,
                             // margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
                             child: Row(
@@ -525,15 +517,15 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
                                       controller: _emailTextController,
-                                      cursorColor: GlobalVariables.black,
+                                      cursorColor: GlobalVariables.green,
                                       keyboardType: TextInputType.emailAddress,
+                                      showCursor: isEditEmail ? true : false,
                                       decoration: InputDecoration(
-                                        //border: InputBorder.,
-                                        // disabledBorder: InputBorder.none,
-                                        // enabledBorder: InputBorder.none,
-                                        // errorBorder: InputBorder.none,
-                                        // focusedBorder: InputBorder.none,
-                                        // focusedErrorBorder: InputBorder.none,
+                                        border: isEditEmail
+                                            ? new UnderlineInputBorder(
+                                            borderSide: new BorderSide(
+                                                color: Colors.green))
+                                            : InputBorder.none,
                                         contentPadding: EdgeInsets.all(5),
                                       ),
                                     ),
@@ -574,7 +566,8 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                           ),
                         ),
                         Container(
-                          height: 45,
+                          alignment: Alignment.topRight,
+                          //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
                             child: RaisedButton(
