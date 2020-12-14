@@ -17,5 +17,10 @@ class LedgerAccount {
     );
   }
 
+  @override
+  String toString() {
+    return '$name'.toLowerCase() + ' $name'.toUpperCase();
+    //return name;
+  }
 
 }

@@ -209,6 +209,9 @@ class DirectoryState extends State<BaseDirectory> {
       field =  _emergencyList[position].Name ==null ? '' : _emergencyList[position].Name;
 
       _emergencyList[position].Contact_No.length != 0 ? phone=true : phone=false;
+
+      if (phone)
+        callNumber = _emergencyList[position].Contact_No;
     }
 
     return directory.directoryType!='Emergency' ? Container(
@@ -375,12 +378,12 @@ class DirectoryState extends State<BaseDirectory> {
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getNeighboursDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         _neighbourList = List<NeighboursDirectory>.from(_list.map((i) => NeighboursDirectory.fromJson(i)));
         setState(() {});
       }
-      _progressDialog.hide();
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -400,12 +403,12 @@ Future<void> getCommitteeDirectoryData() async {
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getCommitteeDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         _committeeList = List<CommitteeDirectory>.from(_list.map((i) => CommitteeDirectory.fromJson(i)));
         setState(() {});
       }
-      _progressDialog.hide();
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -425,12 +428,12 @@ Future<void> getEmergencyDirectoryData() async {
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getEmergencyDirectoryData(societyId).then((value) {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         _emergencyList = List<EmergencyDirectory>.from(_list.map((i) => EmergencyDirectory.fromJson(i)));
         setState(() {});
       }
-      _progressDialog.hide();
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
