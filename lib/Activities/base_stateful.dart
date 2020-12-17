@@ -37,7 +37,10 @@ const String TYPE_RECEIPT = "Receipt";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
-  print("onMessage >>>> $message");
+  print('myBackgroundMessageHandler before isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+  print("myBackgroundMessageHandler onMessage >>>> $message");
+  GlobalVariables.isAlreadyTapped = false;
+  print('onMessage myBackgroundMessageHandler after isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
   Map data;
   if (Platform.isIOS) {
     data = message;
@@ -136,8 +139,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
     _fcm.firebaseMessaging.configure(
       onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
-      onMessage: (Map<String, dynamic> message) async {
+      onMessage: (Map<String, dynamic> message) async  {
+        print('onMessage before isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
         GlobalVariables.isAlreadyTapped = false;
+        print('onMessage after isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
         print("onMessage >>>> $message");
         _showNotification(message, false);
       },
@@ -153,8 +158,9 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    print('isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+    print('selectNotification isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
     if (!GlobalVariables.isAlreadyTapped) {
+      print('IF selectNotification isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
       GlobalVariables.isAlreadyTapped = true;
       try {
         Map<String, dynamic> temp = json.decode(payload);
@@ -196,6 +202,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       if (gatePassPayload.tYPE == TYPE_VISITOR ||
           gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
         if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+          print('_showNotification isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
           if((gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Taxi || gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Delivery))  {
             _fcm.showAlert(context, gatePassPayload);
           }else{
