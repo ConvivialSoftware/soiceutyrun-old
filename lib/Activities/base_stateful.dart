@@ -34,13 +34,13 @@ const String TYPE_VISITOR_VERIFY = "Visitor_verify";
 const String TYPE_POLL = "Poll";
 const String TYPE_BILL = "Bill";
 const String TYPE_RECEIPT = "Receipt";
+const String TYPE_MANUALLY_STATUS_UPDATE = "manually_status_update";
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   GatePassPayload gatePassPayload;
-  print('myBackgroundMessageHandler before isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+  print('myBackgroundMessageHandler before isAlreadyTapped : ' +
+      GlobalVariables.isAlreadyTapped.toString());
   print("myBackgroundMessageHandler onMessage >>>> $message");
-  GlobalVariables.isAlreadyTapped = false;
-  print('onMessage myBackgroundMessageHandler after isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
   Map data;
   if (Platform.isIOS) {
     data = message;
@@ -49,77 +49,89 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   }
   try {
     String payloadData = data["society"];
-    Map<String, dynamic> temp = json.decode(payloadData);
-    gatePassPayload = GatePassPayload.fromJson(temp);
+    Map society;
+    society = json.decode(payloadData.toString());
+    society["isBackGround"] = true;
+   // Map<String, dynamic> temp = json.decode(society.toString());
+    //temp['isBackGround']=true;
+    gatePassPayload = GatePassPayload.fromJson(society);
+
+    var androidPlatformChannelSpecifics;
+    if (gatePassPayload.tYPE == TYPE_VISITOR ||
+        gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
+      androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        androidChannelIdVisitor,
+        androidChannelName,
+        androidChannelDesc,
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'ticker',
+        enableLights: true,
+        color: Colors.green,
+        ledColor: const Color.fromARGB(255, 255, 0, 0),
+        ledOnMs: 1000,
+        ledOffMs: 500,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound("alert"),
+      );
+    } else {
+      androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        androidChannelIdOther,
+        androidChannelName,
+        androidChannelDesc,
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'ticker',
+        enableLights: true,
+        color: Colors.green,
+        ledColor: const Color.fromARGB(255, 255, 0, 0),
+        ledOnMs: 1000,
+        ledOffMs: 500,
+        playSound: true,
+      );
+    }
+    var iOSPlatformChannelSpecifics =
+        IOSNotificationDetails(sound: "alert.caf");
+
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    GlobalVariables.isAlreadyTapped = false;
+    print('onMessage myBackgroundMessageHandler after isAlreadyTapped : ' +
+        GlobalVariables.isAlreadyTapped.toString());
+    flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+        gatePassPayload.body, platformChannelSpecifics,
+        payload: /*data["society"]*/ json.encode(society));
   } catch (e) {
     print(e);
   }
-  var androidPlatformChannelSpecifics;
-  if (gatePassPayload.tYPE == TYPE_VISITOR ||
-      gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
-      androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      androidChannelIdVisitor,
-      androidChannelName,
-      androidChannelDesc,
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'ticker',
-      enableLights: true,
-      color: Colors.green,
-      ledColor: const Color.fromARGB(255, 255, 0, 0),
-      ledOnMs: 1000,
-      ledOffMs: 500,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound("alert"),
-    );
-  } else {
-    androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      androidChannelIdOther,
-      androidChannelName,
-      androidChannelDesc,
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'ticker',
-      enableLights: true,
-      color: Colors.green,
-      ledColor: const Color.fromARGB(255, 255, 0, 0),
-      ledOnMs: 1000,
-      ledOffMs: 500,
-      playSound: true,
-    );
-  }
-  var iOSPlatformChannelSpecifics = IOSNotificationDetails(sound: "alert.caf");
-
-  var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  flutterLocalNotificationsPlugin.show(
-      1, gatePassPayload.title, gatePassPayload.body, platformChannelSpecifics,
-      payload: data["society"]);
-
   return Future<void>.value();
 }
 
 abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   final _fcm = FirebaseMessagingHandler();
   BuildContext _ctx;
-  bool isDailyEntryNotification= false;
-  bool isGuestEntryNotification= false;
-  void baseMethod() {
+  bool isDailyEntryNotification = false;
+  bool isGuestEntryNotification = false;
 
-  }
+  void baseMethod() {}
 
   @override
   void initState() {
     super.initState();
     _fcm.setListeners();
-    setState(()  {
-      _ctx = context;
+    setState(() {
+      _ctx = this.context;
     });
     firebaseCloudMessagingListeners();
   }
 
-  Future<void> firebaseCloudMessagingListeners() async {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _ctx = this.context;
+  }
 
+  Future<void> firebaseCloudMessagingListeners() async {
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('icon_notif');
 
@@ -139,10 +151,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
     _fcm.firebaseMessaging.configure(
       onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
-      onMessage: (Map<String, dynamic> message) async  {
-        print('onMessage before isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+      onMessage: (Map<String, dynamic> message) async {
+        print('onMessage before isAlreadyTapped : ' +
+            GlobalVariables.isAlreadyTapped.toString());
         GlobalVariables.isAlreadyTapped = false;
-        print('onMessage after isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+        print('onMessage after isAlreadyTapped : ' +
+            GlobalVariables.isAlreadyTapped.toString());
         print("onMessage >>>> $message");
         _showNotification(message, false);
       },
@@ -158,32 +172,46 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String payload) async {
-    print('selectNotification isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+    print('In selectNotification method');
+    try {
+    Map<String, dynamic> temp = json.decode(payload);
+    GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+    print('selectNotification isAlreadyTapped : ' +
+        GlobalVariables.isAlreadyTapped.toString());
+    print('selectNotification isBackGround : ' +
+        gatePassPayload.isBackGround.toString());
+    if (gatePassPayload.isBackGround) {
+      GlobalVariables.isAlreadyTapped = false;
+    }
     if (!GlobalVariables.isAlreadyTapped) {
-      print('IF selectNotification isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
+      print('IF selectNotification isAlreadyTapped : ' +
+          GlobalVariables.isAlreadyTapped.toString());
       GlobalVariables.isAlreadyTapped = true;
-      try {
-        Map<String, dynamic> temp = json.decode(payload);
-        GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+
         if (gatePassPayload.tYPE == TYPE_VISITOR ||
             gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
-          if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
-            _fcm.showAlert(context, gatePassPayload);
-          }else{
-            navigate(gatePassPayload,_ctx);
+          if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+            _fcm.showAlert(_ctx, gatePassPayload);
+          } else {
+            navigate(gatePassPayload, _ctx);
           }
         } else {
-          navigate(gatePassPayload,_ctx);
+          print('IF selectNotification gatePassPayload.tYPE : ' +
+              gatePassPayload.tYPE.toString());
+          navigate(gatePassPayload, _ctx);
         }
-      } catch (e) {
-        _fcm.showErrorDialog(context, e);
       }
+    }catch (e) {
+      print('exception : '+e.toString());
+      _fcm.showErrorDialog(_ctx, e);
     }
   }
 
   _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
-    isGuestEntryNotification = await GlobalFunctions.getGuestEntryNotification();
-    isDailyEntryNotification = await GlobalFunctions.getDailyEntryNotification();
+    isGuestEntryNotification =
+        await GlobalFunctions.getGuestEntryNotification();
+    isDailyEntryNotification =
+        await GlobalFunctions.getDailyEntryNotification();
     GatePassPayload gatePassPayload;
     Map data;
     if (Platform.isIOS) {
@@ -193,69 +221,56 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }
     try {
       String payloadSData = data["society"];
-      Map<String, dynamic> temp = jsonDecode(payloadSData);
-      gatePassPayload = GatePassPayload.fromJson(temp);
-    } catch (e) {
-      print(e);
-    }
-    try {
-      if (gatePassPayload.tYPE == TYPE_VISITOR ||
-          gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
-        if(!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
-          print('_showNotification isAlreadyTapped : '+ GlobalVariables.isAlreadyTapped.toString());
-          if((gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Taxi || gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Delivery))  {
-            _fcm.showAlert(context, gatePassPayload);
-          }else{
-            if(isGuestEntryNotification){
-              _fcm.showAlert(context, gatePassPayload);
+      Map society;
+      society =society = json.decode(payloadSData.toString());
+      society["isBackGround"] = shouldRedirect;
+     // Map<String, dynamic> temp = jsonDecode(society.toString());
+      gatePassPayload = GatePassPayload.fromJson(society);
+
+      if (gatePassPayload.isBackGround) {
+        GlobalVariables.isAlreadyTapped = false;
+      }
+      try {
+        if (gatePassPayload.tYPE == TYPE_VISITOR ||
+            gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) {
+          if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+            print('_showNotification isAlreadyTapped : ' +
+                GlobalVariables.isAlreadyTapped.toString());
+            if ((gatePassPayload.vSITORTYPE == GlobalVariables.GatePass_Taxi ||
+                gatePassPayload.vSITORTYPE ==
+                    GlobalVariables.GatePass_Delivery)) {
+              _fcm.showAlert(_ctx, gatePassPayload);
+            } else {
+              if (isGuestEntryNotification) {
+                _fcm.showAlert(_ctx, gatePassPayload);
+              }
             }
           }
+        } else {
+          if (shouldRedirect) {
+            GlobalVariables.isAlreadyTapped = false;
+            // navigate(gatePassPayload,_ctx);
+          }
+          if (gatePassPayload.tYPE == TYPE_MANUALLY_STATUS_UPDATE) {
+            print('before : ' +
+                FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
+            if (FirebaseMessagingHandler.isInAppCallDialogOpen) {
+              Navigator.of(context).pop();
+            }
+            print('after : ' +
+                FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
+          }
         }
-      } else {
-        if (shouldRedirect) {
-          GlobalVariables.isAlreadyTapped = false;
-         // navigate(gatePassPayload,_ctx);
-        }
+      } catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
-    }
-    var androidPlatformChannelSpecifics;
-    if ((gatePassPayload.tYPE == TYPE_VISITOR || gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) &&
-        !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME) ) {
-      print('if showGuestNotification');
-      if((gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Taxi || gatePassPayload.vSITORTYPE==GlobalVariables.GatePass_Delivery)) {
-        androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          androidChannelIdVisitor,
-          androidChannelName,
-          androidChannelDesc,
-          importance: Importance.Max,
-          priority: Priority.High,
-          ticker: 'ticker',
-          enableLights: true,
-          color: Colors.green,
-          ledColor: const Color.fromARGB(255, 255, 0, 0),
-          ledOnMs: 1000,
-          ledOffMs: 500,
-          playSound: true,
-          sound: RawResourceAndroidNotificationSound("alert"),
-        );
-        var iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(sound: "alert.caf");
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-        try {
-          flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
-              gatePassPayload.body, platformChannelSpecifics,
-              payload: data["society"]);
-        } catch (e) {
-          print(e);
-        }
-      }else{
-        print('else showGuestNotification');
-        if(isGuestEntryNotification){
-          print('else showGuestNotification');
+      var androidPlatformChannelSpecifics;
+      if ((gatePassPayload.tYPE == TYPE_VISITOR ||
+              gatePassPayload.tYPE == TYPE_VISITOR_VERIFY) &&
+          !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+        print('if showGuestNotification');
+        if ((gatePassPayload.vSITORTYPE == GlobalVariables.GatePass_Taxi ||
+            gatePassPayload.vSITORTYPE == GlobalVariables.GatePass_Delivery)) {
           androidPlatformChannelSpecifics = AndroidNotificationDetails(
             androidChannelIdVisitor,
             androidChannelName,
@@ -271,65 +286,98 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             playSound: true,
             sound: RawResourceAndroidNotificationSound("alert"),
           );
-          print('else showGuestNotification Alert');
           var iOSPlatformChannelSpecifics =
-          IOSNotificationDetails(sound: "alert.caf");
+              IOSNotificationDetails(sound: "alert.caf");
           var platformChannelSpecifics = NotificationDetails(
               androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
           try {
-            print('else showGuestNotification TRY');
             flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
                 gatePassPayload.body, platformChannelSpecifics,
-                payload: data["society"]);
+                payload: /*data["society"]*/json.encode(society));
           } catch (e) {
-            print('else showGuestNotification CATCH');
+            print(e);
+          }
+        } else {
+          print('else showGuestNotification');
+          if (isGuestEntryNotification) {
+            print('else showGuestNotification');
+            androidPlatformChannelSpecifics = AndroidNotificationDetails(
+              androidChannelIdVisitor,
+              androidChannelName,
+              androidChannelDesc,
+              importance: Importance.Max,
+              priority: Priority.High,
+              ticker: 'ticker',
+              enableLights: true,
+              color: Colors.green,
+              ledColor: const Color.fromARGB(255, 255, 0, 0),
+              ledOnMs: 1000,
+              ledOffMs: 500,
+              playSound: true,
+              sound: RawResourceAndroidNotificationSound("alert"),
+            );
+            print('else showGuestNotification Alert');
+            var iOSPlatformChannelSpecifics =
+                IOSNotificationDetails(sound: "alert.caf");
+            var platformChannelSpecifics = NotificationDetails(
+                androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+            try {
+              print('else showGuestNotification TRY');
+              flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                  gatePassPayload.body, platformChannelSpecifics,
+                  payload: /*data["society"]*/json.encode(society));
+            } catch (e) {
+              print('else showGuestNotification CATCH');
+              print(e);
+            }
+          }
+        }
+      } else {
+        if (isDailyEntryNotification) {
+          print('if showDailyNotification');
+          androidPlatformChannelSpecifics = AndroidNotificationDetails(
+            androidChannelIdOther,
+            androidChannelName,
+            androidChannelDesc,
+            importance: Importance.Max,
+            priority: Priority.High,
+            ticker: 'ticker',
+            enableLights: true,
+            color: Colors.green,
+            ledColor: const Color.fromARGB(255, 255, 0, 0),
+            ledOnMs: 1000,
+            ledOffMs: 500,
+            playSound: true,
+          );
+          var iOSPlatformChannelSpecifics =
+              IOSNotificationDetails(sound: "alert.caf");
+          var platformChannelSpecifics = NotificationDetails(
+              androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+          try {
+            flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                gatePassPayload.body, platformChannelSpecifics,
+                payload: /*data["society"]*/json.encode(society));
+          } catch (e) {
             print(e);
           }
         }
       }
-    } else {
-      if(isDailyEntryNotification) {
-        print('if showDailyNotification');
-        androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          androidChannelIdOther,
-          androidChannelName,
-          androidChannelDesc,
-          importance: Importance.Max,
-          priority: Priority.High,
-          ticker: 'ticker',
-          enableLights: true,
-          color: Colors.green,
-          ledColor: const Color.fromARGB(255, 255, 0, 0),
-          ledOnMs: 1000,
-          ledOffMs: 500,
-          playSound: true,
-        );
-        var iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(sound: "alert.caf");
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-        try {
-          flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
-              gatePassPayload.body, platformChannelSpecifics,
-              payload: data["society"]);
-        } catch (e) {
-          print(e);
-        }
-      }
+    } catch (e) {
+      print(e);
     }
-
   }
 
-  Future<void> navigate(GatePassPayload temp,BuildContext context) async {
-    print('context : '+context.toString());
+  Future<void> navigate(GatePassPayload temp, BuildContext context) async {
+    print('context : ' + context.toString());
     if (temp.tYPE == TYPE_COMPLAINT) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD,false)));
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD, false)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -342,121 +390,127 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD,true)));
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD, true)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (temp.tYPE == TYPE_MEETING) {
+    } else if (temp.tYPE == TYPE_MEETING) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('meetings'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('meetings'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
     } else if (temp.tYPE == TYPE_ANNOUNCEMENT) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('announcement'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('announcement'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
     } else if (temp.tYPE == TYPE_EVENT) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('events'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('events'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
     } else if (temp.tYPE == TYPE_POLL) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyComplex(
-                      AppLocalizations.of(context).translate('poll_survey'))));
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('poll_survey'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    } else if (temp.tYPE == TYPE_VISITOR || temp.tYPE==TYPE_VISITOR_VERIFY) {
+    } else if (temp.tYPE == TYPE_VISITOR || temp.tYPE == TYPE_VISITOR_VERIFY) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>BaseMyGate(AppLocalizations.of(context).translate('my_gate'))));
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_gate'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
     } else if (temp.tYPE == TYPE_BILL) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyUnit(
-                      AppLocalizations.of(context).translate('my_dues'))));
+              builder: (context) => BaseMyUnit(
+                  AppLocalizations.of(context).translate('my_dues'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (temp.tYPE == TYPE_RECEIPT) {
+    } else if (temp.tYPE == TYPE_RECEIPT) {
       final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  BaseLedger()));
+          context, MaterialPageRoute(builder: (context) => BaseLedger()));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (temp.tYPE == TYPE_FVISITOR) {
+    } else if (temp.tYPE == TYPE_FVISITOR) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseMyGate(AppLocalizations.of(context).translate('my_gate'))));
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_gate'))));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => BaseMyGate(AppLocalizations.of(context).translate('my_gate'))),
-                (Route<dynamic> route) => false);
+                builder: (BuildContext context) => BaseDashBoard()),
+            (Route<dynamic> route) => false);
+      }
+    } else if (temp.tYPE == TYPE_MANUALLY_STATUS_UPDATE) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_gate'))));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+            (Route<dynamic> route) => false);
       }
     } else {
       Navigator.pushAndRemoveUntil(

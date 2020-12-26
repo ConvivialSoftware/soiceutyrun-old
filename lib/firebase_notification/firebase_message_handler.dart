@@ -10,6 +10,8 @@ import 'package:societyrun/Models/gatepass_payload.dart';
 class FirebaseMessagingHandler {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
+  static bool isInAppCallDialogOpen=false;
+
   void setListeners() {
     if (Platform.isIOS) _iOSPermission();
 
@@ -38,7 +40,6 @@ class FirebaseMessagingHandler {
   }
 
   void showAlert(BuildContext context, GatePassPayload payload) {
-    GlobalVariables.isAlreadyTapped = false;
       _showItemDialog(payload, context);
   }
 
@@ -50,10 +51,13 @@ class FirebaseMessagingHandler {
 
   }
   void _showItemDialog(GatePassPayload payload,BuildContext context) {
+    isInAppCallDialogOpen=true;
     showDialog<bool>(
       context: context,
       builder: (_) =>GatePassDialog(message: payload),
     ).then((bool shouldNavigate) {
+      isInAppCallDialogOpen = false;
+      print('after Dialog Close : '+FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
       if (shouldNavigate == true) {
 
       }

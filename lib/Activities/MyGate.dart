@@ -1528,6 +1528,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     } else {
       _tabController.animateTo(0);
     }
+    if(pageName!=null) {
+      pageName=null;
+      if(_tabController.index==0){
+        _handleTabSelection();
+      }
+    }
   }
 
   displayPassCode(String pass_code, String userName, String googleParameter,

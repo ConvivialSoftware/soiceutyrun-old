@@ -19,6 +19,7 @@ class GatePassPayload {
   String dATETIME;
   String vSITORTYPE;
   String GCM_ID;
+  bool isBackGround;
 
   GatePassPayload(
       {this.msgID,
@@ -40,7 +41,8 @@ class GatePassPayload {
         this.nOOFVISITORS,
         this.dATETIME,
         this.vSITORTYPE,
-        this.GCM_ID,});
+        this.GCM_ID,
+      this.isBackGround});
 
   GatePassPayload.fromJson(Map<String, dynamic> json) {
     msgID = json['msgID'];
@@ -63,6 +65,7 @@ class GatePassPayload {
     dATETIME = json['DATE_TIME'];
     vSITORTYPE = json['Visitor_type'];
     GCM_ID = json['GCM_ID'];
+    isBackGround = json['isBackGround']??false;
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +90,7 @@ class GatePassPayload {
     data['DATE_TIME'] = this.dATETIME;
     data['Visitor_type'] = this.vSITORTYPE;
     data['GCM_ID'] = this.GCM_ID;
+    data['isBackGround'] = this.isBackGround;
     return data;
   }
 }

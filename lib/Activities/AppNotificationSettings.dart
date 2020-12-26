@@ -28,10 +28,10 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
       block="";
   var email = '', phone = '', consumerId = '', societyName = '';
 
-  bool isInAppCall= false;
-  bool isDailyEntryNotification= false;
+  bool isInAppCall= true;
+  bool isDailyEntryNotification= true;
   //bool isDailyExitNotification= false;
-  bool isGuestEntryNotification= false;
+  bool isGuestEntryNotification= true;
   //bool isGuestExitNotification= false;
 
 
