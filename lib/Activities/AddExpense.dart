@@ -569,7 +569,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
     }
 
-    print('attachment lengtth : '+attachment.length.toString());
+   // print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog.show();
     restClientERP.addExpense(societyId, _amountController.text, _referenceController.text,

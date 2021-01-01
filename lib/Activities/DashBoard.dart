@@ -21,15 +21,18 @@ import 'package:societyrun/Activities/MyComplex.dart';
 
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/Activities/Notifications.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Banners.dart';
+import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -46,7 +49,7 @@ class BaseDashBoard extends StatefulWidget {
 }
 
 class DashBoardState extends BaseStatefulState<BaseDashBoard>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, ChangeNotifier {
   final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
       new GlobalKey<ScaffoldState>();
 
@@ -64,19 +67,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   var name = '';
   var email = '', phone = '';
-  var photo='';
+  var photo = '';
 
   List<Banners> _bannerList = List<Banners>();
 
   RateMyApp _rateMyApp = RateMyApp(
     preferencesPrefix: 'rateMyApp_',
-    minDays: 2,
-    minLaunches: 2,
-    remindDays: 2,
-    remindLaunches: 2,
+    minDays: 30,
     googlePlayIdentifier: AppPackageInfo.packageName,
   );
-
 
   @override
   void initState() {
@@ -88,7 +87,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         getMobile();
         getPhoto();
         getAppPermission();
+        SQLiteDbProvider.db.getDataBaseInstance();
         GlobalFunctions.getAppPackageInfo();
+        SQLiteDbProvider.db.getNotificationTableCount();
         GlobalFunctions.checkInternetConnection().then((internet) {
           if (internet) {
             getDuesData();
@@ -139,8 +140,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       if (value.status) {
         setState(() {
           List<dynamic> _list = value.data;
-          List<ProfileInfo>   _profileList = List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
-          photo=_profileList[0].PROFILE_PHOTO;
+          List<ProfileInfo> _profileList =
+              List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
+          photo = _profileList[0].PROFILE_PHOTO;
           name = _profileList[0].NAME;
         });
       }
@@ -161,6 +163,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   @override
   Widget build(BuildContext context) {
+    print('DashBoard context : ' + context.toString());
+    print('DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getExpandableListViewData(context);
     // TODO: implement build
@@ -242,19 +246,56 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
+                            
                             Container(
                               //color: GlobalVariables.grey,
                               margin: EdgeInsets.fromLTRB(0, 10, 20, 0),
                               child: SizedBox(
                                   child: GestureDetector(
                                 onTap: () {
-                                  GlobalFunctions.comingSoonDialog(context);
+                                  //GlobalFunctions.comingSoonDialog(context);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => BaseNotifications()));
                                 },
-                                child: SvgPicture.asset(
-                                  GlobalVariables.notificationBellIconPath,
-                                  width: 20,
-                                  height: 20,
-                                ),
+                                child: ValueListenableBuilder(
+                                    valueListenable:GlobalVariables.notificationCounterValueNotifer,
+                                    builder: (BuildContext context, int newNotificationCounterValue, Widget child){
+                                  return  Stack(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: 5),
+                                        //color: GlobalVariables.grey,
+                                        child: SvgPicture.asset(
+                                          GlobalVariables.notificationBellIconPath,
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Container(
+                                        alignment: Alignment.topRight,
+                                        margin: EdgeInsets.only(left: 8),
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width * 0.04,
+                                          height: MediaQuery.of(context).size.width * 0.04,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: GlobalVariables.orangeYellow,
+                                              border: Border.all(color: GlobalVariables.transparent, width: 1)),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              newNotificationCounterValue.toString(),style: TextStyle(
+                                              color: GlobalVariables.white
+                                            ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
                               )),
                             ),
                             Container(
@@ -263,37 +304,40 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   0, 10, 20, 0), // alignment: Alignment
                               child: SizedBox(
                                   child: GestureDetector(
-                                onTap: () {
-                                  // GlobalFunctions.showToast('profile_user');
-                                  navigateToProfilePage();
-                                },
-                                child: photo.isEmpty
-                                    ? Container(
-                                  child: Image.asset(
-                                      GlobalVariables.componentUserProfilePath),
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(35),
-                                      border: Border.all(
-                                          color: GlobalVariables.mediumGreen,
-                                          width: 1.0),
-                                      color: GlobalVariables.lightGreen),
-                                )
-                                    : Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              photo),
-                                          fit: BoxFit.cover),
-                                      border: Border.all(
-                                          color: GlobalVariables.mediumGreen,
-                                          width: 1.0)),
-                                )
-                              )),
+                                      onTap: () {
+                                        // GlobalFunctions.showToast('profile_user');
+                                        navigateToProfilePage();
+                                      },
+                                      child: photo.isEmpty
+                                          ? Container(
+                                              child: Image.asset(GlobalVariables
+                                                  .componentUserProfilePath),
+                                              width: 20,
+                                              height: 20,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(35),
+                                                  border: Border.all(
+                                                      color: GlobalVariables
+                                                          .mediumGreen,
+                                                      width: 1.0),
+                                                  color: GlobalVariables
+                                                      .lightGreen),
+                                            )
+                                          : Container(
+                                              width: 20,
+                                              height: 20,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image:
+                                                          NetworkImage(photo),
+                                                      fit: BoxFit.cover),
+                                                  border: Border.all(
+                                                      color: GlobalVariables
+                                                          .mediumGreen,
+                                                      width: 1.0)),
+                                            ))),
                             ),
                           ],
                         ),
@@ -741,7 +785,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               print('mobileMD5 : '+ mobileMD5.toString());
                               print('unitMD5 : '+ unitMD5.toString());*/
 
-                                   /* launch(_bannerList[itemIndex].Url +
+                                    /* launch(_bannerList[itemIndex].Url +
                                         '?' +
                                         'SID=' +
                                         societyId.toString() +
@@ -753,18 +797,23 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         block.toString() +
                                         ' ' +
                                         flat.toString());*/
-                                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url +
-                                        '?' +
-                                        'SID=' +
-                                        societyId.toString() +
-                                        '&MOBILE=' +
-                                        phone.toString() +
-                                        '&NAME=' +
-                                        name.toString() +
-                                        '&UNIT=' +
-                                        block.toString() +
-                                        ' ' +
-                                        flat.toString())));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseWebViewScreen(
+                                                    _bannerList[itemIndex].Url +
+                                                        '?' +
+                                                        'SID=' +
+                                                        societyId.toString() +
+                                                        '&MOBILE=' +
+                                                        phone.toString() +
+                                                        '&NAME=' +
+                                                        name.toString() +
+                                                        '&UNIT=' +
+                                                        block.toString() +
+                                                        ' ' +
+                                                        flat.toString())));
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
@@ -923,34 +972,35 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           //color: GlobalVariables.red,
                           //TODO: userImage
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30.0),
-                            child: photo.isEmpty
-                                ? Container(
-                              child: Image.asset(
-                                  GlobalVariables.componentUserProfilePath),
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(35),
-                                  border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 2.0),
-                                  color: GlobalVariables.lightGreen),
-                            )
-                                : Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          photo),
-                                      fit: BoxFit.cover),
-                                  border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 2.0)),
-                            )
-                          )),
+                              borderRadius: BorderRadius.circular(30.0),
+                              child: photo.isEmpty
+                                  ? Container(
+                                      child: Image.asset(GlobalVariables
+                                          .componentUserProfilePath),
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(35),
+                                          border: Border.all(
+                                              color:
+                                                  GlobalVariables.mediumGreen,
+                                              width: 2.0),
+                                          color: GlobalVariables.lightGreen),
+                                    )
+                                  : Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: NetworkImage(photo),
+                                              fit: BoxFit.cover),
+                                          border: Border.all(
+                                              color:
+                                                  GlobalVariables.mediumGreen,
+                                              width: 2.0)),
+                                    ))),
                     ),
                     Flexible(
                       child: Container(
@@ -1366,47 +1416,59 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             //show logout Dialog
             GlobalFunctions.forceLogoutDialog(context);
           }
-        }else{
-          if(value.message==AppLocalizations.of(context).translate('invalid_username_password')){
+        } else {
+          if (value.message ==
+              AppLocalizations.of(context)
+                  .translate('invalid_username_password')) {
             GlobalFunctions.notAllowForRunAppDialog(context);
           }
         }
 
-        _rateMyApp.init().then((_){
+        _rateMyApp.init().then((_) {
           //if(_rateMyApp.shouldOpenDialog){ //conditions check if user already rated the app
-          _rateMyApp.showRateDialog(
-            context,
-            title: 'Rate this app', // The dialog title.
-            message: 'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.', // The dialog message.
-            rateButton: 'RATE', // The dialog "rate" button text.
-            noButton: 'NO THANKS', // The dialog "no" button text.
-            laterButton: 'MAYBE LATER', // The dialog "later" button text.
-            listener: (button) { // The button click listener (useful if you want to cancel the click event).
-              switch(button) {
-                case RateMyAppDialogButton.rate:
-                  print('Clicked on "Rate".');
-                  break;
-                case RateMyAppDialogButton.later:
-                  print('Clicked on "Later".');
-                  break;
-                case RateMyAppDialogButton.no:
-                  print('Clicked on "No".');
-                  break;
-              }
+          if (mounted && _rateMyApp.shouldOpenDialog) {
+            _rateMyApp.showRateDialog(
+              context,
+              title: 'Rate this app',
+              // The dialog title.
+              message:
+                  'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.',
+              // The dialog message.
+              rateButton: 'RATE',
+              // The dialog "rate" button text.
+              noButton: 'NO THANKS',
+              // The dialog "no" button text.
+              laterButton: 'MAYBE LATER',
+              // The dialog "later" button text.
+              listener: (button) {
+                // The button click listener (useful if you want to cancel the click event).
+                switch (button) {
+                  case RateMyAppDialogButton.rate:
+                    print('Clicked on "Rate".');
+                    break;
+                  case RateMyAppDialogButton.later:
+                    print('Clicked on "Later".');
+                    break;
+                  case RateMyAppDialogButton.no:
+                    print('Clicked on "No".');
+                    break;
+                }
 
-              return true; // Return false if you want to cancel the click event.
-            },
-            ignoreNativeDialog: Platform.isAndroid, // Set to false if you want to show the Apple's native app rating dialog on iOS or Google's native app rating dialog (depends on the current Platform).
-            dialogStyle: DialogStyle(), // Custom dialog styles.
-            onDismissed: () => _rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed), // Called when the user dismissed the dialog (either by taping outside or by pressing the "back" button).
-            // contentBuilder: (context, defaultContent) => content, // This one allows you to change the default dialog content.
-            // actionsBuilder: (context) => [], // This one allows you to use your own buttons.
-          );
-
+                return true; // Return false if you want to cancel the click event.
+              },
+              ignoreNativeDialog: Platform.isAndroid,
+              // Set to false if you want to show the Apple's native app rating dialog on iOS or Google's native app rating dialog (depends on the current Platform).
+              dialogStyle: DialogStyle(),
+              // Custom dialog styles.
+              onDismissed: () => _rateMyApp.callEvent(RateMyAppEventType
+                  .laterButtonPressed), // Called when the user dismissed the dialog (either by taping outside or by pressing the "back" button).
+              // contentBuilder: (context, defaultContent) => content, // This one allows you to change the default dialog content.
+              // actionsBuilder: (context) => [], // This one allows you to use your own buttons.
+            );
+          }
         }
-          // }
-        );
-
+            // }
+            );
       }).catchError((Object obj) {
         if (_progressDialog.isShowing()) {
           _progressDialog.hide();
@@ -1593,7 +1655,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.expenseIconPath,
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
-      /*  new RootTitle(
+        /*  new RootTitle(
             title: AppLocalizations.of(context).translate('about_us'),
             rootIconData: GlobalVariables.aboutUsPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
@@ -2093,23 +2155,35 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
-       Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('discover'))));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseDiscover(
+                  AppLocalizations.of(context).translate('discover'))));
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('classified'))));
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseDiscover(
+                  AppLocalizations.of(context).translate('classified'))));
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
-       Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('services'))));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseDiscover(
+                  AppLocalizations.of(context).translate('services'))));
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
-        Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseDiscover(AppLocalizations.of(context).translate('near_by_shop'))));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseDiscover(
+                  AppLocalizations.of(context).translate('near_by_shop'))));
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
       GlobalFunctions.comingSoonDialog(context);
@@ -2140,11 +2214,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
-    }else if (item == AppLocalizations.of(context).translate('expense')) {
+    } else if (item == AppLocalizations.of(context).translate('expense')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseExpense()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseExpense()));
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
       GlobalFunctions.comingSoonDialog(context);
@@ -2167,12 +2241,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => BaseChangePassword()));
-    } else if (item ==
-        AppLocalizations.of(context).translate('settings')) {
+    } else if (item == AppLocalizations.of(context).translate('settings')) {
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseAppSettings()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseAppSettings()));
     } else if (item == AppLocalizations.of(context).translate('logout')) {
       // GlobalFunctions.showToast("Logout");
       showDialog(
@@ -2265,7 +2338,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         context,
         MaterialPageRoute(
             builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
-    if(result=='profile'){
+    if (result == 'profile') {
       geProfileData();
     }
   }

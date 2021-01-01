@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 class GlobalVariables {
   static var isAlreadyTapped = false;
+  static var isNewlyArrivedNotification = false;
+  static ValueNotifier<int> notificationCounterValueNotifer = ValueNotifier(0);
 
   /*Variables for the Web URL*/
   static const termsConditionURL =
@@ -377,6 +379,22 @@ class GatePassFields {
   static const COMMENT = "COMMENT";
   static const STATUS = "STATUS";
   static const GCM_ID="GCM_ID";
+}
+
+class NotificationTypes{
+
+  static const String TYPE_EVENT = "Event";
+  static const String TYPE_MEETING = "Meeting";
+  static const String TYPE_ANNOUNCEMENT = "Announcement";
+  static const String TYPE_ASSIGN_COMPLAINT = "AssignComplaint";
+  static const String TYPE_COMPLAINT = "Complaint";
+  static const String TYPE_VISITOR = "Visitor";
+  static const String TYPE_FVISITOR = "FVisitor";
+  static const String TYPE_VISITOR_VERIFY = "Visitor_verify";
+  static const String TYPE_POLL = "Poll";
+  static const String TYPE_BILL = "Bill";
+  static const String TYPE_RECEIPT = "Receipt";
+
 }
 
 class SocietyRun {

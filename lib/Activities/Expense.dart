@@ -150,7 +150,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
 
     List<VoucherAmount> _voucherAmountList = List<VoucherAmount>();
     _voucherAmountList = List<VoucherAmount>.from(_expenseList[position].head_details.map((i) => VoucherAmount.fromJson(i)));
-    double _voucherAmount;
+    double _voucherAmount=0.0;
     for(int i=0;i<_voucherAmountList.length;i++){
       _voucherAmount +=double.parse(_voucherAmountList[i].amount);
     }

@@ -338,5 +338,6 @@
   "expense_voucher": "Expense Voucher",
   "voucher_number": "Voucher No.",
   "Vendor_name": "Vendor Name",
-  "transaction_number": "Transaction No."
+  "transaction_number": "Transaction No.",
+  "notification": "Notifications"
 }
