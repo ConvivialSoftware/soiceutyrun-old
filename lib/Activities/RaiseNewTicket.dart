@@ -680,9 +680,9 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
         if(attachmentFileName!=null && attachmentFilePath!=null){
           GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
         }
-        Navigator.of(context).pop();
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
+        Navigator.of(context).pop('back');
+        /*Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));*/
       }
       GlobalFunctions.showToast(value.message);
 

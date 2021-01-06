@@ -70,7 +70,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
           centerTitle: true,
           leading: InkWell(
             onTap: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
             child: Icon(
               Icons.arrow_back,
@@ -88,27 +88,32 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
   }
 
   getMyTicketLayout() {
-    print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                ticketOpenClosedLayout(), //ticketFilterLayout(),
-                getTicketListDataLayout(),
-                !isAssignComplaint ? addTicketFabLayout(): Container(),
-              ],
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context);
+        return;
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: GlobalVariables.veryLightGray,
+        ),
+        child: Column(
+          children: <Widget>[
+            Flexible(
+              child: Stack(
+                children: <Widget>[
+                  GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                      context, 180.0),
+                  ticketOpenClosedLayout(), //ticketFilterLayout(),
+                  getTicketListDataLayout(),
+                  !isAssignComplaint ? addTicketFabLayout(): Container(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -277,13 +282,19 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
           Container(
             padding: EdgeInsets.all(15),
             child: FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
                 //GlobalFunctions.showToast('Fab CLick');
-                Navigator.of(context).pop();
-                Navigator.push(
+                //Navigator.of(context).pop();
+                var result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => BaseRaiseNewTicket()));
+                if(result=='back'){
+                  GlobalFunctions.setBaseContext(context);
+                  getUnitComplaintData();
+                }else{
+                  GlobalFunctions.setBaseContext(context);
+                }
               },
               child: Icon(
                 Icons.add,
@@ -325,8 +336,11 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             context,
             MaterialPageRoute(
                 builder: (context) => BaseComplaintInfoAndComments(isOpenTicket ? _openComplaintList[position] : _closedComplaintList[position],isAssignComplaint)));
-        if (result != null) {
+        if(result=='back'){
+          GlobalFunctions.setBaseContext(context);
           getUnitComplaintData();
+        }else{
+          GlobalFunctions.setBaseContext(context);
         }
       },
       child: Container(

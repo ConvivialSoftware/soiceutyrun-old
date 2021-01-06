@@ -24,6 +24,7 @@ import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Models/Poll.dart';
 import 'package:societyrun/Models/PollOption.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'base_stateful.dart';
 
 class BaseMyComplex extends StatefulWidget {
   String pageName;
@@ -37,7 +38,7 @@ class BaseMyComplex extends StatefulWidget {
   }
 }
 
-class MyComplexState extends State<BaseMyComplex>
+class MyComplexState extends BaseStatefulState<BaseMyComplex>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   //List<NewsBoard> _newsBoardList = List<NewsBoard>();

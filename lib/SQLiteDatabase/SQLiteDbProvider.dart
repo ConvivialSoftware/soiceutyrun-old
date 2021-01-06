@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:sqflite/sqflite.dart';
@@ -43,6 +44,7 @@ class SQLiteDbProvider {
         _notificationTableName +
         "  (nid TEXT PRIMARY KEY,"
             "ID INTEGER,"
+            "uid TEXT,"
             "TYPE TEXT,"
             "Visitor_type TEXT,"
             "DATE_TIME TEXT,"
@@ -56,11 +58,12 @@ class SQLiteDbProvider {
             "read INTEGER)");
   }
 
-  getUnReadNotification() async {
+  getUnReadNotification(String userId) async {
     final db = await getDatabase;
     List<Map> result = await db.query(_notificationTableName,
         columns: [
           'nid',
+          'uid',
           'TYPE',
           'Visitor_type',
           'DATE_TIME',
@@ -71,7 +74,7 @@ class SQLiteDbProvider {
           'title',
           'CONTACT'
         ],
-        where: 'read=0', orderBy: 'DATE_TIME DESC');
+        where: 'read=0 and uid='+"'"+userId+"'", orderBy: 'DATE_TIME DESC');
     if (result.length > 0) {
       print('DB : '+result.toString());
       return result;
@@ -80,8 +83,10 @@ class SQLiteDbProvider {
   }
 
   insertUnReadNotification(DBNotificationPayload _dbNotificationPayload) async {
-    print('DB : DBNotificationPayload >>>> ' +
-        _dbNotificationPayload.toJson().toString());
+    String userId = await GlobalFunctions.getUserId();
+    print('DB : userId >>>> ' + userId.toString());
+    _dbNotificationPayload.uid=userId;
+    print('DB : DBNotificationPayload >>>> ' + _dbNotificationPayload.toJson().toString());
     final db = await getDatabase;
     /*var result = await db.rawInsert(
         "INSERT Into "+_notificationTableName+" (ID,TYPE, Visitor_type, DATE_TIME, FROM_VISITOR, IMAGE,"
@@ -99,14 +104,15 @@ class SQLiteDbProvider {
     );
     print('DB : ' + result.toString());
     print('DB : ' + 'Inserted Successfully');
-    getNotificationTableCount();
+
+    getNotificationTableCount(userId);
     return result;
   }
 
-  getNotificationTableCount() async {
+  getNotificationTableCount(String userId) async {
     final db = await getDatabase;
     int count = Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM ' + _notificationTableName+' WHERE read=0'));
+        await db.rawQuery('SELECT COUNT(*) FROM ' + _notificationTableName+' WHERE read=0 and uid='+"'"+userId+"'"));
     print('Count : ' + count.toString());
     GlobalVariables.notificationCounterValueNotifer.value = count;
     GlobalVariables.notificationCounterValueNotifer.notifyListeners();
@@ -120,7 +126,8 @@ class SQLiteDbProvider {
     int result = await db.rawDelete("DELETE FROM "+_notificationTableName+" WHERE nid = ?", [uuid]);
     print('DB : ' + result.toString());
     print('DB : ' + 'Delete Successfully');
-    getNotificationTableCount();
+    String userId = await GlobalFunctions.getUserId();
+    getNotificationTableCount(userId);
     return result;
   }
 
@@ -129,7 +136,8 @@ class SQLiteDbProvider {
     int result = await db.rawDelete("DELETE FROM "+_notificationTableName+" WHERE DATE_TIME <= date('now','-60 day')");
     print('DB : ' + result.toString());
     print('DB : ' + 'Delete Successfully');
-    getNotificationTableCount();
+    String userId = await GlobalFunctions.getUserId();
+    getNotificationTableCount(userId);
     return result;
   }
 

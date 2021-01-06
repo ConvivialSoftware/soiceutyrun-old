@@ -19,6 +19,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
@@ -977,5 +978,11 @@ class GlobalFunctions{
               );
             }));
   }
+
+  static setBaseContext(BuildContext context){
+    print('BaseContext is  : '+ context.toString());
+    BaseStatefulState.setCtx(context);
+  }
+
 
 }

@@ -128,6 +128,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
     var image  =  GlobalVariables.appLogoPath;
     if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_FVISITOR ||
+        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_SInApp ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR_VERIFY ){
 
       image = GlobalVariables.myGateIconPath;
@@ -241,8 +242,8 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
   }
 
   void getNotificationData() async {
-
-    var _list =  await SQLiteDbProvider.db.getUnReadNotification();
+    String userId = await GlobalFunctions.getUserId();
+    var _list =  await SQLiteDbProvider.db.getUnReadNotification(userId);
     _dbNotificationList = List<DBNotificationPayload>.from(_list.map((i)=>DBNotificationPayload.fromJson(i)));
     setState(() {});
 
@@ -310,6 +311,12 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => BaseLedger()));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_FVISITOR) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('my_gate'))));
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_SInApp) {
       Navigator.push(
           context,
           MaterialPageRoute(

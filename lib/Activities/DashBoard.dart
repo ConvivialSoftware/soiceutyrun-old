@@ -89,7 +89,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         getAppPermission();
         SQLiteDbProvider.db.getDataBaseInstance();
         GlobalFunctions.getAppPackageInfo();
-        SQLiteDbProvider.db.getNotificationTableCount();
         GlobalFunctions.checkInternetConnection().then((internet) {
           if (internet) {
             getDuesData();
@@ -109,8 +108,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -355,7 +354,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     );
   }
 
-  getBottomNavigationBar() {
+ /* getBottomNavigationBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(
           0, 10, 0, 0), //margin: EdgeInsets.fromLTRB(0, 25, 0, 0),
@@ -450,16 +449,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 title: Text("")),
           ]),
     );
-  }
+  }*/
 
-  bool isHomePage() {
+  /*bool isHomePage() {
     if (_currentIndex == 0) {
       return true;
     }
     return false;
-  }
+  }*/
 
-  navigateToPage() {
+ /* navigateToPage() {
     switch (_currentIndex) {
       case 0:
         {
@@ -511,7 +510,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         }
         break;
     }
-  }
+  }*/
 
   getHomePage() {
     return Expanded(
@@ -539,7 +538,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                              getMyUnitPage();
+                              //getMyUnitPage();
+                              redirectToPage(AppLocalizations.of(context).translate('my_unit'));
                             },
                             child: Container(
                               // color: GlobalVariables.black,
@@ -565,7 +565,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                              getMyComplexPage();
+                             // getMyComplexPage();
+                              redirectToPage(AppLocalizations.of(context).translate('my_complex'));
                             },
                             child: Container(
                               //    color: GlobalVariables.green,
@@ -590,7 +591,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                              getHelpDeskPage();
+                             // getHelpDeskPage();
+                              redirectToPage(AppLocalizations.of(context).translate('help_desk'));
                             },
                             child: Container(
                               //   color: GlobalVariables.black,
@@ -624,7 +626,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                              getClubFacilitiesPage();
+                             // getClubFacilitiesPage();
+                              redirectToPage(AppLocalizations.of(context).translate('facilities'));
                             },
                             child: Container(
                               //    color: GlobalVariables.black,
@@ -649,7 +652,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                              getMyGatePage();
+                             // getMyGatePage();
+                              redirectToPage(AppLocalizations.of(context).translate('my_gate'));
                             },
                             child: Container(
                               //   color: GlobalVariables.green,
@@ -674,7 +678,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                              getMorePage();
+                              /*getMorePage();*/
+                              redirectToPage(AppLocalizations.of(context).translate('more'));
                             },
                             child: Container(
                               //     color: GlobalVariables.black,
@@ -838,53 +843,62 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     );
   }
 
-  getMyUnitPage() async {
+  /*getMyUnitPage() async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));
     print('result back : ' + result.toString());
     if (result == 'back') {
       getDuesData();
     }
-  }
+  }*/
 
-  getMyComplexPage() {
+  /*getMyComplexPage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyComplex(null)));
-  }
+  }*/
 
-  getDiscoverPage() {
+  /*getDiscoverPage() {
     GlobalFunctions.comingSoonDialog(context);
-    /*Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*/
-  }
+    *//*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*//*
+  }*/
 
-  getClubFacilitiesPage() {
+  /*getClubFacilitiesPage() {
     GlobalFunctions.comingSoonDialog(context);
-    /* Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
-  }
+    *//* Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseFacilities()));*//*
+  }*/
 
-  getMyGatePage() {
+  /*getMyGatePage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => BaseMyGate(null)));
-  }
+  }*/
 
-  getMorePage() {
+  /*getMorePage() {
     GlobalFunctions.comingSoonDialog(context);
-    /*Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
-  }
+    *//*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*//*
+  }*/
 
-  getHelpDeskPage() {
+  /*getHelpDeskPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
-  }
+        context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false))).then((value) {
+          setState(() {
+            print("context : "+context.toString());
+            print("currentContext : "+_dashboardSacfoldKey.currentContext.toString());
+            print("currentState : "+_dashboardSacfoldKey.currentState.toString());
+            print("currentWidget : "+_dashboardSacfoldKey.currentWidget.toString());
+            GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+            //showDialog(context: context,child: Container(color: GlobalVariables.green,width: 50,height: 50,));
+          });
+    });
+  }*/
 
-  getAdminPage() {
+  /*getAdminPage() {
     GlobalFunctions.comingSoonDialog(context);
-    /*Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/
-  }
+    *//*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*//*
+  }*/
 
   getDrawerLayout() {
     return StatefulBuilder(
@@ -1679,7 +1693,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
   }
 
-  getDrawerItemIndex(int index) {
+  /*getDrawerItemIndex(int index) {
     switch (index) {
       case 0:
         {
@@ -1731,11 +1745,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         }
         break;
     }
-    /*setState(() {
+    *//*setState(() {
 
-    });*/
+    });*//*
     navigateToPage();
-  }
+  }*/
 
   getDuesData() async {
     final dio = Dio();
@@ -2071,6 +2085,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       print('result back : ' + result.toString());
       if (result == 'back') {
         getDuesData();
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      }else{
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       }
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
@@ -2078,49 +2095,63 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_dues'))));
+                  AppLocalizations.of(context).translate('my_dues')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_household'))));
+                  AppLocalizations.of(context).translate('my_household')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_documents'))));
+                  AppLocalizations.of(context).translate('my_documents')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('my_tenants')) {
       //Redirect to  My Tenants
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_tenants'))));
+                  AppLocalizations.of(context).translate('my_tenants')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('my_complex')) {
       //Redirect to  My Complex
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('my_complex'))));
+                  AppLocalizations.of(context).translate('my_complex')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('announcement')) {
       //Redirect to News Board
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('announcement'))));
+                  AppLocalizations.of(context).translate('announcement')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('meetings')) {
       //Redirect to News Board
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('meetings'))));
+                  AppLocalizations.of(context).translate('meetings')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
       //GlobalFunctions.comingSoonDialog(context);
@@ -2128,14 +2159,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('poll_survey'))));
+                  AppLocalizations.of(context).translate('poll_survey')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('directory')) {
       //Redirect to  Directory
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('directory'))));
+                  AppLocalizations.of(context).translate('directory')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('documents')) {
       //Redirect to  Documents
       //GlobalFunctions.showToast("Coming Soon...");
@@ -2143,7 +2178,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('documents'))));
+                  AppLocalizations.of(context).translate('documents')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
       //  GlobalFunctions.comingSoonDialog(context);
@@ -2151,7 +2188,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('events'))));
+                  AppLocalizations.of(context).translate('events')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
@@ -2159,7 +2198,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('discover'))));
+                  AppLocalizations.of(context).translate('discover')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
@@ -2167,7 +2208,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('classified'))));
+                  AppLocalizations.of(context).translate('classified')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
@@ -2175,7 +2218,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('services'))));
+                  AppLocalizations.of(context).translate('services')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
@@ -2183,7 +2228,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('near_by_shop'))));
+                  AppLocalizations.of(context).translate('near_by_shop')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
       GlobalFunctions.comingSoonDialog(context);
@@ -2195,7 +2242,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item ==
         AppLocalizations.of(context).translate('my_activities')) {
       //Redirect to  My Dues
@@ -2203,7 +2252,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_activities'))));
+                  AppLocalizations.of(context).translate('my_activities')))).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  My Dues
       GlobalFunctions.comingSoonDialog(context);
@@ -2212,13 +2263,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('help_desk')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false))).then((value) {
+            GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('expense')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseExpense()));
+          context, MaterialPageRoute(builder: (context) => BaseExpense())).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
       GlobalFunctions.comingSoonDialog(context);
@@ -2229,23 +2284,38 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true)));
+          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true))).then((value) {
+          GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('about_us')) {
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo()));
+          MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo())).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item ==
         AppLocalizations.of(context).translate('change_password')) {
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseChangePassword()));
+          MaterialPageRoute(builder: (context) => BaseChangePassword())).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
     } else if (item == AppLocalizations.of(context).translate('settings')) {
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseAppSettings()));
+          context, MaterialPageRoute(builder: (context) => BaseAppSettings())).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
+    } else if (item == AppLocalizations.of(context).translate('more')) {
+      //Redirect to  Admin
+      GlobalFunctions.comingSoonDialog(context);
+      /*Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseAppSettings())).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });*/
     } else if (item == AppLocalizations.of(context).translate('logout')) {
       // GlobalFunctions.showToast("Logout");
       showDialog(

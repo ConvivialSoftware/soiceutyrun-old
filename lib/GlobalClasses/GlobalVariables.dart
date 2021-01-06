@@ -390,6 +390,7 @@ class NotificationTypes{
   static const String TYPE_COMPLAINT = "Complaint";
   static const String TYPE_VISITOR = "Visitor";
   static const String TYPE_FVISITOR = "FVisitor";
+  static const String TYPE_SInApp = "SInapp";
   static const String TYPE_VISITOR_VERIFY = "Visitor_verify";
   static const String TYPE_POLL = "Poll";
   static const String TYPE_BILL = "Bill";

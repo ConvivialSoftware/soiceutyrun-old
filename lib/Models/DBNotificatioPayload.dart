@@ -1,5 +1,6 @@
 class DBNotificationPayload {
   String nid;
+  String uid;
   String title;
   String body;
   String ID;
@@ -15,6 +16,7 @@ class DBNotificationPayload {
 
   DBNotificationPayload(
       {this.nid,
+      this.uid,
         this.title,
         this.ID,
         this.TYPE,
@@ -30,6 +32,7 @@ class DBNotificationPayload {
 
   DBNotificationPayload.fromJson(Map<String, dynamic> json) {
     nid = json['nid'];
+    uid = json['uid'];
     title = json['title'];
     ID = json['ID'];
     TYPE = json['TYPE'];
@@ -47,6 +50,7 @@ class DBNotificationPayload {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['nid'] = this.nid;
+    data['uid'] = this.uid;
     data['title'] = this.title;
     data['ID'] = this.ID;
     data['TYPE'] = this.TYPE;
