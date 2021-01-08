@@ -157,7 +157,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
                       child: Text(AppLocalizations.of(context).translate('in_app_call'),style: TextStyle(
-                          fontSize: 16,fontWeight: FontWeight.w600
+                          fontSize: 16,fontWeight: FontWeight.bold,color: GlobalVariables.green
                       ),),
                     ),
                   ),
@@ -180,7 +180,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
               alignment: Alignment.topLeft,
               margin: EdgeInsets.fromLTRB(20, 0, 0, 20),
               child: Text(AppLocalizations.of(context).translate('in_app_call_text'),style: TextStyle(
-                  fontSize: 14,fontWeight: FontWeight.normal
+                  fontSize: 14,color: GlobalVariables.grey,
               ),),
             )
           ],
@@ -216,7 +216,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
                         child: Text(AppLocalizations.of(context).translate('daily_helps'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w600
+                            fontSize: 16,fontWeight: FontWeight.bold,color: GlobalVariables.green
                         ),),
                       ),
                     ),
@@ -225,7 +225,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
                         child: Text(AppLocalizations.of(context).translate('daily_helps_example'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w600
+                            fontSize: 14,color: GlobalVariables.grey
                         ),),
                       ),
                     )
@@ -245,18 +245,20 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      child: SvgPicture.asset(GlobalVariables.loginIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: SvgPicture.asset(GlobalVariables.loginIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(AppLocalizations.of(context).translate('entry_notification'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w600
+                            fontSize: 16,color: GlobalVariables.grey,fontWeight: FontWeight.w500
                         ),),
                       ),
                     ),
                     Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: FlutterCustomSwitch(
                         activeColor: GlobalVariables.green,
                         value: isDailyEntryNotification,
@@ -336,9 +338,9 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: Text(AppLocalizations.of(context).translate('your_guest'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w600
+                            fontSize: 16,fontWeight: FontWeight.bold,color: GlobalVariables.green
                         ),),
                       ),
                     ),
@@ -358,18 +360,20 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      child: SvgPicture.asset(GlobalVariables.loginIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: SvgPicture.asset(GlobalVariables.loginIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(AppLocalizations.of(context).translate('entry_notification'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w600
+                            fontSize: 16,fontWeight: FontWeight.w500,color: GlobalVariables.grey
                         ),),
                       ),
                     ),
                     Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: FlutterCustomSwitch(
                         activeColor: GlobalVariables.green,
                         value:

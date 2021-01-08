@@ -178,6 +178,7 @@ flutter:
     - assets/other_assets/daily_helps.svg
     - assets/other_assets/logout_icon.svg
     - assets/other_assets/guest.svg
+    - assets/other_assets/feedback.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

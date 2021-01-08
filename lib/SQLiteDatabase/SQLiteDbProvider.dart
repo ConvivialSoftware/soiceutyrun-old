@@ -43,7 +43,7 @@ class SQLiteDbProvider {
     await db.execute("CREATE TABLE " +
         _notificationTableName +
         "  (nid TEXT PRIMARY KEY,"
-            "ID INTEGER,"
+            "ID TEXT,"
             "uid TEXT,"
             "TYPE TEXT,"
             "Visitor_type TEXT,"
@@ -63,6 +63,7 @@ class SQLiteDbProvider {
     List<Map> result = await db.query(_notificationTableName,
         columns: [
           'nid',
+          'ID',
           'uid',
           'TYPE',
           'Visitor_type',
@@ -72,9 +73,10 @@ class SQLiteDbProvider {
           'VISITOR_NAME',
           'body',
           'title',
-          'CONTACT'
+          'CONTACT',
+          'read'
         ],
-        where: 'read=0 and uid='+"'"+userId+"'", orderBy: 'DATE_TIME DESC');
+        where: 'uid='+"'"+userId+"'", orderBy: 'DATE_TIME DESC');
     if (result.length > 0) {
       print('DB : '+result.toString());
       return result;
@@ -83,6 +85,7 @@ class SQLiteDbProvider {
   }
 
   insertUnReadNotification(DBNotificationPayload _dbNotificationPayload) async {
+    print('DB : _dbNotificationPayload >>>> ' + _dbNotificationPayload.toJson().toString());
     String userId = await GlobalFunctions.getUserId();
     print('DB : userId >>>> ' + userId.toString());
     _dbNotificationPayload.uid=userId;
@@ -136,6 +139,16 @@ class SQLiteDbProvider {
     int result = await db.rawDelete("DELETE FROM "+_notificationTableName+" WHERE DATE_TIME <= date('now','-60 day')");
     print('DB : ' + result.toString());
     print('DB : ' + 'Delete Successfully');
+    String userId = await GlobalFunctions.getUserId();
+    getNotificationTableCount(userId);
+    return result;
+  }
+
+  updateReadNotification(DBNotificationPayload dbNotificationPayload) async {
+    final db = await getDatabase;
+    var result = await db.update(
+        _notificationTableName, dbNotificationPayload.toJson(), where: "nid = ?", whereArgs: [dbNotificationPayload.nid]
+    );
     String userId = await GlobalFunctions.getUserId();
     getNotificationTableCount(userId);
     return result;

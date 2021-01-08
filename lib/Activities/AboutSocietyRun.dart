@@ -486,7 +486,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                       )
                     ],
                   ),
-                  Column(
+                 /* Column(
                     children: [
                       Container(
                         alignment: Alignment.topLeft,
@@ -518,7 +518,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                         ),
                       )
                     ],
-                  ),
+                  ),*/
                 ],
               ),
             )

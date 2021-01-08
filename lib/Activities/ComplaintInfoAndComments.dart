@@ -1079,13 +1079,13 @@ class ComplaintInfoAndCommentsState
     var societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getCommentData(societyId, complaints.TICKET_NO).then((value) {
-      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.data;
         _commentsList =
             List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
         print('complaints.SUBJECT : '+ complaints.SUBJECT.toString());
         if (complaints.SUBJECT != null) {
+          _progressDialog.hide();
           setState(() {});
         } else {
           getComplaintDataAgainstTicketNo();
@@ -1098,7 +1098,9 @@ class ComplaintInfoAndCommentsState
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     var societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
+    if(!_progressDialog.isShowing()) {
+      _progressDialog.show();
+    }
     restClient
         .getComplaintDataAgainstTicketNo(societyId, complaints.TICKET_NO)
         .then((value) {

@@ -155,13 +155,13 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
 
     return InkWell(
       onTap: () {
-       /* SQLiteDbProvider.db.deleteFromNotificationTable(_dbNotificationList[position].nid);
-        _dbNotificationList.removeAt(position);
+        setState(() {
+          DBNotificationPayload dbNotificationPayload = _dbNotificationList[position];
+          dbNotificationPayload.read=1;
+          SQLiteDbProvider.db.updateReadNotification(dbNotificationPayload);
+        });
         GlobalVariables.notificationCounterValueNotifer.value--;
-        GlobalVariables.notificationCounterValueNotifer.notifyListeners();
-        setState(() {});*/
         navigateToPage(_dbNotificationList[position]);
-
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -195,24 +195,38 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(
-                          15, 0, 0, 0), //alignment: Alignment.topLeft,
+                          5, 0, 0, 0), //alignment: Alignment.topLeft,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Text(
-                                _dbNotificationList[position].title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
+                          Row(
+                            children: [
+                              _dbNotificationList[position].read==0 ? Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables
+                                        .skyBlue,
+                                    shape: BoxShape.circle),
+                              ):Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Text(
+                                    _dbNotificationList[position].title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: GlobalVariables.green,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ],
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            margin: EdgeInsets.fromLTRB(_dbNotificationList[position].read==0 ? 15 : 10, 10, 0, 0),
                             child: Text(
                               _dbNotificationList[position].body,
                               maxLines: 2,
@@ -251,6 +265,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
 
   navigateToPage(DBNotificationPayload _dbNotificationPayload)  {
     print('context : ' + context.toString());
+    print('_dbNotificationPayload.ID : ' + _dbNotificationPayload.ID.toString());
     if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_COMPLAINT) {
       Navigator.push(
           context,

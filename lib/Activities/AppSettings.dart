@@ -6,6 +6,7 @@ import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AppNotificationSettings.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
+import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -96,9 +97,10 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           children: [
             profileLayout(),
             appNotificationSettingsLayout(),
-            loggedSocietyDetails(),
+            //loggedSocietyDetails(),
             changePasswordLayout(),
             aboutUsLayout(),
+            feedbackLayout(),
             logoutLayout(),
           ],
         ),
@@ -114,7 +116,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(20,10,20,10),
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -122,7 +124,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.appSettingsIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+              child: SvgPicture.asset(GlobalVariables.appSettingsIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
             ),
             Expanded(
               child: Container(
@@ -224,17 +226,22 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                 child: Text(
                                   email,
                                   style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 16,
+                                    fontSize: 14,color: GlobalVariables.grey,
                                   ),
                                 ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Text(block+' '+flat+','
+                                    ''+societyName,style: TextStyle(
+                                  fontSize: 14,color: GlobalVariables.grey,
+                                ),),
                               ),
                               Container(
                                 child: Text(
                                   phone,
                                   style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 16,
+                                    fontSize: 14,color: GlobalVariables.grey,
                                   ),
                                 ),
                               ),
@@ -329,7 +336,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(20,10,20,10),
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -337,7 +344,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.changePasswordPath,width: 30,height: 30,color: GlobalVariables.grey,),
+              child: SvgPicture.asset(GlobalVariables.changePasswordPath,width: 25,height: 25,color: GlobalVariables.grey,),
             ),
             Expanded(
               child: Container(
@@ -364,7 +371,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(20,10,20,10),
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -372,12 +379,48 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.aboutUsPath,width: 30,height: 30,color: GlobalVariables.grey,),
+              child: SvgPicture.asset(GlobalVariables.aboutUsPath,width: 25,height: 25,color: GlobalVariables.grey,),
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Text(AppLocalizations.of(context).translate('about_us'),style: TextStyle(
+                    fontSize: 16,fontWeight: FontWeight.w500
+                ),),
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  feedbackLayout() {
+    return InkWell(
+      onTap: (){
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => BaseFeedback()));
+      },
+      child: Container(
+        margin: EdgeInsets.fromLTRB(20,10,20,10),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: GlobalVariables.white,
+            borderRadius: BorderRadius.circular(20)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: SvgPicture.asset(GlobalVariables.feedbackIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: Text(AppLocalizations.of(context).translate('feedback'),style: TextStyle(
                     fontSize: 16,fontWeight: FontWeight.w500
                 ),),
               ),
@@ -407,7 +450,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(20,10,20,10),
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -415,7 +458,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.logoutIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+              child: SvgPicture.asset(GlobalVariables.logoutIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
             ),
             Expanded(
               child: Container(

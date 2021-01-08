@@ -116,16 +116,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // user returned to our app
-      //  GlobalFunctions.showToast('Resume');
+        //GlobalFunctions.showToast('Resume');
+        SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.inactive) {
       // app is inactive
       // GlobalFunctions.showToast('Inactive');
+       SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.paused) {
       // user is about quit our app temporally
-      // GlobalFunctions.showToast('Paused');
+       //GlobalFunctions.showToast('Paused');
+       SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.detached) {
       // user is about quit our app temporally
-      //  GlobalFunctions.showToast('Detached');
+       // GlobalFunctions.showToast('Detached');
+        SQLiteDbProvider.db.getDataBaseInstance();
     }
   }
 
@@ -245,7 +249,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            
+
                             Container(
                               //color: GlobalVariables.grey,
                               margin: EdgeInsets.fromLTRB(0, 10, 20, 0),

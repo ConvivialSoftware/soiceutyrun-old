@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class GlobalVariables {
   static var isAlreadyTapped = false;
   static var isNewlyArrivedNotification = false;
+  static var isBackgroundNotification = false;
   static ValueNotifier<int> notificationCounterValueNotifer = ValueNotifier(0);
 
   /*Variables for the Web URL*/
@@ -106,6 +107,7 @@ class GlobalVariables {
   static var dailyHelpsIconPath = "assets/other_assets/daily_helps.svg";
   static var logoutIconPath = "assets/other_assets/logout_icon.svg";
   static var guestIconPath = "assets/other_assets/guest.svg";
+  static var feedbackIconPath = "assets/other_assets/feedback.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =

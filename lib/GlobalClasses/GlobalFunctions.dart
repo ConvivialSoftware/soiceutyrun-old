@@ -229,7 +229,7 @@ class GlobalFunctions{
       print('keyDailyEntryNotification : '+sharedPreferences.getBool(GlobalVariables.keyDailyEntryNotification).toString());
       return  sharedPreferences.getBool(GlobalVariables.keyDailyEntryNotification);
     }
-    return false;
+    return true;
   }
 
   static getGuestEntryNotification() async{
@@ -238,7 +238,7 @@ class GlobalFunctions{
       print('keyGuestEntryNotification : '+sharedPreferences.getBool(GlobalVariables.keyGuestEntryNotification).toString());
       return  sharedPreferences.getBool(GlobalVariables.keyGuestEntryNotification);
     }
-    return false;
+    return true;
   }
 
   static Future<void> setDailyEntryNotification(bool dailyEntryNotification) async {
