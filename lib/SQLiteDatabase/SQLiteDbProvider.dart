@@ -74,7 +74,8 @@ class SQLiteDbProvider {
           'body',
           'title',
           'CONTACT',
-          'read'
+          'read',
+          'VID',
         ],
         where: 'uid='+"'"+userId+"'", orderBy: 'DATE_TIME DESC');
     if (result.length > 0) {

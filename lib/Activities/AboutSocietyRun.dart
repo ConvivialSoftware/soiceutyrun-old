@@ -5,7 +5,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:dynamic_widget/dynamic_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/Activities/Feedback.dart';
@@ -31,6 +33,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
   ProgressDialog _progressDialog;
   var societyId,name,phone,block,flat;
   List<Banners> _bannerList = List<Banners>();
+  var response="";
 
   @override
   void initState() {
@@ -145,6 +148,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
         child: Column(
+
           children: [
             Container(
               decoration: BoxDecoration(
@@ -521,7 +525,8 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                   ),*/
                 ],
               ),
-            )
+            ),
+
           ],
         ),
       ),
@@ -535,6 +540,10 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
     phone = await GlobalFunctions.getMobile();
     block = await GlobalFunctions.getBlock();
     flat = await GlobalFunctions.getFlat();
+
+    response = await rootBundle.loadString('i18n/profile.json');
+    print('Response : '+response.toString());
+    setState(() {});
 
   }
 

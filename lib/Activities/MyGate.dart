@@ -19,13 +19,14 @@ import 'package:intl/intl.dart';
 
 class BaseMyGate extends StatefulWidget {
   String pageName;
+  String _VID;
 
-  BaseMyGate(this.pageName);
+  BaseMyGate(this.pageName,this._VID);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyGateState(pageName);
+    return MyGateState(pageName,this._VID);
   }
 }
 
@@ -59,8 +60,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   TextEditingController _mobileController = TextEditingController();
 
   String pageName;
-
-  MyGateState(this.pageName);
+  String _VID;
+  MyGateState(this.pageName,this._VID);
 
   final ContactPicker _contactPicker = ContactPicker();
   Contact _contact;
@@ -68,7 +69,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   @override
   void initState() {
     super.initState();
-
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabSelection);
     print(pageName.toString());
@@ -85,14 +85,35 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       }
     });
   }
-
+  void afterBuild() {
+    // executes after build is done
+    print('After Build');
+    if(_VID!=null && _visitorList.length>0){
+      print('VID : '+_VID.toString());
+      for(int i=0;i<_visitorList.length;i++){
+        if(_visitorList[i].ID==_VID){
+          print('_visitorList[i].ID : '+_visitorList[i].ID.toString());
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Dialog(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0,
+                      child: displayVisitorInfo(i),
+                    );
+                  }));
+          break;
+        }
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if (pageName != null) {
       redirectToPage(pageName);
     }
-
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -513,8 +534,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     var visitorStatus =
         getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS);
     var visitorUserStatus = _visitorList[position].VISITOR_USER_STATUS;
-    print('_visitorList[position].VISITOR_STATUS : ' + visitorStatus);
-    print('_visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
+  //  print('_visitorList[position].VISITOR_STATUS : ' + visitorStatus);
+   // print('_visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
 
     return InkWell(
       onTap: () {
@@ -596,14 +617,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                         decoration: BoxDecoration(
-                            color:
+                            color:_visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
                                 _visitorList[position].STATUS.toLowerCase() ==
                                         'in'
                                     ? GlobalVariables.green
                                     : GlobalVariables.red,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                          _visitorList[position].STATUS.toLowerCase() == 'in'
+                        child: Text(_visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
+                        _visitorList[position].STATUS.toLowerCase() == 'in'
                               ? 'Arrived'
                               : 'Left',
                           style: TextStyle(
@@ -1490,7 +1511,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     block = await GlobalFunctions.getBlock();
     flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
-    restClient.getGatePassData(societyId, block, flat).then((value) {
+    restClient.getGatePassData(societyId, block, flat).then((value) async {
+      _progressDialog.hide();
       if (value.status) {
         List<dynamic> _list = value.visitor;
         List<dynamic> _scheduleList = value.schedule_visitor;
@@ -1500,17 +1522,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         _scheduleVisitorList = List<ScheduleVisitor>.from(
             _scheduleList.map((i) => ScheduleVisitor.fromJson(i)));
 
-        setState(() {});
-      }
-
-      /* restClient.getGatePassScheduleVisitorData(societyId, block, flat).then((value) {
-        if (value.status) {
-          List<dynamic> _list = value.data;
-
+        setState(() {
+        });
+        if(_VID!=null) {
+          await afterBuild();
         }
-       // _progressDialog.hide();
-      });*/
-      _progressDialog.hide();
+      }
     });
   }
 
@@ -1790,9 +1807,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     Container(
                       padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
                       decoration: BoxDecoration(
-                          color: _visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
+                          color: _visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
+                          _visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
                           borderRadius: BorderRadius.circular(25)),
-                      child: Text(
+                      child: Text(_visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
                         _visitorList[position].STATUS.toLowerCase() == 'in'
                             ? 'Arrived'
                             : 'Left',

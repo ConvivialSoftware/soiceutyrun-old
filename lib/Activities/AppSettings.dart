@@ -232,7 +232,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Text(block+' '+flat+','
+                                child: Text(block+' '+flat+', '
                                     ''+societyName,style: TextStyle(
                                   fontSize: 14,color: GlobalVariables.grey,
                                 ),),

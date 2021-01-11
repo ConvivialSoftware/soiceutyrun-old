@@ -266,6 +266,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
   navigateToPage(DBNotificationPayload _dbNotificationPayload)  {
     print('context : ' + context.toString());
     print('_dbNotificationPayload.ID : ' + _dbNotificationPayload.ID.toString());
+    print('_dbNotificationPayload.VID : ' + _dbNotificationPayload.VID.toString());
     if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_COMPLAINT) {
       Navigator.push(
           context,
@@ -313,7 +314,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
 
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BILL) {
       Navigator.push(
@@ -330,13 +331,13 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
     }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_SInApp) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
     } else {
       Navigator.pushAndRemoveUntil(
           context,

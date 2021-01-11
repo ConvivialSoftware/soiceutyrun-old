@@ -17,6 +17,7 @@ import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/Expense.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
+import 'package:societyrun/Activities/More.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 
 import 'package:societyrun/Activities/MyGate.dart';
@@ -167,6 +168,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   @override
   Widget build(BuildContext context) {
     print('DashBoard context : ' + context.toString());
+    print('BaseStatefulState context : ' + BaseStatefulState.getCtx.toString());
     print('DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getExpandableListViewData(context);
@@ -2246,7 +2248,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate')))).then((value) {
+                  AppLocalizations.of(context).translate('my_gate'),null))).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item ==
@@ -2256,7 +2258,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_activities')))).then((value) {
+                  AppLocalizations.of(context).translate('my_activities'),null))).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
@@ -2317,7 +2319,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //Redirect to  Admin
       GlobalFunctions.comingSoonDialog(context);
       /*Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseAppSettings())).then((value) {
+          context, MaterialPageRoute(builder: (context) => BaseMore())).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });*/
     } else if (item == AppLocalizations.of(context).translate('logout')) {

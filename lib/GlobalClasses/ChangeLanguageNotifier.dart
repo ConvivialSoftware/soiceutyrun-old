@@ -143,7 +143,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.MyGatePage:
       {
-        return BaseMyGate(null);
+        return BaseMyGate(null,null);
       }
       break;
     case GlobalVariables.HelpDeskPage:

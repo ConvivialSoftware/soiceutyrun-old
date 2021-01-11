@@ -115,7 +115,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   bool isGuestEntryNotification = false;
 
 
-  static BuildContext get ctx => _ctx;
+  static BuildContext get getCtx => _ctx;
 
   static void setCtx(BuildContext currentContext) {
     _ctx=currentContext;
@@ -507,7 +507,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate'),temp.vID)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -543,7 +543,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate'),temp.vID)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -556,7 +556,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'))));
+                  AppLocalizations.of(context).translate('my_gate'),temp.vID)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
