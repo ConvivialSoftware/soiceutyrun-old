@@ -259,10 +259,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   child: GestureDetector(
                                 onTap: () {
                                   //GlobalFunctions.comingSoonDialog(context);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => BaseNotifications()));
+                                  if(GlobalVariables.notificationCounterValueNotifer.value>0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseNotifications())).then((
+                                        value) {
+                                      GlobalFunctions.setBaseContext(
+                                          _dashboardSacfoldKey.currentContext);
+                                    });
+                                  }
                                 },
                                 child: ValueListenableBuilder(
                                     valueListenable:GlobalVariables.notificationCounterValueNotifer,
@@ -808,23 +815,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         block.toString() +
                                         ' ' +
                                         flat.toString());*/
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                BaseWebViewScreen(
-                                                    _bannerList[itemIndex].Url +
-                                                        '?' +
-                                                        'SID=' +
-                                                        societyId.toString() +
-                                                        '&MOBILE=' +
-                                                        phone.toString() +
-                                                        '&NAME=' +
-                                                        name.toString() +
-                                                        '&UNIT=' +
-                                                        block.toString() +
-                                                        ' ' +
-                                                        flat.toString())));
+                                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url +
+                                        '?' +
+                                        'SID=' +
+                                        societyId.toString() +
+                                        '&MOBILE=' +
+                                        phone.toString() +
+                                        '&NAME=' +
+                                        name.toString() +
+                                        '&UNIT=' +
+                                        block.toString() +
+                                        ' ' +
+                                        flat.toString()))).then((value) {
+                                      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                                    });
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
@@ -1950,7 +1954,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                BaseLedger()));
+                                                BaseLedger())).then((value) {
+                                      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                                    });
                                   },
                                   child: Text(
                                     AppLocalizations.of(context)
@@ -1968,7 +1974,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                BaseMyUnit(null)));
+                                                BaseMyUnit(null))).then((value) {
+                                      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                                    });
                                   },
                                   child: Text(
                                     AppLocalizations.of(context)
@@ -2035,7 +2043,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BaseAboutSocietyRunInfo()));
+                          builder: (context) => BaseAboutSocietyRunInfo())).then((value) {
+                    GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                  });
                 },
                 textColor: GlobalVariables.white,
                 //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
@@ -2414,8 +2424,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         context,
         MaterialPageRoute(
             builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
-    if (result == 'profile') {
+    if(result=='profile'){
+      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       geProfileData();
+    }else{
+      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
     }
   }
 

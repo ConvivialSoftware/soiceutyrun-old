@@ -223,6 +223,13 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                 ),
                               ),
                               Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Text(block+' '+flat+', '
+                                    ''+societyName,style: TextStyle(
+                                  fontSize: 14,color: GlobalVariables.grey,
+                                ),),
+                              ),
+                              Container(
                                 child: Text(
                                   email,
                                   style: TextStyle(
@@ -231,13 +238,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Text(block+' '+flat+', '
-                                    ''+societyName,style: TextStyle(
-                                  fontSize: 14,color: GlobalVariables.grey,
-                                ),),
-                              ),
-                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                                 child: Text(
                                   phone,
                                   style: TextStyle(
