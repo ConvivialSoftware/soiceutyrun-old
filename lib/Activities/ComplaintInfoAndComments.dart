@@ -1085,7 +1085,8 @@ class ComplaintInfoAndCommentsState
             List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
         print('complaints.SUBJECT : '+ complaints.SUBJECT.toString());
         if (complaints.SUBJECT != null) {
-          _progressDialog.hide();
+         // _progressDialog.hide();
+          Navigator.of(context).pop();
           setState(() {});
         } else {
           getComplaintDataAgainstTicketNo();
@@ -1104,7 +1105,8 @@ class ComplaintInfoAndCommentsState
     restClient
         .getComplaintDataAgainstTicketNo(societyId, complaints.TICKET_NO)
         .then((value) {
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
       if (value.status) {
         List<dynamic> _list = value.data;
         _complaintsList =

@@ -5,7 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:dynamic_widget/dynamic_widget.dart';
+//import 'package:dynamic_widget/dynamic_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -541,8 +541,8 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
     block = await GlobalFunctions.getBlock();
     flat = await GlobalFunctions.getFlat();
 
-    response = await rootBundle.loadString('i18n/profile.json');
-    print('Response : '+response.toString());
+    //response = await rootBundle.loadString('i18n/profile.json');
+    //print('Response : '+response.toString());
     setState(() {});
 
   }

@@ -18,6 +18,7 @@ import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/StaffCategory.dart';
+import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/VerifyStaffMember.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
@@ -828,7 +829,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               _memberList.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
                       width: 600,
                       height: 190,
                       child: Builder(
@@ -899,7 +900,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               _staffList.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
                       width: 600,
                       height: 190,
                       child: Builder(
@@ -940,7 +941,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                     ),
-                    Container(
+                   AppPermission.isSocAddVehiclePermission ?  Container(
                         child: RaisedButton(
                       onPressed: () async {
                         final result = await Navigator.push(
@@ -962,7 +963,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           side: BorderSide(color: GlobalVariables.green)),
                       textColor: GlobalVariables.white,
                       color: GlobalVariables.green,
-                    )),
+                    )) : Container(),
                   ],
                 ),
               ),
@@ -1145,7 +1146,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                   child: Text(
                                     AppLocalizations.of(context)
-                                        .translate('share_address'),
+                                        .translate('share_contact'),
                                     style: TextStyle(
                                       color: GlobalVariables.green,
                                       fontSize: 16,
@@ -1169,10 +1170,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   getContactListItemLayout(var _list, int position, bool family) {
-    var call = '', email = '', userId;
+    var call = '', email = '', userId,userType;
     if (family) {
       call = _list[position].Phone.toString();
       userId = _list[position].ID.toString();
+      userType = _list[position].TYPE.toString();
       //    email = _list[position].EMAIL.toString();
     } else {
       call = _list[position].CONTACT.toString();
@@ -1183,7 +1185,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         print('userId : ' + userId);
         print('societyId : ' + societyId);
         if (family) {
@@ -1191,16 +1193,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BaseDisplayProfileInfo(userId, societyId)));
+                      BaseDisplayProfileInfo(userId, userType)));
         }
-        /*else{
+        else{
           print('_list[position] : '+ _list[position].toString());
-          Navigator.push(
+          var result = await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BaseEditStaffMember(_list[position])));
-        }*/
+                      BaseStaffDetails(_list[position])));
+          if(result=='back'){
+            getUnitMemberData();
+          }
+        }
       },
       child: Container(
         width: 150,
@@ -1321,12 +1326,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: [
                         Flexible(
                           flex:1,
-                          child: Container(
-                            width: double.infinity,
-                              child: Icon(
-                                Icons.call,
-                                color: GlobalVariables.green,
-                              ),
+                          child: InkWell(
+                            onTap: (){
+                              launch("tel://" + call);
+                            },
+                            child: Container(
+                              width: double.infinity,
+                                child: Icon(
+                                  Icons.call,
+                                  color: GlobalVariables.green,
+                                ),
+                            ),
                           ),
                         ),
                         Container(
@@ -1339,11 +1349,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                         Flexible(
                           flex: 1,
-                          child: Container(
-                            width: double.infinity,
-                            child: Icon(
-                              Icons.share,
-                              color: GlobalVariables.grey,
+                          child: InkWell(
+                            onTap: () {
+                              String name= family ? _list[position].NAME : _list[position].STAFF_NAME;
+                              String title = '';
+                              String text = 'Name : ' + name+'\nContact : ' + call;
+                              family
+                                  ? title = _list[position].NAME
+                                  : title = _list[position].STAFF_NAME;
+                              print('titlee : ' + title);
+                              GlobalFunctions.shareData(title, text);
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              child: Icon(
+                                Icons.share,
+                                color: GlobalVariables.grey,
+                              ),
                             ),
                           ),
                         )
@@ -1756,19 +1778,26 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
     restClient.getMembersData(societyId, block, flat).then((value) {
+      _progressDialog.hide();
       if (value.status) {
-        List<dynamic> _list = value.data;
+        List<dynamic> _members = value.members;
+        List<dynamic> staff = value.staff;
+        List<dynamic> vehicles = value.vehicles;
 
-        _memberList = List<Member>.from(_list.map((i) => Member.fromJson(i)));
-
+        _memberList = List<Member>.from(_members.map((i) => Member.fromJson(i)));
+        _staffList = List<Staff>.from(staff.map((i) => Staff.fromJson(i)));
+        _vehicleList = List<Vehicle>.from(vehicles.map((i) => Vehicle.fromJson(i)));
         for (int i = 0; i < _memberList.length; i++) {
           if (_memberList[i].ID == userId) {
             _memberList.removeAt(i);
             break;
           }
         }
+        setState(() {
+          print('setState : ');
+        });
       }
-      getUnitStaffData();
+      //getUnitStaffData();
     }).catchError((Object obj) {
       //     if(_progressDialog.isShowing()){
       //      _progressDialog.hide();
@@ -1798,7 +1827,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
         _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
       }
-      getUnitVehicleData();
+      //getUnitVehicleData();
     }).catchError((Object obj) {
       // if(_progressDialog.isShowing()){
       //   _progressDialog.hide();
@@ -1827,8 +1856,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       if (value.status) {
         List<dynamic> _list = value.data;
 
-        _vehicleList =
-            List<Vehicle>.from(_list.map((i) => Vehicle.fromJson(i)));
+        _vehicleList = List<Vehicle>.from(_list.map((i) => Vehicle.fromJson(i)));
         print("Vehicle List : " + _list.toString());
       }
       _progressDialog.hide();
@@ -2245,12 +2273,35 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Text(
-                  _vehicleList[position].VEHICLE_NO,
-                  style: TextStyle(color: GlobalVariables.grey, fontSize: 16),
-                ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Text(
+                      _vehicleList[position].VEHICLE_NO,
+                      style: TextStyle(color: GlobalVariables.grey, fontSize: 16),
+                    ),
+                  ),
+                  AppPermission.isSocAddVehiclePermission ? InkWell(
+                    onTap: (){
+                      print('Delete Position :'+position.toString());
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => StatefulBuilder(
+                              builder: (BuildContext context, StateSetter setState) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0)),
+                                  child: deleteVehicleLayout(position),
+                                );
+                              }));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      child: Icon(Icons.delete,color: GlobalVariables.mediumGreen,)
+                    ),
+                  ):Container(),
+                ],
               )
             ],
           ),
@@ -2263,6 +2314,61 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ),
                 )
               : Container(),
+        ],
+      ),
+    );
+  }
+
+  deleteVehicleLayout(int position) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      width: MediaQuery.of(context).size.width / 1.3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Text(AppLocalizations.of(context).translate('sure_delete'),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: GlobalVariables.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        deleteVehicle(position);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('yes'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('no'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -2343,7 +2449,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           _listLedgerPending.map((i) => Receipt.fromJson(i)));
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
       setState(() {});
     }).catchError((Object obj) {
       // if(_progressDialog.isShowing()){
@@ -3492,12 +3599,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> navigateToProfilePage() async {
-    String societyId = await GlobalFunctions.getSocietyId();
+    String userType = await GlobalFunctions.getUserType();
     String userId = await GlobalFunctions.getUserId();
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
+            builder: (context) => BaseDisplayProfileInfo(userId, userType)));
   }
 
   /* void emailBillBottomSheet(BuildContext context,int position) {
@@ -3811,6 +3918,28 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     } else {
       return GlobalVariables.mediumGreen;
     }
+  }
+
+  Future<void> deleteVehicle(int position) async {
+
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    societyId = await GlobalFunctions.getSocietyId();
+    String id = _vehicleList[position].ID;
+    _progressDialog.show();
+    restClient.deleteVehicle(id, societyId).then((value) {
+      _progressDialog.hide();
+      if(value.status){
+        _vehicleList.removeAt(position);
+        setState(() {
+
+        });
+      }
+      GlobalFunctions.showToast(value.message);
+
+    });
+
   }
 }
 

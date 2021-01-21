@@ -125,7 +125,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
       displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME, 'hh:mm aa');
     }
 
-    var image  =  GlobalVariables.appLogoPath;
+    var image  =  GlobalVariables.drawerImagePath;
     if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_FVISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_SInApp ||

@@ -339,5 +339,8 @@
   "voucher_number": "Voucher No.",
   "Vendor_name": "Vendor Name",
   "transaction_number": "Transaction No.",
-  "notification": "Notifications"
+  "notification": "Notifications",
+  "contact_for_permission_text": "Kindly Contact to Society ChairPerson for use this feature.",
+  "sure_delete": "Are you sure you want to Delete?",
+  "share_contact": "Share Contact"
 }

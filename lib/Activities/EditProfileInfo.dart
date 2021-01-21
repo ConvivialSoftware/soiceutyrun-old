@@ -969,6 +969,8 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
       _progressDialog.hide();
       if (value.status) {
+        GlobalVariables.userNameValueNotifer.value=_nameController.text;
+        GlobalVariables.userNameValueNotifer.notifyListeners();
         if(attachmentFileName!=null && attachmentFilePath!=null){
           GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
         }

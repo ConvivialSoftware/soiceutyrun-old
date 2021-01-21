@@ -766,7 +766,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
       attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
     }
 
-    print('attachment lengtth : '+attachment.length.toString());
+    //print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog.show();
     restClient.addMember(societyId, block, flat, _nameController.text, _selectedGender, _dobController.text, _emailController.text,
@@ -848,18 +848,26 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
 
   }
 
-  void getMembershipTypeData() {
-
-    _membershipTypeList = ["Owner","Owner Family"];
-    for(int i=0;i<_membershipTypeList.length;i++){
-      __membershipTypeListItems.add(DropdownMenuItem(
-        value: _membershipTypeList[i],
-        child: Text(
-          _membershipTypeList[i],
-          style: TextStyle(color: GlobalVariables.green),
-        ),
-      ));
-    }
+ getMembershipTypeData() {
+//Tenantype
+    GlobalFunctions.getUserType().then((value){
+      if(value.toLowerCase()!='tenant') {
+        _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
+      }else{
+        _membershipTypeList = ["Tenant"];
+      }
+      for(int i=0;i<_membershipTypeList.length;i++){
+        __membershipTypeListItems.add(DropdownMenuItem(
+          value: _membershipTypeList[i],
+          child: Text(
+            _membershipTypeList[i],
+            style: TextStyle(color: GlobalVariables.green),
+          ),
+        ));
+      }
+      setState(() {
+      });
+    });
    // _selectedMembershipType = __membershipTypeListItems[0].value;
   }
 

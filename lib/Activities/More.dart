@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dynamic_widget/dynamic_widget.dart';
+//import 'package:dynamic_widget/dynamic_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -27,7 +27,7 @@ class MoreState extends BaseStatefulState<BaseMore> {
   @override
   void initState() {
     super.initState();
-    getJson();
+   // getJson();
   }
 
   @override
@@ -61,7 +61,7 @@ class MoreState extends BaseStatefulState<BaseMore> {
 
   getBaseLayout() {
     return Container(
-      child: response.length>0 ? DynamicWidgetBuilder.build(response, context, DefaultClickListener()):Container(),
+    //  child: response.length>0 ? DynamicWidgetBuilder.build(response, context, DefaultClickListener()):Container(),
     );
   }
 
@@ -74,6 +74,7 @@ class MoreState extends BaseStatefulState<BaseMore> {
 
 }
 
+/*
 class DefaultClickListener implements ClickListener{
   @override
   void onClicked(String event) {
@@ -81,3 +82,4 @@ class DefaultClickListener implements ClickListener{
   }
 
 }
+*/

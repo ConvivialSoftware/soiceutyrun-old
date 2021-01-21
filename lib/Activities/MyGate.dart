@@ -1512,7 +1512,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
     restClient.getGatePassData(societyId, block, flat).then((value) async {
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
       if (value.status) {
         List<dynamic> _list = value.visitor;
         List<dynamic> _scheduleList = value.schedule_visitor;
@@ -2312,11 +2313,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     return InkWell(
       onTap: () async {
-        Navigator.push(
+        var result = Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     BaseStaffDetails(_staffList[position])));
+        if(result=='back'){
+          getStaffRoleDetailsData();
+        }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -2444,7 +2448,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     _progressDialog.show();
     restClient.staffRoleDetails(societyId,'').then((value) {
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
       List<dynamic> _list = value.data;
       _staffList = List<Staff>.from(_list.map((i)=>Staff.fromJson(i)));
       setState(() {});

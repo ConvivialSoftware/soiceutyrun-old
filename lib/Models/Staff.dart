@@ -35,7 +35,7 @@ class Staff{
       STAFF_NAME: json['STAFF_NAME'],
       GENDER:json['GENDER'],
       DOB:json['DOB'],
-      CONTACT:json['CONTACT'],
+      CONTACT:json['CONTACT']??'',
       QUALIFICATION:json['QUALIFICATION'],
       ADDRESS:json['ADDRESS'],
       VEHICLE_NO:json['VEHICLE_NO'],

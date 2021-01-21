@@ -30,11 +30,14 @@ final String androidChannelDesc = "channel_for_gatepass_feature";
 
 //const String TYPE_MANUALLY_STATUS_UPDATE = "manually_status_update";
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-  GlobalVariables.isNewlyArrivedNotification=true;
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  GlobalVariables.isNewlyArrivedNotification = true;
+  //GlobalFunctions.setIsNewlyArrivedNotification(true);
   GatePassPayload gatePassPayload;
   print('myBackgroundMessageHandler before isAlreadyTapped : ' +
       GlobalVariables.isAlreadyTapped.toString());
+  /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
+      GlobalVariables.isNewlyArrivedNotification.toString());*/
   print("myBackgroundMessageHandler onMessage >>>> $message");
   Map data;
   if (Platform.isIOS) {
@@ -51,8 +54,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
     society["msgID"] = uuid;
     gatePassPayload = GatePassPayload.fromJson(society);
     if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
-      DBNotificationPayload _dbNotificationPayload = DBNotificationPayload
-          .fromJson(society);
+      DBNotificationPayload _dbNotificationPayload =
+          DBNotificationPayload.fromJson(society);
       _dbNotificationPayload.nid = uuid;
       SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
 
@@ -91,7 +94,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
         );
       }
       var iOSPlatformChannelSpecifics =
-      IOSNotificationDetails(sound: "alert.caf");
+          IOSNotificationDetails(sound: "alert.caf");
 
       var platformChannelSpecifics = NotificationDetails(
           androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
@@ -114,11 +117,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   bool isDailyEntryNotification = false;
   bool isGuestEntryNotification = false;
 
-
   static BuildContext get getCtx => _ctx;
 
   static void setCtx(BuildContext currentContext) {
-    _ctx=currentContext;
+    _ctx = currentContext;
   }
 
   void baseMethod() {}
@@ -133,18 +135,17 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     firebaseCloudMessagingListeners();
   }
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-     _ctx = this.context;
-    print('didChangeDependencies : '+context.toString());
-    if(!mounted){
-      print('UnMounted : '+ mounted.toString());
-      print('UnMounted context : '+context.toString());
-    }else{
-      print('Mounted : '+ mounted.toString());
-      print('Mounted context : '+context.toString());
+    _ctx = this.context;
+    print('didChangeDependencies : ' + context.toString());
+    if (!mounted) {
+      print('UnMounted : ' + mounted.toString());
+      print('UnMounted context : ' + context.toString());
+    } else {
+      print('Mounted : ' + mounted.toString());
+      print('Mounted context : ' + context.toString());
     }
   }
 
@@ -175,45 +176,57 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         print('onMessage after isAlreadyTapped : ' +
             GlobalVariables.isAlreadyTapped.toString());
         print("onMessage >>>> $message");
-        GlobalVariables.isNewlyArrivedNotification=true;
+        GlobalVariables.isNewlyArrivedNotification = true;
+        //GlobalFunctions.setIsNewlyArrivedNotification(true);
         _showNotification(message, false);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch >>>> $message");
-        GlobalVariables.isNewlyArrivedNotification=true;
+        GlobalVariables.isNewlyArrivedNotification = true;
+        //GlobalFunctions.setIsNewlyArrivedNotification(true);
         _showNotification(message, true);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume >>>> $message");
-        GlobalVariables.isNewlyArrivedNotification=true;
+        GlobalVariables.isNewlyArrivedNotification = true;
+        //GlobalFunctions.setIsNewlyArrivedNotification(true);
         _showNotification(message, true);
       },
     );
   }
 
   Future selectNotification(String payload) async {
-    print('selectNotification context : '+ _ctx.toString());
+    print('selectNotification context : ' + _ctx.toString());
     print('In selectNotification method');
     try {
-    Map<String, dynamic> temp = json.decode(payload);
-    GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
-    print('selectNotification isAlreadyTapped : ' +
-        GlobalVariables.isAlreadyTapped.toString());
-    print('selectNotification isBackGround : ' +
-        gatePassPayload.isBackGround.toString());
-
-  //  SQLiteDbProvider.db.deleteFromNotificationTable(gatePassPayload.msgID);
-
-    if(GlobalVariables.isNewlyArrivedNotification) {
-      GlobalVariables.isNewlyArrivedNotification=false;
-      if (gatePassPayload.isBackGround) {
-        GlobalVariables.isAlreadyTapped = false;
-      }
-    }
-    if (!GlobalVariables.isAlreadyTapped) {
-      print('IF selectNotification isAlreadyTapped : ' +
+      // bool isNewlyArrivedNotification = await GlobalFunctions.getIsNewlyArrivedNotification();
+      //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
+      Map<String, dynamic> temp = json.decode(payload);
+      GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
+      /*print('selectNotification isNewlyArrivedNotification : ' +
+        GlobalVariables.isNewlyArrivedNotification.toString());*/
+      print('selectNotification isAlreadyTapped : ' +
           GlobalVariables.isAlreadyTapped.toString());
-      GlobalVariables.isAlreadyTapped = true;
+      print('selectNotification isBackGround : ' +
+          gatePassPayload.isBackGround.toString());
+
+      DBNotificationPayload _dbNotificationPayload =
+          DBNotificationPayload.fromJson(temp);
+      _dbNotificationPayload.nid = gatePassPayload.msgID;
+      _dbNotificationPayload.read = 1;
+      SQLiteDbProvider.db.updateReadNotification(_dbNotificationPayload);
+
+      if (GlobalVariables.isNewlyArrivedNotification) {
+        GlobalVariables.isNewlyArrivedNotification = false;
+        //GlobalFunctions.setIsNewlyArrivedNotification(false);
+        if (gatePassPayload.isBackGround) {
+          GlobalVariables.isAlreadyTapped = false;
+        }
+      }
+      if (!GlobalVariables.isAlreadyTapped) {
+        print('IF selectNotification isAlreadyTapped : ' +
+            GlobalVariables.isAlreadyTapped.toString());
+        GlobalVariables.isAlreadyTapped = true;
 
         if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
             gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
@@ -228,14 +241,17 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           navigate(gatePassPayload, _ctx);
         }
       }
-    }catch (e) {
-      print('exception : '+e.toString());
+    } catch (e) {
+      print('exception : ' + e.toString());
       _fcm.showErrorDialog(_ctx, e);
     }
   }
 
   _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
-    print('_showNotification context : '+ _ctx.toString());
+    print('_showNotification context : ' + _ctx.toString());
+    // bool isNewlyArrivedNotification =
+    //await GlobalFunctions.getIsNewlyArrivedNotification();
+    //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
     isGuestEntryNotification =
         await GlobalFunctions.getGuestEntryNotification();
     isDailyEntryNotification =
@@ -251,28 +267,26 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       String uuid = Uuid().v1();
       String payloadSData = data["society"];
       Map society;
-      society =society = json.decode(payloadSData.toString());
+      society = society = json.decode(payloadSData.toString());
       society["isBackGround"] = shouldRedirect;
       society["msgID"] = uuid;
-     // Map<String, dynamic> temp = jsonDecode(society.toString());
+      // Map<String, dynamic> temp = jsonDecode(society.toString());
       gatePassPayload = GatePassPayload.fromJson(society);
 
-      print('_showNotification isNewlyArrivedNotification : ' +
-          GlobalVariables.isNewlyArrivedNotification.toString());
       print('_showNotification isAlreadyTapped : ' +
           GlobalVariables.isAlreadyTapped.toString());
       print('_showNotification isBackGround : ' +
           gatePassPayload.isBackGround.toString());
 
-
       if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
-        DBNotificationPayload _dbNotificationPayload = DBNotificationPayload
-            .fromJson(society);
+        DBNotificationPayload _dbNotificationPayload =
+            DBNotificationPayload.fromJson(society);
         _dbNotificationPayload.nid = uuid;
         SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
       }
-      if(GlobalVariables.isNewlyArrivedNotification) {
-        GlobalVariables.isNewlyArrivedNotification=false;
+      if (GlobalVariables.isNewlyArrivedNotification) {
+        GlobalVariables.isNewlyArrivedNotification = false;
+        //GlobalFunctions.setIsNewlyArrivedNotification(false);
         if (gatePassPayload.isBackGround) {
           GlobalVariables.isAlreadyTapped = false;
         }
@@ -283,7 +297,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               print('_showNotification isAlreadyTapped : ' +
                   GlobalVariables.isAlreadyTapped.toString());
               if ((gatePassPayload.vSITORTYPE ==
-                  GlobalVariables.GatePass_Taxi ||
+                      GlobalVariables.GatePass_Taxi ||
                   gatePassPayload.vSITORTYPE ==
                       GlobalVariables.GatePass_Delivery)) {
                 _fcm.showAlert(_ctx, gatePassPayload);
@@ -314,7 +328,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
           var androidPlatformChannelSpecifics;
           if ((gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
-              gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) &&
+                  gatePassPayload.tYPE ==
+                      NotificationTypes.TYPE_VISITOR_VERIFY) &&
               !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
             print('if showGuestNotification');
             if ((gatePassPayload.vSITORTYPE == GlobalVariables.GatePass_Taxi ||
@@ -336,14 +351,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 sound: RawResourceAndroidNotificationSound("alert"),
               );
               var iOSPlatformChannelSpecifics =
-              IOSNotificationDetails(sound: "alert.caf");
+                  IOSNotificationDetails(sound: "alert.caf");
               var platformChannelSpecifics = NotificationDetails(
                   androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
               try {
                 flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
                     gatePassPayload.body, platformChannelSpecifics,
-                    payload: /*data["society"]*/json.encode(society));
+                    payload: /*data["society"]*/ json.encode(society));
               } catch (e) {
                 print(e);
               }
@@ -368,7 +383,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 );
                 print('else showGuestNotification Alert');
                 var iOSPlatformChannelSpecifics =
-                IOSNotificationDetails(sound: "alert.caf");
+                    IOSNotificationDetails(sound: "alert.caf");
                 var platformChannelSpecifics = NotificationDetails(
                     androidPlatformChannelSpecifics,
                     iOSPlatformChannelSpecifics);
@@ -377,7 +392,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                   print('else showGuestNotification TRY');
                   flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
                       gatePassPayload.body, platformChannelSpecifics,
-                      payload: /*data["society"]*/json.encode(society));
+                      payload: /*data["society"]*/ json.encode(society));
                 } catch (e) {
                   print('else showGuestNotification CATCH');
                   print(e);
@@ -402,14 +417,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 playSound: true,
               );
               var iOSPlatformChannelSpecifics =
-              IOSNotificationDetails(sound: "alert.caf");
+                  IOSNotificationDetails(sound: "alert.caf");
               var platformChannelSpecifics = NotificationDetails(
                   androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
               try {
                 flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
                     gatePassPayload.body, platformChannelSpecifics,
-                    payload: /*data["society"]*/json.encode(society));
+                    payload: /*data["society"]*/ json.encode(society));
               } catch (e) {
                 print(e);
               }
@@ -502,12 +517,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
       }
-    } else if (temp.tYPE == NotificationTypes.TYPE_VISITOR || temp.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+    } else if (temp.tYPE == NotificationTypes.TYPE_VISITOR ||
+        temp.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),temp.vID)));
+                  AppLocalizations.of(context).translate('my_gate'),
+                  temp.vID)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -543,7 +560,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),temp.vID)));
+                  AppLocalizations.of(context).translate('my_gate'),
+                  temp.vID)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -551,12 +569,13 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
       }
-    }else if (temp.tYPE == NotificationTypes.TYPE_SInApp) {
+    } else if (temp.tYPE == NotificationTypes.TYPE_SInApp) {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),temp.vID)));
+                  AppLocalizations.of(context).translate('my_gate'),
+                  temp.vID)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

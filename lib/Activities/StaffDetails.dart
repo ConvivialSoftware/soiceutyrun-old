@@ -105,27 +105,38 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      //height: double.maxFinite,
-      //height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                getStaffDetailsLayout(),
-                addToHouseHoldLayout(),
-              ],
+    return WillPopScope(
+      onWillPop: (){
+        if(isStaffAdded){
+          Navigator.of(context).pop('back');
+        }
+        if(isRattingDone){
+          Navigator.of(context).pop('back');
+        }
+        return;
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        //height: double.maxFinite,
+        //height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: GlobalVariables.veryLightGray,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Flexible(
+              child: Stack(
+                children: <Widget>[
+                  GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                      context, 150.0),
+                  getStaffDetailsLayout(),
+                  addToHouseHoldLayout(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -253,33 +264,42 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Icon(
-                            Icons.call,
-                            color: GlobalVariables.green,
+                  Visibility(
+                    visible: _staff.CONTACT.length>0 ? true : false,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Icon(
+                              Icons.call,
+                              color: GlobalVariables.green,
+                            ),
                           ),
-                        ),
-                        Container(
-                            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            //TODO: Divider
-                            height: 30,
-                            width: 8,
-                            child: VerticalDivider(
-                              thickness: 1,
-                              color: GlobalVariables.grey,
-                            )),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Icon(
-                            Icons.share,
-                            color: GlobalVariables.grey,
+                          Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              //TODO: Divider
+                              height: 30,
+                              width: 8,
+                              child: VerticalDivider(
+                                thickness: 1,
+                                color: GlobalVariables.grey,
+                              )),
+                          InkWell(
+                            onTap: (){
+                                GlobalFunctions.shareData(name,
+                                    'Name : ' + name + '\nContact : ' + phone);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Icon(
+                                Icons.share,
+                                color: GlobalVariables.grey,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -470,8 +490,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     color: GlobalVariables.transparent,
                     width: 3.0,
                   )),
-              child: FlatButton(
-                  onPressed: () {
+              child: InkWell(
+                  onTap: () {
                     myRate=0.0;
                     showDialog(
                         context: context,
@@ -492,27 +512,24 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     style: TextStyle(color: GlobalVariables.white),
                   )),
             ),
-          ):InkWell(
-            onTap: (){
-              addHouseHold();
-            },
-            child: Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              decoration: BoxDecoration(
-                  color: GlobalVariables.green,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: GlobalVariables.transparent,
-                    width: 3.0,
-                  )),
-              child: FlatButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Add to Household',
-                    style: TextStyle(color: GlobalVariables.white),
-                  )),
-            ),
+          ):Container(
+            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            decoration: BoxDecoration(
+                color: GlobalVariables.green,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: GlobalVariables.transparent,
+                  width: 3.0,
+                )),
+            child: InkWell(
+                onTap: () {
+                  addHouseHold();
+                },
+                child: Text(
+                  'Add to Household',
+                  style: TextStyle(color: GlobalVariables.white),
+                )),
           ),
         ),
       ),

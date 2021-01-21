@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 class GlobalVariables {
   static var isAlreadyTapped = false;
   static var isNewlyArrivedNotification = false;
-  static var isBackgroundNotification = false;
+  //static var isBackgroundNotification = false;
   static ValueNotifier<int> notificationCounterValueNotifer = ValueNotifier(0);
+  static ValueNotifier<String> userNameValueNotifer = ValueNotifier('');
+  static ValueNotifier<String> userImageURLValueNotifer = ValueNotifier('');
 
   /*Variables for the Web URL*/
   static const termsConditionURL =
@@ -43,6 +45,7 @@ class GlobalVariables {
   static var keyLoggedUsername = "logged_username";
   static var keyDailyEntryNotification = "daily_entry_notification";
   static var keyGuestEntryNotification = "guest_entry_notification";
+  static var keyIsNewlyArrivedNotification = "isNewlyArrivedNotification";
 
   static var appLogoPath = "assets/images/society_run_green.png";
   static var userProfilePath = "assets/images/user_profile.jpeg";
@@ -108,6 +111,7 @@ class GlobalVariables {
   static var logoutIconPath = "assets/other_assets/logout_icon.svg";
   static var guestIconPath = "assets/other_assets/guest.svg";
   static var feedbackIconPath = "assets/other_assets/feedback.svg";
+  static var verifiedContactIconPath = "assets/other_assets/verified_contact.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -185,6 +189,7 @@ class GlobalVariables {
   static const addStaffRattingAPI = "staff/add_rating";
   static const addHouseholdAPI = "staff/add_household";
   static const removeHouseholdAPI = "staff/household_remove";
+  static const deleteVehicleAPI = "Vehicle/delete";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -342,6 +347,7 @@ class GlobalVariables {
   static const EMAIL_ID = 'EMAIL_ID';
   static const SID = 'SID';
   static const Rate = 'Rate';
+  static const id = 'id';
 
   /*Server Response Key*/
 
@@ -426,7 +432,7 @@ class AppPermission {
   static bool isSocGatePassPermission = false;
   static var socGatePassPermission = 'GATEPASS';
   
-  static bool idSocExpensePermission = false;
+  static bool isSocExpensePermission = false;
   static var socExpensePermission = 'EXPENCE';
   
   static bool isSocAddVehiclePermission = false;

@@ -352,7 +352,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                   Container(
                     alignment: Alignment.bottomCenter,
                     margin: EdgeInsets.fromLTRB(
-                        0, MediaQuery.of(context).size.height / 8, 0, 5),
+                        20, MediaQuery.of(context).size.height / 8, 20, 10),
                     //color: GlobalVariables.orangeAccent,
                     //margin: EdgeInsets.all(20),
                     child: Column(
@@ -362,7 +362,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               color: GlobalVariables.mediumGreen,
                               borderRadius:
                               BorderRadius.all(Radius.circular(10))),
-                          margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                          margin: EdgeInsets.fromLTRB(0, 30, 0, 15),
                           child: CarouselSlider.builder(
                             options: CarouselOptions(height: 200.0, autoPlay: true,
                               autoPlayInterval: Duration(seconds: 3),

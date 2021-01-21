@@ -814,8 +814,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
 
     print('baseurl : ' + baseUrl + GlobalVariables.unitAddMemberAPI);
 
-    print("Pic String: " + profilePic);
-    print('attachment lengtth : ' + profilePic.length.toString());
+   // print("Pic String: " + profilePic);
+   // print('attachment lengtth : ' + profilePic.length.toString());
     final Response _result = await _dio.post(GlobalVariables.unitAddMemberAPI,
         options: RequestOptions(
             //method: GlobalVariables.Post,
@@ -2119,6 +2119,32 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     final value = _result.data;
     print('value of removeHouseHold response : ' + value.toString());
 
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> deleteVehicle(String id, String societyId) async {
+    // TODO: implement deleteVehicle
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(id, GlobalVariables.id);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.id: id
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print(GlobalVariables.id + ": " + id);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.deleteVehicleAPI);
+    final Response _result = await _dio.post(GlobalVariables.deleteVehicleAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of deleteVehicle : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 }

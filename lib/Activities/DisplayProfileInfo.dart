@@ -12,14 +12,14 @@ import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 class BaseDisplayProfileInfo extends StatefulWidget {
-  String userId,societyId;
+  String userId,userType;
 
-  BaseDisplayProfileInfo(this.userId, this.societyId);
+  BaseDisplayProfileInfo(this.userId, this.userType);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return DisplayProfileInfoState(userId,societyId);
+    return DisplayProfileInfoState(userId,userType);
   }
 }
 
@@ -30,10 +30,10 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
 
   List<ProfileInfo> _profileList = List<ProfileInfo>();
 
-  String userId,societyId;
+  String userId,societyId,userType,loggedUserType='';
   bool isEdit=false;
 
-  DisplayProfileInfoState(this.userId,this.societyId);
+  DisplayProfileInfoState(this.userId,this.userType);
 
   @override
   void initState() {
@@ -93,6 +93,9 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
 
 
   void geProfileData() async{
+    societyId = await GlobalFunctions.getSocietyId();
+    loggedUserType = await GlobalFunctions.getUserType();
+    print('loggedUserType : '+ loggedUserType.toString());
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     _progressDialog.show();
@@ -101,6 +104,8 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
       if (value.status) {
         List<dynamic> _list = value.data;
         _profileList = List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
+        print('Display User Type : '+ _profileList[0].TYPE.toString());
+        print('Display User Type : '+ userType.toString());
         setState(() {
         });
       }
@@ -109,6 +114,21 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
   }
 
   getBaseLayout() {
+
+    bool isEditOptionDisplay=false;
+
+    if(loggedUserType.toLowerCase()=='tenant' && userType.toLowerCase()=='tenant'){
+        isEditOptionDisplay=true;
+    }else if(loggedUserType.toLowerCase()!='tenant' && userType.toLowerCase()=='tenant'){
+      isEditOptionDisplay=true;
+    }else if(loggedUserType.toLowerCase()!='tenant' && userType.toLowerCase()!='tenant'){
+      isEditOptionDisplay=true;
+    }else if(loggedUserType.toLowerCase()=='tenant' && userType.toLowerCase()!='tenant'){
+      isEditOptionDisplay=false;
+    }
+    print('loggedUserType : '+loggedUserType.toLowerCase());
+    print('userType : '+userType.toLowerCase());
+
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -123,7 +143,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
                 getProfileInfoLayout(),
-                editProfileFabLayout(),
+                isEditOptionDisplay ? editProfileFabLayout(): Container(),
               ],
             ),
           ),
@@ -454,6 +474,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     MaterialPageRoute(
                         builder: (context) => BaseEditProfileInfo(userId,societyId)));
 
+              print('Back Result : '+result.toString());
               if(result=='profile'){
                 isEdit=true;
                 geProfileData();

@@ -217,7 +217,7 @@ class GlobalFunctions{
    static getUserPermission() async{
     sharedPreferences = await SharedPreferences.getInstance();
     if(sharedPreferences.getKeys().contains(GlobalVariables.keyUserPermission)){
-      print('keyGoogleCoordinate : '+sharedPreferences.getString(GlobalVariables.keyUserPermission));
+      print('keyUserPermission : '+sharedPreferences.getString(GlobalVariables.keyUserPermission));
       return  sharedPreferences.getString(GlobalVariables.keyUserPermission);
     }
     return "";
@@ -251,6 +251,30 @@ class GlobalFunctions{
     sharedPreferences.setBool(GlobalVariables.keyGuestEntryNotification, guestEntryNotification);
   }
 
+  static getIsNewlyArrivedNotification() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyIsNewlyArrivedNotification)){
+      print('getIsNewlyArrivedNotification : '+sharedPreferences.getBool(GlobalVariables.keyIsNewlyArrivedNotification).toString());
+      return  sharedPreferences.getBool(GlobalVariables.keyIsNewlyArrivedNotification);
+    }
+    return false;
+  }
+
+  static Future<void> setIsNewlyArrivedNotification(bool isNewlyArrivedNotification) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    print('setIsNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
+    sharedPreferences.setBool(GlobalVariables.keyIsNewlyArrivedNotification, isNewlyArrivedNotification);
+  }
+
+  static getUserType() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyUserType)){
+      print('display keyUserType : '+sharedPreferences.getString(GlobalVariables.keyUserType));
+      return   sharedPreferences.getString(GlobalVariables.keyUserType);
+    }
+    return "";
+  }
+
   static getAppLanguage() async{
     AppLanguage appLanguage = AppLanguage();
     Locale _appLocale= await appLanguage.fetchLocale();
@@ -276,6 +300,7 @@ class GlobalFunctions{
   }
 
   static Future<void> saveDataToSharedPreferences(LoginResponse value) async {
+    print('saveDataToSharedPreferences');
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(GlobalVariables.keyIsLogin, true);
     sharedPreferences.setString(GlobalVariables.keyId, value.ID);
@@ -298,12 +323,27 @@ class GlobalFunctions{
     sharedPreferences.setString(GlobalVariables.keyConsumerId, value.Consumer_no);
     sharedPreferences.setString(GlobalVariables.keyLoggedUsername, value.LoggedUsername);
     sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
+    GlobalVariables.userNameValueNotifer.value=value.Name;
+    GlobalVariables.userImageURLValueNotifer.value=value.Photo;
+    GlobalVariables.userImageURLValueNotifer.notifyListeners();
+    GlobalVariables.userNameValueNotifer.notifyListeners();
   }
 
   static Future<void> savePasswordToSharedPreferences(String password) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(GlobalVariables.keyPassword, password);
   }
+
+  static Future<void> saveDisplayUserNameToSharedPreferences(String userName) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(GlobalVariables.keyName, userName);
+  }
+
+  static Future<void> saveUserProfileToSharedPreferences(String profilePic) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(GlobalVariables.keyPhoto, profilePic);
+  }
+
   static Future<void> saveFCMToken(String token) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken, token);
@@ -469,7 +509,7 @@ class GlobalFunctions{
 
     print('selected year : '+selectedDate.year.toString());
 
-    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1800,8), lastDate: DateTime(2021));
+    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1800,8), lastDate: DateTime(3021));
     if(picked!=null && picked !=selectedDate){
       selectedDate=picked;
     }
@@ -886,6 +926,27 @@ class GlobalFunctions{
     return false;
   }
 
+  static isDateExpireForPoll(String generateDate){
+
+    DateTime earlier = DateTime.parse(generateDate);
+    //  print('earlier : '+ earlier.toIso8601String());
+    DateTime now = new DateTime.now();
+    DateTime currentDate = new DateTime(now.year, now.month, now.day);
+    //  print('now : '+ now.toIso8601String());
+    // print('isBefore : '+earlier.isBefore(now.toUtc()).toString());
+    //   print('currentDate.difference(earlier).inDays : '+currentDate.difference(earlier).inDays.toString());
+    if(currentDate.difference(earlier).inDays==0){
+      // print('In currentDate.difference(earlier).inDays==0 Condition');
+      return true;
+    }else {
+      if (earlier.isBefore(now.toUtc())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   static isAllowForRunApp() async {
 
     String username = await getUserName();
@@ -984,5 +1045,47 @@ class GlobalFunctions{
     BaseStatefulState.setCtx(context);
   }
 
+  static contactChairPersonForPermissionDialog(BuildContext context){
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context,
+                StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(25.0)),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          //margin: EdgeInsets.all(20),
+                          child: SvgPicture.asset(GlobalVariables.verifiedContactIconPath,color: GlobalVariables.green,width: 80,height: 80,)
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: Text(AppLocalizations.of(context).translate('contact_for_permission_text'),style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: 16
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }));
+  }
+
+  /*static void checkRedirectFromBackgroundNotification(BuildContext context) {
+    print('before isBackgroundNotification : '+GlobalVariables.isBackgroundNotification.toString());
+    if(GlobalVariables.isBackgroundNotification) {
+      GlobalVariables.isBackgroundNotification = false;
+      print('after isBackgroundNotification : '+GlobalVariables.isBackgroundNotification.toString());
+      Navigator.of(context).pop();
+    }
+  }*/
 
 }

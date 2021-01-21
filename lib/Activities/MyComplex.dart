@@ -78,12 +78,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
 
   MyComplexState(this.pageName);
-  Map<String, double> dataMap = {
-    "Flutter": 5,
-    "React": 3,
-    "Xamarin": 2,
-    "Ionic": 2,
-  };
 
   @override
   void initState() {
@@ -170,7 +164,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return FlutterDownloader.open(taskId: id);
   }
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -182,11 +175,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         print(e);
       }
     }
-    if(_progressDialog.isShowing()){
-      print('_progressDialog showing');
-      _progressDialog.hide();
-    }
-    print('_progressDialog Hide');
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -1097,21 +1085,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('EXPIRY_DATE : '+GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE).toString());
     print('SECRET_POLL : '+_pollList[position].SECRET_POLL.toString());
     print('VOTED_TO : '+_pollList[position].VOTED_TO.length.toString());
-    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='no'){
+    if(!GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='no'){
       print('>>> 1st');
       _pollList[position].isGraphView=true;
     }
-    if(GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE)){
+    if(GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE)){
       print('>>> 2nd');
       _pollList[position].isGraphView=true;
     }
 
-    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length==0 )){
+    if(!GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length==0 )){
       print('>>> 3rd');
       _pollList[position].isGraphView=false;
     }
 
-    if(!GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') {
+    if(!GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE) && (_pollList[position].VOTED_TO.length>0 ) && _pollList[position].SECRET_POLL.toLowerCase()=='yes') {
       print('>>> 4th');
       _pollList[position].isGraphView=false;
     }
@@ -2479,28 +2467,20 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getAnnouncementData(societyId, type,userId).then((value) {
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
+      print('_progressDialog show : '+_progressDialog.isShowing().toString());
+      //GlobalFunctions.showToast('_progressDialog whenComplete : '+_progressDialog.isShowing().toString());
       if (value.status) {
         List<dynamic> _list = value.data;
-
-       // print("announcement data : "+ _list[4].toString());
-
-        /*{ID: 94, USER_NAME: Pallavi Unde, USER_PHOTO: 278808_2019-08-16_12:45:09.jpg, SUBJECT: test demo, DESCRIPTION: <p>test demo</p>
-I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
-
-
-
-          _announcementList = List<Announcement>.from(_list.map((i)=>Announcement.fromJson(i)));
-
+        _announcementList = List<Announcement>.from(_list.map((i)=>Announcement.fromJson(i)));
         print("_announcementList length : "+_announcementList.length.toString());
-
-
-
       }
       setState(() {
+        //GlobalFunctions.showToast('_progressDialog setState : '+_progressDialog.isShowing().toString());
       });
-
-
+      /*_progressDialog.hide().whenComplete(() {
+      });*/
     });
   }
 
@@ -2512,7 +2492,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getAnnouncementData(societyId, type,userId).then((value) {
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
+      print('_progressDialog show : '+_progressDialog.isShowing().toString());
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2538,7 +2520,8 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getAnnouncementData(societyId, type,userId).then((value) {
-      _progressDialog.hide();
+      Navigator.of(context).pop();
+      print('_progressDialog show : '+_progressDialog.isShowing().toString());
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -2564,7 +2547,8 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getAnnouncementPollData(societyId, type,block,flat,userId).then((value) {
-      _progressDialog.hide();
+      Navigator.of(context).pop();
+      print('_progressDialog show : '+_progressDialog.isShowing().toString());
       if (value.status) {
         List<dynamic> _list = value.data;
         _pollList = List<Poll>.from(_list.map((i) =>Poll.fromJson(i)));
@@ -2583,7 +2567,8 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClient.getAllMemberDirectoryData(societyId).then((value) {
-      _progressDialog.hide();
+      Navigator.of(context).pop();
+      print('_progressDialog show : '+_progressDialog.isShowing().toString());
       if (value.status) {
         print('memeber status : '+value.status.toString());
         List<dynamic> neighbourList = value.neighbour;
@@ -2968,7 +2953,8 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     String  userId = await GlobalFunctions.getUserId();
     _progressDialog.show();
     restClient.getDocumentData(societyId,userId).then((value) {
-        _progressDialog.hide();
+      Navigator.of(context).pop();
+      print('_progressDialog show : '+_progressDialog.isShowing().toString());
       if (value.status) {
         List<dynamic> _list = value.data;
 
@@ -3126,7 +3112,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
 
     });
   }
-
+  
   /*documentOwnCommonLayout() {
     return Visibility(
       visible: false,

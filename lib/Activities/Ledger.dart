@@ -406,8 +406,8 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
         totalOutStanding = totalAmount + double.parse(openingBalance);
       }
 
-      _progressDialog.hide();
-
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
       setState(() {});
     });
   }

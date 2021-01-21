@@ -34,6 +34,7 @@ import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -87,7 +88,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         getDisplayName();
         getMobile();
         getPhoto();
-        getAppPermission();
         SQLiteDbProvider.db.getDataBaseInstance();
         GlobalFunctions.getAppPackageInfo();
         GlobalFunctions.checkInternetConnection().then((internet) {
@@ -117,20 +117,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // user returned to our app
-        //GlobalFunctions.showToast('Resume');
-        SQLiteDbProvider.db.getDataBaseInstance();
+      //GlobalFunctions.showToast('Resume');
+      SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.inactive) {
       // app is inactive
       // GlobalFunctions.showToast('Inactive');
-       SQLiteDbProvider.db.getDataBaseInstance();
+      SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.paused) {
       // user is about quit our app temporally
-       //GlobalFunctions.showToast('Paused');
-       SQLiteDbProvider.db.getDataBaseInstance();
+      //GlobalFunctions.showToast('Paused');
+      SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.detached) {
       // user is about quit our app temporally
-       // GlobalFunctions.showToast('Detached');
-        SQLiteDbProvider.db.getDataBaseInstance();
+      // GlobalFunctions.showToast('Detached');
+      SQLiteDbProvider.db.getDataBaseInstance();
     }
   }
 
@@ -148,6 +148,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
           photo = _profileList[0].PROFILE_PHOTO;
           name = _profileList[0].NAME;
+          GlobalVariables.userNameValueNotifer.value=name;
+          GlobalVariables.userImageURLValueNotifer.value=photo;
+          GlobalVariables.userImageURLValueNotifer.notifyListeners();
+          GlobalVariables.userNameValueNotifer.notifyListeners();
+          GlobalFunctions.saveUserProfileToSharedPreferences(photo);
+          GlobalFunctions.saveDisplayUserNameToSharedPreferences(name);
         });
       }
     }).catchError((Object obj) {
@@ -167,6 +173,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   @override
   Widget build(BuildContext context) {
+    FirebaseMessagingHandler().getToken();
     print('DashBoard context : ' + context.toString());
     print('BaseStatefulState context : ' + BaseStatefulState.getCtx.toString());
     print('DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
@@ -251,7 +258,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-
                             Container(
                               //color: GlobalVariables.grey,
                               margin: EdgeInsets.fromLTRB(0, 10, 20, 0),
@@ -259,55 +265,71 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   child: GestureDetector(
                                 onTap: () {
                                   //GlobalFunctions.comingSoonDialog(context);
-                                  if(GlobalVariables.notificationCounterValueNotifer.value>0) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                BaseNotifications())).then((
-                                        value) {
-                                      GlobalFunctions.setBaseContext(
-                                          _dashboardSacfoldKey.currentContext);
-                                    });
-                                  }
+                                  //if(GlobalVariables.notificationCounterValueNotifer.value>0) {
+                                  Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BaseNotifications()))
+                                      .then((value) {
+                                    GlobalFunctions.setBaseContext(
+                                        _dashboardSacfoldKey.currentContext);
+                                  });
+                                  //}
                                 },
                                 child: ValueListenableBuilder(
-                                    valueListenable:GlobalVariables.notificationCounterValueNotifer,
-                                    builder: (BuildContext context, int newNotificationCounterValue, Widget child){
-                                  return  Stack(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        //color: GlobalVariables.grey,
-                                        child: SvgPicture.asset(
-                                          GlobalVariables.notificationBellIconPath,
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.topRight,
-                                        margin: EdgeInsets.only(left: 8),
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width * 0.04,
-                                          height: MediaQuery.of(context).size.width * 0.04,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: GlobalVariables.orangeYellow,
-                                              border: Border.all(color: GlobalVariables.transparent, width: 1)),
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              newNotificationCounterValue.toString(),style: TextStyle(
-                                              color: GlobalVariables.white
-                                            ),
+                                    valueListenable: GlobalVariables
+                                        .notificationCounterValueNotifer,
+                                    builder: (BuildContext context,
+                                        int newNotificationCounterValue,
+                                        Widget child) {
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: 5),
+                                            //color: GlobalVariables.grey,
+                                            child: SvgPicture.asset(
+                                              GlobalVariables
+                                                  .notificationBellIconPath,
+                                              width: 20,
+                                              height: 20,
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
+                                          Container(
+                                            alignment: Alignment.topRight,
+                                            margin: EdgeInsets.only(left: 8),
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.04,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.04,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: GlobalVariables
+                                                      .orangeYellow,
+                                                  border: Border.all(
+                                                      color: GlobalVariables
+                                                          .transparent,
+                                                      width: 1)),
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  newNotificationCounterValue
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      color: GlobalVariables
+                                                          .white),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
                               )),
                             ),
                             Container(
@@ -315,41 +337,52 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               margin: EdgeInsets.fromLTRB(
                                   0, 10, 20, 0), // alignment: Alignment
                               child: SizedBox(
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        // GlobalFunctions.showToast('profile_user');
-                                        navigateToProfilePage();
-                                      },
-                                      child: photo.isEmpty
-                                          ? Container(
-                                              child: Image.asset(GlobalVariables
-                                                  .componentUserProfilePath),
-                                              width: 20,
-                                              height: 20,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(35),
-                                                  border: Border.all(
-                                                      color: GlobalVariables
-                                                          .mediumGreen,
-                                                      width: 1.0),
-                                                  color: GlobalVariables
-                                                      .lightGreen),
-                                            )
-                                          : Container(
-                                              width: 20,
-                                              height: 20,
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                      image:
-                                                          NetworkImage(photo),
-                                                      fit: BoxFit.cover),
-                                                  border: Border.all(
-                                                      color: GlobalVariables
-                                                          .mediumGreen,
-                                                      width: 1.0)),
-                                            ))),
+                                  child: ValueListenableBuilder(
+                                      valueListenable: GlobalVariables
+                                          .userImageURLValueNotifer,
+                                      builder: (BuildContext context,
+                                          String userImageURLValueNotifer,
+                                          Widget child) {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              // GlobalFunctions.showToast('profile_user');
+                                              navigateToProfilePage();
+                                            },
+                                            child: userImageURLValueNotifer.isEmpty
+                                                ? Container(
+                                                    child: Image.asset(
+                                                        GlobalVariables
+                                                            .componentUserProfilePath),
+                                                    width: 20,
+                                                    height: 20,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(35),
+                                                        border: Border.all(
+                                                            color:
+                                                                GlobalVariables
+                                                                    .mediumGreen,
+                                                            width: 1.0),
+                                                        color: GlobalVariables
+                                                            .lightGreen),
+                                                  )
+                                                : Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                            image: NetworkImage(
+                                                                userImageURLValueNotifer),
+                                                            fit: BoxFit.cover),
+                                                        border: Border.all(
+                                                            color:
+                                                                GlobalVariables
+                                                                    .mediumGreen,
+                                                            width: 1.0)),
+                                                  ));
+                                      })),
                             ),
                           ],
                         ),
@@ -367,7 +400,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     );
   }
 
- /* getBottomNavigationBar() {
+  /* getBottomNavigationBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(
           0, 10, 0, 0), //margin: EdgeInsets.fromLTRB(0, 25, 0, 0),
@@ -471,7 +504,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     return false;
   }*/
 
- /* navigateToPage() {
+  /* navigateToPage() {
     switch (_currentIndex) {
       case 0:
         {
@@ -552,7 +585,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           child: InkWell(
                             onTap: () {
                               //getMyUnitPage();
-                              redirectToPage(AppLocalizations.of(context).translate('my_unit'));
+                              redirectToPage(AppLocalizations.of(context)
+                                  .translate('my_unit'));
                             },
                             child: Container(
                               // color: GlobalVariables.black,
@@ -578,8 +612,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                             // getMyComplexPage();
-                              redirectToPage(AppLocalizations.of(context).translate('my_complex'));
+                              // getMyComplexPage();
+                              redirectToPage(AppLocalizations.of(context)
+                                  .translate('my_complex'));
                             },
                             child: Container(
                               //    color: GlobalVariables.green,
@@ -604,8 +639,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                             // getHelpDeskPage();
-                              redirectToPage(AppLocalizations.of(context).translate('help_desk'));
+                              // getHelpDeskPage();
+                              if (AppPermission.isSocHelpDeskPermission)
+                                redirectToPage(AppLocalizations.of(context)
+                                    .translate('help_desk'));
+                              else
+                                GlobalFunctions
+                                    .contactChairPersonForPermissionDialog(
+                                        context);
                             },
                             child: Container(
                               //   color: GlobalVariables.black,
@@ -639,8 +680,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                             // getClubFacilitiesPage();
-                              redirectToPage(AppLocalizations.of(context).translate('facilities'));
+                              // getClubFacilitiesPage();
+                              redirectToPage(AppLocalizations.of(context)
+                                  .translate('facilities'));
                             },
                             child: Container(
                               //    color: GlobalVariables.black,
@@ -665,8 +707,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           flex: 1,
                           child: InkWell(
                             onTap: () {
-                             // getMyGatePage();
-                              redirectToPage(AppLocalizations.of(context).translate('my_gate'));
+                              // getMyGatePage();
+                              if (AppPermission.isSocGatePassPermission)
+                                redirectToPage(AppLocalizations.of(context)
+                                    .translate('my_gate'));
+                              else
+                                GlobalFunctions
+                                    .contactChairPersonForPermissionDialog(
+                                        context);
                             },
                             child: Container(
                               //   color: GlobalVariables.green,
@@ -692,7 +740,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           child: InkWell(
                             onTap: () {
                               /*getMorePage();*/
-                              redirectToPage(AppLocalizations.of(context).translate('more'));
+                              redirectToPage(AppLocalizations.of(context)
+                                  .translate('more'));
                             },
                             child: Container(
                               //     color: GlobalVariables.black,
@@ -815,19 +864,26 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         block.toString() +
                                         ' ' +
                                         flat.toString());*/
-                                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url +
-                                        '?' +
-                                        'SID=' +
-                                        societyId.toString() +
-                                        '&MOBILE=' +
-                                        phone.toString() +
-                                        '&NAME=' +
-                                        name.toString() +
-                                        '&UNIT=' +
-                                        block.toString() +
-                                        ' ' +
-                                        flat.toString()))).then((value) {
-                                      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseWebViewScreen(
+                                                    _bannerList[itemIndex].Url +
+                                                        '?' +
+                                                        'SID=' +
+                                                        societyId.toString() +
+                                                        '&MOBILE=' +
+                                                        phone.toString() +
+                                                        '&NAME=' +
+                                                        name.toString() +
+                                                        '&UNIT=' +
+                                                        block.toString() +
+                                                        ' ' +
+                                                        flat.toString()))).then(
+                                        (value) {
+                                      GlobalFunctions.setBaseContext(
+                                          _dashboardSacfoldKey.currentContext);
                                     });
                                   },
                                   child: Container(
@@ -869,14 +925,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   /*getDiscoverPage() {
     GlobalFunctions.comingSoonDialog(context);
-    *//*Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*//*
+    */ /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseDiscover(null)));*/ /*
   }*/
 
   /*getClubFacilitiesPage() {
     GlobalFunctions.comingSoonDialog(context);
-    *//* Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseFacilities()));*//*
+    */ /* Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/ /*
   }*/
 
   /*getMyGatePage() {
@@ -886,8 +942,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   /*getMorePage() {
     GlobalFunctions.comingSoonDialog(context);
-    *//*Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*//*
+    */ /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/ /*
   }*/
 
   /*getHelpDeskPage() {
@@ -906,8 +962,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   /*getAdminPage() {
     GlobalFunctions.comingSoonDialog(context);
-    *//*Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*//*
+    */ /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/ /*
   }*/
 
   getDrawerLayout() {
@@ -995,36 +1051,45 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
                           //color: GlobalVariables.red,
                           //TODO: userImage
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30.0),
-                              child: photo.isEmpty
-                                  ? Container(
-                                      child: Image.asset(GlobalVariables
-                                          .componentUserProfilePath),
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(35),
-                                          border: Border.all(
-                                              color:
-                                                  GlobalVariables.mediumGreen,
-                                              width: 2.0),
-                                          color: GlobalVariables.lightGreen),
-                                    )
-                                  : Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: NetworkImage(photo),
-                                              fit: BoxFit.cover),
-                                          border: Border.all(
-                                              color:
-                                                  GlobalVariables.mediumGreen,
-                                              width: 2.0)),
-                                    ))),
+                          child: ValueListenableBuilder(
+                              valueListenable:
+                                  GlobalVariables.userImageURLValueNotifer,
+                              builder: (BuildContext context,
+                                  String userImageURLValueNotifer,
+                                  Widget child) {
+                                return ClipRRect(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    child: userImageURLValueNotifer.isEmpty
+                                        ? Container(
+                                            child: Image.asset(GlobalVariables
+                                                .componentUserProfilePath),
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(35),
+                                                border: Border.all(
+                                                    color: GlobalVariables
+                                                        .mediumGreen,
+                                                    width: 2.0),
+                                                color:
+                                                    GlobalVariables.lightGreen),
+                                          )
+                                        : Container(
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        userImageURLValueNotifer),
+                                                    fit: BoxFit.cover),
+                                                border: Border.all(
+                                                    color: GlobalVariables
+                                                        .mediumGreen,
+                                                    width: 2.0)),
+                                          ));
+                              })),
                     ),
                     Flexible(
                       child: Container(
@@ -1040,15 +1105,22 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               margin: EdgeInsets.fromLTRB(
                                   5, 0, 0, 5), //color: GlobalVariables.green,
                               //TODO : UserName
-                              child: AutoSizeText(
-                                snapshot.data[GlobalVariables.keyName],
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: GlobalVariables.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                                maxLines: 1,
-                              ),
+                              child: ValueListenableBuilder(
+                                  valueListenable:
+                                      GlobalVariables.userNameValueNotifer,
+                                  builder: (BuildContext context,
+                                      String userNameValueNotifer,
+                                      Widget child) {
+                                    return AutoSizeText(
+                                      userNameValueNotifer,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: GlobalVariables.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 1,
+                                    );
+                                  }),
                             ),
                             Container(
                               margin: EdgeInsets.all(
@@ -1541,7 +1613,654 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   void getExpandableListViewData(BuildContext context) {
     //   print('AppLocalizations.of(context).translate(my_flat) : '+AppLocalizations.of(context).translate('my_unit').toString());
-    if (AppPermission.isUserAdminHelpDeskPermission) {
+    getAppPermission();
+    _list = [
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('my_unit'),
+          rootIconData: GlobalVariables.myFlatIconPath,
+          //innerIconData: Icons.,
+          items: [
+            AppLocalizations.of(context).translate("my_dues"),
+            AppLocalizations.of(context).translate("my_household"),
+            // AppLocalizations.of(context).translate("my_documents"),
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('my_complex'),
+          rootIconData: GlobalVariables.myBuildingIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: [
+            AppLocalizations.of(context).translate("announcement"),
+            AppLocalizations.of(context).translate("meetings"),
+            AppLocalizations.of(context).translate("poll_survey"),
+            AppLocalizations.of(context).translate("documents"),
+            AppLocalizations.of(context).translate("directory"),
+            AppLocalizations.of(context).translate("events")
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('discover'),
+          rootIconData: GlobalVariables.myServiceIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: [
+            AppLocalizations.of(context).translate("classified"),
+            AppLocalizations.of(context).translate("services"),
+            AppLocalizations.of(context).translate("near_by_shop"),
+          ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('facilities'),
+          rootIconData: GlobalVariables.myClubIconPath,
+          //innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      if (AppPermission.isSocGatePassPermission)
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+      if (AppPermission.isSocHelpDeskPermission)
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      if (AppPermission.isSocExpensePermission)
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      if (AppPermission.isUserAdminHelpDeskPermission)
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("assign_helpdesk"),
+            ]),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('settings'),
+          rootIconData: GlobalVariables.settingsIconPath,
+          //  innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+    ];
+
+    /*
+    if (AppPermission.isSocHelpDeskPermission && AppPermission.isSocExpensePermission
+        && AppPermission.isUserAdminPermission) {
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        if(AppPermission.isSocGatePassPermission)
+          new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        if(AppPermission.isSocHelpDeskPermission)
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        if(AppPermission.isSocExpensePermission)
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        if(AppPermission.isUserAdminHelpDeskPermission) new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: [AppLocalizations.of(context).translate("assign_helpdesk"),]
+        ),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+
+    }
+    else if(!AppPermission.isSocHelpDeskPermission && AppPermission.isSocExpensePermission &&
+        AppPermission.isUserAdminPermission){
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        */ /*new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),*/ /*
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        if(AppPermission.isUserAdminHelpDeskPermission) new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: [AppLocalizations.of(context).translate("assign_helpdesk"),]
+        ),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+
+    }else if (AppPermission.isSocHelpDeskPermission && AppPermission.isSocExpensePermission
+        && !AppPermission.isUserAdminPermission){
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+
+    }else if (AppPermission.isSocHelpDeskPermission && AppPermission.isUserAdminPermission
+        && !AppPermission.isSocExpensePermission){
+
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+       */ /* new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),*/ /*
+        if(AppPermission.isUserAdminHelpDeskPermission) new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: [AppLocalizations.of(context).translate("assign_helpdesk"),]
+        ),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+    }else if (AppPermission.isSocHelpDeskPermission && !AppPermission.isUserAdminPermission
+        && !AppPermission.isSocExpensePermission){
+
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        */ /*new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: AppPermission.isUserAdminHelpDeskPermission ? [
+              AppLocalizations.of(context).translate("assign_helpdesk"),
+            ] : []),*/ /*
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+    }else if (!AppPermission.isSocHelpDeskPermission && !AppPermission.isUserAdminPermission
+        && AppPermission.isSocExpensePermission){
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        */ /*new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),*/ /*
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        */ /*new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: AppPermission.isUserAdminHelpDeskPermission ? [
+              AppLocalizations.of(context).translate("assign_helpdesk"),
+            ] : []),*/ /*
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+
+    }else if (!AppPermission.isSocHelpDeskPermission && AppPermission.isUserAdminPermission
+        && !AppPermission.isSocExpensePermission){
+
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+       */ /* new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),*/ /*
+        if(AppPermission.isUserAdminHelpDeskPermission) new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: [AppLocalizations.of(context).translate("assign_helpdesk"),]
+        ),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+    }else if (!AppPermission.isSocHelpDeskPermission && !AppPermission.isUserAdminPermission
+        && !AppPermission.isSocExpensePermission){
+
+
+      _list = [
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_unit'),
+            rootIconData: GlobalVariables.myFlatIconPath,
+            //innerIconData: Icons.,
+            items: [
+              AppLocalizations.of(context).translate("my_dues"),
+              AppLocalizations.of(context).translate("my_household"),
+              // AppLocalizations.of(context).translate("my_documents"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_complex'),
+            rootIconData: GlobalVariables.myBuildingIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("announcement"),
+              AppLocalizations.of(context).translate("meetings"),
+              AppLocalizations.of(context).translate("poll_survey"),
+              AppLocalizations.of(context).translate("documents"),
+              AppLocalizations.of(context).translate("directory"),
+              AppLocalizations.of(context).translate("events")
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('discover'),
+            rootIconData: GlobalVariables.myServiceIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("classified"),
+              AppLocalizations.of(context).translate("services"),
+              AppLocalizations.of(context).translate("near_by_shop"),
+            ]),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('facilities'),
+            rootIconData: GlobalVariables.myClubIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('my_gate'),
+            rootIconData: GlobalVariables.myGateIconPath,
+            //innerIconData: GlobalVariables.myFlatIconPath,
+            items: [
+              AppLocalizations.of(context).translate("my_activities"),
+              AppLocalizations.of(context).translate("helpers"),
+            ]),
+        */ /*new RootTitle(
+            title: AppLocalizations.of(context).translate('help_desk'),
+            rootIconData: GlobalVariables.mySupportIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('expense'),
+            rootIconData: GlobalVariables.expenseIconPath,
+            // innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('admin'),
+            rootIconData: GlobalVariables.myAdminIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: AppPermission.isUserAdminHelpDeskPermission ? [
+              AppLocalizations.of(context).translate("assign_helpdesk"),
+            ] : []),*/ /*
+        new RootTitle(
+            title: AppLocalizations.of(context).translate('settings'),
+            rootIconData: GlobalVariables.settingsIconPath,
+            //  innerIconData: GlobalVariables.myFlatIconPath,
+            items: []),
+      ];
+
+    }
+
+    */
+
+    /*if (AppPermission.isUserAdminHelpDeskPermission) {
       _list = [
         new RootTitle(
             title: AppLocalizations.of(context).translate('my_unit'),
@@ -1600,31 +2319,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             title: AppLocalizations.of(context).translate('admin'),
             rootIconData: GlobalVariables.myAdminIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
-            items: [
+            items: AppPermission.isUserAdminHelpDeskPermission ? [
               AppLocalizations.of(context).translate("assign_helpdesk"),
-            ]),
-        /*new RootTitle(
-            title: AppLocalizations.of(context).translate('about_us'),
-            rootIconData: GlobalVariables.aboutUsPath,
-            //  innerIconData: GlobalVariables.myFlatIconPath,
-            items: []),
-        new RootTitle(
-            title: AppLocalizations.of(context).translate('change_password'),
-            rootIconData: GlobalVariables.changePasswordPath,
-            //  innerIconData: GlobalVariables.myFlatIconPath,
-            items: []),
-        new RootTitle(
-            title: AppLocalizations.of(context).translate('logout'),
-            rootIconData: GlobalVariables.loginIconPath,
-            //  innerIconData: GlobalVariables.myFlatIconPath,
-            items: []),*/
+            ] : []),
         new RootTitle(
             title: AppLocalizations.of(context).translate('settings'),
             rootIconData: GlobalVariables.settingsIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
       ];
-    } else {
+    }
+    else {
       _list = [
         new RootTitle(
             title: AppLocalizations.of(context).translate('my_unit'),
@@ -1679,7 +2384,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.expenseIconPath,
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
-        /*  new RootTitle(
+        */ /*  new RootTitle(
             title: AppLocalizations.of(context).translate('about_us'),
             rootIconData: GlobalVariables.aboutUsPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
@@ -1693,14 +2398,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             title: AppLocalizations.of(context).translate('logout'),
             rootIconData: GlobalVariables.loginIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
-            items: []),*/
+            items: []),*/ /*
         new RootTitle(
             title: AppLocalizations.of(context).translate('settings'),
             rootIconData: GlobalVariables.settingsIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
             items: []),
       ];
-    }
+    }*/
   }
 
   /*getDrawerItemIndex(int index) {
@@ -1755,9 +2460,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         }
         break;
     }
-    *//*setState(() {
+    */ /*setState(() {
 
-    });*//*
+    });*/ /*
     navigateToPage();
   }*/
 
@@ -1955,7 +2660,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 BaseLedger())).then((value) {
-                                      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                                      GlobalFunctions.setBaseContext(
+                                          _dashboardSacfoldKey.currentContext);
                                     });
                                   },
                                   child: Text(
@@ -1971,11 +2677,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   onTap: () {
                                     //GlobalFunctions.showToast('Pay Now');
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                BaseMyUnit(null))).then((value) {
-                                      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BaseMyUnit(null)))
+                                        .then((value) {
+                                      GlobalFunctions.setBaseContext(
+                                          _dashboardSacfoldKey.currentContext);
                                     });
                                   },
                                   child: Text(
@@ -2041,10 +2749,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 color: GlobalVariables.green,
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BaseAboutSocietyRunInfo())).then((value) {
-                    GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => BaseAboutSocietyRunInfo()))
+                      .then((value) {
+                    GlobalFunctions.setBaseContext(
+                        _dashboardSacfoldKey.currentContext);
                   });
                 },
                 textColor: GlobalVariables.white,
@@ -2067,6 +2777,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   getDisplayName() {
     GlobalFunctions.getDisplayName().then((value) {
       name = value;
+      GlobalVariables.userNameValueNotifer.notifyListeners();
     });
   }
 
@@ -2086,6 +2797,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   void getPhoto() {
     GlobalFunctions.getPhoto().then((value) {
       photo = value;
+      GlobalVariables.userImageURLValueNotifer.notifyListeners();
       print('profile image : ' + photo.toString());
     });
   }
@@ -2102,149 +2814,164 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       if (result == 'back') {
         getDuesData();
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      }else{
+      } else {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       }
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_dues')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyUnit(
+                      AppLocalizations.of(context).translate('my_dues'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_household')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyUnit(
+                      AppLocalizations.of(context).translate('my_household'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_documents')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyUnit(
+                      AppLocalizations.of(context).translate('my_documents'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('my_tenants')) {
       //Redirect to  My Tenants
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_tenants')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyUnit(
+                      AppLocalizations.of(context).translate('my_tenants'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('my_complex')) {
       //Redirect to  My Complex
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('my_complex')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('my_complex'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('announcement')) {
       //Redirect to News Board
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('announcement')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('announcement'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('meetings')) {
       //Redirect to News Board
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('meetings')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('meetings'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('poll_survey')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('poll_survey'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('directory')) {
       //Redirect to  Directory
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('directory')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('directory'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('documents')) {
       //Redirect to  Documents
       //GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('documents')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('documents'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
       //  GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyComplex(
-                  AppLocalizations.of(context).translate('events')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyComplex(
+                      AppLocalizations.of(context).translate('events'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('discover')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseDiscover(
+                      AppLocalizations.of(context).translate('discover'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('classified')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseDiscover(
+                      AppLocalizations.of(context).translate('classified'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('services')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseDiscover(
+                      AppLocalizations.of(context).translate('services'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseDiscover(
-                  AppLocalizations.of(context).translate('near_by_shop')))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseDiscover(
+                      AppLocalizations.of(context).translate('near_by_shop'))))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
@@ -2255,10 +2982,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('my_gate')) {
       //Redirect to  My Gate
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),null))).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyGate(
+                      AppLocalizations.of(context).translate('my_gate'), null)))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item ==
@@ -2268,26 +2996,32 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_activities'),null))).then((value) {
+                  AppLocalizations.of(context).translate('my_activities'),
+                  null))).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /*Navigator.push(
-         context, MaterialPageRoute(builder: (context) => BaseMyGate(AppLocalizations.of(context).translate('helpers'))));*/
+      // GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyGate(
+                  AppLocalizations.of(context).translate('helpers'), null)));
     } else if (item == AppLocalizations.of(context).translate('help_desk')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false))).then((value) {
-            GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseHelpDesk(false)))
+          .then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('expense')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseExpense())).then((value) {
+              context, MaterialPageRoute(builder: (context) => BaseExpense()))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('admin')) {
@@ -2299,15 +3033,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         AppLocalizations.of(context).translate('assign_helpdesk')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseHelpDesk(true))).then((value) {
-          GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseHelpDesk(true)))
+          .then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('about_us')) {
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo())).then((value) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseAboutSocietyRunInfo())).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item ==
@@ -2315,14 +3052,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BaseChangePassword())).then((value) {
+              MaterialPageRoute(builder: (context) => BaseChangePassword()))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('settings')) {
       //Redirect to  Admin
       //  GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseAppSettings())).then((value) {
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseAppSettings()))
+          .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('more')) {
@@ -2418,16 +3157,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
 
   Future<void> navigateToProfilePage() async {
-    String societyId = await GlobalFunctions.getSocietyId();
+    //String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
+    String userType = await GlobalFunctions.getUserType();
     var result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => BaseDisplayProfileInfo(userId, societyId)));
-    if(result=='profile'){
+            builder: (context) => BaseDisplayProfileInfo(userId, userType)));
+    if (result == 'profile') {
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       geProfileData();
-    }else{
+    } else {
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
     }
   }
@@ -2524,6 +3264,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     for (int i = 0; i < _socPermissionList.length; i++) {
       if (_socPermissionList[i] == AppPermission.socHelpDeskPermission) {
         AppPermission.isSocHelpDeskPermission = true;
+      }
+      if (_socPermissionList[i] == AppPermission.socExpensePermission) {
+        AppPermission.isSocExpensePermission = true;
+      }
+      if (_socPermissionList[i] == AppPermission.socGatePassPermission) {
+        AppPermission.isSocGatePassPermission = true;
+      }
+      if (_socPermissionList[i] == AppPermission.socAddVehiclePermission) {
+        AppPermission.isSocAddVehiclePermission = true;
       }
     }
 

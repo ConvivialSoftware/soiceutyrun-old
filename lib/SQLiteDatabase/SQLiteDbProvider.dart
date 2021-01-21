@@ -87,12 +87,28 @@ class SQLiteDbProvider {
 
   insertUnReadNotification(DBNotificationPayload _dbNotificationPayload) async {
     print('DB : _dbNotificationPayload >>>> ' + _dbNotificationPayload.toJson().toString());
-    String userId = await GlobalFunctions.getUserId();
-    print('DB : userId >>>> ' + userId.toString());
+    //String userId = await GlobalFunctions.getUserId();
+    GlobalFunctions.getUserId().then((value) async{
+      _dbNotificationPayload.uid=value;
+      print('DB : DBNotificationPayload >>>> ' + _dbNotificationPayload.toJson().toString());
+      final db = await getDatabase;
+      var result = await db.insert(
+        _notificationTableName,
+        _dbNotificationPayload.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      print('DB : ' + result.toString());
+      print('DB : ' + 'Inserted Successfully');
+
+      getNotificationTableCount(value);
+      return result;
+    });
+
+   /* print('DB : userId >>>> ' + userId.toString());
     _dbNotificationPayload.uid=userId;
     print('DB : DBNotificationPayload >>>> ' + _dbNotificationPayload.toJson().toString());
     final db = await getDatabase;
-    /*var result = await db.rawInsert(
+    *//*var result = await db.rawInsert(
         "INSERT Into "+_notificationTableName+" (ID,TYPE, Visitor_type, DATE_TIME, FROM_VISITOR, IMAGE,"
             "VID,VISITOR_NAME,body,title,CONTACT,read)"
             " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -100,17 +116,8 @@ class SQLiteDbProvider {
         _dbNotificationPayload.DATE_TIME,_dbNotificationPayload.FROM_VISITOR,_dbNotificationPayload.IMAGE,
         _dbNotificationPayload.VISITOR_NAME,_dbNotificationPayload.body,_dbNotificationPayload.title,
         _dbNotificationPayload.CONTACT,_dbNotificationPayload.read]
-    );*/
-    var result = await db.insert(
-      _notificationTableName,
-      _dbNotificationPayload.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    print('DB : ' + result.toString());
-    print('DB : ' + 'Inserted Successfully');
-
-    getNotificationTableCount(userId);
-    return result;
+    );*//*
+   */
   }
 
   getNotificationTableCount(String userId) async {
