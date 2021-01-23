@@ -18,6 +18,7 @@ import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
 import 'HelpDesk.dart';
 import 'base_stateful.dart';
@@ -338,7 +339,9 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
                   AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
-    } else {
+    }else if(_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BROADCAST){
+      FirebaseMessagingHandler().showDynamicAlert(context, _dbNotificationPayload);
+    }  else {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(

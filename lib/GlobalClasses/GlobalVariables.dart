@@ -45,6 +45,7 @@ class GlobalVariables {
   static var keyLoggedUsername = "logged_username";
   static var keyDailyEntryNotification = "daily_entry_notification";
   static var keyGuestEntryNotification = "guest_entry_notification";
+  static var keyInAppCallNotification = "in_app_call_notification";
   static var keyIsNewlyArrivedNotification = "isNewlyArrivedNotification";
 
   static var appLogoPath = "assets/images/society_run_green.png";
@@ -190,6 +191,7 @@ class GlobalVariables {
   static const addHouseholdAPI = "staff/add_household";
   static const removeHouseholdAPI = "staff/household_remove";
   static const deleteVehicleAPI = "Vehicle/delete";
+  static const deleteFamilyMemberAPI = "Members/delete";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -403,6 +405,8 @@ class NotificationTypes{
   static const String TYPE_POLL = "Poll";
   static const String TYPE_BILL = "Bill";
   static const String TYPE_RECEIPT = "Receipt";
+  static const String TYPE_WEB = "Web";
+  static const String TYPE_BROADCAST = "Broadcast";
 
 }
 

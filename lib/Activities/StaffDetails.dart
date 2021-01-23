@@ -45,11 +45,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     super.initState();
     getSharedPreferenceData();
 
-    if (_staff.NOTES.contains(':')) {
+    if (_staff.RATINGS.contains(':')) {
       isRattingDone = true;
     }
     if (isRattingDone) {
-      _unitRateList = _staff.NOTES.split(',');
+      _unitRateList = _staff.RATINGS.split(',');
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');
@@ -107,7 +107,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   getBaseLayout() {
     return WillPopScope(
       onWillPop: (){
-        if(isStaffAdded){
+        if(isStaffAdded || !isStaffAdded){
           Navigator.of(context).pop('back');
         }
         if(isRattingDone){
@@ -710,8 +710,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         //if (isRattingDone) {
           double _rate = 0.0;
           double otherMemberRate = 0.0;
-          if(_staff.NOTES.contains(':')) {
-            _unitRateList = _staff.NOTES.split(',');
+          if(_staff.RATINGS.contains(':')) {
+            _unitRateList = _staff.RATINGS.split(',');
             for (int i = 0; i < _unitRateList.length; i++) {
               List<String> _rate = List<String>();
               _rate = _unitRateList[i].split(':');
@@ -760,7 +760,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
-    restClient. removeHouseHold(societyId, block, flat, _staff.SID).then((value) {
+    restClient.removeHouseHold(societyId, block, flat, _staff.SID).then((value) {
       _progressDialog.hide();
       if(value.status){
         for(int i=0;i<_assignFlatList.length;i++){

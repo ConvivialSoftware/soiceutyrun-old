@@ -90,6 +90,7 @@ class SQLiteDbProvider {
     //String userId = await GlobalFunctions.getUserId();
     GlobalFunctions.getUserId().then((value) async{
       _dbNotificationPayload.uid=value;
+      print('DB : getUserId >>>> ' + value.toString());
       print('DB : DBNotificationPayload >>>> ' + _dbNotificationPayload.toJson().toString());
       final db = await getDatabase;
       var result = await db.insert(

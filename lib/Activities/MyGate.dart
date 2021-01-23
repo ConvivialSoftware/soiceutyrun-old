@@ -532,7 +532,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     }
 
     var visitorStatus =
-        getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS);
+        getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS,_visitorList[position].VISITOR_USER_STATUS);
     var visitorUserStatus = _visitorList[position].VISITOR_USER_STATUS;
   //  print('_visitorList[position].VISITOR_STATUS : ' + visitorStatus);
    // print('_visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
@@ -1554,8 +1554,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     }
   }
 
-  displayPassCode(String pass_code, String userName, String googleParameter,
-      String visitorName, String visitorContact) {
+  displayPassCode(String pass_code, String userName, String googleParameter, String visitorName, String visitorContact) {
     DateTime date = DateTime.now();
     String todayDate =
         GlobalFunctions.convertDateFormat(date.toIso8601String(), 'dd MMM');
@@ -1771,7 +1770,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     }
 
     var visitorStatus =
-        getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS);
+        getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS,_visitorList[position].VISITOR_USER_STATUS);
     return Stack(
       children: <Widget>[
         Align(
@@ -2080,10 +2079,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     });
   }
 
-  String getVisitorAllowStatus(String visitorStatus) {
+  String getVisitorAllowStatus(String visitorStatus,String visitorUserStatus) {
     String status = "";
 
-    if (visitorStatus.toLowerCase() == 'accepted') {
+    if(visitorStatus.toLowerCase()=='rejected' && visitorUserStatus.toLowerCase()=='no-answer'){
+      status = "Disallowed by security";
+    }else if (visitorStatus.toLowerCase() == 'accepted') {
       status = "Allowed by you";
     } else if (visitorStatus.toLowerCase() == 'scheduled') {
       status = "Pre-approved by you";

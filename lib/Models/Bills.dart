@@ -12,7 +12,7 @@ class Bills {
   String DUE_DATE;
   String HEAD;
   String INVOICE_NO;
-  int AMOUNT;
+  double AMOUNT;
   int RECEIVED;
   String DISCOUNT;
   String FLAT;
@@ -32,7 +32,7 @@ class Bills {
         DUE_DATE: json['DUE_DATE'],
         HEAD: json['HEAD'],
         INVOICE_NO: json['INVOICE_NO'],
-        AMOUNT: json['AMOUNT'],
+        AMOUNT: double.parse(json['AMOUNT'].toString()),
         RECEIVED: json['RECEIVED'],
         DISCOUNT: json['DISCOUNT'],
         FLAT: json['INVOIFLATCE_NO']

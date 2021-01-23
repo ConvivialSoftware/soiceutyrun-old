@@ -127,7 +127,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                   ],
                 ),
               ),
-              Container(
+              /*Container(
                 margin: EdgeInsets.all(5),
                 padding: EdgeInsets.all(5),
                 child: Row(
@@ -145,7 +145,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                     )
                   ],
                 ),
-              ),
+              ),*/
               Container(
                 margin: EdgeInsets.all(5),
                 padding: EdgeInsets.all(5),

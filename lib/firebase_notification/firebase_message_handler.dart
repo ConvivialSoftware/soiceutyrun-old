@@ -2,15 +2,18 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:societyrun/GlobalClasses/DynamicWidgetDialog.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
+import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 
 class FirebaseMessagingHandler {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
   static bool isInAppCallDialogOpen=false;
+  static bool isDynamicDialogOpen=false;
 
   void setListeners() {
     if (Platform.isIOS) _iOSPermission();
@@ -43,6 +46,10 @@ class FirebaseMessagingHandler {
       _showItemDialog(payload, context);
   }
 
+  void showDynamicAlert(BuildContext context, DBNotificationPayload payload) {
+    _showDynamicWidgetDialog(payload, context);
+  }
+
   void showErrorDialog(BuildContext context, dynamic error) {
     // data
   }
@@ -58,6 +65,20 @@ class FirebaseMessagingHandler {
     ).then((bool shouldNavigate) {
       isInAppCallDialogOpen = false;
       print('after Dialog Close : '+FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
+      if (shouldNavigate == true) {
+
+      }
+    });
+  }
+
+  void _showDynamicWidgetDialog(DBNotificationPayload payload,BuildContext context) {
+    isDynamicDialogOpen=true;
+    showDialog<bool>(
+      context: context,
+      builder: (_) =>DynamicWidgetDialog(message: payload),
+    ).then((bool shouldNavigate) {
+      isDynamicDialogOpen = false;
+      print('after Dialog Close : '+FirebaseMessagingHandler.isDynamicDialogOpen.toString());
       if (shouldNavigate == true) {
 
       }

@@ -564,7 +564,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                   keyboardType: TextInputType.text,
                   maxLines: 99,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('additional_info'),
+                    hintText: AppLocalizations.of(context).translate('address'),
                     hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
                     border: InputBorder.none
                   ),

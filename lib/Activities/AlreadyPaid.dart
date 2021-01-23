@@ -14,7 +14,7 @@ import 'base_stateful.dart';
 
 class BaseAlreadyPaid extends StatefulWidget {
   String invoiceNo;
-  int amount;
+  double amount;
   BaseAlreadyPaid(this.invoiceNo,this.amount);
 
   @override
@@ -60,7 +60,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
   bool isStoragePermission=false;
 
   String invoiceNo;
-  int amount;
+  double amount;
   AlreadyPaidState(this.invoiceNo,this.amount);
 
   @override

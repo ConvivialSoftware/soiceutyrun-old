@@ -28,7 +28,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
       block="";
   var email = '', phone = '', consumerId = '', societyName = '';
 
-  bool isInAppCall= true;
+  bool isInAppCallNotification= true;
   bool isDailyEntryNotification= true;
   //bool isDailyExitNotification= false;
   bool isGuestEntryNotification= true;
@@ -107,6 +107,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
     societyId = await GlobalFunctions.getSocietyId();
     isDailyEntryNotification = await GlobalFunctions.getDailyEntryNotification();
     isGuestEntryNotification = await GlobalFunctions.getGuestEntryNotification();
+    isInAppCallNotification = await GlobalFunctions.getInAppCallNotification();
     print('UserId : ' + userId);
     print('Name : ' + name);
     print('Photo : ' + photo);
@@ -115,6 +116,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
     print('ConsumerId : ' + consumerId);
     print('isDailyEntryNotification : ' + isDailyEntryNotification.toString());
     print('isGuestEntryNotification : ' + isGuestEntryNotification.toString());
+    print('isInAppCallyNotification : ' + isInAppCallNotification.toString());
     setState(() {});
   }
 
@@ -164,11 +166,12 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   Container(
                     child: FlutterCustomSwitch(
                       activeColor: GlobalVariables.green,
-                      value: isInAppCall,
+                      value: isInAppCallNotification,
                       onChanged: (value) {
                         print("VALUE : $value");
                         setState(() {
-                          isInAppCall = value;
+                          isInAppCallNotification = value;
+                          GlobalFunctions.setInAppCallNotification(isInAppCallNotification);
                         });
                       },
                     ),

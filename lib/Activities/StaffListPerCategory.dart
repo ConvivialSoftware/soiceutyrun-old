@@ -137,17 +137,17 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
 
     var staffImage = _staffList[position].IMAGE;
 
-    var notes = _staffList[position].NOTES;
+    var rates = _staffList[position].RATINGS;
     bool isRattingDone = false;
     double totalRate = 0.0;
 
     List<String> _unitRateList = List<String>();
 
-    if (notes.contains(':')) {
+    if (rates.contains(':')) {
       isRattingDone = true;
     }
     if (isRattingDone) {
-      _unitRateList = _staffList[position].NOTES.split(',');
+      _unitRateList = _staffList[position].RATINGS.split(',');
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');
@@ -322,7 +322,11 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
       _progressDialog.hide();
       List<dynamic> _list = value.data;
       _staffList = List<Staff>.from(_list.map((i)=>Staff.fromJson(i)));
-      setState(() {});
+      if (mounted) {
+        setState(() {
+          print('setState');
+        });
+      }
 
     });
 

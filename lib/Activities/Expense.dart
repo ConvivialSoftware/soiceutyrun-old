@@ -207,14 +207,14 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                       ],
                     ),
                   ),
-                  Flexible(
+                  /*Flexible(
                     flex: 1,
                     child: Container(
-                      child: Text(/*AppLocalizations.of(context).translate('ledger_account')+' : '+*/_expenseList[position].name,style: TextStyle(
+                      child: Text(*//*AppLocalizations.of(context).translate('ledger_account')+' : '+*//*_expenseList[position].name,style: TextStyle(
                           color: GlobalVariables.black,fontSize: 16
                       ),),
                     ),
-                  )
+                  )*/
                 ],
               )
             ),

@@ -290,6 +290,11 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.deleteVehicleAPI)
   Future<StatusMsgResponse> deleteVehicle(@Field(GlobalVariables.id) String id,@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.deleteFamilyMemberAPI)
+  Future<StatusMsgResponse> deleteFamilyMember(@Field(GlobalVariables.id) String id,@Field(GlobalVariables.societyId) String societyId);
+
 }
 
 

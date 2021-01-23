@@ -1189,11 +1189,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         print('userId : ' + userId);
         print('societyId : ' + societyId);
         if (family) {
-          Navigator.push(
+          var result = await  Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       BaseDisplayProfileInfo(userId, userType)));
+          if(result=='back'){
+            getUnitMemberData();
+          }
         }
         else{
           print('_list[position] : '+ _list[position].toString());
@@ -1778,7 +1781,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
     restClient.getMembersData(societyId, block, flat).then((value) {
-      _progressDialog.hide();
+      //_progressDialog.hide();
+      Navigator.of(context).pop();
       if (value.status) {
         List<dynamic> _members = value.members;
         List<dynamic> staff = value.staff;
@@ -2412,7 +2416,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       _billList = List<Bills>.from(_list.map((i) => Bills.fromJson(i)));
 
       getLedgerData();
-    }).catchError((Object obj) {
+    })/*.catchError((Object obj) {
+      print('obj : '+obj.toString());
       //  if(_progressDialog.isShowing()){
       //   _progressDialog.hide();
       //  }
@@ -2425,7 +2430,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           break;
         default:
       }
-    });
+    })*/;
   }
 
   getLedgerData() async {

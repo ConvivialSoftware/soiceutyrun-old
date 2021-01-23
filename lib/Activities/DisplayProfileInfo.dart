@@ -144,6 +144,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     context, 200.0),
                 getProfileInfoLayout(),
                 isEditOptionDisplay ? editProfileFabLayout(): Container(),
+               // deleteProfileFabLayout(),
               ],
             ),
           ),
@@ -153,6 +154,19 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
   }
 
   getProfileInfoLayout() {
+
+    bool isDeleteOptionDisplay=false;
+
+    if(loggedUserType.toLowerCase()=='owner'){
+      isDeleteOptionDisplay=true;
+    }else if(loggedUserType.toLowerCase()=='owner family' && userType=='owner'){
+      isDeleteOptionDisplay=false;
+    }else if(loggedUserType.toLowerCase()=='owner' && userType=='owner'){
+      isDeleteOptionDisplay=false;
+    }else if(loggedUserType.toLowerCase()=='tenant' && userType=='tenant'){
+      isDeleteOptionDisplay=true;
+    }
+
     return _profileList.length> 0 ? SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
@@ -167,62 +181,87 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
               Container(
                 margin: EdgeInsets.all(5),
                 padding: EdgeInsets.all(10),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 0,0),
-                     //   width: 400,
-                        //color: GlobalVariables.red,
-                        //TODO: userImage
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
-                          child: _profileList[0].PROFILE_PHOTO == ""
-                              ? Image.asset(
-                              GlobalVariables.componentUserProfilePath,
-                              width: 60,
-                              height: 60)
-                              : Container(
-                            // alignment: Alignment.center,
-                            /* decoration: BoxDecoration(
-                                    borderRadius: BorderRad
+                child: Column(
+                  children: [
+                    isDeleteOptionDisplay ?  InkWell(
+                      onTap:(){
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25.0)),
+                                    child: deleteFamilyMemberLayout(),
+                                  );
+                                }));
+                      },
+                      child: Container(
+                        alignment: Alignment.topRight,
+                        child: Icon(
+                          Icons.delete,
+                          color: GlobalVariables.green,
+                        ),
+                      ),
+                    ) : Container(),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0,0),
+                         //   width: 400,
+                            //color: GlobalVariables.red,
+                            //TODO: userImage
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30.0),
+                              child: _profileList[0].PROFILE_PHOTO == ""
+                                  ? Image.asset(
+                                  GlobalVariables.componentUserProfilePath,
+                                  width: 60,
+                                  height: 60)
+                                  : Container(
+                                // alignment: Alignment.center,
+                                /* decoration: BoxDecoration(
+                                        borderRadius: BorderRad
 
-                                    ius.circular(25)),*/
-                            child: CircleAvatar(
-                              radius: 30,
-                              backgroundColor: GlobalVariables.mediumGreen,
-                              backgroundImage: NetworkImage(_profileList[0].PROFILE_PHOTO),
-                            ),
-                          ),
-                        )),
-                    Flexible(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child:  AutoSizeText(
-                              _profileList[0].NAME,
-                              style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize:20,
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible: true,
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                              child:  AutoSizeText(
-                                _profileList[0].BLOCK+_profileList[0].FLAT,
-                                style: TextStyle(
-                                  color: GlobalVariables.grey,
-                                  fontSize:16,
+                                        ius.circular(25)),*/
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: GlobalVariables.mediumGreen,
+                                  backgroundImage: NetworkImage(_profileList[0].PROFILE_PHOTO),
                                 ),
                               ),
-                            ),
+                            )),
+                        Flexible(
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                child:  AutoSizeText(
+                                  _profileList[0].NAME,
+                                  style: TextStyle(
+                                    color: GlobalVariables.green,
+                                    fontSize:20,
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: true,
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                                  child:  AutoSizeText(
+                                    _profileList[0].BLOCK+_profileList[0].FLAT,
+                                    style: TextStyle(
+                                      color: GlobalVariables.grey,
+                                      fontSize:16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -491,6 +530,78 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
       ),
     );
   }
+
+  deleteFamilyMemberLayout() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      width: MediaQuery.of(context).size.width / 1.3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Text(AppLocalizations.of(context).translate('sure_delete'),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: GlobalVariables.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        deleteFamilyMember();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('yes'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('no'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> deleteFamilyMember() async {
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    societyId = await GlobalFunctions.getSocietyId();
+    _progressDialog.show();
+    restClient.deleteFamilyMember(userId, societyId).then((value) {
+      _progressDialog.hide();
+      if(value.status){
+        Navigator.of(context).pop('back');
+      }
+      GlobalFunctions.showToast(value.message);
+    });
+
+  }
+
 
 
 }

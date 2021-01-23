@@ -22,10 +22,11 @@ class Staff{
   String QR_Text;
   String Attachment;
   String ROLE;
+  String RATINGS;
 
  /* Staff({this.STAFF_NAME,  this.CONTACT,this.IMAGE});*/
  Staff({this.SID, this.STAFF_NAME, this.GENDER, this.DOB, this.CONTACT, this.QUALIFICATION, this.ADDRESS, this.VEHICLE_NO, this.NOTES,
-    this.ASSIGN_FLATS, this.STATUS, this.IN_OUTSS, this.IMAGE, this.C_DATE, this.Staff_QR_Image, this.QR_Text, this.Attachment, this.ROLE});
+    this.ASSIGN_FLATS, this.STATUS, this.IN_OUTSS, this.IMAGE, this.C_DATE, this.Staff_QR_Image, this.QR_Text, this.Attachment, this.ROLE,this.RATINGS});
 
 
   factory Staff.fromJson(Map<String, dynamic> json){
@@ -49,6 +50,7 @@ class Staff{
       QR_Text:json['QR_Text'],
       Attachment:json['Attachment'],
       ROLE:json['ROLE'],
+      RATINGS:json['RATINGS']??'',
     );
   }
 

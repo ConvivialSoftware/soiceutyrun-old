@@ -241,6 +241,20 @@ class GlobalFunctions{
     return true;
   }
 
+  static getInAppCallNotification() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getKeys().contains(GlobalVariables.keyInAppCallNotification)){
+      print('keyInAppCallNotification : '+sharedPreferences.getBool(GlobalVariables.keyInAppCallNotification).toString());
+      return  sharedPreferences.getBool(GlobalVariables.keyInAppCallNotification);
+    }
+    return true;
+  }
+
+  static Future<void> setInAppCallNotification(bool inAppCallNotification) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool(GlobalVariables.keyInAppCallNotification, inAppCallNotification);
+  }
+
   static Future<void> setDailyEntryNotification(bool dailyEntryNotification) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(GlobalVariables.keyDailyEntryNotification, dailyEntryNotification);
