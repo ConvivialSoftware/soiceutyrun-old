@@ -92,7 +92,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
                 getExpenseListDataLayout(),
-                addTicketFabLayout(),
+                AppPermission.isAddExpensePermission ? addExpenseFabLayout():Container(),
               ],
             ),
           ),
@@ -101,7 +101,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
     );
   }
 
-  addTicketFabLayout() {
+  addExpenseFabLayout() {
     return Align(
       alignment: Alignment.bottomRight,
       child: Stack(

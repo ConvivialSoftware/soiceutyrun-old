@@ -107,12 +107,14 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   getBaseLayout() {
     return WillPopScope(
       onWillPop: (){
-        if(isStaffAdded || !isStaffAdded){
+       /* if(isStaffAdded || !isStaffAdded){
           Navigator.of(context).pop('back');
         }
-        if(isRattingDone){
+        if(isRattingDone){*/
           Navigator.of(context).pop('back');
-        }
+        /*}else{
+          Navigator.of(context).pop();
+        }*/
         return;
       },
       child: Container(
@@ -716,7 +718,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
               List<String> _rate = List<String>();
               _rate = _unitRateList[i].split(':');
               print('_rate[1] : ' + _rate[1]);
-              otherMemberRate += int.parse(_rate[1]);
+              otherMemberRate += double.parse(_rate[1]);
               print('totalRate : ' + totalRate.toString());
             }
           }
@@ -725,7 +727,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
           isRattingDoneFromLoggedPerson=true;
           isRattingDone=true;
       //  }
-        setState(() {});
+        setState(() {
+          print('otherMemberRate rate : '+otherMemberRate.toString());
+          print('myRate rate : '+myRate.toString());
+          print('Total rate : '+totalRate.toString());
+        });
       }
       GlobalFunctions.showToast(value.message);
     });

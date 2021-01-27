@@ -2932,48 +2932,48 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       });
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
-      //GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
+      GlobalFunctions.comingSoonDialog(context);
+      /*Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BaseDiscover(
                       AppLocalizations.of(context).translate('discover'))))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
+      });*/
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
-      //GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
+      GlobalFunctions.comingSoonDialog(context);
+      /*Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BaseDiscover(
                       AppLocalizations.of(context).translate('classified'))))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
+      });*/
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
-      //GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
+      GlobalFunctions.comingSoonDialog(context);
+      /*Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BaseDiscover(
                       AppLocalizations.of(context).translate('services'))))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
+      });*/
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
-      //GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
+      GlobalFunctions.comingSoonDialog(context);
+      /* Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BaseDiscover(
                       AppLocalizations.of(context).translate('near_by_shop'))))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
+      });*/
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
       GlobalFunctions.comingSoonDialog(context);
@@ -3285,6 +3285,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       }
       if (_userPermissionList[i] == AppPermission.userAdminPermission) {
         AppPermission.isUserAdminPermission = true;
+      }
+      if (_userPermissionList[i] == AppPermission.addExpensePermission) {
+        AppPermission.isAddExpensePermission = true;
+      }
+      if (_userPermissionList[i] == AppPermission.userAddMemberPermission) {
+        AppPermission.isUserAddMemberPermission = true;
       }
     }
   }

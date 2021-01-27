@@ -799,7 +799,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                     ),
-                    Container(
+                    AppPermission.isUserAddMemberPermission ? Container(
                         child: RaisedButton(
                       onPressed: () async {
                         final result = await Navigator.push(
@@ -822,7 +822,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           side: BorderSide(color: GlobalVariables.green)),
                       textColor: GlobalVariables.white,
                       color: GlobalVariables.green,
-                    )),
+                    )):Container(),
                   ],
                 ),
               ),

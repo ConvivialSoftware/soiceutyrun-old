@@ -76,14 +76,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     // getTicketDescriptionList();
     //getDocumentDescriptionList();
     getScheduleTimeData();
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        //getScheduleVisitorData();
-      } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
-      }
-    });
   }
   void afterBuild() {
     // executes after build is done
@@ -1524,6 +1516,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             _scheduleList.map((i) => ScheduleVisitor.fromJson(i)));
 
         setState(() {
+          print('_VID : '+_VID.toString());
         });
         if(_VID!=null) {
           await afterBuild();

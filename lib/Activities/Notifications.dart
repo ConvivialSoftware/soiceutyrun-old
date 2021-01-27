@@ -161,7 +161,9 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
           dbNotificationPayload.read=1;
           SQLiteDbProvider.db.updateReadNotification(dbNotificationPayload);
         });
-        GlobalVariables.notificationCounterValueNotifer.value--;
+        if(GlobalVariables.notificationCounterValueNotifer.value>0) {
+          GlobalVariables.notificationCounterValueNotifer.value--;
+        }
         navigateToPage(_dbNotificationList[position]);
       },
       child: Container(

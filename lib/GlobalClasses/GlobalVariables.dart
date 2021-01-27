@@ -453,7 +453,7 @@ class AppPermission {
   static var userGatePassPermission = '';
   
   static bool isUserAddMemberPermission = false;
-  static var userAddMemberPermission = '';
+  static var userAddMemberPermission = 'addMember';
   
   static bool isUserHelpDeskPermission = false;
   static var userHelpDeskPermission = 'helpDesk';
@@ -511,6 +511,9 @@ class AppPermission {
   
   static bool isUserCommitteePhonePermission=false;
   static var userCommitteePhonePermission = '';
+
+  static bool isAddExpensePermission=false;
+  static var addExpensePermission = 'Accounting';
 
 
 //addMember,gatepass,classifieds,myUnit,directory,viewFacility,helpDesk,viewDocuments,admin,adminGatepass,
