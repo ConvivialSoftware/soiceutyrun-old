@@ -638,7 +638,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             (Route<dynamic> route) => false);
       }
     }else if (temp.tYPE == NotificationTypes.TYPE_WEB) {
-      launch('https://societyrun.com/');
+      launch(GlobalVariables.appURL);
     } else {
       Navigator.pushAndRemoveUntil(
           context,

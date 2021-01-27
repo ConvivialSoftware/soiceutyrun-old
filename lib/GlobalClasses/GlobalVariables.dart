@@ -11,8 +11,8 @@ class GlobalVariables {
   static ValueNotifier<String> userImageURLValueNotifer = ValueNotifier('');
 
   /*Variables for the Web URL*/
-  static const termsConditionURL =
-      "https://societyrun.com/Terms%20&%20conditions.html";
+  static const appURL = "https://societyrun.com/";
+  static const termsConditionURL = "https://societyrun.com/Terms%20&%20conditions.html";
   static const privacyPolicyURL = "https://societyrun.com/Privacy_Policy.html";
   static bool isERPAccount = false;
 
