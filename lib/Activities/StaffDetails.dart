@@ -13,6 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BaseStaffDetails extends StatefulWidget {
   Staff _staff;
@@ -24,7 +25,13 @@ class BaseStaffDetails extends StatefulWidget {
 }
 
 class _BaseStaffDetailsState extends State<BaseStaffDetails> {
-  var userId = "", name = "", photo = "", societyId = "", flat = "", block = "",unit='';
+  var userId = "",
+      name = "",
+      photo = "",
+      societyId = "",
+      flat = "",
+      block = "",
+      unit = '';
   var email = '', phone = '', consumerId = '', societyName = '';
 
   Staff _staff;
@@ -32,6 +39,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   ProgressDialog _progressDialog;
 
   _BaseStaffDetailsState(this._staff);
+
   double totalRate = 0.0;
 
   List<String> _assignFlatList = List<String>();
@@ -53,10 +61,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');
-        if(_rate.length==2) {
+        if (_rate.length == 2) {
           print('_rate[1] : ' + _rate[1]);
-          if(_rate[1].isEmpty)
-            _rate[1]='0.0';
+          if (_rate[1].isEmpty) _rate[1] = '0.0';
           totalRate += double.parse(_rate[1]);
           print('totalRate : ' + totalRate.toString());
         }
@@ -64,15 +71,12 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       totalRate = totalRate / _unitRateList.length;
     }
 
-    if (_staff.ASSIGN_FLATS.length>0) {
+    if (_staff.ASSIGN_FLATS.length > 0) {
       _assignFlatList = _staff.ASSIGN_FLATS.split(',');
     }
 
-    print('_assignFlatList.length : '+ _assignFlatList.length.toString());
-    print('isStaffAdded : '+ isStaffAdded.toString());
-
-
-
+    print('_assignFlatList.length : ' + _assignFlatList.length.toString());
+    print('isStaffAdded : ' + isStaffAdded.toString());
   }
 
   @override
@@ -106,12 +110,12 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
 
   getBaseLayout() {
     return WillPopScope(
-      onWillPop: (){
-       /* if(isStaffAdded || !isStaffAdded){
+      onWillPop: () {
+        /* if(isStaffAdded || !isStaffAdded){
           Navigator.of(context).pop('back');
         }
         if(isRattingDone){*/
-          Navigator.of(context).pop('back');
+        Navigator.of(context).pop('back');
         /*}else{
           Navigator.of(context).pop();
         }*/
@@ -154,7 +158,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
     societyId = await GlobalFunctions.getSocietyId();
-    unit = block+' '+flat;
+    unit = block + ' ' + flat;
 
     print('UserId : ' + userId);
     print('Name : ' + name);
@@ -163,13 +167,13 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     print('EmailId : ' + email);
     print('ConsumerId : ' + consumerId);
     print('unit : ' + unit);
-    for(int i=0;i<_assignFlatList.length;i++){
-      if(unit==_assignFlatList[i]){
-        isStaffAdded=true;
+    for (int i = 0; i < _assignFlatList.length; i++) {
+      if (unit == _assignFlatList[i]) {
+        isStaffAdded = true;
         break;
       }
     }
-    if(isRattingDone) {
+    if (isRattingDone) {
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');
@@ -182,7 +186,6 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   }
 
   getStaffDetailsLayout() {
-
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(
@@ -190,9 +193,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         child: Column(
           children: [
             staffPersonalDetails(),
-            isRattingDone ? staffRateDetails():Container(
-
-            ),
+            isRattingDone ? staffRateDetails() : Container(),
             staffWorkHouse(),
           ],
         ),
@@ -267,15 +268,20 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     ),
                   ),
                   Visibility(
-                    visible: _staff.CONTACT.length>0 ? true : false,
+                    visible: _staff.CONTACT.length > 0 ? true : false,
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Row(
                         children: [
-                          Container(
-                            child: Icon(
-                              Icons.call,
-                              color: GlobalVariables.green,
+                          InkWell(
+                            onTap: () {
+                              launch("tel:"+_staff.CONTACT);
+                            },
+                            child: Container(
+                              child: Icon(
+                                Icons.call,
+                                color: GlobalVariables.green,
+                              ),
                             ),
                           ),
                           Container(
@@ -288,9 +294,13 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                 color: GlobalVariables.grey,
                               )),
                           InkWell(
-                            onTap: (){
-                                GlobalFunctions.shareData(name,
-                                    'Name : ' + name + '\nContact : ' + phone);
+                            onTap: () {
+                              GlobalFunctions.shareData(
+                                  _staff.STAFF_NAME,
+                                  'Name : ' +
+                                      _staff.STAFF_NAME +
+                                      '\nContact : ' +
+                                      _staff.CONTACT);
                             },
                             child: Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -314,7 +324,6 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   }
 
   staffRateDetails() {
-
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Card(
@@ -341,8 +350,10 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         totalRate.toStringAsFixed(1).toString(),
-                        style: TextStyle(color: GlobalVariables.skyBlue,
-                            fontSize: 20, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                            color: GlobalVariables.skyBlue,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800),
                       ),
                     ),
                     /*Container(
@@ -374,8 +385,6 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   }
 
   staffWorkHouse() {
-
-
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Card(
@@ -406,23 +415,27 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
                         child: Text(
-                          'Work In '+_assignFlatList.length.toString() +' House' ,
+                          'Work In ' +
+                              _assignFlatList.length.toString() +
+                              ' House',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
-                    isStaffAdded ? InkWell(
-                      onTap: (){
-                        removeHouseHold();
-                      },
-                      child: Container(
-                        child: Icon(
-                          Icons.delete,
-                          color: GlobalVariables.green,
-                        ),
-                      ),
-                    ): Container(),
+                    isStaffAdded
+                        ? InkWell(
+                            onTap: () {
+                              removeHouseHold();
+                            },
+                            child: Container(
+                              child: Icon(
+                                Icons.delete,
+                                color: GlobalVariables.green,
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -479,67 +492,70 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
           height: 60,
           width: 250,
           alignment: Alignment.center,
-
-          child: isStaffAdded ? Container(
-            child: isRattingDoneFromLoggedPerson ? Container() : Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-
-              decoration: BoxDecoration(
-                  color: GlobalVariables.green,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: GlobalVariables.transparent,
-                    width: 3.0,
-                  )),
-              child: InkWell(
-                  onTap: () {
-                    myRate=0.0;
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            StatefulBuilder(
-                                builder: (BuildContext context,
-                                    StateSetter setState) {
-                                  return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius
-                                              .circular(25.0)),
-                                      child: showMyRattingBar(setState)
-                                  );
-                                }));
-                  },
-                  child: Text(
-                    'Add Your Ratting',
-                    style: TextStyle(color: GlobalVariables.white),
-                  )),
-            ),
-          ):Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            decoration: BoxDecoration(
-                color: GlobalVariables.green,
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: GlobalVariables.transparent,
-                  width: 3.0,
-                )),
-            child: InkWell(
-                onTap: () {
-                  addHouseHold();
-                },
-                child: Text(
-                  'Add to Household',
-                  style: TextStyle(color: GlobalVariables.white),
-                )),
-          ),
+          child: isStaffAdded
+              ? Container(
+                  child: isRattingDoneFromLoggedPerson
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.green,
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                color: GlobalVariables.transparent,
+                                width: 3.0,
+                              )),
+                          child: InkWell(
+                              onTap: () {
+                                myRate = 0.0;
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(builder:
+                                            (BuildContext context,
+                                                StateSetter setState) {
+                                          return Dialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.0)),
+                                              child:
+                                                  showMyRattingBar(setState));
+                                        }));
+                              },
+                              child: Text(
+                                'Add Your Ratting',
+                                style: TextStyle(color: GlobalVariables.white),
+                              )),
+                        ),
+                )
+              : Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.green,
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: GlobalVariables.transparent,
+                        width: 3.0,
+                      )),
+                  child: InkWell(
+                      onTap: () {
+                        addHouseHold();
+                      },
+                      child: Text(
+                        'Add to Household',
+                        style: TextStyle(color: GlobalVariables.white),
+                      )),
+                ),
         ),
       ),
     );
   }
 
   showRatting() {
-    print('rate : '+totalRate.toString());
+    print('rate : ' + totalRate.toString());
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
       child: RatingBar.builder(
@@ -577,7 +593,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
               return Container();
           }
         },
-       /* onRatingUpdate: (rating) {
+        /* onRatingUpdate: (rating) {
           print(rating);
           setState(() {
             totalRate = rating;
@@ -586,16 +602,14 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       ),
     );
   }
-  double myRate = 0.0;
-  showMyRattingBar(StateSetter _setState) {
 
-   print('after setstate : '+myRate.toString());
+  double myRate = 0.0;
+
+  showMyRattingBar(StateSetter _setState) {
+    print('after setstate : ' + myRate.toString());
     return Container(
       padding: EdgeInsets.all(20),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.3,
+      width: MediaQuery.of(context).size.width / 1.3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -639,11 +653,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                         return Container();
                     }
                   },
-                   onRatingUpdate: (rating) {
+                  onRatingUpdate: (rating) {
                     print(rating);
-                    myRate=rating;
+                    myRate = rating;
                     _setState(() {
-                      print('before setstate : '+myRate.toString());
+                      print('before setstate : ' + myRate.toString());
                     });
                   },
                 ),
@@ -653,20 +667,22 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: Text(
                   myRate.toStringAsFixed(1).toString(),
-                  style: TextStyle(color: GlobalVariables.skyBlue,
-                      fontSize: 20, fontWeight: FontWeight.w800),
+                  style: TextStyle(
+                      color: GlobalVariables.skyBlue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800),
                 ),
               ),
-
             ],
           ),
           InkWell(
-            onTap: (){
-              if(myRate>0) {
+            onTap: () {
+              if (myRate > 0) {
                 Navigator.of(context).pop();
                 addStaffRatting();
-              }else{
-                GlobalFunctions.showToast('Please Select Rate at least grater that Zero');
+              } else {
+                GlobalFunctions.showToast(
+                    'Please Select Rate at least grater that Zero');
               }
             },
             child: Container(
@@ -683,9 +699,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     width: 3.0,
                   )),
               child: FlatButton(
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   child: Text(
                     'Submit',
                     style: TextStyle(color: GlobalVariables.white),
@@ -695,91 +709,89 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         ],
       ),
     );
-
   }
 
   Future<void> addStaffRatting() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
-    restClient. addStaffRatting(societyId, block, flat, _staff.SID, myRate.toStringAsFixed(1).toString()).then((value) {
+    restClient
+        .addStaffRatting(societyId, block, flat, _staff.SID,
+            myRate.toStringAsFixed(1).toString())
+        .then((value) {
       _progressDialog.hide();
-      if(value.status){
+      if (value.status) {
         //if (isRattingDone) {
-          double _rate = 0.0;
-          double otherMemberRate = 0.0;
-          if(_staff.RATINGS.contains(':')) {
-            _unitRateList = _staff.RATINGS.split(',');
-            for (int i = 0; i < _unitRateList.length; i++) {
-              List<String> _rate = List<String>();
-              _rate = _unitRateList[i].split(':');
-              print('_rate[1] : ' + _rate[1]);
-              otherMemberRate += double.parse(_rate[1]);
-              print('totalRate : ' + totalRate.toString());
-            }
+        double _rate = 0.0;
+        double otherMemberRate = 0.0;
+        if (_staff.RATINGS.contains(':')) {
+          _unitRateList = _staff.RATINGS.split(',');
+          for (int i = 0; i < _unitRateList.length; i++) {
+            List<String> _rate = List<String>();
+            _rate = _unitRateList[i].split(':');
+            print('_rate[1] : ' + _rate[1]);
+            otherMemberRate += double.parse(_rate[1]);
+            print('totalRate : ' + totalRate.toString());
           }
-          _rate = otherMemberRate+myRate;
-          totalRate = _rate / (_unitRateList.length+1);
-          isRattingDoneFromLoggedPerson=true;
-          isRattingDone=true;
-      //  }
+        }
+        _rate = otherMemberRate + myRate;
+        totalRate = _rate / (_unitRateList.length + 1);
+        isRattingDoneFromLoggedPerson = true;
+        isRattingDone = true;
+        //  }
         setState(() {
-          print('otherMemberRate rate : '+otherMemberRate.toString());
-          print('myRate rate : '+myRate.toString());
-          print('Total rate : '+totalRate.toString());
+          print('otherMemberRate rate : ' + otherMemberRate.toString());
+          print('myRate rate : ' + myRate.toString());
+          print('Total rate : ' + totalRate.toString());
         });
       }
       GlobalFunctions.showToast(value.message);
     });
-
   }
 
   Future<void> addHouseHold() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
-    restClient. addHouseHold(societyId, block, flat, _staff.SID).then((value) {
+    restClient.addHouseHold(societyId, block, flat, _staff.SID).then((value) {
       _progressDialog.hide();
-      if(value.status){
+      if (value.status) {
         _assignFlatList.add(unit);
-        isStaffAdded=true;
+        isStaffAdded = true;
         setState(() {});
       }
       GlobalFunctions.showToast(value.message);
     });
-
   }
 
   Future<void> removeHouseHold() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
-    restClient.removeHouseHold(societyId, block, flat, _staff.SID).then((value) {
+    restClient
+        .removeHouseHold(societyId, block, flat, _staff.SID)
+        .then((value) {
       _progressDialog.hide();
-      if(value.status){
-        for(int i=0;i<_assignFlatList.length;i++){
-          if(_assignFlatList[i]==unit){
+      if (value.status) {
+        for (int i = 0; i < _assignFlatList.length; i++) {
+          if (_assignFlatList[i] == unit) {
             _assignFlatList.removeAt(i);
             break;
           }
         }
-        isStaffAdded=false;
+        isStaffAdded = false;
         setState(() {});
       }
       GlobalFunctions.showToast(value.message);
     });
-
   }
 }

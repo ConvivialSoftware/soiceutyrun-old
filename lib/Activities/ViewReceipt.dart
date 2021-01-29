@@ -143,7 +143,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 ),),
                               ),
                               Container(
-                                child: Text('Rs. '+(_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString(),style: TextStyle(
+                                child: Text('Rs. '+double.parse((_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString()).toStringAsFixed(2),style: TextStyle(
                                     color: GlobalVariables.red,fontSize: 18,fontWeight: FontWeight.bold
                                 ),),
                               )

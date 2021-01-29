@@ -156,7 +156,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                               ),
                               Container(
                                 child: Text(
-                                  "Rs. " + totalOutStanding.toString(),
+                                  "Rs. " + totalOutStanding.toStringAsFixed(2),
                                   style: TextStyle(
                                       color: GlobalVariables.red,
                                       fontSize: 18,
@@ -291,7 +291,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          "Rs. " + _ledgerList[position].AMOUNT.toString(),
+                          "Rs. " + double.parse(_ledgerList[position].AMOUNT.toString()).toStringAsFixed(2),
                           style: TextStyle(
                               color: _ledgerList[position]
                                           .TYPE
@@ -394,7 +394,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
 
-      openingBalance = _openingBalanceList[0].AMOUNT.toString();
+      openingBalance = double.parse(_openingBalanceList[0].AMOUNT.toString()).toStringAsFixed(2);
 
       double totalAmount = 0;
       for (int i = 0; i < _listLedger.length; i++) {

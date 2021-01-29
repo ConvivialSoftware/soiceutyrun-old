@@ -60,7 +60,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       new List<DropdownMenuItem<String>>();
   List<LoginResponse> _societyList = new List<LoginResponse>();
   LoginResponse _selectedSocietyLogin;
-  var username, password, societyId, flat, block, duesRs = "0", duesDate = "";
+  var username, password, societyId, flat, block, duesRs = "0.0", duesDate = "";
 
   List<RootTitle> _list = new List<RootTitle>();
   int _currentIndex = 0;
@@ -2487,7 +2487,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       duesRs = value.DUES.toString();
       duesDate = value.DUE_DATE.toString();
       if (duesRs.length == 0) {
-        duesRs = "0";
+        duesRs = "0.0";
       }
       if (duesDate == 'null') duesDate = '-';
       GlobalFunctions.saveDuesDataToSharedPreferences(duesRs, duesDate);
@@ -2596,7 +2596,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     color: GlobalVariables.mediumGreen,
                                     fontSize: 14),
                               ),
-                              int.parse(duesRs) > 0
+                              double.parse(duesRs) > 0
                                   ? Text(
                                       getBillPaymentStatus(),
                                       style: TextStyle(
@@ -2617,14 +2617,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                " Rs. " + duesRs,
+                                " Rs. " + double.parse(duesRs).toStringAsFixed(2),
                                 style: TextStyle(
                                     color: GlobalVariables.green,
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold),
                               ),
                               Visibility(
-                                visible: int.parse(duesRs) > 0 ? true : false,
+                                visible: double.parse(duesRs) > 0 ? true : false,
                                 child: Text(
                                   duesDate.length > 0 && duesDate != '-'
                                       ? GlobalFunctions.convertDateFormat(

@@ -158,7 +158,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                     ),
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_expense.AMOUNT.toString(),style: TextStyle(
+                      child: AutoSizeText(double.parse(_expense.AMOUNT.toString()).toStringAsFixed(2),style: TextStyle(
                           color: GlobalVariables.grey,fontSize: 16
                       ),),
                     )

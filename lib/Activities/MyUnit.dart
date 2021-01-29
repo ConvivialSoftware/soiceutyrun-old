@@ -320,7 +320,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Container(
                   padding: EdgeInsets.all(5),
                   child: Text(
-                    "Rs. " + _ledgerList[position].AMOUNT,
+                    "Rs. " + double.parse(_ledgerList[position].AMOUNT).toStringAsFixed(2),
                     style: TextStyle(
                         color: _ledgerList[position]
                                     .TYPE
@@ -398,7 +398,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: Container(
                   padding: EdgeInsets.all(5),
                   child: Text(
-                    "Rs. " + _pendingList[position].AMOUNT.toString(),
+                    "Rs. " + double.parse(_pendingList[position].AMOUNT.toString()).toStringAsFixed(2),
                     style: TextStyle(
                         color:
                             /*_ledgerList[position].TYPE.toLowerCase().toString() ==
@@ -1956,9 +1956,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: <Widget>[
                         Text(
                           "Rs. " +
-                              (_billList[position].AMOUNT -
+                              double.parse((_billList[position].AMOUNT -
                                       _billList[position].RECEIVED)
-                                  .toString(),
+                                  .toString()).toStringAsFixed(2),
                           style: TextStyle(
                               color: GlobalVariables.green,
                               fontSize: 24,
@@ -2045,9 +2045,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             print('hasRazorPayGateway' +
                                 hasRazorPayGateway.toString());
                             _amountTextController.text =
-                                (_billList[position].AMOUNT -
+                                double.parse((_billList[position].AMOUNT -
                                         _billList[position].RECEIVED)
-                                    .toString();
+                                    .toString()).toStringAsFixed(2);
                             amount = _amountTextController.text;
                             if (_billList[position].AMOUNT -
                                     _billList[position].RECEIVED >
@@ -3091,16 +3091,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
                 child: InkWell(
                   onTap: () {
-                  /*  if (double.parse(_amountTextController.text) >
-                        (_billList[position].AMOUNT -
-                            _billList[position].RECEIVED)) {
+                   if (double.parse(_amountTextController.text) <= 0) {
                       GlobalFunctions.showToast(
-                          'Amount must be lesser equal to bill amount');
-                    } else {*/
+                          'Amount must be grater than zero');
+                    } else {
                       Navigator.of(context).pop();
                       redirectToPaymentGateway(
                           position, _amountTextController.text);
-                   // }
+                    }
                   },
                   child: Container(
                       alignment: Alignment.center,

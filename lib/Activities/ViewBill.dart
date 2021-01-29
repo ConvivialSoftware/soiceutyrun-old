@@ -152,7 +152,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                 ),),
                               ),
                               Container(
-                                child: Text('Rs. '+totalAmount.toString(),style: TextStyle(
+                                child: Text('Rs. '+double.parse(totalAmount.toString()).toStringAsFixed(2),style: TextStyle(
                                     color: GlobalVariables.red,fontSize: 18,fontWeight: FontWeight.bold
                                 ),),
                               )
@@ -379,7 +379,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
-                  child: Text('Rs. '+_billHeadsList[position].AMOUNT,style: TextStyle(
+                  child: Text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),style: TextStyle(
                       color:  GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
                   ),),
                 )
@@ -425,12 +425,12 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
         totalAmount+=amount;
       }
       BillHeads arrearsBillHeads = BillHeads();
-      arrearsBillHeads.AMOUNT = value.ARREARS.toString();
+      arrearsBillHeads.AMOUNT = double.parse(value.ARREARS.toString()).toStringAsFixed(2);
       arrearsBillHeads.HEAD_NAME="Arrears";
       totalAmount+= double.parse(value.ARREARS.toString());
 
       BillHeads penaltyBillHeads = BillHeads();
-      penaltyBillHeads.AMOUNT = value.PENALTY.toString();
+      penaltyBillHeads.AMOUNT = double.parse(value.PENALTY.toString()).toStringAsFixed(2);
       penaltyBillHeads.HEAD_NAME="Penalty";
 
       totalAmount+= double.parse(value.PENALTY.toString());

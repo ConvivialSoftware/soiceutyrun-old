@@ -198,7 +198,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                             //Icon(Icons.attach_money,color: GlobalVariables.lightGreen,),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Text('Rs. '+_voucherAmount.toString(),style: TextStyle(
+                              child: Text('Rs. '+double.parse(_voucherAmount.toString()).toStringAsFixed(2),style: TextStyle(
                                 color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
                               ),),
                             ),
