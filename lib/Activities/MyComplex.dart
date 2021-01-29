@@ -858,7 +858,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _meetingList[position].START_DATE/*+' to '+ _meetingList[position].END_DATE*/,
+                          _meetingList[position].Start_Time/*+' to '+ _meetingList[position].END_DATE*/,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -1770,7 +1770,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       child: Text(
                         field,
                         style: TextStyle(
-                            color: GlobalVariables.veryLightGray, fontSize: 16
+                            color: GlobalVariables.grey, fontSize: 16
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

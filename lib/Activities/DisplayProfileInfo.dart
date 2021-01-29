@@ -167,6 +167,12 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
       isDeleteOptionDisplay=true;
     }
 
+    if(_profileList.length>0){
+      if(_profileList[0].ID==userId){
+        isDeleteOptionDisplay=false;
+      }
+    }
+
     return _profileList.length> 0 ? SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 10),

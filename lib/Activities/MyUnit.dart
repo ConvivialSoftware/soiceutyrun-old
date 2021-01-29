@@ -360,11 +360,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       alignment: Alignment.topLeft,
                       //padding: EdgeInsets.all(5),
                       child: Text(
-                        _pendingList[position].NARRATION,
+                        _pendingList[position].REFERENCE_NO,
                         style: TextStyle(
-                            color: GlobalVariables.grey,
+                            color: GlobalVariables.green,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
                     Container(
@@ -880,7 +880,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      BaseStaffCategory()));
+                                      BaseStaffCategory(false)));
                         },
                         child: Text(
                           AppLocalizations.of(context).translate('plus_add'),
@@ -3091,16 +3091,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
                 child: InkWell(
                   onTap: () {
-                    if (int.parse(_amountTextController.text) >
+                  /*  if (double.parse(_amountTextController.text) >
                         (_billList[position].AMOUNT -
                             _billList[position].RECEIVED)) {
                       GlobalFunctions.showToast(
                           'Amount must be lesser equal to bill amount');
-                    } else {
+                    } else {*/
                       Navigator.of(context).pop();
                       redirectToPaymentGateway(
                           position, _amountTextController.text);
-                    }
+                   // }
                   },
                   child: Container(
                       alignment: Alignment.center,
@@ -3159,7 +3159,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
       getRazorPayOrderID(position, _payOptionList[0].KEY_ID,
-          _payOptionList[0].SECRET_KEY, int.parse(textAmount));
+          _payOptionList[0].SECRET_KEY, double.parse(textAmount));
     }
   }
 
@@ -3828,7 +3828,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   void getRazorPayOrderID(
-      int position, String razorKey, String secret_key, int textAmount) {
+      int position, String razorKey, String secret_key, double textAmount) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
         RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
@@ -3862,7 +3862,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     restClientERP
         .postRazorPayTransactionOrderID(societyId, block + ' ' + flat, orderId,
-            (int.parse(amount) / 100).toString())
+            (double.parse(amount) / 100).toString())
         .then((value) {
       print('Value : ' + value.toString());
       _progressDialog.hide();

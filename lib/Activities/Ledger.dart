@@ -398,6 +398,8 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
 
       double totalAmount = 0;
       for (int i = 0; i < _listLedger.length; i++) {
+        print("_ledgerList[i].RECEIPT_NO : "+_ledgerList[i].RECEIPT_NO.toString());
+        print("_ledgerList[i].TYPE : "+_ledgerList[i].TYPE.toString());
         if (_ledgerList[i].TYPE.toLowerCase().toString() == 'bill') {
           totalAmount += double.parse(_ledgerList[i].AMOUNT);
         } else {

@@ -15,10 +15,15 @@ import 'base_stateful.dart';
 
 class BaseStaffCategory extends StatefulWidget {
 
+  bool isHideAppBar=false;
+
+
+  BaseStaffCategory(this.isHideAppBar);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return StaffCategoryState();
+    return StaffCategoryState(this.isHideAppBar);
   }
 }
 
@@ -26,6 +31,9 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
 
   ProgressDialog _progressDialog;
   List<StaffCount> _staffListCount = List<StaffCount>();
+
+  bool isHideAppBar=false;
+  StaffCategoryState(this.isHideAppBar);
 
   @override
   void initState() {
@@ -47,7 +55,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     return Builder(
       builder: (context) => Scaffold(
         //resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
+        appBar: !isHideAppBar ? AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
           leading: InkWell(
@@ -63,7 +71,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
             AppLocalizations.of(context).translate('staff_category'),
             style: TextStyle(color: GlobalVariables.white),
           ),
-        ),
+        ):null,
         body:  getStaffCategoryLayout(),
       ),
     );

@@ -126,7 +126,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
       displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME, 'hh:mm aa');
     }
 
-    var image  =  GlobalVariables.drawerImagePath;
+    var image  =  GlobalVariables.appImagePath;
     if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_FVISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_SInApp ||
@@ -191,7 +191,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                             color: GlobalVariables.transparent,
                             shape: BoxShape.circle
                         ),
-                        child: SvgPicture.asset(image),
+                        child: image.toLowerCase().contains(".svg") ? SvgPicture.asset(image,color: GlobalVariables.green,):Image.asset(image),
                       ),
                     ),
                   ),

@@ -342,5 +342,7 @@
   "notification": "Notifications",
   "contact_for_permission_text": "Kindly Contact to Society ChairPerson for use this feature.",
   "sure_delete": "Are you sure you want to Delete?",
-  "share_contact": "Share Contact"
+  "share_contact": "Share Contact",
+  "already_paid_status": "Your payment request has been received successfully",
+  "already_paid_status_desc": "You will get receipt once request is authorised."
 }

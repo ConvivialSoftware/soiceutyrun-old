@@ -819,10 +819,14 @@ class ComplaintInfoAndCommentsState
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-              child: Image.asset(
+              child: photo.isEmpty ? Image.asset(
                 GlobalVariables.componentUserProfilePath,
                 width: 20,
                 height: 20,
+              ): CircleAvatar(
+                radius: 10,
+                backgroundColor: GlobalVariables.mediumGreen,
+                backgroundImage: NetworkImage(photo),
               ),
             ),
             Expanded(

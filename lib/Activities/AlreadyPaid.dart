@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -592,13 +593,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
         if(attachmentFileName!=null && attachmentFilePath!=null){
           GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
         }
-        Dialog infoDialog = Dialog(
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          child: getMessageInfo(),
-        );
-        showDialog(
-            context: context, builder: (BuildContext context) => infoDialog,barrierDismissible: false);
+        getMessageInfo();
       }
       GlobalFunctions.showToast(value.message);
 
@@ -664,7 +659,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
 
   }
 
-  getMessageInfo() {
+  /*getMessageInfo() {
 
     return Container(
       padding: EdgeInsets.all(10),
@@ -695,8 +690,66 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
       ),
     );
 
-  }
+  }*/
 
+  getMessageInfo() {
+    //print('paymentId : ' + paymentId.toString());
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                   width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset(
+                          GlobalVariables.successIconPath,
+                          width: 80,
+                          height: 80,
+                        ),
+                      ),
+                     /* Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('successful_payment'))),*/
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('already_paid_status'),style: TextStyle(
+                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
+                          ),)
+                      ),Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('already_paid_status_desc'),style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.normal
+                          ),)
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        alignment: Alignment.topRight,
+                        child: FlatButton(onPressed: (){
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        }, child: Text(AppLocalizations.of(context).translate('okay'),style: TextStyle(
+                            color: GlobalVariables.green,fontSize: 20,fontWeight: FontWeight.bold
+                        ),),),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }));
+  }
 
 }
 

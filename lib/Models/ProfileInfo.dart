@@ -16,7 +16,7 @@ class ProfileInfo {
      0s.   tatus: true, message: Profile data}*/
 
 
-  String //ID,
+  String ID,
       BLOCK,
       FLAT,
       TYPE,
@@ -47,7 +47,7 @@ class ProfileInfo {
       Email;
 
   ProfileInfo(
-      {//this.ID,
+      {this.ID,
       this.BLOCK,
       this.FLAT,
       this.TYPE,
@@ -79,7 +79,7 @@ class ProfileInfo {
 
   factory ProfileInfo.fromJson(Map<String, dynamic> json) {
     return ProfileInfo(
-       // ID: json["ID"],
+        ID: json["ID"],
         BLOCK: json["BLOCK"],
         FLAT: json["FLAT"],
         TYPE: json["TYPE"],

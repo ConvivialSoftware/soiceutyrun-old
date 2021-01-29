@@ -3262,6 +3262,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     List<String> _userPermissionList = userPermission.toString().split(',');
 
     for (int i = 0; i < _socPermissionList.length; i++) {
+      print('_socPermissionList[i] : '+_userPermissionList[i].toString());
       if (_socPermissionList[i] == AppPermission.socHelpDeskPermission) {
         AppPermission.isSocHelpDeskPermission = true;
       }
@@ -3277,6 +3278,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
 
     for (int i = 0; i < _userPermissionList.length; i++) {
+
+      print('_userPermissionList[i] : '+_userPermissionList[i].toString());
       if (_userPermissionList[i] == AppPermission.userHelpDeskPermission) {
         AppPermission.isUserHelpDeskPermission = true;
       }

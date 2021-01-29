@@ -523,7 +523,20 @@ class GlobalFunctions{
 
     print('selected year : '+selectedDate.year.toString());
 
-    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1800,8), lastDate: DateTime(3021));
+    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(selectedDate.year-50), lastDate: DateTime(3021));
+    if(picked!=null && picked !=selectedDate){
+      selectedDate=picked;
+    }
+    return selectedDate;
+  }
+
+  static getSelectedDateForDOB(BuildContext context) async {
+
+    DateTime selectedDate = DateTime.now();
+
+    print('selected year : '+selectedDate.year.toString());
+
+    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(selectedDate.year-50), lastDate: DateTime(selectedDate.year,selectedDate.month,selectedDate.day));
     if(picked!=null && picked !=selectedDate){
       selectedDate=picked;
     }

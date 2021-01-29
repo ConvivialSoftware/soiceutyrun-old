@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -130,7 +131,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         ),
         body: TabBarView(controller: _tabController, children: <Widget>[
           getMyActivitiesLayout(),
-          getHelperLayout(),
+          BaseStaffCategory(true),
+          //getHelperLayout(),
         ]),
       ),
     );
@@ -2284,7 +2286,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     var staffImage = _staffList[position].IMAGE;
 
-    var notes = _staffList[position].NOTES;
+    var notes = _staffList[position].RATINGS;
     bool isRattingDone = false;
     double totalRate = 0.0;
 
@@ -2294,7 +2296,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       isRattingDone = true;
     }
     if (isRattingDone) {
-      _unitRateList = _staffList[position].NOTES.split(',');
+      _unitRateList = _staffList[position].RATINGS.split(',');
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');

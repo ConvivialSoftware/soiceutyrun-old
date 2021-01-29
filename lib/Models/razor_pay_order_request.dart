@@ -1,5 +1,5 @@
 class RazorPayOrderRequest {
-  int amount;
+  double amount;
   String currency;
   String receipt;
   int paymentCapture;

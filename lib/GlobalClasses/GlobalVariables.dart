@@ -48,6 +48,7 @@ class GlobalVariables {
   static var keyInAppCallNotification = "in_app_call_notification";
   static var keyIsNewlyArrivedNotification = "isNewlyArrivedNotification";
 
+  static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
   static var userProfilePath = "assets/images/user_profile.jpeg";
   static var drawerImagePath =

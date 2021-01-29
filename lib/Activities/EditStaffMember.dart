@@ -397,7 +397,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                             suffixIcon: IconButton(
                                 onPressed: (){
 
-                                  GlobalFunctions.getSelectedDate(context).then((value){
+                                  GlobalFunctions.getSelectedDateForDOB(context).then((value){
                                     _dobController.text = value.day.toString()+"/"+value.month.toString()+"/"+value.year.toString();
                                   });
 
