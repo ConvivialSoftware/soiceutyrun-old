@@ -32,6 +32,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
   String paymentType="Cheque";
   //String complaintPriority="No";
 
+  TextEditingController _chequeBankNameController  =  TextEditingController();
   TextEditingController _amountController  =  TextEditingController();
   TextEditingController _noteController  =  TextEditingController();
   TextEditingController _referenceController  = TextEditingController();
@@ -80,7 +81,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     });
     _dateController.text = DateTime.now().toLocal().day.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().year.toString();
     insertedDate = DateTime.now().toLocal().year.toString()+"-"+DateTime.now().toLocal().month.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().day.toString().padLeft(2,'0');
-    _amountController.text=amount.toString();
+    _amountController.text=double.parse(amount.toString()).toStringAsFixed(2);
   }
 
   @override
@@ -293,10 +294,32 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                   ],
                 ),
               ),
+              paymentType== "Cheque" ? Container(
+                //  height: 150,
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                decoration: BoxDecoration(
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: GlobalVariables.mediumGreen,
+                      width: 3.0,
+                    )),
+                child: TextField(
+                  controller: _chequeBankNameController,
+                  //maxLines: 99,
+                  decoration: InputDecoration(
+                      hintText:
+                      AppLocalizations.of(context).translate('cheque_bank_name'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray, fontSize: 14),
+                      border: InputBorder.none),
+                ),
+              ):Container(),
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, paymentType== "Cheque" ? 10:20, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
@@ -585,7 +608,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     print('Date :'+date);*/
     _progressDialog.show();
     restClientERP.addAlreadyPaidPaymentRequest(societyId, flat, block,invoiceNo,_amountController.text,
-        _referenceController.text,paymentType,_bankAccountNoSelectedItem,insertedDate,userId,_noteController.text,_bankSelectedItem,attachment,"P").then((value) {
+        _referenceController.text,paymentType,_bankAccountNoSelectedItem,insertedDate,userId,_noteController.text,_chequeBankNameController.text.toString(),attachment,"P").then((value) {
       print("add paymentRequest response : "+ value.toString());
       _progressDialog.hide();
       if(value.status){
