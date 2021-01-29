@@ -1026,10 +1026,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
                           String sharedMsg = userName +
                               ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
-                              todayDate +
-                              ' between ' +
-                              currentTime +
-                              ' - 11: 59 PM. ' +
+                              GlobalFunctions.convertDateFormat(_scheduleVisitorList[position].DATE, "dd MMM yyyy")  +
+                              ' till' +
+                              ' 11: 59 PM. ' +
                               'Please use ' +
                               _scheduleVisitorList[position].PASS_CODE +
                               ' as entry code at gate. ' +
@@ -1438,22 +1437,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       _progressDialog.hide();
       if (value.status) {
         Navigator.of(context).pop();
-        showDialog(
-            context: context,
-            builder: (BuildContext context) => StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                  return Dialog(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0.0,
-                    child: displayPassCode(
-                        value.pass_code,
-                        userName,
-                        googleParameter,
-                        _nameController.text,
-                        _mobileController.text),
-                  );
-                }));
-
         ScheduleVisitor scheduleVisitor = ScheduleVisitor();
         scheduleVisitor.MOBILE_NO = _mobileController.text;
         scheduleVisitor.NAME = _nameController.text;
@@ -1476,10 +1459,26 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         } else {
           _scheduleVisitorList.add(scheduleVisitor);
         }
+        print('date : '+scheduleVisitor.DATE.toString());
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Dialog(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    child: displayPassCode(
+                        value.pass_code,
+                        userName,
+                        googleParameter,
+                        _nameController.text,
+                        _mobileController.text,date),
+                  );
+                }));
+        setState(() {});
+        print('passCode : ' + value.pass_code);
       }
       GlobalFunctions.showToast(value.message);
-      setState(() {});
-      print('passCode : ' + value.pass_code);
 
       /* {pass_code: 303462, status: true, message: Visitor added successfully}*/
     }) /*.catchError((Object obj) {
@@ -1549,7 +1548,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     }
   }
 
-  displayPassCode(String pass_code, String userName, String googleParameter, String visitorName, String visitorContact) {
+  displayPassCode(String pass_code, String userName, String googleParameter, String visitorName, String visitorContact, String visitorDate) {
     DateTime date = DateTime.now();
     String todayDate =
         GlobalFunctions.convertDateFormat(date.toIso8601String(), 'dd MMM');
@@ -1570,10 +1569,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     String sharedMsg = userName +
         ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
-        todayDate +
-        ' between ' +
-        currentTime +
-        ' - 11: 59 PM. ' +
+        GlobalFunctions.convertDateFormat(visitorDate, "dd MMM yyyy") +
+        ' till' +
+        ' 11: 59 PM. ' +
         'Please use ' +
         pass_code +
         ' as entry code at gate. ' +
@@ -2062,7 +2060,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           case 1:
             {
               if (!isHelperAPICall) {
-                getStaffRoleDetailsData();
+                //getStaffRoleDetailsData();
               }
             }
             break;
@@ -2444,7 +2442,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     _progressDialog.show();
     restClient.staffRoleDetails(societyId,'').then((value) {
-      //_progressDialog.hide();
+      _progressDialog.hide();
       Navigator.of(context).pop();
       List<dynamic> _list = value.data;
       _staffList = List<Staff>.from(_list.map((i)=>Staff.fromJson(i)));

@@ -73,6 +73,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
 
     if (_staff.ASSIGN_FLATS.length > 0) {
       _assignFlatList = _staff.ASSIGN_FLATS.split(',');
+      for(int i=0;i<_assignFlatList.length;i++){
+        if(_assignFlatList[i].length==0){
+          _assignFlatList.removeAt(i);
+        }
+      }
     }
 
     print('_assignFlatList.length : ' + _assignFlatList.length.toString());

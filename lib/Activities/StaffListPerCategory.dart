@@ -134,6 +134,11 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
   getStaffListPerCategoryListItemLayout(int position) {
 
     List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
+    for(int i=0;i<_workHouseList.length;i++){
+      if(_workHouseList[i].length==0){
+        _workHouseList.removeAt(i);
+      }
+    }
 
     var staffImage = _staffList[position].IMAGE;
 
