@@ -120,7 +120,6 @@ flutter:
     - assets/images/user_profile.jpeg
     - i18n/en.json
     - i18n/hi.json
-    - i18n/profile.json
     - assets/other_assets/component_user_profile.png
     - assets/other_assets/profile_icon.svg
     - assets/other_assets/societyrun-logo_colored.svg
