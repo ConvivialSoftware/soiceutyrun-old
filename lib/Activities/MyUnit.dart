@@ -2082,10 +2082,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                                 (BuildContext context,
                                                     StateSetter setState) {
                                               return Dialog(
-                                                shape: RoundedRectangleBorder(
+                                                /*shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            25.0)),
+                                                            25.0)),*/
+                                                backgroundColor: Colors.transparent,
+                                                elevation: 0.0,
                                                 child: getListOfPaymentGateway(
                                                     context,
                                                     setState,
@@ -2107,10 +2109,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                                 (BuildContext context,
                                                     StateSetter setState) {
                                               return Dialog(
-                                                shape: RoundedRectangleBorder(
+                                                /*shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            25.0)),
+                                                            25.0)),*/
+                                                backgroundColor: Colors.transparent,
+                                                elevation: 0.0,
                                                 child: getListOfPaymentGateway(
                                                     context,
                                                     setState,
@@ -2972,7 +2976,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ],
                       ),
                     ),*/
-                    Container(
+                    (hasPayTMGateway || hasRazorPayGateway) ? Container(
                       margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -2981,8 +2985,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         style: TextStyle(
                             color: GlobalVariables.black, fontSize: 18),
                       ),
-                    ),
-                    Container(
+                    ): Container(),
+                    hasRazorPayGateway ? Container(
                       margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
@@ -3024,8 +3028,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                       ),
-                    ),
-                    Container(
+                    ):Container(),
+                    hasPayTMGateway ? Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
@@ -3067,7 +3071,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ),
                         ),
                       ),
-                    ),
+                    ) : Container(),
                     Container(
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(10, 15, 0, 5),
