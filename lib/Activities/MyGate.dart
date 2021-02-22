@@ -1359,7 +1359,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       AppLocalizations.of(context)
                                           .translate('add'),
                                       style: TextStyle(
-                                          fontSize: GlobalVariables.largeText),
+                                          fontSize: GlobalVariables.textSizeMedium),
                                     ),
                                   ),
                                 ),

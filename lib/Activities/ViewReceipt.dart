@@ -465,7 +465,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
                                 style: TextStyle(
-                                    fontSize: GlobalVariables.largeText),
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ),
                           ),

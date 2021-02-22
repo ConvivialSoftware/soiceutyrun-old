@@ -386,7 +386,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             child: Text(
                               AppLocalizations.of(context).translate('submit'),
                               style: TextStyle(
-                                  fontSize: GlobalVariables.largeText),
+                                  fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ),
                         ),

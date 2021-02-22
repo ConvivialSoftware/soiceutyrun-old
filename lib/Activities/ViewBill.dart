@@ -603,7 +603,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
                                 style: TextStyle(
-                                    fontSize: GlobalVariables.largeText),
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ),
                           ),

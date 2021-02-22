@@ -618,7 +618,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                       AppLocalizations.of(context)
                           .translate('submit'),
                       style: TextStyle(
-                          fontSize: GlobalVariables.largeText),
+                          fontSize: GlobalVariables.textSizeMedium),
                     ),
                   ),
                 ),

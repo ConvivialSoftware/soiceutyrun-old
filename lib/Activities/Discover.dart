@@ -1,17 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
+import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/ListOfHomeService.dart';
+import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-
+import 'package:societyrun/utils/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseDiscover extends StatefulWidget {
-
   String pageName;
+
   BaseDiscover(this.pageName);
 
   @override
@@ -28,12 +31,14 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
   List<NearByShop> _nearByShopList = new List<NearByShop>();
 
   String pageName;
+  var width, height;
+
   DiscoverState(this.pageName);
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     getClassifiedList();
     getNearByShopList();
   }
@@ -41,10 +46,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
   @override
   Widget build(BuildContext context) {
     //  _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     if (pageName != null) {
       redirectToPage(pageName);
-
     }
     // TODO: implement build
     return Builder(
@@ -71,7 +76,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         body: TabBarView(controller: _tabController, children: <Widget>[
           getClassifiedLayout(),
           getServiceLayout(),
-          getNearByShopLayout(),
+          //getNearByShopLayout(),
         ]),
       ),
     );
@@ -94,12 +99,12 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               text: AppLocalizations.of(context).translate('services'),
             ),
           ),
-          Container(
+         /* Container(
             width: MediaQuery.of(context).size.width / 3,
             child: Tab(
               text: AppLocalizations.of(context).translate('near_by_shop'),
             ),
-          )
+          )*/
         ],
         controller: _tabController,
         unselectedLabelColor: GlobalVariables.white30,
@@ -166,10 +171,9 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                classifiedFilterButtonLayout(),
+              //  classifiedFilterButtonLayout(),
                 getClassifiedListDataLayout(),
-                addClassifiedDiscoverFabLayout(
-                    GlobalVariables.CreateClassifiedListingPage),
+                addClassifiedDiscoverFabLayout(GlobalVariables.CreateClassifiedListingPage),
               ],
             ),
           ),
@@ -262,18 +266,16 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
             child: FloatingActionButton(
               onPressed: () {
                 //GlobalFunctions.showToast('Fab CLick');
-                if (pageTitle==GlobalVariables.CreateClassifiedListingPage) {
+                if (pageTitle == GlobalVariables.CreateClassifiedListingPage) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              BaseCreateClassifiedListing()));
-                } else if(pageTitle==GlobalVariables.AddNearByShopPage){
+                          builder: (context) => BaseCreateClassifiedListing()));
+                } else if (pageTitle == GlobalVariables.AddNearByShopPage) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              BaseAddNearByShop()));
+                          builder: (context) => BaseAddNearByShop()));
                 }
               },
               child: Icon(
@@ -306,7 +308,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
   }
 
   getClassifiedListItemLayout(int position) {
-    return Container(
+    return /*Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -425,6 +427,126 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
             ),
           ),
         ],
+      ),
+    )*/InkWell(
+      onTap: (){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BaseClassifiedListItemDesc()));
+      },
+      child: Container(
+        decoration: boxDecoration(
+            showShadow: false, bgColor: GlobalVariables.white, radius: 10.0),
+        margin: EdgeInsets.all(10),
+
+        // .cornerRadiusWithClipRRect(10.0) .withShadow() .paddingOnly(top: 8,left: 16,right: 16,bottom: 8)
+        //     color: t9_white,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      padding: EdgeInsets.only(top: 2,bottom: 4,left: 8,right: 8),
+                     // alignment: Alignment.topRight ,
+                     // padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(8))),
+                      child: text('Rs. 1,00,000',
+                          textColor: GlobalVariables.white,fontSize: 14.0),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    child: CachedNetworkImage(
+                        imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
+                        height: 50,
+                        width: 50,
+                        fit: BoxFit.fill),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  text(
+                                    'Resale 1bhk luxurious Flat in jail Road. Nasik Road.',
+                                    fontFamily: GlobalVariables.fontBold,
+                                    fontSize: GlobalVariables.textSizeMedium,
+                                    maxLine: 2,
+                                    textColor: GlobalVariables.green
+                                  ),
+                                  SizedBox(height: 4),
+                                  text('Dasak Gaon, Nashik, Maharashtra',
+                                      textColor: GlobalVariables.lightGray,
+                                      fontSize: GlobalVariables.textSizeSmall,
+                                    maxLine: 2
+
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.only(top: 2,bottom: 4,left: 16,right: 16),
+                              child: text(
+                                "Rent",
+                                  fontFamily: GlobalVariables.fontBold,
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  fontWeight: FontWeight.bold,
+                                  textColor: GlobalVariables.grey
+                              ),
+                            ),
+                            Container(
+                              child: text(
+                                "Real Estate",
+                                  fontFamily: GlobalVariables.fontBold,
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  fontWeight: FontWeight.bold,
+                                  textColor: GlobalVariables.grey
+                              ),
+                            ),
+                            //SizedBox(width: 10),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -575,8 +697,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    BaseListOfHomeService()));
+                                builder: (context) => BaseListOfHomeService()));
                       },
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -608,9 +729,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -639,9 +758,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -680,9 +797,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -713,9 +828,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -744,9 +857,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -785,9 +896,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -818,9 +927,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -849,9 +956,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
@@ -957,7 +1062,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                serviceSearchFilterLayout(),
+                //serviceSearchFilterLayout(),
                 getNearByShopListDataLayout(),
                 addClassifiedDiscoverFabLayout(
                     GlobalVariables.AddNearByShopPage),
@@ -970,175 +1075,108 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
   }
 
   getNearByShopListDataLayout() {
-    return Container(
+    return BaseNearByShopPerCategory();/*Container(
+      alignment: Alignment.topCenter,
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 10, 20, 0),
+          10, MediaQuery.of(context).size.height / 12, 10, 0),
       child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
+          builder: (context) => GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height / 2),
+                ),
+                scrollDirection: Axis.vertical,
                 itemCount: _nearByShopList.length,
                 itemBuilder: (context, position) {
                   return getNearByShopListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
+                },
+                //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );
+    );*/
   }
 
   getNearByShopListItemLayout(int position) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.mediumGreen,
-                      borderRadius: BorderRadius.circular(50)),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                _nearByShopList[position].title,
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  _nearByShopList[position].isCall
-                                      ? Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Icon(
-                                            Icons.call,
-                                            color: GlobalVariables.mediumGreen,
-                                            size: 24,
-                                          ))
-                                      : Container(),
-                                  _nearByShopList[position].isMail
-                                      ? Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Icon(
-                                            Icons.mail_outline,
-                                            color: GlobalVariables.mediumGreen,
-                                            size: 24,
-                                          ))
-                                      : Container(),
-                                  _nearByShopList[position].isWeb
-                                      ? Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Icon(
-                                            Icons.language,
-                                            color: GlobalVariables.mediumGreen,
-                                            size: 24,
-                                          ))
-                                      : Container(),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: Text(
-                                  _nearByShopList[position].subDesc,
-                                  style: TextStyle(
-                                    color: GlobalVariables.lightGray,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      child: Icon(
-                                    Icons.star,
-                                    color: GlobalVariables.orangeYellow,
-                                    size: 15,
-                                  )),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                    child: Text(
-                                      _nearByShopList[position].rateCount,
-                                      style: TextStyle(
-                                        color: GlobalVariables.black,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    return InkWell(
+        onTap: () {
+
+         /* Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BaseNearByShopPerCategory(_nearByShopList[position].title)));*/
+
+        },
+        child: category(GlobalVariables.white, GlobalVariables.shoppingIconPath,
+            _nearByShopList[position].subDesc, context, position,
+            isNew: false));
+  }
+
+  Widget category(
+      Color color, String img, String name, BuildContext context, var id,
+      {bool isNew = false, String type = 'New'}) {
+    return Stack(
+      overflow: Overflow.visible,
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: width / 2,
+          height: width / 3,
+          margin: EdgeInsets.only(left: 5, right: 5,top: 10),
+          decoration:
+              boxDecoration(radius: 4, bgColor: color, showShadow: false),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(img, width: width / 12, height: width / 12),
+              text('$name',
+                  textColor: GlobalVariables.green,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontFamily: GlobalVariables.fontMedium,
+                  maxLine: 2,
+                  isCentered: true),
+            ],
+          ),
+        ),
+        Positioned(
+          right: -5,
+          top: -5,
+          child: Visibility(
+            visible: isNew,
+            child: Container(
+              alignment: Alignment.centerRight,
+              margin: EdgeInsets.only(right: 8, top: 8),
+              padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+              decoration:
+                  boxDecoration(bgColor: GlobalVariables.skyBlue, radius: 4),
+              child: FittedBox(
+                  child: text(type,
+                      fontSize: 8.0, textColor: GlobalVariables.white)),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   void redirectToPage(String item) {
-
-    if(item==AppLocalizations.of(context).translate('discover')){
+    if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to Discover
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('classified')){
+    } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  Classified
       _tabController.animateTo(0);
-    }else if(item==AppLocalizations.of(context).translate('services')){
+    } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  Services
       _tabController.animateTo(1);
-    }else if(item==AppLocalizations.of(context).translate('near_by_shop')){
+    } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  NearByShop
       _tabController.animateTo(2);
-    }else{
+    } else {
       _tabController.animateTo(0);
     }
-
   }
 }
 

@@ -114,7 +114,7 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                       AppLocalizations.of(context)
                           .translate('add_ur_society'),
                       style: TextStyle(
-                          fontSize: GlobalVariables.largeText),
+                          fontSize: GlobalVariables.textSizeMedium),
                     ),
                   ),
                 ),

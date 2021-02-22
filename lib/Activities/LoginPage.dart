@@ -230,7 +230,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                       AppLocalizations.of(context)
                                           .translate('login'),
                                       style: TextStyle(
-                                          fontSize: GlobalVariables.largeText),
+                                          fontSize: GlobalVariables.textSizeMedium),
                                     ),
                                   ),
                                 ),

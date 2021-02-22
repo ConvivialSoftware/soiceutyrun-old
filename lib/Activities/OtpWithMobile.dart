@@ -187,7 +187,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                       AppLocalizations.of(context)
                                           .translate('enter'),
                                       style: TextStyle(
-                                          fontSize: GlobalVariables.largeText),
+                                          fontSize: GlobalVariables.textSizeMedium),
                                     ),
                                   ),
                                 ),

@@ -690,7 +690,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                       AppLocalizations.of(context)
                           .translate('submit'),
                       style: TextStyle(
-                          fontSize: GlobalVariables.largeText),
+                          fontSize: GlobalVariables.textSizeMedium),
                     ),
                   ),
                 ),

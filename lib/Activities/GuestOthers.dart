@@ -327,7 +327,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                     AppLocalizations.of(context)
                         .translate('add'),
                     style: TextStyle(
-                        fontSize: GlobalVariables.largeText),
+                        fontSize: GlobalVariables.textSizeMedium),
                   ),
                 ),
               ),

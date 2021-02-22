@@ -206,7 +206,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                           child: Text(
                             AppLocalizations.of(context).translate('register'),
                             style:
-                                TextStyle(fontSize: GlobalVariables.largeText),
+                                TextStyle(fontSize: GlobalVariables.textSizeMedium),
                           ),
                         ),
                       ),

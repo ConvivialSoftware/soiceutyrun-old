@@ -266,7 +266,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                         side: BorderSide(color: GlobalVariables.green)),
                     child: Text(
                       AppLocalizations.of(context).translate('submit'),
-                      style: TextStyle(fontSize: GlobalVariables.largeText),
+                      style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
                     ),
                   ),
                 ),

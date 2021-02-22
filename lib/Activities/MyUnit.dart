@@ -3303,12 +3303,6 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       _callAPI(_tabController.index);
       //}
     }
-    /*else{
-      if(!_tabController.indexIsChanging){
-        _callAPI(_tabController.index);
-      }
-    }
-*/
   }
 
   void _callAPI(int index) {
@@ -3533,7 +3527,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
                                 style: TextStyle(
-                                    fontSize: GlobalVariables.largeText),
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ),
                           ),
@@ -3595,7 +3589,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     side: BorderSide(color: GlobalVariables.green)),
                 child: Text(
                   AppLocalizations.of(context).translate('i_am_interested'),
-                  style: TextStyle(fontSize: GlobalVariables.largeText),
+                  style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
                 ),
               ),
             ),

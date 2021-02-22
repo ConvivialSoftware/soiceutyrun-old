@@ -22,6 +22,7 @@ import 'package:societyrun/Activities/MyComplex.dart';
 
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/Notifications.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -774,7 +775,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                GlobalFunctions.comingSoonDialog(context);
+                                //GlobalFunctions.comingSoonDialog(context);
+                                redirectToPage(AppLocalizations.of(context)
+                                    .translate('near_by_shop'));
                               },
                               child: Container(
                                 padding: EdgeInsets.all(15),
@@ -1643,7 +1646,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           items: [
             AppLocalizations.of(context).translate("classified"),
             AppLocalizations.of(context).translate("services"),
-            AppLocalizations.of(context).translate("near_by_shop"),
+            //AppLocalizations.of(context).translate("near_by_shop"),
           ]),
       new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
@@ -2049,7 +2052,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     side: BorderSide(color: GlobalVariables.green)),
                 child: Text(
                   AppLocalizations.of(context).translate('i_am_interested'),
-                  style: TextStyle(fontSize: GlobalVariables.largeText),
+                  style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
                 ),
               ),
             ),
@@ -2217,26 +2220,19 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       });
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
-      GlobalFunctions.comingSoonDialog(context);
-      /*Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseDiscover(
-                      AppLocalizations.of(context).translate('discover'))))
-          .then((value) {
-        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });*/
+      //GlobalFunctions.comingSoonDialog(context);
+
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /*Navigator.push(
+      //GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BaseDiscover(
                       AppLocalizations.of(context).translate('classified'))))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });*/
+      });
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
       GlobalFunctions.comingSoonDialog(context);
@@ -2250,15 +2246,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       });*/
     } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /* Navigator.push(
+      //GlobalFunctions.comingSoonDialog(context);
+       Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => BaseDiscover(
-                      AppLocalizations.of(context).translate('near_by_shop'))))
+                  builder: (context) => BaseNearByShopPerCategory()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });*/
+      });
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
       GlobalFunctions.comingSoonDialog(context);

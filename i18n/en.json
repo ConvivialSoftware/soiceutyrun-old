@@ -345,5 +345,9 @@
   "share_contact": "Share Contact",
   "already_paid_status": "Your payment request has been received successfully",
   "already_paid_status_desc": "You will get receipt once request is authorised.",
-  "cheque_bank_name": "Cheque Bank Name"
+  "cheque_bank_name": "Cheque Bank Name",
+  "all_offers": "All Offers",
+  "house_things": "House Things",
+  "fashion": "Fashion",
+  "offer_details": "Offer Details"
 }

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -776,7 +777,7 @@ class GlobalFunctions{
                                 AppLocalizations.of(context)
                                     .translate('logout'),
                                 style: TextStyle(
-                                    fontSize: GlobalVariables.largeText),
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ),
                           ),
@@ -854,7 +855,7 @@ class GlobalFunctions{
                                       AppLocalizations.of(context)
                                           .translate('later'),
                                       style: TextStyle(
-                                          fontSize: GlobalVariables.largeText),
+                                          fontSize: GlobalVariables.textSizeMedium),
                                     ),
                                   ),
                                 ),
@@ -886,7 +887,7 @@ class GlobalFunctions{
                                     AppLocalizations.of(context)
                                         .translate('update'),
                                     style: TextStyle(
-                                        fontSize: GlobalVariables.largeText),
+                                        fontSize: GlobalVariables.textSizeMedium),
                                   ),
                                 ),
                               ),
@@ -1054,7 +1055,7 @@ class GlobalFunctions{
                                 AppLocalizations.of(context)
                                     .translate('logout'),
                                 style: TextStyle(
-                                    fontSize: GlobalVariables.largeText),
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ),
                           ),
@@ -1104,6 +1105,16 @@ class GlobalFunctions{
                 ),
               );
             }));
+  }
+
+  static changeStatusColor(Color color) async {
+    try {
+      await FlutterStatusbarcolor.setStatusBarColor(color, animate: true);
+      FlutterStatusbarcolor.setStatusBarWhiteForeground(
+          useWhiteForeground(color));
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   /*static void checkRedirectFromBackgroundNotification(BuildContext context) {

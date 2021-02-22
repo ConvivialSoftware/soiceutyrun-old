@@ -114,6 +114,9 @@ class GlobalVariables {
   static var guestIconPath = "assets/other_assets/guest.svg";
   static var feedbackIconPath = "assets/other_assets/feedback.svg";
   static var verifiedContactIconPath = "assets/other_assets/verified_contact.svg";
+  static var whatsAppIconPath = "assets/other_assets/t3_ic_wp.svg";
+  static var sofaIconPath = "assets/other_assets/db8_ic_item6.png";
+  static var superDailyIconPath = "assets/other_assets/superdaily.png";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -124,11 +127,30 @@ class GlobalVariables {
   static var bottomMyHomeIconPath = "assets/bottom_menu/bottom_myhome_icon.svg";
   static var bottomServiceIconPath = "assets/bottom_menu/bottom_service_icon.svg";
 
-  /*Variable of Text Size */
-  static var smallText = 12.0;
-  static var mediumText = 14.0;
-  static var largeText = 16.0;
-  static var varyLargeText = 25.0;
+  /* font sizes*/
+  static const textSizeSmall = 12.0;
+  static const textSizeSMedium = 14.0;
+  static const textSizeMedium = 16.0;
+  static const varyLargeText = 25.0;
+  static const textSizeLargeMedium = 18.0;
+  static const textSizeNormal = 20.0;
+  static const textSizeLarge = 24.0;
+  static const textSizeXLarge = 30.0;
+  static const textSizeXXLarge = 35.0;
+
+  static const fontRegular = 'Regular';
+  static const fontMedium = 'Medium';
+  static const fontSemibold = 'Semibold';
+  static const fontBold = 'Bold';
+
+  static const spacing_control_half = 2.0;
+  static const spacing_control = 4.0;
+  static const spacing_standard = 8.0;
+  static const spacing_middle = 10.0;
+  static const spacing_standard_new = 16.0;
+  static const spacing_large = 24.0;
+  static const spacing_xlarge = 32.0;
+  static const spacing_xxLarge = 40.0;
 
   /*Variables For Call Rest API*/
   static const Get = 'GET';
@@ -266,6 +288,8 @@ class GlobalVariables {
   static const Color skyBlue = const Color(0xFF64B5F6);
   static const Color orangeYellow = const Color(0xFFFFA726);
   static const Color red = const Color(0xFFC62828);
+  static const Color lightCyan = const Color(0xFF73D7D3);
+  static const Color lightOrange = const Color(0xFFFF9781);
 
   /*Variables for URL FormData Key*/
 
