@@ -72,7 +72,7 @@ class Announcement {
     return Announcement(
         ID: json["ID"],
         USER_NAME: json["USER_NAME"],
-        USER_PHOTO: json["USER_PHOTO"],
+        USER_PHOTO: json["USER_PHOTO"]??'',
         SUBJECT: json["SUBJECT"],
         DESCRIPTION: json["DESCRIPTION"],
         ATTACHMENT: json["ATTACHMENT"],

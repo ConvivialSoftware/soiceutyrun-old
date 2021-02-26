@@ -39,6 +39,8 @@ import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -1081,24 +1083,25 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
                               child: photo.length == 0
-                                  ? Image.asset(
-                                      GlobalVariables.componentUserProfilePath,
-                                      width: 80,
-                                      height: 80,
-                                    )
-                                  : Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: NetworkImage(photo),
-                                              fit: BoxFit.cover),
-                                          border: Border.all(
-                                              color:
-                                                  GlobalVariables.mediumGreen,
-                                              width: 2.0)),
-                                    )),
+                                  ? AppAssetsImage(
+                                GlobalVariables.componentUserProfilePath,
+                                80.0,
+                                80.0,
+                                borderColor: GlobalVariables.grey,
+                                borderWidth: 2.0,
+                                fit: BoxFit.cover,
+                                radius: 40.0,
+                              )
+                                  : AppNetworkImage(
+                                photo,
+                                80.0,
+                                80.0,
+                                borderColor: GlobalVariables.grey,
+                                borderWidth: 2.0,
+                                fit: BoxFit.cover,
+                                radius: 10.0,
+                              )
+                          ),
                           Text(
                             name,
                             style: TextStyle(
@@ -1222,56 +1225,44 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: family
                     ? _list[position].PROFILE_PHOTO.length == 0
-                        ? Container(
-                            child: Image.asset(
-                                GlobalVariables.componentUserProfilePath),
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(35),
-                                border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
-                                    width: 2.0),
-                                color: GlobalVariables.lightGreen),
-                          )
-                        : Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        _list[position].PROFILE_PHOTO),
-                                    fit: BoxFit.cover),
-                                border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
-                                    width: 2.0)),
-                          )
+                        ? AppAssetsImage(
+                  GlobalVariables.componentUserProfilePath,
+                  70.0,
+                  70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 2.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
+                    : AppNetworkImage(
+                  _list[position].PROFILE_PHOTO,
+                  70.0,
+                  70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 2.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
                     : _list[position].IMAGE.length == 0
-                        ? Container(
-                            child: Image.asset(
-                                GlobalVariables.componentUserProfilePath),
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(35),
-                                border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
-                                    width: 2.0),
-                                color: GlobalVariables.lightGreen),
-                          )
-                        : Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(_list[position].IMAGE),
-                                    fit: BoxFit.cover),
-                                border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
-                                    width: 2.0)),
-                          )),
+                        ? AppAssetsImage(
+                  GlobalVariables.componentUserProfilePath,
+                  70.0,
+                  70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 2.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
+                    : AppNetworkImage(
+                  _list[position].IMAGE,
+                  70.0,
+                  70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 2.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
+            ),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(

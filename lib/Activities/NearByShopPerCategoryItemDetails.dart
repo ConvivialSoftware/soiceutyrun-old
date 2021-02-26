@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/utils/AppButton.dart';
 import 'package:societyrun/utils/AppWidget.dart';
 
 class NearByShopPerCategoryItemDetails extends StatefulWidget {
@@ -49,369 +50,382 @@ class NearByShopPerCategoryItemDetailsState
             style: TextStyle(color: GlobalVariables.green, fontSize: 16),
           ),
         ),
-        body: Stack(
-          children: [
-            Container(
-              color: GlobalVariables.lightCyan,
-              height: double.infinity,
-              padding: EdgeInsets.only(left: 8,right: 8,top: 8),
-              child: SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(GlobalVariables.spacing_standard_new),
-                          child: Column(
-                            children: <Widget>[
-                              Image.asset(
-                                GlobalVariables.sofaIconPath,
-                                width: width,
-                                height: width * 0.6,
-                                fit: BoxFit.fill,
-                              ),
-                              SizedBox(
-                                height: GlobalVariables.spacing_xlarge,
-                              ),
-                              Container(
-                                width: double.infinity,
-                                decoration: boxDecoration(radius: 10, showShadow: false,bgColor: GlobalVariables.white),
-                                padding: EdgeInsets.all(16),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(top: 30),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            //color: GlobalVariables.grey,
-                                            padding: EdgeInsets.only(top: 8/*,left: 16*/),
-                                            alignment: Alignment.center,
-                                            child: text('Super Daily',
-                                                textColor: GlobalVariables.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 2),
-                                          ),
-                                          divider(),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: text(
-                                                    'Pay 50% less for your daily groceries.(First 5 Orders)',
-                                                    textColor:
-                                                    GlobalVariables.green,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: GlobalVariables.textSizeMedium,
-                                                    maxLine: 4),
-                                              ),
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 8),
-                                                child: SvgPicture.asset(
-                                                  GlobalVariables.whatsAppIconPath,
-                                                  height: 20,
-                                                  width: 20,
-                                                  color: GlobalVariables.green,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 8),
-                                                child: Icon(
-                                                  Icons.favorite,
-                                                  size: 24,
-                                                  color: GlobalVariables.red,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: GlobalVariables.spacing_standard,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: text(
-                                                    'Woodsworth is our premium homegrown label thats part classic, part contemporary.',
-                                                    textColor: GlobalVariables.grey,
-                                                    fontFamily: GlobalVariables.fontMedium,
-                                                    fontSize: GlobalVariables.textSizeSMedium,
-                                                    maxLine: 5),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 16,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                            children: [
-                                              Expanded(
-                                                  child: Container(
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.location_on,
-                                                          size: 24,
-                                                          color: GlobalVariables.green,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Flexible(
-                                                            child: text(
-                                                                'Kamala Cross Jwel of Pimpari Pune',
-                                                                fontSize: GlobalVariables.textSizeSMedium,
-                                                                maxLine: 10)),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.translationValues(0.0, -70.0, 0.0),
-                                      decoration: BoxDecoration(
-                                        color: GlobalVariables.veryLightGray,
-                                          border: Border.all(
-                                              color: GlobalVariables
-                                                  .green,
-                                              width: 1.0), shape: BoxShape.circle),
-                                      child: new CircleAvatar(
-                                        backgroundColor: GlobalVariables.lightGray,
-                                        child: Container(
-                                            //margin: EdgeInsets.only(top: 8),
-                                            alignment: Alignment.center,
-                                            padding: EdgeInsets.only(left: 16,right: 16,top: 16),
-                                            child: Image.asset(GlobalVariables
-                                                .superDailyIconPath)
-                                        ),
-                                        radius: 50,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration:
-                                boxDecoration(radius: 10, showShadow: false),
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      child: text(
-                                          AppLocalizations.of(context)
-                                              .translate('offer_details'),
-                                          textColor: GlobalVariables.green,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: GlobalVariables.textSizeMedium,),
-                                      alignment: Alignment.topLeft,
-                                    ),
-                                    SizedBox(
-                                      height: 16,
-                                    ),
-                                    Builder(
-                                        builder: (context) => ListView.builder(
-                                          physics:
-                                          const NeverScrollableScrollPhysics(),
-                                          itemCount: 5,
-                                          itemBuilder: (context, position) {
-                                            return Container(
-                                              margin:
-                                              EdgeInsets.only(left: 10),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .start,
-                                                    children: [
-                                                      Container(
-                                                        margin:
-                                                        EdgeInsets.only(
-                                                            top: 8),
-                                                        width: 8,
-                                                        height: 8,
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                            GlobalVariables
-                                                                .green,
-                                                            shape: BoxShape
-                                                                .circle),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Flexible(
-                                                          child: Container(
-                                                              child: text(
-                                                                  position % 2 ==
-                                                                      0
-                                                                      ? 'The offer is only applicable on abc.com'
-                                                                      : 'You can avail a flat 25% discount on a minimum purchase of INR 999 using this voucher on the website.',
-                                                                  fontSize:
-                                                                  14.0,
-                                                                  fontFamily:
-                                                                  GlobalVariables
-                                                                      .fontBold,
-                                                                  maxLine: 99,
-                                                                  textColor:
-                                                                  GlobalVariables
-                                                                      .grey))),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 32,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          //  scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration:
-                                boxDecoration(radius: 10, showShadow: false),
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      child: text(
-                                          AppLocalizations.of(context)
-                                              .translate('terms_conn'),
-                                          textColor: GlobalVariables.green,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: GlobalVariables.textSizeMedium,),
-                                      alignment: Alignment.topLeft,
-                                    ),
-                                    SizedBox(
-                                      height: 16,
-                                    ),
-                                    Builder(
-                                        builder: (context) => ListView.builder(
-                                          physics:
-                                          const NeverScrollableScrollPhysics(),
-                                          itemCount: 5,
-                                          itemBuilder: (context, position) {
-                                            return Container(
-                                              margin:
-                                              EdgeInsets.only(left: 10),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .start,
-                                                    children: [
-                                                      Container(
-                                                        margin:
-                                                        EdgeInsets.only(
-                                                            top: 8),
-                                                        width: 8,
-                                                        height: 8,
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                            GlobalVariables
-                                                                .green,
-                                                            shape: BoxShape
-                                                                .circle),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Flexible(
-                                                          child: Container(
-                                                              child: text(
-                                                                  position % 2 ==
-                                                                      0
-                                                                      ? 'The offer is only applicable on abc.com'
-                                                                      : 'You can avail a flat 25% discount on a minimum purchase of INR 999 using this voucher on the website.',
-                                                                  fontSize:
-                                                                  14.0,
-                                                                  fontFamily:
-                                                                  GlobalVariables
-                                                                      .fontBold,
-                                                                  maxLine: 99,
-                                                                  textColor:
-                                                                  GlobalVariables
-                                                                      .grey))),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 32,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          //  scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: Container(
-          height: 60,
-          decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            border: Border(top: BorderSide(color: GlobalVariables.lightGray,width: 1.0)),
-          ),
-          padding: EdgeInsets.all(8.0),
-          child: Container(
-            child: FlatButton(
-              onPressed: () {
-                showBottomSheet();
-              },
-              color: GlobalVariables.green,
-              child: text('Get Code',textColor: GlobalVariables.white,fontSize: 14.0,fontWeight: FontWeight.w500)
-              ),
-            ),
-        ),
+        body: getBaseLayout(),
       ),
     );
   }
 
+  getBaseLayout(){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: GlobalVariables.lightCyan,
+      ),
+      child: Column(
+        children: [
+          Flexible(
+            child: Stack(
+              children: [
+                Container(
+                  color: GlobalVariables.lightCyan,
+                  height: double.infinity,
+                  padding: EdgeInsets.only(left: 8,right: 8,top: 8),
+                  child: SingleChildScrollView(
+                    child: Stack(
+                      children: [
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(GlobalVariables.spacing_standard_new),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.topRight,
+                                        padding: EdgeInsets.only(left: 5,right: 5,top: 1,bottom: 1),
+                                        decoration: boxDecoration(bgColor: GlobalVariables.white,radius: 30),
+                                        child: text('Till 31 March 2021',fontSize: 12.0,),
+                                      ),
+                                    ],
+                                  ),
+                                  Image.asset(
+                                    GlobalVariables.sofaIconPath,
+                                    width: width,
+                                    height: width * 0.6,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  SizedBox(
+                                    height: GlobalVariables.spacing_xlarge,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    decoration: boxDecoration(radius: 10,bgColor: GlobalVariables.white),
+                                    padding: EdgeInsets.all(16),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          margin: EdgeInsets.only(top: 30),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                //color: GlobalVariables.grey,
+                                                padding: EdgeInsets.only(top: 8/*,left: 16*/),
+                                                alignment: Alignment.center,
+                                                child: text('Super Daily',
+                                                    textColor: GlobalVariables.black,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 2),
+                                              ),
+                                              divider(),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    child: text(
+                                                        'Pay 50% less for your daily groceries.(First 5 Orders)',
+                                                        textColor:
+                                                        GlobalVariables.green,
+                                                        fontWeight: FontWeight.w500,
+                                                        fontSize: GlobalVariables.textSizeMedium,
+                                                        maxLine: 4),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16,
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(top: 8),
+                                                    child: SvgPicture.asset(
+                                                      GlobalVariables.whatsAppIconPath,
+                                                      height: 20,
+                                                      width: 20,
+                                                      color: GlobalVariables.green,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16,
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(top: 8),
+                                                    child: Icon(
+                                                      Icons.favorite,
+                                                      size: 24,
+                                                      color: GlobalVariables.red,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: GlobalVariables.spacing_standard,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: text(
+                                                        'Woodsworth is our premium homegrown label thats part classic, part contemporary.',
+                                                        textColor: GlobalVariables.grey,
+                                                        fontSize: GlobalVariables.textSizeSMedium,
+                                                        maxLine: 5),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 16,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                      child: Container(
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.location_on,
+                                                              size: 24,
+                                                              color: GlobalVariables.green,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 8,
+                                                            ),
+                                                            Flexible(
+                                                                child: text(
+                                                                    'Kamala Cross Jwel of Pimpari Pune',
+                                                                    fontSize: GlobalVariables.textSizeSMedium,
+                                                                    maxLine: 10)),
+                                                            SizedBox(
+                                                              width: 8,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          transform: Matrix4.translationValues(0.0, -70.0, 0.0),
+                                          decoration: BoxDecoration(
+                                              color: GlobalVariables.veryLightGray,
+                                              border: Border.all(
+                                                  color: GlobalVariables
+                                                      .green,
+                                                  width: 1.0), shape: BoxShape.circle),
+                                          child: new CircleAvatar(
+                                            backgroundColor: GlobalVariables.lightGray,
+                                            child: Container(
+                                              //margin: EdgeInsets.only(top: 8),
+                                                alignment: Alignment.center,
+                                                padding: EdgeInsets.only(left: 16,right: 16,top: 16),
+                                                child: Image.asset(GlobalVariables
+                                                    .superDailyIconPath)
+                                            ),
+                                            radius: 50,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    decoration:
+                                    boxDecoration(radius: 10),
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('offer_details'),
+                                            textColor: GlobalVariables.green,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: GlobalVariables.textSizeMedium,),
+                                          alignment: Alignment.topLeft,
+                                        ),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Builder(
+                                            builder: (context) => ListView.builder(
+                                              physics:
+                                              const NeverScrollableScrollPhysics(),
+                                              itemCount: 5,
+                                              itemBuilder: (context, position) {
+                                                return Container(
+                                                  margin:
+                                                  EdgeInsets.only(left: 10),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                            EdgeInsets.only(
+                                                                top: 8),
+                                                            width: 8,
+                                                            height: 8,
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                GlobalVariables
+                                                                    .green,
+                                                                shape: BoxShape
+                                                                    .circle),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Flexible(
+                                                              child: Container(
+                                                                  child: text(
+                                                                      position % 2 ==
+                                                                          0
+                                                                          ? 'The offer is only applicable on abc.com'
+                                                                          : 'You can avail a flat 25% discount on a minimum purchase of INR 999 using this voucher on the website.',
+                                                                      fontSize:
+                                                                      GlobalVariables.textSizeSMedium,
+                                                                      maxLine: 99,
+                                                                      textColor:
+                                                                      GlobalVariables
+                                                                          .grey))),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 32,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              //  scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    decoration:
+                                    boxDecoration(radius: 10),
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('terms_conn'),
+                                            textColor: GlobalVariables.green,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: GlobalVariables.textSizeMedium,),
+                                          alignment: Alignment.topLeft,
+                                        ),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Builder(
+                                            builder: (context) => ListView.builder(
+                                              physics:
+                                              const NeverScrollableScrollPhysics(),
+                                              itemCount: 5,
+                                              itemBuilder: (context, position) {
+                                                return Container(
+                                                  margin:
+                                                  EdgeInsets.only(left: 10),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                            EdgeInsets.only(
+                                                                top: 8),
+                                                            width: 8,
+                                                            height: 8,
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                GlobalVariables
+                                                                    .green,
+                                                                shape: BoxShape
+                                                                    .circle),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Flexible(
+                                                              child: Container(
+                                                                  child: text(
+                                                                      position % 2 ==
+                                                                          0
+                                                                          ? 'The offer is only applicable on abc.com'
+                                                                          : 'You can avail a flat 25% discount on a minimum purchase of INR 999 using this voucher on the website.',
+                                                                      fontSize:
+                                                                      GlobalVariables.textSizeSMedium,
+                                                                      maxLine: 99,
+                                                                      textColor:
+                                                                      GlobalVariables
+                                                                          .grey))),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 32,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              //  scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: width,
+              margin: EdgeInsets.all(10),
+              child: AppButton(textContent: "Get Code", onPressed: () {
+                showBottomSheet();
+              },textColor: GlobalVariables.white,),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   showBottomSheet(){
 
@@ -425,7 +439,7 @@ class NearByShopPerCategoryItemDetailsState
               Container(
                 width: 50,
                 height: 10,
-                decoration: boxDecoration(color: GlobalVariables.transparent, radius: 16, bgColor: GlobalVariables.lightGray,showShadow: false),
+                decoration: boxDecoration(color: GlobalVariables.transparent, radius: 16, bgColor: GlobalVariables.lightGray),
               ),
               SingleChildScrollView(
                 child: Container(
@@ -440,7 +454,7 @@ class NearByShopPerCategoryItemDetailsState
                         SizedBox(
                           height: 16,
                         ),
-                        text('Pay 50% less for your daily groceries.(First 5 Orders)', fontFamily: GlobalVariables.fontMedium, fontSize: GlobalVariables.textSizeLargeMedium,textColor: GlobalVariables.green,maxLine: 3,fontWeight: FontWeight.w500,),
+                        text('Pay 50% less for your daily groceries.(First 5 Orders)', fontSize: GlobalVariables.textSizeLargeMedium,textColor: GlobalVariables.green,maxLine: 3,fontWeight: FontWeight.w500,),
                         SizedBox(
                           height: 8,
                         ),
@@ -461,9 +475,9 @@ class NearByShopPerCategoryItemDetailsState
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
-                                        child: Flexible(child: Container(
+                                        child: Container(
                                             padding: EdgeInsets.all(8),
-                                            child: text('VDHAR34SDGHFHFY-HFFJ345HFY13DHDBHF',textColor: GlobalVariables.black,fontSize: 14.0,maxLine: 1,fontWeight: FontWeight.w500))),
+                                            child: text('VDHAR34SDGHFHFY-HFFJ345HFY13DHDBHF',textColor: GlobalVariables.black,fontSize: 14.0,maxLine: 1,fontWeight: FontWeight.w500)),
                                       ),
                                       SizedBox(
                                         width: 16,
@@ -538,60 +552,3 @@ class NearByShopPerCategoryItemDetailsState
   }
 }
 
-/*Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 16),
-                    Container(
-                      alignment: Alignment.center,
-                      child: CachedNetworkImage(
-                          imageUrl: urlImg, fit: BoxFit.cover),
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        headingText('Pizaa'),
-                        Row(
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(left: 5,right: 5),
-                                child: SvgPicture.asset(GlobalVariables.whatsAppIconPath, height: 24, width: 24)),
-                            Container(
-                              margin: EdgeInsets.only(left: 5,right: 5),
-                                child: Icon(Icons.favorite,size: 24,color: GlobalVariables.red,))
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    text('lots of ingredient used like paneer, tortilla,onion, tomato, peas, ',
-                        textColor: GlobalVariables.green,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        fontFamily: GlobalVariables.fontMedium),
-                    SizedBox(height: 8),
-                    Container(
-                        margin: EdgeInsets.only(left: 16),
-                        child: longText('lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, '
-                            +'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ',
-                            textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            islongTxt: true)),
-                    SizedBox(height: 30),
-/*Container(
-                margin: EdgeInsets.only(left: 30, right: 30),
-                child: AppButton(
-                  textContent: '',
-                  onPressed: () {},
-                ),
-            )*/
-                  ],
-                ),*/

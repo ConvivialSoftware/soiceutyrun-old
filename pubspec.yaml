@@ -191,7 +191,7 @@ flutter:
     - assets/other_assets/verified_contact.svg
     - assets/other_assets/t3_ic_wp.svg
     - assets/other_assets/db8_ic_item6.png
-    - assets/other_assets/superdaily.png
+    - assets/other_assets/document_image.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

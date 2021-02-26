@@ -47,7 +47,7 @@ class Visitor {
         SID: json["SID"],
         VISITOR_NAME: json["VISITOR_NAME"],
         CONTACT: json["CONTACT"],
-        IMAGE: json["IMAGE"],
+        IMAGE: json["IMAGE"]??'',
         VEHICLE_NO: json["VEHICLE_NO"],
         IN_DATE: json["IN_DATE"],
         VISITOR_USER_STATUS: json["VISITOR_USER_STATUS"],

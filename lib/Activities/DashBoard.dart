@@ -15,6 +15,7 @@ import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/Expense.dart';
+import 'package:societyrun/Activities/FindServices.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/More.dart';
@@ -36,6 +37,8 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -149,8 +152,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
           photo = _profileList[0].PROFILE_PHOTO;
           name = _profileList[0].NAME;
-          GlobalVariables.userNameValueNotifer.value=name;
-          GlobalVariables.userImageURLValueNotifer.value=photo;
+          GlobalVariables.userNameValueNotifer.value = name;
+          GlobalVariables.userImageURLValueNotifer.value = photo;
           GlobalVariables.userImageURLValueNotifer.notifyListeners();
           GlobalVariables.userNameValueNotifer.notifyListeners();
           GlobalFunctions.saveUserProfileToSharedPreferences(photo);
@@ -177,7 +180,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     FirebaseMessagingHandler().getToken();
     print('DashBoard context : ' + context.toString());
     print('BaseStatefulState context : ' + BaseStatefulState.getCtx.toString());
-    print('DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
+    print(
+        'DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getExpandableListViewData(context);
     // TODO: implement build
@@ -349,40 +353,28 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                               // GlobalFunctions.showToast('profile_user');
                                               navigateToProfilePage();
                                             },
-                                            child: userImageURLValueNotifer.isEmpty
-                                                ? Container(
-                                                    child: Image.asset(
-                                                        GlobalVariables
-                                                            .componentUserProfilePath),
-                                                    width: 20,
-                                                    height: 20,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(35),
-                                                        border: Border.all(
-                                                            color:
-                                                                GlobalVariables
-                                                                    .mediumGreen,
-                                                            width: 1.0),
-                                                        color: GlobalVariables
-                                                            .lightGreen),
-                                                  )
-                                                : Container(
-                                                    width: 20,
-                                                    height: 20,
-                                                    decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(
-                                                                userImageURLValueNotifer),
-                                                            fit: BoxFit.cover),
-                                                        border: Border.all(
-                                                            color:
-                                                                GlobalVariables
-                                                                    .mediumGreen,
-                                                            width: 1.0)),
-                                                  ));
+                                            child: userImageURLValueNotifer
+                                                    .isEmpty
+                                                ? AppAssetsImage(
+                                              GlobalVariables
+                                                  .componentUserProfilePath,
+                                              20.0,
+                                              20.0,
+                                              borderColor: GlobalVariables.grey,
+                                              borderWidth: 1.0,
+                                              fit: BoxFit.cover,
+                                              radius: 10.0,
+                                            )
+                                                : AppNetworkImage(
+                                              userImageURLValueNotifer,
+                                              20.0,
+                                              20.0,
+                                              borderColor: GlobalVariables.grey,
+                                              borderWidth: 1.0,
+                                              fit: BoxFit.cover,
+                                              radius: 10.0,
+                                            )
+                                        );
                                       })),
                             ),
                           ],
@@ -767,7 +759,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -777,11 +769,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               onTap: () {
                                 //GlobalFunctions.comingSoonDialog(context);
                                 redirectToPage(AppLocalizations.of(context)
-                                    .translate('near_by_shop'));
+                                    .translate('exclusive_offer'));
                               },
                               child: Container(
-                                padding: EdgeInsets.all(15),
-                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.lightGreen,
                                     borderRadius: BorderRadius.circular(10)),
@@ -791,7 +783,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   children: <Widget>[
                                     SvgPicture.asset(
                                         GlobalVariables.storeIconPath),
-                                    Text('Near By Shop')
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Text(AppLocalizations.of(context)
+                                        .translate('exclusive_offer'))
                                   ],
                                 ),
                               ),
@@ -800,11 +796,19 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                GlobalFunctions.comingSoonDialog(context);
+                                // GlobalFunctions.comingSoonDialog(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BaseFindServices())).then((value) {
+                                  GlobalFunctions.setBaseContext(
+                                      _dashboardSacfoldKey.currentContext);
+                                });
                               },
                               child: Container(
-                                padding: EdgeInsets.all(15),
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.lightGreen,
                                     borderRadius: BorderRadius.circular(10)),
@@ -814,6 +818,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   children: <Widget>[
                                     SvgPicture.asset(
                                         GlobalVariables.serviceIconPath),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
                                     Text('Find Services')
                                   ],
                                 ),
@@ -1060,38 +1067,27 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               builder: (BuildContext context,
                                   String userImageURLValueNotifer,
                                   Widget child) {
-                                return ClipRRect(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    child: userImageURLValueNotifer.isEmpty
-                                        ? Container(
-                                            child: Image.asset(GlobalVariables
-                                                .componentUserProfilePath),
-                                            width: 80,
-                                            height: 80,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(35),
-                                                border: Border.all(
-                                                    color: GlobalVariables
-                                                        .mediumGreen,
-                                                    width: 2.0),
-                                                color:
-                                                    GlobalVariables.lightGreen),
+                                return userImageURLValueNotifer.isEmpty
+                                        ? AppAssetsImage(
+                                            GlobalVariables
+                                                .componentUserProfilePath,
+                                            70.0,
+                                            70.0,
+                                            borderColor: GlobalVariables.grey,
+                                            borderWidth: 2.0,
+                                            fit: BoxFit.cover,
+                                            radius: 30.0,
                                           )
-                                        : Container(
-                                            width: 80,
-                                            height: 80,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        userImageURLValueNotifer),
-                                                    fit: BoxFit.cover),
-                                                border: Border.all(
-                                                    color: GlobalVariables
-                                                        .mediumGreen,
-                                                    width: 2.0)),
-                                          ));
+                                        : AppNetworkImage(
+                                            userImageURLValueNotifer,
+                                            70.0,
+                                            70.0,
+                                            borderColor: GlobalVariables.grey,
+                                            borderWidth: 2.0,
+                                            fit: BoxFit.cover,
+                                            radius: 30.0,
+                                          )
+                                    ;
                               })),
                     ),
                     Flexible(
@@ -1646,7 +1642,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           items: [
             AppLocalizations.of(context).translate("classified"),
             AppLocalizations.of(context).translate("services"),
-            //AppLocalizations.of(context).translate("near_by_shop"),
+            AppLocalizations.of(context).translate("exclusive_offer"),
           ]),
       new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
@@ -1674,7 +1670,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.expenseIconPath,
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: [])
-      else if(AppPermission.isAddExpensePermission)
+      else if (AppPermission.isAddExpensePermission)
         new RootTitle(
             title: AppLocalizations.of(context).translate('expense'),
             rootIconData: GlobalVariables.expenseIconPath,
@@ -1905,14 +1901,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                " Rs. " + double.parse(duesRs).toStringAsFixed(2),
+                                " Rs. " +
+                                    double.parse(duesRs).toStringAsFixed(2),
                                 style: TextStyle(
                                     color: GlobalVariables.green,
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold),
                               ),
                               Visibility(
-                                visible: double.parse(duesRs) > 0 ? true : false,
+                                visible:
+                                    double.parse(duesRs) > 0 ? true : false,
                                 child: Text(
                                   duesDate.length > 0 && duesDate != '-'
                                       ? GlobalFunctions.convertDateFormat(
@@ -2235,23 +2233,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       });
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  My Dues
-      GlobalFunctions.comingSoonDialog(context);
-      /*Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseDiscover(
-                      AppLocalizations.of(context).translate('services'))))
+      //GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseFindServices()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });*/
-    } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
+      });
+    } else if (item ==
+        AppLocalizations.of(context).translate('exclusive_offer')) {
       //Redirect to  My Dues
       //GlobalFunctions.comingSoonDialog(context);
-       Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseNearByShopPerCategory()))
-          .then((value) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseNearByShopPerCategory())).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
@@ -2542,7 +2537,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     List<String> _userPermissionList = userPermission.toString().split(',');
 
     for (int i = 0; i < _socPermissionList.length; i++) {
-      print('_socPermissionList[i] : '+_userPermissionList[i].toString());
+      print('_socPermissionList[i] : ' + _userPermissionList[i].toString());
       if (_socPermissionList[i] == AppPermission.socHelpDeskPermission) {
         AppPermission.isSocHelpDeskPermission = true;
       }
@@ -2558,8 +2553,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
 
     for (int i = 0; i < _userPermissionList.length; i++) {
-
-      print('_userPermissionList[i] : '+_userPermissionList[i].toString());
+      print('_userPermissionList[i] : ' + _userPermissionList[i].toString());
       if (_userPermissionList[i] == AppPermission.userHelpDeskPermission) {
         AppPermission.isUserHelpDeskPermission = true;
       }

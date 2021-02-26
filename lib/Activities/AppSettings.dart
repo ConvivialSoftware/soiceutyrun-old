@@ -12,6 +12,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class  BaseAppSettings extends StatefulWidget {
@@ -186,25 +188,27 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                         // alignment: Alignment.center,
                         /* decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25)),*/
-                          child: photo.length == 0
-                              ? Image.asset(
-                            GlobalVariables.componentUserProfilePath,
-                            width: 60,
-                            height: 60,
+                          child: photo.isEmpty
+                              ? AppAssetsImage(
+                            GlobalVariables
+                                .componentUserProfilePath,
+                            60.0,
+                            60.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 2.0,
+                            fit: BoxFit.cover,
+                            radius: 30.0,
                           )
-                              : Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(photo),
-                                    fit: BoxFit.cover),
-                                border: Border.all(
-                                    color:
-                                    GlobalVariables.mediumGreen,
-                                    width: 2.0)),
-                          )),
+                              : AppNetworkImage(
+                            photo,
+                            60.0,
+                            60.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 2.0,
+                            fit: BoxFit.cover,
+                            radius: 30.0,
+                          )
+                      ),
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 20, 0, 0),

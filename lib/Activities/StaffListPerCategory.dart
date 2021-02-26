@@ -11,15 +11,15 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 
 import 'base_stateful.dart';
 
 class BaseStaffListPerCategory extends StatefulWidget {
-
   String _roleName;
 
   BaseStaffListPerCategory(this._roleName);
-
 
   @override
   State<StatefulWidget> createState() {
@@ -28,17 +28,13 @@ class BaseStaffListPerCategory extends StatefulWidget {
   }
 }
 
-class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCategory> {
-
+class StaffListPerCategoryState
+    extends BaseStatefulState<BaseStaffListPerCategory> {
   ProgressDialog _progressDialog;
-  var userId = "",
-      name = "",
-      photo = "",
-      societyId="",
-      flat="",
-      block="";
+  var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
   String _roleName;
+
   StaffListPerCategoryState(this._roleName);
 
   List<Staff> _staffList = List<Staff>();
@@ -59,7 +55,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
 
   @override
   Widget build(BuildContext context) {
-      _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -81,7 +77,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
-        body:  getStaffListPerCategoryLayout(),
+        body: getStaffListPerCategoryLayout(),
       ),
     );
   }
@@ -110,32 +106,34 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
   }
 
   getStaffListPerCategoryListDataLayout() {
-    return _staffList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
-      padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
-      decoration: BoxDecoration(
-          color: GlobalVariables.white,
-          borderRadius: BorderRadius.circular(20)),
+    return _staffList.length > 0
+        ? Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(
+                10, MediaQuery.of(context).size.height / 20, 10, 0),
+            padding: EdgeInsets.all(20),
+            // height: MediaQuery.of(context).size.height / 0.5,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white,
+                borderRadius: BorderRadius.circular(20)),
 
-      child: Builder(
-          builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
-            itemCount: _staffList.length,
-            itemBuilder: (context, position) {
-              return getStaffListPerCategoryListItemLayout(position);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
-    ):Container();
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: _staffList.length,
+                      itemBuilder: (context, position) {
+                        return getStaffListPerCategoryListItemLayout(position);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : Container();
   }
 
   getStaffListPerCategoryListItemLayout(int position) {
-
     List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
-    for(int i=0;i<_workHouseList.length;i++){
-      if(_workHouseList[i].length==0){
+    for (int i = 0; i < _workHouseList.length; i++) {
+      if (_workHouseList[i].length == 0) {
         _workHouseList.removeAt(i);
       }
     }
@@ -156,10 +154,9 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');
-        if(_rate.length==2) {
+        if (_rate.length == 2) {
           print('_rate[1] : ' + _rate[1]);
-          if(_rate[1].isEmpty)
-            _rate[1]='0.0';
+          if (_rate[1].isEmpty) _rate[1] = '0.0';
           totalRate += double.parse(_rate[1]);
           print('totalRate : ' + totalRate.toString());
         }
@@ -169,19 +166,18 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
 
     return InkWell(
       onTap: () async {
-       var result = await Navigator.push(
+        var result = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    BaseStaffDetails(_staffList[position])));
-       if(result=='back'){
-         getStaffRoleDetailsData();
-       }
+                builder: (context) => BaseStaffDetails(_staffList[position])));
+        if (result == 'back') {
+          getStaffRoleDetailsData();
+        }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
-       // padding: EdgeInsets.all(10),
-       // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        // padding: EdgeInsets.all(10),
+        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: GlobalVariables.white),
@@ -195,25 +191,26 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                     // alignment: Alignment.center,
                     /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                    child: staffImage.length == 0
-                        ? Image.asset(
-                      GlobalVariables.componentUserProfilePath,
-                      width: 60,
-                      height: 60,
-                    )
-                        : Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(staffImage),
-                              fit: BoxFit.cover),
-                          border: Border.all(
-                              color:
-                              GlobalVariables.mediumGreen,
-                              width: 2.0)),
-                    )),
+                    child: staffImage.isEmpty
+                        ? AppAssetsImage(
+                            GlobalVariables.componentUserProfilePath,
+                            70.0,
+                            70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 2.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )
+                        : AppNetworkImage(
+                            staffImage,
+                            70.0,
+                            70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 2.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )
+                    ),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -236,11 +233,10 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                             children: <Widget>[
                               Container(
                                   child: Icon(
-                                    Icons.star,
-                                    color: GlobalVariables.skyBlue,
-                                    size: 15,
-                                  )
-                              ),
+                                Icons.star,
+                                color: GlobalVariables.skyBlue,
+                                size: 15,
+                              )),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 child: Text(
@@ -257,13 +253,12 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                                     Icons.fiber_manual_record,
                                     color: GlobalVariables.orangeYellow,
                                     size: 10,
-                                  )
-                              ),
+                                  )),
                               Container(
                                 alignment: Alignment.topLeft,
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 child: Text(
-                                  _workHouseList.length.toString()+' House',
+                                  _workHouseList.length.toString() + ' House',
                                   style: TextStyle(
                                     color: GlobalVariables.green,
                                     fontSize: 12,
@@ -278,18 +273,23 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
                   ),
                 ),
                 Container(
-                  child: Icon(Icons.arrow_forward_ios,color: GlobalVariables.lightGray,),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: GlobalVariables.lightGray,
+                  ),
                 ),
               ],
             ),
-            position !=_staffList.length-1? Container(
-              //color: GlobalVariables.black,
-              //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Divider(
-                thickness: 1,
-                color: GlobalVariables.lightGray,
-              ),
-            ):Container(),
+            position != _staffList.length - 1
+                ? Container(
+                    //color: GlobalVariables.black,
+                    //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: Divider(
+                      thickness: 1,
+                      color: GlobalVariables.lightGray,
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -299,7 +299,7 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
   Future<void> getSharedPreferenceData() async {
     userId = await GlobalFunctions.getUserId();
     name = await GlobalFunctions.getDisplayName();
-   // photo = await GlobalFunctions.getPhoto();
+    // photo = await GlobalFunctions.getPhoto();
     phone = await GlobalFunctions.getMobile();
     email = await GlobalFunctions.getUserName();
     consumerId = await GlobalFunctions.getConsumerID();
@@ -323,18 +323,15 @@ class StaffListPerCategoryState extends BaseStatefulState<BaseStaffListPerCatego
     String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog.show();
-    restClient.staffRoleDetails(societyId,_roleName).then((value) {
+    restClient.staffRoleDetails(societyId, _roleName).then((value) {
       _progressDialog.hide();
       List<dynamic> _list = value.data;
-      _staffList = List<Staff>.from(_list.map((i)=>Staff.fromJson(i)));
+      _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
       if (mounted) {
         setState(() {
           print('setState');
         });
       }
-
     });
-
   }
-
 }

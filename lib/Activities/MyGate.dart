@@ -15,6 +15,8 @@ import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -556,16 +558,25 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             Container(
               child: Row(
                 children: <Widget>[
-                  Container(
-                    child: _visitorList[position].IMAGE==null || _visitorList[position].IMAGE=="" ? Image.asset(
-                      GlobalVariables.componentUserProfilePath,
-                      width: 26,
-                      height: 26,
-                    ): CircleAvatar(
-                      radius: 20,
-                      backgroundColor: GlobalVariables.mediumGreen,
-                      backgroundImage: NetworkImage(_visitorList[position].IMAGE),
-                    ),
+                  _visitorList[position].IMAGE.isEmpty
+                  ? AppAssetsImage(
+                    GlobalVariables
+                        .componentUserProfilePath,
+                    20.0,
+                    20.0,
+                    borderColor: GlobalVariables.grey,
+                    borderWidth: 1.0,
+                    fit: BoxFit.cover,
+                    radius: 10.0,
+                  )
+                      : AppNetworkImage(
+                    _visitorList[position].IMAGE,
+                    26.0,
+                    26.0,
+                    borderColor: GlobalVariables.grey,
+                    borderWidth: 1.0,
+                    fit: BoxFit.cover,
+                    radius: 13.0,
                   ),
                   Expanded(
                     child: Container(

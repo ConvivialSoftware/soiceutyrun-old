@@ -117,6 +117,7 @@ class GlobalVariables {
   static var whatsAppIconPath = "assets/other_assets/t3_ic_wp.svg";
   static var sofaIconPath = "assets/other_assets/db8_ic_item6.png";
   static var superDailyIconPath = "assets/other_assets/superdaily.png";
+  static var documentImageIconPath = "assets/other_assets/document_image.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -138,10 +139,10 @@ class GlobalVariables {
   static const textSizeXLarge = 30.0;
   static const textSizeXXLarge = 35.0;
 
-  static const fontRegular = 'Regular';
+  /*static const fontRegular = 'Regular';
   static const fontMedium = 'Medium';
   static const fontSemibold = 'Semibold';
-  static const fontBold = 'Bold';
+  static const fontBold = 'Bold';*/
 
   static const spacing_control_half = 2.0;
   static const spacing_control = 4.0;
@@ -290,6 +291,7 @@ class GlobalVariables {
   static const Color red = const Color(0xFFC62828);
   static const Color lightCyan = const Color(0xFF73D7D3);
   static const Color lightOrange = const Color(0xFFFF9781);
+  static const Color lightPurple = const Color(0xFF8998FE);
 
   /*Variables for URL FormData Key*/
 

@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/DynamicWidgetDialog.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
-import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';

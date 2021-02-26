@@ -39,7 +39,7 @@ class Poll {
     return Poll(
         ID: json["ID"],
         USER_NAME: json["USER_NAME"],
-        USER_PHOTO: json["USER_PHOTO"],
+        USER_PHOTO: json["USER_PHOTO"]??"",
         DESCRIPTION: json["DESCRIPTION"],
         EXPIRY_DATE: json["EXPIRY_DATE"],
         POLL_Q: json["POLL_Q"],

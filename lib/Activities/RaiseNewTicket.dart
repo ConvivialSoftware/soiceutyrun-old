@@ -9,6 +9,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 
 import 'HelpDesk.dart';
 import 'base_stateful.dart';
@@ -378,7 +380,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
                   children: <Widget>[
-                    Container(
+                    /*Container(
                       width:50,
                       height: 50,
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -395,6 +397,24 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                           border: Border.all(color: GlobalVariables.green,width: 2.0)
                       ),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                    )*/attachmentFilePath==null
+                        ? AppAssetsImage(
+                      GlobalVariables.componentUserProfilePath,
+                      50.0,
+                      50.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 2.0,
+                      fit: BoxFit.cover,
+                      radius: 25.0,
+                    )
+                        : AppFileImage(
+                      attachmentFilePath,
+                      50.0,
+                      50.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 2.0,
+                      fit: BoxFit.cover,
+                      radius: 25.0,
                     ),
                     Column(
                       children: <Widget>[

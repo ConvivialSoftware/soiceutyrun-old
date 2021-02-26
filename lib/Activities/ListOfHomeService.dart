@@ -3,6 +3,7 @@ import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -68,13 +69,7 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      getHomeCareListDataLayout(),
-                    ],
-                  ),
-                ),
+                getHomeCareListDataLayout(),
               ],
             ),
           ),
@@ -86,11 +81,10 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
   getHomeCareListDataLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).size.height / 80, 20, 0),
+      margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
       child: Builder(
           builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
+             scrollDirection: Axis.vertical,
             itemCount: _homeCareList.length,
             itemBuilder: (context, position) {
               return getHomeCareListItemLayout(position);
@@ -107,105 +101,99 @@ class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
             builder: (context) =>
                 BaseDescriptionOfHomeService()));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: GlobalVariables.white),
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text(_homeCareList[position].title,style: TextStyle(
-                        color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.w400
-                      ),),
-                    ),
-                  ),
-                  Container(
-                    child:  Row(
-                      children: <Widget>[
-                        Container(
-                            child: Icon(
-                              Icons.star,
-                              color:
-                              GlobalVariables.orangeYellow,
-                              size: 15,
-                            )),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(
-                              5, 0, 0, 0),
-                          child: Text(
-                            _homeCareList[position]
-                                .rateCount,
-                            style: TextStyle(
-                              color: GlobalVariables
-                                  .veryLightGray,
-                              fontSize: 12,
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          child: Container(
+            decoration: boxDecoration(radius: 10),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: 16,top: 8,right: 16,bottom: 8),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  text(_homeCareList[position].title,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      maxLine: 2,
+                                      textColor: GlobalVariables.green,fontWeight: FontWeight.w500),
+                                  SizedBox(height: 4),
+                                  text(_homeCareList[position].subDesc,
+                                      textColor:
+                                      GlobalVariables.grey,
+                                      fontSize:
+                                      GlobalVariables.textSizeSmall,
+                                      maxLine: 2),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.start,
+                      ),
+                      Divider(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: text(_homeCareList[position].startPrice,
+                                textColor: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeSmall,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child:  Row(
+                                    children: <Widget>[
+                                      Container(
+                                          child: Icon(
+                                            Icons.star,
+                                            color:
+                                            GlobalVariables.orangeYellow,
+                                            size: 15,
+                                          )),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            5, 0, 0, 0),
+                                        child: Text(
+                                          _homeCareList[position]
+                                              .rateCount,
+                                          style: TextStyle(
+                                            color: GlobalVariables
+                                                .grey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                          //SizedBox(width: 10),
+                        ],
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  width: 4,
+                  height: 35,
+                  margin: EdgeInsets.only(top: 16),
+                  color: position % 2 == 0 ? GlobalVariables.lightPurple : GlobalVariables.orangeYellow,
+                )
+              ],
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-              alignment: Alignment.topLeft,
-              child: Text(_homeCareList[position].subDesc,style: TextStyle(
-                  color: GlobalVariables.lightGray,fontSize: 14,
-              ),),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text(_homeCareList[position].startPrice,style: TextStyle(
-                          color: GlobalVariables.mediumGreen,fontSize: 16,fontWeight: FontWeight.w400
-                      ),),
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _homeCareList[position].isCall ?
-                        Container(
-                            margin:EdgeInsets.fromLTRB(5, 0, 5, 0),
-                            child: Icon(
-                              Icons.call,
-                              color:
-                              GlobalVariables.mediumGreen,
-                              size: 24,
-                            )) : Container(),
-                        _homeCareList[position].isMail ?
-                        Container(
-                            margin:EdgeInsets.fromLTRB(5, 0, 5, 0),
-                            child: Icon(
-                              Icons.mail_outline,
-                              color:
-                              GlobalVariables.mediumGreen,
-                              size: 24,
-                            )):Container(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          )),
     );
   }
 

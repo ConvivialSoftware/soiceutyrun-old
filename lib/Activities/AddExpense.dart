@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
-import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
 import 'package:societyrun/Models/LedgerAccount.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/utils/AppButton.dart';
+import 'package:societyrun/utils/AppImage.dart';
+import 'package:societyrun/utils/AppTextField.dart';
 
 import 'base_stateful.dart';
 
@@ -36,8 +37,6 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
 
   List<LedgerAccount> _ledgerAccountList = new List<LedgerAccount>();
   List<String> _ledgerAccountStringList = new List<String>();
-  List<DropdownMenuItem<LedgerAccount>> _ledgerAccountListItems =
-      new List<DropdownMenuItem<LedgerAccount>>();
   LedgerAccount _selectedLedgerAccount;
 
   List<String> _paidByList = new List<String>();
@@ -53,8 +52,8 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
 
-  String currentLedgerAccountText='';
-  String currentLedgerAccountTextID='';
+  String currentLedgerAccountText = '';
+  String currentLedgerAccountTextID = '';
 
   @override
   void initState() {
@@ -144,54 +143,37 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _paymentDateController,
-                  readOnly: true,
-                  style: TextStyle(color: GlobalVariables.green),
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)
-                          .translate('payment_date'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.veryLightGray, fontSize: 16),
-                      border: InputBorder.none,
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            GlobalFunctions.getSelectedDate(context)
-                                .then((value) {
-                              _paymentDateController.text =
-                                  value.day.toString().padLeft(2, '0') +
-                                      "-" +
-                                      value.month.toString().padLeft(2, '0') +
-                                      "-" +
-                                      value.year.toString();
-                            });
-                          },
-                          icon: Icon(
-                            Icons.date_range,
-                            color: GlobalVariables.mediumGreen,
-                          ))),
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('payment_date'),
+                controllerCallback: _paymentDateController,
+                borderWidth: 2.0,
+                readOnly: true,
+                suffixIcon: AppIconButton(
+                  Icons.date_range,
+                  iconColor: GlobalVariables.mediumGreen,
+                  onPressed: () {
+                    GlobalFunctions.getSelectedDate(context).then((value) {
+                      _paymentDateController.text =
+                          value.day.toString().padLeft(2, '0') +
+                              "-" +
+                              value.month.toString().padLeft(2, '0') +
+                              "-" +
+                              value.year.toString();
+                    });
+                  },
                 ),
               ),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                      width: 2.0,
                     )),
                 child: SearchableDropdown(
                   items: _ledgerAccountList.map((item) {
@@ -203,72 +185,23 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                   isExpanded: true,
                   isCaseSensitiveSearch: true,
                   icon: Icon(null
-                    /*Icons.keyboard_arrow_down,
+                      /*Icons.keyboard_arrow_down,
                     color: GlobalVariables.mediumRed,*/
-                  ),
+                      ),
                   underline: SizedBox(),
                   hint: Text(
-                    AppLocalizations.of(context).translate('ledger_account')+
+                    AppLocalizations.of(context).translate('ledger_account') +
                         '*',
                     style: TextStyle(
                         color: GlobalVariables.lightGray, fontSize: 16),
                   ),
                 ),
               ),
-            /*  Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumRed,
-                      width: 3.0,
-                    )),
-                child: SimpleAutoCompleteTextField(
-                  //key: key,
-                  decoration: new InputDecoration(errorText: "Beans"),
-                  controller: TextEditingController(text: "Starting Text"),
-                  suggestions: _ledgerAccountStringList,
-                  textChanged: (text) => currentLedgerAccountText = text,
-                  clearOnSubmit: true,
-                  textSubmitted: (text) => setState(() {
-                    if (text != "") {
-                      for (int i = 0; i < _ledgerAccountList.length; i++) {
-                        LedgerAccount _ledgerAccount = _ledgerAccountList[i];
-                        if(text==_ledgerAccount.name){
-                          currentLedgerAccountTextID=_ledgerAccount.id;
-                        }
-                      }
-                    }
-                  }),
-                ),
-              ),*/
-              Container(
-                //  height: 150,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  //readOnly: true,
-                  //maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText:
-                          AppLocalizations.of(context).translate('amount') +
-                              '*',
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
-                ),
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('amount') + '*',
+                controllerCallback: _amountController,
+                keyboardType: TextInputType.number,
               ),
               Row(
                 children: <Widget>[
@@ -276,14 +209,14 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     flex: 2,
                     child: Container(
                       width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -306,44 +239,30 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    width: 5.0,
+                  ),
                   Flexible(
                     flex: 3,
-                    child: Container(
-                      //  height: 150,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 3.0,
-                          )),
-                      child: TextField(
-                        controller: _referenceController,
-                        //maxLines: 99,
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                    .translate('reference_no') +
-                                '*',
-                            hintStyle: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 14),
-                            border: InputBorder.none),
-                      ),
+                    child: AppTextField(
+                      textHintContent: AppLocalizations.of(context)
+                              .translate('reference_no') +
+                          '*',
+                      controllerCallback: _referenceController,
                     ),
                   ),
                 ],
               ),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                      width: 2.0,
                     )),
                 child: ButtonTheme(
                   child: DropdownButton(
@@ -367,25 +286,11 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
               ),
               Container(
                 height: 100,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _noteController,
-                  keyboardType: TextInputType.text,
-                  maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText:
-                          AppLocalizations.of(context).translate('enter_note'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
-                      border: InputBorder.none),
+                child: AppTextField(
+                  textHintContent:
+                      AppLocalizations.of(context).translate('enter_note') +
+                          '*',
+                  controllerCallback: _noteController,
                 ),
               ),
               Row(
@@ -502,23 +407,11 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                  // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-                      verifyInfo();
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
-                    child: Text(
-                      AppLocalizations.of(context).translate('submit'),
-                      style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyInfo();
+                  },
                 ),
               ),
             ],
@@ -530,19 +423,15 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
 
   void verifyInfo() {
     if (_selectedLedgerAccount != null) {
-
       if (_amountController.text.length > 0) {
-
         if (_selectedPaidBy != null) {
-          if(_referenceController.text.length>0) {
+          if (_referenceController.text.length > 0) {
             if (_selectedBankAccount != null) {
-
               addExpense();
-
             } else {
               GlobalFunctions.showToast('Please Select From Account');
             }
-          }else{
+          } else {
             GlobalFunctions.showToast('Please Enter Reference Number');
           }
         } else {
@@ -557,34 +446,44 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
   }
 
   Future<void> addExpense() async {
-
     final dio = Dio();
-    final RestClientERP restClientERP = RestClientERP(dio,baseUrl: GlobalVariables.BaseURLERP);
+    final RestClientERP restClientERP =
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     String attachmentName;
     String attachment;
 
-    if(attachmentFileName!=null && attachmentFilePath!=null){
+    if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
     }
 
-   // print('attachment lengtth : '+attachment.length.toString());
+    // print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog.show();
-    restClientERP.addExpense(societyId, _amountController.text, _referenceController.text,
-        _selectedPaidBy, _selectedBankAccount, _selectedLedgerAccount.id, _paymentDateController.text,
-        _noteController.text, attachment).then((value) {
-          print('add member Status value : '+value.toString());
-          _progressDialog.hide();
-          if(value.status){
-            if(attachmentFileName!=null && attachmentFilePath!=null){
-              GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-            }
-            Navigator.of(context).pop();
-          }
-          GlobalFunctions.showToast(value.message);
-    }) .catchError((Object obj) {
+    restClientERP
+        .addExpense(
+            societyId,
+            _amountController.text,
+            _referenceController.text,
+            _selectedPaidBy,
+            _selectedBankAccount,
+            _selectedLedgerAccount.id,
+            _paymentDateController.text,
+            _noteController.text,
+            attachment)
+        .then((value) {
+      print('add member Status value : ' + value.toString());
+      _progressDialog.hide();
+      if (value.status) {
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+        }
+        Navigator.of(context).pop();
+      }
+      GlobalFunctions.showToast(value.message);
+    }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -595,8 +494,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
           break;
         default:
       }
-    }) ;
-
+    });
   }
 
   void openFile(BuildContext context) {
@@ -642,7 +540,6 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
     }
   }
 
-
   void changeLedgerAccountDropDownItem(LedgerAccount value) {
     print('clickable value : ' + value.toString());
     setState(() {
@@ -680,24 +577,11 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
       List<dynamic> _list = value.data;
       List<dynamic> _listBank = value.bank;
 
-      _ledgerAccountList = List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
-
+      _ledgerAccountList =
+          List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
       for (int i = 0; i < _ledgerAccountList.length; i++) {
         LedgerAccount _ledgerAccount = _ledgerAccountList[i];
-
         _ledgerAccountStringList.add(_ledgerAccount.name);
-        /*_ledgerAccountListItems.add(DropdownMenuItem(
-          value: _ledgerAccount,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            alignment: Alignment.topLeft,
-            child: Text(
-              _ledgerAccount.name,
-              style: TextStyle(color: GlobalVariables.black, fontSize: 16),
-              maxLines: 1,
-            ),
-          ),
-        ));*/
       }
 
       _bankList = List<Bank>.from(_listBank.map((i) => Bank.fromJson(i)));
@@ -714,7 +598,6 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
       //_categorySelectedItem = __categoryListItems[0].value;
       _progressDialog.hide();
       setState(() {});
-
     }) /*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){
       //    _progressDialog.hide();

@@ -65,7 +65,7 @@ class NearByShopPerCategoryState extends BaseStatefulState<BaseNearByShopPerCate
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('near_by_shop'),
+            AppLocalizations.of(context).translate('exclusive_offer'),
             style: TextStyle(color: GlobalVariables.green,fontSize: 16),
           ),
           bottom: getTabLayout(),
@@ -93,7 +93,7 @@ class NearByShopPerCategoryState extends BaseStatefulState<BaseNearByShopPerCate
   }
   getTabLayout() {
     return PreferredSize(
-      preferredSize: Size.fromHeight(10.0),
+      preferredSize: Size.fromHeight(30.0),
       child: TabBar(
         tabs: [
           Container(
@@ -193,6 +193,17 @@ class NearByShopPerCategoryState extends BaseStatefulState<BaseNearByShopPerCate
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              alignment: Alignment.topRight,
+                              padding: EdgeInsets.only(left: 5,right: 5,top: 1,bottom: 1),
+                              decoration: boxDecoration(bgColor: GlobalVariables.white,radius: 30),
+                              child: text('Till 31 March 2021',fontSize: 12.0,),
+                            ),
+                          ],
+                        ),
                         ClipRRect(
                           child: /*CachedNetworkImage(
                             imageUrl: urlImg,

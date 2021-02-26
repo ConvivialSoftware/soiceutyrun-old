@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/utils/AppButton.dart';
+import 'package:societyrun/utils/AppTextField.dart';
+import 'package:societyrun/utils/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -14,7 +20,21 @@ class BaseCreateClassifiedListing extends StatefulWidget {
 }
 
 class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifiedListing> {
-  var name="", mobile="", mail="";
+  var name="", mobile="", mail="",photo="";
+
+  Map<String, String> imagesMap=Map<String, String>();
+
+  List<String> imagePathList=List<String>();
+  List<String> imagePathKeyList=List<String>();
+
+  var width,height;
+
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _propertyController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
+  TextEditingController _locationController = TextEditingController();
+
 
   @override
   void initState() {
@@ -25,6 +45,8 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
@@ -84,6 +106,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
             borderRadius: BorderRadius.circular(20)),
         child: Container(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
                 alignment: Alignment.topLeft,
@@ -104,7 +127,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                      width: 2.0,
                     )),
                 child: ButtonTheme(
                   child: DropdownButton(
@@ -119,316 +142,164 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     hint: Text(
                       AppLocalizations.of(context).translate('select_category'),
                       style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 12),
+                          color: GlobalVariables.lightGray, fontSize: 14),
                     ),
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  AppLocalizations.of(context).translate('i_want_to'),
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.green,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: GlobalVariables.green,
-                                      width: 2.0,
-                                    )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('sell'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context).translate('buy'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('rent'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('giveaway'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10,0,0,0),
-                margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)
-                          .translate('title_selling'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
-                      border: InputBorder.none),
-                ),
-              ),
-              Container(
-                height: 150,
-                padding: EdgeInsets.fromLTRB(10,0,0,0),
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                      width: 2.0,
                     )),
-                child: TextField(
-                  maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)
-                          .translate('description_selling'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
-                      border: InputBorder.none),
+                child: ButtonTheme(
+                  child: DropdownButton(
+                    items: null,
+                    onChanged: null,
+                    isExpanded: true,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: GlobalVariables.mediumGreen,
+                    ),
+                    underline: SizedBox(),
+                    hint: Text(
+                      AppLocalizations.of(context).translate('i_want_to'),
+                      style: TextStyle(
+                          color: GlobalVariables.lightGray, fontSize: 14),
+                    ),
+                  ),
                 ),
               ),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('title_selling'), controllerCallback: _titleController,borderWidth: 2.0,),
+              Container(height: 150, child: AppTextField(textHintContent: AppLocalizations.of(context).translate('description_selling'), controllerCallback: _descriptionController,borderWidth: 2.0,maxLines: 99,)),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('property_details'), controllerCallback: _propertyController,borderWidth: 2.0,),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('rs'), controllerCallback: _priceController,borderWidth: 2.0,),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('location'), controllerCallback: _locationController,borderWidth: 2.0,),
               Container(
+                width: 140,
+                alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width/2,
-                        padding: EdgeInsets.fromLTRB(10,0,0,0),
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 3.0,
-                            )),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)
-                                  .translate('property_details'),
-                              hintStyle: TextStyle(
-                                  color: GlobalVariables.lightGray,
-                                  fontSize: 16),
-                              border: InputBorder.none),
-                        ),
-                      ),
+                decoration: BoxDecoration(
+                    color: GlobalVariables.mediumGreen,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: GlobalVariables.transparent,
+                      width: 3.0,
+                    )),
+                child: FlatButton.icon(
+                    onPressed: () {
+                      GlobalFunctions.getMultiFilePath(context).then((value) {
+
+                        if(value.length>5){
+                          GlobalFunctions.showToast('Can not upload more than 5 images');
+                        }else {
+                          if(imagesMap.length==0) {
+                            imagesMap = value;
+                          }else{
+                            if(imagesMap.length+value.length>5){
+                              GlobalFunctions.showToast('Can not upload more than 5 images');
+                            }else {
+                              imagesMap.addAll(value);
+                            }
+                          }
+                          imagePathList = imagesMap.entries.map((e) => (e.value)).toList();
+                          imagePathKeyList = imagesMap.entries.map((e) => (e.key)).toList();
+                          print('imagesMap : ' + imagesMap.length.toString());
+                          print('imagePathList : ' + imagePathList.length.toString());
+                          print('imagePathKeyList : ' + imagePathKeyList.length.toString());
+                          setState(() {
+                          });
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: GlobalVariables.white,
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                          width: MediaQuery.of(context).size.width/2,
-                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.mediumGreen,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: GlobalVariables.transparent,
-                              width: 3.0,
-                            )),
-                        child: FlatButton.icon(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.camera_alt,
-                              color: GlobalVariables.white,
+                    label: Text(
+                      AppLocalizations.of(context)
+                          .translate('add_photo'),
+                      style: TextStyle(color: GlobalVariables.white),
+                    )),
+              ),
+              imagesMap.length>0 && imagePathList.length>0 ? Container(
+                height: width / 5,
+                margin:EdgeInsets.fromLTRB(5,10,5,5),
+                child: Builder(
+                    builder: (context) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: imagesMap.length,
+                      itemBuilder: (context, position) {
+                        return GestureDetector(
+                          onLongPress: (){
+                            showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Stack(
+                                    alignment: Alignment.topCenter,
+                                    children: <Widget>[
+                                      Container(
+                                        width: 100,
+                                        height: 50,
+                                        decoration: boxDecoration(color: GlobalVariables.transparent, radius: 16, bgColor: GlobalVariables.transparent),
+                                        child: InkWell(
+                                            onTap: (){
+                                              imagesMap.remove(imagePathKeyList[position]);
+                                              imagePathList.removeAt(position);
+                                              imagePathKeyList.removeAt(position);
+                                              Navigator.of(context).pop();
+                                              setState(() {
+                                                print('imagesMap : ' + imagesMap.length.toString());
+                                                print('imagePathList : ' + imagePathList.length.toString());
+                                                print('imagePathKeyList : ' + imagePathKeyList.length.toString());
+                                              });
+                                            },
+                                            child: Icon(Icons.delete,size: 25,color: GlobalVariables.white,)),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(5),
+                            child: ClipRRect(
+                              child: Image.file(File(imagePathList[position]),width: width/5,height: width/5,fit: BoxFit.fill,),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            label: Text(
-                              AppLocalizations.of(context)
-                                  .translate('add_photo'),
-                              style: TextStyle(color: GlobalVariables.white),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10,0,0,0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                          ),
+                        );
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
                     )),
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintText: "Rs.",
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
-                      border: InputBorder.none),
-                ),
-              ),
+              ):Container(),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                height: 1,
-                color: GlobalVariables.lightGray,
-                child: Divider(
-                  height: 1,
-                  color: GlobalVariables.lightGray,
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: GlobalVariables.mediumGreen, width: 3.0)),
+                decoration: boxDecoration(
+                    bgColor: GlobalVariables.white,
+                    radius: 10,
+                    color: GlobalVariables.mediumGreen,
+                    width: 2.0),
                 child: Container(
                   padding: EdgeInsets.all(5),
+                  margin: EdgeInsets.only(left: 5),
                   child: Row(
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: Image.asset(
-                          GlobalVariables.componentUserProfilePath,
-                          width: 26,
-                          height: 26,
-                        ),
+                      photo.isEmpty ? Image.asset(
+                        GlobalVariables.componentUserProfilePath,
+                        width: 26,
+                        height: 26,
+                      ): CircleAvatar(
+                        radius: 13,
+                        backgroundColor: GlobalVariables.mediumGreen,
+                        backgroundImage: NetworkImage(photo),
                       ),
                       Expanded(
                         child: Container(
@@ -438,60 +309,21 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Container(
-                                child: Text(
-                                  name,
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      child: Text(
-                                        mail,
-                                        style: TextStyle(
-                                          color: GlobalVariables.lightGray,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                      width: 1,
-                                      color: GlobalVariables.lightGray,
-                                      child: Divider(
-                                        height: 10,
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        mobile,
-                                        style: TextStyle(
-                                          color: GlobalVariables.lightGray,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
+                              text(name,textColor: GlobalVariables.green,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeMedium,textStyleHeight: 1.0),
+                              text(mail,textColor: GlobalVariables.grey,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeSmall,textStyleHeight: 1.0),
+                              text(mobile,textColor: GlobalVariables.grey,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeSmall,textStyleHeight: 1.0),
                             ],
                           ),
                         ),
                       ),
-                      Container(
+                      /*Container(
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         decoration: BoxDecoration(
                             color:GlobalVariables.green,
                             borderRadius: BorderRadius.circular(30)),
                         child:Icon(Icons.edit,color: GlobalVariables.white,size: 20,)
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -500,22 +332,9 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                  // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {},
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
-                    child: Text(
-                      AppLocalizations.of(context).translate('submit'),
-                      style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
-                ),
+                child: AppButton(textContent: AppLocalizations.of(context).translate('submit'), onPressed: (){
+
+                },),
               ),
             ],
           ),
@@ -524,16 +343,15 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
     );
   }
 
-  void getSharedPrefData() {
-    GlobalFunctions.getDisplayName().then((displayName) {
-      name = displayName;
-      GlobalFunctions.getUserName().then((displayMail) {
-        mail = displayMail;
-        GlobalFunctions.getMobile().then((displayMobile) {
-          mobile = displayMobile;
-          setState(() {});
-        });
-      });
+  Future<void> getSharedPrefData() async {
+
+    name = await GlobalFunctions.getDisplayName();
+    mail = await GlobalFunctions.getUserName();
+    mobile = await GlobalFunctions.getMobile();
+    photo = await GlobalFunctions.getPhoto();
+
+    setState(() {
+
     });
   }
 }
