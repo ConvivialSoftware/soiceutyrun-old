@@ -9,6 +9,9 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 
 import 'base_stateful.dart';
 
@@ -70,7 +73,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
-    _dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().year.toString();
+    _dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
     });
@@ -142,7 +145,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(15),
        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
@@ -150,29 +153,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('name')+'*',
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                  ),
-                ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('name') +
+                    '*',
+                controllerCallback: _nameController,
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   children: <Widget>[
                     Container(
@@ -261,43 +249,45 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                 children: <Widget>[
                   Flexible(
                     flex: 1,
-                    child: Container(
-                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 3.0,
-                          )
-                      ),
-                      child: TextField(
-                        controller: _dobController,
-                        readOnly: true,
-                        style: TextStyle(
-                            color: GlobalVariables.green
-                        ),
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('date_of_birth'),
-                            hintStyle: TextStyle(color: GlobalVariables.veryLightGray ,fontSize: 16),
-                            border: InputBorder.none,
-                            suffixIcon: IconButton(
-                                onPressed: (){
-
-                                  GlobalFunctions.getSelectedDateForDOB(context).then((value){
-                                    _dobController.text = value.day.toString().padLeft(2, '0')+"/"+value.month.toString().padLeft(2, '0')+"/"+value.year.toString();
-                                  });
-
-                                },
-                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,))
-                        ),
+                    child: AppTextField(
+                      textHintContent:
+                      AppLocalizations.of(context).translate('date_of_birth'),
+                      controllerCallback: _dobController,
+                      borderWidth: 2.0,
+                      contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      readOnly: true,
+                      suffixIcon: AppIconButton(
+                        Icons.date_range,
+                        iconColor: GlobalVariables.mediumGreen,
+                        onPressed: () {
+                          GlobalFunctions.getSelectedDate(context).then((value) {
+                            _dobController.text =
+                                value.day.toString().padLeft(2, '0') +
+                                    "-" +
+                                    value.month.toString().padLeft(2, '0') +
+                                    "-" +
+                                    value.year.toString();
+                          });
+                        },
                       ),
                     ),
                   ),
+                  SizedBox(width: 5,),
                   Flexible(
                     flex: 1,
-                    child: Container(
+                    child: AppTextField(
+                      textHintContent:
+                      AppLocalizations.of(context).translate('contact1') + '*',
+                      controllerCallback: _mobileController,
+                      keyboardType: TextInputType.number,
+                      maxLength: 10,
+                      contentPadding: EdgeInsets.only(top: 14),
+                      suffixIcon: AppIconButton(
+                        Icons.phone_android,
+                        iconColor: GlobalVariables.mediumGreen,
+                      ),
+                    ),
+                    /*Container(
                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
                       decoration: BoxDecoration(
@@ -330,7 +320,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           //contentPadding: EdgeInsets.only(left: 0, bottom: 0, top:0 , right: 0),
-                         /* enabledBorder: OutlineInputBorder(
+                         *//* enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: GlobalVariables.mediumGreen,
                                 width: 3.0,
@@ -341,14 +331,26 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               borderSide: BorderSide(
                                   color: GlobalVariables.mediumGreen, width: 3.0),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),*/
+                              BorderRadius.all(Radius.circular(10.0))),*//*
                         ),
                       ),
-                    ),
+                    ),*/
                   ),
                 ],
               ),
-              Container(
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('contact2'),
+                controllerCallback: _alterMobileController,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                contentPadding: EdgeInsets.only(top: 14),
+                suffixIcon: AppIconButton(
+                  Icons.phone_android,
+                  iconColor: GlobalVariables.mediumGreen,
+                ),
+              ),
+              /*Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
@@ -381,7 +383,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     //contentPadding: EdgeInsets.only(left: 0, bottom: 0, top:0 , right: 0),
-                    /* enabledBorder: OutlineInputBorder(
+                    *//* enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: GlobalVariables.mediumGreen,
                                 width: 3.0,
@@ -392,11 +394,22 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               borderSide: BorderSide(
                                   color: GlobalVariables.mediumGreen, width: 3.0),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),*/
+                              BorderRadius.all(Radius.circular(10.0))),*//*
                   ),
                 ),
+              ),*/
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('email_id'),
+                controllerCallback: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                contentPadding: EdgeInsets.only(top: 14),
+                suffixIcon: AppIconButton(
+                  Icons.email,
+                  iconColor: GlobalVariables.mediumGreen,
+                ),
               ),
-              Container(
+              /*Container(
                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
@@ -420,7 +433,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               Row(
                 children: <Widget>[
                   Flexible(
@@ -428,13 +441,13 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -461,13 +474,13 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -497,13 +510,13 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     flex: 3,
                     child: Container(
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )
                       ),
                       child: TextField(
@@ -522,13 +535,13 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -552,80 +565,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                   ),
                 ],
               ),
-              Visibility(
-                visible: false,
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )
-                  ),
-                  child: TextField(
-                    controller: _hobbiesController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context).translate('hobbies'),
-                        hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                        border: InputBorder.none
-                    ),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: false,
-                child: Container(
-                  height: 100,
-                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )
-                  ),
-                  child: TextField(
-                    controller: _infoController,
-                    keyboardType: TextInputType.text,
-                    maxLines: 99,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('additional_info'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                    ),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: true,
-                child: Container(
-                  height: 100,
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )
-                  ),
-                  child: TextField(
-                    controller: _addressController,
-                    keyboardType: TextInputType.text,
-                    maxLines: 99,
-                    decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context).translate('address'),
-                        hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                        border: InputBorder.none
-                    ),
-                  ),
+              Container(
+                height: 100,
+                child: AppTextField(
+                  textHintContent:
+                  AppLocalizations.of(context).translate('address'),
+                  controllerCallback: _addressController,
+                  maxLines: 99,
+                  contentPadding: EdgeInsets.only(top: 14),
                 ),
               ),
               Row(
@@ -636,7 +583,33 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         children: <Widget>[
-                          Container(
+                          attachmentFilePath==null
+                              ? AppAssetsImage(
+                            GlobalVariables
+                                .componentUserProfilePath,
+                            imageWidth:60.0,
+                            imageHeight:60.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 30.0,
+                          )
+                              : attachmentFilePath.contains("http") ?
+                          AppNetworkImage(attachmentFilePath,
+                            imageWidth:60.0,
+                            imageHeight:60.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 30.0,) :
+                          AppFileImage(File(attachmentFilePath),
+                            imageWidth:60.0,
+                            imageHeight:60.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 30.0,),
+                          /*Container(
                             width:50,
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
@@ -653,7 +626,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                 border: Border.all(color: GlobalVariables.green,width: 2.0)
                             ),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
+                          ),*/
                           Column(
                             children: <Widget>[
                               Container(
@@ -729,27 +702,11 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                 // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-                      print('call Verify');
-                      verifyInfo();
-
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('submit'),
-                      style: TextStyle(
-                          fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyInfo();
+                  },
                 ),
               ),
             ],
@@ -846,7 +803,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         value: _bloodGroupList[i],
         child: Text(
           _bloodGroupList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.black),
         ),
       ));
     }
@@ -861,7 +818,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         value: _membershipTypeList[i],
         child: Text(
           _membershipTypeList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.black),
         ),
       ));
     }
@@ -876,7 +833,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         value: _livesHereList[i],
         child: Text(
           _livesHereList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.black),
         ),
       ));
     }

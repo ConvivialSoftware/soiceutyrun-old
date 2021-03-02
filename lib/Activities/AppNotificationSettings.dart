@@ -12,6 +12,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 
 class BaseAppNotificationSettings extends StatefulWidget {
   @override
@@ -152,7 +153,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: SvgPicture.asset(GlobalVariables.inAppCallIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+                    child: AppAssetsImage(GlobalVariables.inAppCallIconPath,imageWidth: 30,imageHeight: 30,borderColor: GlobalVariables.grey,)/*SvgPicture.asset(GlobalVariables.inAppCallIconPath,width: 30,height: 30,color: GlobalVariables.grey,)*/,
                   ),
                   Expanded(
                     child: Container(

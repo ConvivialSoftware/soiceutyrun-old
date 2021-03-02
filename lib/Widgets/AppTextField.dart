@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/utils/AppImage.dart';
 
 class AppTextField extends StatefulWidget {
 
@@ -13,6 +13,12 @@ class AppTextField extends StatefulWidget {
       borderColor,
       readOnly,
       keyboardType,
+      maxLength,
+      counterText,
+      textCapitalization,
+      inputFormatters,
+      contentPadding,
+      obscureText,
       suffixIcon;
 
   AppTextField({@required this.textHintContent,
@@ -22,7 +28,11 @@ class AppTextField extends StatefulWidget {
     this.maxLines=1,
     this.borderColor=GlobalVariables.mediumGreen,
     this.readOnly=false,
-    this.suffixIcon,this.keyboardType=TextInputType.text
+    this.suffixIcon,this.keyboardType=TextInputType.text,
+    this.maxLength,this.counterText='',
+    this.textCapitalization=TextCapitalization.none,
+    this.inputFormatters,this.contentPadding,
+    this.obscureText=false,
   });
 
   @override
@@ -49,12 +59,21 @@ class AppTextFieldState extends State<AppTextField> {
         readOnly: widget.readOnly,
         maxLines: widget.maxLines,
         keyboardType: widget.keyboardType,
+        maxLength: widget.maxLength,
+        textCapitalization:widget.textCapitalization,
+        inputFormatters:widget.inputFormatters??<TextInputFormatter>[],
+        obscureText: widget.obscureText,
+        /*style: TextStyle(
+            color: GlobalVariables.green
+        ),*/
         decoration: InputDecoration(
+            contentPadding: widget.contentPadding??EdgeInsets.zero,
             hintText: widget.textHintContent,
             hintStyle: TextStyle(
                 color: GlobalVariables.lightGray,
                 fontSize: GlobalVariables.textSizeSMedium),
             border: InputBorder.none,
+          counterText: widget.counterText,
           suffixIcon: widget.suffixIcon!=null ? widget.suffixIcon:null,
         ),
       ),

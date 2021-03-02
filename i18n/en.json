@@ -352,5 +352,7 @@
   "offer_details": "Offer Details",
   "exclusive_offer": "Exclusive Offer",
   "rs": "Rs.",
-  "location": "Location"
+  "location": "Location",
+  "locality": "Locality",
+  "city": "City"
 }

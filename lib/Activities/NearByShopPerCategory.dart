@@ -13,7 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 

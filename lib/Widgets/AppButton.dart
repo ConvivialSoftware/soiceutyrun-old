@@ -1,20 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class AppButton extends StatefulWidget {
   var textContent;
   VoidCallback onPressed;
   Color bgColor;
   Color textColor;
-  var radius;
+  var radius,fontWeight;
 
   AppButton({@required this.textContent,
     @required this.onPressed,
     this.bgColor = GlobalVariables.green,
     this.textColor = GlobalVariables.white,
-    this.radius = 10.0});
+    this.radius = 10.0,this.fontWeight=FontWeight.w500});
 
   @override
   State<StatefulWidget> createState() {
@@ -23,7 +23,6 @@ class AppButton extends StatefulWidget {
 }
 
 class AppButtonState extends State<AppButton> {
-  @override
   Widget build(BuildContext context) {
     return RaisedButton(
       color: widget.bgColor,
@@ -33,7 +32,7 @@ class AppButtonState extends State<AppButton> {
           side: BorderSide(color: widget.bgColor)),
       child: text(widget.textContent,
           fontSize: GlobalVariables.textSizeMedium,
-          textColor: widget.textColor),
+          textColor: widget.textColor,fontWeight: widget.fontWeight),
     );
   }
 

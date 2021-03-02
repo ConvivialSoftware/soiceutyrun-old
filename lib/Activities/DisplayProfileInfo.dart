@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 
 class BaseDisplayProfileInfo extends StatefulWidget {
   String userId,userType;
@@ -219,23 +220,43 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                             //TODO: userImage
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30.0),
-                              child: _profileList[0].PROFILE_PHOTO == ""
+                              child: /*_profileList[0].PROFILE_PHOTO == ""
                                   ? Image.asset(
                                   GlobalVariables.componentUserProfilePath,
                                   width: 60,
                                   height: 60)
                                   : Container(
                                 // alignment: Alignment.center,
-                                /* decoration: BoxDecoration(
+                                *//* decoration: BoxDecoration(
                                         borderRadius: BorderRad
 
-                                        ius.circular(25)),*/
+                                        ius.circular(25)),*//*
                                 child: CircleAvatar(
                                   radius: 30,
                                   backgroundColor: GlobalVariables.mediumGreen,
                                   backgroundImage: NetworkImage(_profileList[0].PROFILE_PHOTO),
                                 ),
-                              ),
+                              ),*/_profileList[0].PROFILE_PHOTO
+                                  .isEmpty
+                                  ? AppAssetsImage(
+                                GlobalVariables
+                                    .componentUserProfilePath,
+                                imageWidth:60.0,
+                                imageHeight:60.0,
+                                borderColor: GlobalVariables.grey,
+                                borderWidth: 1.0,
+                                fit: BoxFit.cover,
+                                radius: 30.0,
+                              )
+                                  : AppNetworkImage(
+                                _profileList[0].PROFILE_PHOTO,
+                                imageWidth:60.0,
+                                imageHeight:60.0,
+                                borderColor: GlobalVariables.grey,
+                                borderWidth: 1.0,
+                                fit: BoxFit.cover,
+                                radius: 30.0,
+                              )
                             )),
                         Flexible(
                           child: Column(

@@ -24,8 +24,8 @@ import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Models/Poll.dart';
 import 'package:societyrun/Models/PollOption.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseMyComplex extends StatefulWidget {
@@ -301,8 +301,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: _announcementList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            26.0,
-                            26.0,
+                            imageWidth:26.0,
+                            imageHeight:26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -310,8 +310,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           )
                         : AppNetworkImage(
                             _announcementList[position].USER_PHOTO,
-                            26.0,
-                            26.0,
+                      imageWidth:26.0,
+                      imageHeight:26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -716,8 +716,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: _meetingList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            26.0,
-                            26.0,
+                      imageWidth:26.0,
+                      imageHeight:26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -725,8 +725,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           )
                         : AppNetworkImage(
                             _meetingList[position].USER_PHOTO,
-                            26.0,
-                            26.0,
+                      imageWidth:26.0,
+                      imageHeight:26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -1181,8 +1181,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   child: _pollList[position].USER_PHOTO.isEmpty
                       ? AppAssetsImage(
                           GlobalVariables.componentUserProfilePath,
-                          26.0,
-                          26.0,
+                    imageWidth:26.0,
+                    imageHeight:26.0,
                           borderColor: GlobalVariables.transparent,
                           borderWidth: 1.0,
                           fit: BoxFit.cover,
@@ -1190,8 +1190,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         )
                       : AppNetworkImage(
                           _pollList[position].USER_PHOTO,
-                          26.0,
-                          26.0,
+                    imageWidth:26.0,
+                    imageHeight:26.0,
                           borderColor: GlobalVariables.transparent,
                           borderWidth: 1.0,
                           fit: BoxFit.cover,
@@ -2286,8 +2286,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       ? AppAssetsImage(
                     GlobalVariables
                         .componentUserProfilePath,
-                    26.0,
-                    26.0,
+                    imageWidth:26.0,
+                    imageHeight:26.0,
                     borderColor: GlobalVariables.grey,
                     borderWidth: 1.0,
                     fit: BoxFit.cover,
@@ -2295,8 +2295,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   )
                       : AppNetworkImage(
                     _eventList[position].USER_PHOTO,
-                    26.0,
-                    26.0,
+                    imageWidth:26.0,
+                    imageHeight:26.0,
                     borderColor: GlobalVariables.grey,
                     borderWidth: 1.0,
                     fit: BoxFit.cover,

@@ -5,6 +5,9 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 
 import 'DashBoard.dart';
 import 'base_stateful.dart';
@@ -94,7 +97,25 @@ ProgressDialog _progressDialog;
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('new_password'),
+                controllerCallback: _newPasswordController,
+                obscureText: _obscureNewPassword,
+                suffixIcon: AppIconButton(
+                  Icons.remove_red_eye,
+                  iconColor: GlobalVariables.mediumGreen,
+                  onPressed: (){
+                    if (_obscureNewPassword) {
+                      _obscureNewPassword = false;
+                    } else {
+                      _obscureNewPassword = true;
+                    }
+                    setState(() {});
+                  },
+                ),
+              ),
+             /* Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
@@ -114,12 +135,7 @@ ProgressDialog _progressDialog;
                       border: InputBorder.none,
                       suffixIcon: IconButton(
                       onPressed: () {
-                        if (_obscureNewPassword) {
-                          _obscureNewPassword = false;
-                        } else {
-                          _obscureNewPassword = true;
-                        }
-                        setState(() {});
+
                       },
                       icon: Icon(
                         Icons.remove_red_eye,
@@ -129,65 +145,34 @@ ProgressDialog _progressDialog;
                   ),
 
                 ),
-              ),
-              Container(
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _confirmPasswordController,
-                  obscureText: _obscureConfirmPassword,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('confirm_password'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        if (_obscureConfirmPassword) {
-                          _obscureConfirmPassword = false;
-                        } else {
-                          _obscureConfirmPassword = true;
-                        }
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.remove_red_eye,
-                        color: GlobalVariables.lightGreen,
-                      ),
-                    ),
-                  ),
+              ),*/
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('confirm_password'),
+                controllerCallback: _confirmPasswordController,
+                obscureText: _obscureConfirmPassword,
+                suffixIcon: AppIconButton(
+                  Icons.remove_red_eye,
+                  iconColor: GlobalVariables.mediumGreen,
+                  onPressed: (){
+                    if (_obscureConfirmPassword) {
+                      _obscureConfirmPassword = false;
+                    } else {
+                      _obscureConfirmPassword = true;
+                    }
+                    setState(() {});
+                  },
                 ),
               ),
               Container(
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                 // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-                      verifyPassword();
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('submit'),
-                      style: TextStyle(
-                          fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyPassword();
+                  },
                 ),
               ),
             ],

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/utils/AppButton.dart';
-import 'package:societyrun/utils/AppTextField.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -33,7 +33,8 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _propertyController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
+  TextEditingController _localityController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
 
 
   @override
@@ -140,7 +141,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('select_category'),
+                      AppLocalizations.of(context).translate('select_category')+"*",
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                     ),
@@ -169,18 +170,24 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('i_want_to'),
+                      AppLocalizations.of(context).translate('i_want_to')+"*",
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                     ),
                   ),
                 ),
               ),
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('title_selling'), controllerCallback: _titleController,borderWidth: 2.0,),
-              Container(height: 150, child: AppTextField(textHintContent: AppLocalizations.of(context).translate('description_selling'), controllerCallback: _descriptionController,borderWidth: 2.0,maxLines: 99,)),
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('property_details'), controllerCallback: _propertyController,borderWidth: 2.0,),
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('rs'), controllerCallback: _priceController,borderWidth: 2.0,),
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('location'), controllerCallback: _locationController,borderWidth: 2.0,),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('title_selling')+"*", controllerCallback: _titleController,borderWidth: 2.0,),
+              Container(height: 150, child: AppTextField(textHintContent: AppLocalizations.of(context).translate('description_selling')+"*", controllerCallback: _descriptionController,borderWidth: 2.0,maxLines: 99,contentPadding: EdgeInsets.only(top: 10,),)),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('property_details')+"*", controllerCallback: _propertyController,borderWidth: 2.0,),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('rs')+"*", controllerCallback: _priceController,borderWidth: 2.0,keyboardType: TextInputType.number,),
+              Row(
+                children: [
+                  Flexible(child: AppTextField(textHintContent: AppLocalizations.of(context).translate('locality')+"*", controllerCallback: _localityController,borderWidth: 2.0,)),
+                  SizedBox(width: 5.0,),
+                  Flexible(child: AppTextField(textHintContent: AppLocalizations.of(context).translate('city')+"*", controllerCallback: _cityController,borderWidth: 2.0,)),
+                ],
+              ),
               Container(
                 width: 140,
                 alignment: Alignment.center,
@@ -332,7 +339,7 @@ class CreateClassifiedListingState extends BaseStatefulState<BaseCreateClassifie
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: AppButton(textContent: AppLocalizations.of(context).translate('submit'), onPressed: (){
+                child: AppButton(textContent: AppLocalizations.of(context).translate('submit'),onPressed: (){
 
                 },),
               ),

@@ -6,8 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/utils/AppButton.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class NearByShopPerCategoryItemDetails extends StatefulWidget {
   @override

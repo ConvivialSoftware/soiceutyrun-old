@@ -36,10 +36,9 @@ import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/Widgets/AppDropDown.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 import 'LoginPage.dart';
@@ -213,11 +212,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   Container(
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: SvgPicture.asset(
+                        child: /*SvgPicture.asset(
                           GlobalVariables.headerIconPath,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.fill,
-                        )),
+                        )*/AppAssetsImage(GlobalVariables.headerIconPath,imageWidth: MediaQuery.of(context).size.width,fit: BoxFit.fill,)
+                    ),
                   ),
                   Container(
                     // color: GlobalVariables.black,
@@ -233,9 +233,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               _dashboardSacfoldKey.currentState.openDrawer();
                             },
-                            child: SvgPicture.asset(
+                            child: /*SvgPicture.asset(
                               GlobalVariables.topBreadCrumPath,
-                            ),
+                            ),*/AppAssetsImage(GlobalVariables.topBreadCrumPath,)
                           )),
                         ),
                         Expanded(
@@ -293,12 +293,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                           Container(
                                             margin: EdgeInsets.only(top: 5),
                                             //color: GlobalVariables.grey,
-                                            child: SvgPicture.asset(
+                                            child: /*SvgPicture.asset(
                                               GlobalVariables
                                                   .notificationBellIconPath,
                                               width: 20,
                                               height: 20,
-                                            ),
+                                            ),*/AppAssetsImage(GlobalVariables.notificationBellIconPath,imageWidth: 20,borderWidth: 20,)
                                           ),
                                           Container(
                                             alignment: Alignment.topRight,
@@ -356,25 +356,26 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                             child: userImageURLValueNotifer
                                                     .isEmpty
                                                 ? AppAssetsImage(
-                                              GlobalVariables
-                                                  .componentUserProfilePath,
-                                              20.0,
-                                              20.0,
-                                              borderColor: GlobalVariables.grey,
-                                              borderWidth: 1.0,
-                                              fit: BoxFit.cover,
-                                              radius: 10.0,
-                                            )
+                                                    GlobalVariables
+                                                        .componentUserProfilePath,
+                                                    imageWidth:20.0,
+                                                    imageHeight:20.0,
+                                                    borderColor:
+                                                        GlobalVariables.grey,
+                                                    borderWidth: 1.0,
+                                                    fit: BoxFit.cover,
+                                                    radius: 10.0,
+                                                  )
                                                 : AppNetworkImage(
-                                              userImageURLValueNotifer,
-                                              20.0,
-                                              20.0,
-                                              borderColor: GlobalVariables.grey,
-                                              borderWidth: 1.0,
-                                              fit: BoxFit.cover,
-                                              radius: 10.0,
-                                            )
-                                        );
+                                                    userImageURLValueNotifer,
+                                                    imageWidth:20.0,
+                                                    imageHeight:20.0,
+                                                    borderColor:
+                                                        GlobalVariables.grey,
+                                                    borderWidth: 1.0,
+                                                    fit: BoxFit.cover,
+                                                    radius: 10.0,
+                                                  ));
                                       })),
                             ),
                           ],
@@ -588,9 +589,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: SvgPicture.asset(
+                                    child: /*SvgPicture.asset(
                                       GlobalVariables.shopIconPath,
-                                    ),
+                                    ),*/AppAssetsImage(GlobalVariables.shopIconPath,)
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -616,8 +617,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: SvgPicture.asset(
-                                        GlobalVariables.buildingIconPath),
+                                    child: /*SvgPicture.asset(
+                                        GlobalVariables.buildingIconPath),*/
+                                    AppAssetsImage(GlobalVariables.buildingIconPath)
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -648,8 +650,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: SvgPicture.asset(
-                                        GlobalVariables.supportIconPath),
+                                    child: /*SvgPicture.asset(
+                                        GlobalVariables.supportIconPath),*/
+                                    AppAssetsImage(GlobalVariables.supportIconPath)
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -684,8 +687,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: SvgPicture.asset(
-                                        GlobalVariables.shoppingIconPath),
+                                    child: /*SvgPicture.asset(
+                                        GlobalVariables.shoppingIconPath),*/
+                                    AppAssetsImage(GlobalVariables.shoppingIconPath)
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -716,8 +720,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: SvgPicture.asset(
-                                        GlobalVariables.gatePassIconPath),
+                                    child: /*SvgPicture.asset(
+                                        GlobalVariables.gatePassIconPath),*/
+                                    AppAssetsImage(GlobalVariables.gatePassIconPath)
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -743,8 +748,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: SvgPicture.asset(
-                                        GlobalVariables.moreIconPath),
+                                    child: /*SvgPicture.asset(
+                                        GlobalVariables.moreIconPath),*/
+                                    AppAssetsImage(GlobalVariables.moreIconPath,)
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -781,8 +787,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    SvgPicture.asset(
-                                        GlobalVariables.storeIconPath),
+                                    /*SvgPicture.asset(
+                                        GlobalVariables.storeIconPath),*/
+                                    AppAssetsImage(GlobalVariables.storeIconPath),
                                     SizedBox(
                                       width: 2,
                                     ),
@@ -816,8 +823,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    SvgPicture.asset(
-                                        GlobalVariables.serviceIconPath),
+                                    /*SvgPicture.asset(
+                                        GlobalVariables.serviceIconPath),*/AppAssetsImage(GlobalVariables.serviceIconPath,),
                                     SizedBox(
                                       width: 2,
                                     ),
@@ -991,10 +998,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
                   padding: EdgeInsets.all(5),
                   alignment: Alignment.topLeft,
-                  child: SvgPicture.asset(
+                  child: /*SvgPicture.asset(
                     GlobalVariables.drawerImagePath,
                     height: 40,
-                  ),
+                  ),*/AppAssetsImage(GlobalVariables.drawerImagePath,borderWidth: 40,)
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -1031,19 +1038,25 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                 ),
                             */
                 //TODO : Dropdown
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: _societyListItems,
-                    onChanged: changeDropDownItem,
-                    value: _selectedItem,
-                    underline: SizedBox(),
-                    isExpanded: false,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.black,
-                    ),
-                    //iconSize: 20,
+                child:
+                    /*AppDropDown<String>(
+                  _societyListItems,
+                  changeDropDownItem,
+                  value: _selectedItem,
+                  icon: Icons.keyboard_arrow_down,
+                  iconColor: GlobalVariables.black,
+                ),*/
+                    DropdownButton(
+                  items: _societyListItems,
+                  onChanged: changeDropDownItem,
+                  value: _selectedItem,
+                  underline: SizedBox(),
+                  isExpanded: false,
+                  icon: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: GlobalVariables.black,
                   ),
+                  //iconSize: 20,
                 ),
               ),
               Container(
@@ -1068,26 +1081,25 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   String userImageURLValueNotifer,
                                   Widget child) {
                                 return userImageURLValueNotifer.isEmpty
-                                        ? AppAssetsImage(
-                                            GlobalVariables
-                                                .componentUserProfilePath,
-                                            70.0,
-                                            70.0,
-                                            borderColor: GlobalVariables.grey,
-                                            borderWidth: 2.0,
-                                            fit: BoxFit.cover,
-                                            radius: 30.0,
-                                          )
-                                        : AppNetworkImage(
-                                            userImageURLValueNotifer,
-                                            70.0,
-                                            70.0,
-                                            borderColor: GlobalVariables.grey,
-                                            borderWidth: 2.0,
-                                            fit: BoxFit.cover,
-                                            radius: 30.0,
-                                          )
-                                    ;
+                                    ? AppAssetsImage(
+                                        GlobalVariables
+                                            .componentUserProfilePath,
+                                        imageWidth:70.0,
+                                        imageHeight:70.0,
+                                        borderColor: GlobalVariables.grey,
+                                        borderWidth: 2.0,
+                                        fit: BoxFit.cover,
+                                        radius: 30.0,
+                                      )
+                                    : AppNetworkImage(
+                                        userImageURLValueNotifer,
+                                        imageWidth:70.0,
+                                        imageHeight:70.0,
+                                        borderColor: GlobalVariables.grey,
+                                        borderWidth: 2.0,
+                                        fit: BoxFit.cover,
+                                        radius: 30.0,
+                                      );
                               })),
                     ),
                     Flexible(
@@ -1438,7 +1450,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                 " " +
                                 loginResponse.FLAT,
                             style: TextStyle(
-                                color: GlobalVariables.black, fontSize: 16),
+                                color: GlobalVariables.black, fontSize: 12),
                             maxLines: 1,
                           ),
                         ),
@@ -1456,7 +1468,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             " " +
                             loginResponse.FLAT,
                         style: TextStyle(
-                            color: GlobalVariables.black, fontSize: 16),
+                            color: GlobalVariables.black, fontSize: 12),
                         maxLines: 1,
                       ),
                     ),
@@ -1475,7 +1487,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           " " +
                           loginResponse.FLAT,
                       style:
-                          TextStyle(color: GlobalVariables.black, fontSize: 16),
+                          TextStyle(color: GlobalVariables.black, fontSize: 12),
                       maxLines: 1,
                     ),
                   ),

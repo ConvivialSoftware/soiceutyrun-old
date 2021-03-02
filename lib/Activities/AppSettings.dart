@@ -12,25 +12,17 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class  BaseAppSettings extends StatefulWidget {
+class BaseAppSettings extends StatefulWidget {
   @override
   _BaseAppSettingsState createState() => _BaseAppSettingsState();
 }
 
 class _BaseAppSettingsState extends State<BaseAppSettings> {
-
-  var userId = "",
-      name = "",
-      photo = "",
-      societyId="",
-      flat="",
-      block="";
+  var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
-
 
   @override
   void initState() {
@@ -41,7 +33,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
   @override
   Widget build(BuildContext context) {
     return Builder(
-      builder: (context)=>Scaffold(
+      builder: (context) => Scaffold(
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -68,9 +60,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
 
   getBaseLayout() {
     return Container(
-      width: MediaQuery.of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       //height: double.maxFinite,
       //height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -82,7 +72,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0),
                 getAppSettingsLayout(),
               ],
             ),
@@ -112,12 +103,14 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
 
   appNotificationSettingsLayout() {
     return InkWell(
-      onTap: (){
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BaseAppNotificationSettings()));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BaseAppNotificationSettings()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20,10,20,10),
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
@@ -126,18 +119,29 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.appSettingsIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
+              child: /*SvgPicture.asset(
+                GlobalVariables.appSettingsIconPath,
+                width: 25,
+                height: 25,
+                color: GlobalVariables.grey,
+              ),*/AppAssetsImage(GlobalVariables.appSettingsIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(AppLocalizations.of(context).translate('app_notification_settings'),style: TextStyle(
-                  fontSize: 16,fontWeight: FontWeight.w500
-                ),),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate('app_notification_settings'),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
             Container(
-              child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: GlobalVariables.grey,
+              ),
             )
           ],
         ),
@@ -147,13 +151,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
 
   profileLayout() {
     return InkWell(
-      onTap: () {
-
-      },
+      onTap: () {},
       child: Align(
         alignment: Alignment.center,
         child: Container(
-         // height: double.infinity,
+          // height: double.infinity,
           // color: GlobalVariables.black,
           //width: MediaQuery.of(context).size.width / 1.2,
           margin: EdgeInsets.fromLTRB(
@@ -165,7 +167,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             shape: (RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0))),
             elevation: 2.0,
-          //  shadowColor: GlobalVariables.green.withOpacity(0.3),
+            //  shadowColor: GlobalVariables.green.withOpacity(0.3),
             margin: EdgeInsets.all(20),
             color: GlobalVariables.white,
             child: Stack(
@@ -174,9 +176,9 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: SvgPicture.asset(
+                    child:/* SvgPicture.asset(
                       GlobalVariables.whileBGPath,
-                    ),
+                    ),*/AppAssetsImage(GlobalVariables.whileBGPath)
                   ),
                 ),
                 Container(
@@ -184,31 +186,29 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.all(20),
-                        // alignment: Alignment.center,
-                        /* decoration: BoxDecoration(
+                          padding: EdgeInsets.all(20),
+                          // alignment: Alignment.center,
+                          /* decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25)),*/
                           child: photo.isEmpty
                               ? AppAssetsImage(
-                            GlobalVariables
-                                .componentUserProfilePath,
-                            60.0,
-                            60.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 2.0,
-                            fit: BoxFit.cover,
-                            radius: 30.0,
-                          )
+                                  GlobalVariables.componentUserProfilePath,
+                                  imageWidth: 60.0,
+                                  imageHeight: 60.0,
+                                  borderColor: GlobalVariables.grey,
+                                  borderWidth: 2.0,
+                                  fit: BoxFit.cover,
+                                  radius: 30.0,
+                                )
                               : AppNetworkImage(
-                            photo,
-                            60.0,
-                            60.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 2.0,
-                            fit: BoxFit.cover,
-                            radius: 30.0,
-                          )
-                      ),
+                                  photo,
+                            imageWidth: 60.0,
+                            imageHeight: 60.0,
+                                  borderColor: GlobalVariables.grey,
+                                  borderWidth: 2.0,
+                                  fit: BoxFit.cover,
+                                  radius: 30.0,
+                                )),
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -220,24 +220,32 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                 child: Text(
                                   name,
                                   style: TextStyle(
-                                    color: GlobalVariables.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
-                                  ),
+                                      color: GlobalVariables.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Text(block+' '+flat+', '
-                                    ''+societyName,style: TextStyle(
-                                  fontSize: 14,color: GlobalVariables.grey,
-                                ),),
+                                child: Text(
+                                  block +
+                                      ' ' +
+                                      flat +
+                                      ', '
+                                          '' +
+                                      societyName,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: GlobalVariables.grey,
+                                  ),
+                                ),
                               ),
                               Container(
                                 child: Text(
                                   email,
                                   style: TextStyle(
-                                    fontSize: 14,color: GlobalVariables.grey,
+                                    fontSize: 14,
+                                    color: GlobalVariables.grey,
                                   ),
                                 ),
                               ),
@@ -246,7 +254,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                 child: Text(
                                   phone,
                                   style: TextStyle(
-                                    fontSize: 14,color: GlobalVariables.grey,
+                                    fontSize: 14,
+                                    color: GlobalVariables.grey,
                                   ),
                                 ),
                               ),
@@ -265,8 +274,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          BaseEditProfileInfo(userId, societyId)));
+                                      builder: (context) => BaseEditProfileInfo(
+                                          userId, societyId)));
                             }),
                       )
                     ],
@@ -302,9 +311,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
   }
 
   loggedSocietyDetails() {
-
     return Container(
-      margin: EdgeInsets.fromLTRB(20,10,20,10),
+      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
           color: GlobalVariables.white,
@@ -313,34 +321,47 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            child: SvgPicture.asset(GlobalVariables.bottomBuildingIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+            child: AppAssetsImage(GlobalVariables.bottomBuildingIconPath,imageWidth: 30.0,imageHeight: 30.0,color: GlobalVariables.grey,)/*SvgPicture.asset(
+              GlobalVariables.bottomBuildingIconPath,
+              width: 30,
+              height: 30,
+              color: GlobalVariables.grey,
+            ),*/
           ),
           Expanded(
             child: Container(
               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Text(block+' '+flat+','
-                  ''+societyName,style: TextStyle(
-                  fontSize: 16,fontWeight: FontWeight.w500
-              ),),
+              child: Text(
+                block +
+                    ' ' +
+                    flat +
+                    ','
+                        '' +
+                    societyName,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
             ),
           ),
           Container(
-            child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              size: 18,
+              color: GlobalVariables.grey,
+            ),
           )
         ],
       ),
     );
-
   }
 
   changePasswordLayout() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => BaseChangePassword()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20,10,20,10),
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
@@ -349,18 +370,28 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.changePasswordPath,width: 25,height: 25,color: GlobalVariables.grey,),
+              child: /*SvgPicture.asset(
+                GlobalVariables.changePasswordPath,
+                width: 25,
+                height: 25,
+                color: GlobalVariables.grey,
+              ),*/AppAssetsImage(GlobalVariables.changePasswordPath,imageWidth: 25.0,imageHeight: 25.0,color: GlobalVariables.grey,)
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(AppLocalizations.of(context).translate('change_password'),style: TextStyle(
-                    fontSize: 16,fontWeight: FontWeight.w500
-                ),),
+                child: Text(
+                  AppLocalizations.of(context).translate('change_password'),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
             Container(
-              child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: GlobalVariables.grey,
+              ),
             )
           ],
         ),
@@ -370,12 +401,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
 
   aboutUsLayout() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20,10,20,10),
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
@@ -384,18 +415,28 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.aboutUsPath,width: 25,height: 25,color: GlobalVariables.grey,),
+              child: /*SvgPicture.asset(
+                GlobalVariables.aboutUsPath,
+                width: 25,
+                height: 25,
+                color: GlobalVariables.grey,
+              ),*/AppAssetsImage(GlobalVariables.aboutUsPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(AppLocalizations.of(context).translate('about_us'),style: TextStyle(
-                    fontSize: 16,fontWeight: FontWeight.w500
-                ),),
+                child: Text(
+                  AppLocalizations.of(context).translate('about_us'),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
             Container(
-              child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: GlobalVariables.grey,
+              ),
             )
           ],
         ),
@@ -403,15 +444,14 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
     );
   }
 
-
   feedbackLayout() {
     return InkWell(
-      onTap: (){
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BaseFeedback()));
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BaseFeedback()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20,10,20,10),
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
@@ -420,18 +460,28 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.feedbackIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
+              child:/* SvgPicture.asset(
+                GlobalVariables.feedbackIconPath,
+                width: 25,
+                height: 25,
+                color: GlobalVariables.grey,
+              ),*/AppAssetsImage(GlobalVariables.feedbackIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(AppLocalizations.of(context).translate('feedback'),style: TextStyle(
-                    fontSize: 16,fontWeight: FontWeight.w500
-                ),),
+                child: Text(
+                  AppLocalizations.of(context).translate('feedback'),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
             Container(
-              child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: GlobalVariables.grey,
+              ),
             )
           ],
         ),
@@ -441,11 +491,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
 
   logoutLayout() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         showDialog(
             context: context,
             builder: (BuildContext context) => StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
+                    builder: (BuildContext context, StateSetter setState) {
                   return Dialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0)),
@@ -454,7 +504,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 }));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20,10,20,10),
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
@@ -463,18 +513,28 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: SvgPicture.asset(GlobalVariables.logoutIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
+              child: /*SvgPicture.asset(
+                GlobalVariables.logoutIconPath,
+                width: 25,
+                height: 25,
+                color: GlobalVariables.grey,
+              ),*/AppAssetsImage(GlobalVariables.logoutIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(AppLocalizations.of(context).translate('logout'),style: TextStyle(
-                    fontSize: 16,fontWeight: FontWeight.w500
-                ),),
+                child: Text(
+                  AppLocalizations.of(context).translate('logout'),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
             Container(
-              child: Icon(Icons.arrow_forward_ios,size: 18,color: GlobalVariables.grey,),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: GlobalVariables.grey,
+              ),
             )
           ],
         ),
@@ -489,14 +549,13 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
       child: Column(
         children: [
           Container(
-            child: SvgPicture.asset(
+            child: /*SvgPicture.asset(
               GlobalVariables.drawerImagePath,
               height: 40,
-            ),
+            ),*/AppAssetsImage(GlobalVariables.drawerImagePath,borderWidth: 40,)
           ),
           Container(
-            margin: EdgeInsets.all(
-                5), //  color: GlobalVariables.green,
+            margin: EdgeInsets.all(5), //  color: GlobalVariables.green,
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -504,12 +563,9 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 Visibility(
                   visible: true,
                   child: InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                     child: Container(
-                        margin: EdgeInsets.fromLTRB(
-                            0, 0, 0, 5), //TODO: logout
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5), //TODO: logout
                         child: GestureDetector(
                           onTap: () {
                             launch(GlobalVariables.termsConditionURL);
@@ -540,8 +596,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 Visibility(
                   visible: true,
                   child: Container(
-                      margin: EdgeInsets.fromLTRB(
-                          0, 0, 5, 5), //Todo: setting
+                      margin: EdgeInsets.fromLTRB(0, 0, 5, 5), //Todo: setting
                       child: GestureDetector(
                         onTap: () {
                           launch(GlobalVariables.privacyPolicyURL);
@@ -561,12 +616,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             ),
           ),
           Container(
-              margin: EdgeInsets.fromLTRB(
-                  0, 0, 5, 5), //Todo: setting
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 5), //Todo: setting
               child: GestureDetector(
                 onTap: () {},
                 child: Text(
-                  'Version '+AppPackageInfo.version,
+                  'Version ' + AppPackageInfo.version,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 16,
@@ -654,7 +708,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => new BaseLoginPage()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
       GlobalFunctions.showToast(value.message);
     }).catchError((Object obj) {
@@ -673,4 +727,3 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
     });
   }
 }
-

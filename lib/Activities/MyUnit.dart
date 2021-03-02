@@ -39,8 +39,8 @@ import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -1085,8 +1085,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               child: photo.length == 0
                                   ? AppAssetsImage(
                                 GlobalVariables.componentUserProfilePath,
-                                80.0,
-                                80.0,
+                                imageWidth:80.0,
+                                imageHeight:80.0,
                                 borderColor: GlobalVariables.grey,
                                 borderWidth: 2.0,
                                 fit: BoxFit.cover,
@@ -1094,8 +1094,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               )
                                   : AppNetworkImage(
                                 photo,
-                                80.0,
-                                80.0,
+                                imageWidth:80.0,
+                                imageHeight:80.0,
                                 borderColor: GlobalVariables.grey,
                                 borderWidth: 2.0,
                                 fit: BoxFit.cover,
@@ -1227,8 +1227,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ? _list[position].PROFILE_PHOTO.length == 0
                         ? AppAssetsImage(
                   GlobalVariables.componentUserProfilePath,
-                  70.0,
-                  70.0,
+                  imageWidth:70.0,
+                  imageHeight:70.0,
                   borderColor: GlobalVariables.grey,
                   borderWidth: 2.0,
                   fit: BoxFit.cover,
@@ -1236,8 +1236,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 )
                     : AppNetworkImage(
                   _list[position].PROFILE_PHOTO,
-                  70.0,
-                  70.0,
+                  imageWidth:70.0,
+                  imageHeight:70.0,
                   borderColor: GlobalVariables.grey,
                   borderWidth: 2.0,
                   fit: BoxFit.cover,
@@ -1246,8 +1246,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     : _list[position].IMAGE.length == 0
                         ? AppAssetsImage(
                   GlobalVariables.componentUserProfilePath,
-                  70.0,
-                  70.0,
+                  imageWidth:70.0,
+                  imageHeight:70.0,
                   borderColor: GlobalVariables.grey,
                   borderWidth: 2.0,
                   fit: BoxFit.cover,
@@ -1255,8 +1255,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 )
                     : AppNetworkImage(
                   _list[position].IMAGE,
-                  70.0,
-                  70.0,
+                  imageWidth:70.0,
+                  imageHeight:70.0,
                   borderColor: GlobalVariables.grey,
                   borderWidth: 2.0,
                   fit: BoxFit.cover,

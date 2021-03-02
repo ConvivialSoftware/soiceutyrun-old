@@ -6,6 +6,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 
 import 'base_stateful.dart';
 
@@ -95,30 +97,13 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _vehicleNoController,
-                  textCapitalization: TextCapitalization.characters,
-                  inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),],
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('vehicle_no')+'*',
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                  ),
-                ),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('vehicle_no')+'*',
+                  controllerCallback: _vehicleNoController,
+                textCapitalization: TextCapitalization.characters,
+                inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),],
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   children: <Widget>[
                     Container(
@@ -211,69 +196,21 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                   ],
                 ),
               ),
-              Container(
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _vehicleModelController,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('model_name')+'*',
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                  ),
-                ),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('model_name')+'*',
+                controllerCallback: _vehicleModelController,
               ),
-              Container(
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _vehicleStickerController,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('sticker'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                  ),
-                ),
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('sticker'),
+                controllerCallback: _vehicleModelController,
               ),
               Container(
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                 // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-                      verifyVehicle();
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('submit'),
-                      style: TextStyle(
-                          fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyVehicle();
+                  },
                 ),
               ),
             ],

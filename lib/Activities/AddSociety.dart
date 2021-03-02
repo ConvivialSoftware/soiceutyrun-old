@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 
 import 'base_stateful.dart';
 
@@ -48,13 +49,16 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                   Container(
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: SvgPicture.asset(
-                          GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,)),
+                        child:
+                        AppAssetsImage(GlobalVariables.headerIconPath, imageWidth : MediaQuery.of(context).size.width,)
+                        /*SvgPicture.asset(
+                          GlobalVariables.headerIconPath,width: MediaQuery.of(context).size.width,)*/
+                    ),
                   ),
                   Align(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 80, 0, 0),
-                      child: SvgPicture.asset(GlobalVariables.appIconPath,),
+                      child: AppAssetsImage(GlobalVariables.appIconPath,)/*SvgPicture.asset(GlobalVariables.appIconPath,)*/,
                     ),
                     alignment: AlignmentDirectional.topCenter,
                   ),
@@ -62,8 +66,9 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 130, 0, 0),
                         child: ClipRRect(borderRadius: BorderRadius.circular(8.0),
-                          child: SvgPicture.asset(GlobalVariables.userProfileIconPath,
-                              width: 100, height: 100),)
+                          child: /*SvgPicture.asset(GlobalVariables.userProfileIconPath,
+                              width: 100, height: 100)*/AppAssetsImage(GlobalVariables.userProfileIconPath, imageWidth : 100.0,imageHeight: 100.0,),
+                        )
                     ),
                   )
                 ],
@@ -131,7 +136,7 @@ class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      child: SvgPicture.asset(GlobalVariables.classifiedBigIconPath),
+                      child: /*SvgPicture.asset(GlobalVariables.classifiedBigIconPath)*/AppAssetsImage(GlobalVariables.headerIconPath, imageWidth : MediaQuery.of(context).size.width,),
                     ),
                     Container(
                       child: Column(

@@ -9,8 +9,10 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'HelpDesk.dart';
 import 'base_stateful.dart';
@@ -147,57 +149,11 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                //  height: 150,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: complaintSubject,
-                  //maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText:
-                          AppLocalizations.of(context).translate('subject')+'*',
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
-                ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('subject') + '*',
+                controllerCallback: complaintSubject,
               ),
-              /*Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: null,
-                    onChanged: null,
-                    isExpanded: true,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('flat_no'),
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 12),
-                    ),
-                  ),
-                ),
-              ),*/
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
@@ -294,36 +250,6 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   ],
                 ),
               ),
-          /*    Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: __areaListItems,
-                    value: _areaSelectedItem,
-                    onChanged: changeAreaDropDownItem,
-                    isExpanded: true,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('select_area'),
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                    ),
-                  ),
-                ),
-              ),*/
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -333,7 +259,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                      width: 2.0,
                     )),
                 child: ButtonTheme(
                   child: DropdownButton(
@@ -356,7 +282,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
               ),
               Container(
                 height: 150,
-                padding: EdgeInsets.all(10),
+                child: AppTextField(
+                  textHintContent:
+                  AppLocalizations.of(context).translate('complaint_desc') + '*',
+                  controllerCallback: complaintSubject,
+                  maxLines: 99,
+                    contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                ),
+                /*padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
@@ -374,7 +307,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       hintStyle: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                       border: InputBorder.none),
-                ),
+                ),*/
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -400,8 +333,8 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     )*/attachmentFilePath==null
                         ? AppAssetsImage(
                       GlobalVariables.componentUserProfilePath,
-                      50.0,
-                      50.0,
+                      imageWidth:50.0,
+                      imageHeight:50.0,
                       borderColor: GlobalVariables.grey,
                       borderWidth: 2.0,
                       fit: BoxFit.cover,
@@ -409,8 +342,8 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     )
                         : AppFileImage(
                       attachmentFilePath,
-                      50.0,
-                      50.0,
+                      imageWidth:50.0,
+                      imageHeight:50.0,
                       borderColor: GlobalVariables.grey,
                       borderWidth: 2.0,
                       fit: BoxFit.cover,
@@ -531,53 +464,15 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   ],
                 ),
               ),
-              /*  Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('for_flat_number'),
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                    ),
-                  ),
-                ),
-              ),*/
               Container(
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                  // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-
-                      verifyData();
-
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
-                    child: Text(
-                      AppLocalizations.of(context).translate('submit'),
-                      style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyData();
+                  },
                 ),
               ),
             ],

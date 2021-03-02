@@ -15,8 +15,10 @@ import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
@@ -427,7 +429,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       child: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(10),
             child: FloatingActionButton(
               onPressed: () {
                 //GlobalFunctions.showToast('Fab CLick');
@@ -562,8 +564,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   ? AppAssetsImage(
                     GlobalVariables
                         .componentUserProfilePath,
-                    20.0,
-                    20.0,
+                    imageWidth:20.0,
+                    imageHeight:20.0,
                     borderColor: GlobalVariables.grey,
                     borderWidth: 1.0,
                     fit: BoxFit.cover,
@@ -571,8 +573,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   )
                       : AppNetworkImage(
                     _visitorList[position].IMAGE,
-                    26.0,
-                    26.0,
+                    imageWidth:20.0,
+                    imageHeight:20.0,
                     borderColor: GlobalVariables.grey,
                     borderWidth: 1.0,
                     fit: BoxFit.cover,
@@ -1133,7 +1135,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   scheduleVisitorLayout() {
 
     return Container(
-      width: MediaQuery.of(context).size.width / 0.2,
+      width: MediaQuery.of(context).size.width,
       //height: 400,
 //      height: Med,
       decoration: BoxDecoration(
@@ -1246,133 +1248,57 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 builder: (BuildContext context, StateSetter setState){
                                   return Column(
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                        decoration: BoxDecoration(
-                                            color: GlobalVariables.white,
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                              color: GlobalVariables.mediumGreen,
-                                              width: 3.0,
-                                            )),
-                                        child: TextField(
-                                          controller: _nameController,
-                                          keyboardType: TextInputType.text,
-                                          decoration: InputDecoration(
-                                            hintText: AppLocalizations.of(context)
-                                                .translate('name_of_person'),
-                                            hintStyle: TextStyle(
-                                                color: GlobalVariables.lightGray,
-                                                fontSize: 14),
-                                            border: InputBorder.none,
-                                            suffixIcon: IconButton(
-                                                onPressed: () async {
-                                                  Contact contact = await _contactPicker
-                                                      .selectContact();
-                                                  print('contact Name : ' +
-                                                      contact.fullName);
-                                                  print('contact Number : ' +
-                                                      contact.phoneNumber.toString());
-                                                  _contact = contact;
-                                                  setState(() {
-                                                    if (_contact != null) {
-                                                      _nameController.text = _contact.fullName;
-                                                      String phoneNumber = _contact.phoneNumber
-                                                          .toString()
-                                                          .substring(0, _contact.phoneNumber.toString().indexOf('(') - 1);
-                                                      _mobileController.text = phoneNumber.toString();
-                                                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
-                                                    }
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons.contacts,
-                                                  color: GlobalVariables.mediumGreen,
-                                                )),
-                                          ),
-                                        ),
+                                      AppTextField(textHintContent: AppLocalizations.of(context)
+                                          .translate('name_of_person'),
+                                        controllerCallback: _nameController,
+                                        contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                        suffixIcon: AppIconButton(Icons.contacts,
+                                          iconColor: GlobalVariables.mediumGreen,
+                                          onPressed: () async {
+                                          Contact contact = await _contactPicker
+                                              .selectContact();
+                                          print('contact Name : ' +
+                                              contact.fullName);
+                                          print('contact Number : ' +
+                                              contact.phoneNumber.toString());
+                                          _contact = contact;
+                                          setState(() {
+                                            if (_contact != null) {
+                                              _nameController.text = _contact.fullName;
+                                              String phoneNumber = _contact.phoneNumber
+                                                  .toString()
+                                                  .substring(0, _contact.phoneNumber.toString().indexOf('(') - 1);
+                                              _mobileController.text = phoneNumber.toString();
+                                              // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                                            }
+                                          });
+                                        },),
+
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                        decoration: BoxDecoration(
-                                            color: GlobalVariables.white,
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                              color: GlobalVariables.mediumGreen,
-                                              width: 3.0,
-                                            )),
-                                        child: TextField(
-                                          controller: _mobileController,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                              hintText: AppLocalizations.of(context)
-                                                  .translate('contact_number'),
-                                              hintStyle: TextStyle(
-                                                  color: GlobalVariables.lightGray,
-                                                  fontSize: 14),
-                                              border: InputBorder.none),
+                                      AppTextField(
+                                        textHintContent: AppLocalizations.of(context).translate('contact_number'),
+                                        controllerCallback: _mobileController,
+                                        keyboardType: TextInputType.number,
+                                        maxLength: 10,
+                                        contentPadding: EdgeInsets.only(top: 14),
+                                        suffixIcon: AppIconButton(
+                                          Icons.phone_android,
+                                          iconColor: GlobalVariables.mediumGreen,
                                         ),
                                       ),
                                     ],
                                   );
                                 },
                               ),
-
-                              /*    Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
-                                      width: 3.0,
-                                    )),
-                                child: ButtonTheme(
-                                  child: DropdownButton(
-                                    items: null,
-                                    onChanged: null,
-                                    isExpanded: true,
-                                    icon: Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: GlobalVariables.mediumGreen,
-                                    ),
-                                    underline: SizedBox(),
-                                    hint: Text(
-                                      AppLocalizations.of(context).translate('flat_no'),
-                                      style: TextStyle(
-                                          color: GlobalVariables.lightGray, fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),*/
                               Container(
                                 alignment: Alignment.topLeft,
                                 height: 45,
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: ButtonTheme(
-                                  // minWidth: MediaQuery.of(context).size.width/2,
-                                  child: RaisedButton(
-                                    color: GlobalVariables.green,
-                                    onPressed: () {
-                                      verifyVisitorDetails();
-                                    },
-                                    textColor: GlobalVariables.white,
-                                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(
-                                            color: GlobalVariables.green)),
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .translate('add'),
-                                      style: TextStyle(
-                                          fontSize: GlobalVariables.textSizeMedium),
-                                    ),
-                                  ),
+                                child: AppButton(
+                                  textContent: AppLocalizations.of(context).translate('add'),
+                                  onPressed: () {
+                                    verifyVisitorDetails();
+                                  },
                                 ),
                               ),
                             ],

@@ -9,8 +9,8 @@ import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseFindServices extends StatefulWidget {
@@ -123,8 +123,8 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                   child: AppNetworkImage(
                                     "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
-                                    30.0,
-                                    30.0,
+                                    imageWidth:30.0,
+                                    imageHeight:30.0,
                                     borderColor: GlobalVariables.grey,
                                     borderWidth: 1.0,
                                     fit: BoxFit.cover,

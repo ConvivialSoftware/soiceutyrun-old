@@ -6,6 +6,7 @@ import 'package:societyrun/Activities/GuestOthers.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 
 import 'base_stateful.dart';
 
@@ -264,8 +265,8 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
-                                GlobalVariables.buildingIconPath),
+                            child: /*SvgPicture.asset(
+                                GlobalVariables.buildingIconPath),*/AppAssetsImage(GlobalVariables.buildingIconPath)
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),

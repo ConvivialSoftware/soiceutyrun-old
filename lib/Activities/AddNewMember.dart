@@ -9,6 +9,9 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 
 import 'base_stateful.dart';
 
@@ -67,7 +70,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
-    _dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"/"+DateTime.now().toLocal().year.toString();
+    _dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
     });
@@ -139,26 +142,10 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('name')+'*',
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                  ),
-                ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('name') + '*',
+                controllerCallback: _nameController,
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -246,153 +233,55 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                   ],
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 3.0,
-                          )
-                      ),
-                      child: TextField(
-                        controller: _dobController,
-                        readOnly: true,
-                        style: TextStyle(
-                            color: GlobalVariables.green
-                        ),
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('date_of_birth'),
-                            hintStyle: TextStyle(color: GlobalVariables.veryLightGray ,fontSize: 16),
-                            border: InputBorder.none,
-                            suffixIcon: IconButton(
-                                onPressed: (){
-
-                                  GlobalFunctions.getSelectedDateForDOB(context).then((value){
-                                    _dobController.text = value.day.toString().padLeft(2, '0')+"/"+value.month.toString().padLeft(2, '0')+"/"+value.year.toString();
-                                  });
-
-                                },
-                                icon: Icon(Icons.date_range,color: GlobalVariables.mediumGreen,))
-                        ),
-                      ),
-                    ),
-                  ),
-                  /*Flexible(
-                    flex: 1,
-                    child: Container(
-                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 3.0,
-                          )
-                      ),
-                      child: TextField(
-                        controller: _mobileController,
-                        keyboardType: TextInputType.number,
-                        maxLength: 10,
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('contact1')+'*',
-                            hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                            border: InputBorder.none,
-                            counterText: '',
-                          suffixIcon: Icon(
-                            Icons.phone_android,
-                            color: GlobalVariables.lightGreen,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),*/
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _mobileController,
-                  keyboardType: TextInputType.number,
-                  maxLength: 10,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('contact1')+'*',
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                    border: InputBorder.none,
-                    counterText: '',
-                    suffixIcon: Icon(
-                      Icons.phone_android,
-                      color: GlobalVariables.lightGreen,
-                    ),
-                  ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('date_of_birth'),
+                controllerCallback: _dobController,
+                readOnly: true,
+                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                suffixIcon: AppIconButton(
+                  Icons.date_range,
+                  iconColor: GlobalVariables.mediumGreen,
+                  onPressed: () {
+                    GlobalFunctions.getSelectedDateForDOB(context).then((value){
+                      _dobController.text = value.day.toString().padLeft(2, '0')+"-"+value.month.toString().padLeft(2, '0')+"-"+value.year.toString();
+                    });
+                  },
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _alterMobileController,
-                  keyboardType: TextInputType.number,
-                  maxLength: 10,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('contact2'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none,
-                    counterText: '',
-                    suffixIcon: Icon(
-                      Icons.phone_android,
-                      color: GlobalVariables.lightGreen,
-                    ),
-                  ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('contact1') + '*',
+                controllerCallback: _mobileController,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                contentPadding: EdgeInsets.only(top: 14),
+                suffixIcon: AppIconButton(
+                  Icons.phone_android,
+                  iconColor: GlobalVariables.mediumGreen,
                 ),
               ),
-              Container(
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('contact2'),
+                controllerCallback: _alterMobileController,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                contentPadding: EdgeInsets.only(top: 14),
+                suffixIcon: AppIconButton(
+                  Icons.phone_android,
+                  iconColor: GlobalVariables.mediumGreen,
                 ),
-                child: TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('email_id'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none,
-                    suffixIcon: Icon(
-                      Icons.email,
-                      color: GlobalVariables.lightGreen,
-                    ),
-                  ),
+              ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('email_id'),
+                controllerCallback: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                contentPadding: EdgeInsets.only(top: 14),
+                suffixIcon: AppIconButton(
+                  Icons.email,
+                  iconColor: GlobalVariables.mediumGreen,
                 ),
               ),
               Row(
@@ -402,13 +291,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -424,7 +313,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           hint: Text(
                             AppLocalizations.of(context).translate('membership_type')+'*',
                             style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                           ),
                         ),
                       ),
@@ -435,13 +324,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -457,7 +346,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           hint: Text(
                             AppLocalizations.of(context).translate('lives_here')+'*',
                             style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                           ),
                         ),
                       ),
@@ -469,26 +358,11 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                 children: <Widget>[
                   Flexible(
                     flex: 3,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 3.0,
-                          )
-                      ),
-                      child: TextField(
-                        controller: _occupationController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('occupation'),
-                            hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                            border: InputBorder.none
-                        ),
-                      ),
+                    child:
+                    AppTextField(
+                      textHintContent:
+                      AppLocalizations.of(context).translate('occupation'),
+                      controllerCallback: _occupationController,
                     ),
                   ),
                   Flexible(
@@ -496,13 +370,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                     child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: GlobalVariables.mediumGreen,
-                            width: 3.0,
+                            width: 2.0,
                           )),
                       child: ButtonTheme(
                         child: DropdownButton(
@@ -518,7 +392,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           hint: Text(
                             AppLocalizations.of(context).translate('blood_group'),
                             style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                           ),
                         ),
                       ),
@@ -526,49 +400,16 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                   ),
                 ],
               ),
-             /* Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _hobbiesController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('hobbies'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                      border: InputBorder.none
-                  ),
-                ),
-              ),*/
               Container(
                 height: 100,
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                  color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )
-                ),
-                child: TextField(
-                  controller: _addressController,
-                  keyboardType: TextInputType.text,
-                  maxLines: 99,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('address'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
-                    border: InputBorder.none
-                  ),
-                ),
+               child: AppTextField(
+                 textHintContent:
+                 AppLocalizations.of(context).translate('address'),
+                 controllerCallback: _addressController,
+                 maxLines: 99,
+                 contentPadding: EdgeInsets.only(top: 14),
+               ),
+
               ),
               Row(
                 children: <Widget>[
@@ -672,27 +513,11 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                 // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-
-                      verifyInfo();
-
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)
-                          .translate('submit'),
-                      style: TextStyle(
-                          fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyInfo();
+                  },
                 ),
               ),
             ],
@@ -840,7 +665,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
         value: _bloodGroupList[i],
         child: Text(
           _bloodGroupList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.black),
         ),
       ));
     }
@@ -861,7 +686,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
           value: _membershipTypeList[i],
           child: Text(
             _membershipTypeList[i],
-            style: TextStyle(color: GlobalVariables.green),
+            style: TextStyle(color: GlobalVariables.black),
           ),
         ));
       }
@@ -879,7 +704,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
         value: _livesHereList[i],
         child: Text(
           _livesHereList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.black),
         ),
       ));
     }

@@ -11,9 +11,9 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
 import 'package:societyrun/Models/LedgerAccount.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
-import 'package:societyrun/utils/AppButton.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppTextField.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 
 import 'base_stateful.dart';
 
@@ -148,6 +148,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     AppLocalizations.of(context).translate('payment_date'),
                 controllerCallback: _paymentDateController,
                 borderWidth: 2.0,
+                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                 readOnly: true,
                 suffixIcon: AppIconButton(
                   Icons.date_range,
@@ -166,7 +167,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
               ),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
@@ -193,7 +194,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     AppLocalizations.of(context).translate('ledger_account') +
                         '*',
                     style: TextStyle(
-                        color: GlobalVariables.lightGray, fontSize: 16),
+                        color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                   ),
                 ),
               ),
@@ -233,7 +234,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                             AppLocalizations.of(context).translate('paid_by') +
                                 '*',
                             style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                           ),
                         ),
                       ),
@@ -279,7 +280,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                       AppLocalizations.of(context).translate('from_account') +
                           '*',
                       style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
+                          color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                     ),
                   ),
                 ),

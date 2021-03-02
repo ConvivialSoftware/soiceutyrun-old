@@ -10,6 +10,9 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 
 import 'base_stateful.dart';
 
@@ -149,17 +152,24 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
         child: Container(
           child: Column(
             children: <Widget>[
-              /*Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  AppLocalizations.of(context).translate('raise_new_ticket'),
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('date'),
+                controllerCallback: _dateController,
+                readOnly: true,
+                contentPadding: EdgeInsets.only(top: 14),
+                suffixIcon: AppIconButton(
+                  Icons.date_range,
+                  iconColor: GlobalVariables.mediumGreen,
+                  onPressed: () {
+                    GlobalFunctions.getSelectedDate(context).then((value){
+                      _dateController.text = value.day.toString().padLeft(2,'0')+"-"+value.month.toString().padLeft(2,'0')+"-"+value.year.toString();
+                      insertedDate =value.toLocal().year.toString()+"-"+value.toLocal().month.toString().padLeft(2,'0')+"-"+value.day.toString().padLeft(2,'0');
+                    });
+                  },
                 ),
-              ),*/
-              Container(
+              ),
+              /*Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                 alignment: Alignment.center,
                 height: 50,
@@ -199,9 +209,9 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                         )),
                   ),
                 ),
-              ),
+              ),*/
               Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   children: <Widget>[
                     Container(
@@ -294,27 +304,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                   ],
                 ),
               ),
-              paymentType== "Cheque" ? Container(
-                //  height: 150,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _chequeBankNameController,
-                  //maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText:
-                      AppLocalizations.of(context).translate('cheque_bank_name'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
-                ),
+              paymentType== "Cheque" ?
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('cheque_bank_name'),
+                controllerCallback: _chequeBankNameController,
               ):Container(),
               Container(
                 width: double.infinity,
@@ -325,7 +319,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
-                      width: 3.0,
+                      width: 2.0,
                     )),
                 child: ButtonTheme(
                   child: DropdownButton(
@@ -346,72 +340,25 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                   ),
                 ),
               ),
-              Container(
-                //  height: 150,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  //readOnly: true,
-                  //maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText:
-                      AppLocalizations.of(context).translate('amount'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
-                ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('amount') ,
+                controllerCallback: _amountController,
+                keyboardType: TextInputType.number,
               ),
-              Container(
-                //  height: 150,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _referenceController,
-                  //maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText:
-                      AppLocalizations.of(context).translate('reference_no')+'*',
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
-                ),
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('reference_no')+'*',
+                controllerCallback: _referenceController,
               ),
               Container(
                 height: 150,
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: _noteController,
+                child: AppTextField(
+                  textHintContent:
+                  AppLocalizations.of(context).translate('enter_note'),
+                  controllerCallback: _noteController,
                   maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)
-                          .translate('enter_note'),
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
+                  contentPadding: EdgeInsets.only(top: 14),
                 ),
               ),
               Container(
@@ -509,25 +456,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                  // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
-                    color: GlobalVariables.green,
-                    onPressed: () {
-
-                      verifyData();
-
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
-                    child: Text(
-                      AppLocalizations.of(context).translate('submit'),
-                      style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
+                child: AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyData();
+                  },
                 ),
               ),
             ],
@@ -734,11 +667,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
-                        child: SvgPicture.asset(
+                        child: AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 80.0,imageHeight: 80.0,)/*SvgPicture.asset(
                           GlobalVariables.successIconPath,
                           width: 80,
                           height: 80,
-                        ),
+                        )*/,
                       ),
                      /* Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),

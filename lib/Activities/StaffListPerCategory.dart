@@ -11,8 +11,8 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/utils/AppImage.dart';
-import 'package:societyrun/utils/AppWidget.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -194,8 +194,8 @@ class StaffListPerCategoryState
                     child: staffImage.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            70.0,
-                            70.0,
+                      imageWidth:70.0,
+                      imageHeight:70.0,
                             borderColor: GlobalVariables.grey,
                             borderWidth: 2.0,
                             fit: BoxFit.cover,
@@ -203,8 +203,8 @@ class StaffListPerCategoryState
                           )
                         : AppNetworkImage(
                             staffImage,
-                            70.0,
-                            70.0,
+                      imageWidth:70.0,
+                      imageHeight:70.0,
                             borderColor: GlobalVariables.grey,
                             borderWidth: 2.0,
                             fit: BoxFit.cover,

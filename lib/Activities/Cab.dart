@@ -6,6 +6,7 @@ import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 
 import 'base_stateful.dart';
 
@@ -380,8 +381,9 @@ class CabState extends BaseStatefulState<BaseCab> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
-                                GlobalVariables.buildingIconPath),
+                            child:/* SvgPicture.asset(
+                                GlobalVariables.buildingIconPath),*/
+                            AppAssetsImage(GlobalVariables.buildingIconPath,)
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -414,9 +416,9 @@ class CabState extends BaseStatefulState<BaseCab> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
+                            child: /*SvgPicture.asset(
                               GlobalVariables.shopIconPath,
-                            ),
+                            ),*/AppAssetsImage(GlobalVariables.shopIconPath)
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -448,8 +450,9 @@ class CabState extends BaseStatefulState<BaseCab> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
-                                GlobalVariables.buildingIconPath),
+                            child: /*SvgPicture.asset(
+                                GlobalVariables.buildingIconPath),*/
+                            AppAssetsImage(GlobalVariables.buildingIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -484,7 +487,8 @@ class CabState extends BaseStatefulState<BaseCab> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: SvgPicture.asset(GlobalVariables.classifiedBigIconPath),
+            child: /*SvgPicture.asset(GlobalVariables.classifiedBigIconPath),*/
+            AppAssetsImage(GlobalVariables.classifiedBigIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -499,7 +503,5 @@ class CabState extends BaseStatefulState<BaseCab> {
         ],
       ),
     );
-
-
   }
 }
