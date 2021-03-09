@@ -153,7 +153,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: AppAssetsImage(GlobalVariables.inAppCallIconPath,imageWidth: 30,imageHeight: 30,borderColor: GlobalVariables.grey,)/*SvgPicture.asset(GlobalVariables.inAppCallIconPath,width: 30,height: 30,color: GlobalVariables.grey,)*/,
+                    child: SvgPicture.asset(GlobalVariables.inAppCallIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
                   ),
                   Expanded(
                     child: Container(

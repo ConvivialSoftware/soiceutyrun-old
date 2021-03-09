@@ -1,6 +1,9 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
@@ -9,6 +12,8 @@ import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/ClassifiedResponse.dart';
+import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
@@ -24,19 +29,19 @@ class BaseDiscover extends StatefulWidget {
     return DiscoverState(pageName);
   }
 }
-
+//TickerProviderStateMixi
 class DiscoverState extends BaseStatefulState<BaseDiscover>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin,AfterLayoutMixin<BaseDiscover> {
   TabController _tabController;
   String pageName;
   var width, height;
 
   DiscoverState(this.pageName);
+  List<ClassifiedResponse> _selectedCategoryData = List<ClassifiedResponse>();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -44,47 +49,84 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     //  _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    if (pageName != null) {
+   /* if (pageName != null) {
       redirectToPage(pageName);
     }
+*/
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('discover'),
-            style: TextStyle(color: GlobalVariables.white, fontSize: 16),
-          ),
-          bottom: getTabLayout(),
-          elevation: 0,
-        ),
-        body: TabBarView(controller: _tabController, children: <Widget>[
-          getClassifiedLayout(),
-          Container(),
-          Container(),
-          Container(),
-          //getNearByShopLayout(),
-        ]),
-      ),
-    );
+    return  ChangeNotifierProvider<ClassifiedResponse>.value(
+        value : Provider.of<ClassifiedResponse>(context),
+        child: Consumer<ClassifiedResponse>(
+          builder: (context, value, child) {
+            print('Consumer Value : '+ value.classifiedCategoryList.toString());
+            _tabController = TabController(length: value.classifiedCategoryList.length, vsync: this);
+            _tabController.addListener((){
+              _handleSelection(_tabController.index,value);
+            });
+            return DefaultTabController(
+              length: value.classifiedCategoryList.length,
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: GlobalVariables.green,
+                  centerTitle: true,
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: GlobalVariables.white,
+                    ),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).translate('discover'),
+                    style: TextStyle(color: GlobalVariables.white, fontSize: 16),
+                  ),
+                  bottom:  value.classifiedCategoryList.isNotEmpty ? getTabLayout(value):PreferredSize(preferredSize: Size.fromHeight(0.0),child: Container(),),
+                  elevation: 0,
+                ),
+                body:  value.classifiedCategoryList.isNotEmpty ? getTabBarView(value):Center(child: CircularProgressIndicator(backgroundColor: GlobalVariables.grey,)),
+              ),
+            );
+          },
+        ));
   }
 
-  getTabLayout() {
+  /*Scaffold(
+          appBar: AppBar(
+            backgroundColor: GlobalVariables.green,
+            centerTitle: true,
+            leading: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: GlobalVariables.white,
+              ),
+            ),
+            title: Text(
+              AppLocalizations.of(context).translate('discover'),
+              style: TextStyle(color: GlobalVariables.white, fontSize: 16),
+            ),
+            bottom: getTabLayout(),
+            elevation: 0,
+          ),
+          body: getTabBarView(),
+        ),*/
+
+  getTabLayout(ClassifiedResponse value) {
     return PreferredSize(
       preferredSize: Size.fromHeight(30.0),
       child: TabBar(
-        tabs: [
+        tabs: value.classifiedCategoryList.map((e) {
+          return Container(
+            width: MediaQuery.of(context).size.width / 3,
+            child: Tab(
+              text: e.Category_Name,
+            ),
+          );
+        }).toList(),/*[
           Container(
             width: MediaQuery.of(context).size.width / 3,
             child: Tab(
@@ -109,13 +151,13 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               text: 'Furniture',
             ),
           ),
-          /* Container(
+          *//* Container(
             width: MediaQuery.of(context).size.width / 3,
             child: Tab(
               text: AppLocalizations.of(context).translate('near_by_shop'),
             ),
-          )*/
-        ],
+          )*//*
+        ],*/
         controller: _tabController,
         unselectedLabelColor: GlobalVariables.white30,
         indicatorColor: GlobalVariables.white,
@@ -126,7 +168,18 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  getClassifiedLayout() {
+  getClassifiedLayout(ClassifiedResponse value) {
+
+    //ClassifiedResponse _classifiedValue;
+    List<Classified> _classifiedValue=List<Classified>();
+    for(int i=0;i<value.classifiedList.length;i++)
+    {
+      var category = value.classifiedCategoryList[_tabController.index].Category_Name;
+      if(category.toLowerCase()==value.classifiedList[i].Category.toLowerCase()){
+         _classifiedValue.add(value.classifiedList[i]);
+         //print('runtime : '+_classifiedValue.runtimeType.toString());
+      }
+    }
     print('getClassifiedLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -141,7 +194,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                getClassifiedListDataLayout(),
+                getClassifiedListDataLayout(_classifiedValue),
                 addClassifiedDiscoverFabLayout(
                     GlobalVariables.CreateClassifiedListingPage),
               ],
@@ -186,7 +239,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  getClassifiedListDataLayout() {
+  getClassifiedListDataLayout(List<Classified> value) {
     return Container(
       //padding: EdgeInsets.all(10),
       margin:
@@ -194,16 +247,20 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
-                itemCount: 5,
+                itemCount: value.length,
                 itemBuilder: (context, position) {
-                  return getClassifiedListItemLayout(position);
+                  return getClassifiedListItemLayout(position,value);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
     );
   }
 
-  getClassifiedListItemLayout(int position) {
+  getClassifiedListItemLayout(int position, List<Classified> value) {
+
+    var daysCount = GlobalFunctions.inDaysCount(value[position].C_Date);
+    print('page : '+_tabController.index.toString());
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -263,7 +320,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  text('Resale 1bhk luxurious Flat in jail Road. Nasik Road.',
+                                  text(value[position].Title,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       maxLine: 2,
                                       textColor: GlobalVariables.green,fontWeight: FontWeight.w500),
@@ -280,7 +337,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                       ),
                                       SizedBox(width: 2),
                                       Flexible(
-                                        child: text('Dasak Gaon, Nashik',
+                                        child: text(value[position].Locality,
                                             textColor:
                                             GlobalVariables.lightGray,
                                             fontSize:
@@ -301,13 +358,31 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
-                            child: text('Rs. 1,00,000',
+                            child: text('Rs. '+value[position].Price,
                                 textColor: GlobalVariables.black,
                                 fontSize: GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            child: Row(
+                            child: (daysCount+1)>7 ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    margin:EdgeInsets.only(top: 3),
+                                    child: Icon(
+                                      Icons.date_range,
+                                      size: 15,
+                                      color: Colors.grey,
+                                    )),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                text(GlobalFunctions.convertDateFormat(value[position].C_Date, 'dd-MMM-yyyy'),
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSmall,
+                                    fontWeight: FontWeight.normal),
+                              ],
+                            ) : Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
@@ -320,7 +395,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                 SizedBox(
                                   width: 4,
                                 ),
-                                text('2 days ago',
+                                text(daysCount.toString()+' days ago',
                                     textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeSmall,
                                     fontWeight: FontWeight.normal),
@@ -341,238 +416,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 )
               ],
             ),
-          ))/*Container(
-        decoration: boxDecoration(
-            showShadow: false, bgColor: GlobalVariables.white, radius: 10.0),
-        margin: EdgeInsets.all(10),
-
-        // .cornerRadiusWithClipRRect(10.0) .withShadow() .paddingOnly(top: 8,left: 16,right: 16,bottom: 8)
-        //     color: t9_white,
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  ClipRRect(
-                    child: CachedNetworkImage(
-                      imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
-                      width: width / 5.5,
-                      height: width / 6,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  text(
-                                      'Resale 1bhk luxurious Flat in jail Road. Nasik Road.',
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                      maxLine: 2,
-                                      textColor: GlobalVariables.green),
-                                  SizedBox(height: 4),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        size: 20,
-                                        color: GlobalVariables.lightGray,
-                                      ),
-                                      SizedBox(width: 2),
-                                      Flexible(
-                                        child: text('Dasak Gaon, Nashik',
-                                            textColor:
-                                                GlobalVariables.lightGray,
-                                            fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                            maxLine: 2),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              child: text('Rs. 1,00,000',
-                                  textColor: GlobalVariables.black,
-                                  fontSize: GlobalVariables.textSizeMedium,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin:EdgeInsets.only(top: 3),
-                                      child: Icon(
-                                    Icons.access_time,
-                                    size: 15,
-                                    color: Colors.grey,
-                                  )),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  text('2 days ago',
-                                      textColor: GlobalVariables.grey,
-                                      fontSize: GlobalVariables.textSizeSmall,
-                                      fontWeight: FontWeight.normal),
-                                ],
-                              ),
-                            ),
-                            //SizedBox(width: 10),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      )*/,
-    );
-  }
-
-  getClassifiedTypeColor(String type) {
-    switch (type.toLowerCase().trim()) {
-      case "sell":
-        return GlobalVariables.skyBlue;
-        break;
-      case "buy":
-        return GlobalVariables.green;
-        break;
-      case "rent":
-        return GlobalVariables.orangeYellow;
-        break;
-      default:
-        return GlobalVariables.skyBlue;
-        break;
-    }
-  }
-
-  getServiceLayout() {
-    print('getClassifiedLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                serviceSearchFilterLayout(),
-                getServiceTypeDataLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  serviceSearchFilterLayout() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        //width: MediaQuery.of(context).size.width / 1.1,
-        //height: 50,
-        margin: EdgeInsets.fromLTRB(
-            10, MediaQuery.of(context).size.height / 40, 10, 0),
-        decoration: BoxDecoration(
-          color: GlobalVariables.transparent,
-          //  borderRadius: BorderRadius.circular(30),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  alignment: Alignment.center,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )),
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          hintText: "Search",
-                          hintStyle:
-                              TextStyle(color: GlobalVariables.veryLightGray),
-                          border: InputBorder.none,
-                          suffixIcon: Icon(
-                            Icons.search,
-                            color: GlobalVariables.mediumGreen,
-                          )),
-                    ),
-                  )),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  alignment: Alignment.center,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: GlobalVariables.mediumGreen,
-                        width: 3.0,
-                      )),
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          hintText: "Filter",
-                          hintStyle:
-                              TextStyle(color: GlobalVariables.veryLightGray),
-                          border: InputBorder.none,
-                          suffixIcon: Icon(
-                            Icons.search,
-                            color: GlobalVariables.mediumGreen,
-                          )),
-                    ),
-                  )),
-            ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
@@ -895,21 +739,22 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  void redirectToPage(String item) {
-    if (item == AppLocalizations.of(context).translate('discover')) {
-      //Redirect to Discover
-      _tabController.animateTo(0);
-    } else if (item == AppLocalizations.of(context).translate('classified')) {
-      //Redirect to  Classified
-      _tabController.animateTo(0);
-    } else if (item == AppLocalizations.of(context).translate('services')) {
-      //Redirect to  Services
-      _tabController.animateTo(1);
-    } else if (item == AppLocalizations.of(context).translate('near_by_shop')) {
-      //Redirect to  NearByShop
-      _tabController.animateTo(2);
-    } else {
-      _tabController.animateTo(0);
-    }
+  getTabBarView(ClassifiedResponse value) {
+
+    return  TabBarView(controller: _tabController,children: value.classifiedCategoryList.map<Widget>((dynamicContent) {
+      return getClassifiedLayout(value);
+    }).toList());
+
+
+  }
+  @override
+  void afterFirstLayout(BuildContext context) {
+    // TODO: implement afterFirstLayout
+    Provider.of<ClassifiedResponse>(context,listen: false).getClassifiedData();
+  }
+
+  void _handleSelection(int index, ClassifiedResponse value) {
+    print('_tabController.index : '+index.toString());
+
   }
 }

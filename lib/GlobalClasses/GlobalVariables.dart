@@ -225,6 +225,10 @@ class GlobalVariables {
   static var AUTHERP =
       "Basic " + base64Url.encode(utf8.encode(authorizedTokenERP));
   static const BaseURLERP = "https://housingsocietyerp.com/";
+  static const BaseURLDiscover = "https://mydemosites.in/";
+
+  /*Api Name for BaseURLERP*/
+  static const displayClassified = "Classified/Android/Login/display";
 
   /*Api Name for BaseURLERP*/
   static const duesAPI = "AndroidApi/dues";
@@ -385,6 +389,7 @@ class GlobalVariables {
   static const DATA = "data";
   static const Front = "front";
   static const bank = "bank";
+  static const category = "category";
   static const head_details = "head_details";
   static const PassCode = "pass_code";
   static const ExpiredTime = "expire_time";
@@ -441,7 +446,8 @@ class SocietyRun {
   static const companyName = "Convivial Software Pvt. Ltd.";
   static const salesContact = "+91 8055551809";
   static const salesContact1 = "+91 8082697529";
-  static const supportContact = "020 46304333";
+  //static const supportContact = "020 46304333";
+  static const supportContact = "+91 7058684440";
   static const webSite = "http://www.convivialsolutions.com/";
   static const salesEmail = "sales@societyrun.com";
   static const supportEmail = "support@societyrun.com";

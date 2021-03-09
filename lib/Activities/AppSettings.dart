@@ -119,12 +119,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: /*SvgPicture.asset(
+              child: SvgPicture.asset(
                 GlobalVariables.appSettingsIconPath,
                 width: 25,
                 height: 25,
                 color: GlobalVariables.grey,
-              ),*/AppAssetsImage(GlobalVariables.appSettingsIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
+              ),
             ),
             Expanded(
               child: Container(
@@ -176,9 +176,9 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child:/* SvgPicture.asset(
+                    child: SvgPicture.asset(
                       GlobalVariables.whileBGPath,
-                    ),*/AppAssetsImage(GlobalVariables.whileBGPath)
+                    ),
                   ),
                 ),
                 Container(
@@ -321,12 +321,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            child: AppAssetsImage(GlobalVariables.bottomBuildingIconPath,imageWidth: 30.0,imageHeight: 30.0,color: GlobalVariables.grey,)/*SvgPicture.asset(
+            child: SvgPicture.asset(
               GlobalVariables.bottomBuildingIconPath,
               width: 30,
               height: 30,
               color: GlobalVariables.grey,
-            ),*/
+            ),
           ),
           Expanded(
             child: Container(
@@ -370,12 +370,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: /*SvgPicture.asset(
+              child: SvgPicture.asset(
                 GlobalVariables.changePasswordPath,
                 width: 25,
                 height: 25,
                 color: GlobalVariables.grey,
-              ),*/AppAssetsImage(GlobalVariables.changePasswordPath,imageWidth: 25.0,imageHeight: 25.0,color: GlobalVariables.grey,)
+              ),
             ),
             Expanded(
               child: Container(
@@ -415,12 +415,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: /*SvgPicture.asset(
+              child: SvgPicture.asset(
                 GlobalVariables.aboutUsPath,
                 width: 25,
                 height: 25,
                 color: GlobalVariables.grey,
-              ),*/AppAssetsImage(GlobalVariables.aboutUsPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
+              ),
             ),
             Expanded(
               child: Container(
@@ -460,12 +460,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child:/* SvgPicture.asset(
+              child: SvgPicture.asset(
                 GlobalVariables.feedbackIconPath,
                 width: 25,
                 height: 25,
                 color: GlobalVariables.grey,
-              ),*/AppAssetsImage(GlobalVariables.feedbackIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
+              ),
             ),
             Expanded(
               child: Container(
@@ -513,12 +513,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              child: /*SvgPicture.asset(
+              child: SvgPicture.asset(
                 GlobalVariables.logoutIconPath,
                 width: 25,
                 height: 25,
                 color: GlobalVariables.grey,
-              ),*/AppAssetsImage(GlobalVariables.logoutIconPath,imageWidth: 25,borderWidth: 25,color: GlobalVariables.grey,)
+              ),
             ),
             Expanded(
               child: Container(
@@ -549,10 +549,10 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
       child: Column(
         children: [
           Container(
-            child: /*SvgPicture.asset(
+            child: SvgPicture.asset(
               GlobalVariables.drawerImagePath,
               height: 40,
-            ),*/AppAssetsImage(GlobalVariables.drawerImagePath,borderWidth: 40,)
+            ),
           ),
           Container(
             margin: EdgeInsets.all(5), //  color: GlobalVariables.green,

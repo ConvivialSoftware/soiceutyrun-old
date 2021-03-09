@@ -1079,6 +1079,15 @@ class GlobalFunctions {
     return false;
   }
 
+  static inDaysCount(String generateDate) {
+    DateTime earlier = DateTime.parse(generateDate);
+    //  print('earlier : '+ earlier.toIso8601String());
+    DateTime now = new DateTime.now();
+    DateTime currentDate = new DateTime(now.year, now.month, now.day);
+
+    return currentDate.difference(earlier).inDays;
+  }
+
   static isDateExpireForPoll(String generateDate) {
     DateTime earlier = DateTime.parse(generateDate);
     //  print('earlier : '+ earlier.toIso8601String());

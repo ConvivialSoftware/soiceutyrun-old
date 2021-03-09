@@ -9,6 +9,7 @@ import 'package:societyrun/Activities/SplashScreen.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/ClassifiedResponse.dart';
 
 void main() {
 
@@ -29,6 +30,7 @@ Future<void> flutterDownloadInitialize() async {
 class BaseAppStart extends StatelessWidget {
 
   AppLanguage appLanguage = AppLanguage();
+  final classifiedResponse = ClassifiedResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +41,27 @@ class BaseAppStart extends StatelessWidget {
       child: Consumer<AppLanguage>(builder: (context, model, child) {
         print('model:' + model.toString());
         print('model applocale:' + model.appLocal.toString());
-        return MaterialApp(
-          theme: getThemeData(),
-          title: "SocietyRun",
-          locale: model.appLocal,
-          supportedLocales: [
-            Locale('en', 'US'),
-            Locale('hi', ''),
+        return MultiProvider(
+          providers: [
+           // ChangeNotifierProvider(create: (context) => ClassifiedResponse()),
+            //ChangeNotifierProvider<ClassifiedResponse>.value(value: classifiedResponse),
+            ChangeNotifierProvider<ClassifiedResponse>.value(value: classifiedResponse),
           ],
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          home: SplashScreen(),
+          child: MaterialApp(
+            theme: getThemeData(),
+            title: "SocietyRun",
+            locale: model.appLocal,
+            supportedLocales: [
+              Locale('en', 'US'),
+              Locale('hi', ''),
+            ],
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            home: SplashScreen(),
+          ),
         );
       }),
     );

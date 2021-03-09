@@ -265,8 +265,8 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: /*SvgPicture.asset(
-                                GlobalVariables.buildingIconPath),*/AppAssetsImage(GlobalVariables.buildingIconPath)
+                            child: SvgPicture.asset(
+                                GlobalVariables.buildingIconPath),
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),

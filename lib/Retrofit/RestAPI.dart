@@ -15,6 +15,7 @@ import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
 import 'package:societyrun/Models/razor_pay_order_request.dart';
+import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 
@@ -22,7 +23,7 @@ import 'RestClient.dart';
 const bool kDebugMode = true;
 
 
-class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
+class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClientDiscover{
   RestAPI(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
     this.baseUrl ??= GlobalVariables.BaseURL;
@@ -2172,5 +2173,20 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay{
     final value = _result.data;
     print('value of deleteFamilyMember : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getClassifiedData() async {
+    // TODO: implement getClassifiedData
+    print('baseurl : ' + baseUrl + GlobalVariables.displayClassified);
+    final Response _result = await _dio.post(GlobalVariables.displayClassified,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl),);
+    final value = _result.data;
+    print('value of displayClassified : ' + value.toString());
+    return DataResponse.fromJsonDiscover(value);
   }
 }

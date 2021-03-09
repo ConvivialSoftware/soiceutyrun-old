@@ -212,11 +212,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   Container(
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: /*SvgPicture.asset(
+                        child: SvgPicture.asset(
                           GlobalVariables.headerIconPath,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.fill,
-                        )*/AppAssetsImage(GlobalVariables.headerIconPath,imageWidth: MediaQuery.of(context).size.width,fit: BoxFit.fill,)
+                        )
                     ),
                   ),
                   Container(
@@ -233,9 +233,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               _dashboardSacfoldKey.currentState.openDrawer();
                             },
-                            child: /*SvgPicture.asset(
+                            child: SvgPicture.asset(
                               GlobalVariables.topBreadCrumPath,
-                            ),*/AppAssetsImage(GlobalVariables.topBreadCrumPath,)
+                            ),
                           )),
                         ),
                         Expanded(
@@ -293,12 +293,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                           Container(
                                             margin: EdgeInsets.only(top: 5),
                                             //color: GlobalVariables.grey,
-                                            child: /*SvgPicture.asset(
+                                            child: SvgPicture.asset(
                                               GlobalVariables
                                                   .notificationBellIconPath,
                                               width: 20,
                                               height: 20,
-                                            ),*/AppAssetsImage(GlobalVariables.notificationBellIconPath,imageWidth: 20,borderWidth: 20,)
+                                            ),
                                           ),
                                           Container(
                                             alignment: Alignment.topRight,
@@ -589,9 +589,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: /*SvgPicture.asset(
+                                    child: SvgPicture.asset(
                                       GlobalVariables.shopIconPath,
-                                    ),*/AppAssetsImage(GlobalVariables.shopIconPath,)
+                                    ),
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -617,9 +617,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: /*SvgPicture.asset(
-                                        GlobalVariables.buildingIconPath),*/
-                                    AppAssetsImage(GlobalVariables.buildingIconPath)
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.buildingIconPath),
+
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -650,9 +650,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: /*SvgPicture.asset(
-                                        GlobalVariables.supportIconPath),*/
-                                    AppAssetsImage(GlobalVariables.supportIconPath)
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.supportIconPath),
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -687,9 +686,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: /*SvgPicture.asset(
-                                        GlobalVariables.shoppingIconPath),*/
-                                    AppAssetsImage(GlobalVariables.shoppingIconPath)
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.shoppingIconPath),
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -720,9 +718,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: /*SvgPicture.asset(
-                                        GlobalVariables.gatePassIconPath),*/
-                                    AppAssetsImage(GlobalVariables.gatePassIconPath)
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.gatePassIconPath),
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -748,9 +745,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    child: /*SvgPicture.asset(
-                                        GlobalVariables.moreIconPath),*/
-                                    AppAssetsImage(GlobalVariables.moreIconPath,)
+                                    child: SvgPicture.asset(
+                                        GlobalVariables.moreIconPath),
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -787,9 +783,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    /*SvgPicture.asset(
-                                        GlobalVariables.storeIconPath),*/
-                                    AppAssetsImage(GlobalVariables.storeIconPath),
+                                    SvgPicture.asset(
+                                        GlobalVariables.storeIconPath),
                                     SizedBox(
                                       width: 2,
                                     ),
@@ -823,8 +818,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    /*SvgPicture.asset(
-                                        GlobalVariables.serviceIconPath),*/AppAssetsImage(GlobalVariables.serviceIconPath,),
+                                    SvgPicture.asset(
+                                        GlobalVariables.serviceIconPath),
                                     SizedBox(
                                       width: 2,
                                     ),
@@ -998,10 +993,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
                   padding: EdgeInsets.all(5),
                   alignment: Alignment.topLeft,
-                  child: /*SvgPicture.asset(
+                  child: SvgPicture.asset(
                     GlobalVariables.drawerImagePath,
                     height: 40,
-                  ),*/AppAssetsImage(GlobalVariables.drawerImagePath,borderWidth: 40,)
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -2549,7 +2544,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     List<String> _userPermissionList = userPermission.toString().split(',');
 
     for (int i = 0; i < _socPermissionList.length; i++) {
-      print('_socPermissionList[i] : ' + _userPermissionList[i].toString());
+     // print('_socPermissionList[i] : ' + _userPermissionList[i].toString());
       if (_socPermissionList[i] == AppPermission.socHelpDeskPermission) {
         AppPermission.isSocHelpDeskPermission = true;
       }
@@ -2565,7 +2560,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
 
     for (int i = 0; i < _userPermissionList.length; i++) {
-      print('_userPermissionList[i] : ' + _userPermissionList[i].toString());
+     // print('_userPermissionList[i] : ' + _userPermissionList[i].toString());
       if (_userPermissionList[i] == AppPermission.userHelpDeskPermission) {
         AppPermission.isUserHelpDeskPermission = true;
       }

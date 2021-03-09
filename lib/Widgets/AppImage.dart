@@ -62,11 +62,11 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
 
 
 class AppAssetsImage extends StatefulWidget {
-  var image, radius, fit, borderColor, borderWidth, imageWidth, imageHeight,shape,color;
+  var image, radius, fit, borderColor, borderWidth, imageWidth, imageHeight,shape;
 
   AppAssetsImage(this.image, { this.imageWidth, this.imageHeight,
      this.radius = 0.0, this.fit = BoxFit
-          .fill,this.borderColor=Colors.transparent, this.borderWidth=1.0,this.shape=BoxShape.circle,this.color=GlobalVariables.mediumGreen});
+          .fill,this.borderColor=Colors.transparent, this.borderWidth=1.0,this.shape=BoxShape.circle});
 
   @override
   _AppAssetsImageState createState() => _AppAssetsImageState();
@@ -90,7 +90,6 @@ class _AppAssetsImageState extends State<AppAssetsImage> {
             width: widget.imageWidth,
             height: widget.imageHeight,
             fit: widget.fit,
-            color: widget.color,
           ) : Container(
             decoration: BoxDecoration(
                 shape: widget.shape,
@@ -102,7 +101,6 @@ class _AppAssetsImageState extends State<AppAssetsImage> {
               width: widget.imageWidth,
               height: widget.imageHeight,
               fit: widget.fit,
-              color: widget.color,
             ),
           ),
         )

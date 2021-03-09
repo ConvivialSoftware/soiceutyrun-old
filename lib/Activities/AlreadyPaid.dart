@@ -667,11 +667,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
-                        child: AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 80.0,imageHeight: 80.0,)/*SvgPicture.asset(
+                        child: SvgPicture.asset(
                           GlobalVariables.successIconPath,
                           width: 80,
                           height: 80,
-                        )*/,
+                        ),
                       ),
                      /* Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
