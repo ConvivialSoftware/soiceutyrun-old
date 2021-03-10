@@ -229,6 +229,7 @@ class GlobalVariables {
 
   /*Api Name for BaseURLERP*/
   static const displayClassified = "Classified/Android/Login/display";
+  static const insertClassified = "Classified/Android/Login/insert";
 
   /*Api Name for BaseURLERP*/
   static const duesAPI = "AndroidApi/dues";

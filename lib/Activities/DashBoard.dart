@@ -12,6 +12,7 @@ import 'package:rate_my_app/rate_my_app.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AppSettings.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
+import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/Expense.dart';
@@ -2226,9 +2227,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
-
+      GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
     } else if (item == AppLocalizations.of(context).translate('classified')) {
-      //Redirect to  My Dues
+      //Redirect to  classified
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
               context,
@@ -2239,7 +2240,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('services')) {
-      //Redirect to  My Dues
+      //Redirect to  services
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseFindServices()))
@@ -2248,7 +2249,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       });
     } else if (item ==
         AppLocalizations.of(context).translate('exclusive_offer')) {
-      //Redirect to  My Dues
+      //Redirect to  exclusive_offer
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
           context,
@@ -2347,8 +2348,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
     } else if (item == AppLocalizations.of(context).translate('more')) {
-      //Redirect to  Admin
-      GlobalFunctions.comingSoonDialog(context);
+      //Redirect to  Admin«
+     // GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseCreateClassifiedListing())).then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
+
       /*Navigator.push(
           context, MaterialPageRoute(builder: (context) => BaseMore())).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);

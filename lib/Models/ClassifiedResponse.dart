@@ -4,31 +4,66 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class ClassifiedResponse extends ChangeNotifier {
-  List<Classified> classifiedList=List<Classified>();
-  List<ClassifiedCategory> classifiedCategoryList=List<ClassifiedCategory>();
+  List<Classified> classifiedList = List<Classified>();
+  List<ClassifiedCategory> classifiedCategoryList = List<ClassifiedCategory>();
   bool isLoading = true;
   String errMsg;
 
-  Future<void> getClassifiedData() async {
+  Future<String> getClassifiedData() async {
     try {
       print('getClassifiedData');
       final dio = Dio();
-      final RestClientDiscover restClient = RestClientDiscover(dio,baseUrl: GlobalVariables.BaseURLDiscover);
+      final RestClientDiscover restClient =
+          RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       await restClient.getClassifiedData().then((value) {
-        classifiedList = List<Classified>.from(value.data.map((i) => Classified.fromJson(i)));
-        classifiedCategoryList = List<ClassifiedCategory>.from(value.category.map((i) => ClassifiedCategory.fromJson(i)));
-        print('classifiedList : '+classifiedList.toString());
-        print('classifiedCategoryList : '+classifiedCategoryList.toString());
-        isLoading =false;
+        classifiedList = List<Classified>.from(
+            value.data.map((i) => Classified.fromJson(i)));
+        classifiedCategoryList = List<ClassifiedCategory>.from(
+            value.category.map((i) => ClassifiedCategory.fromJson(i)));
+        print('classifiedList : ' + classifiedList.toString());
+        print('classifiedCategoryList : ' + classifiedCategoryList.toString());
+        isLoading = false;
         notifyListeners();
       });
     } catch (e) {
       errMsg = e.toString();
-      isLoading =false;
+      isLoading = false;
+      notifyListeners();
+    }
+    return classifiedCategoryList.length.toString();
+  }
+
+  Future<void> insertClassifiedData(
+      String name,
+      String email,
+      String phone,
+      String category,
+      String type,
+      String title,
+      String description,
+      String propertyDetails,
+      String price,
+      String locality,
+      String city,
+      images) async {
+    try {
+      final dio = Dio();
+      final RestClientDiscover restClient =
+          RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+      await restClient
+          .insertClassifiedData(name, email, phone, category, type, title,
+              description, propertyDetails, price, locality, city, images)
+          .then((value) {
+        isLoading = false;
+        notifyListeners();
+        print(value.toString());
+      });
+    } catch (e) {
+      errMsg = e.toString();
+      isLoading = false;
       notifyListeners();
     }
   }
-  
 }
 
 class Classified {
@@ -86,8 +121,10 @@ class Classified {
 class ClassifiedCategory {
   String Id, Category_Name;
 
-  ClassifiedCategory(
-      {this.Id, this.Category_Name,});
+  ClassifiedCategory({
+    this.Id,
+    this.Category_Name,
+  });
 
   factory ClassifiedCategory.fromJson(Map<String, dynamic> map) {
     return ClassifiedCategory(
@@ -107,10 +144,6 @@ class ClassifiedImage {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      "img": img
-    };
+    return {"img": img};
   }
-
-
 }

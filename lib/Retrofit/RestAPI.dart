@@ -2189,4 +2189,52 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     print('value of displayClassified : ' + value.toString());
     return DataResponse.fromJsonDiscover(value);
   }
+
+  @override
+  Future<StatusMsgResponse> insertClassifiedData(String name, String email, String phone, String category,
+      String type, String title, String description, String propertyDetails, String price,
+      String locality, String city, images) async {
+    // TODO: implement insertClassifiedData
+    ArgumentError.checkNotNull(name, "Name");
+    ArgumentError.checkNotNull(email, "Email");
+    ArgumentError.checkNotNull(phone, "Phone");
+    ArgumentError.checkNotNull(category, "Category");
+    ArgumentError.checkNotNull(type, "Type");
+    ArgumentError.checkNotNull(title, "Title");
+    ArgumentError.checkNotNull(description, "Description");
+    ArgumentError.checkNotNull(propertyDetails, "Property_Details");
+    ArgumentError.checkNotNull(price, "Price");
+    ArgumentError.checkNotNull(locality, "Locality");
+    ArgumentError.checkNotNull(city, "City");
+    ArgumentError.checkNotNull(images, "Images");
+    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
+
+    FormData formData = FormData.fromMap({
+      "Name": name,
+      "Email": email,
+      "Phone": phone,
+      "Category": category,
+      "Type": type,
+      "Title": title,
+      "Description": description,
+      "Property_Details": propertyDetails,
+      "Price": price,
+      "Locality": locality,
+      "City": city,
+      "images": images,
+    });
+    //print(GlobalVariables.societyId+": "+socId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.insertClassified);
+    final Response _result = await _dio.post(GlobalVariables.insertClassified,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of insertClassifiedData : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
 }

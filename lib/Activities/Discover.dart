@@ -1,8 +1,9 @@
-import 'package:after_layout/after_layout.dart';
+//import 'package:after_layout/after_layout.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
@@ -31,22 +32,35 @@ class BaseDiscover extends StatefulWidget {
 }
 //TickerProviderStateMixi
 class DiscoverState extends BaseStatefulState<BaseDiscover>
-    with TickerProviderStateMixin,AfterLayoutMixin<BaseDiscover> {
+    with SingleTickerProviderStateMixin/*,AfterLayoutMixin<BaseDiscover>*/ {
   TabController _tabController;
   String pageName;
   var width, height;
 
   DiscoverState(this.pageName);
-  List<ClassifiedResponse> _selectedCategoryData = List<ClassifiedResponse>();
+  ProgressDialog _progressDialog;
 
   @override
   void initState() {
     super.initState();
+    print('initState Call');
+    Provider.of<ClassifiedResponse>(context,listen: false).getClassifiedData().then((tabLength) {
+      print('tablength : '+tabLength.toString());
+      _tabController = TabController(length: int.parse(tabLength), vsync: this);
+      _tabController.addListener((){
+        print('_tabController.index : '+_tabController.index.toString());
+        // _handleSelection(_tabController.index);
+        setState(() {
+
+        });
+      });
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    //  _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+      _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
    /* if (pageName != null) {
@@ -59,10 +73,6 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         child: Consumer<ClassifiedResponse>(
           builder: (context, value, child) {
             print('Consumer Value : '+ value.classifiedCategoryList.toString());
-            _tabController = TabController(length: value.classifiedCategoryList.length, vsync: this);
-            _tabController.addListener((){
-              _handleSelection(_tabController.index,value);
-            });
             return DefaultTabController(
               length: value.classifiedCategoryList.length,
               child: Scaffold(
@@ -85,35 +95,13 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   bottom:  value.classifiedCategoryList.isNotEmpty ? getTabLayout(value):PreferredSize(preferredSize: Size.fromHeight(0.0),child: Container(),),
                   elevation: 0,
                 ),
-                body:  value.classifiedCategoryList.isNotEmpty ? getTabBarView(value):Center(child: CircularProgressIndicator(backgroundColor: GlobalVariables.grey,)),
+                body:  value.classifiedCategoryList.isNotEmpty && !value.isLoading ? getTabBarView(value):_progressDialog.show(),
               ),
             );
           },
-        ));
+        )
+    );
   }
-
-  /*Scaffold(
-          appBar: AppBar(
-            backgroundColor: GlobalVariables.green,
-            centerTitle: true,
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: GlobalVariables.white,
-              ),
-            ),
-            title: Text(
-              AppLocalizations.of(context).translate('discover'),
-              style: TextStyle(color: GlobalVariables.white, fontSize: 16),
-            ),
-            bottom: getTabLayout(),
-            elevation: 0,
-          ),
-          body: getTabBarView(),
-        ),*/
 
   getTabLayout(ClassifiedResponse value) {
     return PreferredSize(
@@ -126,38 +114,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               text: e.Category_Name,
             ),
           );
-        }).toList(),/*[
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Tab(
-              text: 'All Things',
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Tab(
-              text: 'Home',
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Tab(
-              text: 'Vehicle',
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Tab(
-              text: 'Furniture',
-            ),
-          ),
-          *//* Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Tab(
-              text: AppLocalizations.of(context).translate('near_by_shop'),
-            ),
-          )*//*
-        ],*/
+        }).toList(),
         controller: _tabController,
         unselectedLabelColor: GlobalVariables.white30,
         indicatorColor: GlobalVariables.white,
@@ -170,13 +127,13 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
 
   getClassifiedLayout(ClassifiedResponse value) {
 
-    //ClassifiedResponse _classifiedValue;
-    List<Classified> _classifiedValue=List<Classified>();
+    ClassifiedResponse _classifiedResponse=ClassifiedResponse();
     for(int i=0;i<value.classifiedList.length;i++)
     {
-      var category = value.classifiedCategoryList[_tabController.index].Category_Name;
+      var category = value.classifiedCategoryList[_tabController==null ? 0 : _tabController.index].Category_Name;
+      print('category : '+category.toString());
       if(category.toLowerCase()==value.classifiedList[i].Category.toLowerCase()){
-         _classifiedValue.add(value.classifiedList[i]);
+        _classifiedResponse.classifiedList.add(value.classifiedList[i]);
          //print('runtime : '+_classifiedValue.runtimeType.toString());
       }
     }
@@ -194,7 +151,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                getClassifiedListDataLayout(_classifiedValue),
+                _classifiedResponse.classifiedList.isNotEmpty ? getClassifiedListDataLayout(_classifiedResponse):Container(),
                 addClassifiedDiscoverFabLayout(
                     GlobalVariables.CreateClassifiedListingPage),
               ],
@@ -219,7 +176,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BaseCreateClassifiedListing()));
+                        builder: (context) => BaseCreateClassifiedListing())).then((value) {
+                  GlobalFunctions.setBaseContext(context);
+                });
+
                 /*} else if (pageTitle == GlobalVariables.AddNearByShopPage) {
                   Navigator.push(
                       context,
@@ -239,7 +199,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  getClassifiedListDataLayout(List<Classified> value) {
+  getClassifiedListDataLayout(ClassifiedResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
       margin:
@@ -247,7 +207,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
-                itemCount: value.length,
+                itemCount: value.classifiedList.length,
                 itemBuilder: (context, position) {
                   return getClassifiedListItemLayout(position,value);
                 }, //  scrollDirection: Axis.vertical,
@@ -256,17 +216,20 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  getClassifiedListItemLayout(int position, List<Classified> value) {
+  getClassifiedListItemLayout(int position, ClassifiedResponse value) {
 
-    var daysCount = GlobalFunctions.inDaysCount(value[position].C_Date);
-    print('page : '+_tabController.index.toString());
-
+    var daysCount = GlobalFunctions.inDaysCount(value.classifiedList[position].C_Date);
+   // print('page : '+_tabController.index.toString());
+    List<ClassifiedImage> imageList = List<ClassifiedImage>.from(value.classifiedList[position].Images.map((i) => ClassifiedImage.fromJson(i)));
+    print('imageList[0].img : '+imageList[0].img);
     return InkWell(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BaseClassifiedListItemDesc()));
+                builder: (context) => BaseClassifiedListItemDesc())).then((value){
+          GlobalFunctions.setBaseContext(context);
+        });
       },
       child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -295,12 +258,12 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               shape: BoxShape.rectangle
                             )
                                 : */AppNetworkImage(
-                              "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
+                              imageList[0].img,
                               imageWidth:width / 5.5,
-                              imageHeight:width / 6,
+                              imageHeight:width / 5.5,
                               borderColor: GlobalVariables.grey,
                               borderWidth: 1.0,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                               radius: 12.0,
                               shape: BoxShape.rectangle,
                             )
@@ -320,7 +283,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  text(value[position].Title,
+                                  text(value.classifiedList[position].Title,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       maxLine: 2,
                                       textColor: GlobalVariables.green,fontWeight: FontWeight.w500),
@@ -337,7 +300,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                       ),
                                       SizedBox(width: 2),
                                       Flexible(
-                                        child: text(value[position].Locality,
+                                        child: text(value.classifiedList[position].Locality,
                                             textColor:
                                             GlobalVariables.lightGray,
                                             fontSize:
@@ -358,7 +321,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
-                            child: text('Rs. '+value[position].Price,
+                            child: text('Rs. '+value.classifiedList[position].Price,
                                 textColor: GlobalVariables.black,
                                 fontSize: GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold),
@@ -377,7 +340,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                 SizedBox(
                                   width: 4,
                                 ),
-                                text(GlobalFunctions.convertDateFormat(value[position].C_Date, 'dd-MMM-yyyy'),
+                                text(GlobalFunctions.convertDateFormat(value.classifiedList[position].C_Date, 'dd-MMM-yyyy'),
                                     textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeSmall,
                                     fontWeight: FontWeight.normal),
@@ -741,20 +704,14 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
 
   getTabBarView(ClassifiedResponse value) {
 
+    if(_progressDialog.isShowing()){
+      _progressDialog.hide();
+    }
     return  TabBarView(controller: _tabController,children: value.classifiedCategoryList.map<Widget>((dynamicContent) {
       return getClassifiedLayout(value);
     }).toList());
 
 
   }
-  @override
-  void afterFirstLayout(BuildContext context) {
-    // TODO: implement afterFirstLayout
-    Provider.of<ClassifiedResponse>(context,listen: false).getClassifiedData();
-  }
 
-  void _handleSelection(int index, ClassifiedResponse value) {
-    print('_tabController.index : '+index.toString());
-
-  }
 }
