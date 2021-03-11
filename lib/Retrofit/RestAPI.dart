@@ -2206,7 +2206,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(price, "Price");
     ArgumentError.checkNotNull(locality, "Locality");
     ArgumentError.checkNotNull(city, "City");
-    ArgumentError.checkNotNull(images, "Images");
+    ArgumentError.checkNotNull(images, "Img_Name");
     // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
 
     FormData formData = FormData.fromMap({
@@ -2221,7 +2221,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       "Price": price,
       "Locality": locality,
       "City": city,
-      "images": images,
+      "Img_Name": images,
     });
     //print(GlobalVariables.societyId+": "+socId);
 

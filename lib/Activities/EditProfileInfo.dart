@@ -260,7 +260,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         Icons.date_range,
                         iconColor: GlobalVariables.mediumGreen,
                         onPressed: () {
-                          GlobalFunctions.getSelectedDate(context).then((value) {
+                          GlobalFunctions.getSelectedDateForDOB(context).then((value) {
                             _dobController.text =
                                 value.day.toString().padLeft(2, '0') +
                                     "-" +

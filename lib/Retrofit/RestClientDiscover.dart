@@ -21,7 +21,7 @@ abstract class RestClientDiscover {
       @Field("Category") String category, @Field("Type") String type,
       @Field("Title") String title, @Field("Description") String description,
       @Field("Property_Details") String propertyDetails, @Field("Price") String price,
-      @Field("Locality") String locality, @Field("City") String city,@Field("Images") var images,);
+      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,);
 
 }
 

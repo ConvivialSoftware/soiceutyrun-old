@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class ClassifiedResponse extends ChangeNotifier {
@@ -33,7 +35,7 @@ class ClassifiedResponse extends ChangeNotifier {
     return classifiedCategoryList.length.toString();
   }
 
-  Future<void> insertClassifiedData(
+  Future<StatusMsgResponse> insertClassifiedData(
       String name,
       String email,
       String phone,
@@ -46,23 +48,18 @@ class ClassifiedResponse extends ChangeNotifier {
       String locality,
       String city,
       images) async {
-    try {
+
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      await restClient
+     var result =  await restClient
           .insertClassifiedData(name, email, phone, category, type, title,
-              description, propertyDetails, price, locality, city, images)
-          .then((value) {
-        isLoading = false;
-        notifyListeners();
-        print(value.toString());
-      });
-    } catch (e) {
-      errMsg = e.toString();
+              description, propertyDetails, price, locality, city, images);
       isLoading = false;
       notifyListeners();
-    }
+      print('insertClassifiedData : '+result.toString());
+      getClassifiedData();
+     return result;
   }
 }
 

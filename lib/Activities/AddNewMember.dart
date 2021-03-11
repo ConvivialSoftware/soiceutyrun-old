@@ -708,7 +708,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
         ),
       ));
     }
- //   _selectedLivesHere = __livesHereListItems[0].value;
+ //   x
     setState(() {
     });
   }

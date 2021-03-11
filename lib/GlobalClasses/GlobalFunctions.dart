@@ -560,6 +560,33 @@ class GlobalFunctions {
     return _progressDialog;
   }
 
+  static Widget loadingWidget(context) => Center(
+    child: Container(
+      height: 80,
+      width: MediaQuery.of(context).size.width/1.2,
+      decoration: BoxDecoration(
+        color: GlobalVariables.mediumGreen,
+        borderRadius: BorderRadius.all(Radius.circular(10.0))
+      ),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(left: 20),
+        child: Row(
+          children: [
+            CircularProgressIndicator(
+              strokeWidth: 4.0,
+            ),
+            SizedBox(width: 32.0,),
+            Text("Please Wait",style: TextStyle(
+                color: GlobalVariables.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ),
+    ),
+  );
+
   static getDownLoadProgressDialogInstance(BuildContext context) {
     ProgressDialog _progressDialog =
         ProgressDialog(context, type: ProgressDialogType.Download);
@@ -607,7 +634,7 @@ class GlobalFunctions {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(selectedDate.year - 50),
+        firstDate: DateTime(1800,8),
         lastDate: DateTime(3021));
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
@@ -623,7 +650,7 @@ class GlobalFunctions {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(selectedDate.year - 50),
+        firstDate: DateTime(1800,12),
         lastDate:
             DateTime(selectedDate.year, selectedDate.month, selectedDate.day));
     if (picked != null && picked != selectedDate) {
@@ -705,6 +732,10 @@ class GlobalFunctions {
   static removeFileFromDirectory(String path) {
     final dir = Directory(path);
     dir.deleteSync(recursive: true);
+  }
+
+  static removeAllFilesFromDirectory(String path) {
+    Directory(path).delete(recursive: true);
   }
 
   static Future<String> localPath() async {

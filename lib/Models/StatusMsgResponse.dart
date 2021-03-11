@@ -18,6 +18,13 @@ class StatusMsgResponse {
 
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      GlobalVariables.STATUS: status,
+      GlobalVariables.MESSAGE : message
+    };
+  }
+
   factory StatusMsgResponse.fromJsonWithMessage(Map<String, dynamic> map){
 
     return StatusMsgResponse(

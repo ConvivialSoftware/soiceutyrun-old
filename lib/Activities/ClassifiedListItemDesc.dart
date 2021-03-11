@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/ClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
 class BaseClassifiedListItemDesc extends StatefulWidget {
+
+  Classified classifiedList;
+
+  BaseClassifiedListItemDesc(this.classifiedList);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -19,12 +25,7 @@ class BaseClassifiedListItemDesc extends StatefulWidget {
 
 class CreateClassifiedListingState
     extends BaseStatefulState<BaseClassifiedListItemDesc> {
-  final List<String> imageList = [
-    "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
-    "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_ic_dish2.jpg",
-    "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_ic_pizza_dialog.png",
-    "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_ic_dish1.png",
-  ];
+   List<ClassifiedImage> imageList;
 
   int _current = 0;
   var width,height;
@@ -32,6 +33,8 @@ class CreateClassifiedListingState
   @override
   void initState() {
     super.initState();
+    imageList = List<ClassifiedImage>.from(widget.classifiedList.Images
+        .map((i) => ClassifiedImage.fromJson(i)));
   }
 
   @override
@@ -135,7 +138,7 @@ class CreateClassifiedListingState
                           child: Stack(
                             children: <Widget>[
                               CachedNetworkImage(
-                                  imageUrl: imageList[index],
+                                  imageUrl: imageList[index].img,
                                   fit: BoxFit.cover,
                                   width: 1000.0,
                                   height:
@@ -148,8 +151,8 @@ class CreateClassifiedListingState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: imageList.map((url) {
                   int index = imageList.indexOf(url);
-                  print('_current : ' + _current.toString());
-                  print('index : ' + index.toString());
+                  //print('_current : ' + _current.toString());
+                  //('index : ' + index.toString());
                   return Container(
                     width: 8.0,
                     height: 8.0,
@@ -165,7 +168,7 @@ class CreateClassifiedListingState
                 }).toList(),
               ),
               SizedBox(height: 16),
-              text('Resale 1bhk luxurious Flat in jail Road. Nasik Road.',
+              text(widget.classifiedList.Title,
                   fontSize: GlobalVariables.textSizeMedium,
                   maxLine: 2,
                   textColor: GlobalVariables.green,
@@ -180,7 +183,7 @@ class CreateClassifiedListingState
                     size: 20,
                     color: GlobalVariables.lightGray,
                   ),
-                  text('Dasak Gaon, Nashik, Maharashtra',
+                  text(widget.classifiedList.Locality+' - '+widget.classifiedList.City,
                       textColor: GlobalVariables.lightGray,
                       fontSize: GlobalVariables.textSizeSmall,
                       maxLine: 2),
@@ -197,7 +200,7 @@ class CreateClassifiedListingState
                         color: Colors.transparent,
                         borderRadius:
                         BorderRadius.all(Radius.circular(8))),*/
-                    child: text('Rs. 1,00,000',
+                    child: text('Rs. '+widget.classifiedList.Price,
                         textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeNormal,
                         fontWeight: FontWeight.w500),
@@ -205,7 +208,7 @@ class CreateClassifiedListingState
                   Container(
                     alignment: Alignment.topLeft,
                     //padding: EdgeInsets.only(top: 2,bottom: 4,left: 16,right: 16),
-                    child: text("Rent",
+                    child: text(widget.classifiedList.Type,
                         fontSize: GlobalVariables.textSizeSMedium,
                         fontWeight: FontWeight.bold,
                         textColor: GlobalVariables.orangeYellow),
@@ -226,8 +229,7 @@ class CreateClassifiedListingState
               Container(
                   //margin: EdgeInsets.only(left: 8),
                   child: longText(
-                      '1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..' +
-                          '1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
+                      widget.classifiedList.Description + '\n'+ widget.classifiedList.Property_Details
                       /*+'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                       +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                       +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
@@ -258,7 +260,7 @@ class CreateClassifiedListingState
                           text('Posted',
                               fontSize: GlobalVariables.textSizeSMedium,
                               textColor: GlobalVariables.grey),
-                          text('24-03-2021',
+                          text(GlobalFunctions.convertDateFormat(widget.classifiedList.C_Date, 'dd-MM-yyyy'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               textColor: GlobalVariables.grey)
                         ],
@@ -275,7 +277,7 @@ class CreateClassifiedListingState
                           text('Posted By',
                               fontSize: GlobalVariables.textSizeSMedium,
                               textColor: GlobalVariables.grey),
-                          text('Poonam Suthar',
+                          text(widget.classifiedList.Name,
                               fontSize: GlobalVariables.textSizeSMedium,
                               textColor: GlobalVariables.grey)
                         ],

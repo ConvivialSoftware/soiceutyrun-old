@@ -49,7 +49,7 @@ class CreateClassifiedListingState
   new List<DropdownMenuItem<String>>();
   String _categoryItemTypeSelectedItem;
 
-  var imgBinaryArray = [];
+  var imgBinaryList;
 
   ProgressDialog _progressDialog;
 
@@ -316,9 +316,25 @@ class CreateClassifiedListingState
                           print('imagesMap : ' + imagesMap.length.toString());
                           print('imagePathList : ' + imagePathList.length.toString());
                           print('imagePathList : ' + imagePathList.toString());
-                          print('imagePathKeyList : ' +
-                              imagePathKeyList.length.toString());
-                          setState(() {});
+                          print('imagePathKeyList : ' + imagePathKeyList.length.toString());
+                          imgBinaryList = new List(imagePathList.length);
+                          for(int i=0;i<imagePathList.length;i++){
+                            GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+                              print('cache file Path : ' + value.toString());
+                              GlobalFunctions.getFilePathOfCompressImage(
+                                  imagePathList[i], value.toString() + '/' + imagePathKeyList[i])
+                                  .then((value) {
+                                print('Cache file path : ' + value);
+                                imgBinaryList[i]=GlobalFunctions.convertFileToString(value);
+                                print('imgBinaryList : '+imgBinaryList.length.toString());
+                                print('imgBinaryList : '+imgBinaryList.toString());
+                              });
+                            });
+                          }
+                          print('imgBinaryList : '+imgBinaryList.toString());
+                          setState(() {
+
+                          });
                         }
                       });
                     },
@@ -521,6 +537,8 @@ class CreateClassifiedListingState
   }
 
   void verifyData(ClassifiedResponse value) {
+    print('verifyData imgBinaryList.length : '+imgBinaryList.length.toString());
+    print('verifyData imgBinaryList : '+imgBinaryList.toString());
 
     if(_categorySelectedItem!=null){
       if(_categoryItemTypeSelectedItem!=null){
@@ -530,13 +548,23 @@ class CreateClassifiedListingState
               if(_priceController.text.length>0){
                 if(_localityController.text.length>0){
                   if(_cityController.text.length>0){
-                    if(imgBinaryArray.length>0){
-                      if(value.isLoading){
-                        _progressDialog.show();
-                      }
+                    if(imgBinaryList.length>0){
+                      _progressDialog.show();
                       Provider.of<ClassifiedResponse>(context,listen: false).insertClassifiedData(name, mail, mobile, _categorySelectedItem,
                           _categoryItemTypeSelectedItem, _titleController.text, _descriptionController.text,
-                          _propertyController.text, _priceController.text, _localityController.text, _cityController.text, imgBinaryArray);
+                          _propertyController.text, _priceController.text, _localityController.text, _cityController.text, imgBinaryList).then((value) {
+                           // print('insert value : '+ value.toString());
+                           // print('insert value : '+ value.status.toString());
+                           // print('insert value : '+ value.message.toString());
+                            GlobalFunctions.showToast(value.message);
+                            _progressDialog.hide();
+                            if(value.status) {
+                              GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+                                GlobalFunctions.removeAllFilesFromDirectory(value);
+                              });
+                              Navigator.of(context).pop();
+                            }
+                      });
                     }else{
                       GlobalFunctions.showToast("Please select at least one Photo");
                     }
