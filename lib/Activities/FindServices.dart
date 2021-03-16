@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
-import 'package:societyrun/Activities/ListOfHomeService.dart';
+import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
@@ -36,30 +38,37 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
     height = MediaQuery.of(context).size.height;
 
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('discover'),
-            style: TextStyle(color: GlobalVariables.white, fontSize: 16),
-          ),
-          //bottom: getTabLayout(),
-          //elevation: 0,
-        ),
-        body: getServiceLayout(),
-      ),
-    );
+    return ChangeNotifierProvider<ServicesResponse>.value(
+        value: Provider.of<ServicesResponse>(context),
+        child: Consumer<ServicesResponse>(
+          builder: (context, value, child) {
+            //print('Consumer Value : ' + value.classifiedCategoryList.toString());
+            return Builder(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  backgroundColor: GlobalVariables.green,
+                  centerTitle: true,
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: GlobalVariables.white,
+                    ),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).translate('discover'),
+                    style: TextStyle(color: GlobalVariables.white, fontSize: 16),
+                  ),
+                  //bottom: getTabLayout(),
+                  //elevation: 0,
+                ),
+                body: getServiceLayout(),
+              ),
+            );
+          },
+        ));
   }
 
   getServiceLayout() {
@@ -104,7 +113,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      BaseListOfHomeService()));
+                                      BaseServicesPerCategory()));
                         },
                         child: Container(
                           alignment: Alignment.center,

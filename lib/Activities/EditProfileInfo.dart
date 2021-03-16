@@ -73,7 +73,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
-    _dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
+    //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
     });

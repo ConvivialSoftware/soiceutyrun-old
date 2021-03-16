@@ -2176,25 +2176,34 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<DataResponse> getClassifiedData() async {
+  Future<DataResponse> getClassifiedData(String userId) async {
     // TODO: implement getClassifiedData
-    print('baseurl : ' + baseUrl + GlobalVariables.displayClassified);
-    final Response _result = await _dio.post(GlobalVariables.displayClassified,
+
+    ArgumentError.checkNotNull(userId, "User_Id");
+    FormData formData = FormData.fromMap({
+      "User_Id": userId,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.displayClassifiedAPI);
+    final Response _result = await _dio.post(GlobalVariables.displayClassifiedAPI,
       options: RequestOptions(
         //method: GlobalVariables.Post,
           headers: <String, dynamic>{
             "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl),);
+          }, baseUrl: baseUrl,
+          data: formData),
+    );
     final value = _result.data;
     print('value of displayClassified : ' + value.toString());
     return DataResponse.fromJsonDiscover(value);
   }
 
   @override
-  Future<StatusMsgResponse> insertClassifiedData(String name, String email, String phone, String category,
+  Future<StatusMsgResponse> insertClassifiedData(String userId,String name, String email, String phone, String category,
       String type, String title, String description, String propertyDetails, String price,
-      String locality, String city, images) async {
+      String locality, String city, images,String address,String pinCode) async {
     // TODO: implement insertClassifiedData
+    ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(name, "Name");
     ArgumentError.checkNotNull(email, "Email");
     ArgumentError.checkNotNull(phone, "Phone");
@@ -2207,9 +2216,12 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(locality, "Locality");
     ArgumentError.checkNotNull(city, "City");
     ArgumentError.checkNotNull(images, "Img_Name");
+    ArgumentError.checkNotNull(address, "Address");
+    ArgumentError.checkNotNull(pinCode, "Pincode");
     // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
 
     FormData formData = FormData.fromMap({
+      "User_Id": userId,
       "Name": name,
       "Email": email,
       "Phone": phone,
@@ -2222,11 +2234,13 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       "Locality": locality,
       "City": city,
       "Img_Name": images,
+      "Address": address,
+      "Pincode": pinCode,
     });
     //print(GlobalVariables.societyId+": "+socId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.insertClassified);
-    final Response _result = await _dio.post(GlobalVariables.insertClassified,
+    print('baseurl : ' + baseUrl + GlobalVariables.insertClassifiedAPI);
+    final Response _result = await _dio.post(GlobalVariables.insertClassifiedAPI,
         options: RequestOptions(
           //method: GlobalVariables.Post,
             headers: <String, dynamic>{
@@ -2235,6 +2249,134 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
         data: formData);
     final value = _result.data;
     print('value of insertClassifiedData : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getExclusiveOfferData(String appName) async {
+    // TODO: implement getExclusiveOfferData
+    ArgumentError.checkNotNull(appName, "flag");
+    FormData formData = FormData.fromMap({
+      "flag": appName,
+    });
+    print('appName : ' + appName);
+    print('baseurl : ' + baseUrl + GlobalVariables.exclusiveOfferAPI);
+    final Response _result = await _dio.post(GlobalVariables.exclusiveOfferAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getExclusiveOfferData : ' + value.toString());
+    return DataResponse.fromJsonDiscover(value);
+  }
+
+  @override
+  Future<DataResponse> getCityData() async {
+    // TODO: implement getCityData
+    print('baseurl : ' + baseUrl + GlobalVariables.cityAPI);
+    final Response _result = await _dio.post(GlobalVariables.cityAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl),);
+    final value = _result.data;
+    print('value of getCityData : ' + value.toString());
+    var json = jsonDecode(value);
+
+    return DataResponse.fromJsonDiscover(json);
+  }
+
+  @override
+  Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(String societyName, String unit, String mobile, String address) async {
+    // TODO: implement insertUserInfoOnExclusiveGetCode
+    ArgumentError.checkNotNull(societyName, "Society_Name");
+    ArgumentError.checkNotNull(unit, "Unit");
+    ArgumentError.checkNotNull(mobile, "Mobile");
+    ArgumentError.checkNotNull(address, "Address");
+
+    FormData formData = FormData.fromMap({
+      "Society_Name": societyName,
+      "Unit": unit,
+      "Mobile": mobile,
+      "Address": address,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.insertUserInfoOnExclusiveGetCode);
+    final Response _result = await _dio.post(GlobalVariables.insertUserInfoOnExclusiveGetCode,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of insertClassifiedData : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getOwnerClassifiedData(String userId) async {
+    // TODO: implement getOwnerClassifiedData
+    ArgumentError.checkNotNull(userId, "User_Id");
+    FormData formData = FormData.fromMap({
+      "User_Id": userId,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.displayOwnerClassifiedAPI);
+    final Response _result = await _dio.post(GlobalVariables.displayOwnerClassifiedAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl,
+          data: formData),
+    );
+    final value = _result.data;
+    print('value of displayOwnerClassifiedAPI : ' + value.toString());
+    return DataResponse.fromJsonDiscover(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> interestedClassified(String C_Id, String user_id, String societyName, String unit, String mobile, String address,String userName,String userEmail,String userProfile) async {
+    // TODO: implement interestedClassified
+
+    ArgumentError.checkNotNull(C_Id, "C_Id");
+    ArgumentError.checkNotNull(user_id, "User_Id");
+    ArgumentError.checkNotNull(societyName, "Society_Name");
+    ArgumentError.checkNotNull(unit, "Unit");
+    ArgumentError.checkNotNull(mobile, "Mobile");
+    ArgumentError.checkNotNull(address, "Address");
+    ArgumentError.checkNotNull(userName, "User_Name");
+    ArgumentError.checkNotNull(userEmail, "User_Email");
+    ArgumentError.checkNotNull(userProfile, "Profile_Image");
+
+    FormData formData = FormData.fromMap({
+      "C_Id": C_Id,
+      "User_Id": user_id,
+      "Society_Name": societyName,
+      "Unit": unit,
+      "Mobile": mobile,
+      "Address": address,
+      "User_Name": userName,
+      "User_Email": userEmail,
+      "Profile_Image": userProfile,
+    });
+
+    print('C_Id : ' + C_Id);
+    print('baseurl : ' + baseUrl + GlobalVariables.interestedClassified);
+    final Response _result = await _dio.post(GlobalVariables.interestedClassified,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of interestedClassified : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 }

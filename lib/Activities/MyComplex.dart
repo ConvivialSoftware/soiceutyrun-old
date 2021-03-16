@@ -268,7 +268,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getNewsBoardListDataLayout() {
     print('getNewsBoardListDataLayout Tab Call');
-    return Container(
+    return _announcementList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
@@ -281,7 +281,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getNewsBoardListItemLayout(var position) {

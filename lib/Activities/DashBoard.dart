@@ -26,6 +26,7 @@ import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/Notifications.dart';
+import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -1083,7 +1084,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         imageWidth:70.0,
                                         imageHeight:70.0,
                                         borderColor: GlobalVariables.grey,
-                                        borderWidth: 2.0,
+                                        borderWidth: 1.0,
                                         fit: BoxFit.cover,
                                         radius: 30.0,
                                       )
@@ -1092,7 +1093,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         imageWidth:70.0,
                                         imageHeight:70.0,
                                         borderColor: GlobalVariables.grey,
-                                        borderWidth: 2.0,
+                                        borderWidth: 1.0,
                                         fit: BoxFit.cover,
                                         radius: 30.0,
                                       );
@@ -1648,6 +1649,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           rootIconData: GlobalVariables.myServiceIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
           items: [
+            AppLocalizations.of(context).translate("my_classified"),
             AppLocalizations.of(context).translate("classified"),
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("exclusive_offer"),
@@ -2228,7 +2230,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-    } else if (item == AppLocalizations.of(context).translate('classified')) {
+    } else if (item == AppLocalizations.of(context).translate('my_classified')) {
+      //Redirect to  classified
+      //GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseOwnerDiscover(
+                      AppLocalizations.of(context).translate('my_classified'))))
+          .then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
+    }else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  classified
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(

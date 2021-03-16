@@ -45,7 +45,10 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
                       color: widget.borderColor, width: widget.borderWidth)),
             ),
         placeholder: (context, url) =>
-            CircularProgressIndicator(backgroundColor: GlobalVariables.grey,),
+            Center(
+              child: Container(width: 80,height: 80,
+                  child: CircularProgressIndicator(backgroundColor: GlobalVariables.grey,strokeWidth: 2.0,)),
+            ),
         errorWidget: (context, url, error) => AppAssetsImage(
           GlobalVariables.componentUserProfilePath,
           imageWidth : widget.imageWidth,

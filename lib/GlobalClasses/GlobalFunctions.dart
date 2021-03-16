@@ -27,6 +27,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:intl/intl.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GlobalFunctions {
@@ -154,6 +156,16 @@ class GlobalFunctions {
       print('keySocietyId : ' +
           sharedPreferences.getString(GlobalVariables.keySocietyName));
       return sharedPreferences.getString(GlobalVariables.keySocietyName);
+    }
+    return "";
+  }
+
+  static getSocietyAddress() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getKeys().contains(GlobalVariables.keySocietyAddress)) {
+      print('keySocietyAddress : ' +
+          sharedPreferences.getString(GlobalVariables.keySocietyAddress));
+      return sharedPreferences.getString(GlobalVariables.keySocietyAddress);
     }
     return "";
   }
@@ -643,16 +655,15 @@ class GlobalFunctions {
   }
 
   static getSelectedDateForDOB(BuildContext context) async {
-    DateTime selectedDate = DateTime.now();
+    DateTime selectedDate = DateTime(DateTime.now().year-15);
 
     print('selected year : ' + selectedDate.year.toString());
 
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1800,12),
-        lastDate:
-            DateTime(selectedDate.year, selectedDate.month, selectedDate.day));
+        initialDate: DateTime(selectedDate.year),
+        firstDate: DateTime(1800),
+        lastDate: DateTime(selectedDate.year));
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
     }
@@ -1290,6 +1301,21 @@ class GlobalFunctions {
     } on Exception catch (e) {
       print(e);
     }
+  }
+
+  static noDataFoundLayout(BuildContext context,String textMessage){
+    var width = MediaQuery.of(context).size.width;
+    //var height = MediaQuery.of(context).size.height;
+    return  Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppAssetsImage(GlobalVariables.noDataFoundIconPath,imageWidth: width/1.5,imageHeight: width/2,),
+          SizedBox(height: 20,),
+          text(textMessage,textColor: GlobalVariables.green,fontWeight: FontWeight.w500,fontSize: GlobalVariables.textSizeMedium,maxLine: 2)
+        ],
+      ),
+    );
   }
 
 /*static void checkRedirectFromBackgroundNotification(BuildContext context) {

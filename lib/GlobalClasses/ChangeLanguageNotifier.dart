@@ -15,7 +15,7 @@ import 'package:societyrun/Activities/GuestOthers.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/Activities/Ledger.dart';
-import 'package:societyrun/Activities/ListOfHomeService.dart';
+import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
@@ -188,7 +188,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.ListOfHomeServicePage:
       {
-        return BaseListOfHomeService();
+        return BaseServicesPerCategory();
       }
       break;
 

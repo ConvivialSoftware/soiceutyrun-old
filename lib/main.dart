@@ -10,6 +10,9 @@ import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ClassifiedResponse.dart';
+import 'package:societyrun/Models/NearByShopResponse.dart';
+import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
+import 'package:societyrun/Models/ServicesResponse.dart';
 
 void main() {
 
@@ -31,6 +34,9 @@ class BaseAppStart extends StatelessWidget {
 
   AppLanguage appLanguage = AppLanguage();
   final classifiedResponse = ClassifiedResponse();
+  final ownerClassifiedResponse = OwnerClassifiedResponse();
+  final nearByShopResponse = NearByShopResponse();
+  final servicesResponse = ServicesResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +52,9 @@ class BaseAppStart extends StatelessWidget {
            // ChangeNotifierProvider(create: (context) => ClassifiedResponse()),
             //ChangeNotifierProvider<ClassifiedResponse>.value(value: classifiedResponse),
             ChangeNotifierProvider<ClassifiedResponse>.value(value: classifiedResponse),
+            ChangeNotifierProvider<OwnerClassifiedResponse>.value(value: ownerClassifiedResponse),
+            ChangeNotifierProvider<NearByShopResponse>.value(value: nearByShopResponse),
+            ChangeNotifierProvider<ServicesResponse>.value(value: servicesResponse),
           ],
           child: MaterialApp(
             theme: getThemeData(),

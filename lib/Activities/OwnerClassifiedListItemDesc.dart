@@ -1,24 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/ClassifiedResponse.dart';
+import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
-class BaseClassifiedListItemDesc extends StatefulWidget {
+class BaseOwnerClassifiedListItemDesc extends StatefulWidget {
 
   Classified classifiedList;
 
-  BaseClassifiedListItemDesc(this.classifiedList);
+  BaseOwnerClassifiedListItemDesc(this.classifiedList);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,12 +24,11 @@ class BaseClassifiedListItemDesc extends StatefulWidget {
 }
 
 class CreateClassifiedListingState
-    extends BaseStatefulState<BaseClassifiedListItemDesc> {
+    extends BaseStatefulState<BaseOwnerClassifiedListItemDesc> {
    List<ClassifiedImage> imageList;
 
   int _current = 0;
   var width,height;
-   ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -46,7 +41,6 @@ class CreateClassifiedListingState
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height =  MediaQuery.of(context).size.height;
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
@@ -69,14 +63,16 @@ class CreateClassifiedListingState
           ),
         ),
         body: getBaseLayout(),
-        /*bottomNavigationBar: Container(
+        bottomNavigationBar: Container(
           height: 80,
           decoration: BoxDecoration(
             color: GlobalVariables.transparent,
           ),
           padding: EdgeInsets.all(20),
-          child: AppButton(textContent: "I'm Interested", onPressed: () {}),
-        ),*/
+          child: AppButton(textContent: "Interested Customer", onPressed: () {
+            showBottomSheet();
+          }),
+        ),
       ),
     );
   }
@@ -99,61 +95,6 @@ class CreateClassifiedListingState
                 // deleteProfileFabLayout(),
               ],
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-                width: width,
-                margin: EdgeInsets.all(10),
-                child: AppButton(textContent: "I'm Interested", onPressed: () {
-
-                  _progressDialog.show();
-                  Provider.of<ClassifiedResponse>(context,listen: false).interestedClassified(widget.classifiedList.id).then((value) {
-                    print('then value : '+value.toString());
-                    _progressDialog.hide();
-                    return showDialog(
-                        context: context,
-                        builder: (BuildContext context) => StatefulBuilder(
-                            builder: (BuildContext context, StateSetter setState) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0)),
-                                child: Container(
-                                  padding: EdgeInsets.all(20),
-                                  color: GlobalVariables.transparent,
-                                  // width: MediaQuery.of(context).size.width/3,
-                                  // height: MediaQuery.of(context).size.height/4,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Container(
-                                        child: /*SvgPicture.asset(
-                                          GlobalVariables.successIconPath,
-                                          width: 50,
-                                          height: 50,
-                                        ),*/AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 50.0,imageHeight: 50.0,)
-                                      ),
-                                      /*Container(
-                                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                          child: Text(AppLocalizations.of(context)
-                                              .translate('successful_payment'))),*/
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                        child: text(value.message,fontSize: 14.0,textColor: GlobalVariables.black,fontWeight: FontWeight.w500,maxLine: 99),
-                                      ),
-                                      /*Container(
-                                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                          child: Text(AppLocalizations.of(context)
-                                              .translate('thank_you_payment'))),*/
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }));
-                    GlobalFunctions.showToast(value.message);
-                  });
-
-                },textColor: GlobalVariables.white,)),
           ),
         ],
       ),
@@ -349,4 +290,106 @@ class CreateClassifiedListingState
       ),
     );
   }
+
+   showBottomSheet(){
+
+     List<Interested> interestedList = List<Interested>.from(widget.classifiedList.Interested
+         .map((i) => Interested.fromJson(i)));
+
+     return showModalBottomSheet(
+         backgroundColor: Colors.transparent,
+         context: context,
+         builder: (BuildContext context) {
+           return Stack(
+             alignment: Alignment.topCenter,
+             children: <Widget>[
+               Container(
+                 width: 50,
+                 height: 10,
+                 decoration: boxDecoration(color: GlobalVariables.transparent, radius: 16, bgColor: GlobalVariables.lightGray),
+               ),
+               SingleChildScrollView(
+                 child: Container(
+                   margin: EdgeInsets.only(top: 30),
+                   decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)), color: GlobalVariables.white),
+                   // height: MediaQuery.of(context).size.width * 1.0,
+                   child: Builder(
+                       builder: (context) => ListView.builder(
+                         // scrollDirection: Axis.vertical,
+                         itemCount: interestedList.length,
+                         itemBuilder: (context, position) {
+                           return Container(
+                             padding: EdgeInsets.all(16.0),
+                             margin: EdgeInsets.all(8.0),
+                             decoration: boxDecoration(radius: 10.0,),
+                             child:Row(
+                               children: <Widget>[
+                                 interestedList[position].Profile_Image.isEmpty
+                                     ? Image.asset(
+                                   GlobalVariables.componentUserProfilePath,
+                                   width: 60,
+                                   height: 60,
+                                 )
+                                     : CircleAvatar(
+                                   radius: 30,
+                                   backgroundColor: GlobalVariables.mediumGreen,
+                                   backgroundImage: NetworkImage(interestedList[position].Profile_Image),
+                                 ),
+                                 Expanded(
+                                   child: Container(
+                                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                     padding: EdgeInsets.only(left: 8.0),
+                                     child: Column(
+                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                       children: <Widget>[
+                                         text(interestedList[position].User_Name,
+                                             textColor: GlobalVariables.green,
+                                             fontWeight: FontWeight.bold,
+                                             fontSize: GlobalVariables.textSizeMedium,
+                                             textStyleHeight: 1.0),
+                                         SizedBox(height: 2,),
+                                         text(interestedList[position].User_Email,
+                                             textColor: GlobalVariables.grey,
+                                             fontWeight: FontWeight.bold,
+                                             fontSize: GlobalVariables.textSizeSmall,
+                                             textStyleHeight: 1.0),
+                                         SizedBox(height: 3,),
+                                         text(interestedList[position].Mobile,
+                                             textColor: GlobalVariables.grey,
+                                             fontWeight: FontWeight.bold,
+                                             fontSize: GlobalVariables.textSizeSmall,
+                                             textStyleHeight: 1.0),
+                                         SizedBox(height: 3,),
+                                         text(interestedList[position].Society_Name,
+                                             textColor: GlobalVariables.grey,
+                                             fontWeight: FontWeight.bold,
+                                             fontSize: GlobalVariables.textSizeSmall,
+                                             textStyleHeight: 1.0,maxLine: 2),
+                                         SizedBox(height: 3,),
+                                         text(interestedList[position].Address,
+                                             textColor: GlobalVariables.grey,
+                                             fontWeight: FontWeight.bold,
+                                             fontSize: GlobalVariables.textSizeSmall,
+                                             textStyleHeight: 1.0,maxLine: 5),
+                                         //SizedBox(height: 2,),
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                                 divider(thickness: 2.0),
+                               ],
+                             ),
+                           );
+                         }, //  scrollDirection: Axis.vertical,
+                         shrinkWrap: true,
+                       )),
+                 ),
+               )
+             ],
+           );
+         });
+
+   }
+
 }

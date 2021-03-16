@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
-import 'package:societyrun/Activities/ListOfHomeService.dart';
+import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -64,10 +64,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     //   _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    /* if (pageName != null) {
-      redirectToPage(pageName);
-    }
-*/
+
     // TODO: implement build
     return ChangeNotifierProvider<ClassifiedResponse>.value(
         value: Provider.of<ClassifiedResponse>(context),
@@ -149,8 +146,12 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         //print('runtime : '+_classifiedValue.runtimeType.toString());
       }
     }
+    var tabName = 'No Data Found For '+value.classifiedCategoryList[
+    _tabController == null ? 0 : _tabController.index]
+        .Category_Name;
     print('getClassifiedLayout Tab Call');
     return Container(
+
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -161,13 +162,11 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
                 _classifiedResponse.classifiedList.isNotEmpty
                     ? getClassifiedListDataLayout(_classifiedResponse)
-                    : Container(),
-                addClassifiedDiscoverFabLayout(
-                    GlobalVariables.CreateClassifiedListingPage),
+                    : GlobalFunctions.noDataFoundLayout(context, tabName),
+                //addClassifiedDiscoverFabLayout(GlobalVariables.CreateClassifiedListingPage),
               ],
             ),
           ),
@@ -176,7 +175,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  addClassifiedDiscoverFabLayout(String pageTitle) {
+ /* addClassifiedDiscoverFabLayout(String pageTitle) {
     return Align(
       alignment: Alignment.bottomRight,
       child: Stack(
@@ -195,12 +194,12 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   GlobalFunctions.setBaseContext(context);
                 });
 
-                /*} else if (pageTitle == GlobalVariables.AddNearByShopPage) {
+                *//*} else if (pageTitle == GlobalVariables.AddNearByShopPage) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => BaseAddNearByShop()));
-                }*/
+                }*//*
               },
               child: Icon(
                 Icons.add,
@@ -212,7 +211,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         ],
       ),
     );
-  }
+  }*/
 
   getClassifiedListDataLayout(ClassifiedResponse value) {
     return Container(
@@ -454,7 +453,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BaseListOfHomeService()));
+                                builder: (context) => BaseServicesPerCategory()));
                       },
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),

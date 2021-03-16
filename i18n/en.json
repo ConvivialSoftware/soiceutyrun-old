@@ -354,5 +354,7 @@
   "rs": "Rs.",
   "location": "Location",
   "locality": "Locality",
-  "city": "City"
+  "city": "City",
+  "pin_code": "Pin Code",
+  "my_classified": "My Classified"
 }

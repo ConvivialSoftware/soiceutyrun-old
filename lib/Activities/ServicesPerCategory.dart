@@ -7,15 +7,15 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
-class BaseListOfHomeService extends StatefulWidget {
+class BaseServicesPerCategory extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ListOfHomeServiceState();
+    return ServicesPerCategoryState();
   }
 }
 
-class ListOfHomeServiceState extends BaseStatefulState<BaseListOfHomeService> {
+class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory> {
 
 
   List<HomeCare> _homeCareList = List<HomeCare>();

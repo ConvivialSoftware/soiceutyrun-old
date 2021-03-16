@@ -1,15 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NearByShopPerCategoryItemDetails extends StatefulWidget {
+
+  NearByShop nearByShopList;
+  NearByShopPerCategoryItemDetails(this.nearByShopList);
+
   @override
   NearByShopPerCategoryItemDetailsState createState() =>
       NearByShopPerCategoryItemDetailsState();
@@ -17,11 +26,6 @@ class NearByShopPerCategoryItemDetails extends StatefulWidget {
 
 class NearByShopPerCategoryItemDetailsState
     extends State<NearByShopPerCategoryItemDetails> {
-  var urlImg =
-      "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg";
-
-  //var urlImg ="https://iqonic.design/themeforest-images/prokit/images/theme3/t3_ic_dish1.png";
-  //var urlImg ="https://iqonic.design/themeforest-images/prokit/images/theme3/t3_ic_profile.jpg";
 
   var width, height;
 
@@ -60,7 +64,7 @@ class NearByShopPerCategoryItemDetailsState
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        color: GlobalVariables.lightCyan,
+        color: Color(int.parse(widget.nearByShopList.card_bg)),
       ),
       child: Column(
         children: [
@@ -68,9 +72,9 @@ class NearByShopPerCategoryItemDetailsState
             child: Stack(
               children: [
                 Container(
-                  color: GlobalVariables.lightCyan,
+                  color: Color(int.parse(widget.nearByShopList.card_bg)),
                   height: double.infinity,
-                  padding: EdgeInsets.only(left: 8,right: 8,top: 8),
+                  //padding: EdgeInsets.only(left: 8,right: 8,top: 8),
                   child: SingleChildScrollView(
                     child: Stack(
                       children: [
@@ -87,15 +91,17 @@ class NearByShopPerCategoryItemDetailsState
                                         alignment: Alignment.topRight,
                                         padding: EdgeInsets.only(left: 5,right: 5,top: 1,bottom: 1),
                                         decoration: boxDecoration(bgColor: GlobalVariables.white,radius: 30),
-                                        child: text('Till 31 March 2021',fontSize: 12.0,),
+                                        child: text('Till '+GlobalFunctions.convertDateFormat(widget.nearByShopList.exp_date, 'dd-MMM-yyyy'),fontSize: 12.0,),
                                       ),
                                     ],
                                   ),
-                                  Image.asset(
-                                    GlobalVariables.sofaIconPath,
-                                    width: width,
-                                    height: width * 0.6,
+                                  AppNetworkImage(
+                                    widget.nearByShopList.Img_Name,
+                                    imageWidth: width,
+                                    imageHeight: width*0.6,
                                     fit: BoxFit.fill,
+                                    shape: BoxShape.rectangle,
+                                    borderColor: GlobalVariables.transparent,
                                   ),
                                   SizedBox(
                                     height: GlobalVariables.spacing_xlarge,
@@ -114,7 +120,7 @@ class NearByShopPerCategoryItemDetailsState
                                                 //color: GlobalVariables.grey,
                                                 padding: EdgeInsets.only(top: 8/*,left: 16*/),
                                                 alignment: Alignment.center,
-                                                child: text('Super Daily',
+                                                child: text(widget.nearByShopList.vendor_shop,
                                                     textColor: GlobalVariables.black,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 2),
@@ -128,7 +134,7 @@ class NearByShopPerCategoryItemDetailsState
                                                 children: [
                                                   Expanded(
                                                     child: text(
-                                                        'Pay 50% less for your daily groceries.(First 5 Orders)',
+                                                        widget.nearByShopList.Title,
                                                         textColor:
                                                         GlobalVariables.green,
                                                         fontWeight: FontWeight.w500,
@@ -172,7 +178,7 @@ class NearByShopPerCategoryItemDetailsState
                                                 children: [
                                                   Expanded(
                                                     child: text(
-                                                        'Woodsworth is our premium homegrown label thats part classic, part contemporary.',
+                                                        widget.nearByShopList.short_description,
                                                         textColor: GlobalVariables.grey,
                                                         fontSize: GlobalVariables.textSizeSMedium,
                                                         maxLine: 5),
@@ -200,7 +206,7 @@ class NearByShopPerCategoryItemDetailsState
                                                             ),
                                                             Flexible(
                                                                 child: text(
-                                                                    'Kamala Cross Jwel of Pimpari Pune',
+                                                                    widget.nearByShopList.Location,
                                                                     fontSize: GlobalVariables.textSizeSMedium,
                                                                     maxLine: 10)),
                                                             SizedBox(
@@ -218,19 +224,20 @@ class NearByShopPerCategoryItemDetailsState
                                           alignment: Alignment.center,
                                           transform: Matrix4.translationValues(0.0, -70.0, 0.0),
                                           decoration: BoxDecoration(
-                                              color: GlobalVariables.veryLightGray,
+                                              color: GlobalVariables.white,
                                               border: Border.all(
                                                   color: GlobalVariables
-                                                      .green,
-                                                  width: 1.0), shape: BoxShape.circle),
+                                                      .lightGray,
+                                                  width: 2.0), shape: BoxShape.circle),
                                           child: new CircleAvatar(
-                                            backgroundColor: GlobalVariables.lightGray,
+                                            backgroundColor: Color(int.parse(widget.nearByShopList.vendor_logo_bg)),
                                             child: Container(
                                               //margin: EdgeInsets.only(top: 8),
                                                 alignment: Alignment.center,
                                                 padding: EdgeInsets.only(left: 16,right: 16,top: 16),
-                                                child: Image.asset(GlobalVariables
-                                                    .superDailyIconPath)
+                                                child: CachedNetworkImage(
+                                                  imageUrl: widget.nearByShopList.vendor_logo,
+                                                )
                                             ),
                                             radius: 50,
                                           ),
@@ -263,7 +270,7 @@ class NearByShopPerCategoryItemDetailsState
                                             builder: (context) => ListView.builder(
                                               physics:
                                               const NeverScrollableScrollPhysics(),
-                                              itemCount: 5,
+                                              itemCount: 1,
                                               itemBuilder: (context, position) {
                                                 return Container(
                                                   margin:
@@ -294,10 +301,7 @@ class NearByShopPerCategoryItemDetailsState
                                                           Flexible(
                                                               child: Container(
                                                                   child: text(
-                                                                      position % 2 ==
-                                                                          0
-                                                                          ? 'The offer is only applicable on abc.com'
-                                                                          : 'You can avail a flat 25% discount on a minimum purchase of INR 999 using this voucher on the website.',
+                                                                      widget.nearByShopList.offer_details,
                                                                       fontSize:
                                                                       GlobalVariables.textSizeSMedium,
                                                                       maxLine: 99,
@@ -344,7 +348,7 @@ class NearByShopPerCategoryItemDetailsState
                                             builder: (context) => ListView.builder(
                                               physics:
                                               const NeverScrollableScrollPhysics(),
-                                              itemCount: 5,
+                                              itemCount: 2,
                                               itemBuilder: (context, position) {
                                                 return Container(
                                                   margin:
@@ -416,9 +420,10 @@ class NearByShopPerCategoryItemDetailsState
             alignment: Alignment.bottomCenter,
             child: Container(
               width: width,
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.only(left: 16,right: 16,top: 4,bottom: 4),
               child: AppButton(textContent: "Get Code", onPressed: () {
                 showBottomSheet();
+                insertUserInfoOnExclusiveGetCode();
               },textColor: GlobalVariables.white,),
             ),
           ),
@@ -454,11 +459,11 @@ class NearByShopPerCategoryItemDetailsState
                         SizedBox(
                           height: 16,
                         ),
-                        text('Pay 50% less for your daily groceries.(First 5 Orders)', fontSize: GlobalVariables.textSizeLargeMedium,textColor: GlobalVariables.green,maxLine: 3,fontWeight: FontWeight.w500,),
+                        text(widget.nearByShopList.Title, fontSize: GlobalVariables.textSizeLargeMedium,textColor: GlobalVariables.green,maxLine: 3,fontWeight: FontWeight.w500,),
                         SizedBox(
                           height: 8,
                         ),
-                        longText('lots of ingredient used like paneer, tortilla,onion, tomato, peas,lots of ingredient used like paneer, tortilla,onion, tomato, peas,', islongTxt: true, textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
+                        longText(widget.nearByShopList.short_description, islongTxt: true, textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                         SizedBox(
                           height: 16,
                         ),
@@ -477,7 +482,7 @@ class NearByShopPerCategoryItemDetailsState
                                       Expanded(
                                         child: Container(
                                             padding: EdgeInsets.all(8),
-                                            child: text('VDHAR34SDGHFHFY-HFFJ345HFY13DHDBHF',textColor: GlobalVariables.black,fontSize: 14.0,maxLine: 1,fontWeight: FontWeight.w500)),
+                                            child: text(widget.nearByShopList.Offer_Code,textColor: GlobalVariables.black,fontSize: 14.0,maxLine: 1,fontWeight: FontWeight.w500)),
                                       ),
                                       SizedBox(
                                         width: 16,
@@ -501,6 +506,11 @@ class NearByShopPerCategoryItemDetailsState
                             width: MediaQuery.of(context).size.width,
                             child: FlatButton(
                                 onPressed: () {
+                                  ClipboardManager.copyToClipBoard(widget.nearByShopList.Offer_Code)
+                                      .then((value) {
+                                    GlobalFunctions.showToast("Copied to Clipboard");
+                                    launch(widget.nearByShopList.redeem);
+                                  });
                                 },
                                 color: GlobalVariables.green,
                                 child: text('Redeem',textColor: GlobalVariables.white,fontSize: 14.0,fontWeight: FontWeight.w500)
@@ -517,38 +527,17 @@ class NearByShopPerCategoryItemDetailsState
 
   }
 
-  Widget mInfo() {
-    return Container(
-      margin: EdgeInsets.all(GlobalVariables.spacing_standard_new),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          longText(
-              'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ' +
-                  'lots of ingredient used like paneer, tortilla,onion, tomato, peas, ',
-              textColor: GlobalVariables.grey,
-              islongTxt: true,
-              fontSize: GlobalVariables.textSizeMedium),
-          SizedBox(
-            height: GlobalVariables.spacing_standard_new,
-          ),
-          Divider(
-            height: 1,
-            color: GlobalVariables.lightGray,
-          ),
-          SizedBox(
-            height: GlobalVariables.spacing_standard_new,
-          ),
-        ],
-      ),
-    );
+  Future<void> insertUserInfoOnExclusiveGetCode() async {
+
+    String societyName =  await GlobalFunctions.getSocietyName();
+    String block =  await GlobalFunctions.getBlock();
+    String flat =  await GlobalFunctions.getFlat();
+    String mobile = await GlobalFunctions.getMobile();
+    String address = await GlobalFunctions.getSocietyAddress();
+
+    Provider.of<NearByShopResponse>(context, listen: false).insertUserInfoOnExclusiveGetCode(societyName, block+' '+flat, mobile, address);
+
   }
+
 }
 

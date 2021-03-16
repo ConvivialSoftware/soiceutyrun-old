@@ -723,29 +723,30 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     _progressDialog.show();
+    double _rate = 0.0;
+    double otherMemberRate = 0.0;
+    if (_staff.RATINGS.contains(':')) {
+      _unitRateList = _staff.RATINGS.split(',');
+      for (int i = 0; i < _unitRateList.length; i++) {
+        List<String> _rate = List<String>();
+        _rate = _unitRateList[i].split(':');
+        print('_rate[1] : ' + _rate[1]);
+        otherMemberRate += double.parse(_rate[1]);
+        print('totalRate : ' + totalRate.toString());
+      }
+    }
+    _rate = otherMemberRate + myRate;
+    totalRate = _rate / (_unitRateList.length + 1);
+    isRattingDoneFromLoggedPerson = true;
+    isRattingDone = true;
     restClient
         .addStaffRatting(societyId, block, flat, _staff.SID,
-            myRate.toStringAsFixed(1).toString())
+        totalRate.toStringAsFixed(1).toString())
         .then((value) {
       _progressDialog.hide();
       if (value.status) {
         //if (isRattingDone) {
-        double _rate = 0.0;
-        double otherMemberRate = 0.0;
-        if (_staff.RATINGS.contains(':')) {
-          _unitRateList = _staff.RATINGS.split(',');
-          for (int i = 0; i < _unitRateList.length; i++) {
-            List<String> _rate = List<String>();
-            _rate = _unitRateList[i].split(':');
-            print('_rate[1] : ' + _rate[1]);
-            otherMemberRate += double.parse(_rate[1]);
-            print('totalRate : ' + totalRate.toString());
-          }
-        }
-        _rate = otherMemberRate + myRate;
-        totalRate = _rate / (_unitRateList.length + 1);
-        isRattingDoneFromLoggedPerson = true;
-        isRattingDone = true;
+
         //  }
         setState(() {
           print('otherMemberRate rate : ' + otherMemberRate.toString());

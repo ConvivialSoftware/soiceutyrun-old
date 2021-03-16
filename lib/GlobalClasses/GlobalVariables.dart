@@ -117,6 +117,7 @@ class GlobalVariables {
   static var whatsAppIconPath = "assets/other_assets/t3_ic_wp.svg";
   static var sofaIconPath = "assets/other_assets/db8_ic_item6.png";
   static var superDailyIconPath = "assets/other_assets/superdaily.png";
+  static var noDataFoundIconPath = "assets/other_assets/no_data_found.png";
   static var documentImageIconPath = "assets/other_assets/document_image.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
@@ -159,6 +160,7 @@ class GlobalVariables {
   static const Put = 'PUT';
   static const Delete = 'DELETE';
 
+  static const appFlag = "SR";
   static const authorizedToken = "admin:1234";
   static var AUTH = "Basic " + base64Url.encode(utf8.encode(authorizedToken));
   static const BaseURL = "https://societyrun.com/Flutter/";
@@ -228,8 +230,13 @@ class GlobalVariables {
   static const BaseURLDiscover = "https://mydemosites.in/";
 
   /*Api Name for BaseURLERP*/
-  static const displayClassified = "Classified/Android/Login/display";
-  static const insertClassified = "Classified/Android/Login/insert";
+  static const displayClassifiedAPI = "Classified/Android/Login/display";
+  static const displayOwnerClassifiedAPI = "Classified/Android/Login/my_classified";
+  static const insertClassifiedAPI = "Classified/Android/Login/insert";
+  static const exclusiveOfferAPI = "Classified/Android/Login/exclusive_offer";
+  static const cityAPI = "Classified/Android/Login/city";
+  static const insertUserInfoOnExclusiveGetCode = "Classified/Android/Login/getcode";
+  static const interestedClassified = "Classified/Android/Login/interested";
 
   /*Api Name for BaseURLERP*/
   static const duesAPI = "AndroidApi/dues";

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/ClassifiedResponse.dart';
+import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -37,19 +37,25 @@ class CreateClassifiedListingState
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _propertyController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
   TextEditingController _localityController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
+  //TextEditingController _cityController = TextEditingController();
+  TextEditingController _pinCodeController = TextEditingController();
 
   List<DropdownMenuItem<String>> _categoryListItems =
-  new List<DropdownMenuItem<String>>();
+      new List<DropdownMenuItem<String>>();
   String _categorySelectedItem;
 
   List<String> _categoryItemTypeList = new List<String>();
   List<DropdownMenuItem<String>> _categoryItemTypeListItems =
-  new List<DropdownMenuItem<String>>();
+      new List<DropdownMenuItem<String>>();
   String _categoryItemTypeSelectedItem;
 
-  var imgBinaryList;
+  List<DropdownMenuItem<String>> _cityItemListItems =
+      new List<DropdownMenuItem<String>>();
+  String _cityItemSelectedItem;
+
+  List<String> imgBinaryList =  List<String>();
 
   ProgressDialog _progressDialog;
 
@@ -66,18 +72,28 @@ class CreateClassifiedListingState
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    return ChangeNotifierProvider<ClassifiedResponse>.value(
-        value: Provider.of<ClassifiedResponse>(context),
-        child: Consumer<ClassifiedResponse>(
+    return ChangeNotifierProvider<OwnerClassifiedResponse>.value(
+        value: Provider.of<OwnerClassifiedResponse>(context),
+        child: Consumer<OwnerClassifiedResponse>(
           builder: (context, value, child) {
-            print('classifiedCategoryList Value : ' + value.classifiedCategoryList.length.toString());
-            _categoryListItems =
-            new List<DropdownMenuItem<String>>();
-            for(int i=0;i<value.classifiedCategoryList.length;i++){
+            print('ownerClassifiedCategoryList Value : ' +
+                value.ownerClassifiedCategoryList.length.toString());
+            _categoryListItems = new List<DropdownMenuItem<String>>();
+            for (int i = 0; i < value.ownerClassifiedCategoryList.length; i++) {
               _categoryListItems.add(DropdownMenuItem(
-                value: value.classifiedCategoryList[i].Category_Name,
+                value: value.ownerClassifiedCategoryList[i].Category_Name,
                 child: Text(
-                  value.classifiedCategoryList[i].Category_Name,
+                  value.ownerClassifiedCategoryList[i].Category_Name,
+                  style: TextStyle(color: GlobalVariables.black),
+                ),
+              ));
+            }
+            _cityItemListItems = new List<DropdownMenuItem<String>>();
+            for (int i = 0; i < value.cityList.length; i++) {
+              _cityItemListItems.add(DropdownMenuItem(
+                value: value.cityList[i].city,
+                child: Text(
+                  value.cityList[i].city,
                   style: TextStyle(color: GlobalVariables.black),
                 ),
               ));
@@ -107,7 +123,7 @@ class CreateClassifiedListingState
         ));
   }
 
-  getBaseLayout(ClassifiedResponse value) {
+  getBaseLayout(OwnerClassifiedResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -130,7 +146,7 @@ class CreateClassifiedListingState
     );
   }
 
-  getCreateClassifiedListingLayout(ClassifiedResponse value) {
+  getCreateClassifiedListingLayout(OwnerClassifiedResponse value) {
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
@@ -168,10 +184,11 @@ class CreateClassifiedListingState
                   child: DropdownButton(
                     items: _categoryListItems,
                     value: _categorySelectedItem,
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
-                        _categorySelectedItem=value;
-                        print('_categorySelectedItem : '+_categorySelectedItem);
+                        _categorySelectedItem = value;
+                        print(
+                            '_categorySelectedItem : ' + _categorySelectedItem);
                       });
                     },
                     isExpanded: true,
@@ -182,7 +199,7 @@ class CreateClassifiedListingState
                     underline: SizedBox(),
                     hint: Text(
                       AppLocalizations.of(context)
-                          .translate('select_category') +
+                              .translate('select_category') +
                           "*",
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
@@ -205,10 +222,11 @@ class CreateClassifiedListingState
                   child: DropdownButton(
                     items: _categoryItemTypeListItems,
                     value: _categoryItemTypeSelectedItem,
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
-                        _categoryItemTypeSelectedItem=value;
-                        print('_categoryItemTypeSelectedItem : '+_categoryItemTypeSelectedItem);
+                        _categoryItemTypeSelectedItem = value;
+                        print('_categoryItemTypeSelectedItem : ' +
+                            _categoryItemTypeSelectedItem);
                       });
                     },
                     isExpanded: true,
@@ -227,8 +245,8 @@ class CreateClassifiedListingState
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('title_selling') +
-                    "*",
+                    AppLocalizations.of(context).translate('title_selling') +
+                        "*",
                 controllerCallback: _titleController,
                 borderWidth: 2.0,
               ),
@@ -236,7 +254,7 @@ class CreateClassifiedListingState
                   height: 150,
                   child: AppTextField(
                     textHintContent: AppLocalizations.of(context)
-                        .translate('description_selling') +
+                            .translate('description_selling') +
                         "*",
                     controllerCallback: _descriptionController,
                     borderWidth: 2.0,
@@ -247,38 +265,83 @@ class CreateClassifiedListingState
                   )),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('property_details') +
-                    "*",
+                    AppLocalizations.of(context).translate('property_details') +
+                        "*",
                 controllerCallback: _propertyController,
                 borderWidth: 2.0,
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('rs') + "*",
+                    AppLocalizations.of(context).translate('rs') + "*",
                 controllerCallback: _priceController,
                 borderWidth: 2.0,
                 keyboardType: TextInputType.number,
+              ),
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('address') + "*",
+                controllerCallback: _addressController,
+                borderWidth: 2.0,
+              ),
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('locality') + "*",
+                controllerCallback: _localityController,
+                borderWidth: 2.0,
               ),
               Row(
                 children: [
                   Flexible(
                       child: AppTextField(
-                        textHintContent:
-                        AppLocalizations.of(context).translate('locality') +
+                    textHintContent:
+                        AppLocalizations.of(context).translate('pin_code') +
                             "*",
-                        controllerCallback: _localityController,
-                        borderWidth: 2.0,
-                      )),
+                    controllerCallback: _pinCodeController,
+                    borderWidth: 2.0,
+                    keyboardType: TextInputType.number,
+                  )),
                   SizedBox(
                     width: 5.0,
                   ),
                   Flexible(
-                      child: AppTextField(
-                        textHintContent:
-                        AppLocalizations.of(context).translate('city') + "*",
-                        controllerCallback: _cityController,
-                        borderWidth: 2.0,
-                      )),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: GlobalVariables.mediumGreen,
+                            width: 2.0,
+                          )),
+                      child: ButtonTheme(
+                        child: DropdownButton(
+                          items: _cityItemListItems,
+                          value: _cityItemSelectedItem,
+                          onChanged: (value) {
+                            setState(() {
+                              _cityItemSelectedItem = value;
+                              print('_cityItemSelectedItem : ' +
+                                  _cityItemSelectedItem);
+                            });
+                          },
+                          isExpanded: true,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: GlobalVariables.mediumGreen,
+                          ),
+                          underline: SizedBox(),
+                          hint: Text(
+                            AppLocalizations.of(context).translate('city') +
+                                "*",
+                            style: TextStyle(
+                                color: GlobalVariables.lightGray, fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Container(
@@ -314,27 +377,34 @@ class CreateClassifiedListingState
                           imagePathKeyList =
                               imagesMap.entries.map((e) => (e.key)).toList();
                           print('imagesMap : ' + imagesMap.length.toString());
-                          print('imagePathList : ' + imagePathList.length.toString());
+                          print('imagePathList : ' +
+                              imagePathList.length.toString());
                           print('imagePathList : ' + imagePathList.toString());
-                          print('imagePathKeyList : ' + imagePathKeyList.length.toString());
+                          print('imagePathKeyList : ' +
+                              imagePathKeyList.length.toString());
                           imgBinaryList = new List(imagePathList.length);
-                          for(int i=0;i<imagePathList.length;i++){
-                            GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+                          for (int i = 0; i < imagePathList.length; i++) {
+                            GlobalFunctions.getTemporaryDirectoryPath()
+                                .then((value) {
                               print('cache file Path : ' + value.toString());
                               GlobalFunctions.getFilePathOfCompressImage(
-                                  imagePathList[i], value.toString() + '/' + imagePathKeyList[i])
+                                      imagePathList[i],
+                                      value.toString() +
+                                          '/' +
+                                          imagePathKeyList[i])
                                   .then((value) {
                                 print('Cache file path : ' + value);
-                                imgBinaryList[i]=GlobalFunctions.convertFileToString(value);
-                                print('imgBinaryList : '+imgBinaryList.length.toString());
-                                print('imgBinaryList : '+imgBinaryList.toString());
+                                imgBinaryList[i] =
+                                    GlobalFunctions.convertFileToString(value);
+                                print('imgBinaryList : ' +
+                                    imgBinaryList.length.toString());
+                                print('imgBinaryList : ' +
+                                    imgBinaryList.toString());
                               });
                             });
                           }
-                          print('imgBinaryList : '+imgBinaryList.toString());
-                          setState(() {
-
-                          });
+                          print('imgBinaryList : ' + imgBinaryList.toString());
+                          setState(() {});
                         }
                       });
                     },
@@ -349,85 +419,85 @@ class CreateClassifiedListingState
               ),
               imagesMap.length > 0 && imagePathList.length > 0
                   ? Container(
-                height: width / 5,
-                margin: EdgeInsets.fromLTRB(5, 10, 5, 5),
-                child: Builder(
-                    builder: (context) => ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: imagesMap.length,
-                      itemBuilder: (context, position) {
-                        return GestureDetector(
-                          onLongPress: () {
-                            showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Stack(
-                                    alignment: Alignment.topCenter,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 100,
-                                        height: 50,
-                                        decoration: boxDecoration(
-                                            color: GlobalVariables
-                                                .transparent,
-                                            radius: 16,
-                                            bgColor: GlobalVariables
-                                                .transparent),
-                                        child: InkWell(
-                                            onTap: () {
-                                              imagesMap.remove(
-                                                  imagePathKeyList[
-                                                  position]);
-                                              imagePathList
-                                                  .removeAt(position);
-                                              imagePathKeyList
-                                                  .removeAt(position);
-                                              Navigator.of(context)
-                                                  .pop();
-                                              setState(() {
-                                                print('imagesMap : ' +
-                                                    imagesMap.length
-                                                        .toString());
-                                                print('imagePathList : ' +
-                                                    imagePathList
-                                                        .length
-                                                        .toString());
-                                                print('imagePathKeyList : ' +
-                                                    imagePathKeyList
-                                                        .length
-                                                        .toString());
-                                              });
-                                            },
-                                            child: Icon(
-                                              Icons.delete,
-                                              size: 25,
-                                              color: GlobalVariables
-                                                  .white,
-                                            )),
+                      height: width / 5,
+                      margin: EdgeInsets.fromLTRB(5, 10, 5, 5),
+                      child: Builder(
+                          builder: (context) => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: imagesMap.length,
+                                itemBuilder: (context, position) {
+                                  return GestureDetector(
+                                    onLongPress: () {
+                                      showModalBottomSheet(
+                                          backgroundColor: Colors.transparent,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Stack(
+                                              alignment: Alignment.topCenter,
+                                              children: <Widget>[
+                                                Container(
+                                                  width: 100,
+                                                  height: 50,
+                                                  decoration: boxDecoration(
+                                                      color: GlobalVariables
+                                                          .transparent,
+                                                      radius: 16,
+                                                      bgColor: GlobalVariables
+                                                          .transparent),
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        imagesMap.remove(
+                                                            imagePathKeyList[
+                                                                position]);
+                                                        imagePathList
+                                                            .removeAt(position);
+                                                        imagePathKeyList
+                                                            .removeAt(position);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        setState(() {
+                                                          print('imagesMap : ' +
+                                                              imagesMap.length
+                                                                  .toString());
+                                                          print('imagePathList : ' +
+                                                              imagePathList
+                                                                  .length
+                                                                  .toString());
+                                                          print('imagePathKeyList : ' +
+                                                              imagePathKeyList
+                                                                  .length
+                                                                  .toString());
+                                                        });
+                                                      },
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        size: 25,
+                                                        color: GlobalVariables
+                                                            .white,
+                                                      )),
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.all(5),
+                                      child: ClipRRect(
+                                        child: Image.file(
+                                          File(imagePathList[position]),
+                                          width: width / 5,
+                                          height: width / 5,
+                                          fit: BoxFit.fill,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
-                                    ],
+                                    ),
                                   );
-                                });
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: ClipRRect(
-                              child: Image.file(
-                                File(imagePathList[position]),
-                                width: width / 5,
-                                height: width / 5,
-                                fit: BoxFit.fill,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        );
-                      },
-                      //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-              )
+                                },
+                                //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                    )
                   : Container(),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -443,15 +513,15 @@ class CreateClassifiedListingState
                     children: <Widget>[
                       photo.isEmpty
                           ? Image.asset(
-                        GlobalVariables.componentUserProfilePath,
-                        width: 26,
-                        height: 26,
-                      )
+                              GlobalVariables.componentUserProfilePath,
+                              width: 26,
+                              height: 26,
+                            )
                           : CircleAvatar(
-                        radius: 13,
-                        backgroundColor: GlobalVariables.mediumGreen,
-                        backgroundImage: NetworkImage(photo),
-                      ),
+                              radius: 13,
+                              backgroundColor: GlobalVariables.mediumGreen,
+                              backgroundImage: NetworkImage(photo),
+                            ),
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -498,9 +568,7 @@ class CreateClassifiedListingState
                 child: AppButton(
                   textContent: AppLocalizations.of(context).translate('submit'),
                   onPressed: () {
-
                     verifyData(value);
-
                   },
                 ),
               ),
@@ -521,8 +589,8 @@ class CreateClassifiedListingState
   }
 
   void getCategoryItemTypeData() {
-    _categoryItemTypeList = ["Buy","Sell","Rent","Giveaway"];
-    for(int i=0;i<_categoryItemTypeList.length;i++){
+    _categoryItemTypeList = ["Buy", "Sell", "Rent", "Giveaway"];
+    for (int i = 0; i < _categoryItemTypeList.length; i++) {
       _categoryItemTypeListItems.add(DropdownMenuItem(
         value: _categoryItemTypeList[i],
         child: Text(
@@ -532,66 +600,90 @@ class CreateClassifiedListingState
       ));
     }
     //   _selectedLivesHere = __livesHereListItems[0].value;
-    setState(() {
-    });
+    setState(() {});
   }
 
-  void verifyData(ClassifiedResponse value) {
-    print('verifyData imgBinaryList.length : '+imgBinaryList.length.toString());
-    print('verifyData imgBinaryList : '+imgBinaryList.toString());
+  void verifyData(OwnerClassifiedResponse value) {
+    print('verifyData imgBinaryList.length : ' + imgBinaryList.length.toString());
+    print('verifyData imgBinaryList : ' + imgBinaryList.toString());
 
-    if(_categorySelectedItem!=null){
-      if(_categoryItemTypeSelectedItem!=null){
-        if(_titleController.text.length>0){
-          if(_descriptionController.text.length>0){
-            if(_propertyController.text.length>0){
-              if(_priceController.text.length>0){
-                if(_localityController.text.length>0){
-                  if(_cityController.text.length>0){
-                    if(imgBinaryList.length>0){
-                      _progressDialog.show();
-                      Provider.of<ClassifiedResponse>(context,listen: false).insertClassifiedData(name, mail, mobile, _categorySelectedItem,
-                          _categoryItemTypeSelectedItem, _titleController.text, _descriptionController.text,
-                          _propertyController.text, _priceController.text, _localityController.text, _cityController.text, imgBinaryList).then((value) {
-                           // print('insert value : '+ value.toString());
-                           // print('insert value : '+ value.status.toString());
-                           // print('insert value : '+ value.message.toString());
+    if (_categorySelectedItem != null) {
+      if (_categoryItemTypeSelectedItem != null) {
+        if (_titleController.text.length > 0) {
+          if (_descriptionController.text.length > 0) {
+            if (_propertyController.text.length > 0) {
+              if (_priceController.text.length > 0) {
+                if (_addressController.text.length > 0) {
+                  if (_localityController.text.length > 0) {
+                    if (_cityItemSelectedItem != null) {
+                      if (_pinCodeController.text.length > 0) {
+                        if (imgBinaryList.length > 0) {
+                          _progressDialog.show();
+                          Provider.of<OwnerClassifiedResponse>(context,
+                                  listen: false)
+                              .insertClassifiedData(
+                                  name,
+                                  mail,
+                                  mobile,
+                                  _categorySelectedItem,
+                                  _categoryItemTypeSelectedItem,
+                                  _titleController.text,
+                                  _descriptionController.text,
+                                  _propertyController.text,
+                                  _priceController.text,
+                                  _localityController.text,
+                                  _cityItemSelectedItem,
+                                  imgBinaryList,
+                                  _addressController.text,
+                                  _pinCodeController.text)
+                              .then((value) {
+                            // print('insert value : '+ value.toString());
+                            // print('insert value : '+ value.status.toString());
+                            // print('insert value : '+ value.message.toString());
                             GlobalFunctions.showToast(value.message);
                             _progressDialog.hide();
-                            if(value.status) {
-                              GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-                                GlobalFunctions.removeAllFilesFromDirectory(value);
+                            if (value.status) {
+                              GlobalFunctions.getTemporaryDirectoryPath()
+                                  .then((value) {
+                                GlobalFunctions.removeAllFilesFromDirectory(
+                                    value);
                               });
                               Navigator.of(context).pop();
                             }
-                      });
-                    }else{
-                      GlobalFunctions.showToast("Please select at least one Photo");
+                          });
+                        } else {
+                          GlobalFunctions.showToast(
+                              "Please select at least one Photo");
+                        }
+                      } else {
+                        GlobalFunctions.showToast("Please Enter PinCode");
+                      }
+                    } else {
+                      GlobalFunctions.showToast("Please Enter City");
                     }
-                  }else{
-                    GlobalFunctions.showToast("Please Enter City");
+                  } else {
+                    GlobalFunctions.showToast("Please Enter Address");
                   }
-                }else{
+                } else {
                   GlobalFunctions.showToast("Please Enter Locality");
                 }
-              }else{
+              } else {
                 GlobalFunctions.showToast("Please Enter Price");
               }
-            }else{
+            } else {
               GlobalFunctions.showToast("Please Enter Property Details");
             }
-          }else{
+          } else {
             GlobalFunctions.showToast("Please Enter Description");
           }
-        }else{
+        } else {
           GlobalFunctions.showToast("Please Enter Title");
         }
-      }else{
+      } else {
         GlobalFunctions.showToast("Please Select I want to");
       }
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Select Category");
     }
-
   }
 }
