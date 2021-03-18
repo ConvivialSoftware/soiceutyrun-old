@@ -25,7 +25,8 @@ abstract class RestClientDiscover {
       @Field("Category") String category, @Field("Type") String type,
       @Field("Title") String title, @Field("Description") String description,
       @Field("Property_Details") String propertyDetails, @Field("Price") String price,
-      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,@Field("Address") String address, @Field("Pincode") String pincode,);
+      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,
+      @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String Society_Name,);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.exclusiveOfferAPI)
@@ -48,6 +49,33 @@ abstract class RestClientDiscover {
       @Field("Society_Name") String societyName,@Field("Unit") String unit,
       @Field("Mobile") String mobile, @Field("Address") String address,
       @Field("User_Name") String User_Name,@Field("User_Email") String User_Email,@Field("Profile_Image") String Profile_Image);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.servicesCategory)
+  Future<DataResponse> getServicesCategory();
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.servicePerCategory)
+  Future<DataResponse> getServicePerCategory(@Field("category") String category,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.bookServicePerCategory)
+  Future<StatusMsgResponse> bookServicePerCategory(
+      @Field("S_Id") String S_Id,@Field("User_Id") String user_id,
+      @Field("Name") String Name,@Field("Email") String Email,
+      @Field("Society_Name") String societyName,@Field("Unit") String unit,
+      @Field("Mobile") String mobile, @Field("Address") String address,
+      @Field("Requiremnt") String Requiremnt,);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.ownerServices)
+  Future<DataResponse> getOwnerServices(@Field("User_Id") String userId,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.addServicesRatting)
+  Future<StatusMsgResponse> updateServicesRatting(@Field("User_Id") String userId,@Field("S_Id") String S_Id,@Field("Rating") String Rating);
+
 
 }
 

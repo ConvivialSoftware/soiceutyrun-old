@@ -430,7 +430,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  getServiceTypeDataLayout() {
+  /*getServiceTypeDataLayout() {
     return Container(
       //color: GlobalVariables.black,
       //width: MediaQuery.of(context).size.width / 1.1,
@@ -747,7 +747,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         ),
       ),
     );
-  }
+  }*/
 
   getTabBarView(ClassifiedResponse value) {
     return TabBarView(

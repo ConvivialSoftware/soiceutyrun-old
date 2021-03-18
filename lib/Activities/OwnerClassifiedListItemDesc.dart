@@ -168,6 +168,11 @@ class CreateClassifiedListingState
                   maxLine: 2,
                   textColor: GlobalVariables.green,
                   fontWeight: FontWeight.w500),
+              text(widget.classifiedList.Society_Name,
+                  fontSize: GlobalVariables.textSizeSMedium,
+                  maxLine: 2,
+                  textColor: GlobalVariables.grey,
+                  fontWeight: FontWeight.w500),
               SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

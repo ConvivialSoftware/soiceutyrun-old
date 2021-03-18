@@ -30,6 +30,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
   void initState() {
     super.initState();
     // _tabController = TabController(length: 4, vsync: this);
+    Provider.of<ServicesResponse>(context,listen: false).getServicesCategory();
   }
 
   @override
@@ -42,7 +43,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
         value: Provider.of<ServicesResponse>(context),
         child: Consumer<ServicesResponse>(
           builder: (context, value, child) {
-            //print('Consumer Value : ' + value.classifiedCategoryList.toString());
+            print('Consumer Value : ' + value.servicesCategoryList.toString());
             return Builder(
               builder: (context) => Scaffold(
                 appBar: AppBar(
@@ -64,14 +65,14 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                   //bottom: getTabLayout(),
                   //elevation: 0,
                 ),
-                body: getServiceLayout(),
+                body: value.isLoading ? GlobalFunctions.loadingWidget(context):getServiceLayout(value),
               ),
             );
           },
         ));
   }
 
-  getServiceLayout() {
+  getServiceLayout(ServicesResponse value) {
     print('getClassifiedLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -86,7 +87,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                getServiceTypeDataLayout(),
+                getServiceTypeDataLayout(value),
               ],
             ),
           ),
@@ -95,7 +96,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
     );
   }
 
-  getServiceTypeDataLayout() {
+  getServiceTypeDataLayout(ServicesResponse value) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 10, 0,
           0), //color: GlobalVariables.black,
@@ -105,7 +106,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                     ),
-                    itemCount: 9,
+                    itemCount: value.servicesCategoryList.length,
                     itemBuilder: (context, position) {
                       return InkWell(
                         onTap: () {
@@ -113,7 +114,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      BaseServicesPerCategory()));
+                                      BaseServicesPerCategory(value.servicesCategoryList[position].Category_Name)));
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -142,8 +143,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                                 ),
                                 Container(
                                     margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: Text(AppLocalizations.of(context)
-                                        .translate('home_care'))),
+                                    child: Text(value.servicesCategoryList[position].Category_Name)),
                               ],
                             ),
                           ),

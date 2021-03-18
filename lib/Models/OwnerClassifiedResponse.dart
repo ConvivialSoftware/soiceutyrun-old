@@ -73,12 +73,13 @@ class OwnerClassifiedResponse extends ChangeNotifier {
       images,String address,String pinCode) async {
 
     String userId = await GlobalFunctions.getUserId();
+    String societyName = await GlobalFunctions.getSocietyName();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
           .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description, propertyDetails, price, locality, city, images,address,pinCode);
+              description, propertyDetails, price, locality, city, images,address,pinCode,societyName);
       isLoading = false;
       notifyListeners();
       print('insertClassifiedData : '+result.toString());
@@ -100,6 +101,8 @@ class Classified {
       Description,
       Property_Details,
       Price,
+      Address,
+      Society_Name,
       C_Date;
   var Images;
   var Interested;
@@ -118,7 +121,7 @@ class Classified {
       this.Property_Details,
       this.Price,
       this.C_Date,
-      this.Images,this.Interested});
+      this.Images,this.Interested,this.Society_Name,this.Address});
 
   factory Classified.fromJson(Map<String, dynamic> map) {
     return Classified(

@@ -237,6 +237,11 @@ class GlobalVariables {
   static const cityAPI = "Classified/Android/Login/city";
   static const insertUserInfoOnExclusiveGetCode = "Classified/Android/Login/getcode";
   static const interestedClassified = "Classified/Android/Login/interested";
+  static const servicesCategory = "Classified/Android/Login/service_category";
+  static const servicePerCategory = "Classified/Android/Login/services";
+  static const bookServicePerCategory = "Classified/Android/Login/book_service";
+  static const ownerServices = "Classified/Android/Login/my_service";
+  static const addServicesRatting = "Classified/Android/Login/update_rating";
 
   /*Api Name for BaseURLERP*/
   static const duesAPI = "AndroidApi/dues";

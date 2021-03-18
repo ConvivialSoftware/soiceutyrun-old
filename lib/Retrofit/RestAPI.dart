@@ -2201,7 +2201,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   @override
   Future<StatusMsgResponse> insertClassifiedData(String userId,String name, String email, String phone, String category,
       String type, String title, String description, String propertyDetails, String price,
-      String locality, String city, images,String address,String pinCode) async {
+      String locality, String city, images,String address,String pinCode,String societyName) async {
     // TODO: implement insertClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(name, "Name");
@@ -2218,6 +2218,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(images, "Img_Name");
     ArgumentError.checkNotNull(address, "Address");
     ArgumentError.checkNotNull(pinCode, "Pincode");
+    ArgumentError.checkNotNull(societyName, "Society_Name");
+    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
     // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
 
     FormData formData = FormData.fromMap({
@@ -2236,6 +2238,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       "Img_Name": images,
       "Address": address,
       "Pincode": pinCode,
+      "Society_Name": societyName,
     });
     //print(GlobalVariables.societyId+": "+socId);
 
@@ -2379,4 +2382,134 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     print('value of interestedClassified : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
+
+  @override
+  Future<DataResponse> getServicesCategory() async {
+    // TODO: implement getServicesCategory
+    print('baseurl : ' + baseUrl + GlobalVariables.servicesCategory);
+    final Response _result = await _dio.post(GlobalVariables.servicesCategory,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl),);
+    final value = _result.data;
+    print('value of getServicesCategory : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getServicePerCategory(String category) async {
+    // TODO: implement getServicePerCategory
+    ArgumentError.checkNotNull(category, "category");
+    FormData formData = FormData.fromMap({
+      "category": category,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.servicePerCategory);
+    final Response _result = await _dio.post(GlobalVariables.servicePerCategory,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl,
+          data: formData),
+    );
+    final value = _result.data;
+    print('value of getServicePerCategory : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> bookServicePerCategory(String S_Id, String userId,String userName,
+      String userEmail,String societyName,String unit,String mobile,String address,String Requirement) async {
+    // TODO: implement bookServicePerCategory
+
+    ArgumentError.checkNotNull(S_Id, "S_Id");
+    ArgumentError.checkNotNull(userId, "User_Id");
+    ArgumentError.checkNotNull(userName, "Name");
+    ArgumentError.checkNotNull(userEmail, "Email");
+    ArgumentError.checkNotNull(mobile, "Mobile");
+    ArgumentError.checkNotNull(societyName, "Society_Name");
+    ArgumentError.checkNotNull(unit, "Unit");
+    ArgumentError.checkNotNull(address, "Address");
+    ArgumentError.checkNotNull(Requirement, "Requirement");
+
+    FormData formData = FormData.fromMap({
+      "S_Id": S_Id,
+      "User_Id": userId,
+      "Society_Name": societyName,
+      "Unit": unit,
+      "Mobile": mobile,
+      "Address": address,
+      "Name": userName,
+      "Email": userEmail,
+      "Requirement": Requirement,
+    });
+
+    print('S_Id : ' + S_Id);
+    print('baseurl : ' + baseUrl + GlobalVariables.bookServicePerCategory);
+    final Response _result = await _dio.post(GlobalVariables.bookServicePerCategory,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of bookServicePerCategory : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+
+  }
+
+  @override
+  Future<DataResponse> getOwnerServices(String userId) async {
+    // TODO: implement getOwnerServices
+    ArgumentError.checkNotNull(userId, "User_Id");
+    FormData formData = FormData.fromMap({
+      "User_Id": userId,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.ownerServices);
+    final Response _result = await _dio.post(GlobalVariables.ownerServices,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl,
+          data: formData),
+    );
+    final value = _result.data;
+    print('value of ownerServices : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> updateServicesRatting(String userId, String S_Id,String rate) async {
+    // TODO: implement addServicesRatting
+    ArgumentError.checkNotNull(userId, "User_Id");
+    ArgumentError.checkNotNull(S_Id, "S_Id");
+    ArgumentError.checkNotNull(rate, "Rating");
+
+    FormData formData = FormData.fromMap({
+      "User_Id": userId,
+      "S_Id": S_Id,
+      "Rating":rate
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.addServicesRatting);
+    final Response _result = await _dio.post(GlobalVariables.addServicesRatting,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of insertClassifiedData : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+
+
 }

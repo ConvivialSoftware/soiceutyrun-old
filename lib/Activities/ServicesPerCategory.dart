@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
 class BaseServicesPerCategory extends StatefulWidget {
+
+  String category;
+  BaseServicesPerCategory(this.category);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -17,45 +23,48 @@ class BaseServicesPerCategory extends StatefulWidget {
 
 class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory> {
 
-
-  List<HomeCare> _homeCareList = List<HomeCare>();
-
   @override
   void initState() {
     super.initState();
-    getHomeCareList();
-
+    Provider.of<ServicesResponse>(context,listen: false).getServicePerCategory(widget.category);
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('home_services'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getBaseLayout(),
-      ),
-    );
+    return ChangeNotifierProvider<ServicesResponse>.value(
+        value: Provider.of<ServicesResponse>(context),
+        child: Consumer<ServicesResponse>(
+          builder: (context, value, child) {
+            print('Consumer Value : ' + value.servicesList.toString());
+            return Builder(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  backgroundColor: GlobalVariables.green,
+                  centerTitle: true,
+                  elevation: 0,
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: GlobalVariables.white,
+                    ),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).translate('home_services'),
+                    style: TextStyle(color: GlobalVariables.white),
+                  ),
+                ),
+                body: value.isLoading ? GlobalFunctions.loadingWidget(context) : getBaseLayout(value),
+              ),
+            );
+          },
+        ));
   }
 
-  getBaseLayout() {
+  getBaseLayout(ServicesResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -69,7 +78,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                getHomeCareListDataLayout(),
+                getHomeCareListDataLayout(value),
               ],
             ),
           ),
@@ -78,28 +87,28 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
     );
   }
 
-  getHomeCareListDataLayout() {
+  getHomeCareListDataLayout(ServicesResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
       child: Builder(
           builder: (context) => ListView.builder(
              scrollDirection: Axis.vertical,
-            itemCount: _homeCareList.length,
+            itemCount: value.servicesList.length,
             itemBuilder: (context, position) {
-              return getHomeCareListItemLayout(position);
+              return getHomeCareListItemLayout(position,value);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
     );
   }
 
-  getHomeCareListItemLayout(int position) {
+  getHomeCareListItemLayout(int position, ServicesResponse value) {
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
             builder: (context) =>
-                BaseDescriptionOfHomeService()));
+                BaseDescriptionOfHomeService(value.servicesList[position])));
       },
       child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -118,12 +127,12 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  text(_homeCareList[position].title,
+                                  text(value.servicesList[position].Name,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                       maxLine: 2,
                                       textColor: GlobalVariables.green,fontWeight: FontWeight.w500),
                                   SizedBox(height: 4),
-                                  text(_homeCareList[position].subDesc,
+                                  text(value.servicesList[position].Title,
                                       textColor:
                                       GlobalVariables.grey,
                                       fontSize:
@@ -141,7 +150,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
-                            child: text(_homeCareList[position].startPrice,
+                            child: text('Rs. '+value.servicesList[position].Price,
                                 textColor: GlobalVariables.black,
                                 fontSize: GlobalVariables.textSizeSmall,
                                 fontWeight: FontWeight.bold),
@@ -164,8 +173,8 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                                         margin: EdgeInsets.fromLTRB(
                                             5, 0, 0, 0),
                                         child: Text(
-                                          _homeCareList[position]
-                                              .rateCount,
+                                          value.servicesList[position]
+                                              .Rating,
                                           style: TextStyle(
                                             color: GlobalVariables
                                                 .grey,
@@ -197,40 +206,4 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
     );
   }
 
-  getHomeCareList(){
-
-    _homeCareList = [
-
-      HomeCare(title: "Siddhivinayak Traders",subDesc: "AC Repair and Maintainance",startPrice: "Price Starts from: Rs. 200",
-      rateCount: "4.3",isCall: true,isMail: true),
-      HomeCare(title: "Balaji Plumbers",subDesc: "Plumbing Service",startPrice: "Price Starts from: Rs. 200",
-          rateCount: "4.5",isCall: true,isMail: false),
-      HomeCare(title: "Rajesh Electronics",subDesc: "Electronics",startPrice: "Price Starts from: Rs. 250",
-          rateCount: "3.6",isCall: true,isMail: false),
-      HomeCare(title: "Star HardWare and Electronics",subDesc: "Hardware & Electronics",startPrice: "Price Starts from: Rs. 500",
-          rateCount: "4.4",isCall: true,isMail: true),
-      HomeCare(title: "Madhuram Packaging",subDesc: "Plastic Bags & Packaging",startPrice: "Price Starts from: Rs. 200",
-          rateCount: "2.9",isCall: true,isMail: true),
-      HomeCare(title: "Krishna Repairs",subDesc: "AC Repair and Maintainance",startPrice: "Price Starts from: Rs. 500",
-          rateCount: "3.2",isCall: true,isMail: false),
-      HomeCare(title: "Sudar Hardware",subDesc: "Hardware & Electronics",startPrice: "Price Starts from: Rs. 300",
-          rateCount: "4.8",isCall: true,isMail: true),
-
-    ];
-
-
-  }
-}
-
-class HomeCare {
-  String title, subDesc, startPrice, rateCount;
-  bool isCall, isMail;
-
-  HomeCare(
-      {this.title,
-      this.subDesc,
-      this.startPrice,
-      this.rateCount,
-      this.isCall,
-      this.isMail});
 }

@@ -356,5 +356,7 @@
   "locality": "Locality",
   "city": "City",
   "pin_code": "Pin Code",
-  "my_classified": "My Classified"
+  "my_classified": "My Classified",
+  "my_services": "My Services",
+  "add_ratting": "Add Ratting"
 }

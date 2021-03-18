@@ -1,9 +1,12 @@
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -11,6 +14,12 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseDescriptionOfHomeService extends StatefulWidget {
+
+  Services _services;
+  BaseDescriptionOfHomeService(this._services);
+
+
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -20,58 +29,62 @@ class BaseDescriptionOfHomeService extends StatefulWidget {
 
 class DescriptionOfHomeServiceState
     extends BaseStatefulState<BaseDescriptionOfHomeService> {
-  List<HomeCareDescription> _homeCareList = List<HomeCareDescription>();
+  //List<HomeCareDescription> _homeCareList = List<HomeCareDescription>();
 
   var name="",mobile="",mail="",photo="";
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
+  TextEditingController _requirementController = TextEditingController();
   var width,height;
-
+  List<ServicesCharges> _serviceChargesList;
+  ProgressDialog _progressDialog;
   @override
   void initState() {
     super.initState();
     getSharedPrefData();
-    getHomeCareDescriptionList();
+    _serviceChargesList = List<ServicesCharges>.from(widget._services.charges
+        .map((i) => ServicesCharges.fromJson(i)));
+    //getHomeCareDescriptionList();
   }
 
   @override
   Widget build(BuildContext context) {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     width = MediaQuery.of(context).size.width;
     height =  MediaQuery.of(context).size.height;
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('home_services'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getBaseLayout(),
-     /*   bottomNavigationBar: Container(
-          height: 80,
-          decoration: BoxDecoration(
-            color: GlobalVariables.transparent,
-          ),
-          padding: EdgeInsets.all(20),
-          child: AppButton(textContent: "Book Service", onPressed: () {}),
-        ),*/
-      ),
-    );
+    return ChangeNotifierProvider<ServicesResponse>.value(
+        value: Provider.of<ServicesResponse>(context),
+        child: Consumer<ServicesResponse>(
+          builder: (context, value, child) {
+            print('Consumer Value : ' + value.servicesList.toString());
+            return Builder(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  backgroundColor: GlobalVariables.green,
+                  centerTitle: true,
+                  elevation: 0,
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: GlobalVariables.white,
+                    ),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).translate('home_services'),
+                    style: TextStyle(color: GlobalVariables.white),
+                  ),
+                ),
+                body: getBaseLayout(),
+              ),
+            );
+          },
+        ));
   }
 
   getBaseLayout() {
@@ -103,7 +116,18 @@ class DescriptionOfHomeServiceState
             child: Container(
                 width: width,
                 margin: EdgeInsets.all(10),
-                child: AppButton(textContent: "Book Service", onPressed: () {},textColor: GlobalVariables.white,)),
+                child: AppButton(textContent: "Book Service", onPressed: () {
+
+                  _progressDialog.show();
+                  Provider.of<ServicesResponse>(context,listen: false).bookServicePerCategory(widget._services.Id, _requirementController.text.toString()).then((value) {
+                    _progressDialog.hide();
+                    if(value.status){
+                      Navigator.of(context).pop();
+                    }
+                    GlobalFunctions.showToast(value.message);
+                  });
+
+                },textColor: GlobalVariables.white,)),
           ),
         ],
       ),
@@ -111,6 +135,8 @@ class DescriptionOfHomeServiceState
   }
 
   getHomeCareDescriptionListDataLayout() {
+
+
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -121,7 +147,7 @@ class DescriptionOfHomeServiceState
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
             child: Text(
-              _homeCareList[0].title,
+              widget._services.Name,
               style: TextStyle(
                   color: GlobalVariables.white,
                   fontSize: 18,
@@ -132,7 +158,7 @@ class DescriptionOfHomeServiceState
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(15, 5, 0, 0),
             child: Text(
-              _homeCareList[0].subDesc,
+              widget._services.Title,
               style: TextStyle(
                 color: GlobalVariables.lightGray,
                 fontSize: 14,
@@ -164,29 +190,29 @@ class DescriptionOfHomeServiceState
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Text(
-                        _homeCareList[0].serviceDesc,
+                        widget._services.Description,
                         style: TextStyle(
                           color: GlobalVariables.grey,
                           fontSize: 14,
                         ),
                       ),
                     ),
-                    Container(
+                    /*Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       // color: GlobalVariables.grey,
                       child: Builder(
                           builder: (context) => ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: _homeCareList[0].serviceList.length,
+                              itemCount: widget._services.charges.length,
                               shrinkWrap: true,
-                              /*gridDelegate:
+                              *//*gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 4),*/
+                                    crossAxisCount: 2, childAspectRatio: 4),*//*
                               itemBuilder: (BuildContext context, int position) {
                                 return getHomeCareDescriptionListItemLayout(
                                     position);
                               })),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
@@ -198,7 +224,7 @@ class DescriptionOfHomeServiceState
                   margin: EdgeInsets.only(right: 8, top: 8),
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 8),
-                  child: FittedBox(child: text('15% Discount', fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
+                  child: FittedBox(child: text(widget._services.Discount+'% Discount', fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -226,9 +252,9 @@ class DescriptionOfHomeServiceState
                   child: Builder(
                       builder: (context) => ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
-                          itemCount: _homeCareList[0].chargesList.length,
+                          itemCount: _serviceChargesList.length,
                           shrinkWrap: true,
-                          itemBuilder: (BuildContext contect, int position) {
+                          itemBuilder: (BuildContext context, int position) {
                             return getHomeCareChargesListItemLayout(position);
                           })),
                 ),
@@ -246,7 +272,7 @@ class DescriptionOfHomeServiceState
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Tell us your requirment',
+                    'Tell us your requirement',
                     style: TextStyle(
                         color: GlobalVariables.green,
                         fontSize: 16,
@@ -255,10 +281,13 @@ class DescriptionOfHomeServiceState
                 ),
                 Container(
                   height: 100,
-                  child: TextField(
+                  child: /*AppTextField(textHintContent: 'Write to us about your requirement',
+                      controllerCallback: _requirementController,
+                    borderColor: GlobalVariables.transparent,
+                  ),*/TextField(
                     //maxLines: 99,
                     decoration: InputDecoration(
-                      hintText: 'Write to us about your requirment',
+                      hintText: 'Write to us about your requirement',
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
                     ),
@@ -393,7 +422,7 @@ class DescriptionOfHomeServiceState
     );
   }
 
-  getHomeCareDescriptionListItemLayout(int position) {
+ /* getHomeCareDescriptionListItemLayout(int position) {
     return Container(
       padding: EdgeInsets.all(5),
       //margin: EdgeInsets.fromLTRB(0, 10, 0, 0), // width: 100,
@@ -420,7 +449,7 @@ class DescriptionOfHomeServiceState
         ),
       ),
     );
-  }
+  }*/
 
   getHomeCareChargesListItemLayout(int position) {
     return Container(
@@ -446,7 +475,7 @@ class DescriptionOfHomeServiceState
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         child: Text(
-                          _homeCareList[0].chargesList[position].chargesName,
+                          _serviceChargesList[position].Service_Title,
                           style: TextStyle(color: GlobalVariables.grey),
                         ),
                       ),
@@ -455,14 +484,14 @@ class DescriptionOfHomeServiceState
                 ),
                 Container(
                   child: Text(
-                    _homeCareList[0].chargesList[position].chargesPrice,
+                    _serviceChargesList[position].Service_Price,
                     style: TextStyle(color: GlobalVariables.green),
                   ),
                 )
               ],
             ),
           ),
-          _homeCareList[0].chargesList.length-1!=position ? Container(
+          _serviceChargesList.length-1!=position ? Container(
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
             child: Divider(
               color: GlobalVariables.grey,
@@ -475,9 +504,8 @@ class DescriptionOfHomeServiceState
   }
 
   showBottomSheetEditInfoLayout(){
-    return
 
-      showDialog(
+    return showDialog(
           context: context,
           builder: (BuildContext context) =>
               StatefulBuilder(builder:
@@ -540,7 +568,7 @@ class DescriptionOfHomeServiceState
 
   }
 
-  getHomeCareDescriptionList() {
+ /* getHomeCareDescriptionList() {
     _homeCareList = [
       HomeCareDescription(
           title: "Siddhivinayak Traders",
@@ -566,7 +594,7 @@ class DescriptionOfHomeServiceState
           ])
     ];
   }
-
+*/
 
   Future<void> getSharedPrefData() async {
     name = await GlobalFunctions.getDisplayName();
@@ -582,7 +610,7 @@ class DescriptionOfHomeServiceState
   }
 }
 
-class HomeCareDescription {
+/*class HomeCareDescription {
   String title, subDesc, serviceDesc;
   List<Services> serviceList;
   List<Charges> chargesList;
@@ -603,4 +631,4 @@ class Services {
 class Charges {
   String chargesName, chargesPrice;
   Charges({this.chargesName, this.chargesPrice});
-}
+}*/

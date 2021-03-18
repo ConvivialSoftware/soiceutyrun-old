@@ -73,12 +73,14 @@ class ClassifiedResponse extends ChangeNotifier {
       images,String address,String pinCode) async {
 
     String userId = await GlobalFunctions.getUserId();
+    String societyName = await GlobalFunctions.getSocietyName();
+    String address = await GlobalFunctions.getSocietyAddress();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
           .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description, propertyDetails, price, locality, city, images,address,pinCode);
+              description, propertyDetails, price, locality, city, images,address,pinCode,societyName);
       isLoading = false;
       notifyListeners();
       print('insertClassifiedData : '+result.toString());
@@ -122,6 +124,9 @@ class Classified {
       Description,
       Property_Details,
       Price,
+      Address,
+      PinCode,
+      Society_Name,
       C_Date;
   var Images;
 
@@ -138,8 +143,8 @@ class Classified {
       this.Description,
       this.Property_Details,
       this.Price,
-      this.C_Date,
-      this.Images});
+      this.C_Date, this.Society_Name,
+      this.Images,this.Address,this.PinCode});
 
   factory Classified.fromJson(Map<String, dynamic> map) {
     return Classified(
@@ -156,6 +161,9 @@ class Classified {
       Property_Details: map["Property_Details"],
       Price: map["Price"],
       C_Date: map["C_Date"],
+      Address: map["Address"],
+      PinCode: map["Pincode"],
+      Society_Name: map["Society_Name"],
       Images: map["Images"],
     );
   }

@@ -27,6 +27,7 @@ import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/Notifications.dart';
 import 'package:societyrun/Activities/OwnerDiscover.dart';
+import 'package:societyrun/Activities/OwnerServices.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -1651,6 +1652,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           items: [
             AppLocalizations.of(context).translate("my_classified"),
             AppLocalizations.of(context).translate("classified"),
+            AppLocalizations.of(context).translate("my_services"),
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("exclusive_offer"),
           ]),
@@ -2238,6 +2240,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               MaterialPageRoute(
                   builder: (context) => BaseOwnerDiscover(
                       AppLocalizations.of(context).translate('my_classified'))))
+          .then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
+    }else if (item == AppLocalizations.of(context).translate('my_services')) {
+      //Redirect to  classified
+      //GlobalFunctions.comingSoonDialog(context);
+      Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseOwnerServices()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });

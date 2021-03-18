@@ -7,9 +7,107 @@ import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class ServicesResponse extends ChangeNotifier {
   List<Services> servicesList = List<Services>();
+  List<Services> ownerServicesList = List<Services>();
   List<ServicesCategory> servicesCategoryList = List<ServicesCategory>();
   bool isLoading = true;
   String errMsg;
+
+
+  Future<void> getServicesCategory() async {
+    try {
+      print('getCategoryData');
+      final dio = Dio();
+      final RestClientDiscover restClient =
+      RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+      var value =  await restClient.getServicesCategory();
+      print('servicesCategoryList value : '+value.toString());
+      servicesCategoryList = List<ServicesCategory>.from(value.data.map((i) => ServicesCategory.fromJson(i)));
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      errMsg = e.toString();
+      print('errMsg '+errMsg);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getServicePerCategory(String category) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      print('getServicePerCategory');
+      final dio = Dio();
+      final RestClientDiscover restClient =
+      RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+      var value = await restClient.getServicePerCategory(category);
+      servicesList = List<Services>.from(value.data.map((i) => Services.fromJson(i)));
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      errMsg = e.toString();
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<StatusMsgResponse> bookServicePerCategory(String S_Id,String Requirement) async {
+
+    String userId = await GlobalFunctions.getUserId();
+    String societyName =  await GlobalFunctions.getSocietyName();
+    String block =  await GlobalFunctions.getBlock();
+    String flat =  await GlobalFunctions.getFlat();
+    String mobile = await GlobalFunctions.getMobile();
+    String address = await GlobalFunctions.getSocietyAddress();
+    String userName = await GlobalFunctions.getDisplayName();
+    String userEmail = await GlobalFunctions.getUserName();
+
+    final dio = Dio();
+    final RestClientDiscover restClient =
+    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result =  await restClient.bookServicePerCategory(S_Id, userId, userName, userEmail, societyName, block+' '+flat, mobile, address, Requirement);
+    isLoading = false;
+    notifyListeners();
+    print('bookServicePerCategory : '+result.toString());
+    return result;
+  }
+
+  Future<void> getOwnerServices() async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      print('getOwnerServices');
+      String userId = await GlobalFunctions.getUserId();
+      final dio = Dio();
+      final RestClientDiscover restClient =
+      RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+      var value = await restClient.getOwnerServices(userId);
+      ownerServicesList = List<Services>.from(value.data.map((i) => Services.fromJson(i)));
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      errMsg = e.toString();
+      print('errMsg '+errMsg);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<StatusMsgResponse> updateServiceRatting(String S_Id,String _myRate) async {
+
+    isLoading = true;
+    notifyListeners();
+    String userId = await GlobalFunctions.getUserId();
+    final dio = Dio();
+    final RestClientDiscover restClient =
+    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result =  await restClient.updateServicesRatting(userId,S_Id,_myRate);
+    isLoading = false;
+    notifyListeners();
+    getOwnerServices();
+    print('addServiceRatting : '+result.toString());
+    return result;
+  }
 
 }
 

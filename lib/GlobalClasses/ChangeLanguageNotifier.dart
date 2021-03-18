@@ -188,13 +188,13 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.ListOfHomeServicePage:
       {
-        return BaseServicesPerCategory();
+        return BaseServicesPerCategory(null);
       }
       break;
 
     case GlobalVariables.DescriptionOfHomeServicePage:
       {
-        return BaseDescriptionOfHomeService();
+        return BaseDescriptionOfHomeService(null);
       }
       break;
     case GlobalVariables.GuestOthersPage:
