@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
+import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -87,8 +88,40 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                       color: GlobalVariables.white,
                     ),
                   ),
+                  actions: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BaseOwnerDiscover(
+                                    AppLocalizations.of(context)
+                                        .translate('my_classified'))));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.history,
+                              color: GlobalVariables.white,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('history'),
+                              style: TextStyle(
+                                  color: GlobalVariables.white,
+                                  fontSize: GlobalVariables.textSizeSMedium),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   title: Text(
-                    AppLocalizations.of(context).translate('discover'),
+                    AppLocalizations.of(context).translate('classified'),
                     style:
                         TextStyle(color: GlobalVariables.white, fontSize: 16),
                   ),
@@ -101,7 +134,8 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   elevation: 0,
                 ),
                 body:
-                    /*value.classifiedCategoryList.isNotEmpty && */!value.isLoading
+                    /*value.classifiedCategoryList.isNotEmpty && */ !value
+                            .isLoading
                         ? getTabBarView(value)
                         : GlobalFunctions.loadingWidget(context),
               ),
@@ -146,12 +180,13 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         //print('runtime : '+_classifiedValue.runtimeType.toString());
       }
     }
-    var tabName = 'No Data Found For '+value.classifiedCategoryList[
-    _tabController == null ? 0 : _tabController.index]
-        .Category_Name;
+    var tabName = 'No Data Found For ' +
+        value
+            .classifiedCategoryList[
+                _tabController == null ? 0 : _tabController.index]
+            .Category_Name;
     print('getClassifiedLayout Tab Call');
     return Container(
-
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -162,7 +197,8 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0),
                 _classifiedResponse.classifiedList.isNotEmpty
                     ? getClassifiedListDataLayout(_classifiedResponse)
                     : GlobalFunctions.noDataFoundLayout(context, tabName),
@@ -175,7 +211,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
- /* addClassifiedDiscoverFabLayout(String pageTitle) {
+  addClassifiedDiscoverFabLayout(String pageTitle) {
     return Align(
       alignment: Alignment.bottomRight,
       child: Stack(
@@ -193,13 +229,6 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                             BaseCreateClassifiedListing())).then((value) {
                   GlobalFunctions.setBaseContext(context);
                 });
-
-                *//*} else if (pageTitle == GlobalVariables.AddNearByShopPage) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BaseAddNearByShop()));
-                }*//*
               },
               child: Icon(
                 Icons.add,
@@ -211,7 +240,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         ],
       ),
     );
-  }*/
+  }
 
   getClassifiedListDataLayout(ClassifiedResponse value) {
     return Container(
@@ -241,10 +270,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     return InkWell(
       onTap: () {
         Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BaseClassifiedListItemDesc(value.classifiedList[position])))
-            .then((value) {
+            context,
+            MaterialPageRoute(
+                builder: (context) => BaseClassifiedListItemDesc(
+                    value.classifiedList[position]))).then((value) {
           GlobalFunctions.setBaseContext(context);
         });
       },
@@ -277,26 +306,28 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               shape: BoxShape.rectangle
                             )
                                 : */
-                              imageList.length>0 ? AppNetworkImage(
-                            imageList[0].img,
-                            imageWidth: width / 5.5,
-                            imageHeight: width / 5.5,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.fill,
-                            radius: 12.0,
-                            shape: BoxShape.rectangle,
-                          ) : AppAssetsImage(
-                                  GlobalVariables
-                                      .componentUserProfilePath,
-                                imageWidth: width / 5.5,
-                                imageHeight: width / 5.5,
-                                borderColor: GlobalVariables.grey,
-                                borderWidth: 1.0,
-                                fit: BoxFit.fill,
-                                radius: 12.0,
-                                shape: BoxShape.circle,
-                              )
+                                  imageList.length > 0
+                                      ? AppNetworkImage(
+                                          imageList[0].img,
+                                          imageWidth: width / 5.5,
+                                          imageHeight: width / 5.5,
+                                          borderColor: GlobalVariables.grey,
+                                          borderWidth: 1.0,
+                                          fit: BoxFit.fill,
+                                          radius: 12.0,
+                                          shape: BoxShape.rectangle,
+                                        )
+                                      : AppAssetsImage(
+                                          GlobalVariables
+                                              .componentUserProfilePath,
+                                          imageWidth: width / 5.5,
+                                          imageHeight: width / 5.5,
+                                          borderColor: GlobalVariables.grey,
+                                          borderWidth: 1.0,
+                                          fit: BoxFit.fill,
+                                          radius: 12.0,
+                                          shape: BoxShape.circle,
+                                        )
                               /*ClipRRect(
                               child: CachedNetworkImage(
                                 imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
@@ -333,8 +364,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                       Flexible(
                                         child: text(
                                             value.classifiedList[position]
-                                                .Locality+' - '+value.classifiedList[position]
-                                                .City,
+                                                    .Locality +
+                                                ' - ' +
+                                                value.classifiedList[position]
+                                                    .City,
                                             textColor:
                                                 GlobalVariables.lightGray,
                                             fontSize:
@@ -402,7 +435,13 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                       SizedBox(
                                         width: 4,
                                       ),
-                                      text(daysCount==0 ? 'Today' : daysCount==1 ? 'Yesterday ': daysCount.toString() + ' days ago',
+                                      text(
+                                          daysCount == 0
+                                              ? 'Today'
+                                              : daysCount == 1
+                                                  ? 'Yesterday '
+                                                  : daysCount.toString() +
+                                                      ' days ago',
                                           textColor: GlobalVariables.grey,
                                           fontSize:
                                               GlobalVariables.textSizeSmall,

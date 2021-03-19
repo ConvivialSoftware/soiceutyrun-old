@@ -150,14 +150,14 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                       ),
                       Divider(height: 10),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          /*Container(
-                            child: text('Rs. '+servicesList[position].Price,
-                                textColor: GlobalVariables.black,
+                          Container(
+                            child: text(servicesList[position].Category,
+                                textColor: GlobalVariables.orangeYellow,
                                 fontSize: GlobalVariables.textSizeSmall,
                                 fontWeight: FontWeight.bold),
-                          ),*/
+                          ),
                           Container(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +187,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                                             borderRadius:
                                                             BorderRadius.circular(
                                                                 25.0)),
-                                                        child: showMyRattingBar(setState,servicesList[position].Id));
+                                                        child: showMyRattingBar(setState,servicesList[position].S_Id));
                                                   }));
 
                                         },
@@ -195,7 +195,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                         child: Container(
                                           margin: EdgeInsets.fromLTRB(
                                               5, 0, 0, 0),
-                                          child: text(AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
+                                          child: text(double.parse(servicesList[position].Rating)>0.0 ? servicesList[position].Rating :AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
                                         ),
                                       ),
                                     ],

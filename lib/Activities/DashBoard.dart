@@ -1650,9 +1650,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           rootIconData: GlobalVariables.myServiceIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
           items: [
-            AppLocalizations.of(context).translate("my_classified"),
+           // AppLocalizations.of(context).translate("my_classified"),
             AppLocalizations.of(context).translate("classified"),
-            AppLocalizations.of(context).translate("my_services"),
+            //AppLocalizations.of(context).translate("my_services"),
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("exclusive_offer"),
           ]),
@@ -2232,28 +2232,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-    } else if (item == AppLocalizations.of(context).translate('my_classified')) {
-      //Redirect to  classified
-      //GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseOwnerDiscover(
-                      AppLocalizations.of(context).translate('my_classified'))))
-          .then((value) {
-        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
-    }else if (item == AppLocalizations.of(context).translate('my_services')) {
-      //Redirect to  classified
-      //GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseOwnerServices()))
-          .then((value) {
-        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
-    }else if (item == AppLocalizations.of(context).translate('classified')) {
+    } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  classified
       //GlobalFunctions.comingSoonDialog(context);
       Navigator.push(
@@ -2374,13 +2353,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       });
     } else if (item == AppLocalizations.of(context).translate('more')) {
       //Redirect to  Admin«
-     // GlobalFunctions.comingSoonDialog(context);
-      Navigator.push(
+      GlobalFunctions.comingSoonDialog(context);
+     /* Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseCreateClassifiedListing())).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      });
+      });*/
 
       /*Navigator.push(
           context, MaterialPageRoute(builder: (context) => BaseMore())).then((value) {

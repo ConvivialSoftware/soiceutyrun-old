@@ -88,7 +88,7 @@ class NearByShopPerCategoryState extends BaseStatefulState<BaseNearByShopPerCate
                     ),
                   ),
                   title: Text(
-                    AppLocalizations.of(context).translate('discover'),
+                    AppLocalizations.of(context).translate('exclusive_offer'),
                     style:
                     TextStyle(color: GlobalVariables.white, fontSize: 16),
                   ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
+import 'package:societyrun/Activities/OwnerServices.dart';
 import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -58,8 +59,36 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                       color: GlobalVariables.white,
                     ),
                   ),
+                  actions: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BaseOwnerServices()));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.history,
+                              color: GlobalVariables.white,
+                            ),
+                            SizedBox(width: 4,),
+                            Text(
+                              AppLocalizations.of(context).translate('history'),
+                              style:
+                              TextStyle(color: GlobalVariables.white, fontSize: GlobalVariables.textSizeSMedium),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   title: Text(
-                    AppLocalizations.of(context).translate('discover'),
+                    AppLocalizations.of(context).translate('find_services'),
                     style: TextStyle(color: GlobalVariables.white, fontSize: 16),
                   ),
                   //bottom: getTabLayout(),

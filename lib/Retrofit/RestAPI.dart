@@ -2491,6 +2491,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(S_Id, "S_Id");
     ArgumentError.checkNotNull(rate, "Rating");
 
+    //rate="5";
     FormData formData = FormData.fromMap({
       "User_Id": userId,
       "S_Id": S_Id,
@@ -2498,6 +2499,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.addServicesRatting);
+    print('Rating : ' + rate);
+    print('S_Id : ' + S_Id);
+    print('User_Id : ' + userId);
     final Response _result = await _dio.post(GlobalVariables.addServicesRatting,
         options: RequestOptions(
           //method: GlobalVariables.Post,

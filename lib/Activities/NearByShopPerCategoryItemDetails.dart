@@ -50,7 +50,7 @@ class NearByShopPerCategoryItemDetailsState
             ),
           ),
           title: Text(
-            'Items Details',
+            'Offer Details',
             style: TextStyle(color: GlobalVariables.green, fontSize: 16),
           ),
         ),
@@ -487,7 +487,14 @@ class NearByShopPerCategoryItemDetailsState
                                       SizedBox(
                                         width: 16,
                                       ),
-                                      Icon(Icons.content_copy,color: GlobalVariables.skyBlue,size: 24,)
+                                      InkWell(
+                                          onTap: (){
+                                            ClipboardManager.copyToClipBoard(widget.nearByShopList.Offer_Code)
+                                                .then((value) {
+                                              GlobalFunctions.showToast("Copied to Clipboard");
+
+                                            });
+                                          },child: Icon(Icons.content_copy,color: GlobalVariables.skyBlue,size: 24,))
                                     ],
                                   ),
                                 ),
@@ -506,11 +513,7 @@ class NearByShopPerCategoryItemDetailsState
                             width: MediaQuery.of(context).size.width,
                             child: FlatButton(
                                 onPressed: () {
-                                  ClipboardManager.copyToClipBoard(widget.nearByShopList.Offer_Code)
-                                      .then((value) {
-                                    GlobalFunctions.showToast("Copied to Clipboard");
-                                    launch(widget.nearByShopList.redeem);
-                                  });
+                                  launch(widget.nearByShopList.redeem);
                                 },
                                 color: GlobalVariables.green,
                                 child: text('Redeem',textColor: GlobalVariables.white,fontSize: 14.0,fontWeight: FontWeight.w500)

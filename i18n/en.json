@@ -358,5 +358,7 @@
   "pin_code": "Pin Code",
   "my_classified": "My Classified",
   "my_services": "My Services",
-  "add_ratting": "Add Ratting"
+  "add_ratting": "Add Ratting",
+  "find_services": "Find Services",
+  "history": "History"
 }

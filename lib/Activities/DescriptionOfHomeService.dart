@@ -118,14 +118,21 @@ class DescriptionOfHomeServiceState
                 margin: EdgeInsets.all(10),
                 child: AppButton(textContent: "Book Service", onPressed: () {
 
-                  _progressDialog.show();
-                  Provider.of<ServicesResponse>(context,listen: false).bookServicePerCategory(widget._services.Id, _requirementController.text.toString()).then((value) {
-                    _progressDialog.hide();
-                    if(value.status){
-                      Navigator.of(context).pop();
-                    }
-                    GlobalFunctions.showToast(value.message);
-                  });
+                  if(_requirementController.text.length>0) {
+                    _progressDialog.show();
+                    Provider.of<ServicesResponse>(context, listen: false)
+                        .bookServicePerCategory(widget._services.Id,
+                        _requirementController.text.toString())
+                        .then((value) {
+                      _progressDialog.hide();
+                      if (value.status) {
+                        Navigator.of(context).pop();
+                      }
+                      GlobalFunctions.showToast(value.message);
+                    });
+                  }else{
+                    GlobalFunctions.showToast('Please Enter Your Requirement');
+                  }
 
                 },textColor: GlobalVariables.white,)),
           ),
@@ -285,6 +292,7 @@ class DescriptionOfHomeServiceState
                       controllerCallback: _requirementController,
                     borderColor: GlobalVariables.transparent,
                   ),*/TextField(
+                    controller: _requirementController,
                     //maxLines: 99,
                     decoration: InputDecoration(
                       hintText: 'Write to us about your requirement',

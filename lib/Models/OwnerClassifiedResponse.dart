@@ -140,6 +140,7 @@ class Classified {
       C_Date: map["C_Date"],
       Images: map["Images"],
       Interested: map["Interested"],
+      Society_Name: map["Society_Name"],
     );
   }
 }

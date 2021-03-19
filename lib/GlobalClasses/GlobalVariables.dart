@@ -161,7 +161,8 @@ class GlobalVariables {
   static const Delete = 'DELETE';
 
   static const appFlag = "SR";
-  static const authorizedToken = "admin:1234";
+  static const authorizedToken = "socrun:Plmn#091";
+  //static const authorizedToken = "admin:1234";
   static var AUTH = "Basic " + base64Url.encode(utf8.encode(authorizedToken));
   static const BaseURL = "https://societyrun.com/Flutter/";
  // static const BaseURLAndroid = "https://societyrun.com/Android/";

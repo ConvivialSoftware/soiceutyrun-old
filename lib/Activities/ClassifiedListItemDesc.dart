@@ -64,7 +64,7 @@ class CreateClassifiedListingState
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('create_listing'),
+            'Classified Details',
             style: TextStyle(color: GlobalVariables.white, fontSize: 16),
           ),
         ),

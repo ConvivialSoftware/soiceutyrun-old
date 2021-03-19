@@ -12,21 +12,23 @@ class ServicesResponse extends ChangeNotifier {
   bool isLoading = true;
   String errMsg;
 
-
   Future<void> getServicesCategory() async {
     try {
       print('getCategoryData');
+      //isLoading = true;
+      //notifyListeners();
       final dio = Dio();
       final RestClientDiscover restClient =
-      RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      var value =  await restClient.getServicesCategory();
-      print('servicesCategoryList value : '+value.toString());
-      servicesCategoryList = List<ServicesCategory>.from(value.data.map((i) => ServicesCategory.fromJson(i)));
+          RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+      var value = await restClient.getServicesCategory();
+      print('servicesCategoryList value : ' + value.toString());
+      servicesCategoryList = List<ServicesCategory>.from(
+          value.data.map((i) => ServicesCategory.fromJson(i)));
       isLoading = false;
       notifyListeners();
     } catch (e) {
       errMsg = e.toString();
-      print('errMsg '+errMsg);
+      print('errMsg ' + errMsg);
       isLoading = false;
       notifyListeners();
     }
@@ -34,14 +36,16 @@ class ServicesResponse extends ChangeNotifier {
 
   Future<void> getServicePerCategory(String category) async {
     try {
-      isLoading = true;
-      notifyListeners();
+      //isLoading = true;
+      //notifyListeners();
       print('getServicePerCategory');
       final dio = Dio();
       final RestClientDiscover restClient =
-      RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+          RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       var value = await restClient.getServicePerCategory(category);
-      servicesList = List<Services>.from(value.data.map((i) => Services.fromJson(i)));
+      servicesList = List<Services>();
+      servicesList =
+          List<Services>.from(value.data.map((i) => Services.fromJson(i)));
       isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -51,68 +55,81 @@ class ServicesResponse extends ChangeNotifier {
     }
   }
 
-  Future<StatusMsgResponse> bookServicePerCategory(String S_Id,String Requirement) async {
-
+  Future<StatusMsgResponse> bookServicePerCategory(
+      String S_Id, String Requirement) async {
     String userId = await GlobalFunctions.getUserId();
-    String societyName =  await GlobalFunctions.getSocietyName();
-    String block =  await GlobalFunctions.getBlock();
-    String flat =  await GlobalFunctions.getFlat();
+    String societyName = await GlobalFunctions.getSocietyName();
+    String block = await GlobalFunctions.getBlock();
+    String flat = await GlobalFunctions.getFlat();
     String mobile = await GlobalFunctions.getMobile();
     String address = await GlobalFunctions.getSocietyAddress();
     String userName = await GlobalFunctions.getDisplayName();
     String userEmail = await GlobalFunctions.getUserName();
 
+    isLoading = true;
+    notifyListeners();
     final dio = Dio();
     final RestClientDiscover restClient =
-    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-    var result =  await restClient.bookServicePerCategory(S_Id, userId, userName, userEmail, societyName, block+' '+flat, mobile, address, Requirement);
+        RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result = await restClient.bookServicePerCategory(
+        S_Id,
+        userId,
+        userName,
+        userEmail,
+        societyName,
+        block + ' ' + flat,
+        mobile,
+        address,
+        Requirement);
     isLoading = false;
     notifyListeners();
-    print('bookServicePerCategory : '+result.toString());
+    print('bookServicePerCategory : ' + result.toString());
     return result;
   }
 
   Future<void> getOwnerServices() async {
     try {
-      isLoading = true;
-      notifyListeners();
+      //isLoading = true;
+      //notifyListeners();
       print('getOwnerServices');
       String userId = await GlobalFunctions.getUserId();
       final dio = Dio();
       final RestClientDiscover restClient =
-      RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+          RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       var value = await restClient.getOwnerServices(userId);
-      ownerServicesList = List<Services>.from(value.data.map((i) => Services.fromJson(i)));
+      ownerServicesList =
+          List<Services>.from(value.data.map((i) => Services.fromJson(i)));
       isLoading = false;
       notifyListeners();
     } catch (e) {
       errMsg = e.toString();
-      print('errMsg '+errMsg);
+      print('errMsg ' + errMsg);
       isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<StatusMsgResponse> updateServiceRatting(String S_Id,String _myRate) async {
-
+  Future<StatusMsgResponse> updateServiceRatting(
+      String S_Id, String _myRate) async {
     isLoading = true;
     notifyListeners();
     String userId = await GlobalFunctions.getUserId();
     final dio = Dio();
     final RestClientDiscover restClient =
-    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-    var result =  await restClient.updateServicesRatting(userId,S_Id,_myRate);
+        RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result = await restClient.updateServicesRatting(userId, S_Id, _myRate);
     isLoading = false;
     notifyListeners();
     getOwnerServices();
-    print('addServiceRatting : '+result.toString());
+    print('addServiceRatting : ' + result.toString());
     return result;
   }
-
 }
 
 class Services {
   String Id,
+      User_Id,
+      S_Id,
       Name,
       Category,
       Title,
@@ -125,6 +142,8 @@ class Services {
 
   Services(
       {this.Id,
+      this.User_Id,
+      this.S_Id,
       this.Name,
       this.Category,
       this.Title,
@@ -138,6 +157,8 @@ class Services {
   factory Services.fromJson(Map<String, dynamic> map) {
     return Services(
       Id: map["Id"],
+      User_Id: map["User_Id"],
+      S_Id: map["S_Id"],
       Name: map["Name"],
       Category: map["Category"],
       Title: map["Title"],
@@ -168,13 +189,9 @@ class ServicesCategory {
 }
 
 class ServicesCharges {
-  String Id, S_Id,Service_Title,Service_Price;
+  String Id, S_Id, Service_Title, Service_Price;
 
-  ServicesCharges({
-    this.Id,
-    this.S_Id,
-    this.Service_Price,this.Service_Title
-  });
+  ServicesCharges({this.Id, this.S_Id, this.Service_Price, this.Service_Title});
 
   factory ServicesCharges.fromJson(Map<String, dynamic> map) {
     return ServicesCharges(

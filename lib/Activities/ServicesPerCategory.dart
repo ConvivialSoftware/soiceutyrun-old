@@ -53,7 +53,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                     ),
                   ),
                   title: Text(
-                    AppLocalizations.of(context).translate('home_services'),
+                    widget.category + ' Services',
                     style: TextStyle(color: GlobalVariables.white),
                   ),
                 ),
@@ -65,7 +65,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
   }
 
   getBaseLayout(ServicesResponse value) {
-    return Container(
+    return value.servicesList.length >0 ? Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -84,7 +84,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
           ),
         ],
       ),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Services Found for "+ widget.category);
   }
 
   getHomeCareListDataLayout(ServicesResponse value) {
