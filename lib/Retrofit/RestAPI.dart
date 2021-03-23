@@ -996,7 +996,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
 
 
   @override
-  Future<LedgerResponse> getLedgerData(String socId, String flat, String block) async {
+  Future<LedgerResponse> getLedgerData(String socId, String flat, String block,String year) async {
     // TODO: implement getLedgerData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1005,11 +1005,13 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
-      GlobalVariables.block: block
+      GlobalVariables.block: block,
+      "YEAR": year
     });
     print(GlobalVariables.societyId + " " + socId);
     print(GlobalVariables.flat + " " + flat);
     print(GlobalVariables.block + " " + block);
+    print('YEAR' + " " + year.toString());
 
     print('baseurlERP : ' + baseUrl + GlobalVariables.ledgerAPI);
     final Response _result = await _dio.post(GlobalVariables.ledgerAPI,
@@ -1106,7 +1108,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<BillViewResponse> getBillData(String socId, String flat, String block, String invoiceNo) async {
+  Future<BillViewResponse> getBillData(String socId, String flat, String block, String invoiceNo,String year) async {
     // TODO: implement getBillData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1117,12 +1119,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block,
-      GlobalVariables.INVOICE_NO: invoiceNo
+      GlobalVariables.INVOICE_NO: invoiceNo,
+      'YEAR': year
     });
     print(GlobalVariables.societyId + ":" + socId);
     print(GlobalVariables.flat + ":" + flat);
     print(GlobalVariables.block + ":" + block);
     print(GlobalVariables.INVOICE_NO + ":" + invoiceNo);
+    print('YEAR' + ":" + year.toString());
 
     print('baseurlERP : ' + baseUrl + GlobalVariables.billAPI);
     final Response _result = await _dio.post(GlobalVariables.billAPI,
@@ -1143,7 +1147,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<ReceiptViewResponse> getReceiptData(String socId, String flat, String block, String receiptNo) async {
+  Future<ReceiptViewResponse> getReceiptData(String socId, String flat, String block, String receiptNo,String year) async {
     // TODO: implement getReceiptData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1154,12 +1158,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       GlobalVariables.societyId: socId,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block,
-      GlobalVariables.RECEIPT_NO: receiptNo
+      GlobalVariables.RECEIPT_NO: receiptNo,
+      'YEAR': year
     });
     print(GlobalVariables.societyId + ":" + socId);
     print(GlobalVariables.flat + ":" + flat);
     print(GlobalVariables.block + ":" + block);
     print(GlobalVariables.RECEIPT_NO + ":" + receiptNo);
+    print('YEAR' + ":" + year.toString());
 
     print('baseurlERP : ' + baseUrl + GlobalVariables.receiptAPI);
     final Response _result = await _dio.post(GlobalVariables.receiptAPI,
@@ -1511,7 +1517,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 */
   @override
-  Future<StatusMsgResponse> getBillMail(String socId, String type, String number,String emailId) async {
+  Future<StatusMsgResponse> getBillMail(String socId, String type, String number,String emailId,String year) async {
     // TODO: implement getBillMail
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(type, GlobalVariables.TYPE);
@@ -1523,7 +1529,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       GlobalVariables.societyId: socId,
       GlobalVariables.TYPE: type,
       GlobalVariables.NUMBER: number,
-      GlobalVariables.Email_id: emailId
+      GlobalVariables.Email_id: emailId,
+      'YEAR': year
     });
     print('baseurl : ' + baseUrl + GlobalVariables.mailAPI);
     final Response _result = await _dio.post(GlobalVariables.mailAPI,
@@ -1944,7 +1951,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<StatusMsgResponse> getReceiptMail(String socId, String receiptNo, String emailId) async {
+  Future<StatusMsgResponse> getReceiptMail(String socId, String receiptNo, String emailId,String year) async {
     // TODO: implement getReceiptMail
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(receiptNo, GlobalVariables.RECEIPT_NO);
@@ -1954,7 +1961,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     FormData.fromMap({
       GlobalVariables.societyId: socId,
       GlobalVariables.RECEIPT_NO: receiptNo,
-      GlobalVariables.EMAIL_ID: emailId
+      GlobalVariables.EMAIL_ID: emailId,
+      'YEAR': year
     });
     print('baseurl : ' + baseUrl + GlobalVariables.receiptMailAPI);
     final Response _result = await _dio.post(GlobalVariables.receiptMailAPI,

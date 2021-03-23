@@ -25,7 +25,7 @@ class Ledger {
         RECEIPT_NO: json['RECEIPT_NO'],
         LEDGER: json['LEDGER'],
         NARRATION: json['NARRATION'],
-        TYPE: json['TYPE'],
+        TYPE: json['TYPE']??'',
         LEDGER_TYPE: json['LEDGER_TYPE'],
         PURPOSE: json['PURPOSE'],
         NAME: json['NAME'],

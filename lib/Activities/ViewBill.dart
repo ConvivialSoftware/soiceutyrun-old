@@ -13,8 +13,8 @@ import 'base_stateful.dart';
 
 class BaseViewBill extends StatefulWidget {
 
-  String invoiceNo;
-  BaseViewBill(this.invoiceNo);
+  String invoiceNo,yearSelectedItem;
+  BaseViewBill(this.invoiceNo,this.yearSelectedItem);
 
   @override
   State<StatefulWidget> createState() {
@@ -406,7 +406,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     String flat = await GlobalFunctions.getFlat();
     String block = await GlobalFunctions.getBlock();
     _progressDialog.show();
-    restClientERP.getBillData(societyId,flat,block,invoiceNo).then((value) {
+    restClientERP.getBillData(societyId,flat,block,invoiceNo,widget.yearSelectedItem).then((value) {
       print('Response : ' + value.toString());
       _billViewList = value;
       List<dynamic> _listBillDetails = value.BillDetails;
@@ -581,7 +581,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                       getBillMail(
                                           _billDetailsList[0].INVOICE_NO,
                                           _billDetailsList[0].TYPE,
-                                          _emailTextController.text);
+                                          _emailTextController.text,widget.yearSelectedItem);
                                     } else {
                                       GlobalFunctions.showToast(
                                           'Please Enter Email ID');
@@ -614,7 +614,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             }));
   }
 
-  Future<void> getBillMail(String invoice_no, String type, String emailId) async {
+  Future<void> getBillMail(String invoice_no, String type, String emailId,String year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -622,7 +622,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
 
     _progressDialog.show();
     restClientERP
-        .getBillMail(societyId, type, invoice_no, _emailTextController.text)
+        .getBillMail(societyId, type, invoice_no, _emailTextController.text,year)
         .then((value) {
       print('Response : ' + value.toString());
 

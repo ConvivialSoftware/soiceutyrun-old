@@ -360,5 +360,7 @@
   "my_services": "My Services",
   "add_ratting": "Add Ratting",
   "find_services": "Find Services",
-  "history": "History"
+  "history": "History",
+  "select_year": "Select Year",
+  "already_paid_advance_payment": "It seems like you don't have any pending amount. Would you like to pay in advance?"
 }

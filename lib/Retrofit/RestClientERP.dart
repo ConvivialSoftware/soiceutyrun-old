@@ -23,7 +23,7 @@ abstract class RestClientERP {
   @FormUrlEncoded()
   @POST(GlobalVariables.ledgerAPI)
   Future<LedgerResponse> getLedgerData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
-      @Field("BLOCK") String block );
+      @Field("BLOCK") String block,@Field("YEAR") String year);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.viewBillsAPI)
@@ -33,12 +33,12 @@ abstract class RestClientERP {
   @FormUrlEncoded()
   @POST(GlobalVariables.billAPI)
   Future<BillViewResponse> getBillData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
-      @Field("BLOCK") String block,@Field("INVOICE_NO") String invoiceNo );
+      @Field("BLOCK") String block,@Field("INVOICE_NO") String invoiceNo,@Field("YEAR") String year );
 
   @FormUrlEncoded()
   @POST(GlobalVariables.receiptAPI)
   Future<ReceiptViewResponse> getReceiptData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
-      @Field("BLOCK") String block,@Field("RECEIPT_NO") String receiptNo);
+      @Field("BLOCK") String block,@Field("RECEIPT_NO") String receiptNo,@Field("YEAR") String year);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.bankAPI)
@@ -63,7 +63,7 @@ abstract class RestClientERP {
   @FormUrlEncoded()
   @POST(GlobalVariables.mailAPI)
   Future<StatusMsgResponse> getBillMail(@Field("SOCIETY_ID") String socId, @Field("TYPE") String type,
-      @Field("NUMBER") String number,@Field("Email_id") String emailId);
+      @Field("NUMBER") String number,@Field("Email_id") String emailId,@Field("YEAR") String year);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.razorPayTransactionAPI)
@@ -91,7 +91,7 @@ abstract class RestClientERP {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.receiptMailAPI)
-  Future<StatusMsgResponse> getReceiptMail(@Field("SOCIETY_ID") String socId,@Field("RECEIPT_NO") String receiptNo,@Field("Email_id") String emailId);
+  Future<StatusMsgResponse> getReceiptMail(@Field("SOCIETY_ID") String socId,@Field("RECEIPT_NO") String receiptNo,@Field("Email_id") String emailId,@Field("YEAR") String year);
 
 }
 

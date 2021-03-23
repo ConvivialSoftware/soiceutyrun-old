@@ -118,6 +118,7 @@ class GlobalVariables {
   static var sofaIconPath = "assets/other_assets/db8_ic_item6.png";
   static var superDailyIconPath = "assets/other_assets/superdaily.png";
   static var noDataFoundIconPath = "assets/other_assets/no_data_found.png";
+  static var paidIconPath = "assets/other_assets/paid.png";
   static var documentImageIconPath = "assets/other_assets/document_image.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";

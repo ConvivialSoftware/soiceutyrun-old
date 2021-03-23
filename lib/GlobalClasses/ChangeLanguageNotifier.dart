@@ -214,7 +214,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.ViewBillPage:
       {
-        return BaseViewBill(null);
+        return BaseViewBill(null,null);
       }
       break;
     /*default:

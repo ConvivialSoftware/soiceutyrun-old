@@ -281,7 +281,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
+    ):/*GlobalFunctions.noDataFoundLayout(context, "No Data Found")*/Container();
   }
 
   getNewsBoardListItemLayout(var position) {

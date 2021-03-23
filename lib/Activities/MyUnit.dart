@@ -39,6 +39,7 @@ import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -310,13 +311,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         context,
                         MaterialPageRoute(
                             builder: (context) => BaseViewBill(
-                                _ledgerList[position].RECEIPT_NO)));
+                                _ledgerList[position].RECEIPT_NO,null)));
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => BaseViewReceipt(
-                                _ledgerList[position].RECEIPT_NO)));
+                                _ledgerList[position].RECEIPT_NO,null)));
                   }
                 },
                 child: Container(
@@ -1997,13 +1998,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => BaseViewBill(
-                                          _billList[position].INVOICE_NO)));
+                                          _billList[position].INVOICE_NO,null)));
                             } else {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => BaseViewReceipt(
-                                          _billList[position].INVOICE_NO)));
+                                          _billList[position].INVOICE_NO,null)));
                             }
                           },
                           child: Container(
@@ -2085,7 +2086,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                                     position),
                                               );
                                             }));
-                                  } else if (hasPayTMGateway) {
+                                  }
+                                  else if (hasPayTMGateway) {
                                     //Paytm Payment method execute
 
                                     _selectedPaymentGateway = 'PayTM';
@@ -2112,7 +2114,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                                     position),
                                               );
                                             }));
-                                  } else {
+                                  }
+                                  else {
                                     GlobalFunctions.showToast(
                                         "Online Payment Option is not available.");
                                   }
@@ -2122,9 +2125,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 }
                               }
                             } else {
-                              GlobalFunctions.showToast(
+
+                              alreadyPaidDialog(position);
+                              /*GlobalFunctions.showToast(
                                   AppLocalizations.of(context)
-                                      .translate('already_paid'));
+                                      .translate('already_paid'));*/
                             }
                           },
                           child: Container(
@@ -2436,7 +2441,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
     //_progressDialog.show();
-    restClientERP.getLedgerData(societyId, flat, block).then((value) {
+    restClientERP.getLedgerData(societyId, flat, block,null).then((value) {
       print('Response : ' + value.toString());
       List<dynamic> _listLedger = value.ledger;
       List<dynamic> _listLedgerPending = value.pending_request;
@@ -2476,7 +2481,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
     //_progressDialog.show();
-    restClientERP.getReceiptData(societyId, flat, block, "1").then((value) {
+    restClientERP.getReceiptData(societyId, flat, block, "1",null).then((value) {
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
 
@@ -2968,17 +2973,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ),
                     ),*/
                     (hasPayTMGateway || hasRazorPayGateway) ? Container(
-                      margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
                       alignment: Alignment.topLeft,
                       child: Text(
                         AppLocalizations.of(context)
                             .translate('select_payment_option'),
                         style: TextStyle(
-                            color: GlobalVariables.black, fontSize: 18),
+                            color: GlobalVariables.black, fontSize: 16,fontWeight: FontWeight.normal),
                       ),
                     ): Container(),
                     hasRazorPayGateway ? Container(
-                      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
@@ -3021,7 +3026,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ),
                     ):Container(),
                     hasPayTMGateway ? Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
@@ -3069,7 +3074,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: Text(
                         AppLocalizations.of(context).translate('trans_charges'),
                         style: TextStyle(
-                            color: GlobalVariables.grey, fontSize: 18),
+                            color: GlobalVariables.grey, fontSize: 12),
                       ),
                     ),
                   ],
@@ -3325,7 +3330,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> getBillMail(
-      String invoice_no, String type, String emailId) async {
+      String invoice_no, String type, String emailId, String year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -3333,7 +3338,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     _progressDialog.show();
     restClientERP
-        .getBillMail(societyId, type, invoice_no, _emailTextController.text)
+        .getBillMail(societyId, type, invoice_no, _emailTextController.text,year)
         .then((value) {
       print('Response : ' + value.toString());
 
@@ -3496,7 +3501,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       getBillMail(
                                           _billList[position].INVOICE_NO,
                                           _billList[position].TYPE,
-                                          _emailTextController.text);
+                                          _emailTextController.text,null);
                                     } else {
                                       GlobalFunctions.showToast(
                                           'Please Enter Email ID');
@@ -3932,6 +3937,79 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
     });
 
+  }
+
+  void alreadyPaidDialog(int position) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                  // height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: AppAssetsImage(GlobalVariables.paidIconPath,imageWidth: 70.0,imageHeight: 70.0,)
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('already_paid_advance_payment'))),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                child: text('Close',fontSize: 16.0,textColor: GlobalVariables.grey,fontWeight: FontWeight.w500)
+                              ),
+                            ),
+                            Container(
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.of(context).pop();
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          StatefulBuilder(builder:
+                                              (BuildContext context,
+                                              StateSetter setState) {
+                                            return Dialog(
+                                              /*shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                25.0)),*/
+                                              backgroundColor: Colors.transparent,
+                                              elevation: 0.0,
+                                              child: getListOfPaymentGateway(
+                                                  context,
+                                                  setState,
+                                                  position),
+                                            );
+                                          }));
+                                },
+                                child: text('Pay advance',fontSize: 16.0,textColor: GlobalVariables.green,fontWeight: FontWeight.w500)
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }));
   }
 }
 

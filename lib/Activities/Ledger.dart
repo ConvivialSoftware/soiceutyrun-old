@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -7,6 +9,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Ledger.dart';
+import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
@@ -21,7 +24,6 @@ class BaseLedger extends StatefulWidget {
 }
 
 class LedgerState extends BaseStatefulState<BaseLedger> {
-
   List<Ledger> _ledgerList = new List<Ledger>();
 
   List<OpeningBalance> _openingBalanceList = new List<OpeningBalance>();
@@ -32,13 +34,18 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
 
   String openingBalance = "0.0";
 
+  List<DropdownMenuItem<String>> _yearListItems =
+      new List<DropdownMenuItem<String>>();
+  List<LedgerYear> _listYear = List<LedgerYear>();
+  String _yearSelectedItem;
+
   @override
   void initState() {
     super.initState();
     // getTransactionList();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getLedgerData();
+        getLedgerData(null);
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -97,16 +104,91 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Container(
-                        child: Text(
-                          AppLocalizations.of(context).translate('ledger'),
-                          style: TextStyle(
-                              color: GlobalVariables.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                          child: Text(
+                            AppLocalizations.of(context).translate('ledger'),
+                            style: TextStyle(
+                                color: GlobalVariables.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      Visibility(
+                      Flexible(
+                        flex: 2,
+                        child: ButtonTheme(
+                          //alignedDropdown: true,
+                          child: DropdownButton(
+                            items: _yearListItems,
+                            onChanged: (value) {
+                              _yearSelectedItem = value;
+                              print('_selctedItem:' +
+                                  _yearSelectedItem.toString());
+
+                              getLedgerData(_yearSelectedItem);
+                            },
+                            value: _yearSelectedItem,
+                            underline: SizedBox(),
+                            isExpanded: true,
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: GlobalVariables.white,
+                            ),
+                            iconSize: 20,
+                            selectedItemBuilder: (BuildContext context) {
+                              // String txt =  _societyListItems.elementAt(position).value;
+                              return _yearListItems.map((e) {
+                                return Container(
+                                    alignment: Alignment.center,
+                                    //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                                    child: Text(
+                                      _yearSelectedItem,
+                                      style: TextStyle(
+                                          color: GlobalVariables.white),
+                                    ));
+                              }).toList();
+                            },
+                          ),
+                        ),
+                      ),
+                      /*Flexible(
+                        flex: 2,
+                        child: ButtonTheme(
+                          child: DropdownButton(
+                            items: _yearListItems,
+                            value: _yearSelectedItem,
+                            onChanged: (value){
+                              setState(() {
+                                _yearSelectedItem = value;
+                                print('_selctedItem:' + _yearSelectedItem.toString());
+                              });
+                            },
+                            isExpanded: true,
+                            selectedItemBuilder: (BuildContext context){
+                              // String txt =  _societyListItems.elementAt(position).value;
+                              return _yearListItems.map((e) {
+                                return Container(
+                                    alignment: Alignment.center,
+                                    //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                                    child: Text(_yearSelectedItem,style: TextStyle(color: GlobalVariables.white),));
+                              }).toList();
+                            },
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: GlobalVariables.mediumGreen,
+                            ),
+                            underline: SizedBox(),
+                            hint: Text(
+                              AppLocalizations.of(context).translate('select_year')+'*',
+                              style: TextStyle(
+                                  color: GlobalVariables.white, fontSize: 14),
+                            ),
+                          ),
+                        ),
+                      ),*/
+                      /*Visibility(
                         visible: false,
                         child: Container(
                           child: Icon(
@@ -114,14 +196,14 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                             color: GlobalVariables.mediumGreen,
                           ),
                         ),
-                      )
+                      )*/
                     ],
                   ),
                 ),
                 _ledgerList.length > 0
                     ? Container(
                         margin: EdgeInsets.fromLTRB(10,
-                            MediaQuery.of(context).size.height / 12, 10, 100),
+                            MediaQuery.of(context).size.height / 8, 10, 100),
                         alignment: Alignment.topLeft,
                         //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                         // padding: EdgeInsets.all(15),
@@ -267,31 +349,37 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     InkWell(
                       onTap: () {
                         if (_ledgerList[position]
-                                .TYPE
-                                .toLowerCase()
-                                .toString() ==
-                            'bill' || _ledgerList[position]
-                            .TYPE
-                            .toLowerCase()
-                            .toString() ==
-                            'invoice') {
+                                    .TYPE
+                                    .toLowerCase()
+                                    .toString() ==
+                                'bill' ||
+                            _ledgerList[position]
+                                    .TYPE
+                                    .toLowerCase()
+                                    .toString() ==
+                                'invoice') {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewBill(
-                                      _ledgerList[position].RECEIPT_NO)));
+                                      _ledgerList[position].RECEIPT_NO,
+                                      _yearSelectedItem)));
                         } else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewReceipt(
-                                      _ledgerList[position].RECEIPT_NO)));
+                                      _ledgerList[position].RECEIPT_NO,
+                                      _yearSelectedItem)));
                         }
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          "Rs. " + double.parse(_ledgerList[position].AMOUNT.toString()).toStringAsFixed(2),
+                          "Rs. " +
+                              double.parse(
+                                      _ledgerList[position].AMOUNT.toString())
+                                  .toStringAsFixed(2),
                           style: TextStyle(
                               color: _ledgerList[position]
                                           .TYPE
@@ -374,7 +462,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }*/
 
-  getLedgerData() async {
+  getLedgerData(var year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -382,10 +470,30 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     String flat = await GlobalFunctions.getFlat();
     String block = await GlobalFunctions.getBlock();
     _progressDialog.show();
-    restClientERP.getLedgerData(societyId, flat, block).then((value) {
+    restClientERP.getLedgerData(societyId, flat, block, year).then((value) {
       print('Response : ' + value.toString());
       List<dynamic> _listLedger = value.ledger;
       List<dynamic> _listOpeningBalance = value.openingBalance;
+      List<dynamic> _year = value.year;
+
+      // _listYear = [LedgerYear(year: "2021"), LedgerYear(year: "2020")];
+      print('_listYear : ' + _listYear.toString());
+      _yearListItems = new List<DropdownMenuItem<String>>();
+      _listYear = List<LedgerYear>();
+      _listYear =
+          List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
+      for (int i = 0; i < _listYear.length; i++) {
+        _yearListItems.add(DropdownMenuItem(
+          value: _listYear[i].years,
+          child: Text(
+            _listYear[i].years,
+            style: TextStyle(color: GlobalVariables.green),
+          ),
+        ));
+        if (_yearSelectedItem == null) {
+          _yearSelectedItem = _listYear[0].years;
+        }
+      }
 
       //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
 
@@ -394,12 +502,14 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
       _openingBalanceList = List<OpeningBalance>.from(
           _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
 
-      openingBalance = double.parse(_openingBalanceList[0].AMOUNT.toString()).toStringAsFixed(2);
+      openingBalance = double.parse(_openingBalanceList[0].AMOUNT.toString())
+          .toStringAsFixed(2);
 
       double totalAmount = 0;
       for (int i = 0; i < _listLedger.length; i++) {
-        print("_ledgerList[i].RECEIPT_NO : "+_ledgerList[i].RECEIPT_NO.toString());
-        print("_ledgerList[i].TYPE : "+_ledgerList[i].TYPE.toString());
+        print("_ledgerList[i].RECEIPT_NO : " +
+            _ledgerList[i].RECEIPT_NO.toString());
+        print("_ledgerList[i].TYPE : " + _ledgerList[i].TYPE.toString());
         if (_ledgerList[i].TYPE.toLowerCase().toString() == 'bill') {
           totalAmount += double.parse(_ledgerList[i].AMOUNT);
         } else {
@@ -408,10 +518,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
         totalOutStanding = totalAmount + double.parse(openingBalance);
       }
 
-      //_progressDialog.hide();
-      Navigator.of(context).pop();
+      _progressDialog.hide();
+      //Navigator.of(context).pop();
       setState(() {});
     });
   }
 }
-

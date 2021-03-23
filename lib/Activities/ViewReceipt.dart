@@ -12,8 +12,8 @@ import 'base_stateful.dart';
 
 class BaseViewReceipt extends StatefulWidget {
 
-  String invoiceNo;
-  BaseViewReceipt(this.invoiceNo);
+  String invoiceNo,yearSelectedItem;
+  BaseViewReceipt(this.invoiceNo, this.yearSelectedItem);
 
   @override
   State<StatefulWidget> createState() {
@@ -291,7 +291,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
     String flat = await GlobalFunctions.getFlat();
     String block = await GlobalFunctions.getBlock();
     _progressDialog.show();
-    restClientERP.getReceiptData(societyId, flat, block, invoiceNo).then((value) {
+    restClientERP.getReceiptData(societyId, flat, block, invoiceNo,widget.yearSelectedItem).then((value) {
       _progressDialog.hide();
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
@@ -443,7 +443,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                   if (internet) {
                                     if (_emailTextController.text.length > 0) {
                                       Navigator.of(context).pop();
-                                      getReceiptMail(_receiptList[0].RECEIPT_NO, _emailTextController.text);
+                                      getReceiptMail(_receiptList[0].RECEIPT_NO, _emailTextController.text,widget.yearSelectedItem);
                                     } else {
                                       GlobalFunctions.showToast(
                                           'Please Enter Email ID');
@@ -476,7 +476,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             }));
   }
 
-  Future<void> getReceiptMail(String invoice_no, String emailId) async {
+  Future<void> getReceiptMail(String invoice_no, String emailId,String year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -484,7 +484,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
 
     _progressDialog.show();
     restClientERP
-        .getReceiptMail(societyId, invoice_no, _emailTextController.text)
+        .getReceiptMail(societyId, invoice_no, _emailTextController.text,year)
         .then((value) {
       print('Response : ' + value.toString());
 
