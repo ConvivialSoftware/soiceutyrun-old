@@ -126,8 +126,9 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
   }
 
   getServiceTypeDataLayout(ServicesResponse value) {
+
     return Container(
-      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 10, 0,
+      margin: EdgeInsets.fromLTRB(5, MediaQuery.of(context).size.height / 10, 5,
           0), //color: GlobalVariables.black,
       child: Container(
           child: Builder(
@@ -137,6 +138,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                     ),
                     itemCount: value.servicesCategoryList.length,
                     itemBuilder: (context, position) {
+                      print('image : '+value.servicesCategoryList[position].image);
                       return InkWell(
                         onTap: () {
                           Navigator.push(
@@ -147,32 +149,37 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          width: width / 5.5,
-                          height: width / 6,
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          //width: width / 4,
+                         // height: width / 4,
+                          margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: GlobalVariables.white,
                           ),
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                            padding: EdgeInsets.all(5),
+                           // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                  alignment: Alignment.center,
+                                  //color: GlobalVariables.lightGray,
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   child: AppNetworkImage(
-                                    "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
-                                    imageWidth:30.0,
-                                    imageHeight:30.0,
+                                    value.servicesCategoryList[position].image,
+                                    imageWidth:35.0,
+                                    imageHeight:35.0,
                                     borderColor: GlobalVariables.grey,
                                     borderWidth: 1.0,
-                                    fit: BoxFit.cover,
-                                    radius: 15.0,
+                                    radius: 0.0,
                                   ),
                                 ),
-                                Container(
-                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: Text(value.servicesCategoryList[position].Category_Name)),
+                                Flexible(
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.fromLTRB(2, 5, 2, 4),
+                                      child: text(value.servicesCategoryList[position].Category_Name,fontSize: 14.0,maxLine: 2)),
+                                ),
                               ],
                             ),
                           ),

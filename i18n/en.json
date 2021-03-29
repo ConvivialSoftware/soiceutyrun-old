@@ -308,7 +308,7 @@
   "not_allow_run_app": "Please login again to fix the issue.",
   "invalid_username_password": "Incorrect username or password",
   "add_expense": "Add Expense",
-  "expense": "Expense",
+  "expense": "Expenses",
   "payment_date": "Payment Date",
   "paid_by": "Paid By",
   "from_account": "From Account",
@@ -316,7 +316,7 @@
   "opt_on_mail": "OTP on Email",
   "opt_on_mobile": "OTP on Mobile",
   "bank": "Bank",
-  "reference_number": "Reference No.",
+  "reference_number": "Ref. No.",
   "enter_email_id": "Enter Email ID",
   "add_family_details": "Give your family member access of app. They can view announcement, participate in Poll, Pay bills and get notified on each activity in the Society.",
   "add_staff_details": "Add Details of Daily Help coming to your Society. Get Notification of their Entry, Exit & Track Attendance of Daily Help Through GatePass.",
@@ -350,7 +350,7 @@
   "house_things": "House Things",
   "fashion": "Fashion",
   "offer_details": "Offer Details",
-  "exclusive_offer": "Exclusive Offer",
+  "exclusive_offer": "Offers Near you",
   "rs": "Rs.",
   "location": "Location",
   "locality": "Locality",
@@ -362,5 +362,8 @@
   "find_services": "Find Services",
   "history": "History",
   "select_year": "Select Year",
-  "already_paid_advance_payment": "It seems like you don't have any pending amount. Would you like to pay in advance?"
+  "already_paid_advance_payment": "It seems like you don't have any pending amount. Would you like to pay in advance?",
+  "my_ads": "My Ads",
+  "sure_active_ads": "Are you sure you want to active your Ads?",
+  "booking_date": "Book Date"
 }

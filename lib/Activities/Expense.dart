@@ -109,13 +109,16 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
           Container(
             padding: EdgeInsets.all(15),
             child: FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
                 //GlobalFunctions.showToast('Fab CLick');
-                Navigator.of(context).pop();
-                Navigator.push(
+               // Navigator.of(context).pop();
+               var result =  await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => BaseAddExpense()));
+               if(result=='back'){
+                 getExpenseData();
+               }
               },
               child: Icon(
                 Icons.add,
@@ -243,7 +246,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                               color: GlobalVariables.orangeYellow,fontSize: 14
                           ),),
                         ),
-                        Container(
+                        /*Container(
                           alignment: Alignment.topRight,
                           padding: EdgeInsets.all(5),
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -256,7 +259,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                             color: GlobalVariables.white,
                             size: 18,
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
@@ -277,11 +280,10 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClientERP.getExpenseData(societyId).then((value) {
-      _progressDialog.hide();
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
      _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
-
+      _progressDialog.hide();
       setState(() {});
     })/*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){

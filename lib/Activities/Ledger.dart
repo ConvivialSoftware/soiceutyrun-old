@@ -12,6 +12,7 @@ import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -33,6 +34,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
   double totalOutStanding = 0;
 
   String openingBalance = "0.0";
+  String openingBalanceRemark = "";
 
   List<DropdownMenuItem<String>> _yearListItems =
       new List<DropdownMenuItem<String>>();
@@ -264,33 +266,58 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
         // padding: EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
+            InkWell(
+              onTap: () {
+                if (openingBalanceRemark.length > 0) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => StatefulBuilder(
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0)),
+                              child: Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.all(16),
+                                  child: text(openingBalanceRemark,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      maxLine: 99,),
+                                ),
+                              ),
+                            );
+                          }));
+                }
+                // GlobalFunctions.showToast(openingBalanceRemark);
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .translate('opening_balance'),
+                          style: TextStyle(
+                              color: GlobalVariables.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Container(
                       child: Text(
-                        AppLocalizations.of(context)
-                            .translate('opening_balance'),
+                        'Rs. ' + openingBalance,
                         style: TextStyle(
-                            color: GlobalVariables.black,
+                            color: GlobalVariables.red,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Text(
-                      'Rs. ' + openingBalance,
-                      style: TextStyle(
-                          color: GlobalVariables.red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Container(
@@ -504,6 +531,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
 
       openingBalance = double.parse(_openingBalanceList[0].AMOUNT.toString())
           .toStringAsFixed(2);
+      openingBalanceRemark = _openingBalanceList[0].Remark;
 
       double totalAmount = 0;
       for (int i = 0; i < _listLedger.length; i++) {

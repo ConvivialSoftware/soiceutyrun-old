@@ -12,14 +12,15 @@ class OwnerClassifiedResponse extends ChangeNotifier {
   bool isLoading = true;
   String errMsg;
 
-  Future<String> getOwnerClassifiedData() async {
+  Future<String> getOwnerClassifiedData({String Id}) async {
     try {
       print('getClassifiedData');
       String userId = await GlobalFunctions.getUserId();
+      String societyId = await GlobalFunctions.getSocietyId();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      await restClient.getOwnerClassifiedData(userId).then((value) {
+      await restClient.getOwnerClassifiedData(userId,societyId,Id).then((value) {
         ownerClassifiedList = List<Classified>.from(
             value.data.map((i) => Classified.fromJson(i)));
         ownerClassifiedCategoryList = List<ClassifiedCategory>.from(
@@ -65,8 +66,39 @@ class OwnerClassifiedResponse extends ChangeNotifier {
       String category,
       String type,
       String title,
-      String description,
-      String propertyDetails,
+      String description,/*
+      String propertyDetails,*/
+      String price,
+      String locality,
+      String city,
+      images,String address,String pinCode) async {
+
+    String userId = await GlobalFunctions.getUserId();
+    String societyId = await GlobalFunctions.getSocietyId();
+    String societyName = await GlobalFunctions.getSocietyName();
+      final dio = Dio();
+      final RestClientDiscover restClient =
+          RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+     var result =  await restClient
+          .insertClassifiedData(userId,name, email, phone, category, type, title,
+              description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId);
+      isLoading = false;
+      notifyListeners();
+      print('insertClassifiedData : '+result.toString());
+      getOwnerClassifiedData();
+     return result;
+  }
+
+  Future<StatusMsgResponse> updateClassifiedData(
+      String classifiedId,
+      String name,
+      String email,
+      String phone,
+      String category,
+      String type,
+      String title,
+      String description,/*
+      String propertyDetails,*/
       String price,
       String locality,
       String city,
@@ -74,17 +106,66 @@ class OwnerClassifiedResponse extends ChangeNotifier {
 
     String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
+    final dio = Dio();
+    final RestClientDiscover restClient =
+    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result =  await restClient
+        .editClassifiedData(classifiedId,userId,name, email, phone, category, type, title,
+        description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName);
+    isLoading = false;
+    notifyListeners();
+    print('insertClassifiedData : '+result.toString());
+    getOwnerClassifiedData();
+    return result;
+  }
+
+
+  Future<StatusMsgResponse> updateClassifiedStatus(String classifiedId,String reason) async {
+
+      isLoading=true;
+      notifyListeners();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
-          .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description, propertyDetails, price, locality, city, images,address,pinCode,societyName);
+          .updateClassifiedStatus(classifiedId,reason);
       isLoading = false;
       notifyListeners();
-      print('insertClassifiedData : '+result.toString());
+      print('updateClassifiedStatus : '+result.toString());
       getOwnerClassifiedData();
      return result;
+  }
+
+  Future<StatusMsgResponse> activeClassifiedStatus(String classifiedId) async {
+
+    isLoading=true;
+    notifyListeners();
+    final dio = Dio();
+    final RestClientDiscover restClient =
+    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result =  await restClient
+        .activeClassifiedStatus(classifiedId);
+    isLoading = false;
+    notifyListeners();
+    print('activeClassifiedStatus : '+result.toString());
+    getOwnerClassifiedData();
+    return result;
+  }
+
+  Future<StatusMsgResponse> deleteClassifiedImage(String classifiedId,String imageId) async {
+
+    isLoading=true;
+    notifyListeners();
+    final dio = Dio();
+    final RestClientDiscover restClient =
+    RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
+    var result =  await restClient
+        .deleteClassifiedImage(classifiedId,imageId);
+    isLoading = false;
+    notifyListeners();
+    print('activeClassifiedStatus : '+result.toString());
+    getOwnerClassifiedData();
+    return result;
   }
 }
 
@@ -94,15 +175,17 @@ class Classified {
       Email,
       Phone,
       Locality,
+      Pincode,
       City,
       Category,
       Type,
       Title,
       Description,
-      Property_Details,
       Price,
       Address,
       Society_Name,
+      Status,
+      Reason,
       C_Date;
   var Images;
   var Interested;
@@ -113,12 +196,14 @@ class Classified {
       this.Email,
       this.Phone,
       this.Locality,
+        this.Pincode,
       this.City,
       this.Category,
       this.Type,
       this.Title,
       this.Description,
-      this.Property_Details,
+        this.Status,
+        this.Reason,
       this.Price,
       this.C_Date,
       this.Images,this.Interested,this.Society_Name,this.Address});
@@ -130,12 +215,15 @@ class Classified {
       Email: map["Email"],
       Phone: map["Phone"],
       Locality: map["Locality"],
+      Pincode: map["Pincode"],
+      Address: map["Address"],
       City: map["City"],
       Category: map["Category"],
       Type: map["Type"],
       Title: map["Title"],
       Description: map["Description"],
-      Property_Details: map["Property_Details"],
+      Status: map["Status"],
+      Reason: map["Reason"],
       Price: map["Price"],
       C_Date: map["C_Date"],
       Images: map["Images"],
@@ -162,16 +250,22 @@ class ClassifiedCategory {
 }
 
 class ClassifiedImage {
-  String img;
+  String Id,Img_Name;
 
-  ClassifiedImage({this.img});
+  ClassifiedImage({this.Img_Name,this.Id});
 
   factory ClassifiedImage.fromJson(Map<String, dynamic> map) {
-    return ClassifiedImage(img: map["img"]);
+    return ClassifiedImage(
+        Id: map["Id"],
+        Img_Name: map["Img_Name"]
+    );
   }
 
   Map<String, dynamic> toJson() {
-    return {"img": img};
+    return {
+      "Id": Id,
+      "Img_Name": Img_Name
+    };
   }
 }
 

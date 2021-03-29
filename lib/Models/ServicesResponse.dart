@@ -56,15 +56,16 @@ class ServicesResponse extends ChangeNotifier {
   }
 
   Future<StatusMsgResponse> bookServicePerCategory(
-      String S_Id, String Requirement) async {
+      String S_Id, String Requirement,userName,userMobile,userEmail,String bookingDate) async {
     String userId = await GlobalFunctions.getUserId();
+    String societyId = await GlobalFunctions.getSocietyId();
     String societyName = await GlobalFunctions.getSocietyName();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
-    String mobile = await GlobalFunctions.getMobile();
+    //String mobile = await GlobalFunctions.getMobile();
     String address = await GlobalFunctions.getSocietyAddress();
-    String userName = await GlobalFunctions.getDisplayName();
-    String userEmail = await GlobalFunctions.getUserName();
+    //String userName = await GlobalFunctions.getDisplayName();
+    //String userEmail = await GlobalFunctions.getUserName();
 
     isLoading = true;
     notifyListeners();
@@ -78,9 +79,9 @@ class ServicesResponse extends ChangeNotifier {
         userEmail,
         societyName,
         block + ' ' + flat,
-        mobile,
+        userMobile,
         address,
-        Requirement);
+        Requirement,societyId,bookingDate);
     isLoading = false;
     notifyListeners();
     print('bookServicePerCategory : ' + result.toString());
@@ -93,10 +94,11 @@ class ServicesResponse extends ChangeNotifier {
       //notifyListeners();
       print('getOwnerServices');
       String userId = await GlobalFunctions.getUserId();
+      String societyId = await GlobalFunctions.getSocietyId();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      var value = await restClient.getOwnerServices(userId);
+      var value = await restClient.getOwnerServices(userId,societyId);
       ownerServicesList =
           List<Services>.from(value.data.map((i) => Services.fromJson(i)));
       isLoading = false;
@@ -114,10 +116,11 @@ class ServicesResponse extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     String userId = await GlobalFunctions.getUserId();
+    String societyId = await GlobalFunctions.getSocietyId();
     final dio = Dio();
     final RestClientDiscover restClient =
         RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-    var result = await restClient.updateServicesRatting(userId, S_Id, _myRate);
+    var result = await restClient.updateServicesRatting(userId, S_Id, _myRate,societyId);
     isLoading = false;
     notifyListeners();
     getOwnerServices();
@@ -137,6 +140,7 @@ class Services {
       Price,
       Rating,
       Discount,
+      booking_date,
       C_Date;
   var charges;
 
@@ -151,6 +155,7 @@ class Services {
       this.Price,
       this.Rating,
       this.Discount,
+      this.booking_date,
       this.C_Date,
       this.charges});
 
@@ -164,8 +169,9 @@ class Services {
       Title: map["Title"],
       Description: map["Description"],
       Price: map["Price"],
-      Rating: map["Rating"],
+      Rating: map["Rating"]??'0.0',
       Discount: map["Discount"],
+      booking_date: map["booking_date"],
       C_Date: map["C_Date"],
       charges: map["charges"],
     );
@@ -173,17 +179,18 @@ class Services {
 }
 
 class ServicesCategory {
-  String Id, Category_Name;
+  String Id, Category_Name,image;
 
   ServicesCategory({
     this.Id,
-    this.Category_Name,
+    this.Category_Name,this.image
   });
 
   factory ServicesCategory.fromJson(Map<String, dynamic> map) {
     return ServicesCategory(
       Id: map["Id"],
       Category_Name: map["Category_Name"],
+      image: map["image"],
     );
   }
 }

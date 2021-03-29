@@ -161,6 +161,7 @@ class CreateClassifiedListingState
   }
 
   getCreateClassifiedListingLayout() {
+    print('Address : '+widget.classifiedList.Address+','+widget.classifiedList.Locality+' - '+widget.classifiedList.City+(widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '': ' '));
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
@@ -192,7 +193,7 @@ class CreateClassifiedListingState
                           child: Stack(
                             children: <Widget>[
                               CachedNetworkImage(
-                                  imageUrl: imageList[index].img,
+                                  imageUrl: imageList[index].Img_Name,
                                   fit: BoxFit.cover,
                                   width: 1000.0,
                                   height:
@@ -245,7 +246,8 @@ class CreateClassifiedListingState
                   ),
                   SizedBox(width: 4,),
                   Flexible(
-                    child: text(widget.classifiedList.Address+(widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '': ' ')+widget.classifiedList.PinCode+','+widget.classifiedList.Locality+' - '+widget.classifiedList.City,
+                    child: text(widget.classifiedList.Address+', '+widget.classifiedList.Locality+', '+widget.classifiedList.City+', '+widget.classifiedList.Pincode,
+                        /*widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '':widget.classifiedList.Pincode.toString())*/
                         textColor: GlobalVariables.lightGray,
                         fontSize: GlobalVariables.textSizeSmall,
                         maxLine: 4),
@@ -272,7 +274,7 @@ class CreateClassifiedListingState
                     alignment: Alignment.topLeft,
                     //padding: EdgeInsets.only(top: 2,bottom: 4,left: 16,right: 16),
                     child: text(widget.classifiedList.Type,
-                        fontSize: GlobalVariables.textSizeSMedium,
+                        fontSize: GlobalVariables.textSizeSmall,
                         fontWeight: FontWeight.bold,
                         textColor: GlobalVariables.orangeYellow),
                   ),
@@ -292,7 +294,7 @@ class CreateClassifiedListingState
               Container(
                   //margin: EdgeInsets.only(left: 8),
                   child: longText(
-                      widget.classifiedList.Description + '\n'+ widget.classifiedList.Property_Details
+                      widget.classifiedList.Description
                       /*+'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                       +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                       +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'

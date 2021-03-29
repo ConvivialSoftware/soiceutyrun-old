@@ -108,7 +108,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
             builder: (context) =>
-                BaseDescriptionOfHomeService(value.servicesList[position])));
+                BaseDescriptionOfHomeService(value.servicesList[position],)));
       },
       child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

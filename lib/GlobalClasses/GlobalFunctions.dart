@@ -654,6 +654,22 @@ class GlobalFunctions {
     return selectedDate;
   }
 
+  static selectFutureDate(BuildContext context) async {
+    DateTime selectedDate = DateTime.now();
+
+    print('selected year : ' + selectedDate.year.toString());
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(selectedDate.year,selectedDate.month,selectedDate.day),
+        lastDate: DateTime(3021));
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
+    }
+    return selectedDate;
+  }
+
   static getSelectedDateForDOB(BuildContext context) async {
     DateTime selectedDate = DateTime(DateTime.now().year-15);
 
@@ -672,7 +688,7 @@ class GlobalFunctions {
 
   static Future<String> getFilePath(BuildContext context) async {
     return await FilePicker.getFilePath(
-      type: FileType.any,
+      type: FileType.custom,
       allowCompression: true,
       allowedExtensions: ['jpg', 'jgpe', 'png'],
       /*allowedExtensions: (_extension?.isNotEmpty ?? false)

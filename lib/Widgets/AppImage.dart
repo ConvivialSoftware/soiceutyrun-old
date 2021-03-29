@@ -28,7 +28,16 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
         .width;
     return ClipRRect(
       borderRadius: BorderRadius.circular(widget.radius),
-      child: CachedNetworkImage(
+      child: widget.image.toString().contains('.svg')? SvgPicture.network(
+        widget.image,
+        width: widget.imageWidth,
+        height: widget.imageHeight,
+        //semanticsLabel: 'A shark?!',
+        placeholderBuilder: (BuildContext context) => Center(
+          child: Container(width: 80,height: 80,
+              child: CircularProgressIndicator(backgroundColor: GlobalVariables.grey,strokeWidth: 2.0,)),
+        ),
+      ) : CachedNetworkImage(
         imageUrl: widget.image,
         width: widget.imageWidth,
         height: widget.imageHeight,
@@ -49,15 +58,18 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
               child: Container(width: 80,height: 80,
                   child: CircularProgressIndicator(backgroundColor: GlobalVariables.grey,strokeWidth: 2.0,)),
             ),
-        errorWidget: (context, url, error) => AppAssetsImage(
-          GlobalVariables.componentUserProfilePath,
-          imageWidth : widget.imageWidth,
-          imageHeight :  widget.imageHeight,
-          borderColor: widget.borderColor,
-          borderWidth: widget.borderWidth,
-          fit: widget.fit,
-          radius: widget.radius,
-        ),
+        errorWidget: (context, url, error) {
+          print('error : '+ error.toString());
+          return AppAssetsImage(
+            GlobalVariables.componentUserProfilePath,
+            imageWidth : widget.imageWidth,
+            imageHeight :  widget.imageHeight,
+            borderColor: widget.borderColor,
+            borderWidth: widget.borderWidth,
+            fit: widget.fit,
+            radius: widget.radius,
+          );
+        },
       ),
     );
   }

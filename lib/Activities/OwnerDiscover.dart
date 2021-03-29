@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
+import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OwnerClassifiedListItemDesc.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -20,7 +21,8 @@ import 'base_stateful.dart';
 class BaseOwnerDiscover extends StatefulWidget {
   String pageName;
 
-  BaseOwnerDiscover(this.pageName);
+  String classifiedId;
+  BaseOwnerDiscover(this.pageName,{this.classifiedId});
 
   @override
   State<StatefulWidget> createState() {
@@ -39,12 +41,18 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
 
   // ProgressDialog _progressDialog;
 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     print('initState Call');
     Provider.of<OwnerClassifiedResponse>(context, listen: false)
-        .getOwnerClassifiedData()
+        .getOwnerClassifiedData(Id : widget.classifiedId)
         .then((tabLength) {
           setState(() {
             
@@ -72,6 +80,26 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
           builder: (context, value, child) {
             print(
                 'Consumer Value : ' + value.ownerClassifiedCategoryList.toString());
+            if(value.ownerClassifiedList.length>0) {
+              if (widget.classifiedId != null) {
+                widget.classifiedId=null;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              BaseOwnerClassifiedListItemDesc(
+                                  value.ownerClassifiedList[0]))).then((value) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) => BaseDashBoard()),
+                            (Route<dynamic> route) => false);
+                  });
+                });
+              }
+            }
             return DefaultTabController(
               length: value.ownerClassifiedCategoryList.length,
               child: Scaffold(
@@ -174,6 +202,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
   }
 
   addClassifiedOwnerDiscoverFabLayout(String pageTitle) {
+
     return Align(
       alignment: Alignment.bottomRight,
       child: Stack(
@@ -188,8 +217,8 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            BaseCreateClassifiedListing())).then((value) {
-                  GlobalFunctions.setBaseContext(context);
+                            BaseCreateClassifiedListing(false))).then((value) {
+                 // GlobalFunctions.setBaseContext(context);
                 });
 
                 /*} else if (pageTitle == GlobalVariables.AddNearByShopPage) {
@@ -236,6 +265,9 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
         .ownerClassifiedList[position].Images
         .map((i) => ClassifiedImage.fromJson(i)));
     //print('imageList[0].img : ' + imageList[0].img);
+    var  inDaysCount = GlobalFunctions.getDaysFromDate(
+        DateTime.now().toIso8601String(), value.ownerClassifiedList[position].C_Date);
+    print('DaysCount : ' + inDaysCount.toString());
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -243,7 +275,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                 MaterialPageRoute(
                     builder: (context) => BaseOwnerClassifiedListItemDesc(value.ownerClassifiedList[position])))
             .then((value) {
-          GlobalFunctions.setBaseContext(context);
+         // GlobalFunctions.setBaseContext(context);
         });
       },
       child: Padding(
@@ -276,7 +308,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                             )
                                 : */
                               imageList.length>0 ? AppNetworkImage(
-                            imageList[0].img,
+                            imageList[0].Img_Name,
                             imageWidth: width / 5.5,
                             imageHeight: width / 5.5,
                             borderColor: GlobalVariables.grey,
@@ -341,6 +373,71 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                       ),
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: (daysCount + 1) > 7
+                                            ? Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                margin: EdgeInsets.only(top: 3),
+                                                child: Icon(
+                                                  Icons.date_range,
+                                                  size: 15,
+                                                  color: GlobalVariables.lightGray,
+                                                )),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            text(
+                                                GlobalFunctions.convertDateFormat(
+                                                    value.ownerClassifiedList[position]
+                                                        .C_Date,
+                                                    'dd-MMM-yyyy'),
+                                                textColor: GlobalVariables.lightGray,
+                                                fontSize:
+                                                GlobalVariables.textSizeSmall,
+                                                fontWeight: FontWeight.normal),
+                                          ],
+                                        )
+                                            : Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                margin: EdgeInsets.only(top: 3),
+                                                child: Icon(
+                                                  Icons.access_time,
+                                                  size: 15,
+                                                  color: GlobalVariables.lightGray,
+                                                )),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            text(daysCount==0 ? 'Today' : daysCount==1 ? 'Yesterday ': daysCount.toString() + ' days ago',
+                                                textColor: GlobalVariables.lightGray,
+                                                fontSize:
+                                                GlobalVariables.textSizeSmall,
+                                                fontWeight: FontWeight.normal),
+                                          ],
+                                        ),
+                                      ),
+                                      value.ownerClassifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
+                                        child: text(value.ownerClassifiedList[position].Status,
+                                            fontSize: GlobalVariables.textSizeSmall,
+                                            maxLine: 1,
+                                            textColor: GlobalVariables.red,
+                                            fontWeight: FontWeight.normal),
+                                      ): daysCount>30 ?  text('Inactive',
+                                          fontSize: GlobalVariables.textSizeSmall,
+                                          maxLine: 1,
+                                          textColor: GlobalVariables.red,
+                                          fontWeight: FontWeight.normal) : SizedBox(),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -360,54 +457,13 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            child: (daysCount + 1) > 7
-                                ? Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(top: 3),
-                                          child: Icon(
-                                            Icons.date_range,
-                                            size: 15,
-                                            color: Colors.grey,
-                                          )),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      text(
-                                          GlobalFunctions.convertDateFormat(
-                                              value.ownerClassifiedList[position]
-                                                  .C_Date,
-                                              'dd-MMM-yyyy'),
-                                          textColor: GlobalVariables.grey,
-                                          fontSize:
-                                              GlobalVariables.textSizeSmall,
-                                          fontWeight: FontWeight.normal),
-                                    ],
-                                  )
-                                : Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(top: 3),
-                                          child: Icon(
-                                            Icons.access_time,
-                                            size: 15,
-                                            color: Colors.grey,
-                                          )),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      text(daysCount==0 ? 'Today' : daysCount==1 ? 'Yesterday ': daysCount.toString() + ' days ago',
-                                          textColor: GlobalVariables.grey,
-                                          fontSize:
-                                              GlobalVariables.textSizeSmall,
-                                          fontWeight: FontWeight.normal),
-                                    ],
-                                  ),
+                            child: text(value.ownerClassifiedList[position].Type,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                maxLine: 2,
+                                textColor: GlobalVariables.orangeYellow,
+                                fontWeight: FontWeight.w500),
                           ),
+
                           //SizedBox(width: 10),
                         ],
                       )

@@ -35,7 +35,7 @@ class Expense {
         REFERENCE_NO: json['REFERENCE_NO'],
         BANK: json['BANK'],
         STATUS: json['STATUS'],
-        ATTACHMENT: json['ATTACHMENT'],
+        ATTACHMENT: json['ATTACHMENT']??'',
         REMARK: json['REMARK'],
         PAYMENT_DATE: json['PAYMENT_DATE'],
         CHEQUE_CLEARANCE_DATE: json['CHEQUE_CLEARANCE_DATE'],

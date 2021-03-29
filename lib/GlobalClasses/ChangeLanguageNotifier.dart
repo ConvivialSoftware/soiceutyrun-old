@@ -122,7 +122,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.CreateClassifiedListingPage:
       {
-        return BaseCreateClassifiedListing();
+        return BaseCreateClassifiedListing(null);
       }
       break;
 

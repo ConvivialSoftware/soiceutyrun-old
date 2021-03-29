@@ -85,6 +85,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     googlePlayIdentifier: AppPackageInfo.packageName,
   );
 
+
+
   @override
   void initState() {
     super.initState();
@@ -115,8 +117,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   @override
   void dispose() {
-    super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -680,7 +682,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               // getClubFacilitiesPage();
                               redirectToPage(AppLocalizations.of(context)
-                                  .translate('facilities'));
+                                  .translate('classified'));
                             },
                             child: Container(
                               //    color: GlobalVariables.black,
@@ -695,7 +697,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                                       child: Text(AppLocalizations.of(context)
-                                          .translate('facilities'))),
+                                          .translate('classified'))),
                                 ],
                               ),
                             ),

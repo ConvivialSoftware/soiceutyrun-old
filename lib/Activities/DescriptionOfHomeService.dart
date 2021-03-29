@@ -8,6 +8,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -37,6 +38,7 @@ class DescriptionOfHomeServiceState
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _requirementController = TextEditingController();
+  TextEditingController _bookingDateController = TextEditingController();
   var width,height;
   List<ServicesCharges> _serviceChargesList;
   ProgressDialog _progressDialog;
@@ -76,7 +78,7 @@ class DescriptionOfHomeServiceState
                     ),
                   ),
                   title: Text(
-                    AppLocalizations.of(context).translate('home_services'),
+                    widget._services.Category+ ' Services',
                     style: TextStyle(color: GlobalVariables.white),
                   ),
                 ),
@@ -118,20 +120,57 @@ class DescriptionOfHomeServiceState
                 margin: EdgeInsets.all(10),
                 child: AppButton(textContent: "Book Service", onPressed: () {
 
-                  if(_requirementController.text.length>0) {
-                    _progressDialog.show();
-                    Provider.of<ServicesResponse>(context, listen: false)
-                        .bookServicePerCategory(widget._services.Id,
-                        _requirementController.text.toString())
-                        .then((value) {
-                      _progressDialog.hide();
-                      if (value.status) {
-                        Navigator.of(context).pop();
-                      }
-                      GlobalFunctions.showToast(value.message);
-                    });
+                  if(_bookingDateController.text.length>0) {
+                    if (_requirementController.text.length > 0) {
+                      _progressDialog.show();
+                      Provider.of<ServicesResponse>(context, listen: false)
+                          .bookServicePerCategory(widget._services.Id,
+                          _requirementController.text.toString(),
+                          _nameController.text, _mobileController.text,
+                          _emailController.text, _bookingDateController.text)
+                          .then((value) {
+                        _progressDialog.hide();
+                        if (value.status) {
+                          Navigator.of(context).pop();
+                        }
+                        _requirementController.text='';
+                        _bookingDateController.text='';
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                StatefulBuilder(
+                                    builder: (BuildContext context,
+                                        StateSetter setState) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                25.0)),
+                                        child: Container(
+                                          padding: EdgeInsets.all(16),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                  child: AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 50.0,imageHeight: 50.0,)
+                                              ),
+                                              Container(
+                                                child: text(value.message,
+                                                    fontSize: GlobalVariables
+                                                        .textSizeSMedium,
+                                                    maxLine: 99),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }));
+                      });
+                    } else {
+                      GlobalFunctions.showToast(
+                          'Please Enter Your Requirement');
+                    }
                   }else{
-                    GlobalFunctions.showToast('Please Enter Your Requirement');
+                    GlobalFunctions.showToast('Please Select Booking Date');
                   }
 
                 },textColor: GlobalVariables.white,)),
@@ -300,8 +339,37 @@ class DescriptionOfHomeServiceState
                       hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
                     ),
                   ),
-                )
+                ),
               ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+                color: GlobalVariables.white,
+                borderRadius: BorderRadius.circular(10)),
+            child: AppTextField(
+              textHintContent:
+              AppLocalizations.of(context).translate('booking_date'),
+              controllerCallback: _bookingDateController,
+              borderWidth: 2.0,
+              contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              readOnly: true,
+              suffixIcon: AppIconButton(
+                Icons.date_range,
+                iconColor: GlobalVariables.mediumGreen,
+                onPressed: () {
+                  GlobalFunctions.selectFutureDate(context).then((value) {
+                    _bookingDateController.text =
+                        value.day.toString().padLeft(2, '0') +
+                            "-" +
+                            value.month.toString().padLeft(2, '0') +
+                            "-" +
+                            value.year.toString();
+                  });
+                },
+              ),
             ),
           ),
           Container(

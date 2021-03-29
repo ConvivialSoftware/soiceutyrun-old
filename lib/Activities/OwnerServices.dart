@@ -107,6 +107,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
   }
 
   getHomeCareListItemLayout(int position, List<Services> servicesList) {
+   // print('servicesList[position].Rating : '+servicesList[position].Rating);
     return InkWell(
       onTap: (){
         /*Navigator.push(context, MaterialPageRoute(
@@ -141,6 +142,27 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                       fontSize:
                                       GlobalVariables.textSizeSmall,
                                       maxLine: 2),
+                                  SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(top: 3),
+                                          child: Icon(
+                                            Icons.date_range,
+                                            size: 15,
+                                            color: GlobalVariables.grey,
+                                          )),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      text(
+                                          GlobalFunctions.convertDateFormat(servicesList[position].booking_date, 'dd-MM-yyyy'),
+                                          textColor: GlobalVariables.grey,
+                                          fontSize:
+                                          GlobalVariables.textSizeSmall,
+                                          fontWeight: FontWeight.normal),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -195,7 +217,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                         child: Container(
                                           margin: EdgeInsets.fromLTRB(
                                               5, 0, 0, 0),
-                                          child: text(double.parse(servicesList[position].Rating)>0.0 ? servicesList[position].Rating :AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
+                                          child: text(servicesList[position].Rating.length==0?'0.0' :servicesList[position].Rating.length==0?'0.0' : double.parse(servicesList[position].Rating)>0.0 ? servicesList[position].Rating :AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
                                         ),
                                       ),
                                     ],
@@ -222,7 +244,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
     );
   }
 
-  showMyRattingBar(StateSetter _setState, String serviceId) {
+  showMyRattingBar(StateSetter setState, String serviceId) {
   //  print('after setstate : ' + myRate.toString());
     return Container(
       padding: EdgeInsets.all(20),
@@ -273,6 +295,10 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                   onRatingUpdate: (rating) {
                     print(rating);
                     _myRate = rating;
+                    print('_myRate : '+_myRate.toString());
+                    setState(() {
+
+                    });
 
                   },
                 ),
@@ -280,7 +306,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Text('0.0',
+                child: Text(_myRate.toString(),
                   //myRate.toStringAsFixed(1).toString(),
                   style: TextStyle(
                       color: GlobalVariables.skyBlue,
@@ -319,7 +345,20 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                     width: 3.0,
                   )),
               child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_myRate > 0) {
+                      Navigator.of(context).pop();
+                      Provider.of<ServicesResponse>(context,listen: false).updateServiceRatting(serviceId,_myRate.toString()).then((value) {
+                        if(value.status){
+                          _myRate=0.0;
+                        }
+                        GlobalFunctions.showToast(value.message);
+                      });
+                    } else {
+                      GlobalFunctions.showToast(
+                          'Please Select Rate at least grater that Zero');
+                    }
+                  },
                   child: Text(
                     'Submit',
                     style: TextStyle(color: GlobalVariables.white),

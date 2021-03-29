@@ -1,4 +1,5 @@
 //import 'package:after_layout/after_layout.dart';
+import 'package:after_layout/after_layout.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -34,19 +35,22 @@ class BaseDiscover extends StatefulWidget {
 
 //TickerProviderStateMixi
 class DiscoverState extends BaseStatefulState<BaseDiscover>
-    with SingleTickerProviderStateMixin /*,AfterLayoutMixin<BaseDiscover>*/ {
+    with SingleTickerProviderStateMixin ,AfterLayoutMixin<BaseDiscover> {
   TabController _tabController;
   String pageName;
   var width, height;
 
   DiscoverState(this.pageName);
 
-  // ProgressDialog _progressDialog;
+  @override
+  void dispose() {
+    super.dispose();
+  } // ProgressDialog _progressDialog;
+
 
   @override
-  void initState() {
-    super.initState();
-    print('initState Call');
+  void afterFirstLayout(BuildContext context) {
+    // TODO: implement afterFirstLayout
     Provider.of<ClassifiedResponse>(context, listen: false)
         .getClassifiedData()
         .then((tabLength) {
@@ -58,6 +62,13 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         setState(() {});
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print('initState Call');
+
   }
 
   @override
@@ -110,7 +121,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               width: 4,
                             ),
                             Text(
-                              AppLocalizations.of(context).translate('history'),
+                              AppLocalizations.of(context).translate('my_ads'),
                               style: TextStyle(
                                   color: GlobalVariables.white,
                                   fontSize: GlobalVariables.textSizeSMedium),
@@ -226,7 +237,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            BaseCreateClassifiedListing())).then((value) {
+                            BaseCreateClassifiedListing(false))).then((value) {
                   GlobalFunctions.setBaseContext(context);
                 });
               },
@@ -308,7 +319,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                 : */
                                   imageList.length > 0
                                       ? AppNetworkImage(
-                                          imageList[0].img,
+                                          imageList[0].Img_Name,
                                           imageWidth: width / 5.5,
                                           imageHeight: width / 5.5,
                                           borderColor: GlobalVariables.grey,
@@ -376,6 +387,77 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                       ),
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: (daysCount + 1) > 7
+                                            ? Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                margin: EdgeInsets.only(top: 3),
+                                                child: Icon(
+                                                  Icons.date_range,
+                                                  size: 15,
+                                                  color: GlobalVariables.lightGray,
+                                                )),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            text(
+                                                GlobalFunctions.convertDateFormat(
+                                                    value.classifiedList[position]
+                                                        .C_Date,
+                                                    'dd-MMM-yyyy'),
+                                                textColor: GlobalVariables.lightGray,
+                                                fontSize:
+                                                GlobalVariables.textSizeSmall,
+                                                fontWeight: FontWeight.normal),
+                                          ],
+                                        )
+                                            : Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                margin: EdgeInsets.only(top: 3),
+                                                child: Icon(
+                                                  Icons.access_time,
+                                                  size: 15,
+                                                  color: GlobalVariables.lightGray,
+                                                )),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            text(
+                                                daysCount == 0
+                                                    ? 'Today'
+                                                    : daysCount == 1
+                                                    ? 'Yesterday '
+                                                    : daysCount.toString() +
+                                                    ' days ago',
+                                                textColor: GlobalVariables.lightGray,
+                                                fontSize:
+                                                GlobalVariables.textSizeSmall,
+                                                fontWeight: FontWeight.normal),
+                                          ],
+                                        ),
+                                      ),
+                                      value.classifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
+                                        child: text(value.classifiedList[position].Status,
+                                            fontSize: GlobalVariables.textSizeSmall,
+                                            maxLine: 1,
+                                            textColor: GlobalVariables.red,
+                                            fontWeight: FontWeight.normal),
+                                      ): daysCount>30 ?  text('Inactive',
+                                          fontSize: GlobalVariables.textSizeSmall,
+                                          maxLine: 1,
+                                          textColor: GlobalVariables.red,
+                                          fontWeight: FontWeight.normal) : SizedBox(),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -395,59 +477,11 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                 fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            child: (daysCount + 1) > 7
-                                ? Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(top: 3),
-                                          child: Icon(
-                                            Icons.date_range,
-                                            size: 15,
-                                            color: Colors.grey,
-                                          )),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      text(
-                                          GlobalFunctions.convertDateFormat(
-                                              value.classifiedList[position]
-                                                  .C_Date,
-                                              'dd-MMM-yyyy'),
-                                          textColor: GlobalVariables.grey,
-                                          fontSize:
-                                              GlobalVariables.textSizeSmall,
-                                          fontWeight: FontWeight.normal),
-                                    ],
-                                  )
-                                : Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(top: 3),
-                                          child: Icon(
-                                            Icons.access_time,
-                                            size: 15,
-                                            color: Colors.grey,
-                                          )),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      text(
-                                          daysCount == 0
-                                              ? 'Today'
-                                              : daysCount == 1
-                                                  ? 'Yesterday '
-                                                  : daysCount.toString() +
-                                                      ' days ago',
-                                          textColor: GlobalVariables.grey,
-                                          fontSize:
-                                              GlobalVariables.textSizeSmall,
-                                          fontWeight: FontWeight.normal),
-                                    ],
-                                  ),
+                            child: text(value.classifiedList[position].Type,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                maxLine: 2,
+                                textColor: GlobalVariables.orangeYellow,
+                                fontWeight: FontWeight.w500),
                           ),
                           //SizedBox(width: 10),
                         ],

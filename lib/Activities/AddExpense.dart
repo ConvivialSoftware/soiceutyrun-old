@@ -481,7 +481,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
         if (attachmentFileName != null && attachmentFilePath != null) {
           GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
         }
-        Navigator.of(context).pop();
+        Navigator.of(context).pop('back');
       }
       GlobalFunctions.showToast(value.message);
     }).catchError((Object obj) {

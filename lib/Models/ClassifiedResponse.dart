@@ -16,10 +16,11 @@ class ClassifiedResponse extends ChangeNotifier {
     try {
       print('getClassifiedData');
       String userId = await GlobalFunctions.getUserId();
+      String societyId = await GlobalFunctions.getSocietyId();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      await restClient.getClassifiedData(userId).then((value) {
+      await restClient.getClassifiedData(userId,societyId).then((value) {
         classifiedList = List<Classified>.from(
             value.data.map((i) => Classified.fromJson(i)));
         classifiedCategoryList = List<ClassifiedCategory>.from(
@@ -74,13 +75,14 @@ class ClassifiedResponse extends ChangeNotifier {
 
     String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
+    String societyId = await GlobalFunctions.getSocietyId();
     String address = await GlobalFunctions.getSocietyAddress();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
           .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description, propertyDetails, price, locality, city, images,address,pinCode,societyName);
+              description, /*propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId);
       isLoading = false;
       notifyListeners();
       print('insertClassifiedData : '+result.toString());
@@ -91,6 +93,7 @@ class ClassifiedResponse extends ChangeNotifier {
   Future<StatusMsgResponse> interestedClassified(String C_Id) async {
 
     String userId = await GlobalFunctions.getUserId();
+    String societyId = await GlobalFunctions.getSocietyId();
     String societyName =  await GlobalFunctions.getSocietyName();
     String block =  await GlobalFunctions.getBlock();
     String flat =  await GlobalFunctions.getFlat();
@@ -103,7 +106,7 @@ class ClassifiedResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClientDiscover restClient =
     RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-    var result =  await restClient.interestedClassified(C_Id, userId,societyName,block+' '+flat,mobile,address,userName,userEmail,userProfile);
+    var result =  await restClient.interestedClassified(C_Id, userId,societyName,block+' '+flat,mobile,address,userName,userEmail,userProfile,societyId);
     isLoading = false;
     notifyListeners();
     print('interestedClassified : '+result.toString());
@@ -117,16 +120,18 @@ class Classified {
       Email,
       Phone,
       Locality,
+      Pincode,
       City,
       Category,
       Type,
       Title,
       Description,
-      Property_Details,
       Price,
       Address,
       PinCode,
       Society_Name,
+      Status,
+      Reason,
       C_Date;
   var Images;
 
@@ -136,12 +141,14 @@ class Classified {
       this.Email,
       this.Phone,
       this.Locality,
+        this.Pincode,
       this.City,
       this.Category,
       this.Type,
       this.Title,
       this.Description,
-      this.Property_Details,
+      this.Status,
+      this.Reason,
       this.Price,
       this.C_Date, this.Society_Name,
       this.Images,this.Address,this.PinCode});
@@ -153,16 +160,17 @@ class Classified {
       Email: map["Email"],
       Phone: map["Phone"],
       Locality: map["Locality"],
+      Pincode: map["Pincode"],
       City: map["City"],
       Category: map["Category"],
       Type: map["Type"],
       Title: map["Title"],
       Description: map["Description"],
-      Property_Details: map["Property_Details"],
+      Status: map["Status"],
+      Reason: map["Reason"],
       Price: map["Price"],
       C_Date: map["C_Date"],
       Address: map["Address"],
-      PinCode: map["Pincode"],
       Society_Name: map["Society_Name"],
       Images: map["Images"],
     );
@@ -186,16 +194,22 @@ class ClassifiedCategory {
 }
 
 class ClassifiedImage {
-  String img;
+  String Id,Img_Name;
 
-  ClassifiedImage({this.img});
+  ClassifiedImage({this.Img_Name,this.Id});
 
   factory ClassifiedImage.fromJson(Map<String, dynamic> map) {
-    return ClassifiedImage(img: map["img"]);
+    return ClassifiedImage(
+        Id: map["Id"],
+        Img_Name: map["Img_Name"]
+    );
   }
 
   Map<String, dynamic> toJson() {
-    return {"img": img};
+    return {
+      "Id": Id,
+      "Img_Name": Img_Name
+    };
   }
 }
 

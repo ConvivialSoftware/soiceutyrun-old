@@ -4,16 +4,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
+import 'package:societyrun/Activities/NearByShopPerCategory.dart';
+import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
+import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
+import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
@@ -636,6 +642,30 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == NotificationTypes.TYPE_NEW_OFFER) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseNearByShopNotificationItemDetails(temp.iD)));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+            (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == NotificationTypes.TYPE_INTERESTED_CUSTOMER) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(temp.iD)));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
       }
     }else if (temp.tYPE == NotificationTypes.TYPE_WEB) {
       launch(GlobalVariables.appURL);

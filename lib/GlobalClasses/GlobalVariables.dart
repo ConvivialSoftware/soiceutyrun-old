@@ -223,27 +223,32 @@ class GlobalVariables {
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
- // static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";
+ // static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";.;
 
   static const authorizedTokenERP = "erpadmin:SocERP21run";
   static var AUTHERP =
       "Basic " + base64Url.encode(utf8.encode(authorizedTokenERP));
   static const BaseURLERP = "https://housingsocietyerp.com/";
-  static const BaseURLDiscover = "https://mydemosites.in/";
+ // static const BaseURLDiscover = "https://mydemosites.in/";
+  static const BaseURLDiscover = "https://societyrun.com//Flutter/Classified/Login/";
 
   /*Api Name for BaseURLERP*/
-  static const displayClassifiedAPI = "Classified/Android/Login/display";
-  static const displayOwnerClassifiedAPI = "Classified/Android/Login/my_classified";
-  static const insertClassifiedAPI = "Classified/Android/Login/insert";
-  static const exclusiveOfferAPI = "Classified/Android/Login/exclusive_offer";
-  static const cityAPI = "Classified/Android/Login/city";
-  static const insertUserInfoOnExclusiveGetCode = "Classified/Android/Login/getcode";
-  static const interestedClassified = "Classified/Android/Login/interested";
-  static const servicesCategory = "Classified/Android/Login/service_category";
-  static const servicePerCategory = "Classified/Android/Login/services";
-  static const bookServicePerCategory = "Classified/Android/Login/book_service";
-  static const ownerServices = "Classified/Android/Login/my_service";
-  static const addServicesRatting = "Classified/Android/Login/update_rating";
+  static const displayClassifiedAPI = "display";
+  static const displayOwnerClassifiedAPI = "my_classified";
+  static const insertClassifiedAPI = "insert";
+  static const exclusiveOfferAPI = "exclusive_offer";
+  static const cityAPI = "city";
+  static const insertUserInfoOnExclusiveGetCode = "getcode";
+  static const interestedClassified = "interested";
+  static const servicesCategory = "service_category";
+  static const servicePerCategory = "services";
+  static const bookServicePerCategory = "book_service";
+  static const ownerServices = "my_service";
+  static const addServicesRatting = "update_rating";
+  static const editClassifiedData = "classfied_edit";
+  static const updateClassifiedReasonForRemove = "update_reason";
+  static const activeClassifiedStatus = "classified_active";
+  static const deleteClassifiedImage = "classfied_img_delete";
 
   /*Api Name for BaseURLERP*/
   static const duesAPI = "AndroidApi/dues";
@@ -454,6 +459,8 @@ class NotificationTypes{
   static const String TYPE_RECEIPT = "Receipt";
   static const String TYPE_WEB = "Web";
   static const String TYPE_BROADCAST = "Broadcast";
+  static const String TYPE_NEW_OFFER = "New_Offer";
+  static const String TYPE_INTERESTED_CUSTOMER = "Interested_Customer";
 
 }
 
@@ -466,8 +473,7 @@ class SocietyRun {
   static const webSite = "http://www.convivialsolutions.com/";
   static const salesEmail = "sales@societyrun.com";
   static const supportEmail = "support@societyrun.com";
-  static const puneAddress =
-      "Wing-A, Office No-17,18, Kamala Cross Road,Finolex Chowk, Pimpri, Pune 411 018";
+  static const puneAddress = "Office No. - 906, Rama Equator, Morwadi, Pimpri- 411018";
   static const mumbaiAddress =
       "F70, Haware Fantasia Business Park,Near Vashi Station & Inorbit Mall,Vashi, Navi Mumbai - 400705";
 //static const versionCode="1.0.0";

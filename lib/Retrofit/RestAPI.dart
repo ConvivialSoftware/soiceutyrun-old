@@ -2184,12 +2184,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<DataResponse> getClassifiedData(String userId) async {
+  Future<DataResponse> getClassifiedData(String userId,String societyId) async {
     // TODO: implement getClassifiedData
 
     ArgumentError.checkNotNull(userId, "User_Id");
+    ArgumentError.checkNotNull(societyId, "SOCIETY_ID");
     FormData formData = FormData.fromMap({
       "User_Id": userId,
+      "SOCIETY_ID": societyId,
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.displayClassifiedAPI);
@@ -2208,8 +2210,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
 
   @override
   Future<StatusMsgResponse> insertClassifiedData(String userId,String name, String email, String phone, String category,
-      String type, String title, String description, String propertyDetails, String price,
-      String locality, String city, images,String address,String pinCode,String societyName) async {
+      String type, String title, String description, /*String propertyDetails,*/ String price,
+      String locality, String city, images,String address,String pinCode,String societyName,String societyId) async {
     // TODO: implement insertClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(name, "Name");
@@ -2219,7 +2221,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(type, "Type");
     ArgumentError.checkNotNull(title, "Title");
     ArgumentError.checkNotNull(description, "Description");
-    ArgumentError.checkNotNull(propertyDetails, "Property_Details");
+    //ArgumentError.checkNotNull(propertyDetails, "Property_Details");
     ArgumentError.checkNotNull(price, "Price");
     ArgumentError.checkNotNull(locality, "Locality");
     ArgumentError.checkNotNull(city, "City");
@@ -2227,6 +2229,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(address, "Address");
     ArgumentError.checkNotNull(pinCode, "Pincode");
     ArgumentError.checkNotNull(societyName, "Society_Name");
+    ArgumentError.checkNotNull(societyId, "SOCIETY_ID");
     // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
     // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
 
@@ -2239,7 +2242,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       "Type": type,
       "Title": title,
       "Description": description,
-      "Property_Details": propertyDetails,
+      //"Property_Details": propertyDetails,
       "Price": price,
       "Locality": locality,
       "City": city,
@@ -2247,6 +2250,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       "Address": address,
       "Pincode": pinCode,
       "Society_Name": societyName,
+      "SOCIETY_ID": societyId,
     });
     //print(GlobalVariables.societyId+": "+socId);
 
@@ -2264,11 +2268,71 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<DataResponse> getExclusiveOfferData(String appName) async {
+  Future<StatusMsgResponse> editClassifiedData(String classifiedId,String userId,String name, String email, String phone, String category,
+      String type, String title, String description, /*String propertyDetails,*/ String price,
+      String locality, String city, images,String address,String pinCode,String societyName) async {
+    // TODO: implement insertClassifiedData
+    ArgumentError.checkNotNull(classifiedId, "C_Id");
+    ArgumentError.checkNotNull(userId, "User_Id");
+    ArgumentError.checkNotNull(name, "Name");
+    ArgumentError.checkNotNull(email, "Email");
+    ArgumentError.checkNotNull(phone, "Phone");
+    ArgumentError.checkNotNull(category, "Category");
+    ArgumentError.checkNotNull(type, "Type");
+    ArgumentError.checkNotNull(title, "Title");
+    ArgumentError.checkNotNull(description, "Description");
+    //ArgumentError.checkNotNull(propertyDetails, "Property_Details");
+    ArgumentError.checkNotNull(price, "Price");
+    ArgumentError.checkNotNull(locality, "Locality");
+    ArgumentError.checkNotNull(city, "City");
+    ArgumentError.checkNotNull(images, "Img_Name");
+    ArgumentError.checkNotNull(address, "Address");
+    ArgumentError.checkNotNull(pinCode, "Pincode");
+    ArgumentError.checkNotNull(societyName, "Society_Name");
+    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
+    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
+
+    FormData formData = FormData.fromMap({
+      "C_Id": classifiedId,
+      "User_Id": userId,
+      "Name": name,
+      "Email": email,
+      "Phone": phone,
+      "Category": category,
+      "Type": type,
+      "Title": title,
+      "Description": description,
+      //"Property_Details": propertyDetails,
+      "Price": price,
+      "Locality": locality,
+      "City": city,
+      "Img_Name": images,
+      "Address": address,
+      "Pincode": pinCode,
+      "Society_Name": societyName,
+    });
+    print("C_Id: "+classifiedId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.editClassifiedData);
+    final Response _result = await _dio.post(GlobalVariables.editClassifiedData,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of editClassifiedData : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getExclusiveOfferData(String appName,String Id) async {
     // TODO: implement getExclusiveOfferData
     ArgumentError.checkNotNull(appName, "flag");
     FormData formData = FormData.fromMap({
       "flag": appName,
+      "Id": Id,
     });
     print('appName : ' + appName);
     print('baseurl : ' + baseUrl + GlobalVariables.exclusiveOfferAPI);
@@ -2302,18 +2366,28 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(String societyName, String unit, String mobile, String address) async {
+  Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(String userId,String societyName, String unit, String mobile, String address,String userName,String societyID,String exclusiveId,String userEmail) async {
     // TODO: implement insertUserInfoOnExclusiveGetCode
+    ArgumentError.checkNotNull(userId, "USER_ID");
+    ArgumentError.checkNotNull(societyID, "SOCIETY_ID");
+    ArgumentError.checkNotNull(exclusiveId, "Id");
+    ArgumentError.checkNotNull(userName, "User_Name");
     ArgumentError.checkNotNull(societyName, "Society_Name");
     ArgumentError.checkNotNull(unit, "Unit");
     ArgumentError.checkNotNull(mobile, "Mobile");
     ArgumentError.checkNotNull(address, "Address");
+    ArgumentError.checkNotNull(userEmail, "User_Email");
 
     FormData formData = FormData.fromMap({
+      "USER_ID": userId,
+      "SOCIETY_ID": societyID,
+      "Id": exclusiveId,
+      "User_Name": userName,
       "Society_Name": societyName,
       "Unit": unit,
       "Mobile": mobile,
       "Address": address,
+      "User_Email": userEmail,
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.insertUserInfoOnExclusiveGetCode);
@@ -2330,11 +2404,13 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<DataResponse> getOwnerClassifiedData(String userId) async {
+  Future<DataResponse> getOwnerClassifiedData(String userId,String societyId,String classifiedId) async {
     // TODO: implement getOwnerClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     FormData formData = FormData.fromMap({
       "User_Id": userId,
+      "SOCIETY_ID": societyId,
+      "Id": classifiedId,
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.displayOwnerClassifiedAPI);
@@ -2352,10 +2428,11 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<StatusMsgResponse> interestedClassified(String C_Id, String user_id, String societyName, String unit, String mobile, String address,String userName,String userEmail,String userProfile) async {
+  Future<StatusMsgResponse> interestedClassified(String C_Id, String user_id, String societyName, String unit, String mobile, String address,String userName,String userEmail,String userProfile,societyId) async {
     // TODO: implement interestedClassified
 
     ArgumentError.checkNotNull(C_Id, "C_Id");
+    ArgumentError.checkNotNull(societyId, "SOCIETY_ID");
     ArgumentError.checkNotNull(user_id, "User_Id");
     ArgumentError.checkNotNull(societyName, "Society_Name");
     ArgumentError.checkNotNull(unit, "Unit");
@@ -2367,6 +2444,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
 
     FormData formData = FormData.fromMap({
       "C_Id": C_Id,
+      "SOCIETY_ID": societyId,
       "User_Id": user_id,
       "Society_Name": societyName,
       "Unit": unit,
@@ -2430,7 +2508,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
 
   @override
   Future<StatusMsgResponse> bookServicePerCategory(String S_Id, String userId,String userName,
-      String userEmail,String societyName,String unit,String mobile,String address,String Requirement) async {
+      String userEmail,String societyName,String unit,String mobile,String address,String Requirement,String societyId,String booking_date) async {
     // TODO: implement bookServicePerCategory
 
     ArgumentError.checkNotNull(S_Id, "S_Id");
@@ -2442,6 +2520,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(unit, "Unit");
     ArgumentError.checkNotNull(address, "Address");
     ArgumentError.checkNotNull(Requirement, "Requirement");
+    ArgumentError.checkNotNull(societyId, "SOCIETY_ID");
+    ArgumentError.checkNotNull(booking_date, "booking_date");
 
     FormData formData = FormData.fromMap({
       "S_Id": S_Id,
@@ -2453,6 +2533,8 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
       "Name": userName,
       "Email": userEmail,
       "Requirement": Requirement,
+      "SOCIETY_ID": societyId,
+      "booking_date": booking_date,
     });
 
     print('S_Id : ' + S_Id);
@@ -2471,11 +2553,13 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<DataResponse> getOwnerServices(String userId) async {
+  Future<DataResponse> getOwnerServices(String userId,String societyId) async {
     // TODO: implement getOwnerServices
     ArgumentError.checkNotNull(userId, "User_Id");
+    ArgumentError.checkNotNull(societyId, "SOCIETY_ID");
     FormData formData = FormData.fromMap({
       "User_Id": userId,
+      "SOCIETY_ID": societyId,
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.ownerServices);
@@ -2493,7 +2577,7 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<StatusMsgResponse> updateServicesRatting(String userId, String S_Id,String rate) async {
+  Future<StatusMsgResponse> updateServicesRatting(String userId, String S_Id,String rate,String societyId) async {
     // TODO: implement addServicesRatting
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(S_Id, "S_Id");
@@ -2519,6 +2603,79 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
         data: formData);
     final value = _result.data;
     print('value of insertClassifiedData : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> updateClassifiedStatus(String classifiedId, String Reason) async {
+    // TODO: implement updateClassifiedStatus
+    ArgumentError.checkNotNull(classifiedId, "C_Id");
+    ArgumentError.checkNotNull(Reason, "Reason");
+
+    //rate="5";
+    FormData formData = FormData.fromMap({
+      "C_Id": classifiedId,
+      "Reason": Reason,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.updateClassifiedReasonForRemove);
+    final Response _result = await _dio.post(GlobalVariables.updateClassifiedReasonForRemove,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of updateClassifiedStatus : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> activeClassifiedStatus(String classifiedId) async {
+    // TODO: implement activeClassifiedStatus
+    ArgumentError.checkNotNull(classifiedId, "C_Id");
+
+    //rate="5";
+    FormData formData = FormData.fromMap({
+      "C_Id": classifiedId,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.activeClassifiedStatus);
+    final Response _result = await _dio.post(GlobalVariables.activeClassifiedStatus,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of updateClassifiedStatus : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> deleteClassifiedImage(String classifiedId, String imageId) async {
+    // TODO: implement deleteClassifiedImage
+    ArgumentError.checkNotNull(classifiedId, "C_Id");
+    ArgumentError.checkNotNull(imageId, "Id");
+
+    //rate="5";
+    FormData formData = FormData.fromMap({
+      "C_Id": classifiedId,
+      "Id": imageId,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.deleteClassifiedImage);
+    final Response _result = await _dio.post(GlobalVariables.deleteClassifiedImage,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of updateClassifiedStatus : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 

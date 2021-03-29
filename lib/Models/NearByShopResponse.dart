@@ -11,13 +11,13 @@ class NearByShopResponse extends ChangeNotifier {
   bool isLoading = true;
   String errMsg;
 
-  Future<String> getExclusiveOfferData(String appName) async {
+  Future<String> getExclusiveOfferData(String appName,String Id) async {
     try {
       print('getClassifiedData');
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      await restClient.getExclusiveOfferData(appName).then((value) {
+      await restClient.getExclusiveOfferData(appName,Id).then((value) {
         nearByShopList = List<NearByShop>.from(
             value.data.map((i) => NearByShop.fromJson(i)));
         nearByShopCategoryList = List<NearByShopCategory>.from(
@@ -30,6 +30,7 @@ class NearByShopResponse extends ChangeNotifier {
       });
     } catch (e) {
       errMsg = e.toString();
+      print('errMsg : '+errMsg);
       isLoading = false;
       notifyListeners();
     }
@@ -37,13 +38,15 @@ class NearByShopResponse extends ChangeNotifier {
   }
 
   Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(
-      String societyName, String unit, String mobile, String address) async {
+      String societyName, String unit, String mobile, String address,String userName,String societyId,exclusiveId) async {
 
+    String userId = await GlobalFunctions.getUserId();
+    String userEmail = await GlobalFunctions.getUserName();
     final dio = Dio();
     final RestClientDiscover restClient =
     RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
     var result =  await restClient
-        .insertUserInfoOnExclusiveGetCode( societyName,  unit,  mobile,  address);
+        .insertUserInfoOnExclusiveGetCode(userId, societyName,  unit,  mobile,  address,userName,societyId,exclusiveId,userEmail);
     isLoading = false;
     notifyListeners();
     print('insertUserInfoOnExclusiveGetCode : '+result.toString());
@@ -59,7 +62,6 @@ class NearByShop {
       Offer_Code,
       Location,
       Img_Name,
-      offer_details,
       exp_date,
       vendor_shop,
       vendor_mobile,
@@ -69,6 +71,7 @@ class NearByShop {
       card_bg,
       redeem,
       C_Date;
+  var offer_details,terms_condition;
 
   NearByShop(
       {this.Id,
@@ -85,7 +88,7 @@ class NearByShop {
       this.title_bg,
       this.vendor_logo_bg,
       this.vendor_mobile,
-      this.vendor_shop,this.vendor_logo,this.redeem});
+      this.vendor_shop,this.vendor_logo,this.terms_condition,this.redeem});
 
   factory NearByShop.fromJson(Map<String, dynamic> map) {
     return NearByShop(
@@ -96,6 +99,7 @@ class NearByShop {
       Offer_Code: map["Offer_Code"],
       Location: map["Location"],
       offer_details: map["offer_details"],
+      terms_condition: map["terms_condition"],
       Img_Name: map["Img_Name"],
       C_Date: map["C_Date"],
       exp_date: map["exp_date"],
@@ -123,6 +127,42 @@ class NearByShopCategory {
     return NearByShopCategory(
       Id: map["Id"],
       Category_Name: map["Category_Name"],
+    );
+  }
+}
+
+class NearByShopOfferDetails {
+  String Id, Exclusive_Id,Description;
+
+  NearByShopOfferDetails({
+    this.Id,
+    this.Exclusive_Id,
+    this.Description,
+  });
+
+  factory NearByShopOfferDetails.fromJson(Map<String, dynamic> map) {
+    return NearByShopOfferDetails(
+      Id: map["Id"],
+      Exclusive_Id: map["Exclusive_Id"],
+      Description: map["Description"],
+    );
+  }
+}
+
+class NearByShopTermsCondition {
+  String Id, Exclusive_Id,Description;
+
+  NearByShopTermsCondition({
+    this.Id,
+    this.Exclusive_Id,
+    this.Description,
+  });
+
+  factory NearByShopTermsCondition.fromJson(Map<String, dynamic> map) {
+    return NearByShopTermsCondition(
+      Id: map["Id"],
+      Exclusive_Id: map["Exclusive_Id"],
+      Description: map["Description"],
     );
   }
 }

@@ -11,6 +11,10 @@ import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
+import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
+import 'package:societyrun/Activities/NearByShopPerCategory.dart';
+import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
+import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -341,6 +345,16 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
                   AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_NEW_OFFER) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseNearByShopNotificationItemDetails( _dbNotificationPayload.ID)));
+    }else if (_dbNotificationPayload.TYPE  == NotificationTypes.TYPE_INTERESTED_CUSTOMER) {
+       Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(_dbNotificationPayload.ID)));
     }else if(_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BROADCAST){
       FirebaseMessagingHandler().showDynamicAlert(context, _dbNotificationPayload);
     }  else {
