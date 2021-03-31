@@ -496,10 +496,12 @@ class AppPermission {
   static bool isSocAddVehiclePermission = false;
   static var socAddVehiclePermission = 'AddVehicle';
 
-  static bool isSocEditPaymentPermission = false;
-  static var socEditPaymentPermission = 'editPayment';
-  
-  
+  static bool isSocPayAmountEditPermission = false;
+  static var socPayAmountEditPermission = 'PayAmountEdit';
+
+  static bool isSocPayAmountNoLessPermission = false;
+  static var socPayAmountNoLessPermission = 'PayAmountNoLess';
+
   static bool isUserMyUnitPermission = false;
   static var userMyUnitPermission = '';
   

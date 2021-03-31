@@ -2571,9 +2571,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       if (_socPermissionList[i] == AppPermission.socAddVehiclePermission) {
         AppPermission.isSocAddVehiclePermission = true;
       }
-      if (_socPermissionList[i] == AppPermission.socEditPaymentPermission) {
-        AppPermission.isSocEditPaymentPermission = true;
+      if (_socPermissionList[i] == AppPermission.socPayAmountEditPermission) {
+        AppPermission.isSocPayAmountEditPermission = true;
       }
+      if (_socPermissionList[i] == AppPermission.socPayAmountNoLessPermission) {
+        AppPermission.isSocPayAmountNoLessPermission = true;
+      }
+      //AppPermission.isSocPayAmountEditPermission = true;
+      //AppPermission.isSocPayAmountNoLessPermission = true;
     }
 
     for (int i = 0; i < _userPermissionList.length; i++) {

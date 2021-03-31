@@ -2368,9 +2368,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   @override
   Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(String userId,String societyName, String unit, String mobile, String address,String userName,String societyID,String exclusiveId,String userEmail) async {
     // TODO: implement insertUserInfoOnExclusiveGetCode
-    ArgumentError.checkNotNull(userId, "USER_ID");
+    ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(societyID, "SOCIETY_ID");
-    ArgumentError.checkNotNull(exclusiveId, "Id");
+    ArgumentError.checkNotNull(exclusiveId, "E_Id");
     ArgumentError.checkNotNull(userName, "User_Name");
     ArgumentError.checkNotNull(societyName, "Society_Name");
     ArgumentError.checkNotNull(unit, "Unit");
@@ -2379,9 +2379,9 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(userEmail, "User_Email");
 
     FormData formData = FormData.fromMap({
-      "USER_ID": userId,
+      "User_Id": userId,
       "SOCIETY_ID": societyID,
-      "Id": exclusiveId,
+      "E_Id": exclusiveId,
       "User_Name": userName,
       "Society_Name": societyName,
       "Unit": unit,
@@ -2582,12 +2582,14 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(S_Id, "S_Id");
     ArgumentError.checkNotNull(rate, "Rating");
+    ArgumentError.checkNotNull(societyId, "SOCIETY_ID");
 
     //rate="5";
     FormData formData = FormData.fromMap({
       "User_Id": userId,
       "S_Id": S_Id,
-      "Rating":rate
+      "Rating":rate,
+      "SOCIETY_ID":societyId
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.addServicesRatting);

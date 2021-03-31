@@ -2810,7 +2810,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       ),
                                     ),
                                   ),
-                                  AppPermission.isSocEditPaymentPermission ? Container(
+                                  (AppPermission.isSocPayAmountEditPermission || AppPermission.isSocPayAmountNoLessPermission)  ? Container(
                                     alignment: Alignment.topLeft,
                                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                                     child: !isEditAmount
@@ -3091,13 +3091,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
                 child: InkWell(
                   onTap: () {
+                    print('amount : '+amount);
+                    print('_amountTextController : '+_amountTextController.text.toString());
                    if (double.parse(_amountTextController.text) <= 0) {
                       GlobalFunctions.showToast(
                           'Amount must be grater than zero');
-                    } else {
+                    }else if(AppPermission.isSocPayAmountNoLessPermission){
+                     if(double.parse(amount)<double.parse(_amountTextController.text)){
+                       Navigator.of(context).pop();
+                       redirectToPaymentGateway(position, _amountTextController.text);
+                     }else{
+                       GlobalFunctions.showToast(
+                           'Amount must be Grater or equal to Actual Amount');
+                     }
+                   }else {
                       Navigator.of(context).pop();
-                      redirectToPaymentGateway(
-                          position, _amountTextController.text);
+                      redirectToPaymentGateway(position, _amountTextController.text);
                     }
                   },
                   child: Container(
@@ -3976,7 +3985,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 child: text('Close',fontSize: 16.0,textColor: GlobalVariables.grey,fontWeight: FontWeight.w500)
                               ),
                             ),
-                            AppPermission.isSocEditPaymentPermission ?  Container(
+                            Container(
                               child: InkWell(
                                 onTap: (){
                                   Navigator.of(context).pop();
@@ -4002,7 +4011,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 },
                                 child: text('Pay advance',fontSize: 16.0,textColor: GlobalVariables.green,fontWeight: FontWeight.w500)
                               ),
-                            ):SizedBox()
+                            ),
                           ],
                         ),
                       )
