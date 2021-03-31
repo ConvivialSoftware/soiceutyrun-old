@@ -285,7 +285,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 child: AppTextField(
                   textHintContent:
                   AppLocalizations.of(context).translate('complaint_desc') + '*',
-                  controllerCallback: complaintSubject,
+                  controllerCallback: complaintDesc,
                   maxLines: 99,
                     contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                 ),

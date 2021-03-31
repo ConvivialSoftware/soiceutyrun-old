@@ -200,7 +200,7 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                 controllerCallback: _vehicleModelController,
               ),
               AppTextField(textHintContent: AppLocalizations.of(context).translate('sticker'),
-                controllerCallback: _vehicleModelController,
+                controllerCallback: _vehicleStickerController,
               ),
               Container(
                 alignment: Alignment.topLeft,

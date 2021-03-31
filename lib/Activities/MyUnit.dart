@@ -2810,7 +2810,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       ),
                                     ),
                                   ),
-                                  Container(
+                                  AppPermission.isSocEditPaymentPermission ? Container(
                                     alignment: Alignment.topLeft,
                                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                                     child: !isEditAmount
@@ -2838,7 +2838,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                               isEditAmount = false;
                                               setState(() {});
                                             }),
-                                  ),
+                                  ):SizedBox(),
                                 ],
                               ),
                             ),
@@ -3972,10 +3972,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 Navigator.of(context).pop();
                               },
                               child: Container(
+                                alignment: Alignment.topRight,
                                 child: text('Close',fontSize: 16.0,textColor: GlobalVariables.grey,fontWeight: FontWeight.w500)
                               ),
                             ),
-                            Container(
+                            AppPermission.isSocEditPaymentPermission ?  Container(
                               child: InkWell(
                                 onTap: (){
                                   Navigator.of(context).pop();
@@ -4001,7 +4002,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 },
                                 child: text('Pay advance',fontSize: 16.0,textColor: GlobalVariables.green,fontWeight: FontWeight.w500)
                               ),
-                            )
+                            ):SizedBox()
                           ],
                         ),
                       )
