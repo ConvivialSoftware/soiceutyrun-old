@@ -36,8 +36,8 @@ class ServicesResponse extends ChangeNotifier {
 
   Future<void> getServicePerCategory(String category) async {
     try {
-      //isLoading = true;
-      //notifyListeners();
+      isLoading = true;
+      notifyListeners();
       print('getServicePerCategory');
       final dio = Dio();
       final RestClientDiscover restClient =
@@ -90,8 +90,8 @@ class ServicesResponse extends ChangeNotifier {
 
   Future<void> getOwnerServices() async {
     try {
-      //isLoading = true;
-      //notifyListeners();
+      isLoading = true;
+      notifyListeners();
       print('getOwnerServices');
       String userId = await GlobalFunctions.getUserId();
       String societyId = await GlobalFunctions.getSocietyId();

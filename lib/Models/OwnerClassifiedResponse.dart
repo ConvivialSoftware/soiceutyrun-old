@@ -15,6 +15,9 @@ class OwnerClassifiedResponse extends ChangeNotifier {
   Future<String> getOwnerClassifiedData({String Id}) async {
     try {
       print('getClassifiedData');
+      if(!isLoading){
+        isLoading = false;
+      }
       String userId = await GlobalFunctions.getUserId();
       String societyId = await GlobalFunctions.getSocietyId();
       final dio = Dio();
