@@ -122,7 +122,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                           children: [
                             Container(
                               alignment: Alignment.topRight,
-                              child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
+                              child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                             ),
                             SizedBox(height: 4,),
                             Container(
@@ -139,7 +139,108 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                       ),
 
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
+                        padding: EdgeInsets.all(
+                            10), // height: MediaQuery.of(context).size.height / 0.5,
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  10, 5, 10, 0),
+                              alignment: Alignment.topLeft,
+                              child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('name')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(_billDetailsList[0].NAME,
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            /*Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('date')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),*/
+                           /* Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('due_date')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),*/
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('bill_period')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(_billDetailsList[0]
+                                        .TYPE
+                                        .toLowerCase()
+                                        .toString() ==
+                                        'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
                         padding: EdgeInsets.all(
                             10), // height: MediaQuery.of(context).size.height / 0.5,
                         decoration: BoxDecoration(
@@ -204,106 +305,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                         ),
                       ),
 
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        padding: EdgeInsets.all(
-                            10), // height: MediaQuery.of(context).size.height / 0.5,
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.white,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  10, 5, 10, 0),
-                              alignment: Alignment.topLeft,
-                              child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    child: text(AppLocalizations.of(context).translate('name')+ " : ",
-                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                    ),
-                                  ),
-                                  Container(
-                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                    child: text(_billDetailsList[0].NAME,
-                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            /*Container(
-                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    child: text(AppLocalizations.of(context).translate('date')+ " : ",
-                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                    ),
-                                  ),
-                                  Container(
-                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                    child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
-                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),*/
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    child: text(AppLocalizations.of(context).translate('due_date')+ " : ",
-                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                    ),
-                                  ),
-                                  Container(
-                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                    child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
-                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    child: text(AppLocalizations.of(context).translate('bill_period')+ " : ",
-                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                    ),
-                                  ),
-                                  Container(
-                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                    child: text(_billDetailsList[0]
-                                        .TYPE
-                                        .toLowerCase()
-                                        .toString() ==
-                                        'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
-                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+
                     /*  Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(

@@ -197,7 +197,7 @@ class StaffListPerCategoryState
                       imageWidth:70.0,
                       imageHeight:70.0,
                             borderColor: GlobalVariables.grey,
-                            borderWidth: 2.0,
+                            borderWidth: 1.0,
                             fit: BoxFit.cover,
                             radius: 35.0,
                           )
@@ -206,7 +206,7 @@ class StaffListPerCategoryState
                       imageWidth:70.0,
                       imageHeight:70.0,
                             borderColor: GlobalVariables.grey,
-                            borderWidth: 2.0,
+                            borderWidth: 1.0,
                             fit: BoxFit.cover,
                             radius: 35.0,
                           )

@@ -238,7 +238,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                               image: NetworkImage(_staff.IMAGE),
                               fit: BoxFit.cover),
                           border: Border.all(
-                              color: GlobalVariables.mediumGreen, width: 2.0)),
+                              color: GlobalVariables.grey, width: 2.0)),
                     )),
           Expanded(
             child: Container(

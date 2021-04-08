@@ -132,7 +132,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                     ),
 
                     Container(
-                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      margin: EdgeInsets.fromLTRB(10, 15, 10, 10),
                       padding: EdgeInsets.all(
                           10), // height: MediaQuery.of(context).size.height / 0.5,
                       decoration: BoxDecoration(
@@ -220,10 +220,11 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                       textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
                                   ),
                                 ),
-                                Container(
-                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                  child: text(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-',
-                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                Flexible(
+                                  child: Container(
+                                    child: text(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-',
+                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium,maxLine: 99,)
+                                    ,
                                   ),
                                 )
                               ],
