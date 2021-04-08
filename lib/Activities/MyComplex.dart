@@ -268,20 +268,22 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getNewsBoardListDataLayout() {
     print('getNewsBoardListDataLayout Tab Call');
-    return _announcementList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: _announcementList.length,
-                itemBuilder: (context, position) {
-                  return getNewsBoardListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-    ):/*GlobalFunctions.noDataFoundLayout(context, "No Data Found")*/Container();
+    return _announcementList.length > 0
+        ? Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(
+                10, MediaQuery.of(context).size.height / 20, 10, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: _announcementList.length,
+                      itemBuilder: (context, position) {
+                        return getNewsBoardListItemLayout(position);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : /*GlobalFunctions.noDataFoundLayout(context, "No Data Found")*/ Container();
   }
 
   getNewsBoardListItemLayout(var position) {
@@ -301,8 +303,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: _announcementList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            imageWidth:26.0,
-                            imageHeight:26.0,
+                            imageWidth: 26.0,
+                            imageHeight: 26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -310,8 +312,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           )
                         : AppNetworkImage(
                             _announcementList[position].USER_PHOTO,
-                      imageWidth:26.0,
-                      imageHeight:26.0,
+                            imageWidth: 26.0,
+                            imageHeight: 26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -402,24 +404,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Text(
+            child: text(
               _announcementList[position].SUBJECT,
-              style: TextStyle(
-                  color: GlobalVariables.green,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+              textColor: GlobalVariables.green,
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
               //  maxLines: 1,
               //  overflow: TextOverflow.ellipsis,
             ),
           ),
           Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Html(
-                data: _announcementList[position].DESCRIPTION,
-                defaultTextStyle: TextStyle(
-                  color: GlobalVariables.grey,
-                  fontSize: 14,
-                ),
+              child: htmlText(
+                _announcementList[position].DESCRIPTION,
+                textColor: GlobalVariables.grey,
+                fontSize: 14.0,
               ) /*Text(
               _announcementList[position].DESCRIPTION,
               style: TextStyle(
@@ -716,8 +715,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: _meetingList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                      imageWidth:26.0,
-                      imageHeight:26.0,
+                            imageWidth: 26.0,
+                            imageHeight: 26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -725,8 +724,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           )
                         : AppNetworkImage(
                             _meetingList[position].USER_PHOTO,
-                      imageWidth:26.0,
-                      imageHeight:26.0,
+                            imageWidth: 26.0,
+                            imageHeight: 26.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
@@ -821,24 +820,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Text(
+            child: text(
               _meetingList[position].SUBJECT,
-              style: TextStyle(
-                  color: GlobalVariables.green,
-                  fontSize: 20,
+                  textColor: GlobalVariables.green,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold),
               //  maxLines: 1,
               //  overflow: TextOverflow.ellipsis,
-            ),
           ),
           Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Html(
-                data: _meetingList[position].DESCRIPTION,
-                defaultTextStyle: TextStyle(
-                  color: GlobalVariables.grey,
-                  fontSize: 14,
-                ),
+              child: htmlText(
+               _meetingList[position].DESCRIPTION,
+                  textColor: GlobalVariables.grey,
+                  fontSize: 14.0,
+
               ) /*Text(
               _announcementList[position].DESCRIPTION,
               style: TextStyle(
@@ -1181,8 +1177,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   child: _pollList[position].USER_PHOTO.isEmpty
                       ? AppAssetsImage(
                           GlobalVariables.componentUserProfilePath,
-                    imageWidth:26.0,
-                    imageHeight:26.0,
+                          imageWidth: 26.0,
+                          imageHeight: 26.0,
                           borderColor: GlobalVariables.transparent,
                           borderWidth: 1.0,
                           fit: BoxFit.cover,
@@ -1190,14 +1186,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         )
                       : AppNetworkImage(
                           _pollList[position].USER_PHOTO,
-                    imageWidth:26.0,
-                    imageHeight:26.0,
+                          imageWidth: 26.0,
+                          imageHeight: 26.0,
                           borderColor: GlobalVariables.transparent,
                           borderWidth: 1.0,
                           fit: BoxFit.cover,
                           radius: 13.0,
-                        )
-                  ,
+                        ),
                 ),
                 Expanded(
                   child: Container(
@@ -1272,23 +1267,20 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Text(
+            child: text(
               _pollList[position].POLL_Q,
-              style: TextStyle(
-                  color: GlobalVariables.green,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                  textColor: GlobalVariables.green,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold
             ),
           ),
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child: Text(
+            child: htmlText(
               _pollList[position].DESCRIPTION,
-              style: TextStyle(
-                color: GlobalVariables.grey,
-                fontSize: 14,
-              ),
+                textColor: GlobalVariables.grey,
+                fontSize: 14.0,
             ),
           ),
           getVoteLayout(position),
@@ -1922,8 +1914,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           directoryType: "Committee", directoryTypeWiseList: _committeeList),
       DirectoryType(
           directoryType: "Emergency", directoryTypeWiseList: _emergencyList),
-      DirectoryType(directoryType: "Near By Shops", directoryTypeWiseList: [
-        /* DirectoryTypeWiseData(
+      /* DirectoryType(directoryType: "Near By Shops", directoryTypeWiseList: [
+        */ /* DirectoryTypeWiseData(
             name: "Arogya Medical",
             field: "Medical",
             isCall: true,
@@ -1950,8 +1942,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             isCall: true,
             isMail: false,
             isSearch: true,
-            isFilter: true),*/
-      ]),
+            isFilter: true),*/ /*
+      ]),*/
     ];
   }
 
@@ -2282,27 +2274,25 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                  child: _eventList[position].USER_PHOTO.isEmpty
-                      ? AppAssetsImage(
-                    GlobalVariables
-                        .componentUserProfilePath,
-                    imageWidth:26.0,
-                    imageHeight:26.0,
-                    borderColor: GlobalVariables.grey,
-                    borderWidth: 1.0,
-                    fit: BoxFit.cover,
-                    radius: 10.0,
-                  )
-                      : AppNetworkImage(
-                    _eventList[position].USER_PHOTO,
-                    imageWidth:26.0,
-                    imageHeight:26.0,
-                    borderColor: GlobalVariables.grey,
-                    borderWidth: 1.0,
-                    fit: BoxFit.cover,
-                    radius: 10.0,
-                  )
-                ),
+                    child: _eventList[position].USER_PHOTO.isEmpty
+                        ? AppAssetsImage(
+                            GlobalVariables.componentUserProfilePath,
+                            imageWidth: 26.0,
+                            imageHeight: 26.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 10.0,
+                          )
+                        : AppNetworkImage(
+                            _eventList[position].USER_PHOTO,
+                            imageWidth: 26.0,
+                            imageHeight: 26.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 10.0,
+                          )),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -2367,12 +2357,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Text(
+            child: text(
               _eventList[position].SUBJECT,
-              style: TextStyle(
-                  color: GlobalVariables.green,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                  textColor: GlobalVariables.green,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold
               //maxLines: 1,
               //overflow: TextOverflow.ellipsis,
             ),
@@ -2380,12 +2369,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child: Html(
-              data: _eventList[position].DESCRIPTION,
-              defaultTextStyle: TextStyle(
-                color: GlobalVariables.grey,
-                fontSize: 14,
-              ),
+            child: htmlText(_eventList[position].DESCRIPTION,
+                textColor: GlobalVariables.grey,
+                fontSize: 14.0,
             ) /*Text(
               _eventList[position].DESCRIPTION,
               style: TextStyle(
@@ -2960,12 +2946,10 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                               flex: 1,
                               child: Container(
                                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: Text(
+                                child: text(
                                   _documentList[position].DOCUMENT_CATEGORY,
-                                  style: TextStyle(
-                                      color: GlobalVariables.white,
-                                      fontSize: 12),
-                                ),
+                                      textColor: GlobalVariables.white,
+                                      fontSize: 12.0),
                                 decoration: BoxDecoration(
                                     color: getDocumentTypeColor(
                                         _documentList[position]
@@ -2977,11 +2961,12 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                         )),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: Text(
+                          child: text(
                             _documentList[position].DESCRIPTION,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: GlobalVariables.black),
+                            maxLine: 3,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                        //    overflow: TextOverflow.ellipsis,
+                            textColor: GlobalVariables.black,
                           ),
                         ),
                       ],

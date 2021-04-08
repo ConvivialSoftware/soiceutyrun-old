@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/ExpenseVoucher.dart';
@@ -10,13 +11,22 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/Expense.dart';
+import 'package:societyrun/Models/LedgerAccount.dart';
 import 'package:societyrun/Models/VoucherAmount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
 class BaseExpense extends StatefulWidget {
+
+  var startDate,endDate,ledgerHeads,ledgerYear;
+
+
+  BaseExpense({this.startDate, this.endDate, this.ledgerHeads,this.ledgerYear});
 
   @override
   State<StatefulWidget> createState() {
@@ -33,13 +43,14 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
   ProgressDialog _progressDialog;
 
   List<Expense> _expenseList = List<Expense>();
-
   @override
   void initState() {
     super.initState();
+
     GlobalFunctions.checkInternetConnection().then((value) {
       if(value){
-        getExpenseData();
+
+        getExpenseData(widget.startDate,widget.endDate,widget.ledgerHeads,widget.ledgerYear);
       }else{
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -91,8 +102,8 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
+            //    getSearchLayout(),
                 getExpenseListDataLayout(),
-                AppPermission.isAddExpensePermission ? addExpenseFabLayout():Container(),
               ],
             ),
           ),
@@ -117,7 +128,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                     MaterialPageRoute(
                         builder: (context) => BaseAddExpense()));
                if(result=='back'){
-                 getExpenseData();
+                 getExpenseData(widget.startDate,widget.endDate,widget.ledgerHeads,widget.ledgerYear);
                }
               },
               child: Icon(
@@ -136,7 +147,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
     return _expenseList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
+          10, MediaQuery.of(context).size.width/8, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -170,9 +181,9 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
         padding: EdgeInsets.all(20),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(15),
             color: GlobalVariables.white),
         child: Column(
           children: [
@@ -186,25 +197,41 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                     child: Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.date_range,color: GlobalVariables.mediumGreen,),
                             Container(
                               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: Text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE, "dd-MM-yyyy"),style: TextStyle(
-                                  color: GlobalVariables.black,fontSize: 16
+                              child: Text(_voucherAmountList[0].head_name,style: TextStyle(
+                                  color: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
                               ),),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            //Icon(Icons.attach_money,color: GlobalVariables.lightGreen,),
+                            ),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: Text('Rs. '+double.parse(_voucherAmount.toString()).toStringAsFixed(2),style: TextStyle(
-                                color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
+                                  color: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
                               ),),
                             ),
+
+                          ],
+                        ),
+                        /*SizedBox(
+                          height: 4,
+                        ),*/
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Text(_expenseList[position].BANK_NAME,style: TextStyle(
+                                  color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
+                              ),),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE, "dd-MM-yyyy"),style: TextStyle(
+                                  color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
+                              ),),
+                            )
                           ],
                         ),
                       ],
@@ -221,7 +248,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 ],
               )
             ),
-            Container(
+          /*  Container(
               child: Divider(
                 thickness: 2,
                 color: GlobalVariables.lightGray,
@@ -233,7 +260,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 children: [
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: Text(/*AppLocalizations.of(context).translate('bank')+' : '+*/_expenseList[position].BANK_NAME,style: TextStyle(
+                    child: Text(*//*AppLocalizations.of(context).translate('bank')+' : '+*//*_expenseList[position].BANK_NAME,style: TextStyle(
                         color: GlobalVariables.skyBlue,fontSize: 14
                     ),),
                   ),
@@ -246,7 +273,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                               color: GlobalVariables.orangeYellow,fontSize: 14
                           ),),
                         ),
-                        /*Container(
+                        *//*Container(
                           alignment: Alignment.topRight,
                           padding: EdgeInsets.all(5),
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -259,30 +286,31 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                             color: GlobalVariables.white,
                             size: 18,
                           ),
-                        ),*/
+                        ),*//*
                       ],
                     ),
                   ),
                 ],
               ),
-            ),
+            ),*/
           ],
         )
       ),
     );
   }
 
-  getExpenseData() async {
+  getExpenseData(startDate,endDate,heads, ledgerYear) async {
 
     final dio = Dio();
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
-    restClientERP.getExpenseData(societyId).then((value) {
+    restClientERP.getExpenseData(societyId,startDate,endDate,heads,ledgerYear).then((value) {
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
      _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
+      //getExpenseAccountLedger();
       _progressDialog.hide();
       setState(() {});
     })/*.catchError((Object obj) {
@@ -301,5 +329,154 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
       }
     })*/;
   }
+/*
+  getSearchLayout() {
+
+    return Container(
+
+      margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+      padding: EdgeInsets.all(20),
+      // height: MediaQuery.of(context).size.height / 0.5,
+      decoration: BoxDecoration(
+          color: GlobalVariables.white,
+          borderRadius: BorderRadius.circular(20)),
+
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppTextField(
+            textHintContent:
+            AppLocalizations.of(context).translate('start_date'),
+            controllerCallback: _startDateController,
+            borderWidth: 2.0,
+            contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            readOnly: true,
+            suffixIcon: AppIconButton(
+              Icons.date_range,
+              iconColor: GlobalVariables.mediumGreen,
+              onPressed: () {
+                GlobalFunctions.getSelectedDate(context).then((value) {
+                  _startDateController.text =
+                      value.day.toString().padLeft(2, '0') +
+                          "-" +
+                          value.month.toString().padLeft(2, '0') +
+                          "-" +
+                          value.year.toString();
+                  startDate=_startDateController.text;
+                });
+              },
+            ),
+          ),
+          AppTextField(
+            textHintContent:
+            AppLocalizations.of(context).translate('end_date'),
+            controllerCallback: _endDateController,
+            borderWidth: 2.0,
+            contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            readOnly: true,
+            suffixIcon: AppIconButton(
+              Icons.date_range,
+              iconColor: GlobalVariables.mediumGreen,
+              onPressed: () {
+                GlobalFunctions.getSelectedDate(context).then((value) {
+                  _endDateController.text =
+                      value.day.toString().padLeft(2, '0') +
+                          "-" +
+                          value.month.toString().padLeft(2, '0') +
+                          "-" +
+                          value.year.toString();
+                  endDate=_endDateController.text;
+                  getExpenseData(startDate, endDate,null);
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 8,),
+          Divider(thickness: 1,color: GlobalVariables.veryLightGray,),
+         // SizedBox(height: 8,),
+          Row(
+            children: [
+              Flexible(
+                flex: 5,
+                child:Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: GlobalVariables.mediumGreen,
+                        width: 2.0,
+                      )),
+                  child: SearchableDropdown(
+                    items: _ledgerAccountList.map((item) {
+                      return new DropdownMenuItem<LedgerAccount>(
+                          child: Text(item.name), value: item);
+                    }).toList(),
+                    value: _selectedLedgerAccount,
+                    onChanged: changeLedgerAccountDropDownItem,
+                    isExpanded: true,
+                    isCaseSensitiveSearch: true,
+                    icon: Icon(null
+                      *//*Icons.keyboard_arrow_down,
+                    color: GlobalVariables.mediumRed,*//*
+                    ),
+                    underline: SizedBox(),
+                    hint: Text(
+                      AppLocalizations.of(context).translate('ledger_account'),
+                      style: TextStyle(
+                          color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 32,),
+              Flexible(
+                flex: 1,
+                child: InkWell(
+                  onTap: (){
+                    getExpenseData(null, null, _selectedLedgerAccount.name);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10),
+                    decoration: boxDecoration(
+                      radius: 30.0,
+                      bgColor: GlobalVariables.green,
+
+                    ),
+                    child: AppIconButton(
+                      Icons.search,
+                      iconColor: GlobalVariables.white,
+                      iconSize: 30.0,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+       *//*   Row(
+            children: [
+              AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('search_by_heads'),
+                controllerCallback: _startDateController,
+                borderWidth: 2.0,
+                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+
+            ],
+          ),*//*
+        ],
+      ),
+    );
+
+  }
+
+ */
+
 
 }

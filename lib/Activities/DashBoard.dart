@@ -16,6 +16,7 @@ import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/Expense.dart';
+import 'package:societyrun/Activities/ExpenseSearchAdd.dart';
 import 'package:societyrun/Activities/FindServices.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
@@ -1658,11 +1659,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("exclusive_offer"),
           ]),
-      new RootTitle(
+     /* new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
           rootIconData: GlobalVariables.myClubIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
-          items: []),
+          items: []),*/
       if (AppPermission.isSocGatePassPermission)
         new RootTitle(
             title: AppLocalizations.of(context).translate('my_gate'),
@@ -2308,8 +2309,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('expense')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(
-              context, MaterialPageRoute(builder: (context) => BaseExpense()))
+     Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BaseExpenseSearchAdd()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });

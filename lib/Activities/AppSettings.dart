@@ -196,7 +196,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                   imageWidth: 60.0,
                                   imageHeight: 60.0,
                                   borderColor: GlobalVariables.grey,
-                                  borderWidth: 2.0,
+                                  borderWidth: 1.0,
                                   fit: BoxFit.cover,
                                   radius: 30.0,
                                 )
@@ -205,7 +205,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                             imageWidth: 60.0,
                             imageHeight: 60.0,
                                   borderColor: GlobalVariables.grey,
-                                  borderWidth: 2.0,
+                                  borderWidth: 1.0,
                                   fit: BoxFit.cover,
                                   radius: 30.0,
                                 )),

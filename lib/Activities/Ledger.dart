@@ -280,9 +280,11 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                               child: Flexible(
                                 child: Container(
                                   padding: EdgeInsets.all(16),
-                                  child: text(openingBalanceRemark,
-                                      fontSize: GlobalVariables.textSizeSMedium,
-                                      maxLine: 99,),
+                                  child: text(
+                                    openingBalanceRemark,
+                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    maxLine: 99,
+                                  ),
                                 ),
                               ),
                             );
@@ -504,21 +506,47 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
       List<dynamic> _year = value.year;
 
       // _listYear = [LedgerYear(year: "2021"), LedgerYear(year: "2020")];
-      print('_listYear : ' + _listYear.toString());
+
       _yearListItems = new List<DropdownMenuItem<String>>();
       _listYear = List<LedgerYear>();
-      _listYear =
-          List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
+      _listYear = List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
+      print('_listYear : ' + _listYear.toString());
       for (int i = 0; i < _listYear.length; i++) {
-        _yearListItems.add(DropdownMenuItem(
-          value: _listYear[i].years,
-          child: Text(
-            _listYear[i].years,
-            style: TextStyle(color: GlobalVariables.green),
-          ),
-        ));
-        if (_yearSelectedItem == null) {
-          _yearSelectedItem = _listYear[0].years;
+        print('_listYear : ' + _listYear[i].Active_account.toString());
+        print('_listYear : ' + _listYear[i].years.toString());
+        if (_listYear[i].Active_account.toString().toLowerCase() == 'yes') {
+          if (_yearListItems.length == 0) {
+            _yearListItems.add(DropdownMenuItem(
+              value: _listYear[i].years,
+              child: Text(
+                _listYear[i].years,
+                style: TextStyle(color: GlobalVariables.green),
+              ),
+            ));
+          } else {
+            print('insert at 0 ');
+            _yearListItems.insert(
+                0,
+                DropdownMenuItem(
+                  value: _listYear[i].years,
+                  child: Text(
+                    _listYear[i].years,
+                    style: TextStyle(color: GlobalVariables.green),
+                  ),
+                ));
+            if (_yearSelectedItem == null) {
+              _yearSelectedItem = _listYear[i].years;
+              print('_yearSelectedItem : ' + _yearSelectedItem);
+            }
+          }
+        } else {
+          _yearListItems.add(DropdownMenuItem(
+            value: _listYear[i].years,
+            child: Text(
+              _listYear[i].years,
+              style: TextStyle(color: GlobalVariables.green),
+            ),
+          ));
         }
       }
 
@@ -545,7 +573,10 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
         }
         totalOutStanding = totalAmount + double.parse(openingBalance);
       }
-
+      if(_yearSelectedItem==null){
+        _yearSelectedItem = _listYear[0].years;
+      }
+      print('_yearSelectedItem : ' + _yearSelectedItem.toString());
       _progressDialog.hide();
       //Navigator.of(context).pop();
       setState(() {});

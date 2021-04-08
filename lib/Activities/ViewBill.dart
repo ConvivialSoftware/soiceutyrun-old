@@ -8,6 +8,7 @@ import 'package:societyrun/Models/BillDetails.dart';
 import 'package:societyrun/Models/BillHeads.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -44,7 +45,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
   void initState() {
     super.initState();
     getSharedPrefData();
-    getTransactionList();
+    //getTransactionList();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBillData();
@@ -82,7 +83,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('bill')+ ' - '+invoiceNo,
+            AppLocalizations.of(context).translate('bill')+ ' #'+invoiceNo,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -105,36 +106,205 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                Container(
-                  margin: EdgeInsets.fromLTRB(
-                      10, MediaQuery.of(context).size.height / 30, 10, 0),
+                _billDetailsList.length>0  ?     Container(
+                  margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 20, 10, 0),
                   child: Column(
                     children: <Widget>[
+
                       Container(
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            AppLocalizations.of(context).translate('details'),style: TextStyle(
-                            color: GlobalVariables.white,fontSize: 18,
-                          ),),
+                       // margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
+                        padding: EdgeInsets.all(
+                            16), // height: MediaQuery.of(context).size.height / 0.5,
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.topRight,
+                              child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
+                            ),
+                            SizedBox(height: 4,),
+                            Container(
+                              alignment: Alignment.center,
+                              child: text('Rs. '+double.parse(totalAmount.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4,),
+                            Container(
+                              alignment: Alignment.center,
+                              child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
+                            )
+                          ],
                         ),
                       ),
-                      getBillDetailsLayout(),
+
                       Container(
-                        margin: EdgeInsets.fromLTRB(
-                            0, 10, 0, 0),
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            AppLocalizations.of(context).translate('charges'),style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18,
-                          ),),
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        padding: EdgeInsets.all(
+                            10), // height: MediaQuery.of(context).size.height / 0.5,
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  10, 5, 10, 0),
+                              alignment: Alignment.topLeft,
+                              child: text("Charges",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            _billHeadsList.length>0 ? Container(
+                              //padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.fromLTRB(
+                                  10, 0, 10, 10),
+                              child: Builder(
+                                  builder: (context) => ListView.builder(
+                                    // scrollDirection: Axis.vertical,
+                                    itemCount: _billHeadsList.length,
+                                    itemBuilder: (context, position) {
+                                      return Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(_billHeadsList[position].HEAD_NAME,style: TextStyle(
+                                                          color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                                      ),),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),style: TextStyle(
+                                                        color:  GlobalVariables.red,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
+                                                    ),),
+                                                  )
+                                                ],
+                                              ),
+                                             /* position!=_recentTransactionList.length-1 ? Container(
+                                                margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                                child: Divider(
+                                                  color: GlobalVariables.lightGreen,
+                                                  height: 3,
+                                                ),
+                                              ):Container(),*/
+                                            ],
+                                          )
+                                      );
+                                    }, //  scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                  )),
+                            ):Container(),
+                          ],
                         ),
                       ),
-                      Flexible(
-                      child : _billHeadsList.length>0 ? getBillChargesLayout() : Container(),
+
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        padding: EdgeInsets.all(
+                            10), // height: MediaQuery.of(context).size.height / 0.5,
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  10, 5, 10, 0),
+                              alignment: Alignment.topLeft,
+                              child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('name')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(_billDetailsList[0].NAME,
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            /*Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('date')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),*/
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('due_date')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: text(AppLocalizations.of(context).translate('bill_period')+ " : ",
+                                        textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                    ),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(_billDetailsList[0]
+                                        .TYPE
+                                        .toLowerCase()
+                                        .toString() ==
+                                        'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
+                                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Align(
+                    /*  Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -159,188 +329,16 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                             ],
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
-                ),
+                ) : SizedBox(),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  getBillChargesLayout() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(20)),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    //scrollDirection: Axis.vertical,
-                    itemBuilder: (context, position) {
-                      return getBillChargesItemLayout(position);
-                    },
-                    itemCount: _billHeadsList.length)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  getTransactionList() {
-    _recentTransactionList = [
-      RecentTransaction(
-        transactionTitle: "General Maintenance",
-        transactionRs: "Rs. 1,347.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Sinking Fund",
-        transactionRs: "Rs. 57.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Building Repairs Funds",
-        transactionRs: "Rs. 86.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Parking Charges",
-        transactionRs: "Rs. 500.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Water Charges",
-        transactionRs: "Rs. 56.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Build. Dev. Fund",
-        transactionRs: "Rs. 285.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Accounting Charges",
-        transactionRs: "Rs. 135.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Late Fees",
-        transactionRs: "Rs. 0.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "SGST",
-        transactionRs: "Rs. 0.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "CGST",
-        transactionRs: "Rs. 1,347.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Arrears",
-        transactionRs: "Rs. 0.00",
-      ),
-      RecentTransaction(
-        transactionTitle: "Late Fees/Interest",
-        transactionRs: "Rs. 1,347.00",
-      ),
-    ];
-  }
-
-  getBillDetailsLayout() {
-    return _billDetailsList.length>0 ? Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: GlobalVariables.white,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                text: AppLocalizations.of(context).translate('name'),
-                style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                text: ": "+_billDetailsList[0].NAME,style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child: RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child: RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('due_date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('consumer_id'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                text: ': '+consumerId,
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('bill_period'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                text: _billDetailsList[0]
-                    .TYPE
-                    .toLowerCase()
-                    .toString() ==
-                    'invoice' ?  ": "+'NA': ": "+(GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-        ],
-      ),
-    ) : Container();
   }
 
   Future<void> getSharedPrefData() async {

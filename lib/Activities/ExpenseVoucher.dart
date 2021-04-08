@@ -17,6 +17,7 @@ import 'package:societyrun/Models/Expense.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Models/VoucherAmount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseExpenseVoucher extends StatefulWidget {
 
@@ -141,7 +142,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
             ),
           ),
           title: AutoSizeText(
-            AppLocalizations.of(context).translate('expense_voucher'),
+            'Expense #'+_expense.VOUCHER_NO,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -209,175 +210,80 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
     return SingleChildScrollView(
       child: Column(
         children: [
+
           Container(
+            margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
+            padding: EdgeInsets.all(
+                16), // height: MediaQuery.of(context).size.height / 0.5,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white,
+                borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.topRight,
+                  child: text(GlobalFunctions.convertDateFormat(_expense.PAYMENT_DATE, "dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
+                ),
+                SizedBox(height: 4,),
+                Container(
+                  alignment: Alignment.center,
+                  child: text('Rs. '+double.parse(_expense.AMOUNT.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 4,),
+                Container(
+                  alignment: Alignment.center,
+                  child: text(_expense.BANK_NAME,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
+                )
+              ],
+            ),
+          ),
+          /*Container(
             margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
             padding: EdgeInsets.all(
                 10), // height: MediaQuery.of(context).size.height / 0.5,
             decoration: BoxDecoration(
                 color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(20)),
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: AutoSizeText(AppLocalizations.of(context).translate('voucher_number')+ " : ",style: TextStyle(
-                              color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
-                          ),),
-                        ),
-                        Container(
-                       //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: AutoSizeText(_expense.VOUCHER_NO,style: TextStyle(
-                              color: GlobalVariables.grey,fontSize: 18,fontWeight: FontWeight.bold
-                          ),),
-                        )
-                      ],
-                    ),
+                borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              children: <Widget>[
+
+                Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        child: AutoSizeText(AppLocalizations.of(context).translate('amount')+ "(Rs.) : ",style: TextStyle(
+                            color: GlobalVariables.green,fontSize: 18
+                        ),),
+                      ),
+                      Container(
+                      //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: AutoSizeText(double.parse(_expense.AMOUNT.toString()).toStringAsFixed(2),style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: 16
+                        ),),
+                      )
+                    ],
                   ),
-                  /*Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: AutoSizeText(AppLocalizations.of(context).translate('Vendor_name')+ " : ",style: TextStyle(
-                              color: GlobalVariables.green,fontSize: 18
-                          ),),
-                        ),
-                        Container(
-                         // margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: AutoSizeText(_expense.name,style: TextStyle(
-                              color: GlobalVariables.grey,fontSize: 16
-                          ),),
-                        )
-                      ],
-                    ),
-                  ),*/
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: AutoSizeText(AppLocalizations.of(context).translate('amount')+ "(Rs.) : ",style: TextStyle(
-                              color: GlobalVariables.green,fontSize: 18
-                          ),),
-                        ),
-                        Container(
-                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: AutoSizeText(double.parse(_expense.AMOUNT.toString()).toStringAsFixed(2),style: TextStyle(
-                              color: GlobalVariables.grey,fontSize: 16
-                          ),),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: AutoSizeText(AppLocalizations.of(context).translate('transaction_mode')+ " : ",style: TextStyle(
-                              color: GlobalVariables.green,fontSize: 18
-                          ),),
-                        ),
-                        Container(
-                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: AutoSizeText(_expense.TRANSACTION_TYPE,style: TextStyle(
-                              color: GlobalVariables.grey,fontSize: 16
-                          ),),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: AutoSizeText(AppLocalizations.of(context).translate('transaction_number')+ " : ",style: TextStyle(
-                              color: GlobalVariables.green,fontSize: 18
-                          ),),
-                        ),
-                        Container(
-                          //margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: AutoSizeText(_expense.REFERENCE_NO,style: TextStyle(
-                              color: GlobalVariables.grey,fontSize: 16
-                          ),),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: AutoSizeText(AppLocalizations.of(context).translate('from_account')+ " : ",style: TextStyle(
-                              color: GlobalVariables.green,fontSize: 18
-                          ),),
-                        ),
-                        Container(
-                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: AutoSizeText(_expense.BANK_NAME,style: TextStyle(
-                              color: GlobalVariables.grey,fontSize: 16
-                          ),),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: Container(
-                            child: AutoSizeText(AppLocalizations.of(context).translate('narration')+ " : ",style: TextStyle(
-                                color: GlobalVariables.green,fontSize: 18
-                            ),),
-                          ),
-                        ),
-                        Flexible(
-                          child: Container(
-                            //color : GlobalVariables.green,
-                            //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: AutoSizeText(_expense.REMARK,style: TextStyle(
-                                color: GlobalVariables.grey,fontSize: 16
-                            ),maxLines: 2,)
-                            ,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
+          ),*/
           Container(
-            margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
             padding: EdgeInsets.all(
                 10), // height: MediaQuery.of(context).size.height / 0.5,
             decoration: BoxDecoration(
                 color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(20)),
+                borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.fromLTRB(
                       10, 5, 10, 0),
                   alignment: Alignment.topLeft,
-                  child: AutoSizeText("Head Details",style: TextStyle(
-                      color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
+                  child: AutoSizeText("Details",style: TextStyle(
+                      color: GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
                   ),),
                 ),
                 SizedBox(height: 10,),
@@ -392,12 +298,13 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                         itemBuilder: (context, position) {
                           return Container(
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
                                   flex:2,
                                   child: Container(
                                     child: AutoSizeText(_voucherAmountList[position].head_name+' : ',style: TextStyle(
-                                        color: GlobalVariables.green,fontSize: 18
+                                        color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
                                     ),),
                                   ),
                                 ),
@@ -406,8 +313,8 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                                   child: Container(
                                     //color : GlobalVariables.green,
                                     //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                    child: AutoSizeText(_voucherAmountList[position].amount,style: TextStyle(
-                                        color: GlobalVariables.grey,fontSize: 16
+                                    child: AutoSizeText('Rs. '+double.parse(_voucherAmountList[position].amount.toString()).toStringAsFixed(2),style: TextStyle(
+                                        color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
                                     ),maxLines: 2,)
                                     ,
                                   ),
@@ -419,7 +326,92 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                         }, //  scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                       )),
-                ):Container()
+                ):Container(),
+                Container(
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(5),
+                    child: Divider(thickness: 0.5,color: GlobalVariables.lightGray,)),
+                Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: AutoSizeText(AppLocalizations.of(context).translate('transaction_mode')+ " : ",style: TextStyle(
+                            color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                        ),),
+                      ),
+                      Container(
+                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: AutoSizeText(_expense.TRANSACTION_TYPE,style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: AutoSizeText(AppLocalizations.of(context).translate('transaction_number')+ " : ",style: TextStyle(
+                            color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                        ),),
+                      ),
+                      Container(
+                        //margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: AutoSizeText(_expense.REFERENCE_NO,style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: AutoSizeText(AppLocalizations.of(context).translate('from_account')+ " : ",style: TextStyle(
+                            color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                        ),),
+                      ),
+                      Container(
+                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: AutoSizeText(_expense.BANK_NAME,style: TextStyle(
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                        ),),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: AutoSizeText(AppLocalizations.of(context).translate('narration')+ " : ",style: TextStyle(
+                            color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                        ),),
+                      ),
+                      Flexible(
+                        child: Container(
+                          child: text(_expense.REMARK,
+                              textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium,maxLine: 99,)
+                          ,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

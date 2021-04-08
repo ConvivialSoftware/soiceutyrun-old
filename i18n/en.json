@@ -365,5 +365,9 @@
   "already_paid_advance_payment": "It seems like you don't have any pending amount. Would you like to pay in advance?",
   "my_ads": "My Ads",
   "sure_active_ads": "Are you sure you want to active your Ads?",
-  "booking_date": "Book Date"
+  "booking_date": "Book Date",
+  "start_date": "Start Date",
+  "end_date": "End Date",
+  "search_expense": "Search Expense",
+  "search_by_heads": "Search by heads"
 }

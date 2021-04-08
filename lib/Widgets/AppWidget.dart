@@ -27,7 +27,7 @@ Widget text(var text,
     {var fontSize = GlobalVariables.textSizeLargeMedium,
       textColor = GlobalVariables.grey,
       var isCentered = false,
-      var maxLine = 1,
+      var maxLine = 2,
       var latterSpacing = 0.5,
       var fontWeight = FontWeight.normal,var textStyleHeight=1.5}) {
   return Text(text,

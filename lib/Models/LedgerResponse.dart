@@ -27,13 +27,14 @@ class LedgerResponse {
 
 class LedgerYear {
 
-  var years;
-  LedgerYear({this.years});
+  var years,Active_account;
+  LedgerYear({this.years,this.Active_account});
 
   factory LedgerYear.fromJson(Map<String, dynamic> map){
 
     return LedgerYear(
       years: map["years"],
+      Active_account: map["Active_account"],
     );
   }
 

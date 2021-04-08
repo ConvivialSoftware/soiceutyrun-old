@@ -410,6 +410,7 @@ class GlobalVariables {
   static const Front = "front";
   static const bank = "bank";
   static const category = "category";
+  static const Year = "Year";
   static const head_details = "head_details";
   static const PassCode = "pass_code";
   static const ExpiredTime = "expire_time";

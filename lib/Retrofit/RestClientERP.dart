@@ -72,7 +72,8 @@ abstract class RestClientERP {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.expenseAPI)
-  Future<DataResponse> getExpenseData(@Field("SOCIETY_ID") String socId);
+  Future<DataResponse> getExpenseData(@Field("SOCIETY_ID") String socId,@Field("START_DATE") String startDate,@
+  Field("END_DATE") String endDate,@Field("HEADS") String heads,@Field("LEDGER_YEAR") String ledgerYear);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.accountLedgerAPI)

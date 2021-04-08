@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -75,7 +76,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             ),
           ),
           title: Text(
-            AppLocalizations.of(context).translate('receipt')+ ' - '+invoiceNo,
+            AppLocalizations.of(context).translate('receipt')+ ' #'+invoiceNo,
             style: TextStyle(color: GlobalVariables.white),
           ),
         ),
@@ -98,167 +99,144 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                Container(
-                  margin: EdgeInsets.fromLTRB(
-                      10, MediaQuery.of(context).size.height / 30, 10, 0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            AppLocalizations.of(context).translate('details'),style: TextStyle(
-                            color: GlobalVariables.white,fontSize: 18,
-                          ),),
-                        ),
-                      ),
-                      getBillDetailsLayout(),
-                     /* Container(
-                        margin: EdgeInsets.fromLTRB(
-                            0, 20, 0, 0),
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            AppLocalizations.of(context).translate('charges'),style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18,
-                          ),),
-                        ),
-                      ),*/
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          alignment : Alignment.bottomCenter,
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: GlobalVariables.white,
+
+                _receiptList.length>0 ?   Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 20, 10, 0),
+                      // margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
+                      padding: EdgeInsets.all(
+                          16), // height: MediaQuery.of(context).size.height / 0.5,
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        //mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            alignment: Alignment.topRight,
+                            child: text(GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") ,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: Text(AppLocalizations.of(context).translate('paid_amount'),style: TextStyle(
-                                    color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-                                ),),
-                              ),
-                              Container(
-                                child: Text('Rs. '+double.parse((_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString()).toStringAsFixed(2),style: TextStyle(
-                                    color: GlobalVariables.red,fontSize: 18,fontWeight: FontWeight.bold
-                                ),),
-                              )
-                            ],
+                          SizedBox(height: 4,),
+                          Container(
+                            alignment: Alignment.center,
+                            child: text('Rs. '+double.parse((_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
                           ),
-                        ),
+                          SizedBox(height: 4,),
+                          Container(
+                            alignment: Alignment.center,
+                            child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      padding: EdgeInsets.all(
+                          10), // height: MediaQuery.of(context).size.height / 0.5,
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        children: <Widget>[
+
+                          Container(
+                            margin: EdgeInsets.fromLTRB(
+                                10, 5, 10, 0),
+                            alignment: Alignment.topLeft,
+                            child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+
+
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  child: text(AppLocalizations.of(context).translate('name')+ " : ",
+                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                  ),
+                                ),
+                                Container(
+                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                  child: text(_receiptList[0].NAME,
+                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  child: text(AppLocalizations.of(context).translate('transaction_mode')+ " : ",
+                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                  ),
+                                ),
+                                Container(
+                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                  child: text(_receiptList[0].TRANSACTION_MODE!=null ? _receiptList[0].TRANSACTION_MODE: '-',
+                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  child: text(AppLocalizations.of(context).translate('reference_no')+ " : ",
+                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                  ),
+                                ),
+                                Container(
+                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                  child: text(_receiptList[0].REFERENCE_NO !=null ? _receiptList[0].REFERENCE_NO: '-',
+                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: Row(
+                            //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  child: text(AppLocalizations.of(context).translate('narration')+ " : ",
+                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                  ),
+                                ),
+                                Container(
+                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                  child: text(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-',
+                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ) : SizedBox(),
+
               ],
             ),
-          ),
-        ],
-      ),
-    ) : Container();
-  }
-
-  getBillDetailsLayout() {
-    return _receiptList.length>0 ? Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: GlobalVariables.white,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                text: AppLocalizations.of(context).translate('name'),
-                style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                text: ": "+_receiptList[0].NAME,style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child: RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+ (_receiptList[0].PAYMENT_DATE.length > 0 ? GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") : "" ),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child: RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('due_date'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+(_receiptList[0].PAYMENT_DATE.length > 0 ? GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") : "" ),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('transaction_mode'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                text: ': '+(_receiptList[0].TRANSACTION_MODE!=null ? _receiptList[0].TRANSACTION_MODE: '-'),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('reference_no'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                text:  ": "+(_receiptList[0].REFERENCE_NO !=null ? _receiptList[0].REFERENCE_NO: '-'),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
-          ),
-          getDivider(),
-          Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child:RichText(text: TextSpan(children: [
-              TextSpan(
-                  text: AppLocalizations.of(context).translate('narration'),
-                  style: TextStyle(color: GlobalVariables.green,fontSize: 18)
-              ),
-              TextSpan(
-                  text:  ": "+(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-'),
-                  style: TextStyle(color: GlobalVariables.grey,fontSize: 18)
-              )
-            ])),
           ),
         ],
       ),

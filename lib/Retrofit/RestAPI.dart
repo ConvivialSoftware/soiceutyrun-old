@@ -1864,12 +1864,16 @@ class RestAPI implements RestClient, RestClientERP , RestClientRazorPay,RestClie
   }
 
   @override
-  Future<DataResponse> getExpenseData(String societyId) async {
+  Future<DataResponse> getExpenseData(String societyId,String startDate,String endDate,String heads,String ledgerYear) async {
     // TODO: implement getExpenseData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      "START_DATE": startDate,
+      "END_DATE": endDate,
+      "HEADS": heads,
+      "LEDGER_YEAR": ledgerYear,
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
