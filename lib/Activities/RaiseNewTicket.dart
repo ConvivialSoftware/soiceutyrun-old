@@ -4,10 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
+import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -26,24 +28,20 @@ class BaseRaiseNewTicket extends StatefulWidget {
 }
 
 class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
+  // List<ComplaintArea> _areaList = new List<ComplaintArea>();
+  // List<ComplaintCategory> _categoryList = new List<ComplaintCategory>();
+  String complaintType = "Personal";
+  String complaintPriority = "No";
 
- // List<ComplaintArea> _areaList = new List<ComplaintArea>();
-  List<ComplaintCategory> _categoryList = new List<ComplaintCategory>();
-  String complaintType="Personal";
-  String complaintPriority="No";
-
-  TextEditingController complaintSubject =  TextEditingController();
+  TextEditingController complaintSubject = TextEditingController();
 
   TextEditingController complaintDesc = TextEditingController();
 
-
-
- // List<DropdownMenuItem<String>> __areaListItems = new List<DropdownMenuItem<String>>();
- // String _areaSelectedItem;
-
+  // List<DropdownMenuItem<String>> __areaListItems = new List<DropdownMenuItem<String>>();
+  // String _areaSelectedItem;
 
   List<DropdownMenuItem<String>> __categoryListItems =
-  new List<DropdownMenuItem<String>>();
+      new List<DropdownMenuItem<String>>();
 
   String _categorySelectedItem;
 
@@ -53,25 +51,38 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
 
   ProgressDialog _progressDialog;
 
-  bool isStoragePermission=false;
+  bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission=value;
+      isStoragePermission = value;
     });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         //getComplaintAreaData();
-        getComplaintCategoryData();
+        Provider.of<HelpDeskResponse>(context,listen: false)
+            .getComplaintCategoryData()
+            .then((value) {
+          print('before setState list : '+value.toString());
+          for (int i = 0; i < value.length; i++) {
+            __categoryListItems.add(DropdownMenuItem(
+              value: value[i].COMPLAINT_CATEGORY,
+              child: Text(
+                value[i].COMPLAINT_CATEGORY,
+                style: TextStyle(color: GlobalVariables.green),
+              ),
+            ));
+          }
+          print('before setState');
+          setState(() {});
+        });
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
       }
     });
-
-
   }
 
   @override
@@ -79,32 +90,39 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     // TODO: implement build
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
+    return ChangeNotifierProvider<HelpDeskResponse>.value(
+      value: Provider.of(context),
+      child: Consumer<HelpDeskResponse>(
+        builder: (context, value, child) {
+          return Builder(
+            builder: (context) => Scaffold(
+              appBar: AppBar(
+                backgroundColor: GlobalVariables.green,
+                centerTitle: true,
+                elevation: 0,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: GlobalVariables.white,
+                  ),
+                ),
+                title: Text(
+                  AppLocalizations.of(context).translate('help_desk'),
+                  style: TextStyle(color: GlobalVariables.white),
+                ),
+              ),
+              body: getBaseLayout(value),
             ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('help_desk'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getBaseLayout(),
+          );
+        },
       ),
     );
   }
 
-  getBaseLayout() {
+  getBaseLayout(HelpDeskResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -118,7 +136,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                getRaiseTicketLayout(),
+               value.isLoading ? GlobalFunctions.loadingWidget(context) : getRaiseTicketLayout(value),
               ],
             ),
           ),
@@ -127,7 +145,20 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     );
   }
 
-  getRaiseTicketLayout() {
+  getRaiseTicketLayout(HelpDeskResponse value) {
+    print('Out If');
+    if(value.complaintCategoryList.length>0){
+      print('In If');
+      for (int i = 0; i < value.complaintCategoryList.length; i++) {
+        __categoryListItems.add(DropdownMenuItem(
+          value: value.complaintCategoryList[i].COMPLAINT_CATEGORY,
+          child: Text(
+            value.complaintCategoryList[i].COMPLAINT_CATEGORY,
+            style: TextStyle(color: GlobalVariables.green),
+          ),
+        ));
+      }
+    }
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
@@ -151,7 +182,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('subject') + '*',
+                    AppLocalizations.of(context).translate('subject') + '*',
                 controllerCallback: complaintSubject,
               ),
               Container(
@@ -166,10 +197,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                           AppLocalizations.of(context)
                               .translate('personal')*/
                           complaintType = "Personal";
-                          setState(() {
-
-                          });
-
+                          setState(() {});
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -179,10 +207,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: complaintType== "Personal" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: complaintType == "Personal"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: complaintType== "Personal" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: complaintType == "Personal"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -208,12 +240,8 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-
                           complaintType = "Community";
-                          setState(() {
-
-                          });
-
+                          setState(() {});
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -223,10 +251,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: complaintType!= "Personal" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: complaintType != "Personal"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: complaintType!= "Personal" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: complaintType != "Personal"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -273,7 +305,9 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     ),
                     underline: SizedBox(),
                     hint: Text(
-                      AppLocalizations.of(context).translate('select_category')+'*',
+                      AppLocalizations.of(context)
+                              .translate('select_category') +
+                          '*',
                       style: TextStyle(
                           color: GlobalVariables.lightGray, fontSize: 14),
                     ),
@@ -284,10 +318,11 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 height: 150,
                 child: AppTextField(
                   textHintContent:
-                  AppLocalizations.of(context).translate('complaint_desc') + '*',
+                      AppLocalizations.of(context).translate('complaint_desc') +
+                          '*',
                   controllerCallback: complaintDesc,
                   maxLines: 99,
-                    contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                 ),
                 /*padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -330,50 +365,54 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                           border: Border.all(color: GlobalVariables.green,width: 2.0)
                       ),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                    )*/attachmentFilePath==null
+                    )*/
+                    attachmentFilePath == null
                         ? AppAssetsImage(
-                      GlobalVariables.componentUserProfilePath,
-                      imageWidth:50.0,
-                      imageHeight:50.0,
-                      borderColor: GlobalVariables.grey,
-                      borderWidth: 1.0,
-                      fit: BoxFit.cover,
-                      radius: 25.0,
-                    )
+                            GlobalVariables.componentUserProfilePath,
+                            imageWidth: 50.0,
+                            imageHeight: 50.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 25.0,
+                          )
                         : AppFileImage(
-                      attachmentFilePath,
-                      imageWidth:50.0,
-                      imageHeight:50.0,
-                      borderColor: GlobalVariables.grey,
-                      borderWidth: 1.0,
-                      fit: BoxFit.cover,
-                      radius: 25.0,
-                    ),
+                            attachmentFilePath,
+                            imageWidth: 50.0,
+                            imageHeight: 50.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 25.0,
+                          ),
                     Column(
                       children: <Widget>[
                         Container(
                           child: FlatButton.icon(
                             onPressed: () {
-
-                              if(isStoragePermission) {
+                              if (isStoragePermission) {
                                 openFile(context);
-                              }else{
-                                GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                  if(value){
+                              } else {
+                                GlobalFunctions.askPermission(
+                                        Permission.storage)
+                                    .then((value) {
+                                  if (value) {
                                     openFile(context);
-                                  }else{
-                                    GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        AppLocalizations.of(context)
+                                            .translate('download_permission'));
                                   }
                                 });
                               }
-
                             },
                             icon: Icon(
                               Icons.attach_file,
                               color: GlobalVariables.mediumGreen,
                             ),
                             label: Text(
-                              AppLocalizations.of(context).translate('attach_photo'),
+                              AppLocalizations.of(context)
+                                  .translate('attach_photo'),
                               style: TextStyle(color: GlobalVariables.green),
                             ),
                           ),
@@ -388,19 +427,22 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                         Container(
                           child: FlatButton.icon(
                               onPressed: () {
-
-                                if(isStoragePermission) {
+                                if (isStoragePermission) {
                                   openCamera(context);
-                                }else{
-                                  GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                    if(value){
+                                } else {
+                                  GlobalFunctions.askPermission(
+                                          Permission.storage)
+                                      .then((value) {
+                                    if (value) {
                                       openCamera(context);
-                                    }else{
-                                      GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                    } else {
+                                      GlobalFunctions.showToast(
+                                          AppLocalizations.of(context)
+                                              .translate(
+                                                  'download_permission'));
                                     }
                                   });
                                 }
-
                               },
                               icon: Icon(
                                 Icons.camera_alt,
@@ -414,12 +456,11 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
 
-           /*   Container(
+              /*   Container(
                 alignment: Alignment.topLeft,
                 child: Text(
                   attachmentFileName==null ? "" : attachmentFileName,
@@ -434,19 +475,24 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                       onTap:(){
-                         complaintPriority=="No" ? complaintPriority="Yes" : complaintPriority="No";
-                         setState(() {
-                         });
-                       } ,
+                      onTap: () {
+                        complaintPriority == "No"
+                            ? complaintPriority = "Yes"
+                            : complaintPriority = "No";
+                        setState(() {});
+                      },
                       child: Container(
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                           color:  complaintPriority=="No" ?  GlobalVariables.white:GlobalVariables.green,
+                            color: complaintPriority == "No"
+                                ? GlobalVariables.white
+                                : GlobalVariables.green,
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
-                              color: complaintPriority=="No" ?  GlobalVariables.mediumGreen : GlobalVariables.transparent,
+                              color: complaintPriority == "No"
+                                  ? GlobalVariables.mediumGreen
+                                  : GlobalVariables.transparent,
                               width: 2.0,
                             )),
                         child: Icon(Icons.check, color: GlobalVariables.white),
@@ -501,6 +547,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
       print('_selctedItem:' + _categorySelectedItem.toString());
     });
   }
+
 /*
 
   void getComplaintAreaData() async{
@@ -533,9 +580,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
   }
 */
 
-
-  void getComplaintCategoryData() async{
-
+ /* void getComplaintCategoryData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -543,10 +588,11 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     restClient.getComplaintsCategoryData(societyId).then((value) {
       if (value.status) {
         List<dynamic> _list = value.data;
-      //  print("category list : "+_list.toString());
-        _categoryList = List<ComplaintCategory>.from(_list.map((i)=>ComplaintCategory.fromJson(i)));
+        //  print("category list : "+_list.toString());
+        _categoryList = List<ComplaintCategory>.from(
+            _list.map((i) => ComplaintCategory.fromJson(i)));
 
-        for(int i=0;i<_categoryList.length;i++){
+        for (int i = 0; i < _categoryList.length; i++) {
           __categoryListItems.add(DropdownMenuItem(
             value: _categoryList[i].COMPLAINT_CATEGORY,
             child: Text(
@@ -557,16 +603,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
         }
         //_categorySelectedItem = __categoryListItems[0].value;
 
-        setState(() {
-        });
+        setState(() {});
       }
       _progressDialog.hide();
     });
 //800423_2020\-07\-30_20\:06\:12\.jpg
   }
-
+*/
   Future<void> addComplaint() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -582,17 +626,35 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     String attachmentName;
     String attachment;
 
-    if(attachmentFileName!=null && attachmentFilePath!=null){
+    if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
     }
     _progressDialog.show();
-    restClient.addComplaint(societyId, block,flat,userId,complaintSubject.text,complaintType,/*_areaSelectedItem,*/_categorySelectedItem,
-    complaintDesc.text,complaintPriority,name,attachment,attachmentName,societyName,userEmail,societyEmail).then((value) {
-      print("add complaint response : "+ value.toString());
+    restClient
+        .addComplaint(
+            societyId,
+            block,
+            flat,
+            userId,
+            complaintSubject.text,
+            complaintType,
+            /*_areaSelectedItem,*/
+            _categorySelectedItem,
+            complaintDesc.text,
+            complaintPriority,
+            name,
+            attachment,
+            attachmentName,
+            societyName,
+            userEmail,
+            societyEmail)
+        .then((value) {
+      print("add complaint response : " + value.toString());
       _progressDialog.hide();
-      if(value.status){
-        if(attachmentFileName!=null && attachmentFilePath!=null){
+      if (value.status) {
+        if (attachmentFileName != null && attachmentFilePath != null) {
           GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
         }
         Navigator.of(context).pop('back');
@@ -600,75 +662,59 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
             context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));*/
       }
       GlobalFunctions.showToast(value.message);
-
     });
   }
 
-
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentFilePath = value;
       getCompressFilePath();
     });
-
   }
 
   void openCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath=value.path;
+      attachmentFilePath = value.path;
       getCompressFilePath();
     });
   }
 
-  void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-    print('file Name : '+attachmentFileName.toString());
+  void getCompressFilePath() {
+    attachmentFileName = attachmentFilePath.substring(
+        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentFilePath, value.toString() + '/' + attachmentFileName)
+          .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
-        setState(() {
-        });
+        print('Cache file path : ' + attachmentCompressFilePath);
+        setState(() {});
       });
     });
   }
 
   void verifyData() {
+    if (complaintSubject.text.length > 0) {
+      //  if(_areaSelectedItem!=null){
 
-
-    if(complaintSubject.text.length>0){
-
-    //  if(_areaSelectedItem!=null){
-
-        if(_categorySelectedItem!=null){
-
-          if(complaintDesc.text.length>0){
-
-            addComplaint();
-
-          }else{
-            GlobalFunctions.showToast("Please Enter Complaint Description");
-          }
-
-
-        }else{
-          GlobalFunctions.showToast("Please Select Complaint Category");
+      if (_categorySelectedItem != null) {
+        if (complaintDesc.text.length > 0) {
+          addComplaint();
+        } else {
+          GlobalFunctions.showToast("Please Enter Complaint Description");
         }
+      } else {
+        GlobalFunctions.showToast("Please Select Complaint Category");
+      }
 
-
-     /* }else{
+      /* }else{
         GlobalFunctions.showToast("Please Select Complaint Area");
       }
 */
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Enter Complaint Subject");
     }
-
-
   }
-
-
-
-
 }

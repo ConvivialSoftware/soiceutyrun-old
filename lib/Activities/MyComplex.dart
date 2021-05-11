@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/Directory.dart';
 import 'package:societyrun/Activities/ViewPollGraph.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -20,6 +21,7 @@ import 'package:societyrun/Models/Announcement.dart';
 import 'package:societyrun/Models/CommitteeDirectory.dart';
 import 'package:societyrun/Models/Documents.dart';
 import 'package:societyrun/Models/EmergencyDirectory.dart';
+import 'package:societyrun/Models/MyComplexResponse.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Models/Poll.dart';
 import 'package:societyrun/Models/PollOption.dart';
@@ -44,21 +46,7 @@ class BaseMyComplex extends StatefulWidget {
 class MyComplexState extends BaseStatefulState<BaseMyComplex>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
-  //List<NewsBoard> _newsBoardList = List<NewsBoard>();
-  List<PollSurvey> _pollSurveyList = List<PollSurvey>();
-  List<DirectoryType> _directoryList = List<DirectoryType>();
-  List<Documents> _documentList = List<Documents>();
-
-//  List<Events> _eventsList = List<Events>();
-  List<NeighboursDirectory> _neighbourList = List<NeighboursDirectory>();
-  List<CommitteeDirectory> _committeeList = List<CommitteeDirectory>();
-  List<EmergencyDirectory> _emergencyList = List<EmergencyDirectory>();
-  List<Announcement> _announcementList = List<Announcement>();
-  List<Announcement> _meetingList = List<Announcement>();
-  List<Announcement> _eventList = List<Announcement>();
-  List<Poll> _pollList = List<Poll>();
-
+  
   var name, _localPath;
   String _taskId;
   ReceivePort _port = ReceivePort();
@@ -72,13 +60,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   String pageName;
 
   bool isStoragePermission = false;
-
+/*
   bool isAnnouncementTabAPICall = false;
   bool isMeetingsTabAPICall = false;
   bool isPollTabAPICall = false;
   bool isDocumentsTabAPICall = false;
   bool isDirectoryTabAPICall = false;
-  bool isEventsTabAPICall = false;
+  bool isEventsTabAPICall = false;*/
 
   MyComplexState(this.pageName);
 
@@ -175,36 +163,41 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       }
     }
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
+    return ChangeNotifierProvider<MyComplexResponse>.value(
+      value: Provider.of<MyComplexResponse>(context),
+      child: Consumer<MyComplexResponse>(builder: (context, value, child) {
+        return Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back,
+                  color: GlobalVariables.white,
+                ),
+              ),
+              title: Text(
+                AppLocalizations.of(context).translate('my_complex'),
+                style: TextStyle(color: GlobalVariables.white),
+              ),
+              bottom: getTabLayout(),
+              elevation: 0,
             ),
+            body: TabBarView(controller: _tabController, children: <Widget>[
+              getNewsBoardLayout(value),
+              getMeetingsLayout(value),
+              getPollSurveyLayout(value),
+              getDocumentsLayout(value),
+              getDirectoryLayout(value),
+              getEventsLayout(value),
+            ]),
           ),
-          title: Text(
-            AppLocalizations.of(context).translate('my_complex'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-          bottom: getTabLayout(),
-          elevation: 0,
-        ),
-        body: TabBarView(controller: _tabController, children: <Widget>[
-          getNewsBoardLayout(),
-          getMeetingsLayout(),
-          getPollSurveyLayout(),
-          getDocumentsLayout(),
-          getDirectoryLayout(),
-          getEventsLayout(),
-        ]),
-      ),
+        );
+      }),
     );
   }
 
@@ -242,7 +235,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getNewsBoardLayout() {
+  getNewsBoardLayout(MyComplexResponse value) {
     print('getNewsBoardLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -257,7 +250,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                getNewsBoardListDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context):getNewsBoardListDataLayout(value),
               ],
             ),
           ),
@@ -266,9 +259,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getNewsBoardListDataLayout() {
+  getNewsBoardListDataLayout(MyComplexResponse value) {
     print('getNewsBoardListDataLayout Tab Call');
-    return _announcementList.length > 0
+    return value.announcementList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
@@ -276,9 +269,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
-                      itemCount: _announcementList.length,
+                      itemCount: value.announcementList.length,
                       itemBuilder: (context, position) {
-                        return getNewsBoardListItemLayout(position);
+                        return getNewsBoardListItemLayout(position,value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -286,7 +279,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         : /*GlobalFunctions.noDataFoundLayout(context, "No Data Found")*/ Container();
   }
 
-  getNewsBoardListItemLayout(var position) {
+  getNewsBoardListItemLayout(var position, MyComplexResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -300,7 +293,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                    child: _announcementList[position].USER_PHOTO.isEmpty
+                    child: value.announcementList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 26.0,
@@ -311,7 +304,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             radius: 13.0,
                           )
                         : AppNetworkImage(
-                            _announcementList[position].USER_PHOTO,
+                            value.announcementList[position].USER_PHOTO,
                             imageWidth: 26.0,
                             imageHeight: 26.0,
                             borderColor: GlobalVariables.transparent,
@@ -329,7 +322,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _announcementList[position].USER_NAME,
+                            value.announcementList[position].USER_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 12,
@@ -342,11 +335,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _announcementList[position].BLOCK.length > 0
-                                      ? _announcementList[position]
+                                  value.announcementList[position].BLOCK.length > 0
+                                      ? value.announcementList[position]
                                               .BLOCK
                                               .toString() +
-                                          _announcementList[position]
+                                          value.announcementList[position]
                                               .FLAT
                                               .toString()
                                       : 'Maintainnance Staff',
@@ -366,7 +359,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               ),
                               Container(
                                 child: Text(
-                                  _announcementList[position].C_DATE,
+                                  value.announcementList[position].C_DATE,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -387,10 +380,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                     decoration: BoxDecoration(
                         color:
-                            getNewsTypeColor(_announcementList[position].CATEGORY),
+                            getNewsTypeColor(value.announcementList[position].CATEGORY),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      _announcementList[position].CATEGORY,
+                      value.announcementList[position].CATEGORY,
                       style: TextStyle(
                         color: GlobalVariables.white,
                         fontSize: 12,
@@ -405,7 +398,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: text(
-              _announcementList[position].SUBJECT,
+              value.announcementList[position].SUBJECT,
               textColor: GlobalVariables.green,
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
@@ -416,11 +409,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
               child: htmlText(
-                _announcementList[position].DESCRIPTION,
+                value.announcementList[position].DESCRIPTION,
                 textColor: GlobalVariables.grey,
                 fontSize: 14.0,
               ) /*Text(
-              _announcementList[position].DESCRIPTION,
+              value.announcementList[position].DESCRIPTION,
               style: TextStyle(
                 color: GlobalVariables.mediumGreen,
                 fontSize: 14,
@@ -465,7 +458,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   ],
                 )),
           ),*/
-          _announcementList[position].ATTACHMENT.length > 0
+          value.announcementList[position].ATTACHMENT.length > 0
               ? Container(
                   height: 2,
                   color: GlobalVariables.mediumGreen,
@@ -514,11 +507,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               ),
             ),
           ),*/
-          _announcementList[position].ATTACHMENT.length > 0
+          value.announcementList[position].ATTACHMENT.length > 0
               ? InkWell(
                   onTap: () async {
                     //: https://societyrun.com//Uploads/fb4c12f20c92a8e63bbaaa8e3f680fd3.jpg,
-                    String url = _announcementList[position].ATTACHMENT;
+                    String url = value.announcementList[position].ATTACHMENT;
 
                     print("storagePermiassion : " +
                         isStoragePermission.toString());
@@ -654,7 +647,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   }
 */
 
-  getMeetingsLayout() {
+  getMeetingsLayout(MyComplexResponse value) {
     print('getMeetingsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -669,7 +662,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                getMeetingsListDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context): getMeetingsListDataLayout(value),
               ],
             ),
           ),
@@ -678,9 +671,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getMeetingsListDataLayout() {
+  getMeetingsListDataLayout(MyComplexResponse value) {
     print('getMeetingsListDataLayout Tab Call');
-    return _meetingList.length > 0
+    return value.meetingList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
@@ -688,9 +681,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
-                      itemCount: _meetingList.length,
+                      itemCount: value.meetingList.length,
                       itemBuilder: (context, position) {
-                        return getMeetingsListItemLayout(position);
+                        return getMeetingsListItemLayout(position,value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -698,7 +691,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         : Container();
   }
 
-  getMeetingsListItemLayout(var position) {
+  getMeetingsListItemLayout(var position, MyComplexResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -712,7 +705,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                    child: _meetingList[position].USER_PHOTO.isEmpty
+                    child: value.meetingList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 26.0,
@@ -723,7 +716,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             radius: 13.0,
                           )
                         : AppNetworkImage(
-                            _meetingList[position].USER_PHOTO,
+                            value.meetingList[position].USER_PHOTO,
                             imageWidth: 26.0,
                             imageHeight: 26.0,
                             borderColor: GlobalVariables.transparent,
@@ -746,7 +739,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _meetingList[position].USER_NAME,
+                            value.meetingList[position].USER_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 12,
@@ -759,12 +752,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _meetingList[position].BLOCK.length > 0
-                                      ? _meetingList[position]
+                                  value.meetingList[position].BLOCK.length > 0
+                                      ? value.meetingList[position]
                                               .BLOCK
                                               .toString() +
                                           ' ' +
-                                          _meetingList[position].FLAT.toString()
+                                          value.meetingList[position].FLAT.toString()
                                       : 'Maintainnance Staff',
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
@@ -782,7 +775,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               ),
                               Container(
                                 child: Text(
-                                  _meetingList[position].C_DATE,
+                                  value.meetingList[position].C_DATE,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -803,10 +796,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                     decoration: BoxDecoration(
                         color:
-                        getNewsTypeColor(_meetingList[position].CATEGORY),
+                        getNewsTypeColor(value.meetingList[position].CATEGORY),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      _meetingList[position].CATEGORY,
+                      value.meetingList[position].CATEGORY,
                       style: TextStyle(
                         color: GlobalVariables.white,
                         fontSize: 12,
@@ -820,23 +813,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(
-              _meetingList[position].SUBJECT,
-                  textColor: GlobalVariables.green,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold),
-              //  maxLines: 1,
-              //  overflow: TextOverflow.ellipsis,
+            child: text(value.meetingList[position].SUBJECT,
+                textColor: GlobalVariables.green,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+            //  maxLines: 1,
+            //  overflow: TextOverflow.ellipsis,
           ),
           Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
               child: htmlText(
-               _meetingList[position].DESCRIPTION,
-                  textColor: GlobalVariables.grey,
-                  fontSize: 14.0,
-
+                value.meetingList[position].DESCRIPTION,
+                textColor: GlobalVariables.grey,
+                fontSize: 14.0,
               ) /*Text(
-              _announcementList[position].DESCRIPTION,
+              value.announcementList[position].DESCRIPTION,
               style: TextStyle(
                 color: GlobalVariables.mediumGreen,
                 fontSize: 14,
@@ -870,7 +861,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       ),
                       Container(
                         child: Text(
-                          _meetingList[position].VENUE,
+                          value.meetingList[position].VENUE,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -902,8 +893,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _meetingList[position]
-                              .START_DATE /*+' to '+ _meetingList[position].END_DATE*/,
+                          value.meetingList[position]
+                              .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -935,8 +926,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _meetingList[position]
-                              .Start_Time /*+' to '+ _meetingList[position].END_TIME*/,
+                          value.meetingList[position]
+                              .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -985,7 +976,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   ],
                 )),
           ),*/
-          _meetingList[position].ATTACHMENT.length > 0
+          value.meetingList[position].ATTACHMENT.length > 0
               ? Container(
                   height: 2,
                   color: GlobalVariables.mediumGreen,
@@ -1034,10 +1025,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               ),
             ),
           ),*/
-          _meetingList[position].ATTACHMENT.length > 0
+          value.meetingList[position].ATTACHMENT.length > 0
               ? InkWell(
                   onTap: () {
-                    String url = _meetingList[position].ATTACHMENT;
+                    String url = value.meetingList[position].ATTACHMENT;
 
                     print("storagePermiassion : " +
                         isStoragePermission.toString());
@@ -1084,7 +1075,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getPollSurveyLayout() {
+  getPollSurveyLayout(MyComplexResponse value) {
     print('getPollSurveyLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -1099,7 +1090,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                getPollSurveyListDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context):   getPollSurveyListDataLayout(value),
               ],
             ),
           ),
@@ -1108,7 +1099,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getPollSurveyListDataLayout() {
+  getPollSurveyListDataLayout(MyComplexResponse value) {
     print('getPollSurveyListDataLayout Tab Call');
     return Container(
       //padding: EdgeInsets.all(10),
@@ -1117,50 +1108,50 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
-                itemCount: _pollList.length,
+                itemCount: value.pollList.length,
                 itemBuilder: (context, position) {
-                  return getPollSurveyListItemLayout(position);
+                  return getPollSurveyListItemLayout(position,value);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
     );
   }
 
-  getPollSurveyListItemLayout(var position) {
+  getPollSurveyListItemLayout(var position, MyComplexResponse value) {
     print('>>>>> ' + position.toString());
 
     print('EXPIRY_DATE : ' +
-        GlobalFunctions.isDateSameOrGrater(_pollList[position].EXPIRY_DATE)
+        GlobalFunctions.isDateSameOrGrater(value.pollList[position].EXPIRY_DATE)
             .toString());
-    print('SECRET_POLL : ' + _pollList[position].SECRET_POLL.toString());
-    print('VOTED_TO : ' + _pollList[position].VOTED_TO.length.toString());
-    if (!GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE) &&
-        (_pollList[position].VOTED_TO.length > 0) &&
-        _pollList[position].SECRET_POLL.toLowerCase() == 'no') {
+    print('SECRET_POLL : ' + value.pollList[position].SECRET_POLL.toString());
+    print('VOTED_TO : ' + value.pollList[position].VOTED_TO.length.toString());
+    if (!GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE) &&
+        (value.pollList[position].VOTED_TO.length > 0) &&
+        value.pollList[position].SECRET_POLL.toLowerCase() == 'no') {
       print('>>> 1st');
-      _pollList[position].isGraphView = true;
+      value.pollList[position].isGraphView = true;
     }
-    if (GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE)) {
+    if (GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE)) {
       print('>>> 2nd');
-      _pollList[position].isGraphView = true;
+      value.pollList[position].isGraphView = true;
     }
 
-    if (!GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE) &&
-        (_pollList[position].VOTED_TO.length == 0)) {
+    if (!GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE) &&
+        (value.pollList[position].VOTED_TO.length == 0)) {
       print('>>> 3rd');
-      _pollList[position].isGraphView = false;
+      value.pollList[position].isGraphView = false;
     }
 
-    if (!GlobalFunctions.isDateExpireForPoll(_pollList[position].EXPIRY_DATE) &&
-        (_pollList[position].VOTED_TO.length > 0) &&
-        _pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
+    if (!GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE) &&
+        (value.pollList[position].VOTED_TO.length > 0) &&
+        value.pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
       print('>>> 4th');
-      _pollList[position].isGraphView = false;
+      value.pollList[position].isGraphView = false;
     }
 
     print('>>>>> ' + position.toString());
-    print('>>>>> _pollList[position].VOTED_TO.length : ' +
-        _pollList[position].VOTED_TO.length.toString());
+    print('>>>>> value.pollList[position].VOTED_TO.length : ' +
+        value.pollList[position].VOTED_TO.length.toString());
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
@@ -1174,7 +1165,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                  child: _pollList[position].USER_PHOTO.isEmpty
+                  child: value.pollList[position].USER_PHOTO.isEmpty
                       ? AppAssetsImage(
                           GlobalVariables.componentUserProfilePath,
                           imageWidth: 26.0,
@@ -1185,7 +1176,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           radius: 13.0,
                         )
                       : AppNetworkImage(
-                          _pollList[position].USER_PHOTO,
+                          value.pollList[position].USER_PHOTO,
                           imageWidth: 26.0,
                           imageHeight: 26.0,
                           borderColor: GlobalVariables.transparent,
@@ -1204,7 +1195,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _pollList[position].USER_NAME,
+                            value.pollList[position].USER_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 12,
@@ -1217,9 +1208,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _pollList[position].BLOCK +
+                                  value.pollList[position].BLOCK +
                                       ' ' +
-                                      _pollList[position].FLAT,
+                                      value.pollList[position].FLAT,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -1236,7 +1227,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               ),
                               Container(
                                 child: Text(
-                                  _pollList[position].C_DATE,
+                                  value.pollList[position].C_DATE,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -1256,7 +1247,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   height: 10,
                   decoration: BoxDecoration(
                       color: !GlobalFunctions.isDateSameOrGrater(
-                              _pollList[position].EXPIRY_DATE)
+                              value.pollList[position].EXPIRY_DATE)
                           ? GlobalVariables.green
                           : GlobalVariables.red,
                       shape: BoxShape.circle),
@@ -1267,23 +1258,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(
-              _pollList[position].POLL_Q,
-                  textColor: GlobalVariables.green,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
-            ),
+            child: text(value.pollList[position].POLL_Q,
+                textColor: GlobalVariables.green,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
           ),
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
             child: htmlText(
-              _pollList[position].DESCRIPTION,
-                textColor: GlobalVariables.grey,
-                fontSize: 14.0,
+              value.pollList[position].DESCRIPTION,
+              textColor: GlobalVariables.grey,
+              fontSize: 14.0,
             ),
           ),
-          getVoteLayout(position),
+          getVoteLayout(position,value),
           Container(
             height: 2,
             color: GlobalVariables.mediumGreen,
@@ -1312,9 +1301,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         ),
                       ),*/
                       (!GlobalFunctions.isDateSameOrGrater(
-                                  _pollList[position].EXPIRY_DATE) &&
-                              (_pollList[position].VOTED_TO.length > 0) &&
-                              _pollList[position].SECRET_POLL.toLowerCase() ==
+                                  value.pollList[position].EXPIRY_DATE) &&
+                              (value.pollList[position].VOTED_TO.length > 0) &&
+                              value.pollList[position].SECRET_POLL.toLowerCase() ==
                                   'yes')
                           ? Container(
                               margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -1334,7 +1323,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                   Text(
                                     "  (Result On " +
                                         GlobalFunctions.convertDateFormat(
-                                            _pollList[position].EXPIRY_DATE,
+                                            value.pollList[position].EXPIRY_DATE,
                                             "dd MMM yy") +
                                         ")",
                                     style: TextStyle(
@@ -1350,26 +1339,26 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   ),
                 ),
               ),
-              _pollList[position].isGraphView
+              value.pollList[position].isGraphView
                   ? InkWell(
                       onTap: () {
                         List<PollOption> _optionList = List<PollOption>.from(
-                            _pollList[position]
+                            value.pollList[position]
                                 .OPTION
                                 .map((i) => PollOption.fromJson(i)));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => BaseViewPollGraph(
-                                    _pollList[position], _optionList)));
+                                    value.pollList[position], _optionList)));
                       },
                       child: Row(
                         children: [
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: GlobalFunctions.isDateSameOrGrater(
-                                        _pollList[position].EXPIRY_DATE) &&
-                                    (_pollList[position].VOTED_TO.length > 0)
+                                        value.pollList[position].EXPIRY_DATE) &&
+                                    (value.pollList[position].VOTED_TO.length > 0)
                                 ? Text(
                                     "See Poll Result",
                                     style: TextStyle(
@@ -1396,21 +1385,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       ),
                     )
                   : Container(),
-              (_pollList[position].VOTED_TO.length == 0) &&
-                      _pollList[position].VOTE_PERMISSION.toLowerCase() ==
+              (value.pollList[position].VOTED_TO.length == 0) &&
+                      value.pollList[position].VOTE_PERMISSION.toLowerCase() ==
                           'yes' &&
                       !GlobalFunctions.isDateSameOrGrater(
-                          _pollList[position].EXPIRY_DATE)
+                          value.pollList[position].EXPIRY_DATE)
                   ? InkWell(
                       onTap: () {
                         String optionId = '';
                         List<PollOption> _optionList = List<PollOption>.from(
-                            _pollList[position]
+                            value.pollList[position]
                                 .OPTION
                                 .map((i) => PollOption.fromJson(i)));
                         for (int i = 0; i < _optionList.length; i++) {
                           if (_optionList[i].ANS_ID ==
-                              _pollList[position].View_VOTED_TO) {
+                              value.pollList[position].View_VOTED_TO) {
                             optionId = _optionList[i].ANS_ID;
                             _optionList[i].VOTES =
                                 (int.parse(_optionList[i].VOTES) + 1)
@@ -1419,8 +1408,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           }
                         }
 
-                        addPollVote(_pollList[position].ID, optionId, position,
-                            _optionList);
+                        addPollVote(value.pollList[position].ID, optionId, position,
+                            _optionList,value);
                       },
                       child: Container(
                         alignment: Alignment.topRight,
@@ -1443,75 +1432,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       ),
     );
   }
-
-  getPollSurveyListData() {
-    _pollSurveyList = [
-      PollSurvey(
-          username: "Ashish Waykar",
-          blockFlatNo: "AA102",
-          date: "10/02/2020",
-          surveyTitle: "Can we celebrate Holi festival this year?",
-          surveyDesc: "please lat us know your views on this.",
-          surveyVoteOptions: [
-            SurveyVoteOption(isSelected: true, radioText: "Yes", index: 1),
-            SurveyVoteOption(isSelected: false, radioText: "No", index: 2)
-          ],
-          surveyVote: [
-            "1 vote",
-            "0 Vote"
-          ]),
-      PollSurvey(
-          username: "Ashish Waykar",
-          blockFlatNo: "AA102",
-          date: "10/02/2020",
-          surveyTitle: "Can we celebrate Holi festival this year?",
-          surveyDesc: "please lat us know your views on this.",
-          surveyVoteOptions: [
-            SurveyVoteOption(isSelected: true, radioText: "Yes", index: 1),
-            SurveyVoteOption(isSelected: false, radioText: "No", index: 2),
-            SurveyVoteOption(
-                isSelected: false, radioText: "May be or May be not", index: 3)
-          ],
-          surveyVote: [
-            "1 vote",
-            "0 Vote",
-            "0 Vote"
-          ]),
-      PollSurvey(
-          username: "Ashish Waykar",
-          blockFlatNo: "AA102",
-          date: "10/02/2020",
-          surveyTitle: "Can we celebrate Holi festival this year?",
-          surveyDesc: "please lat us know your views on this.",
-          surveyVoteOptions: [
-            SurveyVoteOption(isSelected: true, radioText: "Yes", index: 1),
-            SurveyVoteOption(isSelected: false, radioText: "No", index: 2)
-          ],
-          surveyVote: [
-            "1 vote",
-            "0 Vote"
-          ]),
-      PollSurvey(
-          username: "Ashish Waykar",
-          blockFlatNo: "AA102",
-          date: "10/02/2020",
-          surveyTitle: "Can we celebrate Holi festival this year?",
-          surveyDesc: "please lat us know your views on this.",
-          surveyVoteOptions: [
-            SurveyVoteOption(isSelected: true, radioText: "Yes", index: 1),
-            SurveyVoteOption(isSelected: false, radioText: "No", index: 2),
-            SurveyVoteOption(
-                isSelected: false, radioText: "May be or May be not", index: 3)
-          ],
-          surveyVote: [
-            "1 vote",
-            "0 Vote",
-            "0 Vote"
-          ]),
-    ];
-  }
-
-  getDirectoryLayout() {
+  
+  getDirectoryLayout(MyComplexResponse value) {
     print('getDirectoryLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -1540,7 +1462,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     // child: getSearchFilerLayout(),
                   ),
                 ),
-                getDirectoryListDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context):  getDirectoryListDataLayout(value),
               ],
             ),
           ),
@@ -1649,9 +1571,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     });*/
   }
 
-  getDirectoryListDataLayout() {
+  getDirectoryListDataLayout(MyComplexResponse value) {
     print('getDirectoryListDataLayout Tab Call');
-    return _directoryList.length > 0
+    return value.directoryList.length > 0
         ? Container(
             // color: GlobalVariables.grey,
             //padding: EdgeInsets.all(10),
@@ -1660,9 +1582,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
-                      itemCount: _directoryList.length,
+                      itemCount: value.directoryList.length,
                       itemBuilder: (context, position) {
-                        return getDirectoryListItemLayout(position);
+                        return getDirectoryListItemLayout(position,value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -1670,11 +1592,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         : Container();
   }
 
-  getDirectoryListItemLayout(int position) {
+  getDirectoryListItemLayout(int position, MyComplexResponse value) {
     // int _default;
 
     //Committee
-    String type = _directoryList[position].directoryType;
+    String type = value.directoryList[position].directoryType;
     // print('Type : '+type);
     return Column(
       children: <Widget>[
@@ -1711,12 +1633,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     builder: (context) => ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _directoryList[position]
+                        itemCount: value.directoryList[position]
                             .directoryTypeWiseList
                             .length,
                         itemBuilder: (context, childPosition) {
                           return getDirectoryTypeWiseItemLayout(
-                              position, childPosition, type);
+                              position, childPosition, type,value);
                         })),
               ),
               InkWell(
@@ -1726,7 +1648,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                BaseDirectory(_directoryList[position])));
+                                BaseDirectory(value.directoryList[position])));
                   }
                 },
                 child: Container(
@@ -1774,58 +1696,58 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   getDirectoryTypeWiseItemLayout(
     int position,
     int childPosition,
-    String type,
+    String type, MyComplexResponse value,
   ) {
     // print('Type : '+type);
 
     //bool phone=false,email=false;
     String name = '', field = '', permission = '';
     if (type == 'Committee') {
-      name = _directoryList[position].directoryTypeWiseList[childPosition].NAME;
+      name = value.directoryList[position].directoryTypeWiseList[childPosition].NAME;
 
       field =
-          _directoryList[position].directoryTypeWiseList[childPosition].POST;
+          value.directoryList[position].directoryTypeWiseList[childPosition].POST;
 
-      /* _directoryList[position]
+      /* value.directoryList[position]
           .directoryTypeWiseList[childPosition].EMAIL.length!= 0 ? email=true : email=false;
 
-      _directoryList[position]
+      value.directoryList[position]
           .directoryTypeWiseList[childPosition].PHONE.length != 0 ? phone=true : phone=false;*/
     }
 
     if (type == 'Emergency') {
-      name = _directoryList[position]
+      name = value.directoryList[position]
                   .directoryTypeWiseList[childPosition]
                   .Name ==
               null
           ? ''
-          : _directoryList[position].directoryTypeWiseList[childPosition].Name;
+          : value.directoryList[position].directoryTypeWiseList[childPosition].Name;
 
-      field = _directoryList[position]
+      field = value.directoryList[position]
                   .directoryTypeWiseList[childPosition]
                   .Category ==
               null
           ? ''
-          : _directoryList[position]
+          : value.directoryList[position]
               .directoryTypeWiseList[childPosition]
               .Category;
 
       print('name : ' + name);
       print('field : ' + field);
-      /*_directoryList[position]
+      /*value.directoryList[position]
           .directoryTypeWiseList[childPosition].Contact_No.length != 0 ? phone=true : phone=false;*/
     }
 
     if (type == 'Neighbours') {
-      name = _directoryList[position].directoryTypeWiseList[childPosition].NAME;
+      name = value.directoryList[position].directoryTypeWiseList[childPosition].NAME;
 
-      field = _directoryList[position]
+      field = value.directoryList[position]
               .directoryTypeWiseList[childPosition]
               .BLOCK +
           "-" +
-          _directoryList[position].directoryTypeWiseList[childPosition].FLAT;
+          value.directoryList[position].directoryTypeWiseList[childPosition].FLAT;
 
-      /* permission = _directoryList[position]
+      /* permission = value.directoryList[position]
           .directoryTypeWiseList[childPosition].PERMISSIONS;
       if(permission!=null && permission.contains('memberPhone')){
         phone = true;
@@ -1836,10 +1758,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     }
 
     if (type == 'Near By Shops') {
-      name = _directoryList[position].directoryTypeWiseList[childPosition].name;
+      name = value.directoryList[position].directoryTypeWiseList[childPosition].name;
 
       field =
-          _directoryList[position].directoryTypeWiseList[childPosition].field;
+          value.directoryList[position].directoryTypeWiseList[childPosition].field;
     }
     if (name == null) name = '';
 
@@ -1905,48 +1827,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       ),
     );
   }
-
-  getDirectoryListData() {
-    _directoryList = [
-      DirectoryType(
-          directoryType: "Neighbours", directoryTypeWiseList: _neighbourList),
-      DirectoryType(
-          directoryType: "Committee", directoryTypeWiseList: _committeeList),
-      DirectoryType(
-          directoryType: "Emergency", directoryTypeWiseList: _emergencyList),
-      /* DirectoryType(directoryType: "Near By Shops", directoryTypeWiseList: [
-        */ /* DirectoryTypeWiseData(
-            name: "Arogya Medical",
-            field: "Medical",
-            isCall: true,
-            isMail: false,
-            isSearch: true,
-            isFilter: true),
-        DirectoryTypeWiseData(
-            name: "Mahalakshmi Store",
-            field: "Grocery",
-            isCall: true,
-            isMail: false,
-            isSearch: true,
-            isFilter: true),
-        DirectoryTypeWiseData(
-            name: "D'mary",
-            field: "Grocery",
-            isCall: true,
-            isMail: false,
-            isSearch: true,
-            isFilter: true),
-        DirectoryTypeWiseData(
-            name: "Medicare",
-            field: "Medical",
-            isCall: true,
-            isMail: false,
-            isSearch: true,
-            isFilter: true),*/ /*
-      ]),*/
-    ];
-  }
-
+  
   /* getDocumentsLayout() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -2000,7 +1881,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
-                itemCount: _documentList.length,
+                itemCount: value.documentList.length,
                 itemBuilder: (context, position) {
                   return getDocumentListItemLayout(position);
                 }, //  scrollDirection: Axis.vertical,
@@ -2018,7 +1899,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
           alignment: Alignment.topLeft,
           child: Text(
-            _documentList[position].docTypes,
+            value.documentList[position].docTypes,
             style: TextStyle(color: GlobalVariables.green, fontSize: 20),
           ),
         ),
@@ -2043,7 +1924,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     builder: (context) => ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _documentList[position].documentList.length,
+                        itemCount: value.documentList[position].documentList.length,
                         itemBuilder: (context, childPosition) {
                           return getDocumentTypeWiseItemLayout(
                               position, childPosition);
@@ -2113,7 +1994,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           Container(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              _documentList[position]
+                              value.documentList[position]
                                   .documentList[childPosition]
                                   .docTitle,
                               style: TextStyle(
@@ -2125,7 +2006,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           Container(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              _documentList[position]
+                              value.documentList[position]
                                   .documentList[childPosition]
                                   .docDesc,
                               style: TextStyle(
@@ -2155,7 +2036,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   }
 
   getDocumentsListData() {
-    _documentList = [
+    value.documentList = [
       Documents(docTypes: "Own Documents", documentList: [
         DocumentsTypeWiseData(
           docTitle: "Rent Agreement",
@@ -2191,7 +2072,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     ];
   }*/
 
-  getEventsLayout() {
+  getEventsLayout(MyComplexResponse value) {
     print('getEventsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -2220,7 +2101,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     // child: getSearchFilerLayout(),
                   ),
                 ),
-                getEventsDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context):   getEventsDataLayout(value),
               ],
             ),
           ),
@@ -2229,7 +2110,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getEventsDataLayout() {
+  getEventsDataLayout(MyComplexResponse value) {
     print('getEventsDataLayout Tab Call');
     return /*Align(
       alignment: Alignment.center,
@@ -2239,7 +2120,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         ),),
       ),
     );*/
-        _eventList.length > 0
+        value.eventList.length > 0
             ? Container(
                 //  color: GlobalVariables.grey,
                 //padding: EdgeInsets.all(10),
@@ -2248,9 +2129,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 child: Builder(
                     builder: (context) => ListView.builder(
                           // scrollDirection: Axis.vertical,
-                          itemCount: _eventList.length,
+                          itemCount: value.eventList.length,
                           itemBuilder: (context, position) {
-                            return getEventsListItemLayout(position);
+                            return getEventsListItemLayout(position,value);
                           }, //  scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                         )),
@@ -2258,7 +2139,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             : Container();
   }
 
-  getEventsListItemLayout(var position) {
+  getEventsListItemLayout(var position, MyComplexResponse value) {
     // int _default;
 
     return Container(
@@ -2274,7 +2155,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                    child: _eventList[position].USER_PHOTO.isEmpty
+                    child: value.eventList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 26.0,
@@ -2285,7 +2166,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             radius: 10.0,
                           )
                         : AppNetworkImage(
-                            _eventList[position].USER_PHOTO,
+                            value.eventList[position].USER_PHOTO,
                             imageWidth: 26.0,
                             imageHeight: 26.0,
                             borderColor: GlobalVariables.grey,
@@ -2303,7 +2184,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _eventList[position].USER_NAME,
+                            value.eventList[position].USER_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 12,
@@ -2316,10 +2197,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  _eventList[position].BLOCK.length > 0
-                                      ? _eventList[position].BLOCK +
+                                  value.eventList[position].BLOCK.length > 0
+                                      ? value.eventList[position].BLOCK +
                                           ' ' +
-                                          _eventList[position].FLAT
+                                          value.eventList[position].FLAT
                                       : "Maintannance Staff",
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
@@ -2337,7 +2218,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               ),
                               Container(
                                 child: Text(
-                                  _eventList[position].C_DATE,
+                                  value.eventList[position].C_DATE,
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
                                     fontSize: 10,
@@ -2357,23 +2238,23 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(
-              _eventList[position].SUBJECT,
-                  textColor: GlobalVariables.green,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
-              //maxLines: 1,
-              //overflow: TextOverflow.ellipsis,
-            ),
+            child: text(value.eventList[position].SUBJECT,
+                textColor: GlobalVariables.green,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+                //maxLines: 1,
+                //overflow: TextOverflow.ellipsis,
+                ),
           ),
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child: htmlText(_eventList[position].DESCRIPTION,
-                textColor: GlobalVariables.grey,
-                fontSize: 14.0,
+            child: htmlText(
+              value.eventList[position].DESCRIPTION,
+              textColor: GlobalVariables.grey,
+              fontSize: 14.0,
             ) /*Text(
-              _eventList[position].DESCRIPTION,
+              value.eventList[position].DESCRIPTION,
               style: TextStyle(
                 color: GlobalVariables.mediumGreen,
                 fontSize: 14,
@@ -2408,7 +2289,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       ),
                       Container(
                         child: Text(
-                          _eventList[position].VENUE,
+                          value.eventList[position].VENUE,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -2440,9 +2321,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _eventList[position].START_DATE +
+                          value.eventList[position].START_DATE +
                               ' to ' +
-                              _eventList[position].END_DATE,
+                              value.eventList[position].END_DATE,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -2474,9 +2355,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                         child: Text(
-                          _eventList[position].START_TIME +
+                          value.eventList[position].START_TIME +
                               ' to ' +
-                              _eventList[position].END_TIME,
+                              value.eventList[position].END_TIME,
                           style: TextStyle(
                             color: GlobalVariables.green,
                             fontSize: 14,
@@ -2489,7 +2370,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               ],
             ),
           ),
-          _eventList[position].ATTACHMENT.length > 0
+          value.eventList[position].ATTACHMENT.length > 0
               ? Container(
                   height: 2,
                   color: GlobalVariables.mediumGreen,
@@ -2499,10 +2380,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   ),
                 )
               : Container(),
-          _eventList[position].ATTACHMENT.length > 0
+          value.eventList[position].ATTACHMENT.length > 0
               ? InkWell(
                   onTap: () {
-                    String url = _eventList[position].ATTACHMENT;
+                    String url = value.eventList[position].ATTACHMENT;
 
                     print("storagePermiassion : " +
                         isStoragePermission.toString());
@@ -2549,51 +2430,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  /* getEventsListData() {
-    _eventsList = [
-      Events(
-          name: "Ashish Waykar",
-          blockFlat: "AA102",
-          date: "10/02/2020",
-          eventTitle: "Skill Compitition",
-          eventDesc:
-              "Hello Guys,Today we all to gather at society hall for performing compititiona and awards.",
-          eventVenue: "Mumbai",
-          eventDate: "25 MArch 2020",
-          eventTime: "09:00 am to 12:00 pm"),
-      Events(
-          name: "Ashish Waykar",
-          blockFlat: "AA102",
-          date: "10/02/2020",
-          eventTitle: "Skill Compitition",
-          eventDesc:
-              "Hello Guys,Today we all to gather at society hall for performing compititiona and awards.",
-          eventVenue: "Mumbai",
-          eventDate: "25 MArch 2020",
-          eventTime: "09:00 am to 12:00 pm"),
-      Events(
-          name: "Ashish Waykar",
-          blockFlat: "AA102",
-          date: "10/02/2020",
-          eventTitle: "Skill Compitition",
-          eventDesc:
-              "Hello Guys,Today we all to gather at society hall for performing compititiona and awards.",
-          eventVenue: "Mumbai",
-          eventDate: "25 MArch 2020",
-          eventTime: "09:00 am to 12:00 pm"),
-      Events(
-          name: "Ashish Waykar",
-          blockFlat: "AA102",
-          date: "10/02/2020",
-          eventTitle: "Skill Compitition",
-          eventDesc:
-              "Hello Guys,Today we all to gather at society hall for performing compititiona and awards.",
-          eventVenue: "Mumbai",
-          eventDate: "25 MArch 2020",
-          eventTime: "09:00 am to 12:00 pm"),
-    ];
-  }
-*/
   Future<void> getDisplayName() async {
     name = await GlobalFunctions.getDisplayName();
     setState(() {});
@@ -2603,149 +2439,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     GlobalFunctions.localPath().then((value) {
       print("External Directory Path" + value.toString());
       _localPath = value;
-    });
-  }
-
-  Future<void> getAnnouncementData(String type) async {
-    isAnnouncementTabAPICall = true;
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
-    restClient.getAnnouncementData(societyId, type, userId).then((value) {
-      //_progressDialog.hide();
-      Navigator.of(context).pop();
-      print('_progressDialog show : ' + _progressDialog.isShowing().toString());
-      //GlobalFunctions.showToast('_progressDialog whenComplete : '+_progressDialog.isShowing().toString());
-      if (value.status) {
-        List<dynamic> _list = value.data;
-        _announcementList =
-            List<Announcement>.from(_list.map((i) => Announcement.fromJson(i)));
-        print("_announcementList length : " +
-            _announcementList.length.toString());
-      }
-      setState(() {
-        //GlobalFunctions.showToast('_progressDialog setState : '+_progressDialog.isShowing().toString());
-      });
-      /*_progressDialog.hide().whenComplete(() {
-      });*/
-    });
-  }
-
-  Future<void> getMeetingData(String type) async {
-    isMeetingsTabAPICall = true;
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
-    restClient.getAnnouncementData(societyId, type, userId).then((value) {
-      //_progressDialog.hide();
-      Navigator.of(context).pop();
-      print('_progressDialog show : ' + _progressDialog.isShowing().toString());
-      if (value.status) {
-        List<dynamic> _list = value.data;
-
-        // print("announcement data : "+ _list[4].toString());
-
-        /*{ID: 94, USER_NAME: Pallavi Unde, USER_PHOTO: 278808_2019-08-16_12:45:09.jpg, SUBJECT: test demo, DESCRIPTION: <p>test demo</p>
-I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
-
-        _meetingList =
-            List<Announcement>.from(_list.map((i) => Announcement.fromJson(i)));
-        print("_meetingList length : " + _meetingList.length.toString());
-      }
-      setState(() {});
-    });
-  }
-
-  Future<void> getEventData(String type) async {
-    isEventsTabAPICall = true;
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
-    restClient.getAnnouncementData(societyId, type, userId).then((value) {
-      Navigator.of(context).pop();
-      print('_progressDialog show : ' + _progressDialog.isShowing().toString());
-      if (value.status) {
-        List<dynamic> _list = value.data;
-
-        // print("announcement data : "+ _list[4].toString());
-
-        /*{ID: 94, USER_NAME: Pallavi Unde, USER_PHOTO: 278808_2019-08-16_12:45:09.jpg, SUBJECT: test demo, DESCRIPTION: <p>test demo</p>
-I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-00, POLL_Q: , C_DATE: 14 Apr 2020 03:09 pm, table_name: broadcast, ANS: , votes: , START_DATETIME: 1970-01-01 00:00:00, END_DATETIME: 1970-01-01 00:00:00, Start_Time: , VENUE: , ACHIEVER_NAME: , ALLOW_COMMENT: , DISPLAY_COMMENT_ALL: , SEND_TO: All Owners, SECRET_POLL: , VOTING_RIGHTS: , POST_AS: Societyrun System Administrator, STATUS: , Cancel_By: , Cancel_Date: 0000-00-00 00:00:00, START_DATE: 01 Jan 1970, END_DATE: 01 Jan 1970, START_TIME: 12:00 am, END_TIME: 12:00 am}*/
-        _eventList =
-            List<Announcement>.from(_list.map((i) => Announcement.fromJson(i)));
-        print("_eventList length : " + _eventList.length.toString());
-      }
-      setState(() {});
-    });
-  }
-
-  Future<void> getAnnouncementPollData(String type) async {
-    isPollTabAPICall = true;
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
-    String userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
-    restClient
-        .getAnnouncementPollData(societyId, type, block, flat, userId)
-        .then((value) {
-      Navigator.of(context).pop();
-      print('_progressDialog show : ' + _progressDialog.isShowing().toString());
-      if (value.status) {
-        List<dynamic> _list = value.data;
-        _pollList = List<Poll>.from(_list.map((i) => Poll.fromJson(i)));
-
-        print("announcementPoll : " + _list.length.toString());
-      }
-      setState(() {});
-    });
-  }
-
-  Future<void> getAllMemberDirectoryData() async {
-    isDirectoryTabAPICall = true;
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
-    restClient.getAllMemberDirectoryData(societyId).then((value) {
-      Navigator.of(context).pop();
-      print('_progressDialog show : ' + _progressDialog.isShowing().toString());
-      if (value.status) {
-        print('memeber status : ' + value.status.toString());
-        List<dynamic> neighbourList = value.neighbour;
-        List<dynamic> committeeList = value.committee;
-        List<dynamic> emergencyList = value.emergency;
-
-        _neighbourList = List<NeighboursDirectory>.from(
-            neighbourList.map((i) => NeighboursDirectory.fromJson(i)));
-
-        _committeeList = List<CommitteeDirectory>.from(
-            committeeList.map((i) => CommitteeDirectory.fromJson(i)));
-
-        _emergencyList = List<EmergencyDirectory>.from(
-            emergencyList.map((i) => EmergencyDirectory.fromJson(i)));
-        getDirectoryListData();
-        print('list : ' + _directoryList.toString());
-        setState(() {});
-      }
-    }).catchError((Object obj) {
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-          }
-          break;
-        default:
-      }
     });
   }
 
@@ -2799,45 +2492,51 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         switch (index) {
           case 0:
             {
-              if (!isAnnouncementTabAPICall) {
-                getAnnouncementData('Announcement');
-              }
+                Provider.of<MyComplexResponse>(context, listen: false)
+                    .getAnnouncementData('Announcement');
+         
             }
             break;
           case 1:
             {
-              if (!isMeetingsTabAPICall) {
-                getMeetingData('Meeting');
-              }
+              //if (!isMeetingsTabAPICall) {
+                Provider.of<MyComplexResponse>(context, listen: false)
+                    .getAnnouncementData('Meeting');
+                // getMeetingData('Meeting');
+              //}
             }
             break;
           case 2:
             {
-              if (!isPollTabAPICall) {
-                getAnnouncementPollData('Poll');
-              }
+              //if (!isPollTabAPICall) {
+                Provider.of<MyComplexResponse>(context, listen: false)
+                    .getAnnouncementPollData('Poll');
+                // getAnnouncementPollData('Poll');
+              //}
             }
             break;
           case 3:
             {
-              if (!isDocumentsTabAPICall) {
-                getDocumentData();
-              }
+             // if (!isDocumentsTabAPICall) {
+                Provider.of<MyComplexResponse>(context, listen: false).getDocumentData();
+              //}
             }
             break;
           case 4:
             {
-              if (!isDirectoryTabAPICall) {
+              //if (!isDirectoryTabAPICall) {
                 //getNeighboursDirectoryData();
-                getAllMemberDirectoryData();
-              }
+              Provider.of<MyComplexResponse>(context, listen: false).getAllMemberDirectoryData();
+              //}
             }
             break;
           case 5:
             {
-              if (!isEventsTabAPICall) {
-                getEventData('Event');
-              }
+            //  if (!isEventsTabAPICall) {
+                Provider.of<MyComplexResponse>(context, listen: false)
+                    .getAnnouncementData('Event');
+                //getEventData('Event');
+             // }
             }
             break;
         }
@@ -2848,7 +2547,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
-  getDocumentsLayout() {
+  getDocumentsLayout(MyComplexResponse value) {
     print('MyDocumentsLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -2864,7 +2563,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0), //ticketOpenClosedLayout(),
                 // documentOwnCommonLayout(),
-                getDocumentListDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context): getDocumentListDataLayout(value),
               ],
             ),
           ),
@@ -2873,7 +2572,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     );
   }
 
-  getDocumentListDataLayout() {
+  getDocumentListDataLayout(MyComplexResponse value) {
     print('getDocumentListDataLayout Tab Call');
     return Container(
       //padding: EdgeInsets.all(10),
@@ -2881,16 +2580,16 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
-                itemCount: _documentList.length,
+                itemCount: value.documentList.length,
                 itemBuilder: (context, position) {
-                  return getDocumentListItemLayout(position);
+                  return getDocumentListItemLayout(position,value);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
     );
   }
 
-  getDocumentListItemLayout(int position) {
+  getDocumentListItemLayout(int position, MyComplexResponse value) {
     print('getDocumentListItemLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
@@ -2931,7 +2630,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                               flex: 2,
                               child: Container(
                                 child: Text(
-                                  _documentList[position].TITLE,
+                                  value.documentList[position].TITLE,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -2947,12 +2646,12 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                               child: Container(
                                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                                 child: text(
-                                  _documentList[position].DOCUMENT_CATEGORY,
-                                      textColor: GlobalVariables.white,
-                                      fontSize: 12.0),
+                                    value.documentList[position].DOCUMENT_CATEGORY,
+                                    textColor: GlobalVariables.white,
+                                    fontSize: 12.0),
                                 decoration: BoxDecoration(
                                     color: getDocumentTypeColor(
-                                        _documentList[position]
+                                        value.documentList[position]
                                             .DOCUMENT_CATEGORY),
                                     borderRadius: BorderRadius.circular(8)),
                               ),
@@ -2962,10 +2661,10 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                           child: text(
-                            _documentList[position].DESCRIPTION,
+                            value.documentList[position].DESCRIPTION,
                             maxLine: 3,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        //    overflow: TextOverflow.ellipsis,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                            //    overflow: TextOverflow.ellipsis,
                             textColor: GlobalVariables.black,
                           ),
                         ),
@@ -3009,7 +2708,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                     ],
                   ),
                 ),*/
-                _documentList[position].DOCUMENT.length != null
+                value.documentList[position].DOCUMENT.length != null
                     ? Container(
                         // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: InkWell(
@@ -3018,13 +2717,13 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                                 isStoragePermission.toString());
                             if (isStoragePermission) {
                               downloadAttachment(
-                                  _documentList[position].DOCUMENT, _localPath);
+                                  value.documentList[position].DOCUMENT, _localPath);
                             } else {
                               GlobalFunctions.askPermission(Permission.storage)
-                                  .then((value) {
-                                if (value) {
+                                  .then((value1) {
+                                if (value1) {
                                   downloadAttachment(
-                                      _documentList[position].DOCUMENT,
+                                      value.documentList[position].DOCUMENT,
                                       _localPath);
                                 } else {
                                   GlobalFunctions.showToast(
@@ -3059,9 +2758,9 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                 Container(
                   margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                   child: Text(
-                      _documentList[position].USER_NAME == null
+                      value.documentList[position].USER_NAME == null
                           ? 'Posted By: - '
-                          : 'Posted By: ' + _documentList[position].USER_NAME,
+                          : 'Posted By: ' + value.documentList[position].USER_NAME,
                       style: TextStyle(color: GlobalVariables.mediumGreen)),
                 ),
               ],
@@ -3088,32 +2787,12 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
         break;
     }
   }
-
-  void getDocumentData() async {
-    isDocumentsTabAPICall = true;
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
-    restClient.getDocumentData(societyId, userId).then((value) {
-      Navigator.of(context).pop();
-      print('_progressDialog show : ' + _progressDialog.isShowing().toString());
-      if (value.status) {
-        List<dynamic> _list = value.data;
-
-        _documentList =
-            List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
-        setState(() {});
-      }
-    });
-  }
-
-  getVoteLayout(int position) {
-    //  print("_pollList[position].SECRET_POLL : "+_pollList[position].SECRET_POLL.toString());
-    // print("_pollList[position].OPTION : "+_pollList[position].OPTION.toString());
+  
+  getVoteLayout(int position, MyComplexResponse value) {
+    //  print("value.pollList[position].SECRET_POLL : "+value.pollList[position].SECRET_POLL.toString());
+    // print("value.pollList[position].OPTION : "+value.pollList[position].OPTION.toString());
     List<PollOption> _optionList = List<PollOption>.from(
-        _pollList[position].OPTION.map((i) => PollOption.fromJson(i)));
+        value.pollList[position].OPTION.map((i) => PollOption.fromJson(i)));
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -3127,7 +2806,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
                 shrinkWrap: true,
                 itemCount: _optionList.length,
                 itemBuilder: (BuildContext context, int i) {
-                  return getPollOptionListItemLayout(position, _optionList[i]);
+                  return getPollOptionListItemLayout(position, _optionList[i],value);
                 }),
           ),
         ),
@@ -3135,17 +2814,17 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     );
   }
 
-  getPollOptionListItemLayout(int position, PollOption pollOption) {
-    if (_pollList[position].VOTED_TO.length > 0) {
+  getPollOptionListItemLayout(int position, PollOption pollOption, MyComplexResponse value) {
+    if (value.pollList[position].VOTED_TO.length > 0) {
       if (pollOption.ANS_ID.toString().toLowerCase() ==
-          _pollList[position].VOTED_TO.toLowerCase()) {
+          value.pollList[position].VOTED_TO.toLowerCase()) {
         pollOption.isSelected = true;
       } else {
         pollOption.isSelected = false;
       }
-    } else if (_pollList[position].View_VOTED_TO.length > 0) {
+    } else if (value.pollList[position].View_VOTED_TO.length > 0) {
       if (pollOption.ANS_ID.toString().toLowerCase() ==
-          _pollList[position].View_VOTED_TO.toLowerCase()) {
+          value.pollList[position].View_VOTED_TO.toLowerCase()) {
         pollOption.isSelected = true;
       } else {
         pollOption.isSelected = false;
@@ -3157,10 +2836,10 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     return InkWell(
       //  splashColor: GlobalVariables.mediumGreen,
       onTap: () {
-        if (_pollList[position].VOTE_PERMISSION.toLowerCase() == 'yes') {
+        if (value.pollList[position].VOTE_PERMISSION.toLowerCase() == 'yes') {
           setState(() {
             pollOption.isSelected = true;
-            _pollList[position].View_VOTED_TO = pollOption.ANS_ID;
+            value.pollList[position].View_VOTED_TO = pollOption.ANS_ID;
           });
         }
       },
@@ -3213,7 +2892,7 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
   }
 
   Future<void> addPollVote(String pollId, String optionId, int position,
-      List<PollOption> optionList) async {
+      List<PollOption> optionList, MyComplexResponse myComplexValue) async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -3227,21 +2906,21 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
       _progressDialog.hide();
       print('Response : ' + value.toString());
       if (value.status) {
-        _pollList[position].VOTED_TO = optionId;
-        _pollList[position].VOTE_PERMISSION = 'NO';
+        myComplexValue.pollList[position].VOTED_TO = optionId;
+        myComplexValue.pollList[position].VOTE_PERMISSION = 'NO';
 
-        if (_pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
+        if (myComplexValue.pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
           setState(() {});
           GlobalFunctions.showToast(value.message +
               '. You can view result of poll after ' +
-              _pollList[position].EXPIRY_DATE);
+              myComplexValue.pollList[position].EXPIRY_DATE);
         } else {
           setState(() {});
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BaseViewPollGraph(_pollList[position], optionList)));
+                      BaseViewPollGraph(myComplexValue.pollList[position], optionList)));
         }
       } else {
         GlobalFunctions.showToast(value.message);
@@ -3249,147 +2928,5 @@ I/flutter (11139): , ATTACHMENT: , CATEGORY: Announcement, EXPIRY_DATE: 0000-00-
     });
   }
 
-/*documentOwnCommonLayout() {
-    return Visibility(
-      visible: false,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          width: MediaQuery.of(context).size.width / 1.1,
-          height: 50,
-          margin: EdgeInsets.fromLTRB(
-              0, MediaQuery.of(context).size.height / 60, 0, 0),
-          decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: firstDocumentsContainerColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30.0),
-                            bottomLeft: Radius.circular(30.0))),
-                    child: ButtonTheme(
-                      minWidth: 190,
-                      height: 50,
-                      child: FlatButton(
-                        //color: GlobalVariables.grey,
-                        child: Text(
-                          AppLocalizations.of(context).translate('own'),
-                          style: TextStyle(
-                              fontSize: 15, color: firstDocumentsTextColor),
-                        ),
-                        onPressed: () {
-                          GlobalFunctions.showToast("OWN Click");
-                          if (!isOpenDocuments) {
-                            isOpenDocuments = true;
-                            isClosedDocuments = false;
-                            firstDocumentsTextColor = GlobalVariables.white;
-                            firstDocumentsContainerColor =
-                                GlobalVariables.mediumGreen;
-                            secondDocumentsTextColor = GlobalVariables.green;
-                            secondDocumentsContainerColor =
-                                GlobalVariables.white;
-                          }
-                          setState(() {});
-                        },
-                      ),
-                    )),
-              ),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: secondDocumentsContainerColor,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(30.0),
-                            bottomRight: Radius.circular(30.0))),
-                    child: ButtonTheme(
-                      minWidth: 190,
-                      height: 50,
-                      child: FlatButton(
-                        child: Text(
-                          AppLocalizations.of(context).translate('common'),
-                          style: TextStyle(
-                              fontSize: 15, color: secondDocumentsTextColor),
-                        ),
-                        onPressed: () {
-                          GlobalFunctions.showToast("COMMON Click");
-                          if (!isClosedDocuments) {
-                            isOpenDocuments = false;
-                            isClosedDocuments = true;
-                            firstDocumentsContainerColor =
-                                GlobalVariables.white;
-                            firstDocumentsTextColor = GlobalVariables.green;
-                            secondDocumentsTextColor = GlobalVariables.white;
-                            secondDocumentsContainerColor =
-                                GlobalVariables.mediumGreen;
-                          }
-                          setState(() {});
-                        },
-                        color: GlobalVariables.transparent,
-                      ),
-                    )),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }*/
-
 }
 
-class PollSurvey {
-  String username, blockFlatNo, date, surveyTitle, surveyDesc;
-  List<SurveyVoteOption> surveyVoteOptions;
-  List<String> surveyVote;
-
-  PollSurvey(
-      {this.username,
-      this.blockFlatNo,
-      this.date,
-      this.surveyTitle,
-      this.surveyDesc,
-      this.surveyVoteOptions,
-      this.surveyVote});
-}
-
-class SurveyVoteOption {
-  bool isSelected;
-  String radioText;
-  int index;
-
-  SurveyVoteOption({this.isSelected, this.radioText, this.index});
-}
-
-class DirectoryType {
-  String directoryType;
-  List<dynamic> directoryTypeWiseList;
-
-  DirectoryType({this.directoryType, this.directoryTypeWiseList});
-}
-
-class DirectoryTypeWiseData {
-  String name, field;
-  bool isCall, isMail, isSearch, isFilter;
-
-  DirectoryTypeWiseData(
-      {this.name,
-      this.field,
-      this.isCall,
-      this.isMail,
-      this.isSearch,
-      this.isFilter});
-}

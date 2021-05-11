@@ -1,4 +1,79 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:societyrun/Models/ComplaintCategory.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
+
+class HelpDeskResponse extends ChangeNotifier{
+
+  List<Complaints> complaintList = List<Complaints>();
+  List<Complaints> openComplaintList = List<Complaints>();
+  List<Complaints> closeComplaintList = List<Complaints>();
+  List<ComplaintCategory> complaintCategoryList = List<ComplaintCategory>();
+  bool isLoading = true;
+  String errMsg;
+
+
+  Future<dynamic> getUnitComplaintData(bool isAssignComplaint) async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String block = await GlobalFunctions.getBlock();
+    String flat = await GlobalFunctions.getFlat();
+    String userId = await GlobalFunctions.getUserId();
+   await restClient.getComplaintsData(societyId, block, flat,userId,isAssignComplaint).then((value) {
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        print('complaint list length : ' + _list.length.toString());
+
+        complaintList = List<Complaints>.from(_list.map((i)=>Complaints.fromJson(i)));
+
+        // print("Complaint List : " + _complaintList.toString());
+        for (int i = 0; i < complaintList.length; i++) {
+          print('status : '+complaintList[i].toString());
+          if (complaintList[i].STATUS.toLowerCase() == 'completed' ||
+              complaintList[i].STATUS.toLowerCase() == 'close') {
+            closeComplaintList.add(complaintList[i]);
+          }else{
+            openComplaintList.add(complaintList[i]);
+          }
+        }
+
+        print('complaint openlist length : ' + openComplaintList.length.toString());
+        print('complaint closelist length : ' + closeComplaintList.length.toString());
+      }
+      isLoading=false;
+      notifyListeners();
+    });
+
+    return complaintList;
+  }
+
+  Future<dynamic> getComplaintCategoryData() async{
+
+    if(complaintCategoryList.length==0) {
+      isLoading = true;
+      notifyListeners();
+    }
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+   await restClient.getComplaintsCategoryData(societyId).then((value) {
+      if (value.status) {
+        List<dynamic> _list = value.data;
+        //  print("category list : "+_list.toString());
+        complaintCategoryList = List<ComplaintCategory>.from(_list.map((i)=>ComplaintCategory.fromJson(i)));
+
+      }
+      isLoading=false;
+      notifyListeners();
+    });
+    return complaintCategoryList;
+  }
+
+}
+
 
 @JsonSerializable()
 class Complaints {
