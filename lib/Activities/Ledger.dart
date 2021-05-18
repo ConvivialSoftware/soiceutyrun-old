@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -10,6 +12,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
+import 'package:societyrun/Models/MyUnitResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -25,20 +28,10 @@ class BaseLedger extends StatefulWidget {
 }
 
 class LedgerState extends BaseStatefulState<BaseLedger> {
-  List<Ledger> _ledgerList = new List<Ledger>();
-
-  List<OpeningBalance> _openingBalanceList = new List<OpeningBalance>();
-
   ProgressDialog _progressDialog;
-
-  double totalOutStanding = 0;
-
-  String openingBalance = "0.0";
-  String openingBalanceRemark = "";
-
   List<DropdownMenuItem<String>> _yearListItems =
       new List<DropdownMenuItem<String>>();
-  List<LedgerYear> _listYear = List<LedgerYear>();
+
   String _yearSelectedItem;
 
   @override
@@ -61,32 +54,37 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
+    return ChangeNotifierProvider<MyUnitResponse>.value(
+      value: Provider.of<MyUnitResponse>(context),
+      child: Consumer<MyUnitResponse>(builder: (context, value, child) {
+        return Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              elevation: 0,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back,
+                  color: GlobalVariables.white,
+                ),
+              ),
+              title: Text(
+                AppLocalizations.of(context).translate('ledger'),
+                style: TextStyle(color: GlobalVariables.white),
+              ),
             ),
+            body: getBaseLayout(value),
           ),
-          title: Text(
-            AppLocalizations.of(context).translate('ledger'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getBaseLayout(),
-      ),
+        );
+      }),
     );
   }
 
-  getBaseLayout() {
+  getBaseLayout(MyUnitResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height,
@@ -100,7 +98,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                Container(
+                value.isLoading ? SizedBox() : Container(
                   margin: EdgeInsets.fromLTRB(
                       10, MediaQuery.of(context).size.height / 30, 10, 0),
                   child: Row(
@@ -202,7 +200,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     ],
                   ),
                 ),
-                _ledgerList.length > 0
+                value.isLoading ? GlobalFunctions.loadingWidget(context) :   value.ledgerList.length > 0
                     ? Container(
                         margin: EdgeInsets.fromLTRB(10,
                             MediaQuery.of(context).size.height / 8, 10, 100),
@@ -212,11 +210,10 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                         decoration: BoxDecoration(
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10)),
-                        child: getRecentTransactionLayout(),
+                        child: getRecentTransactionLayout(value),
                       )
                     : Container(),
-                _ledgerList.length > 0
-                    ? Align(
+                value.isLoading ? SizedBox(): Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
@@ -240,7 +237,8 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                               ),
                               Container(
                                 child: Text(
-                                  "Rs. " + totalOutStanding.toStringAsFixed(2),
+                                  "Rs. " +
+                                      value.totalOutStanding.toStringAsFixed(2),
                                   style: TextStyle(
                                       color: GlobalVariables.red,
                                       fontSize: 18,
@@ -251,7 +249,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                           ),
                         ),
                       )
-                    : Container()
+
               ],
             ),
           ),
@@ -260,7 +258,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }
 
-  getRecentTransactionLayout() {
+  getRecentTransactionLayout(MyUnitResponse value) {
     return SingleChildScrollView(
       child: Container(
         // padding: EdgeInsets.all(5),
@@ -268,7 +266,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
           children: <Widget>[
             InkWell(
               onTap: () {
-                if (openingBalanceRemark.length > 0) {
+                if (value.openingBalanceRemark.length > 0) {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) => StatefulBuilder(
@@ -281,7 +279,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                                 child: Container(
                                   padding: EdgeInsets.all(16),
                                   child: text(
-                                    openingBalanceRemark,
+                                    value.openingBalanceRemark,
                                     fontSize: GlobalVariables.textSizeSMedium,
                                     maxLine: 99,
                                   ),
@@ -311,7 +309,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     ),
                     Container(
                       child: Text(
-                        'Rs. ' + openingBalance,
+                        'Rs. ' + value.openingBalance,
                         style: TextStyle(
                             color: GlobalVariables.red,
                             fontSize: 20,
@@ -330,12 +328,12 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, position) {
-                        return getDateTransactionItemLayout(position);
+                        return getDateTransactionItemLayout(position, value);
                       },
                       /* separatorBuilder: (context, position) {
                         return getDateWiseRecentTransactionLayout(position);
                       },*/
-                      itemCount: _ledgerList.length)),
+                      itemCount: value.ledgerList.length)),
             )
           ],
         ),
@@ -343,7 +341,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }
 
-  getDateTransactionItemLayout(int position) {
+  getDateTransactionItemLayout(int position, MyUnitResponse value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -353,7 +351,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Text(
-              _ledgerList[position].C_DATE,
+              value.ledgerList[position].C_DATE,
               style: TextStyle(color: GlobalVariables.grey, fontSize: 14),
             ),
           ),
@@ -369,7 +367,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          _ledgerList[position].LEDGER,
+                          value.ledgerList[position].LEDGER,
                           style: TextStyle(
                               color: GlobalVariables.grey, fontSize: 18),
                         ),
@@ -377,13 +375,11 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (_ledgerList[position]
-                                    .TYPE
+                        if (value.ledgerList[position].TYPE
                                     .toLowerCase()
                                     .toString() ==
                                 'bill' ||
-                            _ledgerList[position]
-                                    .TYPE
+                            value.ledgerList[position].TYPE
                                     .toLowerCase()
                                     .toString() ==
                                 'invoice') {
@@ -391,14 +387,14 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewBill(
-                                      _ledgerList[position].RECEIPT_NO,
+                                      value.ledgerList[position].RECEIPT_NO,
                                       _yearSelectedItem)));
                         } else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewReceipt(
-                                      _ledgerList[position].RECEIPT_NO,
+                                      value.ledgerList[position].RECEIPT_NO,
                                       _yearSelectedItem)));
                         }
                       },
@@ -406,12 +402,11 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                         padding: EdgeInsets.all(5),
                         child: Text(
                           "Rs. " +
-                              double.parse(
-                                      _ledgerList[position].AMOUNT.toString())
+                              double.parse(value.ledgerList[position].AMOUNT
+                                      .toString())
                                   .toStringAsFixed(2),
                           style: TextStyle(
-                              color: _ledgerList[position]
-                                          .TYPE
+                              color: value.ledgerList[position].TYPE
                                           .toLowerCase()
                                           .toString() ==
                                       'bill'
@@ -424,7 +419,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     )
                   ],
                 ),
-                position != _ledgerList.length - 1
+                position != value.ledgerList.length - 1
                     ? Container(
                         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Divider(
@@ -492,94 +487,57 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
   }*/
 
   getLedgerData(var year) async {
-    final dio = Dio();
-    final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String flat = await GlobalFunctions.getFlat();
-    String block = await GlobalFunctions.getBlock();
-    _progressDialog.show();
-    restClientERP.getLedgerData(societyId, flat, block, year).then((value) {
-      print('Response : ' + value.toString());
-      List<dynamic> _listLedger = value.ledger;
-      List<dynamic> _listOpeningBalance = value.openingBalance;
-      List<dynamic> _year = value.year;
-
-      // _listYear = [LedgerYear(year: "2021"), LedgerYear(year: "2020")];
-
+    Provider.of<MyUnitResponse>(context, listen: false)
+        .getLedgerData(year)
+        .then((value) {
       _yearListItems = new List<DropdownMenuItem<String>>();
-      _listYear = List<LedgerYear>();
-      _listYear = List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
-      print('_listYear : ' + _listYear.toString());
-      for (int i = 0; i < _listYear.length; i++) {
-        print('_listYear : ' + _listYear[i].Active_account.toString());
-        print('_listYear : ' + _listYear[i].years.toString());
-        if (_listYear[i].Active_account.toString().toLowerCase() == 'yes') {
-          if (_yearListItems.length == 0) {
+      if (MyUnitResponse.listYear.length > 0) {
+        for (int i = 0; i < MyUnitResponse.listYear.length; i++) {
+          print('_listYear : ' +
+              MyUnitResponse.listYear[i].Active_account.toString());
+          print('_listYear : ' + MyUnitResponse.listYear[i].years.toString());
+          if (MyUnitResponse.listYear[i].Active_account
+                  .toString()
+                  .toLowerCase() ==
+              'yes') {
+            if (_yearListItems.length == 0) {
+              _yearListItems.add(DropdownMenuItem(
+                value: MyUnitResponse.listYear[i].years,
+                child: Text(
+                  MyUnitResponse.listYear[i].years,
+                  style: TextStyle(color: GlobalVariables.green),
+                ),
+              ));
+            } else {
+              print('insert at 0 ');
+              _yearListItems.insert(
+                  0,
+                  DropdownMenuItem(
+                    value: MyUnitResponse.listYear[i].years,
+                    child: Text(
+                      MyUnitResponse.listYear[i].years,
+                      style: TextStyle(color: GlobalVariables.green),
+                    ),
+                  ));
+              if (_yearSelectedItem == null) {
+                _yearSelectedItem = MyUnitResponse.listYear[i].years;
+                print('_yearSelectedItem : ' + _yearSelectedItem);
+              }
+            }
+          } else {
             _yearListItems.add(DropdownMenuItem(
-              value: _listYear[i].years,
+              value: MyUnitResponse.listYear[i].years,
               child: Text(
-                _listYear[i].years,
+                MyUnitResponse.listYear[i].years,
                 style: TextStyle(color: GlobalVariables.green),
               ),
             ));
-          } else {
-            print('insert at 0 ');
-            _yearListItems.insert(
-                0,
-                DropdownMenuItem(
-                  value: _listYear[i].years,
-                  child: Text(
-                    _listYear[i].years,
-                    style: TextStyle(color: GlobalVariables.green),
-                  ),
-                ));
-            if (_yearSelectedItem == null) {
-              _yearSelectedItem = _listYear[i].years;
-              print('_yearSelectedItem : ' + _yearSelectedItem);
-            }
           }
-        } else {
-          _yearListItems.add(DropdownMenuItem(
-            value: _listYear[i].years,
-            child: Text(
-              _listYear[i].years,
-              style: TextStyle(color: GlobalVariables.green),
-            ),
-          ));
+        }
+        if (_yearSelectedItem == null) {
+          _yearSelectedItem = MyUnitResponse.listYear[0].years;
         }
       }
-
-      //_ledgerResponseList = List<LedgerResponse>.from(_list.map((i)=>Documents.fromJson(i)));
-
-      _ledgerList =
-          List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
-      _openingBalanceList = List<OpeningBalance>.from(
-          _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
-
-      openingBalance = double.parse(_openingBalanceList[0].AMOUNT.toString())
-          .toStringAsFixed(2);
-      openingBalanceRemark = _openingBalanceList[0].Remark;
-
-      double totalAmount = 0;
-      for (int i = 0; i < _listLedger.length; i++) {
-        print("_ledgerList[i].RECEIPT_NO : " +
-            _ledgerList[i].RECEIPT_NO.toString());
-        print("_ledgerList[i].TYPE : " + _ledgerList[i].TYPE.toString());
-        if (_ledgerList[i].TYPE.toLowerCase().toString() == 'bill') {
-          totalAmount += double.parse(_ledgerList[i].AMOUNT);
-        } else {
-          totalAmount -= double.parse(_ledgerList[i].AMOUNT);
-        }
-        totalOutStanding = totalAmount + double.parse(openingBalance);
-      }
-      if(_yearSelectedItem==null){
-        _yearSelectedItem = _listYear[0].years;
-      }
-      print('_yearSelectedItem : ' + _yearSelectedItem.toString());
-      _progressDialog.hide();
-      //Navigator.of(context).pop();
-      setState(() {});
     });
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
@@ -40,8 +41,8 @@ class BaseMyGate extends StatefulWidget {
 class MyGateState extends BaseStatefulState<BaseMyGate>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  List<Visitor> _visitorList = new List<Visitor>();
-  List<ScheduleVisitor> _scheduleVisitorList = new List<ScheduleVisitor>();
+ // List<Visitor> value.visitorList = new List<Visitor>();
+ // List<ScheduleVisitor> value.scheduleVisitorList = new List<ScheduleVisitor>();
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
@@ -54,10 +55,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   var username, password;
   ProgressDialog _progressDialog;
 
-  bool isActivitiesAPICall = false;
+ // bool isActivitiesAPICall = false;
   bool isHelperAPICall = false;
 
-  List<Staff> _staffList = new List<Staff>();
+ // List<Staff> _staffList = new List<Staff>();
   List<String> _scheduleList = new List<String>();
   List<DropdownMenuItem<String>> _scheduleListItems =
       new List<DropdownMenuItem<String>>();
@@ -72,7 +73,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   final ContactPicker _contactPicker = ContactPicker();
   Contact _contact;
-  List<StaffCount> _staffListCount = List<StaffCount>();
+ // List<StaffCount> value.staffListCount = List<StaffCount>();
 
   @override
   void initState() {
@@ -85,14 +86,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     //getDocumentDescriptionList();
     getScheduleTimeData();
   }
-  void afterBuild() {
+  void afterBuild(visitorList) {
     // executes after build is done
     print('After Build');
-    if(_VID!=null && _visitorList.length>0){
+    if(_VID!=null && visitorList.length>0){
       print('VID : '+_VID.toString());
-      for(int i=0;i<_visitorList.length;i++){
-        if(_visitorList[i].ID==_VID){
-          print('_visitorList[i].ID : '+_visitorList[i].ID.toString());
+      for(int i=0;i<visitorList.length;i++){
+        if(visitorList[i].ID==_VID){
+          print('value.visitorList[i].ID : '+visitorList[i].ID.toString());
           showDialog(
               context: context,
               builder: (BuildContext context) => StatefulBuilder(
@@ -100,7 +101,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     return Dialog(
                       backgroundColor: Colors.transparent,
                       elevation: 0.0,
-                      child: displayVisitorInfo(i),
+                      child: displayVisitorInfo(i,visitorList),
                     );
                   }));
           break;
@@ -114,33 +115,41 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     if (pageName != null) {
       redirectToPage(pageName);
     }
+    print('after build');
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
+    return ChangeNotifierProvider<GatePass>.value(
+        value: Provider.of(context),
+      child: Consumer<GatePass>(
+        builder: (context,value,child){
+          return Builder(
+            builder: (context) => Scaffold(
+              appBar: AppBar(
+                backgroundColor: GlobalVariables.green,
+                centerTitle: true,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: GlobalVariables.white,
+                  ),
+                ),
+                title: Text(
+                  AppLocalizations.of(context).translate('my_gate'),
+                  style: TextStyle(color: GlobalVariables.white),
+                ),
+                bottom: getTabLayout(),
+                elevation: 0,
+              ),
+              body: TabBarView(controller: _tabController, children: <Widget>[
+               getMyActivitiesLayout(value),
+                getStaffCategoryLayout(value),
+                //getHelperLayout(),
+              ]),
             ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('my_gate'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-          bottom: getTabLayout(),
-          elevation: 0,
-        ),
-        body: TabBarView(controller: _tabController, children: <Widget>[
-          getMyActivitiesLayout(),
-          getStaffCategoryLayout(),
-          //getHelperLayout(),
-        ]),
+          );
+        },
       ),
     );
   }
@@ -173,7 +182,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getMyActivitiesLayout() {
+  getMyActivitiesLayout(GatePass value) {
     // print('MyTicketLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -190,7 +199,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     context, 150.0),
                 // getSocietyDataLayout(),
                 //   activitiesFilterDateLayout(),
-                getActivitiesListDataLayout(),
+                value.isLoading? GlobalFunctions.loadingWidget(context):getActivitiesListDataLayout(value),
                 addActivitiesFabLayout(),
               ],
             ),
@@ -199,62 +208,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       ),
     );
   }
-
-  getHelperLayout() {
-    //  print('MyDocumentsLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0), //ticketOpenClosedLayout(),
-                getHelperListDataLayout(),
-                /*Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    // margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/40, 0, 0),
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.all(20),
-                            child: Image.asset(
-                              GlobalVariables.comingSoonPath,
-                              fit: BoxFit.fitWidth,
-                            )),
-                        Container(
-                          margin: EdgeInsets.all(10),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate('coming_soon_text'),
-                            style: TextStyle(
-                                color: GlobalVariables.black, fontSize: 18),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )*/
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-
-
-  getStaffCategoryLayout() {
+  
+  getStaffCategoryLayout(GatePass value) {
+    print(value.staffListCount.toString());
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -268,7 +224,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
-                getStaffCategoryListDataLayout(),
+                value.isLoading ? GlobalFunctions.loadingWidget(context): getStaffCategoryListDataLayout(value),
               ],
             ),
           ),
@@ -277,8 +233,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getStaffCategoryListDataLayout() {
-    return _staffListCount.length>0 ? Container(
+  getStaffCategoryListDataLayout(GatePass value) {
+    return value.staffListCount.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
@@ -290,23 +246,23 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: _staffListCount.length,
+            itemCount: value.staffListCount.length,
             itemBuilder: (context, position) {
-              return getStaffCategoryListItemLayout(position);
+              return getStaffCategoryListItemLayout(position,value);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
     ):Container();
   }
 
-  getStaffCategoryListItemLayout(int position) {
+  getStaffCategoryListItemLayout(int position, GatePass value) {
     return InkWell(
       onTap: () async {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseStaffListPerCategory(_staffListCount[position].ROLE)));
+                    BaseStaffListPerCategory(value.staffListCount[position].ROLE)));
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -320,12 +276,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: [
                 Expanded(
                   child: Container(
-                    child: Text(_staffListCount[position].ROLE),
+                    child: Text(value.staffListCount[position].ROLE),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(_staffListCount[position].Role_count),
+                  child: Text(value.staffListCount[position].Role_count),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -347,6 +303,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
+/*
   Future<void> getStaffCountData() async {
     isHelperAPICall=true;
     final dio = Dio();
@@ -357,11 +314,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     restClient.staffCount(societyId).then((value) {
       _progressDialog.hide();
       List<dynamic> _list = value.data;
-      _staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
+      value.staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
       setState(() {});
     });
 
   }
+*/
 
 
 
@@ -581,7 +539,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getActivitiesListDataLayout() {
+  getActivitiesListDataLayout(GatePass value) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -593,9 +551,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: _scheduleVisitorList.length,
+                      itemCount: value.scheduleVisitorList.length,
                       itemBuilder: (context, position) {
-                        return getScheduleVisitorListItemLayout(position);
+                        return getScheduleVisitorListItemLayout(position,value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -606,9 +564,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: _visitorList.length,
+                      itemCount: value.visitorList.length,
                       itemBuilder: (context, position) {
-                        return getVisitorsListItemLayout(position);
+                        return getVisitorsListItemLayout(position,value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -618,38 +576,38 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getVisitorsListItemLayout(int position) {
+  getVisitorsListItemLayout(int position, GatePass value) {
     String Time = "";
     String Date = "";
-    if (_visitorList[position].OUT_TIME.length > 0) {
-      if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Time = /*_visitorList[position].IN_TIME +
+    if (value.visitorList[position].OUT_TIME.length > 0) {
+      if (value.visitorList[position].STATUS.toLowerCase() == 'out') {
+        Time = /*value.visitorList[position].IN_TIME +
             " - " +*/
-            _visitorList[position].OUT_TIME;
+            value.visitorList[position].OUT_TIME;
       } else {
-        Time = _visitorList[position].IN_TIME;
+        Time = value.visitorList[position].IN_TIME;
       }
     } else {
-      Time = _visitorList[position].IN_TIME;
+      Time = value.visitorList[position].IN_TIME;
     }
 
-    if (_visitorList[position].OUT_DATE.length > 0) {
-      if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Date = /*_visitorList[position].IN_DATE +
+    if (value.visitorList[position].OUT_DATE.length > 0) {
+      if (value.visitorList[position].STATUS.toLowerCase() == 'out') {
+        Date = /*value.visitorList[position].IN_DATE +
             " - " +*/
-            _visitorList[position].OUT_DATE;
+            value.visitorList[position].OUT_DATE;
       } else {
-        Date = _visitorList[position].IN_DATE;
+        Date = value.visitorList[position].IN_DATE;
       }
     } else {
-      Date = _visitorList[position].IN_DATE;
+      Date = value.visitorList[position].IN_DATE;
     }
 
     var visitorStatus =
-        getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS,_visitorList[position].VISITOR_USER_STATUS);
-    var visitorUserStatus = _visitorList[position].VISITOR_USER_STATUS;
-  //  print('_visitorList[position].VISITOR_STATUS : ' + visitorStatus);
-   // print('_visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
+        getVisitorAllowStatus(value.visitorList[position].VISITOR_STATUS,value.visitorList[position].VISITOR_USER_STATUS);
+    var visitorUserStatus = value.visitorList[position].VISITOR_USER_STATUS;
+  //  print('value.visitorList[position].VISITOR_STATUS : ' + visitorStatus);
+   // print('value.visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
 
     return InkWell(
       onTap: () {
@@ -660,7 +618,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   return Dialog(
                     backgroundColor: Colors.transparent,
                     elevation: 0.0,
-                    child: displayVisitorInfo(position),
+                    child: displayVisitorInfo(position,value.visitorList),
                   );
                 }));
       },
@@ -676,7 +634,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             Container(
               child: Row(
                 children: <Widget>[
-                  _visitorList[position].IMAGE.isEmpty
+                  value.visitorList[position].IMAGE.isEmpty
                   ? AppAssetsImage(
                     GlobalVariables
                         .componentUserProfilePath,
@@ -688,7 +646,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     radius: 10.0,
                   )
                       : AppNetworkImage(
-                    _visitorList[position].IMAGE,
+                    value.visitorList[position].IMAGE,
                     imageWidth:20.0,
                     imageHeight:20.0,
                     borderColor: GlobalVariables.grey,
@@ -706,7 +664,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         children: <Widget>[
                           Container(
                             child: Text(
-                              _visitorList[position].VISITOR_NAME,
+                              value.visitorList[position].VISITOR_NAME,
                               style: TextStyle(
                                   color: GlobalVariables.green,
                                   fontSize: 14,
@@ -740,14 +698,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                         decoration: BoxDecoration(
-                            color:_visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
-                                _visitorList[position].STATUS.toLowerCase() ==
+                            color:value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
+                                value.visitorList[position].STATUS.toLowerCase() ==
                                         'in'
                                     ? GlobalVariables.green
                                     : GlobalVariables.red,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Text(_visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
-                        _visitorList[position].STATUS.toLowerCase() == 'in'
+                        child: Text(value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
+                        value.visitorList[position].STATUS.toLowerCase() == 'in'
                               ? 'Arrived'
                               : 'Left',
                           style: TextStyle(
@@ -758,7 +716,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       ),
                       /* InkWell(
                         onTap: (){
-                          launch('tel://' + _visitorList[position].CONTACT);
+                          launch('tel://' + value.visitorList[position].CONTACT);
                         },
                         child: Container(
                             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -770,7 +728,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 ],
               ),
             ),
-            _visitorList[position].FROM_VISITOR.length>0 && _visitorList[position].FROM_VISITOR!=null? Container(
+            value.visitorList[position].FROM_VISITOR.length>0 && value.visitorList[position].FROM_VISITOR!=null? Container(
               margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
               child: Row(
                 children: <Widget>[
@@ -786,7 +744,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
                     child: Text(
-                      _visitorList[position].FROM_VISITOR,
+                      value.visitorList[position].FROM_VISITOR,
                       style: TextStyle(
                         color: GlobalVariables.grey,
                         fontSize: 16,
@@ -850,7 +808,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                                borderRadius: BorderRadius
                                                    .circular(25.0)),
                                            child: displayWrongEntryLayout(
-                                               position)
+                                               position,value)
                                        );
                                      }));
                        }
@@ -898,7 +856,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           color: GlobalVariables.green,
                         ),
                         onPressed: () {
-                          launch('tel://' + _visitorList[position].CONTACT);
+                          launch('tel://' + value.visitorList[position].CONTACT);
                         }),
                   ),
                 ],
@@ -921,7 +879,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: Text(
-                        _visitorList[position].VISITOR_NAME,
+                        value.visitorList[position].VISITOR_NAME,
                         style: TextStyle(
                           color: GlobalVariables.green,
                           fontSize: 12,
@@ -999,7 +957,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getScheduleVisitorListItemLayout(int position) {
+  getScheduleVisitorListItemLayout(int position, GatePass value) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
@@ -1033,7 +991,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       children: <Widget>[
                         Container(
                           child: Text(
-                            _scheduleVisitorList[position].NAME,
+                            value.scheduleVisitorList[position].NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 14,
@@ -1047,7 +1005,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                               Container(
                                 child: Text(
                                   GlobalFunctions.convertDateFormat(
-                                      _scheduleVisitorList[position].DATE,
+                                      value.scheduleVisitorList[position].DATE,
                                       'dd-MM-yyyy'),
                                   style: TextStyle(
                                     color: GlobalVariables.grey,
@@ -1081,7 +1039,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     ),
                     /* InkWell(
                       onTap: (){
-                        launch('tel://' + _visitorList[position].CONTACT);
+                        launch('tel://' + value.visitorList[position].CONTACT);
                       },
                       child: Container(
                           margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -1107,7 +1065,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
                 child: Text(
-                  _scheduleVisitorList[position].PASS_CODE,
+                  value.scheduleVisitorList[position].PASS_CODE,
                   style: TextStyle(
                     color: GlobalVariables.grey,
                     fontSize: 16,
@@ -1142,7 +1100,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                               await GlobalFunctions.getGoogleCoordinate();
                           String userName = await GlobalFunctions.getDisplayName();
                           DateTime earlier = DateTime.parse(
-                              _scheduleVisitorList[position].DATE);
+                              value.scheduleVisitorList[position].DATE);
 
                           DateTime date = DateTime.now();
                           String todayDate = GlobalFunctions.convertDateFormat(
@@ -1155,11 +1113,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
                           String sharedMsg = userName +
                               ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
-                              GlobalFunctions.convertDateFormat(_scheduleVisitorList[position].DATE, "dd MMM yyyy")  +
+                              GlobalFunctions.convertDateFormat(value.scheduleVisitorList[position].DATE, "dd MMM yyyy")  +
                               ' till' +
                               ' 11: 59 PM. ' +
                               'Please use ' +
-                              _scheduleVisitorList[position].PASS_CODE +
+                              value.scheduleVisitorList[position].PASS_CODE +
                               ' as entry code at gate. ' +
                               'Google coordinates : <a href=' +
                               mapUrl +
@@ -1200,7 +1158,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         ),
                         onPressed: () {
                           launch('tel://' +
-                              _scheduleVisitorList[position].MOBILE_NO);
+                              value.scheduleVisitorList[position].MOBILE_NO);
                         }),
                   ),
                 ),
@@ -1233,7 +1191,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                         return Dialog(
                                           shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(25.0)),
-                                          child: displayDeleteExpectedVisitorLayout(position)
+                                          child: displayDeleteExpectedVisitorLayout(position,value)
                                         );
                                       }));
 
@@ -1466,35 +1424,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   Future<void> addScheduleVisitorGatePass() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
-    String userId = await GlobalFunctions.getUserId();
-    String userName = await GlobalFunctions.getDisplayName();
-    String googleParameter = await GlobalFunctions.getGoogleCoordinate();
 
     _progressDialog.show();
-    restClient
-            .addScheduleVisitorGatePass(
-                societyId,
-                block,
-                flat,
-                _nameController.text,
-                _mobileController.text,
-                _selectedSchedule,
-                userId)
-            .then((value) {
+    Provider.of<GatePass>(context,listen: false).addScheduleVisitorGatePass(_nameController.text,_mobileController.text,_selectedSchedule).then((value) async {
+
       print('add Schedule Visitor value : ' + value.toString());
       _progressDialog.hide();
       if (value.status) {
         Navigator.of(context).pop();
-        ScheduleVisitor scheduleVisitor = ScheduleVisitor();
-        scheduleVisitor.MOBILE_NO = _mobileController.text;
-        scheduleVisitor.NAME = _nameController.text;
-        scheduleVisitor.PASS_CODE = value.pass_code;
-
         DateTime now = DateTime.now();
         DateFormat formatter = DateFormat('yyyy-MM-dd');
         String date = formatter.format(now);
@@ -1506,13 +1443,21 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           now = now.add(Duration(days: 2));
           date = formatter.format(now);
         }
+      /*  ScheduleVisitor scheduleVisitor = ScheduleVisitor();
+        scheduleVisitor.MOBILE_NO = _mobileController.text;
+        scheduleVisitor.NAME = _nameController.text;
+        scheduleVisitor.PASS_CODE = value.pass_code;
+
+
         scheduleVisitor.DATE = date;
-        if (_scheduleVisitorList.length > 0) {
-          _scheduleVisitorList.insert(0, scheduleVisitor);
+        if (value.scheduleVisitorList.length > 0) {
+          value.scheduleVisitorList.insert(0, scheduleVisitor);
         } else {
-          _scheduleVisitorList.add(scheduleVisitor);
+          value.scheduleVisitorList.add(scheduleVisitor);
         }
-        print('date : '+scheduleVisitor.DATE.toString());
+        print('date : '+scheduleVisitor.DATE.toString());*/
+        String userName = await GlobalFunctions.getDisplayName();
+        String googleParameter = await GlobalFunctions.getGoogleCoordinate();
         showDialog(
             context: context,
             builder: (BuildContext context) => StatefulBuilder(
@@ -1533,22 +1478,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       }
       GlobalFunctions.showToast(value.message);
 
-      /* {pass_code: 303462, status: true, message: Visitor added successfully}*/
-    }) /*.catchError((Object obj) {
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-            _progressDialog.hide();
-          }
-          break;
-        default:
-      }
-    })*/
-        ;
+
+    });
   }
 
+/*
   Future<void> getScheduleVisitorData() async {
     isActivitiesAPICall = true;
     final dio = Dio();
@@ -1564,9 +1498,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         List<dynamic> _list = value.visitor;
         List<dynamic> _scheduleList = value.schedule_visitor;
 
-        _visitorList = List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
-        print('_visitor length : ' + _visitorList.length.toString());
-        _scheduleVisitorList = List<ScheduleVisitor>.from(
+        value.visitorList = List<Visitor>.from(_list.map((i) => Visitor.fromJson(i)));
+        print('_visitor length : ' + value.visitorList.length.toString());
+        value.scheduleVisitorList = List<ScheduleVisitor>.from(
             _scheduleList.map((i) => ScheduleVisitor.fromJson(i)));
 
         setState(() {
@@ -1578,6 +1512,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       }
     });
   }
+*/
 
   void redirectToPage(String item) {
     if (item == AppLocalizations.of(context).translate('my_gate')) {
@@ -1787,36 +1722,36 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  displayVisitorInfo(int position) {
+  displayVisitorInfo(int position, List<Visitor> visitorList) {
     String Time = "";
     String Date = "";
-    // String image = _visitorList[position].IMAGE;
-    if (_visitorList[position].OUT_TIME.length > 0) {
-      if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Time = /*_visitorList[position].IN_TIME +
+    // String image = value.visitorList[position].IMAGE;
+    if (visitorList[position].OUT_TIME.length > 0) {
+      if (visitorList[position].STATUS.toLowerCase() == 'out') {
+        Time = /*value.visitorList[position].IN_TIME +
             " - " +*/
-            _visitorList[position].OUT_TIME;
+            visitorList[position].OUT_TIME;
       } else {
-        Time = _visitorList[position].IN_TIME;
+        Time = visitorList[position].IN_TIME;
       }
     } else {
-      Time = _visitorList[position].IN_TIME;
+      Time = visitorList[position].IN_TIME;
     }
 
-    if (_visitorList[position].OUT_DATE.length > 0) {
-      if (_visitorList[position].STATUS.toLowerCase() == 'out') {
-        Date =/* _visitorList[position].IN_DATE +
+    if (visitorList[position].OUT_DATE.length > 0) {
+      if (visitorList[position].STATUS.toLowerCase() == 'out') {
+        Date =/* value.visitorList[position].IN_DATE +
             " - " +*/
-            _visitorList[position].OUT_DATE;
+            visitorList[position].OUT_DATE;
       } else {
-        Date = _visitorList[position].IN_DATE;
+        Date = visitorList[position].IN_DATE;
       }
     } else {
-      Date = _visitorList[position].IN_DATE;
+      Date = visitorList[position].IN_DATE;
     }
 
     var visitorStatus =
-        getVisitorAllowStatus(_visitorList[position].VISITOR_STATUS,_visitorList[position].VISITOR_USER_STATUS);
+        getVisitorAllowStatus(visitorList[position].VISITOR_STATUS,visitorList[position].VISITOR_USER_STATUS);
     return Stack(
       children: <Widget>[
         Align(
@@ -1853,11 +1788,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     Container(
                       padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
                       decoration: BoxDecoration(
-                          color: _visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
-                          _visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
+                          color: visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
+                          visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
                           borderRadius: BorderRadius.circular(25)),
-                      child: Text(_visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
-                        _visitorList[position].STATUS.toLowerCase() == 'in'
+                      child: Text(visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
+                        visitorList[position].STATUS.toLowerCase() == 'in'
                             ? 'Arrived'
                             : 'Left',
                         style: TextStyle(
@@ -1899,7 +1834,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                             //borderRadius: BorderRadius.all(Radius.circular(50))
                                           ),
                                           child: Image.network(
-                                            _visitorList[position].IMAGE,
+                                            visitorList[position].IMAGE,
                                             scale: 1.0,
                                             fit: BoxFit.fill,
                                             width: MediaQuery.of(context)
@@ -1919,14 +1854,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             radius: 25,
                             backgroundColor: GlobalVariables.mediumGreen,
                             backgroundImage:
-                                NetworkImage(_visitorList[position].IMAGE),
+                                NetworkImage(visitorList[position].IMAGE),
                           ),
                         ),
                         SizedBox(
                           width: 20.0,
                         ),
                         Text(
-                          _visitorList[position].VISITOR_NAME,
+                          visitorList[position].VISITOR_NAME,
                           style: TextStyle(
                               color: GlobalVariables.green,
                               fontSize: 20,
@@ -1942,7 +1877,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             iconSize: 25.0,
                             color: GlobalVariables.mediumGreen,
                             onPressed: () {
-                              launch('tel://' + _visitorList[position].CONTACT);
+                              launch('tel://' + visitorList[position].CONTACT);
                             },
                           ),
                         ),
@@ -2027,7 +1962,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   alignment: Alignment.topLeft,
                                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: Text(
-                                    _visitorList[position].FROM_VISITOR,
+                                    visitorList[position].FROM_VISITOR,
                                     style: TextStyle(
                                       color: GlobalVariables.black,
                                       fontSize: 16,
@@ -2056,7 +1991,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 color: GlobalVariables.white, shape: BoxShape.circle),
             child: CircleAvatar(
               child: SvgPicture.asset(
-                getVisitorStatusIcon(_visitorList[position].TYPE),
+                getVisitorStatusIcon(visitorList[position].TYPE),
                 width: 50,
                 height: 50,
                 color: GlobalVariables.white,
@@ -2105,16 +2040,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         switch (index) {
           case 0:
             {
-              if (!isActivitiesAPICall) {
-                getScheduleVisitorData();
-              }
+                Provider.of<GatePass>(context,listen: false).getGatePassData().then((value) {
+                  afterBuild(value);
+                });
             }
             break;
           case 1:
             {
               if (!isHelperAPICall) {
                 //getStaffRoleDetailsData();
-                getStaffCountData();
+               Provider.of<GatePass>(context,listen: false).getStaffCountData().then((value) {});
               }
             }
             break;
@@ -2160,40 +2095,40 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     return icon;
   }
 
-  Future<void> addGatePassWrongEntry(int position) async {
+  Future<void> addGatePassWrongEntry(int position, GatePass value) async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
-    restClient.addGatePassWrongEntry(societyId, _visitorList[position].ID, 'Wrong Entry').then((value) {
-      if (value.status) {
+    restClient.addGatePassWrongEntry(societyId, value.visitorList[position].ID, 'Wrong Entry').then((value1) {
+      if (value1.status) {
 
-        _visitorList[position].VISITOR_USER_STATUS='Wrong Entry';
+        value.visitorList[position].VISITOR_USER_STATUS='Wrong Entry';
         setState(() {});
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value1.message);
       _progressDialog.hide();
     });
   }
 
-  Future<void> deleteExpectedVisitor(int position) async {
+  Future<void> deleteExpectedVisitor(int position, GatePass value) async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
-    String srNo = _scheduleVisitorList[position].SR_NO;
+    String srNo = value.scheduleVisitorList[position].SR_NO;
     _progressDialog.show();
-    restClient.deleteExpectedVisitor(societyId,srNo).then((value) {
+    restClient.deleteExpectedVisitor(societyId,srNo).then((value1) {
       _progressDialog.hide();
-      if (value.status) {
-        _scheduleVisitorList.removeAt(position);
+      if (value1.status) {
+        value.scheduleVisitorList.removeAt(position);
         setState(() {});
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value1.message);
     });
   }
 
-  displayWrongEntryLayout(int position) {
+  displayWrongEntryLayout(int position, GatePass value) {
     return Container(
       padding: EdgeInsets.all(15),
       width: MediaQuery
@@ -2221,7 +2156,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        addGatePassWrongEntry(position);
+                        addGatePassWrongEntry(position,value);
                       },
                       child: Text(
                         AppLocalizations.of(context).translate('yes'),
@@ -2252,7 +2187,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  displayDeleteExpectedVisitorLayout(int position) {
+  displayDeleteExpectedVisitorLayout(int position, GatePass value) {
     return Container(
       padding: EdgeInsets.all(15),
       width: MediaQuery
@@ -2280,7 +2215,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        deleteExpectedVisitor(position);
+                        deleteExpectedVisitor(position,value);
                       },
                       child: Text(
                         AppLocalizations.of(context).translate('yes'),
@@ -2311,7 +2246,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }
 
-  getHelperListDataLayout() {
+/*  getHelperListDataLayout() {
     return _staffList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -2331,9 +2266,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             shrinkWrap: true,
           )),
     ):Container();
-  }
+  }*/
 
-  getHelperListItemLayout(int position) {
+  /*getHelperListItemLayout(int position) {
     List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
 
     var staffImage = _staffList[position].IMAGE;
@@ -2385,8 +2320,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     padding: EdgeInsets.all(10),
                     // alignment: Alignment.center,
-                    /* decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25)),*/
+                    *//* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*//*
                     child: staffImage.length == 0
                         ? Image.asset(
                       GlobalVariables.componentUserProfilePath,
@@ -2486,9 +2421,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         ),
       ),
     );
-  }
+  }*/
 
-  Future<void> getStaffRoleDetailsData() async {
+ /* Future<void> getStaffRoleDetailsData() async {
     isHelperAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -2504,5 +2439,5 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     });
 
-  }
+  }*/
 }

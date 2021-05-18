@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/WebViewScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
@@ -17,6 +18,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Banners.dart';
+import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,21 +34,21 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
 
   ProgressDialog _progressDialog;
   var societyId,name,phone,block,flat;
-  List<Banners> _bannerList = List<Banners>();
+ // List<Banners> value.bannerList = List<Banners>();
   var response="";
 
   @override
   void initState() {
     super.initState();
     getSharedPreferencesData();
-    GlobalFunctions.checkInternetConnection().then((internet) {
+  /*  GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBannerData();
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
       }
-    });
+    });*/
 
   }
 
@@ -55,32 +57,39 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
     // TODO: implement build
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
+    return ChangeNotifierProvider<LoginDashBoardResponse>.value(
+        value: Provider.of<LoginDashBoardResponse>(context),
+      child: Consumer<LoginDashBoardResponse>(builder: (context,value,child){
+        
+        return  Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              elevation: 0,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back,
+                  color: GlobalVariables.white,
+                ),
+              ),
+              title: AutoSizeText(
+                AppLocalizations.of(context).translate('about_societyrun'),
+                style: TextStyle(color: GlobalVariables.white),
+              ),
             ),
+            body: getBaseLayout(value),
           ),
-          title: AutoSizeText(
-            AppLocalizations.of(context).translate('about_societyrun'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getBaseLayout(),
-      ),
+        );
+        
+      }),
     );
   }
 
-  getBannerData() async {
+  /*getBannerData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     restClient.getBannerData().then((value) {
@@ -92,7 +101,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
         // print('first complaint : ' + _list[0].toString());
         // print('first complaint Status : ' + _list[0]['STATUS'].toString());
 
-        _bannerList = List<Banners>.from(_list.map((i) => Banners.fromJson(i)));
+        value.bannerList = List<Banners>.from(_list.map((i) => Banners.fromJson(i)));
         if (this.mounted) {
           setState(() {
             //Your state change code goes here
@@ -113,9 +122,9 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
         default:
       }
     });
-  }
+  }*/
 
-  getBaseLayout() {
+  getBaseLayout(LoginDashBoardResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -129,7 +138,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                getAboutSocietyRunLayout(),
+                getAboutSocietyRunLayout(value),
               ],
             ),
           ),
@@ -138,7 +147,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
     );
   }
 
-  getAboutSocietyRunLayout() {
+  getAboutSocietyRunLayout(LoginDashBoardResponse value) {
     return  SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
@@ -162,9 +171,9 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   viewportFraction: 1.0,
                 ),
-                itemCount: _bannerList.length,
+                itemCount: value.bannerList.length,
                 itemBuilder: (BuildContext context, int itemIndex) =>
-                _bannerList.length> 0 ? InkWell(
+                value.bannerList.length> 0 ? InkWell(
                   onTap: (){
                     print('SocietyID : '+ societyId);
                     print('Name : '+ name);
@@ -181,9 +190,9 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                     print('mobileMD5 : '+ mobileMD5.toString());
                     print('unitMD5 : '+ unitMD5.toString());*/
 
-                   // launch(_bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
-                   // launch(_bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
-                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(_bannerList[itemIndex].Url +
+                   // launch(value.bannerList[itemIndex].Url+'?'+'SID='+societyId.toString()+'&MOBILE='+phone.toString()+'&NAME='+name.toString()+'&UNIT='+ block.toString()+' '+flat.toString());
+                   // launch(value.bannerList[itemIndex].Url+'?'+'SID='+societyIdMD5.toString()+'&MOBILE='+mobileMD5.toString()+'&NAME='+nameMD5.toString()+'&UNIT='+unitMD5.toString());
+                    Navigator.push(context, MaterialPageRoute(builder:  (context) => BaseWebViewScreen(value.bannerList[itemIndex].Url +
                         '?' +
                         'SID=' +
                         societyId.toString() +
@@ -201,7 +210,7 @@ class AboutSocietyRunInfoState extends BaseStatefulState<BaseAboutSocietyRunInfo
                     height: MediaQuery.of(context).size.height,
                     //color: GlobalVariables.black,
                     //alignment: Alignment.center,
-                    child: Image.network(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
+                    child: Image.network(value.bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
                   ),
                 ): Container(),
               ),

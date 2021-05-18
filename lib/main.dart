@@ -11,7 +11,10 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ClassifiedResponse.dart';
 import 'package:societyrun/Models/Complaints.dart';
+import 'package:societyrun/Models/GatePassResponse.dart';
+import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MyComplexResponse.dart';
+import 'package:societyrun/Models/MyUnitResponse.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
@@ -41,6 +44,9 @@ class BaseAppStart extends StatelessWidget {
   final servicesResponse = ServicesResponse();
   final helpDeskResponse = HelpDeskResponse();
   final myComplexResponse = MyComplexResponse();
+  final myUnitResponse = MyUnitResponse();
+  final gatePassResponse = GatePass();
+  final loginDashboardResponse = LoginDashBoardResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +67,9 @@ class BaseAppStart extends StatelessWidget {
             ChangeNotifierProvider<ServicesResponse>.value(value: servicesResponse),
             ChangeNotifierProvider<HelpDeskResponse>.value(value: helpDeskResponse),
             ChangeNotifierProvider<MyComplexResponse>.value(value: myComplexResponse),
+            ChangeNotifierProvider<MyUnitResponse>.value(value: myUnitResponse),
+            ChangeNotifierProvider<GatePass>.value(value: gatePassResponse),
+            ChangeNotifierProvider<LoginDashBoardResponse>.value(value: loginDashboardResponse),
           ],
           child: MaterialApp(
             theme: getThemeData(),

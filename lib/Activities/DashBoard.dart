@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AppSettings.dart';
@@ -65,9 +66,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   String _selectedItem;
   List<DropdownMenuItem<String>> _societyListItems =
       new List<DropdownMenuItem<String>>();
-  List<LoginResponse> _societyList = new List<LoginResponse>();
+
+  //List<LoginResponse> _societyList = new List<LoginResponse>();
   LoginResponse _selectedSocietyLogin;
-  var username, password, societyId, flat, block, duesRs = "0.0", duesDate = "";
+  var username, password, societyId, flat, block; /*duesRs = "0.0", duesDate = ""*/
 
   List<RootTitle> _list = new List<RootTitle>();
   int _currentIndex = 0;
@@ -78,15 +80,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   var email = '', phone = '';
   var photo = '';
 
-  List<Banners> _bannerList = List<Banners>();
+  //List<Banners> _bannerList = List<Banners>();
 
   RateMyApp _rateMyApp = RateMyApp(
     preferencesPrefix: 'rateMyApp_',
     minDays: 30,
     googlePlayIdentifier: AppPackageInfo.packageName,
   );
-
-
 
   @override
   void initState() {
@@ -103,8 +103,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           if (internet) {
             getDuesData();
             getAllSocietyData();
-            getBannerData();
-            //geProfileData();
+            Provider.of<LoginDashBoardResponse>(context, listen: false)
+                .getBannerData();
           } else {
             GlobalFunctions.showToast(AppLocalizations.of(context)
                 .translate('pls_check_internet_connectivity'));
@@ -143,67 +143,41 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
   }
 
-  void geProfileData() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String userId = await GlobalFunctions.getUserId();
-    restClient.getProfileData(societyId, userId).then((value) {
-      //  _progressDialog.hide();
-      if (value.status) {
-        setState(() {
-          List<dynamic> _list = value.data;
-          List<ProfileInfo> _profileList =
-              List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
-          photo = _profileList[0].PROFILE_PHOTO;
-          name = _profileList[0].NAME;
-          GlobalVariables.userNameValueNotifer.value = name;
-          GlobalVariables.userImageURLValueNotifer.value = photo;
-          GlobalVariables.userImageURLValueNotifer.notifyListeners();
-          GlobalVariables.userNameValueNotifer.notifyListeners();
-          GlobalFunctions.saveUserProfileToSharedPreferences(photo);
-          GlobalFunctions.saveDisplayUserNameToSharedPreferences(name);
-        });
-      }
-    }).catchError((Object obj) {
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-          }
-          break;
-        default:
-      }
-    });
-  }
-
   int _activeMeterIndex;
 
   @override
   Widget build(BuildContext context) {
+
     FirebaseMessagingHandler().getToken();
     print('DashBoard context : ' + context.toString());
     print('BaseStatefulState context : ' + BaseStatefulState.getCtx.toString());
-    print(
-        'DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
+    print('DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
+
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getExpandableListViewData(context);
+
     // TODO: implement build
     //  GlobalFunctions.showToast("Dashboard state page");
-    return Builder(
-      builder: (context) => Scaffold(
-        key: _dashboardSacfoldKey,
-        // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
-        body: WillPopScope(child: getBodyLayout(), onWillPop: onWillPop),
-        drawer: getDrawerLayout(),
-        // bottomNavigationBar: getBottomNavigationBar(),
+    return ChangeNotifierProvider<LoginDashBoardResponse>.value(
+        value: Provider.of<LoginDashBoardResponse>(context),
+      child: Consumer<LoginDashBoardResponse>(
+          builder: (context,value,child){
+            return Builder(
+              builder: (context) => Scaffold(
+                key: _dashboardSacfoldKey,
+                // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
+                body: WillPopScope(child: getBodyLayout(value), onWillPop: onWillPop),
+                drawer: getDrawerLayout(value),
+                // bottomNavigationBar: getBottomNavigationBar(),
+              ),
+            );
+          },
       ),
     );
   }
 
-  getBodyLayout() {
-    return Stack(
+  getBodyLayout(LoginDashBoardResponse value) {
+    return value.isLoading ? GlobalFunctions.loadingWidget(context) : Stack(
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width,
@@ -222,8 +196,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           GlobalVariables.headerIconPath,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.fill,
-                        )
-                    ),
+                        )),
                   ),
                   Container(
                     // color: GlobalVariables.black,
@@ -364,8 +337,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                 ? AppAssetsImage(
                                                     GlobalVariables
                                                         .componentUserProfilePath,
-                                                    imageWidth:20.0,
-                                                    imageHeight:20.0,
+                                                    imageWidth: 20.0,
+                                                    imageHeight: 20.0,
                                                     borderColor:
                                                         GlobalVariables.grey,
                                                     borderWidth: 1.0,
@@ -374,8 +347,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                   )
                                                 : AppNetworkImage(
                                                     userImageURLValueNotifer,
-                                                    imageWidth:20.0,
-                                                    imageHeight:20.0,
+                                                    imageWidth: 20.0,
+                                                    imageHeight: 20.0,
                                                     borderColor:
                                                         GlobalVariables.grey,
                                                     borderWidth: 1.0,
@@ -389,10 +362,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       ],
                     ),
                   ),
-                  duesLayout(),
+                  duesLayout(value),
                 ],
               ),
-              getHomePage()
+              getHomePage(value)
             ],
           ),
         ),
@@ -558,7 +531,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
   }*/
 
-  getHomePage() {
+  getHomePage(LoginDashBoardResponse loginDashBoardResponse) {
     return Expanded(
       child: SingleChildScrollView(
         child: Align(
@@ -625,7 +598,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   Container(
                                     child: SvgPicture.asset(
                                         GlobalVariables.buildingIconPath),
-
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -850,16 +822,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         viewportFraction: 1.0,
                         autoPlayAnimationDuration: Duration(milliseconds: 800),
                       ),
-                      itemCount: _bannerList.length,
+                      itemCount: loginDashBoardResponse.bannerList.length,
                       itemBuilder: (BuildContext context, int itemIndex) =>
-                          _bannerList.length > 0
+                      loginDashBoardResponse.bannerList.length > 0
                               ? InkWell(
                                   onTap: () {
-                                    print('SocietyID : ' + societyId);
+                                 /*   print('SocietyID : ' + societyId);
                                     print('Name : ' + name);
                                     print('Mobile : ' + phone);
                                     print('Unit : ' + block + ' ' + flat);
-
+*/
                                     /*  var societyIdMD5 = md5.convert(utf8.encode(societyId));
                              var nameMD5 = md5.convert(utf8.encode(name));
                              var mobileMD5 = md5.convert(utf8.encode(phone));
@@ -887,7 +859,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 BaseWebViewScreen(
-                                                    _bannerList[itemIndex].Url +
+                                                    loginDashBoardResponse.bannerList[itemIndex].Url +
                                                         '?' +
                                                         'SID=' +
                                                         societyId.toString() +
@@ -910,7 +882,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     //color: GlobalVariables.black,
                                     //alignment: Alignment.center,
                                     child: Image.network(
-                                      _bannerList[itemIndex].IMAGE,
+                                      loginDashBoardResponse.bannerList[itemIndex].IMAGE,
                                       fit: BoxFit.fitWidth,
                                     ),
                                   ),
@@ -984,7 +956,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         context, MaterialPageRoute(builder: (context) => BaseMyUnit(null)));*/ /*
   }*/
 
-  getDrawerLayout() {
+  getDrawerLayout(LoginDashBoardResponse value) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Container(
@@ -1008,7 +980,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   padding: EdgeInsets.all(5),
                   color: GlobalVariables.veryLightGray,
-                  child: getHeaderLayout(),
+                  child: getHeaderLayout(value),
                 ),
                 getListData(),
               ],
@@ -1019,7 +991,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     });
   }
 
-  getHeaderLayout() {
+  getHeaderLayout(LoginDashBoardResponse loginDashBoardResponse) {
     return FutureBuilder<Map<String, dynamic>>(
       future: getHeaderData(),
       builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
@@ -1049,7 +1021,36 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 ),*/
                     DropdownButton(
                   items: _societyListItems,
-                  onChanged: changeDropDownItem,
+                  onChanged: (value){
+
+                    GlobalFunctions.checkInternetConnection().then((internet) {
+                      if (internet) {
+                        setState(() {
+                          _selectedItem = value;
+                          print('_selctedItem:' + _selectedItem.toString());
+                          for (int i = 0; i < loginDashBoardResponse.societyList.length; i++) {
+                            if (_selectedItem == loginDashBoardResponse.societyList[i].ID) {
+                              _selectedSocietyLogin = loginDashBoardResponse.societyList[i];
+                              _selectedSocietyLogin.PASSWORD = password;
+                              GlobalFunctions.saveDataToSharedPreferences(
+                                  _selectedSocietyLogin);
+                              print('for _selctedItem:' + _selectedItem);
+                              getDuesData();
+                              getDisplayName();
+                              getMobile();
+                              getPhoto();
+                              break;
+                            }
+                          }
+                        });
+                      } else {
+                        GlobalFunctions.showToast(AppLocalizations.of(context)
+                            .translate('pls_check_internet_connectivity'));
+                      }
+                    });
+
+
+                  },
                   value: _selectedItem,
                   underline: SizedBox(),
                   isExpanded: false,
@@ -1085,8 +1086,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     ? AppAssetsImage(
                                         GlobalVariables
                                             .componentUserProfilePath,
-                                        imageWidth:70.0,
-                                        imageHeight:70.0,
+                                        imageWidth: 70.0,
+                                        imageHeight: 70.0,
                                         borderColor: GlobalVariables.grey,
                                         borderWidth: 1.0,
                                         fit: BoxFit.cover,
@@ -1094,8 +1095,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       )
                                     : AppNetworkImage(
                                         userImageURLValueNotifer,
-                                        imageWidth:70.0,
-                                        imageHeight:70.0,
+                                        imageWidth: 70.0,
+                                        imageHeight: 70.0,
                                         borderColor: GlobalVariables.grey,
                                         borderWidth: 1.0,
                                         fit: BoxFit.cover,
@@ -1374,107 +1375,64 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
 
   Future<void> getAllSocietyData() async {
-    //  _progressDialog.show();
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
 
     String loggedUsername = await GlobalFunctions.getLoggedUserName();
     if (loggedUsername.length == 0) {
       GlobalFunctions.notAllowForRunAppDialog(context);
     } else {
-      password = await GlobalFunctions.getPassword();
-      societyId = await GlobalFunctions.getSocietyId();
-      String loginId = await GlobalFunctions.getLoginId();
-      int prefPos = 0;
-      restClient.getAllSocietyData(loggedUsername).then((value) {
-        if (value.status) {
-          List<dynamic> _list = value.data;
 
-          _societyList = List<LoginResponse>.from(
-              _list.map((i) => LoginResponse.fromJson(i)));
-          print('Societylist length ' + _societyList.length.toString());
-          for (int i = 0; i < _societyList.length; i++) {
-            _societyList[i].LoggedUsername = loggedUsername;
-            LoginResponse loginResponse = _societyList[i];
+      Provider.of<LoginDashBoardResponse>(context, listen: false)
+          .getAllSocietyData(loggedUsername, context)
+          .then((_societyList) async {
 
-            /*    cryptor.generateRandomKey().then((value) async {
-            final encrypted =  await cryptor.encrypt(loginResponse.PASSWORD, value);
-            final decrypted =  await cryptor.decrypt(loginResponse.PASSWORD, 'incredible');
-            print('"loginResponse.ID : ' + loginResponse.ID);
-            print('ShardPref societyId : ' + societyId);
-            print('SocietyId ' + loginResponse.SOCIETY_ID);
-            print('PASSWORD ' + loginResponse.PASSWORD);
-            print('encrypted PASSWORD ' + encrypted);
-            print('decrypted PASSWORD ' + decrypted);
+        password = await GlobalFunctions.getPassword();
+        societyId = await GlobalFunctions.getSocietyId();
+        String loginId = await GlobalFunctions.getLoginId();
+        int prefPos = 0;
 
-          });*/
-            /*   var bytes1 = utf8.encode("incredible");         // data being hashed
-          var digest1 = sha1.convert(bytes1);         // Hashing Process
-          print("Digest as bytes: ${digest1.bytes}");   // Print Bytes
-          print("Digest as hex string: $digest1");*/
-            print('"loginResponse.ID : ' + loginResponse.ID);
-            print('ShardPref societyId : ' + societyId);
-            print('SocietyId ' + loginResponse.SOCIETY_ID);
-            print('PASSWORD ' + loginResponse.PASSWORD);
+        print('Societylist length ' + _societyList.length.toString());
+        for (int i = 0; i < _societyList.length; i++) {
+          _societyList[i].LoggedUsername = loggedUsername;
+          LoginResponse loginResponse = _societyList[i];
 
-            //  print('SALT KEY '+utf8.encode('incredible').toString());
+          print('"loginResponse.ID : ' + loginResponse.ID);
+          print('ShardPref societyId : ' + societyId);
+          print('SocietyId ' + loginResponse.SOCIETY_ID);
+          print('PASSWORD ' + loginResponse.PASSWORD);
 
-            //   print('ENCRYPTION PASSWORD '+ sha1.convert(utf8.encode('incredible')+utf8.encode(loginResponse.PASSWORD)).toString());
+          print('SocietyId ' +
+              loginResponse.Society_Name +
+              " " +
+              loginResponse.BLOCK +
+              " " +
+              loginResponse.FLAT);
 
-            //  print('DECRYPTION PASSWORD '+ sha1.convert();
-
-            print('SocietyId ' +
-                loginResponse.Society_Name +
-                " " +
-                loginResponse.BLOCK +
-                " " +
-                loginResponse.FLAT);
-
-            print('User Status : ' + loginResponse.User_Status);
-            //loginResponse.User_Status='C';
-            print('User Status : ' + loginResponse.User_Status);
-            if (loginResponse.User_Status != 'C') {
-              if (loginId == loginResponse.ID) {
-                if (_societyListItems.length > 0) {
-                  prefPos = i;
-                  _societyListItems.insert(
-                      0,
-                      DropdownMenuItem(
-                        value: loginResponse.ID,
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          alignment: Alignment.topLeft,
-                          child: AutoSizeText(
-                            loginResponse.Society_Name +
-                                " " +
-                                loginResponse.BLOCK +
-                                " " +
-                                loginResponse.FLAT,
-                            style: TextStyle(
-                                color: GlobalVariables.black, fontSize: 12),
-                            maxLines: 1,
-                          ),
+          print('User Status : ' + loginResponse.User_Status);
+          //loginResponse.User_Status='C';
+          print('User Status : ' + loginResponse.User_Status);
+          if (loginResponse.User_Status != 'C') {
+            if (loginId == loginResponse.ID) {
+              if (_societyListItems.length > 0) {
+                prefPos = i;
+                _societyListItems.insert(
+                    0,
+                    DropdownMenuItem(
+                      value: loginResponse.ID,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        alignment: Alignment.topLeft,
+                        child: AutoSizeText(
+                          loginResponse.Society_Name +
+                              " " +
+                              loginResponse.BLOCK +
+                              " " +
+                              loginResponse.FLAT,
+                          style: TextStyle(
+                              color: GlobalVariables.black, fontSize: 12),
+                          maxLines: 1,
                         ),
-                      ));
-                } else {
-                  _societyListItems.add(DropdownMenuItem(
-                    value: loginResponse.ID,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      alignment: Alignment.topLeft,
-                      child: AutoSizeText(
-                        loginResponse.Society_Name +
-                            " " +
-                            loginResponse.BLOCK +
-                            " " +
-                            loginResponse.FLAT,
-                        style: TextStyle(
-                            color: GlobalVariables.black, fontSize: 12),
-                        maxLines: 1,
                       ),
-                    ),
-                  ));
-                }
+                    ));
               } else {
                 _societyListItems.add(DropdownMenuItem(
                   value: loginResponse.ID,
@@ -1494,42 +1452,42 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   ),
                 ));
               }
+            } else {
+              _societyListItems.add(DropdownMenuItem(
+                value: loginResponse.ID,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  alignment: Alignment.topLeft,
+                  child: AutoSizeText(
+                    loginResponse.Society_Name +
+                        " " +
+                        loginResponse.BLOCK +
+                        " " +
+                        loginResponse.FLAT,
+                    style:
+                        TextStyle(color: GlobalVariables.black, fontSize: 12),
+                    maxLines: 1,
+                  ),
+                ),
+              ));
             }
-            //print('value: ' + _societyListItems[i].value.toString());
           }
-          print('size : ' + _societyListItems.length.toString());
-          if (_societyListItems.length > 0) {
-            print('_societyListItems 0 : ' + _societyListItems[0].toString());
-            _selectedItem = _societyListItems[0].value;
-            print('_selectedItem initial : ' + _selectedItem.toString());
-            _selectedSocietyLogin = _societyList[prefPos];
-            // if(_selectedSocietyLogin.User_Status!='C') {
-            _selectedSocietyLogin.PASSWORD = password;
-            _selectedSocietyLogin.LoggedUsername = loggedUsername;
-            print("Flat" + _selectedSocietyLogin.FLAT.toString());
-            GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+        }
 
-            if (Platform.isAndroid) {
-              if (value.android_version != AppPackageInfo.version) {
-                //show app update Dialog
-                GlobalFunctions.appUpdateDialog(context, value.android_type);
-              }
-            } else if (Platform.isIOS) {
-              if (value.ios_version != AppPackageInfo.version) {
-                //show app update Dialog
-                GlobalFunctions.appUpdateDialog(context, value.ios_type);
-              }
-            }
-          } else {
-            //show logout Dialog
-            GlobalFunctions.forceLogoutDialog(context);
-          }
+        print('size : ' + _societyListItems.length.toString());
+        if (_societyListItems.length > 0) {
+          print('_societyListItems 0 : ' + _societyListItems[0].toString());
+          _selectedItem = _societyListItems[0].value;
+          print('_selectedItem initial : ' + _selectedItem.toString());
+          _selectedSocietyLogin = _societyList[prefPos];
+          // if(_selectedSocietyLogin.User_Status!='C') {
+          _selectedSocietyLogin.PASSWORD = password;
+          _selectedSocietyLogin.LoggedUsername = loggedUsername;
+          print("Flat" + _selectedSocietyLogin.FLAT.toString());
+          GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
         } else {
-          if (value.message ==
-              AppLocalizations.of(context)
-                  .translate('invalid_username_password')) {
-            GlobalFunctions.notAllowForRunAppDialog(context);
-          }
+          //show logout Dialog
+          GlobalFunctions.forceLogoutDialog(context);
         }
 
         _rateMyApp.init().then((_) {
@@ -1574,53 +1532,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               // actionsBuilder: (context) => [], // This one allows you to use your own buttons.
             );
           }
-        }
-            // }
-            );
-      }).catchError((Object obj) {
-        if (_progressDialog.isShowing()) {
-          _progressDialog.hide();
-        }
-        switch (obj.runtimeType) {
-          case DioError:
-            {
-              final res = (obj as DioError).response;
-              print('res : ' + res.toString());
-            }
-            break;
-          default:
-        }
+        });
       });
     }
   }
 
   void changeDropDownItem(String value) {
     print('clickable value : ' + value.toString());
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        setState(() {
-          _selectedItem = value;
-          print('_selctedItem:' + _selectedItem.toString());
-          for (int i = 0; i < _societyList.length; i++) {
-            if (_selectedItem == _societyList[i].ID) {
-              _selectedSocietyLogin = _societyList[i];
-              _selectedSocietyLogin.PASSWORD = password;
-              GlobalFunctions.saveDataToSharedPreferences(
-                  _selectedSocietyLogin);
-              print('for _selctedItem:' + _selectedItem);
-              getDuesData();
-              getDisplayName();
-              getMobile();
-              getPhoto();
-              break;
-            }
-          }
-        });
-      } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
-      }
-    });
+
   }
 
   void getExpandableListViewData(BuildContext context) {
@@ -1653,13 +1572,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           rootIconData: GlobalVariables.myServiceIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
           items: [
-           // AppLocalizations.of(context).translate("my_classified"),
+            // AppLocalizations.of(context).translate("my_classified"),
             AppLocalizations.of(context).translate("classified"),
             //AppLocalizations.of(context).translate("my_services"),
             AppLocalizations.of(context).translate("services"),
             AppLocalizations.of(context).translate("exclusive_offer"),
           ]),
-     /* new RootTitle(
+      /* new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
           rootIconData: GlobalVariables.myClubIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
@@ -1766,31 +1685,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }*/
 
   getDuesData() async {
-    final dio = Dio();
-    final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
-    societyId = await GlobalFunctions.getSocietyId();
-    flat = await GlobalFunctions.getFlat();
-    block = await GlobalFunctions.getBlock();
-    _progressDialog.show();
-    //societyId=110015.toString();
-    restClientERP.getDuesData(societyId, flat, block).then((value) {
-      print('Response : ' + value.toString());
 
-      if (value.status) {
-        GlobalVariables.isERPAccount = true;
-      } else {
-        GlobalVariables.isERPAccount = false;
-      }
-
-      duesRs = value.DUES.toString();
-      duesDate = value.DUE_DATE.toString();
-      if (duesRs.length == 0) {
-        duesRs = "0.0";
-      }
-      if (duesDate == 'null') duesDate = '-';
-      GlobalFunctions.saveDuesDataToSharedPreferences(duesRs, duesDate);
-      _progressDialog.hide();
+    Provider.of<LoginDashBoardResponse>(context,listen: false).getDuesData().then((value) {
 
       if (_dashboardSacfoldKey.currentState != null) {
         if (_dashboardSacfoldKey.currentState.isDrawerOpen) {
@@ -1802,59 +1698,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           //Your state change code goes here
         });
       }
-    }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
-      }
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-          }
-          break;
-        default:
-      }
     });
   }
 
-  getBannerData() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    restClient.getBannerData().then((value) {
-      print('Response : ' + value.toString());
-      if (value.status) {
-        List<dynamic> _list = value.data;
-        print('complaint list length : ' + _list.length.toString());
 
-        // print('first complaint : ' + _list[0].toString());
-        // print('first complaint Status : ' + _list[0]['STATUS'].toString());
-
-        _bannerList = List<Banners>.from(_list.map((i) => Banners.fromJson(i)));
-        if (this.mounted) {
-          setState(() {
-            //Your state change code goes here
-          });
-        }
-      }
-    }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
-      }
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-          }
-          break;
-        default:
-      }
-    });
-  }
-
-  duesLayout() {
-    print('duesDate : ' + duesDate);
+  duesLayout(LoginDashBoardResponse loginDashBoardResponse) {
+    print('duesDate : ' + loginDashBoardResponse.duesDate);
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -1895,11 +1744,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     color: GlobalVariables.mediumGreen,
                                     fontSize: 14),
                               ),
-                              double.parse(duesRs) > 0
+                              double.parse(loginDashBoardResponse.duesRs) > 0
                                   ? Text(
-                                      getBillPaymentStatus(),
+                                      getBillPaymentStatus(loginDashBoardResponse),
                                       style: TextStyle(
-                                          color: getBillPaymentStatusColor(),
+                                          color: getBillPaymentStatusColor(loginDashBoardResponse),
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
                                     )
@@ -1917,7 +1766,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             children: <Widget>[
                               Text(
                                 " Rs. " +
-                                    double.parse(duesRs).toStringAsFixed(2),
+                                    double.parse(loginDashBoardResponse.duesRs).toStringAsFixed(2),
                                 style: TextStyle(
                                     color: GlobalVariables.green,
                                     fontSize: 24,
@@ -1925,11 +1774,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               ),
                               Visibility(
                                 visible:
-                                    double.parse(duesRs) > 0 ? true : false,
+                                    double.parse(loginDashBoardResponse.duesRs) > 0 ? true : false,
                                 child: Text(
-                                  duesDate.length > 0 && duesDate != '-'
+                                  loginDashBoardResponse.duesDate.length > 0 && loginDashBoardResponse.duesDate != '-'
                                       ? GlobalFunctions.convertDateFormat(
-                                          duesDate, 'dd-MM-yyyy')
+                                      loginDashBoardResponse.duesDate, 'dd-MM-yyyy')
                                       : '-',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -2309,8 +2158,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('expense')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-     Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseExpenseSearchAdd()))
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseExpenseSearchAdd()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
@@ -2357,7 +2206,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (item == AppLocalizations.of(context).translate('more')) {
       //Redirect to  Admin«
       GlobalFunctions.comingSoonDialog(context);
-     /* Navigator.push(
+      /* Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseCreateClassifiedListing())).then((value) {
@@ -2463,19 +2312,19 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             builder: (context) => BaseDisplayProfileInfo(userId, userType)));
     if (result == 'profile') {
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      geProfileData();
+      Provider.of<LoginDashBoardResponse>(context,listen: false).geProfileData().then((value) {});
     } else {
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
     }
   }
 
-  String getBillPaymentStatus() {
+  String getBillPaymentStatus(LoginDashBoardResponse loginDashBoardResponse) {
     String status = '';
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
-    final toDateTine = DateTime.parse(duesDate);
+    final toDateTine = DateTime.parse(loginDashBoardResponse.duesDate);
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -2493,11 +2342,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     return status;
   }
 
-  getBillPaymentStatusColor() {
+  getBillPaymentStatusColor(LoginDashBoardResponse loginDashBoardResponse) {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
-    final toDateTine = DateTime.parse(duesDate);
+    final toDateTine = DateTime.parse(loginDashBoardResponse.duesDate);
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -2559,7 +2408,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     List<String> _userPermissionList = userPermission.toString().split(',');
 
     for (int i = 0; i < _socPermissionList.length; i++) {
-     // print('_socPermissionList[i] : ' + _userPermissionList[i].toString());
+      // print('_socPermissionList[i] : ' + _userPermissionList[i].toString());
       if (_socPermissionList[i] == AppPermission.socHelpDeskPermission) {
         AppPermission.isSocHelpDeskPermission = true;
       }
@@ -2583,7 +2432,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
 
     for (int i = 0; i < _userPermissionList.length; i++) {
-     // print('_userPermissionList[i] : ' + _userPermissionList[i].toString());
+      // print('_userPermissionList[i] : ' + _userPermissionList[i].toString());
       if (_userPermissionList[i] == AppPermission.userHelpDeskPermission) {
         AppPermission.isUserHelpDeskPermission = true;
       }

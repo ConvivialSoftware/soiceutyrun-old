@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
@@ -9,6 +10,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
+import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -37,7 +39,7 @@ class StaffListPerCategoryState
 
   StaffListPerCategoryState(this._roleName);
 
-  List<Staff> _staffList = List<Staff>();
+ // List<Staff> value.staffList = List<Staff>();
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class StaffListPerCategoryState
     getSharedPreferenceData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        getStaffRoleDetailsData();
+        Provider.of<GatePass>(context,listen: false).getStaffRoleDetailsData(widget._roleName);
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -57,32 +59,37 @@ class StaffListPerCategoryState
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        //resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
+    return ChangeNotifierProvider<GatePass>.value(
+        value: Provider.of<GatePass>(context),
+      child: Consumer<GatePass>(builder: (context,value,child){
+        return Builder(
+          builder: (context) => Scaffold(
+            //resizeToAvoidBottomPadding: false,
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back,
+                  color: GlobalVariables.white,
+                ),
+              ),
+              title: Text(
+                _roleName,
+                style: TextStyle(color: GlobalVariables.white),
+              ),
             ),
+            body: getStaffListPerCategoryLayout(value),
           ),
-          title: Text(
-            _roleName,
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getStaffListPerCategoryLayout(),
-      ),
+        );
+      }),
     );
   }
 
-  getStaffListPerCategoryLayout() {
+  getStaffListPerCategoryLayout(GatePass value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -96,7 +103,7 @@ class StaffListPerCategoryState
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
-                getStaffListPerCategoryListDataLayout(),
+                value.isLoading? GlobalFunctions.loadingWidget(context):  getStaffListPerCategoryListDataLayout(value),
               ],
             ),
           ),
@@ -105,8 +112,8 @@ class StaffListPerCategoryState
     );
   }
 
-  getStaffListPerCategoryListDataLayout() {
-    return _staffList.length > 0
+  getStaffListPerCategoryListDataLayout(GatePass value) {
+    return value.staffList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
@@ -120,9 +127,9 @@ class StaffListPerCategoryState
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
-                      itemCount: _staffList.length,
+                      itemCount: value.staffList.length,
                       itemBuilder: (context, position) {
-                        return getStaffListPerCategoryListItemLayout(position);
+                        return getStaffListPerCategoryListItemLayout(position,value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -130,17 +137,17 @@ class StaffListPerCategoryState
         : Container();
   }
 
-  getStaffListPerCategoryListItemLayout(int position) {
-    List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
+  getStaffListPerCategoryListItemLayout(int position, GatePass value) {
+    List<String> _workHouseList = value.staffList[position].ASSIGN_FLATS.split(',');
     for (int i = 0; i < _workHouseList.length; i++) {
       if (_workHouseList[i].length == 0) {
         _workHouseList.removeAt(i);
       }
     }
 
-    var staffImage = _staffList[position].IMAGE;
+    var staffImage = value.staffList[position].IMAGE;
 
-    var rates = _staffList[position].RATINGS;
+    var rates = value.staffList[position].RATINGS;
     bool isRattingDone = false;
     double totalRate = 0.0;
 
@@ -150,7 +157,7 @@ class StaffListPerCategoryState
       isRattingDone = true;
     }
     if (isRattingDone) {
-      _unitRateList = _staffList[position].RATINGS.split(',');
+      _unitRateList = value.staffList[position].RATINGS.split(',');
       for (int i = 0; i < _unitRateList.length; i++) {
         List<String> _rate = List<String>();
         _rate = _unitRateList[i].split(':');
@@ -169,9 +176,9 @@ class StaffListPerCategoryState
         var result = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BaseStaffDetails(_staffList[position])));
+                builder: (context) => BaseStaffDetails(value.staffList[position])));
         if (result == 'back') {
-          getStaffRoleDetailsData();
+          Provider.of<GatePass>(context,listen: false).getStaffRoleDetailsData(widget._roleName);
         }
       },
       child: Container(
@@ -220,7 +227,7 @@ class StaffListPerCategoryState
                       children: [
                         Container(
                           child: Text(
-                            _staffList[position].STAFF_NAME,
+                            value.staffList[position].STAFF_NAME,
                             style: TextStyle(
                                 color: GlobalVariables.green,
                                 fontSize: 16,
@@ -280,7 +287,7 @@ class StaffListPerCategoryState
                 ),
               ],
             ),
-            position != _staffList.length - 1
+            position != value.staffList.length - 1
                 ? Container(
                     //color: GlobalVariables.black,
                     //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -317,21 +324,5 @@ class StaffListPerCategoryState
     setState(() {});
   }
 
-  Future<void> getStaffRoleDetailsData() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-
-    _progressDialog.show();
-    restClient.staffRoleDetails(societyId, _roleName).then((value) {
-      _progressDialog.hide();
-      List<dynamic> _list = value.data;
-      _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
-      if (mounted) {
-        setState(() {
-          print('setState');
-        });
-      }
-    });
-  }
+  
 }
