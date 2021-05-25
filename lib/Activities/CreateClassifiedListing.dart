@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:http/http.dart' as http;
@@ -116,9 +117,9 @@ class CreateClassifiedListingState
             for (int i = 0; i < value.ownerClassifiedCategoryList.length; i++) {
               _categoryListItems.add(DropdownMenuItem(
                 value: value.ownerClassifiedCategoryList[i].Category_Name,
-                child: Text(
+                child: text(
                   value.ownerClassifiedCategoryList[i].Category_Name,
-                  style: TextStyle(color: GlobalVariables.black),
+                  textColor: GlobalVariables.black,
                 ),
               ));
             }
@@ -126,9 +127,9 @@ class CreateClassifiedListingState
             for (int i = 0; i < value.cityList.length; i++) {
               _cityItemListItems.add(DropdownMenuItem(
                 value: value.cityList[i].city,
-                child: Text(
+                child: text(
                   value.cityList[i].city,
-                  style: TextStyle(color: GlobalVariables.black),
+                  textColor: GlobalVariables.black,
                 ),
               ));
             }
@@ -141,14 +142,14 @@ class CreateClassifiedListingState
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(
+                  child: AppIcon(
                     Icons.arrow_back,
-                    color: GlobalVariables.white,
+                    iconColor: GlobalVariables.white,
                   ),
                 ),
-                title: Text(
+                title: text(
                   AppLocalizations.of(context).translate('create_listing'),
-                  style: TextStyle(color: GlobalVariables.white),
+                  textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
                 ),
               ),
               body: getBaseLayout(value),
@@ -226,17 +227,16 @@ class CreateClassifiedListingState
                       });
                     },
                     isExpanded: true,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
-                    hint: Text(
+                    hint: text(
                       AppLocalizations.of(context)
                               .translate('select_category') +
                           "*",
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
+                      textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                     ),
                   ),
                 ),
@@ -269,15 +269,14 @@ class CreateClassifiedListingState
                       });
                     },
                     isExpanded: true,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
-                    hint: Text(
+                    hint: text(
                       AppLocalizations.of(context).translate('i_want_to') + "*",
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
+                      textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                     ),
                   ),
                 ),
@@ -368,16 +367,15 @@ class CreateClassifiedListingState
                             });
                           },
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
+                          hint: text(
                             AppLocalizations.of(context).translate('city') +
                                 "*",
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 14),
+                            textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                       ),
@@ -474,19 +472,19 @@ class CreateClassifiedListingState
                           });
 
                         },
-                        icon: Icon(
+                        icon: AppIcon(
                           Icons.camera_alt,
-                          color: GlobalVariables.white,
+                          iconColor: GlobalVariables.white,
                         ),
-                        label: Text(
+                        label: text(
                           AppLocalizations.of(context).translate('add_photo'),
-                          style: TextStyle(color: GlobalVariables.white),
+                          textColor: GlobalVariables.white,
                         )),
                   ),
                   SizedBox(width: 16,),
                   Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: text('* select up-to 5 photos',fontSize: 12.0,textColor: GlobalVariables.grey)),
+                      child: text('* select up-to 5 photos',fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.grey)),
                 ],
               ),
               imagesMap.length > 0 && imagePathList.length > 0
@@ -622,10 +620,10 @@ class CreateClassifiedListingState
                                                           }
                                                         }
                                                       },
-                                                      child: Icon(
+                                                      child: AppIcon(
                                                         Icons.delete,
-                                                        size: 25,
-                                                        color: GlobalVariables
+                                                        iconSize: GlobalVariables.textSizeLarge,
+                                                        iconColor: GlobalVariables
                                                             .white,
                                                       )),
                                                 ),
@@ -746,9 +744,9 @@ class CreateClassifiedListingState
     for (int i = 0; i < _categoryItemTypeList.length; i++) {
       _categoryItemTypeListItems.add(DropdownMenuItem(
         value: _categoryItemTypeList[i],
-        child: Text(
+        child: text(
           _categoryItemTypeList[i],
-          style: TextStyle(color: GlobalVariables.black),
+          textColor: GlobalVariables.black,
         ),
       ));
     }

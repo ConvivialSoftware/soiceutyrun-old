@@ -97,12 +97,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           _openDownloadedFile(_taskId).then((success) {
             if (!success) {
               Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text('Cannot open this file')));
+                  SnackBar(content: text('Cannot open this file')));
             }
           });
         } else {
           Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text('Download failed!')));
+              .showSnackBar(SnackBar(content: text('Download failed!')));
         }
       });
     });
@@ -175,14 +175,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Icon(
+                child: AppIcon(
                   Icons.arrow_back,
-                  color: GlobalVariables.white,
+                  iconColor: GlobalVariables.white,
                 ),
               ),
-              title: Text(
+              title: text(
                 AppLocalizations.of(context).translate('my_complex'),
-                style: TextStyle(color: GlobalVariables.white),
+                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
               ),
               bottom: getTabLayout(),
               elevation: 0,
@@ -321,12 +321,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             value.announcementList[position].USER_NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
+                            textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSmall,
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -334,7 +333,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Row(
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: text(
                                   value.announcementList[position].BLOCK.length > 0
                                       ? value.announcementList[position]
                                               .BLOCK
@@ -343,10 +342,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                               .FLAT
                                               .toString()
                                       : 'Maintainnance Staff',
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               ),
                               Container(
@@ -358,12 +355,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 ),
                               ),
                               Container(
-                                child: Text(
+                                child: text(
                                   value.announcementList[position].C_DATE,
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               )
                             ],
@@ -400,7 +395,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: text(
               value.announcementList[position].SUBJECT,
               textColor: GlobalVariables.green,
-              fontSize: 20.0,
+              fontSize: GlobalVariables.textSizeNormal,
               fontWeight: FontWeight.bold,
               //  maxLines: 1,
               //  overflow: TextOverflow.ellipsis,
@@ -411,7 +406,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               child: htmlText(
                 value.announcementList[position].DESCRIPTION,
                 textColor: GlobalVariables.grey,
-                fontSize: 14.0,
+                fontSize: GlobalVariables.textSizeSMedium,
               ) /*Text(
               value.announcementList[position].DESCRIPTION,
               style: TextStyle(
@@ -534,18 +529,16 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Row(
                       children: <Widget>[
                         Container(
-                            child: Icon(
+                            child: AppIcon(
                           Icons.attach_file,
-                          color: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.mediumGreen,
                         )),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text(
+                          child: text(
                             "Attachment",
-                            style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 10,
-                            ),
+                            textColor: GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeVerySmall,
                           ),
                         )
                       ],
@@ -738,12 +731,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             value.meetingList[position].USER_NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
+                            textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSmall,
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -751,7 +743,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Row(
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: text(
                                   value.meetingList[position].BLOCK.length > 0
                                       ? value.meetingList[position]
                                               .BLOCK
@@ -759,10 +751,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                           ' ' +
                                           value.meetingList[position].FLAT.toString()
                                       : 'Maintainnance Staff',
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               ),
                               Container(
@@ -774,12 +764,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 ),
                               ),
                               Container(
-                                child: Text(
+                                child: text(
                                   value.meetingList[position].C_DATE,
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               )
                             ],
@@ -815,7 +803,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: text(value.meetingList[position].SUBJECT,
                 textColor: GlobalVariables.green,
-                fontSize: 20.0,
+                fontSize: GlobalVariables.textSizeNormal,
                 fontWeight: FontWeight.bold),
             //  maxLines: 1,
             //  overflow: TextOverflow.ellipsis,
@@ -825,7 +813,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               child: htmlText(
                 value.meetingList[position].DESCRIPTION,
                 textColor: GlobalVariables.grey,
-                fontSize: 14.0,
+                fontSize: GlobalVariables.textSizeSMedium,
               ) /*Text(
               value.announcementList[position].DESCRIPTION,
               style: TextStyle(
@@ -845,27 +833,24 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.location_on,
-                          color: GlobalVariables.mediumGreen,
-                          size: 20,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: GlobalVariables.textSizeNormal,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           "Venue : ",
-                          style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                       Container(
-                        child: Text(
+                        child: text(
                           value.meetingList[position].VENUE,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 14,
-                          ),
+                          textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ],
@@ -876,29 +861,26 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.date_range,
-                          color: GlobalVariables.mediumGreen,
-                          size: 20,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: GlobalVariables.textSizeNormal,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           "Date : ",
-                          style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           value.meetingList[position]
                               .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 14,
-                          ),
+                          textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ],
@@ -909,29 +891,26 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.access_time,
-                          color: GlobalVariables.mediumGreen,
-                          size: 20,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: GlobalVariables.textSizeNormal,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           "Time : ",
-                          style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           value.meetingList[position]
                               .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 14,
-                          ),
+                          textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ],
@@ -1051,18 +1030,16 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Row(
                       children: <Widget>[
                         Container(
-                            child: Icon(
+                            child: AppIcon(
                           Icons.attach_file,
-                          color: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.mediumGreen,
                         )),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text(
+                          child: text(
                             "Attachment",
-                            style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 10,
-                            ),
+                            textColor: GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeVerySmall,
                           ),
                         )
                       ],
@@ -1194,27 +1171,23 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             value.pollList[position].USER_NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 12,
+                            textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSmall,
                                 fontWeight: FontWeight.bold),
-                          ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                           child: Row(
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: text(
                                   value.pollList[position].BLOCK +
                                       ' ' +
                                       value.pollList[position].FLAT,
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               ),
                               Container(
@@ -1226,12 +1199,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 ),
                               ),
                               Container(
-                                child: Text(
+                                child: text(
                                   value.pollList[position].C_DATE,
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               )
                             ],
@@ -1260,7 +1231,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: text(value.pollList[position].POLL_Q,
                 textColor: GlobalVariables.green,
-                fontSize: 20.0,
+                fontSize: GlobalVariables.textSizeNormal,
                 fontWeight: FontWeight.bold),
           ),
           Container(
@@ -1269,7 +1240,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: htmlText(
               value.pollList[position].DESCRIPTION,
               textColor: GlobalVariables.grey,
-              fontSize: 14.0,
+              fontSize: GlobalVariables.textSizeSMedium,
             ),
           ),
           getVoteLayout(position,value),
@@ -1313,23 +1284,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
+                                  text(
                                     "VOTED",
-                                    style: TextStyle(
-                                        color: GlobalVariables.red,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    textColor: GlobalVariables.red,
+                                        fontSize: GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold,
                                   ),
-                                  Text(
+                                  text(
                                     "  (Result On " +
                                         GlobalFunctions.convertDateFormat(
                                             value.pollList[position].EXPIRY_DATE,
                                             "dd MMM yy") +
                                         ")",
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold,
                                   ),
                                 ],
                               ),
@@ -1359,12 +1328,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             child: GlobalFunctions.isDateSameOrGrater(
                                         value.pollList[position].EXPIRY_DATE) &&
                                     (value.pollList[position].VOTED_TO.length > 0)
-                                ? Text(
+                                ? text(
                                     "See Poll Result",
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold,
                                   )
                                 : Container(),
                           ),
@@ -1376,9 +1344,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               color: GlobalVariables.green,
                               borderRadius: BorderRadius.circular(35),
                             ),
-                            child: Icon(
+                            child: AppIcon(
                               Icons.remove_red_eye,
-                              color: GlobalVariables.white,
+                              iconColor: GlobalVariables.white,
                             ),
                           ),
                         ],
@@ -1419,9 +1387,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           color: GlobalVariables.green,
                           borderRadius: BorderRadius.circular(35),
                         ),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.send,
-                          color: GlobalVariables.white,
+                          iconColor: GlobalVariables.white,
                         ),
                       ),
                     )
@@ -1502,9 +1470,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           hintStyle:
                               TextStyle(color: GlobalVariables.veryLightGray),
                           border: InputBorder.none,
-                          suffixIcon: Icon(
+                          suffixIcon: AppIcon(
                             Icons.search,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -1533,15 +1501,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         onChanged: changeDropDownItem,
                         value: _selectedItem,
                         underline: SizedBox(),
-                        icon: Icon(
+                        icon: AppIcon(
                           Icons.arrow_drop_down,
-                          color: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.mediumGreen,
                         ),
                         isExpanded: true,
-                        hint: Text(
+                        hint: text(
                           'Category',
-                          style:
-                              TextStyle(color: GlobalVariables.veryLightGray),
+                          textColor: GlobalVariables.veryLightGray,
                         ), //iconSize: 20,
                       ),
                     ),
@@ -1603,13 +1570,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         Container(
           margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
           alignment: Alignment.topLeft,
-          child: Text(
+          child: text(
             type,
-            style: TextStyle(
-                color: position == 0
+            textColor: position == 0
                     ? GlobalVariables.white
                     : GlobalVariables.green,
-                fontSize: 20),
+                fontSize: GlobalVariables.textSizeNormal,
           ),
         ),
         Container(
@@ -1664,22 +1630,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Row(
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             type == 'Near By Shops'
                                 ? 'Coming Soon...'
                                 : AppLocalizations.of(context)
                                     .translate('view_more'),
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                            textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         type != 'Near By Shops'
                             ? Container(
-                                child: Icon(
+                                child: AppIcon(
                                   Icons.fast_forward,
-                                  color: GlobalVariables.green,
+                                  iconColor: GlobalVariables.green,
                                 ),
                               )
                             : Container()
@@ -1795,14 +1760,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                       alignment: Alignment.topLeft, //height: 10,
                       //color: GlobalVariables.grey,
-                      child: Text(
+                      child: text(
                         name,
-                        style: TextStyle(
-                          color: GlobalVariables.green,
-                          fontSize: 16,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        textColor: GlobalVariables.green,
+                          fontSize: GlobalVariables.textSizeMedium,
+                        maxLine: 1,
                       ),
                     )),
                 Flexible(
@@ -1812,12 +1774,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                       alignment: Alignment.topRight, // height: 10,
                       //  color: GlobalVariables.lightGreen,
-                      child: Text(
+                      child: text(
                         field,
-                        style: TextStyle(
-                            color: GlobalVariables.grey, fontSize: 16),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium,
+                        maxLine: 1,
                       ),
                     )),
               ],
@@ -2183,12 +2143,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             value.eventList[position].USER_NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
+                            textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSmall,
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -2196,16 +2155,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Row(
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: text(
                                   value.eventList[position].BLOCK.length > 0
                                       ? value.eventList[position].BLOCK +
                                           ' ' +
                                           value.eventList[position].FLAT
                                       : "Maintannance Staff",
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               ),
                               Container(
@@ -2217,12 +2174,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 ),
                               ),
                               Container(
-                                child: Text(
+                                child: text(
                                   value.eventList[position].C_DATE,
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
-                                    fontSize: 10,
-                                  ),
+                                  textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               )
                             ],
@@ -2240,7 +2195,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: text(value.eventList[position].SUBJECT,
                 textColor: GlobalVariables.green,
-                fontSize: 20.0,
+                fontSize: GlobalVariables.textSizeNormal,
                 fontWeight: FontWeight.bold
                 //maxLines: 1,
                 //overflow: TextOverflow.ellipsis,
@@ -2252,7 +2207,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             child: htmlText(
               value.eventList[position].DESCRIPTION,
               textColor: GlobalVariables.grey,
-              fontSize: 14.0,
+              fontSize: GlobalVariables.textSizeSMedium,
             ) /*Text(
               value.eventList[position].DESCRIPTION,
               style: TextStyle(
@@ -2273,27 +2228,24 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.location_on,
-                          color: GlobalVariables.mediumGreen,
-                          size: 20,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: GlobalVariables.textSizeNormal,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           "Venue : ",
-                          style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                       Container(
-                        child: Text(
+                        child: text(
                           value.eventList[position].VENUE,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 14,
-                          ),
+                          textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ],
@@ -2304,30 +2256,27 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.date_range,
-                          color: GlobalVariables.mediumGreen,
-                          size: 20,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: GlobalVariables.textSizeNormal,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           "Date : ",
-                          style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           value.eventList[position].START_DATE +
                               ' to ' +
                               value.eventList[position].END_DATE,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 14,
-                          ),
+                          textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ],
@@ -2338,30 +2287,27 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Icon(
+                        child: AppIcon(
                           Icons.access_time,
-                          color: GlobalVariables.mediumGreen,
-                          size: 20,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: GlobalVariables.textSizeNormal,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           "Time : ",
-                          style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 14),
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: Text(
+                        child: text(
                           value.eventList[position].START_TIME +
                               ' to ' +
                               value.eventList[position].END_TIME,
-                          style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 14,
-                          ),
+                          textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ],
@@ -2406,18 +2352,16 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: Row(
                       children: <Widget>[
                         Container(
-                            child: Icon(
+                            child: AppIcon(
                           Icons.attach_file,
-                          color: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.mediumGreen,
                         )),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text(
+                          child: text(
                             "Attachment",
-                            style: TextStyle(
-                              color: GlobalVariables.green,
-                              fontSize: 10,
-                            ),
+                            textColor: GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeVerySmall,
                           ),
                         )
                       ],
@@ -2629,15 +2573,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             Flexible(
                               flex: 2,
                               child: Container(
-                                child: Text(
+                                child: text(
                                   value.documentList[position].TITLE,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16,
+                                  maxLine: 1,
+                                 textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold,
-                                  ),
                                 ),
                               ),
                             ),
@@ -2648,7 +2589,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 child: text(
                                     value.documentList[position].DOCUMENT_CATEGORY,
                                     textColor: GlobalVariables.white,
-                                    fontSize: 12.0),
+                                    fontSize: GlobalVariables.textSizeSmall
+                                ),
                                 decoration: BoxDecoration(
                                     color: getDocumentTypeColor(
                                         value.documentList[position]
@@ -2736,18 +2678,16 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: Row(
                             children: <Widget>[
                               Container(
-                                  child: Icon(
+                                  child: AppIcon(
                                 Icons.attach_file,
-                                color: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.mediumGreen,
                               )),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                child: Text(
+                                child: text(
                                   "Attachment",
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
+                                  textColor: GlobalVariables.green,
                                     fontSize: 10,
-                                  ),
                                 ),
                               )
                             ],
@@ -2757,11 +2697,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     : Container(),
                 Container(
                   margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                  child: Text(
+                  child: text(
                       value.documentList[position].USER_NAME == null
                           ? 'Posted By: - '
                           : 'Posted By: ' + value.documentList[position].USER_NAME,
-                      style: TextStyle(color: GlobalVariables.mediumGreen)),
+                      textColor: GlobalVariables.mediumGreen),
                 ),
               ],
             ),
@@ -2865,9 +2805,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               : GlobalVariables.mediumGreen,
                           width: 2.0,
                         )),
-                    child: Icon(
+                    child: AppIcon(
                       Icons.check,
-                      color: pollOption.isSelected == true
+                      iconColor: pollOption.isSelected == true
                           ? GlobalVariables.white
                           : GlobalVariables.transparent,
                     ),
@@ -2875,10 +2815,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   Flexible(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text(
+                      child: text(
                         pollOption.ANS == null ? '' : pollOption.ANS,
-                        style: TextStyle(
-                            color: GlobalVariables.green, fontSize: 16),
+                        textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                       ),
                     ),
                   ),

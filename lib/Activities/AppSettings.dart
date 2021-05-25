@@ -13,6 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BaseAppSettings extends StatefulWidget {
@@ -42,14 +43,14 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('settings'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -129,18 +130,18 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
+                child: text(
                   AppLocalizations.of(context)
                       .translate('app_notification_settings'),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500
                 ),
               ),
             ),
             Container(
-              child: Icon(
+              child: AppIcon(
                 Icons.arrow_forward_ios,
-                size: 18,
-                color: GlobalVariables.grey,
+                iconSize: GlobalVariables.textSizeLargeMedium,
+                iconColor: GlobalVariables.grey,
               ),
             )
           ],
@@ -176,7 +177,7 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: SvgPicture.asset(
+                    child: AppAssetsImage(
                       GlobalVariables.whileBGPath,
                     ),
                   ),
@@ -217,46 +218,40 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                child: Text(
+                                child: text(
                                   name,
-                                  style: TextStyle(
-                                      color: GlobalVariables.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+
+                                      textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeLargeMedium,
+                                      fontWeight: FontWeight.bold
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   block +
                                       ' ' +
                                       flat +
                                       ', '
                                           '' +
                                       societyName,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: GlobalVariables.grey,
-                                  ),
+                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    textColor: GlobalVariables.grey,
                                 ),
                               ),
                               Container(
-                                child: Text(
+                                child: text(
                                   email,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: GlobalVariables.grey,
-                                  ),
+                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    textColor: GlobalVariables.grey,
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                child: Text(
+                                child: text(
                                   phone,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: GlobalVariables.grey,
-                                  ),
+                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    textColor: GlobalVariables.grey,
                                 ),
                               ),
                             ],
@@ -265,10 +260,10 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                       ),
                       Container(
                         child: IconButton(
-                            icon: Icon(
+                            icon: AppIcon(
                               Icons.edit,
-                              color: GlobalVariables.green,
-                              size: 24,
+                              iconColor: GlobalVariables.green,
+                              iconSize: GlobalVariables.textSizeLarge,
                             ),
                             onPressed: () {
                               Navigator.push(
@@ -331,22 +326,22 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           Expanded(
             child: Container(
               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Text(
+              child: text(
                 block +
                     ' ' +
                     flat +
                     ','
                         '' +
                     societyName,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+               fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500
               ),
             ),
           ),
           Container(
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_forward_ios,
-              size: 18,
-              color: GlobalVariables.grey,
+              iconSize: GlobalVariables.textSizeLargeMedium,
+              iconColor: GlobalVariables.grey,
             ),
           )
         ],
@@ -380,17 +375,17 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
+                child: text(
                   AppLocalizations.of(context).translate('change_password'),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500,
                 ),
               ),
             ),
             Container(
-              child: Icon(
+              child: AppIcon(
                 Icons.arrow_forward_ios,
-                size: 18,
-                color: GlobalVariables.grey,
+                iconSize: GlobalVariables.textSizeLargeMedium,
+                iconColor: GlobalVariables.grey,
               ),
             )
           ],
@@ -425,17 +420,17 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
+                child: text(
                   AppLocalizations.of(context).translate('about_us'),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500
                 ),
               ),
             ),
             Container(
-              child: Icon(
+              child: AppIcon(
                 Icons.arrow_forward_ios,
-                size: 18,
-                color: GlobalVariables.grey,
+                iconSize: GlobalVariables.textSizeLargeMedium,
+                iconColor: GlobalVariables.grey,
               ),
             )
           ],
@@ -470,17 +465,17 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
+                child: text(
                   AppLocalizations.of(context).translate('feedback'),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500,
                 ),
               ),
             ),
             Container(
-              child: Icon(
+              child: AppIcon(
                 Icons.arrow_forward_ios,
-                size: 18,
-                color: GlobalVariables.grey,
+                iconSize: GlobalVariables.textSizeLargeMedium,
+                iconColor: GlobalVariables.grey,
               ),
             )
           ],
@@ -523,17 +518,17 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
+                child: text(
                   AppLocalizations.of(context).translate('logout'),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500,
                 ),
               ),
             ),
             Container(
-              child: Icon(
+              child: AppIcon(
                 Icons.arrow_forward_ios,
-                size: 18,
-                color: GlobalVariables.grey,
+                iconSize: GlobalVariables.textSizeLargeMedium,
+                iconColor: GlobalVariables.grey,
               ),
             )
           ],
@@ -570,14 +565,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                           onTap: () {
                             launch(GlobalVariables.termsConditionURL);
                           },
-                          child: Text(
+                          child: text(
                             AppLocalizations.of(context)
                                 .translate('terms_conn'),
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: GlobalVariables.green,
-                            ),
+                            //textAlign: TextAlign.left,
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              textColor: GlobalVariables.green,
                           ),
                         )),
                   ),
@@ -601,14 +594,12 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                         onTap: () {
                           launch(GlobalVariables.privacyPolicyURL);
                         },
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context)
                               .translate('privacy_statement'),
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: GlobalVariables.green,
-                          ),
+                          //textAlign: TextAlign.left,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                            textColor: GlobalVariables.green,
                         ),
                       )),
                 )
@@ -619,13 +610,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
               margin: EdgeInsets.fromLTRB(0, 0, 5, 5), //Todo: setting
               child: GestureDetector(
                 onTap: () {},
-                child: Text(
+                child: text(
                   'Version ' + AppPackageInfo.version,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: GlobalVariables.black,
-                  ),
+                //  textAlign: TextAlign.left,
+                    fontSize: GlobalVariables.textSizeMedium,
+                    textColor: GlobalVariables.black,
                 ),
               )),
         ],
@@ -641,13 +630,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: Text(
+            child: text(
               AppLocalizations.of(context).translate('sure_logout'),
-              style: TextStyle(
-                  fontSize: 18,
-                  color: GlobalVariables.black,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
+                  textColor: GlobalVariables.black,
                   fontWeight: FontWeight.bold),
-            ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -660,26 +647,24 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                         Navigator.of(context).pop();
                         logout(context);
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
-                      )),
+                      ),
                 ),
                 Container(
                   child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('no'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
-                      )),
+                      ),
                 ),
               ],
             ),

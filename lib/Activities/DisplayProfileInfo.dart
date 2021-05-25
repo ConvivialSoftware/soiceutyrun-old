@@ -11,6 +11,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseDisplayProfileInfo extends StatefulWidget {
   String userId,userType;
@@ -69,9 +70,9 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 Navigator.of(context).pop('profile');
               }
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
           title: AutoSizeText(
@@ -205,9 +206,9 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                       },
                       child: Container(
                         alignment: Alignment.topRight,
-                        child: Icon(
+                        child: AppIcon(
                           Icons.delete,
-                          color: GlobalVariables.green,
+                          iconColor: GlobalVariables.green,
                         ),
                       ),
                     ) : Container(),
@@ -305,7 +306,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Container(
                    //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].Phone==null ? '': _profileList[0].Phone,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                       ),),
                     )
                   ],
@@ -324,7 +325,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Container(
                      // margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].ALTERNATE_CONTACT1,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                       ),),
                     )
                   ],
@@ -343,7 +344,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].Email==null ? '': _profileList[0].Email,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                       ),),
                     )
                   ],
@@ -362,7 +363,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].GENDER,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                       ),),
                     )
                   ],
@@ -381,7 +382,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Container(
                       //margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].BLOOD_GROUP,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize:GlobalVariables.textSizeMedium
                       ),),
                     )
                   ],
@@ -400,7 +401,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     _profileList[0].DOB!=null && _profileList[0].DOB.length!=0 ? Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].DOB=='0000-00-00' ? '':GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy"),style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                       ),),
                     ):Container()
                   ],
@@ -421,7 +422,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                       Container(
                      //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                         child: AutoSizeText(/*GlobalFunctions.convertDateFormat(_profileList[0].ANNIVERSARY_DATE, "dd-MM-yyyy")*/'',style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: 16
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                         ),),
                       )
                     ],
@@ -441,7 +442,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                       child: AutoSizeText(_profileList[0].OCCUPATION,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: 16
+                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                       ),),
                     )
                   ],
@@ -462,7 +463,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                       Container(
                      //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                         child: AutoSizeText(''/*_profileList                     [0].HOBBIES*/,style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: 16
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                         ),),
                       )
                     ],
@@ -484,7 +485,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                       Container(
                       //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                         child: AutoSizeText('',/*_profileList[0].LANGUAGES,*/style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: 16
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                         ),),
                       )
                     ],
@@ -508,7 +509,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                         //color : GlobalVariables.green,
                         //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                         child: AutoSizeText(_profileList[0].ADDRESS,style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: 16
+                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
                         ),maxLines: 2,)
                         ,
                       ),
@@ -546,9 +547,9 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 geProfileData();
               }
               },
-              child: Icon(
+              child: AppIcon(
                 Icons.edit,
-                color: GlobalVariables.white,
+                iconColor: GlobalVariables.white,
               ),
               backgroundColor: GlobalVariables.green,
             ),
@@ -566,11 +567,10 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: Text(AppLocalizations.of(context).translate('sure_delete'),
-              style: TextStyle(
+            child: text(AppLocalizations.of(context).translate('sure_delete'),
                   fontSize: 18,
-                  color: GlobalVariables.black,
-                  fontWeight: FontWeight.bold),
+                  textColor: GlobalVariables.black,
+                  fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -584,25 +584,23 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                         Navigator.of(context).pop();
                         deleteFamilyMember();
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
+                        textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
-                      )),
+                      ),
                 ),
                 Container(
                   child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('no'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                        textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold,
                       )),
                 ),
               ],

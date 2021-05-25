@@ -9,6 +9,7 @@ import 'package:societyrun/Activities/SplashScreen.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/BroadcastResponse.dart';
 import 'package:societyrun/Models/ClassifiedResponse.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
@@ -47,6 +48,7 @@ class BaseAppStart extends StatelessWidget {
   final myUnitResponse = MyUnitResponse();
   final gatePassResponse = GatePass();
   final loginDashboardResponse = LoginDashBoardResponse();
+  final broadcastResponse = BroadcastResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,7 @@ class BaseAppStart extends StatelessWidget {
             ChangeNotifierProvider<MyUnitResponse>.value(value: myUnitResponse),
             ChangeNotifierProvider<GatePass>.value(value: gatePassResponse),
             ChangeNotifierProvider<LoginDashBoardResponse>.value(value: loginDashboardResponse),
+            ChangeNotifierProvider<BroadcastResponse>.value(value: broadcastResponse),
           ],
           child: MaterialApp(
             theme: getThemeData(),

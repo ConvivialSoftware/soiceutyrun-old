@@ -135,9 +135,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     color: GlobalVariables.white,
                   ),
                 ),
-                title: Text(
+                title: text(
                   AppLocalizations.of(context).translate('my_gate'),
-                  style: TextStyle(color: GlobalVariables.white),
+                  textColor: GlobalVariables.white,
                 ),
                 bottom: getTabLayout(),
                 elevation: 0,
@@ -276,12 +276,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: [
                 Expanded(
                   child: Container(
-                    child: Text(value.staffListCount[position].ROLE),
+                    child: text(value.staffListCount[position].ROLE),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(value.staffListCount[position].Role_count),
+                  child: text(value.staffListCount[position].Role_count),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -663,12 +663,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Container(
-                            child: Text(
+                            child: text(
                               value.visitorList[position].VISITOR_NAME,
-                              style: TextStyle(
-                                  color: GlobalVariables.green,
+                              textColor: GlobalVariables.green,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
                             ),
                           ),
                           Container(
@@ -676,12 +675,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             child: Row(
                               children: <Widget>[
                                 Container(
-                                  child: Text(
+                                  child: text(
                                     Date + '  ' + Time,
-                                    style: TextStyle(
-                                      color: GlobalVariables.grey,
+                                    textColor: GlobalVariables.grey,
                                       fontSize: 12,
-                                    ),
                                   ),
                                 ),
                               ],
@@ -704,14 +701,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     ? GlobalVariables.green
                                     : GlobalVariables.red,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Text(value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
+                        child: text(value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
                         value.visitorList[position].STATUS.toLowerCase() == 'in'
                               ? 'Arrived'
                               : 'Left',
-                          style: TextStyle(
-                            color: GlobalVariables.white,
+                          textColor: GlobalVariables.white,
                             fontSize: 12,
-                          ),
                         ),
                       ),
                       /* InkWell(
@@ -743,12 +738,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: Text(
+                    child: text(
                       value.visitorList[position].FROM_VISITOR,
-                      style: TextStyle(
-                        color: GlobalVariables.grey,
+                      textColor: GlobalVariables.grey,
                         fontSize: 16,
-                      ),
                     ),
                   ),
                 ],
@@ -769,12 +762,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: Text(
+                    child: text(
                       visitorStatus,
-                      style: TextStyle(
-                        color: GlobalVariables.grey,
+                      textColor: GlobalVariables.grey,
                         fontSize: 16,
-                      ),
                     ),
                   ),
                 ],
@@ -825,12 +816,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                  child: Text(
+                                  child: text(
                                     visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
-                                    style: TextStyle(
-                                      color: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
+                                    textColor: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
                                       fontSize: 16,
-                                    ),
                                   ),
                                 ),
                               ],
@@ -878,12 +867,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     Container(
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: Text(
+                      child: text(
                         value.visitorList[position].VISITOR_NAME,
-                        style: TextStyle(
-                          color: GlobalVariables.green,
+                        textColor: GlobalVariables.green,
                           fontSize: 12,
-                        ),
                       ),
                     ),
                   ],
@@ -921,9 +908,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           color: GlobalVariables.white,
                           size: 20,
                         ),
-                        label: Text(
+                        label: text(
                           AppLocalizations.of(context).translate('edit'),
-                          style: TextStyle(color: GlobalVariables.white),
+                         textColor: GlobalVariables.white
                         ),
                       ),
                     ),
@@ -942,9 +929,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             color: GlobalVariables.white,
                             size: 20,
                           ),
-                          label: Text(
+                          label: text(
                             AppLocalizations.of(context).translate('cancel'),
-                            style: TextStyle(color: GlobalVariables.white),
+                            textColor: GlobalVariables.white,
                           )),
                     ),
                   ],
@@ -990,12 +977,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             value.scheduleVisitorList[position].NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -1003,14 +989,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           child: Row(
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: text(
                                   GlobalFunctions.convertDateFormat(
                                       value.scheduleVisitorList[position].DATE,
                                       'dd-MM-yyyy'),
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
+                                  textColor: GlobalVariables.grey,
                                     fontSize: 12,
-                                  ),
                                 ),
                               ),
                             ],
@@ -1029,12 +1013,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       decoration: BoxDecoration(
                           color: GlobalVariables.skyBlue,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Text(
+                      child: text(
                         'Expected',
-                        style: TextStyle(
-                          color: GlobalVariables.white,
+                        textColor: GlobalVariables.white,
                           fontSize: 12,
-                        ),
                       ),
                     ),
                     /* InkWell(
@@ -1064,12 +1046,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               Container(
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                child: Text(
+                child: text(
                   value.scheduleVisitorList[position].PASS_CODE,
-                  style: TextStyle(
-                    color: GlobalVariables.grey,
+                  textColor: GlobalVariables.grey,
                     fontSize: 16,
-                  ),
                 ),
               ),
             ],
@@ -1259,13 +1239,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             children: <Widget>[
                               Container(
                                 alignment: Alignment.topLeft,
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('visitor_arriving_on'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
+                                  textColor: GlobalVariables.green,
                                       fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Align(
@@ -1304,13 +1283,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                         hint: Container(
                                           padding:
                                           EdgeInsets.fromLTRB(0, 0, 15, 0),
-                                          child: Text(
+                                          child: text(
                                             "",
-                                            style: TextStyle(
-                                                color:
+                                            textColor:
                                                 GlobalVariables.mediumGreen,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.w500),
+                                                fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       );
@@ -1402,9 +1380,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     for (int i = 0; i < _scheduleList.length; i++) {
       _scheduleListItems.add(DropdownMenuItem(
         value: _scheduleList[i],
-        child: Text(
+        child: text(
           _scheduleList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          textColor: GlobalVariables.green,
         ),
       ));
     }
@@ -1609,42 +1587,37 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     SizedBox(
                       height: 80,
                     ),
-                    Text(
+                    text(
                       line1,
-                      style: TextStyle(
-                        color: GlobalVariables.black,
+                      textColor: GlobalVariables.black,
                         fontSize: 16,
-                      ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
+                    text(
                       line2,
-                      style: TextStyle(
-                          color: GlobalVariables.black,
+                      textColor: GlobalVariables.black,
                           fontSize: 18,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.bold,
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
+                    text(
                       line3,
-                      style: TextStyle(
-                          color: GlobalVariables.green,
+                      textColor: GlobalVariables.green,
                           fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.bold,
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    text(
                       line4,
-                      style: TextStyle(
-                          color: GlobalVariables.grey,
+                      textColor: GlobalVariables.grey,
                           fontSize: 16,
-                          fontWeight: FontWeight.normal),
+                          fontWeight: FontWeight.normal,
                     ),
                     SizedBox(
                       height: 20,
@@ -1791,14 +1764,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           color: visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
                           visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
                           borderRadius: BorderRadius.circular(25)),
-                      child: Text(visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
+                      child: text(visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
                         visitorList[position].STATUS.toLowerCase() == 'in'
                             ? 'Arrived'
                             : 'Left',
-                        style: TextStyle(
-                            color: GlobalVariables.white,
+                       textColor: GlobalVariables.white,
                             fontSize: 14,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
@@ -1860,12 +1832,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         SizedBox(
                           width: 20.0,
                         ),
-                        Text(
+                        text(
                           visitorList[position].VISITOR_NAME,
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                          textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                         SizedBox(
                           width: 10.0,
@@ -1910,12 +1881,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   child: Container(
                                     alignment: Alignment.topLeft,
                                     margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    child: Text(
+                                    child: text(
                                       Date + ' ' + Time,
-                                      style: TextStyle(
-                                        color: GlobalVariables.black,
+                                      textColor: GlobalVariables.black,
                                         fontSize: 16,
-                                      ),
                                     ),
                                   ),
                                 ),
@@ -1936,12 +1905,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 Container(
                                   alignment: Alignment.topLeft,
                                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text(
+                                  child: text(
                                     visitorStatus,
-                                    style: TextStyle(
-                                      color: GlobalVariables.black,
+                                    textColor: GlobalVariables.black,
                                       fontSize: 16,
-                                    ),
                                   ),
                                 ),
                               ],
@@ -1961,12 +1928,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                 Container(
                                   alignment: Alignment.topLeft,
                                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text(
+                                  child: text(
                                     visitorList[position].FROM_VISITOR,
-                                    style: TextStyle(
-                                      color: GlobalVariables.black,
+                                   textColor: GlobalVariables.black,
                                       fontSize: 16,
-                                    ),
                                   ),
                                 ),
                               ],
@@ -2139,12 +2104,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: Text(
+            child: text(
               AppLocalizations.of(context).translate('wrong_entry_str'),
-              style: TextStyle(
                   fontSize: 18,
-                  color: GlobalVariables.black,
-                  fontWeight: FontWeight.bold),
+                  textColor: GlobalVariables.black,
+                  fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -2158,12 +2122,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         Navigator.of(context).pop();
                         addGatePassWrongEntry(position,value);
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
+                        textColor: GlobalVariables.green,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
                       )),
                 ),
                 Container(
@@ -2171,12 +2134,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('no'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
+                        textColor: GlobalVariables.green,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
                       )),
                 ),
               ],

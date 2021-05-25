@@ -13,6 +13,7 @@ import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -102,14 +103,14 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
             onTap: () {
               Navigator.pop(context,'back');
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('already_paid'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -241,16 +242,15 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                       color: paymentType== "Cheque" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   "Cheque",
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium
                                 ),
                               ),
                             ],
@@ -284,16 +284,15 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                       color: paymentType!= "Cheque" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   "NEFT/IMPS",
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -327,15 +326,14 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     value: _bankSelectedItem,
                     onChanged: changeBankDropDownItem,
                     isExpanded: true,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
-                    hint: Text(
+                    hint: text(
                       AppLocalizations.of(context).translate('select_bank')+'*',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
+                      textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                     ),
                   ),
                 ),
@@ -402,21 +400,21 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                               }
 
                             },
-                            icon: Icon(
+                            icon: AppIcon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.mediumGreen,
                             ),
-                            label: Text(
+                            label: text(
                               AppLocalizations.of(context).translate('attach_photo'),
-                              style: TextStyle(color: GlobalVariables.green),
+                              textColor: GlobalVariables.green,
                             ),
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Text(
+                          child: text(
                             'OR',
-                            style: TextStyle(color: GlobalVariables.lightGray),
+                            textColor: GlobalVariables.lightGray,
                           ),
                         ),
                         Container(
@@ -436,14 +434,14 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                                 }
 
                               },
-                              icon: Icon(
+                              icon: AppIcon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.mediumGreen,
                               ),
-                              label: Text(
+                              label: text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.green),
+                                textColor: GlobalVariables.green,
                               )),
                         ),
                       ],
@@ -500,9 +498,9 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
       for(int i=0;i<_bankList.length;i++){
         __bankListItems.add(DropdownMenuItem(
           value: _bankList[i].BANK_NAME,
-          child: Text(
+          child: text(
             _bankList[i].BANK_NAME,
-            style: TextStyle(color: GlobalVariables.green),
+            textColor: GlobalVariables.green,
           ),
         ));
       }
@@ -667,10 +665,10 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
-                        child: SvgPicture.asset(
+                        child: AppAssetsImage(
                           GlobalVariables.successIconPath,
-                          width: 80,
-                          height: 80,
+                          imageWidth: 80,
+                          imageHeight: 80,
                         ),
                       ),
                      /* Container(
@@ -679,16 +677,14 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                               .translate('successful_payment'))),*/
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: Text(AppLocalizations.of(context)
-                              .translate('already_paid_status'),style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18,fontWeight: FontWeight.bold
-                          ),)
+                          child: text(AppLocalizations.of(context)
+                              .translate('already_paid_status'),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium,fontWeight: FontWeight.bold
+                          ),
                       ),Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: Text(AppLocalizations.of(context)
-                              .translate('already_paid_status_desc'),style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.normal
-                          ),)
+                          child: text(AppLocalizations.of(context)
+                              .translate('already_paid_status_desc'),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
+                          )
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -696,9 +692,8 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                         child: FlatButton(onPressed: (){
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
-                        }, child: Text(AppLocalizations.of(context).translate('okay'),style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 20,fontWeight: FontWeight.bold
-                        ),),),
+                        }, child: text(AppLocalizations.of(context).translate('okay'),textColor: GlobalVariables.green,fontSize: 20,fontWeight: FontWeight.bold
+                        ),),
                       ),
                     ],
                   ),

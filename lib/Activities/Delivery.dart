@@ -6,6 +6,8 @@ import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -31,14 +33,14 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('delivery'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -91,12 +93,11 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
           children: <Widget>[
             Container(
               alignment: Alignment.topLeft,
-              child: Text(
+              child: text(
                 AppLocalizations.of(context).translate('delivery_arriving_on'),
-                style: TextStyle(
-                    color: GlobalVariables.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
+                textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.textSizeLargeMedium,
+                    fontWeight: FontWeight.bold,
               ),
             ),
             Align(
@@ -118,17 +119,17 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                     items: null,
                     onChanged: null,
                     isExpanded: false,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
                     hint: Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                      child:  Text(
+                      child:  text(
                         "Today",
-                        style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                        textColor: GlobalVariables.mediumGreen,
+                          fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -149,7 +150,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context).translate('company_name'),
-                  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
+                  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
                   border: InputBorder.none
                 ),
               ),
@@ -170,15 +171,14 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                   items: null,
                   onChanged: null,
                   isExpanded: true,
-                  icon: Icon(
+                  icon: AppIcon(
                     Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.mediumGreen,
                   ),
                   underline: SizedBox(),
-                  hint: Text(
+                  hint: text(
                     AppLocalizations.of(context).translate('flat_no'),
-                    style: TextStyle(
-                        color: GlobalVariables.lightGray, fontSize: 14),
+                    textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                   ),
                 ),
               ),
@@ -205,17 +205,16 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                                     color: GlobalVariables.mediumGreen,
                                     width: 2.0,
                                   )),
-                              child: Icon(Icons.check,
-                                  color: GlobalVariables.white),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('leave_package_at_gate'),
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16),
+                                textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -242,11 +241,10 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                   ),
-                  child: Text(
+                  child: text(
                     AppLocalizations.of(context)
                         .translate('add'),
-                    style: TextStyle(
-                        fontSize: GlobalVariables.textSizeMedium),
+                    textColor: GlobalVariables.textSizeMedium,
                   ),
                 ),
               ),
@@ -287,12 +285,12 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
+                            child: AppAssetsImage(
                                 GlobalVariables.buildingIconPath),
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Text(AppLocalizations.of(context)
+                              child: text(AppLocalizations.of(context)
                                   .translate('cab'))),
                         ],
                       ),
@@ -321,13 +319,13 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
+                            child: AppAssetsImage(
                               GlobalVariables.shopIconPath,
                             ),
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Text(AppLocalizations.of(context)
+                              child: text(AppLocalizations.of(context)
                                   .translate('home_services'))),
                         ],
                       ),
@@ -355,12 +353,12 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            child: SvgPicture.asset(
+                            child: AppAssetsImage(
                                 GlobalVariables.buildingIconPath),
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Text(AppLocalizations.of(context)
+                              child: text(AppLocalizations.of(context)
                                   .translate('guests_other'))),
                         ],
                       ),
@@ -374,8 +372,6 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
         ),
       ],
     );
-
-
   }
 
   getSearchPropertyLayout() {
@@ -391,17 +387,16 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: SvgPicture.asset(GlobalVariables.classifiedBigIconPath),
+            child: AppAssetsImage(GlobalVariables.classifiedBigIconPath),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             alignment: Alignment.center,
-            child: Text(
+            child: text(
                 AppLocalizations.of(context)
                     .translate('search_property'),
-                style: TextStyle(
-                  color: GlobalVariables.green,
-                    fontSize: GlobalVariables.varyLargeText,)),
+                textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.varyLargeText,),
           )
         ],
       ),

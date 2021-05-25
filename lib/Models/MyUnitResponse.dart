@@ -74,7 +74,7 @@ class MyUnitResponse extends ChangeNotifier{
     }
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERPView);
     String societyId = await GlobalFunctions.getSocietyId();
     String flat = await GlobalFunctions.getFlat();
     String block = await GlobalFunctions.getBlock();

@@ -6,6 +6,8 @@ import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -31,14 +33,14 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child:AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('guests_other'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -91,12 +93,11 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
           children: <Widget>[
             Container(
               alignment: Alignment.topLeft,
-              child: Text(
+              child: text(
                 AppLocalizations.of(context).translate('guest_other_arriving_on'),
-                style: TextStyle(
-                    color: GlobalVariables.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
+                textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.textSizeLargeMedium,
+                    fontWeight: FontWeight.bold,
               ),
             ),
             Align(
@@ -118,18 +119,16 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                     items: null,
                     onChanged: null,
                     isExpanded: false,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
                     hint: Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                      child:  Text(
+                      child:  text(
                         "Today",
-                        style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
-                      ) ,
+                       textColor: GlobalVariables.mediumGreen, fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -154,12 +153,12 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                       maxLength: 10,
                       decoration: InputDecoration(
                           hintText: AppLocalizations.of(context).translate('add_name_from_contact'),
-                          hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
+                          hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
                           border: InputBorder.none,
                           counterText: '',
-                          suffixIcon: Icon(
+                          suffixIcon: AppIcon(
                             Icons.contacts,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           )
 
                       ),
@@ -171,9 +170,8 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   child: Container(
                     alignment: Alignment.topRight,
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: Text('OR',style: TextStyle(
-                      color: GlobalVariables.mediumGreen,fontSize: 16
-                    ),),
+                    child: text('OR',textColor: GlobalVariables.mediumGreen,fontSize: GlobalVariables.textSizeMedium
+                    ),
                   ),
                 )
               ],
@@ -192,7 +190,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               child: TextField(
                 decoration: InputDecoration(
                     hintText: AppLocalizations.of(context).translate('enter_name'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
+                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
                     border: InputBorder.none
                 ),
               ),
@@ -211,7 +209,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               child: TextField(
                 decoration: InputDecoration(
                     hintText: AppLocalizations.of(context).translate('mobile_no'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
+                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
                     border: InputBorder.none
                 ),
               ),
@@ -219,12 +217,11 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
             Container(
               margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
               alignment: Alignment.topLeft,
-              child: Text(
+              child: text(
                 AppLocalizations.of(context).translate('frequently_guest_other_running'),
-                style: TextStyle(
-                    color: GlobalVariables.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400),
+                textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.textSizeLargeMedium,
+                    fontWeight: FontWeight.w400,
               ),
             ),
             Container(
@@ -249,18 +246,16 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                                     color: GlobalVariables.green,
                                     width: 2.0,
                                   )),
-                              child: Icon(Icons.check,
-                                  color: GlobalVariables.white),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('once'),
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16),
-                              ),
+                                textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ],
                         ),
@@ -286,17 +281,16 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                                     color: GlobalVariables.mediumGreen,
                                     width: 2.0,
                                   )),
-                              child: Icon(Icons.check,
-                                  color: GlobalVariables.white),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('frequently'),
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 16),
+                                textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -323,11 +317,10 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                   ),
-                  child: Text(
+                  child: text(
                     AppLocalizations.of(context)
                         .translate('add'),
-                    style: TextStyle(
-                        fontSize: GlobalVariables.textSizeMedium),
+                        fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
               ),
@@ -373,7 +366,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Text(AppLocalizations.of(context)
+                              child: text(AppLocalizations.of(context)
                                   .translate('cab'))),
                         ],
                       ),
@@ -408,7 +401,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Text(AppLocalizations.of(context)
+                              child: text(AppLocalizations.of(context)
                                   .translate('delivery'))),
                         ],
                       ),
@@ -441,7 +434,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                           ),
                           Container(
                               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Text(AppLocalizations.of(context)
+                              child: text(AppLocalizations.of(context)
                                   .translate('home_services'))),
                         ],
                       ),
@@ -477,12 +470,11 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             alignment: Alignment.center,
-            child: Text(
+            child: text(
                 AppLocalizations.of(context)
                     .translate('search_property'),
-                style: TextStyle(
-                  color: GlobalVariables.green,
-                    fontSize: GlobalVariables.varyLargeText,)),
+                textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.varyLargeText,),
           )
         ],
       ),

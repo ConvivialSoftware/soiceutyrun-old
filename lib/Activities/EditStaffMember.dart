@@ -9,6 +9,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -116,14 +118,14 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('edit_staff_member'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -183,7 +185,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('name'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none
                   ),
                 ),
@@ -205,7 +207,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   maxLength: 10,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('mobile_no'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none,
                     counterText: ''
                   ),
@@ -228,15 +230,14 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     value: _selectedRoleType,
                     onChanged: changeBRoleTypeDropDownItem,
                     isExpanded: true,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
-                    hint: Text(
+                    hint: text(
                       AppLocalizations.of(context).translate('select_role'),
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 12),
+                      textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSmall,
                     ),
                   ),
                 ),
@@ -266,17 +267,16 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                                       color: _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('male'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                 textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -306,17 +306,16 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                                       color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('female'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeSmall,
                                 ),
                               ),
                             ],
@@ -343,7 +342,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('qualification'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none
                   ),
                 ),
@@ -364,7 +363,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('vehicle_no'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none
                   ),
                 ),
@@ -392,7 +391,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                         ),
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).translate('date_of_birth'),
-                            hintStyle: TextStyle(color: GlobalVariables.veryLightGray ,fontSize: 16),
+                            hintStyle: TextStyle(color: GlobalVariables.veryLightGray ,fontSize: GlobalVariables.textSizeMedium),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
                                 onPressed: (){
@@ -425,7 +424,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('address'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none
                   ),
                 ),
@@ -448,7 +447,7 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                   maxLines: 99,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context).translate('note_for_moderate'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                     border: InputBorder.none
                   ),
                 ),
@@ -586,9 +585,9 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
 
                               openIdentityProofFile(context);
 
-                            }, icon: Icon(Icons.camera_alt,color: GlobalVariables.white,), label:Text(AppLocalizations.of(context).translate('identity_proof'),style: TextStyle(
-                                color: GlobalVariables.white
-                            ),)),
+                            }, icon: AppIcon(Icons.camera_alt,iconColor: GlobalVariables.white,), label:text(
+                              AppLocalizations.of(context).translate('identity_proof'),textColor: GlobalVariables.white
+                            ,)),
                           ),
                         ],
                       ),
@@ -614,11 +613,10 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
                     ),
-                    child: Text(
+                    child: text(
                       AppLocalizations.of(context)
                           .translate('submit'),
-                      style: TextStyle(
-                          fontSize: GlobalVariables.textSizeMedium),
+                          fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                 ),
@@ -763,9 +761,9 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
     for(int i=0;i<_roleTypeList.length;i++){
       __roleTypeListItems.add(DropdownMenuItem(
         value: _roleTypeList[i],
-        child: Text(
+        child: text(
           _roleTypeList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          textColor: GlobalVariables.green,
         ),
       ));
     }

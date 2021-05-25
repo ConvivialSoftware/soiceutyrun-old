@@ -9,6 +9,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -79,14 +81,14 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(
+                  child: AppIcon(
                     Icons.arrow_back,
-                    color: GlobalVariables.white,
+                    iconColor: GlobalVariables.white,
                   ),
                 ),
-                title: Text(
+                title: text(
                   AppLocalizations.of(context).translate('help_desk'),
-                  style: TextStyle(color: GlobalVariables.white),
+                  textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
                 ),
               ),
               body:  getMyTicketLayout(value),
@@ -159,10 +161,9 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                     height: 50,
                     child: FlatButton(
                       //color: GlobalVariables.grey,
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('open'),
-                        style: TextStyle(
-                            fontSize: 15, color: firstTicketTextColor),
+                            fontSize: 15.0, textColor: firstTicketTextColor,
                       ),
                       onPressed: () {
                       //  GlobalFunctions.showToast("OPEN Click");
@@ -195,10 +196,9 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                     minWidth: 190,
                     height: 50,
                     child: FlatButton(
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('closed'),
-                        style: TextStyle(
-                            fontSize: 15, color: secondTicketTextColor),
+                            fontSize: 15.0, textColor: secondTicketTextColor,
                       ),
                       onPressed: () {
                       //  GlobalFunctions.showToast("CLOSED Click");
@@ -271,9 +271,9 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           hintStyle:
                               TextStyle(color: GlobalVariables.veryLightGray),
                           border: InputBorder.none,
-                          suffixIcon: Icon(
+                          suffixIcon: AppIcon(
                             Icons.search,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           )),
                     ),
                   )),
@@ -306,9 +306,9 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   GlobalFunctions.setBaseContext(context);
                 }
               },
-              child: Icon(
+              child: AppIcon(
                 Icons.add,
-                color: GlobalVariables.white,
+                iconColor: GlobalVariables.white,
               ),
               backgroundColor: GlobalVariables.green,
             ),
@@ -367,11 +367,10 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: Text(
+                  child: text(
                     isOpenTicket ? value.openComplaintList[position].STATUS : value.closeComplaintList[position].STATUS,
-                    style: TextStyle(
-                        color: GlobalVariables.white,
-                        fontSize: 12),
+                    textColor: GlobalVariables.white,
+                        fontSize: GlobalVariables.textSizeSmall,
                   ),
                   decoration: BoxDecoration(
                       color: getTicketCategoryColor(
@@ -384,21 +383,18 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   children: [
                     Container(
                       alignment: Alignment.topRight,
-                      child: Text(
+                      child: text(
                         'Ticket No: ' +
                             ( isOpenTicket ? value.openComplaintList[position].TICKET_NO : value.closeComplaintList[position].TICKET_NO),
-                        style: TextStyle(
-                            color: GlobalVariables.green),
+                        textColor: GlobalVariables.green,
                       ),
                     ),
                     isAssignComplaint ? Container(
                       alignment: Alignment.topRight,
                       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      child: Text(
+                      child: text(
                         'Unit No: '+ (isOpenTicket ? value.openComplaintList[position].BLOCK+' '+value.openComplaintList[position].FLAT : value.closeComplaintList[position].BLOCK+' '+value.closeComplaintList[position].FLAT),
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                        TextStyle(color: GlobalVariables.green),
+                        textColor: GlobalVariables.green,
                       ),
                     ):Container(),
                   ],
@@ -449,23 +445,19 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           )),*/
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Text(
+                            child: text(
                                 isOpenTicket ? value.openComplaintList[position].SUBJECT : value.closeComplaintList[position].SUBJECT,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: GlobalVariables.green,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
+                                maxLine: 1,
+                                textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeLargeMedium,
+                                    fontWeight: FontWeight.bold),
                           ),
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: Text(
+                            child: text(
                               isOpenTicket ? value.openComplaintList[position].DESCRIPTION : value.closeComplaintList[position].DESCRIPTION,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(color: GlobalVariables.grey),
+                              maxLine: 2,
+                              textColor: GlobalVariables.grey,
                             ),
                           ),
                           /*Row(
@@ -561,24 +553,24 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: Text(
+                    child: text(
                         'Issued on: ' +
                             ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE,"dd-MM-yyyy")),
-                        style: TextStyle(color: GlobalVariables.grey)),
+                        textColor: GlobalVariables.grey),
                   ),
                   Row(
                     children: <Widget>[
                       Container(
-                          child: Icon(
+                          child: AppIcon(
                         Icons.chat_bubble,
-                        color: GlobalVariables.lightGray,
+                        iconColor: GlobalVariables.lightGray,
                       )),
                       Container(
                         margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                        child: Text(
+                        child: text(
                            ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT ) +
                                 ' Comments',
-                            style: TextStyle(color: GlobalVariables.grey)),
+                            textColor: GlobalVariables.grey),
                       ),
                     ],
                   ),

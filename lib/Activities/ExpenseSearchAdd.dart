@@ -67,14 +67,14 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('expense'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(context),
@@ -291,9 +291,9 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                                           value: _yearSelectedItem,
                                           underline: SizedBox(),
                                           isExpanded: true,
-                                          icon: Icon(
+                                          icon: AppIcon(
                                             Icons.keyboard_arrow_down,
-                                            color: GlobalVariables.mediumGreen,
+                                            iconColor: GlobalVariables.mediumGreen,
                                           ),
                                           iconSize: 20,
                                           selectedItemBuilder: (BuildContext context) {
@@ -302,10 +302,9 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                                               return Container(
                                                   alignment: Alignment.center,
                                                   //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                                                  child: Text(
+                                                  child: text(
                                                     _yearSelectedItem,
-                                                    style: TextStyle(
-                                                        color: GlobalVariables.green),
+                                                    textColor: GlobalVariables.green,
                                                   ));
                                             }).toList();
                                           },
@@ -390,13 +389,13 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                                               child: SearchableDropdown(
                                                 items: _ledgerAccountList.map((item) {
                                                   return new DropdownMenuItem<LedgerAccount>(
-                                                      child: Text(item.name), value: item);
+                                                      child: text(item.name), value: item);
                                                 }).toList(),
                                                 value: _selectedLedgerAccount,
                                                 onChanged: changeLedgerAccountDropDownItem,
                                                 isExpanded: true,
                                                 isCaseSensitiveSearch: true,
-                                                icon: Icon(null
+                                                icon: AppIcon(null
                                                   /*Icons.keyboard_arrow_down, color: GlobalVariables.grey,*/
                                                 ),
                                                 underline: SizedBox(),
@@ -409,11 +408,9 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                                                 });
                                               },
                                               //  closeButton: SizedBox.shrink(),
-                                                hint: Text(
+                                                hint: text(
                                                   AppLocalizations.of(context).translate('ledger_account'),
-                                                  style: TextStyle(
-                                                      color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
-                                                ),
+                                                  textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                                               ),
                                             ),
                                             SizedBox(width: 8,),
@@ -524,9 +521,9 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
           if (_yearListItems.length == 0) {
             _yearListItems.add(DropdownMenuItem(
               value: _listYear[i].years,
-              child: Text(
+              child: text(
                 _listYear[i].years,
-                style: TextStyle(color: GlobalVariables.green),
+                textColor: GlobalVariables.green
               ),
             ));
           } else {
@@ -535,9 +532,9 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                 0,
                 DropdownMenuItem(
                   value: _listYear[i].years,
-                  child: Text(
+                  child: text(
                     _listYear[i].years,
-                    style: TextStyle(color: GlobalVariables.green),
+                   textColor: GlobalVariables.green,
                   ),
                 ));
             if (_yearSelectedItem == null) {
@@ -548,9 +545,9 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
         } else {
           _yearListItems.add(DropdownMenuItem(
             value: _listYear[i].years,
-            child: Text(
+            child: text(
               _listYear[i].years,
-              style: TextStyle(color: GlobalVariables.green),
+              textColor: GlobalVariables.green,
             ),
           ));
         }

@@ -58,12 +58,12 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
           _openDownloadedFile(_taskId).then((success) {
             if (!success) {
               Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text('Cannot open this file')));
+                  SnackBar(content: text('Cannot open this file')));
             }
           });
         } else {
           Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text('Download failed!')));
+              .showSnackBar(SnackBar(content: text('Download failed!')));
         }
       });
     });
@@ -141,9 +141,9 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
               color: GlobalVariables.white,
             ),
           ),
-          title: AutoSizeText(
+          title: text(
             'Expense #'+_expense.VOUCHER_NO,
-            style: TextStyle(color: GlobalVariables.white),
+           textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: WillPopScope(child: getBaseLayout(), onWillPop: (){

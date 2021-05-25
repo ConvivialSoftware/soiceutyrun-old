@@ -14,6 +14,7 @@ import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -93,14 +94,14 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('add_expense'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -179,22 +180,22 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                 child: SearchableDropdown(
                   items: _ledgerAccountList.map((item) {
                     return new DropdownMenuItem<LedgerAccount>(
-                        child: Text(item.name), value: item);
+                        child: text(item.name), value: item);
                   }).toList(),
                   value: _selectedLedgerAccount,
                   onChanged: changeLedgerAccountDropDownItem,
                   isExpanded: true,
                   isCaseSensitiveSearch: true,
-                  icon: Icon(null
+                  icon: AppIcon(null
                       /*Icons.keyboard_arrow_down,
                     color: GlobalVariables.mediumRed,*/
                       ),
                   underline: SizedBox(),
-                  hint: Text(
+                  hint: text(
                     AppLocalizations.of(context).translate('ledger_account') +
                         '*',
-                    style: TextStyle(
-                        color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
+                    textColor: GlobalVariables.lightGray,
+                    fontSize: GlobalVariables.textSizeSMedium,
                   ),
                 ),
               ),
@@ -225,16 +226,16 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                           value: _selectedPaidBy,
                           onChanged: changePaidByDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
+                          hint: text(
                             AppLocalizations.of(context).translate('paid_by') +
                                 '*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
+                            textColor: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                       ),
@@ -271,16 +272,16 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     value: _selectedBankAccount,
                     onChanged: changeFromAccountDropDownItem,
                     isExpanded: true,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
-                    hint: Text(
+                    hint: text(
                       AppLocalizations.of(context).translate('from_account') +
                           '*',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
+                      textColor: GlobalVariables.lightGray,
+                      fontSize: GlobalVariables.textSizeSMedium,
                     ),
                   ),
                 ),
@@ -345,24 +346,22 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                       });
                                     }
                                   },
-                                  icon: Icon(
+                                  icon: AppIcon(
                                     Icons.attach_file,
-                                    color: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.mediumGreen,
                                   ),
-                                  label: Text(
+                                  label: text(
                                     AppLocalizations.of(context)
                                         .translate('attach_photo'),
-                                    style:
-                                        TextStyle(color: GlobalVariables.green),
+                                    textColor: GlobalVariables.green,
                                   ),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: Text(
+                                child: text(
                                   'OR',
-                                  style: TextStyle(
-                                      color: GlobalVariables.lightGray),
+                                  textColor: GlobalVariables.lightGray,
                                 ),
                               ),
                               Container(
@@ -385,15 +384,14 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                         });
                                       }
                                     },
-                                    icon: Icon(
+                                    icon: AppIcon(
                                       Icons.camera_alt,
-                                      color: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.mediumGreen,
                                     ),
-                                    label: Text(
+                                    label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_picture'),
-                                      style: TextStyle(
-                                          color: GlobalVariables.green),
+                                      textColor: GlobalVariables.green,
                                     )),
                               ),
                             ],
@@ -533,9 +531,9 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
     for (int i = 0; i < _paidByList.length; i++) {
       _paidByListItems.add(DropdownMenuItem(
         value: _paidByList[i],
-        child: Text(
+        child: text(
           _paidByList[i],
-          style: TextStyle(color: GlobalVariables.green),
+          textColor: GlobalVariables.green,
         ),
       ));
     }
@@ -589,9 +587,9 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
       for (int i = 0; i < _bankList.length; i++) {
         _bankAccountListItems.add(DropdownMenuItem(
           value: _bankList[i].ID,
-          child: Text(
+          child: text(
             _bankList[i].BANK_NAME,
-            style: TextStyle(color: GlobalVariables.green),
+            textColor: GlobalVariables.green,
           ),
         ));
       }

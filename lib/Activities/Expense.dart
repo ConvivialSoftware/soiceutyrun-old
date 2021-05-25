@@ -72,14 +72,14 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('expense'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body:  getExpenseLayout(),
@@ -131,9 +131,9 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                  getExpenseData(widget.startDate,widget.endDate,widget.ledgerHeads,widget.ledgerYear);
                }
               },
-              child: Icon(
+              child: AppIcon(
                 Icons.add,
-                color: GlobalVariables.white,
+                iconColor: GlobalVariables.white,
               ),
               backgroundColor: GlobalVariables.green,
             ),
@@ -201,15 +201,13 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: Text(_voucherAmountList[0].head_name,style: TextStyle(
-                                  color: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
-                              ),),
+                              child: text(_voucherAmountList[0].head_name,textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
+                              ),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Text('Rs. '+double.parse(_voucherAmount.toString()).toStringAsFixed(2),style: TextStyle(
-                                  color: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
-                              ),),
+                              child: text('Rs. '+double.parse(_voucherAmount.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
+                              ),
                             ),
 
                           ],
@@ -222,15 +220,13 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                           children: [
                             Container(
                               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: Text(_expenseList[position].BANK_NAME,style: TextStyle(
-                                  color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
-                              ),),
+                              child: text(_expenseList[position].BANK_NAME,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
+                              ),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE, "dd-MM-yyyy"),style: TextStyle(
-                                  color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
-                              ),),
+                              child: text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE, "dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
+                              ),
                             )
                           ],
                         ),

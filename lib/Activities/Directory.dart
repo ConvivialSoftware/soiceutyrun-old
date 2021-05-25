@@ -11,6 +11,8 @@ import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/MyComplexResponse.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BaseDirectory extends StatefulWidget {
@@ -90,16 +92,16 @@ class DirectoryState extends State<BaseDirectory> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(
+                  child: AppIcon(
                     Icons.arrow_back,
-                    color: GlobalVariables.white,
+                    iconColor: GlobalVariables.white,
                   ),
                 ),
-                title: Text(
+                title: text(
                   directory.directoryType +
                       ' ' +
                       AppLocalizations.of(context).translate('directory'),
-                  style: TextStyle(color: GlobalVariables.white),
+                  textColor: GlobalVariables.white,
                 ),
               ),
               body: getDirectoryLayout(value),
@@ -255,12 +257,11 @@ class DirectoryState extends State<BaseDirectory> {
                         ? Expanded(
                             child: Container(
                               margin: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                              child: Text(
+                              child: text(
                                 flat,
-                                style: TextStyle(
-                                    color: GlobalVariables.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                                textColor: GlobalVariables.black,
+                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontWeight: FontWeight.bold,
                               ),
                             ),
                           )
@@ -278,10 +279,10 @@ class DirectoryState extends State<BaseDirectory> {
                                 // height: 10,
                                 alignment: Alignment.topRight,
                                 margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                child: Icon(
+                                child: AppIcon(
                                   Icons.call,
-                                  color: GlobalVariables.mediumGreen,
-                                  size: 24,
+                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
                             ),
@@ -304,12 +305,11 @@ class DirectoryState extends State<BaseDirectory> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
-                        child: Text(
+                        child: text(
                           name,
-                          style: TextStyle(
-                              color: GlobalVariables.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                          textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeLargeMedium,
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -329,10 +329,10 @@ class DirectoryState extends State<BaseDirectory> {
                                 // height: 10,
                                 alignment: Alignment.topRight,
                                 margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                child: Icon(
+                                child: AppIcon(
                                   Icons.email,
-                                  color: GlobalVariables.mediumGreen,
-                                  size: 24,
+                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
                             ),
@@ -345,12 +345,10 @@ class DirectoryState extends State<BaseDirectory> {
                 Container(
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-                  child: Text(
+                  child: text(
                     field,
-                    style: TextStyle(
-                      color: GlobalVariables.grey,
-                      fontSize: 16,
-                    ),
+                    textColor: GlobalVariables.grey,
+                      fontSize: GlobalVariables.textSizeSmall
                   ),
                 ),
               ],
@@ -370,12 +368,11 @@ class DirectoryState extends State<BaseDirectory> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
-                        child: Text(
+                        child: text(
                           name,
-                          style: TextStyle(
-                              color: GlobalVariables.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                          textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeLargeMedium,
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -392,10 +389,10 @@ class DirectoryState extends State<BaseDirectory> {
                                 // height: 10,
                                 alignment: Alignment.topRight,
                                 margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                child: Icon(
+                                child: AppIcon(
                                   Icons.call,
-                                  color: GlobalVariables.mediumGreen,
-                                  size: 24,
+                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
                             ),
@@ -408,26 +405,22 @@ class DirectoryState extends State<BaseDirectory> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
-                        child: Text(
+                        child: text(
                           address,
-                          style: TextStyle(
-                              color: GlobalVariables.black,
-                              fontSize: 18,
+                          textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeLargeMedium,
                               fontWeight: FontWeight.normal),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 Container(
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-                  child: Text(
+                  child: text(
                     field,
-                    style: TextStyle(
-                      color: GlobalVariables.grey,
-                      fontSize: 16,
-                    ),
+                    textColor: GlobalVariables.grey,
+                      fontSize: GlobalVariables.textSizeMedium
                   ),
                 ),
               ],

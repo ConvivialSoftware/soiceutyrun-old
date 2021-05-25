@@ -12,13 +12,15 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
 class BaseAddNewMember extends StatefulWidget {
-
   String memberType;
+
   BaseAddNewMember(this.memberType);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -27,7 +29,6 @@ class BaseAddNewMember extends StatefulWidget {
 }
 
 class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
-
   String memberType;
 
   String attachmentFilePath;
@@ -42,27 +43,29 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   TextEditingController _alterMobileController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _occupationController = TextEditingController();
+
   //TextEditingController _hobbiesController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
   List<String> _bloodGroupList = new List<String>();
-  List<DropdownMenuItem<String>> __bloodGroupListItems = new List<DropdownMenuItem<String>>();
+  List<DropdownMenuItem<String>> __bloodGroupListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedBloodGroup;
 
   List<String> _membershipTypeList = new List<String>();
-  List<DropdownMenuItem<String>> __membershipTypeListItems = new List<DropdownMenuItem<String>>();
+  List<DropdownMenuItem<String>> __membershipTypeListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedMembershipType;
 
-
   List<String> _livesHereList = new List<String>();
-  List<DropdownMenuItem<String>> __livesHereListItems = new List<DropdownMenuItem<String>>();
+  List<DropdownMenuItem<String>> __livesHereListItems =
+      new List<DropdownMenuItem<String>>();
   String _selectedLivesHere;
 
- // String _selectedOccupation="Software Engg.";
-  String _selectedGender="Male";
+  // String _selectedOccupation="Software Engg.";
+  String _selectedGender = "Male";
   ProgressDialog _progressDialog;
-  bool isStoragePermission=false;
-
+  bool isStoragePermission = false;
 
   @override
   void initState() {
@@ -72,13 +75,12 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission=value;
+      isStoragePermission = value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     //GlobalFunctions.showToast(memberType.toString());
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
@@ -92,14 +94,14 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('add_new_member'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -135,7 +137,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
       child: Container(
         margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
         padding: EdgeInsets.all(20),
-       // height: MediaQuery.of(context).size.height / 0.5,
+        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -144,7 +146,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
             children: <Widget>[
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('name') + '*',
+                    AppLocalizations.of(context).translate('name') + '*',
                 controllerCallback: _nameController,
               ),
               Container(
@@ -166,23 +168,26 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: _selectedGender == "Male"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: _selectedGender == "Male"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('male'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -195,7 +200,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-                          _selectedGender="Female";
+                          _selectedGender = "Female";
                           setState(() {});
                         },
                         child: Container(
@@ -206,24 +211,26 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: _selectedGender == "Female"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: _selectedGender == "Female"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('female'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
-                                ),
+                                child: text(
+                                    AppLocalizations.of(context)
+                                        .translate('female'),
+                                    textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ],
                           ),
@@ -235,7 +242,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('date_of_birth'),
+                    AppLocalizations.of(context).translate('date_of_birth'),
                 controllerCallback: _dobController,
                 readOnly: true,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -243,15 +250,21 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                   Icons.date_range,
                   iconColor: GlobalVariables.mediumGreen,
                   onPressed: () {
-                    GlobalFunctions.getSelectedDateForDOB(context).then((value){
-                      _dobController.text = value.day.toString().padLeft(2, '0')+"-"+value.month.toString().padLeft(2, '0')+"-"+value.year.toString();
+                    GlobalFunctions.getSelectedDateForDOB(context)
+                        .then((value) {
+                      _dobController.text =
+                          value.day.toString().padLeft(2, '0') +
+                              "-" +
+                              value.month.toString().padLeft(2, '0') +
+                              "-" +
+                              value.year.toString();
                     });
                   },
                 ),
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('contact1') + '*',
+                    AppLocalizations.of(context).translate('contact1') + '*',
                 controllerCallback: _mobileController,
                 keyboardType: TextInputType.number,
                 maxLength: 10,
@@ -263,7 +276,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('contact2'),
+                    AppLocalizations.of(context).translate('contact2'),
                 controllerCallback: _alterMobileController,
                 keyboardType: TextInputType.number,
                 maxLength: 10,
@@ -275,7 +288,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('email_id'),
+                    AppLocalizations.of(context).translate('email_id'),
                 controllerCallback: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 contentPadding: EdgeInsets.only(top: 14),
@@ -305,15 +318,17 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           value: _selectedMembershipType,
                           onChanged: changeMembershipTypeDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
-                            AppLocalizations.of(context).translate('membership_type')+'*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
+                          hint: text(
+                            AppLocalizations.of(context)
+                                    .translate('membership_type') +
+                                '*',
+                            textColor: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                       ),
@@ -338,16 +353,17 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           value: _selectedLivesHere,
                           onChanged: changeLivesHereDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
-                            AppLocalizations.of(context).translate('lives_here')+'*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
-                          ),
+                          hint: text(
+                              AppLocalizations.of(context)
+                                      .translate('lives_here') +
+                                  '*',
+                              textColor: GlobalVariables.lightGray,
+                              fontSize: GlobalVariables.textSizeSMedium),
                         ),
                       ),
                     ),
@@ -358,10 +374,9 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                 children: <Widget>[
                   Flexible(
                     flex: 3,
-                    child:
-                    AppTextField(
+                    child: AppTextField(
                       textHintContent:
-                      AppLocalizations.of(context).translate('occupation'),
+                          AppLocalizations.of(context).translate('occupation'),
                       controllerCallback: _occupationController,
                     ),
                   ),
@@ -384,15 +399,16 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           value: _selectedBloodGroup,
                           onChanged: changeBloodGroupDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
-                            AppLocalizations.of(context).translate('blood_group'),
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
+                          hint: text(
+                            AppLocalizations.of(context)
+                                .translate('blood_group'),
+                            textColor: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                       ),
@@ -402,14 +418,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               ),
               Container(
                 height: 100,
-               child: AppTextField(
-                 textHintContent:
-                 AppLocalizations.of(context).translate('address'),
-                 controllerCallback: _addressController,
-                 maxLines: 99,
-                 contentPadding: EdgeInsets.only(top: 14),
-               ),
-
+                child: AppTextField(
+                  textHintContent:
+                      AppLocalizations.of(context).translate('address'),
+                  controllerCallback: _addressController,
+                  maxLines: 99,
+                  contentPadding: EdgeInsets.only(top: 14),
+                ),
               ),
               Row(
                 children: <Widget>[
@@ -420,23 +435,24 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width:50,
+                            width: 50,
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
-                              borderRadius: BorderRadius.circular(25),
-                           //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-
-                            ) : BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: FileImage(File(attachmentFilePath)),
-                                    fit: BoxFit.cover
-                                ),
-                                border: Border.all(color: GlobalVariables.green,width: 2.0)
-
-                            ),
+                            decoration: attachmentFilePath == null
+                                ? BoxDecoration(
+                                    color: GlobalVariables.mediumGreen,
+                                    borderRadius: BorderRadius.circular(25),
+                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                  )
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image:
+                                            FileImage(File(attachmentFilePath)),
+                                        fit: BoxFit.cover),
+                                    border: Border.all(
+                                        color: GlobalVariables.green,
+                                        width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
                           Column(
@@ -444,65 +460,72 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                               Container(
                                 child: FlatButton.icon(
                                   onPressed: () {
-
-                                    if(isStoragePermission) {
+                                    if (isStoragePermission) {
                                       openFile(context);
-                                    }else{
-                                      GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                        if(value){
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                              Permission.storage)
+                                          .then((value) {
+                                        if (value) {
                                           openFile(context);
-                                        }else{
-                                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                      'download_permission'));
                                         }
                                       });
                                     }
-
                                   },
-                                  icon: Icon(
+                                  icon: AppIcon(
                                     Icons.attach_file,
-                                    color: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.mediumGreen,
                                   ),
-                                  label: Text(
-                                    AppLocalizations.of(context).translate('attach_photo'),
-                                    style: TextStyle(color: GlobalVariables.green),
+                                  label: text(
+                                    AppLocalizations.of(context)
+                                        .translate('attach_photo'),
+                                    textColor: GlobalVariables.green,
                                   ),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: Text(
+                                child: text(
                                   'OR',
-                                  style: TextStyle(color: GlobalVariables.lightGray),
+                                  textColor: GlobalVariables.lightGray,
                                 ),
                               ),
                               Container(
                                 child: FlatButton.icon(
                                     onPressed: () {
-
-                                      if(isStoragePermission) {
+                                      if (isStoragePermission) {
                                         openCamera(context);
-                                      }else{
-                                        GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                          if(value){
+                                      } else {
+                                        GlobalFunctions.askPermission(
+                                                Permission.storage)
+                                            .then((value) {
+                                          if (value) {
                                             openCamera(context);
-                                          }else{
-                                            GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                          } else {
+                                            GlobalFunctions.showToast(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'download_permission'));
                                           }
                                         });
                                       }
                                     },
-                                    icon: Icon(
+                                    icon: AppIcon(
                                       Icons.camera_alt,
-                                      color: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.mediumGreen,
                                     ),
-                                    label: Text(
-                                      AppLocalizations.of(context).translate('take_picture'),
-                                      style: TextStyle(color: GlobalVariables.green),
-                                    )),
+                                    label: text(
+                                        AppLocalizations.of(context)
+                                            .translate('take_picture'),
+                                        textColor: GlobalVariables.green)),
                               ),
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -528,55 +551,47 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   }
 
   void verifyInfo() {
+    if (_nameController.text.length > 0) {
+      // if(_dobController.text.length>0){
 
-    if(_nameController.text.length>0){
-
-     // if(_dobController.text.length>0){
-
-        if(_mobileController.text.length>0){
-
+      if (_mobileController.text.length > 0) {
         //  if(_emailController.text.length>0){
 
-          //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
+        //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
 
-             // if(_occupationController.text.length>0){
+        // if(_occupationController.text.length>0){
 
-                  if(_selectedMembershipType!=null) {
+        if (_selectedMembershipType != null) {
+          if (_selectedLivesHere != null) {
+            addMember();
+          } else {
+            GlobalFunctions.showToast('Please Select Lives Here');
+          }
+        } else {
+          GlobalFunctions.showToast('Please Select MemberShip Type');
+        }
 
-                    if(_selectedLivesHere!=null) {
-
-                      addMember();
-
-                    }else{
-                      GlobalFunctions.showToast('Please Select Lives Here');
-                    }
-                  }else{
-                    GlobalFunctions.showToast('Please Select MemberShip Type');
-                  }
-
-             /* }else{
+        /* }else{
                 GlobalFunctions.showToast('Please Enter Occupation');
               }*/
-            /*}else{
+        /*}else{
               GlobalFunctions.showToast('Please Select BloodGroup');
             }*/
-          /*}else{
+        /*}else{
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
-        }else{
-          GlobalFunctions.showToast('Please Enter Mobile Number');
-        }
+      } else {
+        GlobalFunctions.showToast('Please Enter Mobile Number');
+      }
       /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
       }*/
-    }else{
+    } else {
       GlobalFunctions.showToast('Please Enter Name');
     }
-
   }
 
   Future<void> addMember() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -586,33 +601,48 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     String attachmentName;
     String attachment;
 
-    if(attachmentFileName!=null && attachmentFilePath!=null){
+    if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
     }
 
     //print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog.show();
-    restClient.addMember(societyId, block, flat, _nameController.text, _selectedGender, _dobController.text, _emailController.text,
-        _mobileController.text, _alterMobileController.text,_selectedBloodGroup, _occupationController.text, _selectedLivesHere,_selectedMembershipType,_addressController.text,attachment).then((value) {
-          print('add member Status value : '+value.toString());
-          _progressDialog.hide();
-          if(value.status){
-            if(attachmentFileName!=null && attachmentFilePath!=null){
-              GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-            }
-            Navigator.of(context).pop();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BaseMyUnit(
-                        AppLocalizations.of(context).translate('my_household'))));
-          }
-          GlobalFunctions.showToast(value.message);
-
-
-    })/*.catchError((Object obj) {
+    restClient
+            .addMember(
+                societyId,
+                block,
+                flat,
+                _nameController.text,
+                _selectedGender,
+                _dobController.text,
+                _emailController.text,
+                _mobileController.text,
+                _alterMobileController.text,
+                _selectedBloodGroup,
+                _occupationController.text,
+                _selectedLivesHere,
+                _selectedMembershipType,
+                _addressController.text,
+                attachment)
+            .then((value) {
+      print('add member Status value : ' + value.toString());
+      _progressDialog.hide();
+      if (value.status) {
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+        }
+        Navigator.of(context).pop();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BaseMyUnit(
+                    AppLocalizations.of(context).translate('my_household'))));
+      }
+      GlobalFunctions.showToast(value.message);
+    }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -623,94 +653,89 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
           break;
         default:
       }
-    })*/;
-
+    })*/
+        ;
   }
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentFilePath = value;
       getCompressFilePath();
     });
-
   }
 
   void openCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath=value.path;
+      attachmentFilePath = value.path;
       getCompressFilePath();
     });
   }
 
-  void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-    print('file Name : '+attachmentFileName.toString());
+  void getCompressFilePath() {
+    attachmentFileName = attachmentFilePath.substring(
+        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentFilePath, value.toString() + '/' + attachmentFileName)
+          .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
-        setState(() {
-        });
+        print('Cache file path : ' + attachmentCompressFilePath);
+        setState(() {});
       });
     });
   }
 
-
   void getBloodGroupData() {
-
-    _bloodGroupList = ["A+","O+","B+","AB+","A-","O-","B-","AB-"];
-    for(int i=0;i<_bloodGroupList.length;i++){
+    _bloodGroupList = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
+    for (int i = 0; i < _bloodGroupList.length; i++) {
       __bloodGroupListItems.add(DropdownMenuItem(
         value: _bloodGroupList[i],
-        child: Text(
+        child: text(
           _bloodGroupList[i],
-          style: TextStyle(color: GlobalVariables.black),
+          textColor: GlobalVariables.black,
         ),
       ));
     }
-  //  _selectedBloodGroup = __bloodGroupListItems[0].value;
-
+    //  _selectedBloodGroup = __bloodGroupListItems[0].value;
   }
 
- getMembershipTypeData() {
+  getMembershipTypeData() {
 //Tenantype
-    GlobalFunctions.getUserType().then((value){
-      if(value.toLowerCase()!='tenant') {
+    GlobalFunctions.getUserType().then((value) {
+      if (value.toLowerCase() != 'tenant') {
         _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
-      }else{
+      } else {
         _membershipTypeList = ["Tenant"];
       }
-      for(int i=0;i<_membershipTypeList.length;i++){
+      for (int i = 0; i < _membershipTypeList.length; i++) {
         __membershipTypeListItems.add(DropdownMenuItem(
           value: _membershipTypeList[i],
-          child: Text(
+          child: text(
             _membershipTypeList[i],
-            style: TextStyle(color: GlobalVariables.black),
+            textColor: GlobalVariables.black,
           ),
         ));
       }
-      setState(() {
-      });
+      setState(() {});
     });
-   // _selectedMembershipType = __membershipTypeListItems[0].value;
+    // _selectedMembershipType = __membershipTypeListItems[0].value;
   }
 
   void gteLivesHereData() {
-
-    _livesHereList = ["Yes","No"];
-    for(int i=0;i<_livesHereList.length;i++){
+    _livesHereList = ["Yes", "No"];
+    for (int i = 0; i < _livesHereList.length; i++) {
       __livesHereListItems.add(DropdownMenuItem(
         value: _livesHereList[i],
-        child: Text(
+        child: text(
           _livesHereList[i],
-          style: TextStyle(color: GlobalVariables.black),
+          textColor: GlobalVariables.black,
         ),
       ));
     }
- //   x
-    setState(() {
-    });
+    //   x
+    setState(() {});
   }
 
   void changeBloodGroupDropDownItem(String value) {
@@ -736,7 +761,4 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
       print('_selctedItem:' + _selectedLivesHere.toString());
     });
   }
-
-
-
 }

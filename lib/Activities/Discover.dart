@@ -94,9 +94,9 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(
+                    child: AppIcon(
                       Icons.arrow_back,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
                   actions: [
@@ -113,28 +113,25 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                         margin: EdgeInsets.only(right: 10),
                         child: Row(
                           children: [
-                            Icon(
+                            AppIcon(
                               Icons.history,
-                              color: GlobalVariables.white,
+                              iconColor: GlobalVariables.white,
                             ),
                             SizedBox(
                               width: 4,
                             ),
-                            Text(
+                            AppIcon(
                               AppLocalizations.of(context).translate('my_ads'),
-                              style: TextStyle(
-                                  color: GlobalVariables.white,
-                                  fontSize: GlobalVariables.textSizeSMedium),
-                            ),
+                              iconColor: GlobalVariables.white,
+                                  iconSize: GlobalVariables.textSizeSMedium),
                           ],
                         ),
                       ),
                     ),
                   ],
-                  title: Text(
+                  title: text(
                     AppLocalizations.of(context).translate('classified'),
-                    style:
-                        TextStyle(color: GlobalVariables.white, fontSize: 16),
+                    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
                   ),
                   bottom: value.classifiedCategoryList.isNotEmpty
                       ? getTabLayout(value)
@@ -241,9 +238,9 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                   GlobalFunctions.setBaseContext(context);
                 });
               },
-              child: Icon(
+              child: AppIcon(
                 Icons.add,
-                color: GlobalVariables.white,
+                iconColor: GlobalVariables.white,
               ),
               backgroundColor: GlobalVariables.green,
             ),
@@ -366,10 +363,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Icon(
+                                      AppIcon(
                                         Icons.location_on,
-                                        size: 20,
-                                        color: GlobalVariables.lightGray,
+                                        iconSize: 20,
+                                        iconColor: GlobalVariables.lightGray,
                                       ),
                                       SizedBox(width: 2),
                                       Flexible(
@@ -398,10 +395,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                           children: [
                                             Container(
                                                 margin: EdgeInsets.only(top: 3),
-                                                child: Icon(
+                                                child: AppIcon(
                                                   Icons.date_range,
-                                                  size: 15,
-                                                  color: GlobalVariables.lightGray,
+                                                  iconSize: 15.0,
+                                                  iconColor: GlobalVariables.lightGray,
                                                 )),
                                             SizedBox(
                                               width: 4,
@@ -423,10 +420,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                           children: [
                                             Container(
                                                 margin: EdgeInsets.only(top: 3),
-                                                child: Icon(
+                                                child: AppIcon(
                                                   Icons.access_time,
-                                                  size: 15,
-                                                  color: GlobalVariables.lightGray,
+                                                  iconSize: 15,
+                                                  iconColor: GlobalVariables.lightGray,
                                                 )),
                                             SizedBox(
                                               width: 4,

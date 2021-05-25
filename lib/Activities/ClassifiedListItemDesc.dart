@@ -58,14 +58,14 @@ class CreateClassifiedListingState
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             'Classified Details',
-            style: TextStyle(color: GlobalVariables.white, fontSize: 16),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
           ),
         ),
         body: getBaseLayout(),
@@ -139,7 +139,7 @@ class CreateClassifiedListingState
                                               .translate('successful_payment'))),*/
                                       Container(
                                         margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                        child: text(value.message,fontSize: 14.0,textColor: GlobalVariables.black,fontWeight: FontWeight.w500,maxLine: 99),
+                                        child: text(value.message,fontSize: GlobalVariables.textSizeSMedium,textColor: GlobalVariables.black,fontWeight: FontWeight.w500,maxLine: 99),
                                       ),
                                       /*Container(
                                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -239,10 +239,10 @@ class CreateClassifiedListingState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
+                  AppIcon(
                     Icons.location_on,
-                    size: 20,
-                    color: GlobalVariables.lightGray,
+                    iconSize: GlobalVariables.textSizeNormal,
+                    iconColor: GlobalVariables.lightGray,
                   ),
                   SizedBox(width: 4,),
                   Flexible(

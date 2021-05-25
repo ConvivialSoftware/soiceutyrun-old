@@ -72,14 +72,14 @@ class DescriptionOfHomeServiceState
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(
+                    child: AppIcon(
                       Icons.arrow_back,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
-                  title: Text(
+                  title: text(
                     widget._services.Category+ ' Services',
-                    style: TextStyle(color: GlobalVariables.white),
+                    textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
                   ),
                 ),
                 body: getBaseLayout(),
@@ -192,23 +192,20 @@ class DescriptionOfHomeServiceState
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
-            child: Text(
+            child: text(
               widget._services.Name,
-              style: TextStyle(
-                  color: GlobalVariables.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
+              textColor: GlobalVariables.white,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
+                  fontWeight: FontWeight.bold,
             ),
           ),
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.fromLTRB(15, 5, 0, 0),
-            child: Text(
+            child: text(
               widget._services.Title,
-              style: TextStyle(
-                color: GlobalVariables.lightGray,
-                fontSize: 14,
-              ),
+              textColor: GlobalVariables.lightGray,
+                fontSize: GlobalVariables.textSizeSMedium,
             ),
           ),
           Stack(
@@ -224,23 +221,20 @@ class DescriptionOfHomeServiceState
                   children: <Widget>[
                     Container(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: text(
                         'Service Description',
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                        textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold,
                       ),
                     ),
                     Container(
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text(
+                      child: text(
                         widget._services.Description,
-                        style: TextStyle(
-                          color: GlobalVariables.grey,
-                          fontSize: 14,
-                        ),
+                        textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium,
                       ),
                     ),
                     /*Container(
@@ -285,12 +279,11 @@ class DescriptionOfHomeServiceState
               children: <Widget>[
                 Container(
                   alignment: Alignment.topLeft,
-                  child: Text(
+                  child: text(
                     'Charges',
-                    style: TextStyle(
-                        color: GlobalVariables.green,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                   ),
                 ),
                 Container(
@@ -317,12 +310,11 @@ class DescriptionOfHomeServiceState
               children: <Widget>[
                 Container(
                   alignment: Alignment.topLeft,
-                  child: Text(
+                  child: text(
                     'Tell us your requirement',
-                    style: TextStyle(
-                        color: GlobalVariables.green,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                   ),
                 ),
                 Container(
@@ -336,7 +328,7 @@ class DescriptionOfHomeServiceState
                     decoration: InputDecoration(
                       hintText: 'Write to us about your requirement',
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
+                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
                     ),
                   ),
                 ),
@@ -382,12 +374,11 @@ class DescriptionOfHomeServiceState
               children: <Widget>[
                 Container(
                   alignment: Alignment.topLeft,
-                  child: Text(
+                  child: text(
                     'Requester Details',
-                    style: TextStyle(
-                        color: GlobalVariables.green,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                   ),
                 ),
                 Container(
@@ -419,33 +410,28 @@ class DescriptionOfHomeServiceState
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Container(
-                                  child: Text(
+                                  child: text(
                                     name,
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                    textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeMedium,
+                                        fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Container(
                                   //margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                                   child: Container(
-                                    child: Text(
+                                    child: text(
                                       mail,
-                                      style: TextStyle(
-                                        color: GlobalVariables.lightGray,
-                                        fontSize: 12,
-                                      ),
+                                      textColor: GlobalVariables.lightGray,
+                                        fontSize: GlobalVariables.textSizeSmall,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  child: Text(
+                                  child: text(
                                     mobile,
-                                    style: TextStyle(
-                                      color: GlobalVariables.lightGray,
-                                      fontSize: 12,
-                                    ),
+                                   textColor: GlobalVariables.lightGray,
+                                      fontSize: GlobalVariables.textSizeSmall,
                                   ),
                                 )
                               ],
@@ -462,7 +448,7 @@ class DescriptionOfHomeServiceState
                               decoration: BoxDecoration(
                                   color:GlobalVariables.green,
                                   borderRadius: BorderRadius.circular(30)),
-                              child:Icon(Icons.edit,color: GlobalVariables.white,size: 20,)
+                              child:AppIcon(Icons.edit,iconColor: GlobalVariables.white,iconSize: GlobalVariables.textSizeNormal  ,)
                           ),
                         ),
                       ],
@@ -550,18 +536,18 @@ class DescriptionOfHomeServiceState
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: Text(
+                        child: text(
                           _serviceChargesList[position].Service_Title,
-                          style: TextStyle(color: GlobalVariables.grey),
+                          textColor: GlobalVariables.grey,
                         ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  child: Text(
+                  child: text(
                     _serviceChargesList[position].Service_Price,
-                    style: TextStyle(color: GlobalVariables.green),
+                    textColor: GlobalVariables.green,
                   ),
                 )
               ],
@@ -632,7 +618,7 @@ class DescriptionOfHomeServiceState
                                   });
                                 },
                                 color: GlobalVariables.green,
-                                child: text('Submit',textColor: GlobalVariables.white,fontSize: 14.0,fontWeight: FontWeight.w500)
+                                child: text('Submit',textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w500)
                             ),
                           )
                         ],

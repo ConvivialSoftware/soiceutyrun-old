@@ -131,6 +131,7 @@ class GlobalVariables {
   static var bottomServiceIconPath = "assets/bottom_menu/bottom_service_icon.svg";
 
   /* font sizes*/
+  static const textSizeVerySmall = 10.0;
   static const textSizeSmall = 12.0;
   static const textSizeSMedium = 14.0;
   static const textSizeMedium = 16.0;
@@ -220,6 +221,10 @@ class GlobalVariables {
   static const removeHouseholdAPI = "staff/household_remove";
   static const deleteVehicleAPI = "Vehicle/delete";
   static const deleteFamilyMemberAPI = "Members/delete";
+  static const broadcastEmailAPI = "Broadcast/send_email";
+  static const broadcastNotificationAPI = "Broadcast/send_notification";
+  static const flatNoAPI = "Broadcast/Flatno";
+  static const broadcastSMSAPI = "Broadcast/send_sms";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -229,6 +234,7 @@ class GlobalVariables {
   static var AUTHERP =
       "Basic " + base64Url.encode(utf8.encode(authorizedTokenERP));
   static const BaseURLERP = "https://housingsocietyerp.com/";
+  static const BaseURLERPView = "https://housing.convivialsoftware.com/";
  // static const BaseURLDiscover = "https://mydemosites.in/";
   static const BaseURLDiscover = "https://societyrun.com//Flutter/Classified/Login/";
 
@@ -251,6 +257,22 @@ class GlobalVariables {
   static const deleteClassifiedImage = "classfied_img_delete";
 
   /*Api Name for BaseURLERP*/
+  /*static const duesAPI = "AndroidApi/dues";
+  static const ledgerAPI = "AndroidApi/ledger";
+  static const viewBillsAPI = "AndroidApi/view";
+  static const billAPI = "AndroidApi/Billview1";
+  static const receiptAPI = "AndroidApi/receiptview1";
+  static const bankAPI = "AndroidApi/bank";
+  static const insertPaymentAPI = "AndroidApi/insertpayment_razorpay";
+  static const paymentRequestAPI = "AndroidApi/paymentrequest";
+  static const mailAPI = "AndroidApi/mail";
+  static const receiptMailAPI = "AndroidApi/receipt_mail";
+  static const razorPayTransactionAPI = "AndroidApi/Razorpay_transaction";
+  static const accountLedgerAPI = "Androidexpense/account_ledger";
+  static const expenseAPI = "Androidexpense/all_expense";
+  static const expenseBankAPI = "Androidexpense/bank";
+  static const addExpenseAPI = "Androidexpense/Add";*/
+
   static const duesAPI = "AndroidApi/dues";
   static const ledgerAPI = "AndroidApi/ledger";
   static const viewBillsAPI = "AndroidApi/view";
@@ -340,6 +362,16 @@ class GlobalVariables {
   static const ATTACHMENT = 'ATTACHMENT';
   static const ATTACHMENT_NAME = 'ATTACHMENT_NAME';
   static const DESCRIPTION = 'DESCRIPTION';
+  static const SEND_TO = 'SEND_TO';
+  static const SMS_TYPE = 'sms_type';
+  static const name = 'name';
+  static const meeting_name = 'meeting_name';
+  static const meeting_date = 'meeting_date';
+  static const time = 'time';
+  static const minute = 'minute';
+  static const time_type = 'time_type';
+  static const venue = 'venue';
+  static const FLATS = 'FLATS';
   static const COMMENT = 'COMMENT';
   static const ESCALATION_LEVEL = 'ESCALATION_LEVEL';
   static const GENDER = 'GENDER';

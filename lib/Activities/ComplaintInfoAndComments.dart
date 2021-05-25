@@ -16,6 +16,8 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Comments.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'HelpDesk.dart';
 
@@ -100,12 +102,12 @@ class ComplaintInfoAndCommentsState
           _openDownloadedFile(_taskId).then((success) {
             if (!success) {
               Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text('Cannot open this file')));
+                  SnackBar(content: text('Cannot open this file')));
             }
           });
         } else {
           Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text('Download failed!')));
+              .showSnackBar(SnackBar(content: text('Download failed!')));
         }
       });
     });
@@ -170,16 +172,16 @@ class ComplaintInfoAndCommentsState
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('complaint') +
                 " " +
                 complaints.TICKET_NO,
-            style: TextStyle(color: GlobalVariables.white),
+           textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -257,11 +259,10 @@ class ComplaintInfoAndCommentsState
                                       Container(
                                         padding:
                                             EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                        child: Text(
+                                        child: text(
                                           complaints.STATUS,
-                                          style: TextStyle(
-                                              color: GlobalVariables.white,
-                                              fontSize: 12),
+                                         textColor: GlobalVariables.white,
+                                              fontSize: GlobalVariables.textSizeSmall,
                                         ),
                                         decoration: BoxDecoration(
                                             color: MyUnitState
@@ -271,30 +272,25 @@ class ComplaintInfoAndCommentsState
                                                 BorderRadius.circular(8)),
                                       ),
                                       Container(
-                                        child: Text(
+                                        child: text(
                                           'Ticket No: ' + complaints.TICKET_NO,
-                                          style: TextStyle(
-                                            color: GlobalVariables.green,
+                                         textColor: GlobalVariables.green,
                                           ),
-                                        ),
                                       ),
                                     ],
                                   )),
                                   Container(
                                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: AutoSizeText(complaints.SUBJECT,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: GlobalVariables.green,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
+                                    child: text(complaints.SUBJECT,
+                                        textColor: GlobalVariables.green,
+                                            fontSize: GlobalVariables.textSizeLargeMedium,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Container(
                                     margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                    child: Text(
+                                    child: text(
                                       complaints.DESCRIPTION,
-                                      style: TextStyle(
-                                          color: GlobalVariables.grey),
+                                     textColor: GlobalVariables.grey,
                                     ),
                                   ),
                                   complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
@@ -329,19 +325,17 @@ class ComplaintInfoAndCommentsState
                                           alignment: Alignment.topRight,
                                             margin: EdgeInsets.fromLTRB(
                                                 5, 15, 5, 0),
-                                            child: Icon(
+                                            child: AppIcon(
                                               Icons.attach_file,
-                                              color: GlobalVariables
+                                              iconColor: GlobalVariables
                                                   .mediumGreen,
                                             )),
                                         Container(
                                           margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(
+                                          child: text(
                                             "Attachment",
-                                            style: TextStyle(
-                                              color: GlobalVariables.green,
-                                              fontSize: 10,
-                                            ),
+                                            textColor: GlobalVariables.green,
+                                              fontSize: GlobalVariables.textSizeVerySmall,
                                           ),
                                         )
                                       ],
@@ -368,22 +362,20 @@ class ComplaintInfoAndCommentsState
                                                 Container(
                                                   margin: EdgeInsets.fromLTRB(
                                                       0, 10, 0, 5),
-                                                  child: Text(
+                                                  child: text(
                                                     'Name: ',
-                                                    style: TextStyle(
-                                                        color: GlobalVariables
+                                                    textColor: GlobalVariables
                                                             .green,
-                                                        fontSize: 14),
+                                                        fontSize: GlobalVariables.textSizeSMedium,
                                                   ),
                                                 ),
                                                 Container(
                                                   margin: EdgeInsets.fromLTRB(
                                                       0, 10, 0, 5),
-                                                  child: Text(complaints.NAME,
-                                                      style: TextStyle(
-                                                          color: GlobalVariables
+                                                  child: text(complaints.NAME,
+                                                      textColor: GlobalVariables
                                                               .grey,
-                                                          fontSize: 14)),
+                                                          fontSize: GlobalVariables.textSizeSMedium),
                                                 ),
                                               ],
                                             ),
@@ -392,26 +384,23 @@ class ComplaintInfoAndCommentsState
                                                 Container(
                                                   margin: EdgeInsets.fromLTRB(
                                                       0, 15, 0, 0),
-                                                  child: Text(
+                                                  child: text(
                                                     'Unit No: ',
-                                                    style: TextStyle(
-                                                        color: GlobalVariables
+                                                    textColor: GlobalVariables
                                                             .green,
-                                                        fontSize: 14),
+                                                        fontSize: GlobalVariables.textSizeSMedium,
                                                   ),
                                                 ),
                                                 Container(
                                                   margin: EdgeInsets.fromLTRB(
                                                       0, 15, 0, 0),
-                                                  child: Text(
+                                                  child: text(
                                                     complaints.BLOCK +
                                                         ' ' +
                                                         complaints.FLAT,
-                                                    style: TextStyle(
-                                                      color:
+                                                    textColor:
                                                           GlobalVariables.grey,
-                                                      fontSize: 14,
-                                                    ),
+                                                      fontSize: GlobalVariables.textSizeSMedium,
                                                   ),
                                                 ),
                                               ],
@@ -436,24 +425,23 @@ class ComplaintInfoAndCommentsState
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 0, 10, 0, 0),
-                                            child: Text(
+                                            child: text(
                                               'Issued on: ',
-                                              style: TextStyle(
-                                                  color: GlobalVariables.green,
-                                                  fontSize: 14),
+                                              textColor: GlobalVariables.green,
+                                                  fontSize: GlobalVariables.textSizeSMedium,
                                             ),
                                           ),
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 0, 10, 0, 0),
-                                            child: Text(
+                                            child: text(
                                                 GlobalFunctions
                                                     .convertDateFormat(
                                                         complaints.DATE,
                                                         "dd-MM-yyyy"),
-                                                style: TextStyle(
-                                                    color: GlobalVariables.grey,
-                                                    fontSize: 14)),
+                                                textColor: GlobalVariables.grey,
+                                                    fontSize: GlobalVariables.textSizeSMedium
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -462,22 +450,19 @@ class ComplaintInfoAndCommentsState
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 0, 10, 0, 0),
-                                            child: Text(
+                                            child: text(
                                               'Category: ',
-                                              style: TextStyle(
-                                                  color: GlobalVariables.green,
-                                                  fontSize: 14),
+                                              textColor: GlobalVariables.green,
+                                                  fontSize: GlobalVariables.textSizeSMedium,
                                             ),
                                           ),
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 0, 10, 0, 0),
-                                            child: Text(
+                                            child: text(
                                               complaints.CATEGORY,
-                                              style: TextStyle(
-                                                color: GlobalVariables.grey,
-                                                fontSize: 14,
-                                              ),
+                                              textColor: GlobalVariables.grey,
+                                                fontSize: GlobalVariables.textSizeSMedium,
                                             ),
                                           ),
                                         ],
@@ -554,9 +539,9 @@ class ComplaintInfoAndCommentsState
                                           onChanged: changeDropDownItem,
                                           isExpanded: true,
                                           value: _selectedItem,
-                                          icon: Icon(
+                                          icon: AppIcon(
                                             Icons.keyboard_arrow_down,
-                                            color: GlobalVariables.mediumGreen,
+                                            iconColor: GlobalVariables.mediumGreen,
                                           ),
                                           underline: SizedBox(),
                                           /* hint: Text(
@@ -643,13 +628,12 @@ class ComplaintInfoAndCommentsState
                                             Container(
                                               margin: EdgeInsets.fromLTRB(
                                                   10, 0, 0, 0),
-                                              child: Text(
+                                              child: text(
                                                 AppLocalizations.of(context)
                                                     .translate('close'),
-                                                style: TextStyle(
-                                                    color:
+                                               textColor:
                                                         GlobalVariables.green,
-                                                    fontSize: 16),
+                                                    fontSize: GlobalVariables.textSizeMedium,
                                               ),
                                             ),
                                           ],
@@ -688,21 +672,20 @@ class ComplaintInfoAndCommentsState
                                                               .transparent,
                                                       width: 2.0,
                                                     )),
-                                                child: Icon(Icons.check,
-                                                    color:
+                                                child: AppIcon(Icons.check,
+                                                    iconColor:
                                                         GlobalVariables.white),
                                               ),
                                             ),
                                             Container(
                                               margin: EdgeInsets.fromLTRB(
                                                   10, 0, 0, 0),
-                                              child: Text(
+                                              child: text(
                                                 AppLocalizations.of(context)
                                                     .translate('reopen'),
-                                                style: TextStyle(
-                                                    color:
+                                                textColor:
                                                         GlobalVariables.green,
-                                                    fontSize: 16),
+                                                    fontSize: GlobalVariables.textSizeMedium,
                                               ),
                                             ),
                                           ],
@@ -743,12 +726,11 @@ class ComplaintInfoAndCommentsState
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
                                             color: GlobalVariables.green)),
-                                    child: AutoSizeText(
+                                    child: text(
                                       AppLocalizations.of(context)
                                           .translate('submit'),
-                                      style: TextStyle(
-                                          fontSize: GlobalVariables.textSizeMedium),
-                                      maxLines: 1,
+                                          fontSize: GlobalVariables.textSizeMedium,
+                                      maxLine: 1,
                                     ),
                                   ),
                                 ),
@@ -770,13 +752,12 @@ class ComplaintInfoAndCommentsState
                                 Container(
                                   margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                                   alignment: Alignment.topLeft,
-                                  child: Text(
+                                  child: text(
                                     AppLocalizations.of(context)
                                         .translate('comments'),
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                    textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeNormal,
+                                        fontWeight: FontWeight.bold
                                   ),
                                 ),
                                 Container(
@@ -843,7 +824,7 @@ class ComplaintInfoAndCommentsState
                       hintText: AppLocalizations.of(context)
                           .translate('add_ur_comments'),
                       hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 16),
+                          color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none),
                 ),
               ),
@@ -854,9 +835,9 @@ class ComplaintInfoAndCommentsState
                 margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
                 child: Transform.rotate(
                     angle: 108 * 3.14 / 600,
-                    child: Icon(
+                    child: AppIcon(
                       Icons.attach_file,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     )),
               ),
             ),
@@ -873,9 +854,9 @@ class ComplaintInfoAndCommentsState
                   color: GlobalVariables.green,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: Icon(
+                child: AppIcon(
                   Icons.arrow_forward_ios,
-                  color: GlobalVariables.white,
+                  iconColor: GlobalVariables.white,
                 ),
               ),
             ),
@@ -955,10 +936,9 @@ class ComplaintInfoAndCommentsState
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             _commentsList[position].NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green, fontSize: 16),
+                            textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                           ),
                         ), /*Container(
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -971,14 +951,13 @@ class ComplaintInfoAndCommentsState
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
-                    child: Text(
+                    child: text(
                       _commentsList[position].C_WHEN != '0000-00-00 00:00:00'
                           ? GlobalFunctions.convertDateFormat(
                               _commentsList[position].C_WHEN,
                               "dd-MM-yyyy hh:mm aa")
                           : '',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 12),
+                     textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSmall,
                     ),
                   ),
                   Container(
@@ -989,10 +968,9 @@ class ComplaintInfoAndCommentsState
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                            child: Text(
+                            child: text(
                               _commentsList[position].COMMENT,
-                              style: TextStyle(
-                                  color: GlobalVariables.black, fontSize: 14),
+                              textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSMedium,
                             ),
                           ),
                         ), /*Container(
@@ -1032,9 +1010,9 @@ class ComplaintInfoAndCommentsState
     for (int i = 0; i < _complaintStatusList.length; i++) {
       _complaintStatusListItems.add(DropdownMenuItem(
         value: _complaintStatusList[i].complaintStatus,
-        child: Text(
+        child: text(
           _complaintStatusList[i].complaintStatus,
-          style: TextStyle(color: GlobalVariables.green),
+          textColor: GlobalVariables.green,
         ),
       ));
     }

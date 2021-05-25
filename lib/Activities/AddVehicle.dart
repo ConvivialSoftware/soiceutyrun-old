@@ -7,12 +7,13 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
 class BaseAddVehicle extends StatefulWidget {
-
   //String memberType;
   //BaseAddVehicle(this.memberType);
   @override
@@ -23,18 +24,16 @@ class BaseAddVehicle extends StatefulWidget {
 }
 
 class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
-
   TextEditingController _vehicleNoController = TextEditingController();
   TextEditingController _vehicleModelController = TextEditingController();
   TextEditingController _vehicleStickerController = TextEditingController();
 
-  String _selectedVehicleType="2 Wheeler";
+  String _selectedVehicleType = "2 Wheeler";
 
   ProgressDialog _progressDialog;
 
   @override
   Widget build(BuildContext context) {
-
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
@@ -47,14 +46,14 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('add_vehicle'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -90,17 +89,21 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
       child: Container(
         margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
         padding: EdgeInsets.all(20),
-       // height: MediaQuery.of(context).size.height / 0.5,
+        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
         child: Container(
           child: Column(
             children: <Widget>[
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('vehicle_no')+'*',
-                  controllerCallback: _vehicleNoController,
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('vehicle_no') + '*',
+                controllerCallback: _vehicleNoController,
                 textCapitalization: TextCapitalization.characters,
-                inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),],
+                inputFormatters: [
+                  new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),
+                ],
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -110,12 +113,8 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-
                           _selectedVehicleType = "2 Wheeler";
-                          setState(() {
-
-                          });
-
+                          setState(() {});
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -125,24 +124,26 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedVehicleType== "2 Wheeler" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: _selectedVehicleType == "2 Wheeler"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedVehicleType== "2 Wheeler" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: _selectedVehicleType == "2 Wheeler"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('2_wheeler'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
-                                ),
+                                child: text(
+                                    AppLocalizations.of(context)
+                                        .translate('2_wheeler'),
+                                    textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ],
                           ),
@@ -154,12 +155,8 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-
                           _selectedVehicleType = "4 Wheeler";
-                          setState(() {
-
-                          });
-
+                          setState(() {});
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -169,23 +166,26 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedVehicleType== "4 Wheeler" ? GlobalVariables.green : GlobalVariables.white,
+                                    color: _selectedVehicleType == "4 Wheeler"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedVehicleType== "4 Wheeler" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                      color: _selectedVehicleType == "4 Wheeler"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('4_wheeler'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -196,10 +196,14 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                   ],
                 ),
               ),
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('model_name')+'*',
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('model_name') + '*',
                 controllerCallback: _vehicleModelController,
               ),
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('sticker'),
+              AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('sticker'),
                 controllerCallback: _vehicleStickerController,
               ),
               Container(
@@ -221,7 +225,6 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
   }
 
   Future<void> addVehicle() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -230,17 +233,24 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
     String userId = await GlobalFunctions.getUserId();
 
     _progressDialog.show();
-    restClient.addVehicle(societyId, block, flat, _vehicleNoController.text, _vehicleModelController.text,_selectedVehicleType,_vehicleStickerController.text,userId).then((value) {
-
-      print('add vehicle Status value : '+value.toString());
-      if(value.status)
-      {
+    restClient
+        .addVehicle(
+            societyId,
+            block,
+            flat,
+            _vehicleNoController.text,
+            _vehicleModelController.text,
+            _selectedVehicleType,
+            _vehicleStickerController.text,
+            userId)
+        .then((value) {
+      print('add vehicle Status value : ' + value.toString());
+      if (value.status) {
         Navigator.pop(context);
       }
       GlobalFunctions.showToast(value.message);
 
       _progressDialog.hide();
-
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -253,25 +263,21 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
         default:
       }
     });
-
   }
 
   void verifyVehicle() {
-
-    if(_vehicleNoController.text.length>0){
-      if(_vehicleModelController.text.length>0){
-       // if(_vehicleStickerController.text.length>0){
-          addVehicle();
-       /* }else{
+    if (_vehicleNoController.text.length > 0) {
+      if (_vehicleModelController.text.length > 0) {
+        // if(_vehicleStickerController.text.length>0){
+        addVehicle();
+        /* }else{
           GlobalFunctions.showToast("Please Enter Sticker");
         }*/
-      }else{
+      } else {
         GlobalFunctions.showToast("Please Enter ModelName");
       }
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Enter Vehicle Number");
     }
-
-
   }
 }

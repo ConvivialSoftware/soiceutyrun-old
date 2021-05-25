@@ -12,6 +12,7 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -103,14 +104,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('edit_profile'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -184,17 +185,16 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                       color: _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('male'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -224,17 +224,16 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                       color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('female'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                  textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -455,15 +454,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           value: _selectedMembershipType,
                           onChanged: changeMembershipTypeDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
+                          hint: text(
                             AppLocalizations.of(context).translate('membership_type')+'*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                            textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
                           ),
                         ),
                       ),
@@ -488,15 +486,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           value: _selectedLivesHere,
                           onChanged: changeLivesHereDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
+                          hint: text(
                             AppLocalizations.of(context).translate('lives_here')+'*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                            textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
                           ),
                         ),
                       ),
@@ -524,7 +521,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).translate('occupation'),
-                            hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 16),
+                            hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
                             border: InputBorder.none
                         ),
                       ),
@@ -549,15 +546,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           value: _selectedBloodGroup,
                           onChanged: changeBloodGroupDropDownItem,
                           isExpanded: true,
-                          icon: Icon(
+                          icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.mediumGreen,
                           ),
                           underline: SizedBox(),
-                          hint: Text(
+                          hint: text(
                             AppLocalizations.of(context).translate('blood_group'),
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 16),
+                            textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
                           ),
                         ),
                       ),
@@ -602,7 +598,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
                             radius: 30.0,) :
-                          AppFileImage(File(attachmentFilePath),
+                          AppFileImage(attachmentFilePath,
                             imageWidth:60.0,
                             imageHeight:60.0,
                             borderColor: GlobalVariables.grey,
@@ -646,21 +642,21 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     }
 
                                   },
-                                  icon: Icon(
+                                  icon: AppIcon(
                                     Icons.attach_file,
-                                    color: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.mediumGreen,
                                   ),
-                                  label: Text(
+                                  label: text(
                                     AppLocalizations.of(context).translate('attach_photo'),
-                                    style: TextStyle(color: GlobalVariables.green),
+                                    textColor: GlobalVariables.green,
                                   ),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                child: Text(
+                                child: text(
                                   'OR',
-                                  style: TextStyle(color: GlobalVariables.lightGray),
+                                  textColor: GlobalVariables.lightGray,
                                 ),
                               ),
                               Container(
@@ -680,14 +676,14 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                       }
 
                                     },
-                                    icon: Icon(
+                                    icon: AppIcon(
                                       Icons.camera_alt,
-                                      color: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.mediumGreen,
                                     ),
-                                    label: Text(
+                                    label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_picture'),
-                                      style: TextStyle(color: GlobalVariables.green),
+                                      textColor: GlobalVariables.green,
                                     )),
                               ),
                             ],
@@ -801,9 +797,9 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     for(int i=0;i<_bloodGroupList.length;i++){
       __bloodGroupListItems.add(DropdownMenuItem(
         value: _bloodGroupList[i],
-        child: Text(
+        child: text(
           _bloodGroupList[i],
-          style: TextStyle(color: GlobalVariables.black),
+          textColor: GlobalVariables.black,
         ),
       ));
     }
@@ -816,9 +812,9 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     for(int i=0;i<_membershipTypeList.length;i++){
       __membershipTypeListItems.add(DropdownMenuItem(
         value: _membershipTypeList[i],
-        child: Text(
+        child: text(
           _membershipTypeList[i],
-          style: TextStyle(color: GlobalVariables.black),
+          textColor: GlobalVariables.black,
         ),
       ));
     }
@@ -831,9 +827,9 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
     for(int i=0;i<_livesHereList.length;i++){
       __livesHereListItems.add(DropdownMenuItem(
         value: _livesHereList[i],
-        child: Text(
+        child: text(
           _livesHereList[i],
-          style: TextStyle(color: GlobalVariables.black),
+         textColor: GlobalVariables.black,
         ),
       ));
     }

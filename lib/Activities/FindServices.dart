@@ -54,9 +54,9 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(
+                    child: AppIcon(
                       Icons.arrow_back,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
                   actions: [
@@ -71,15 +71,14 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                         margin: EdgeInsets.only(right: 10),
                         child: Row(
                           children: [
-                            Icon(
+                            AppIcon(
                               Icons.history,
-                              color: GlobalVariables.white,
+                              iconColor: GlobalVariables.white,
                             ),
                             SizedBox(width: 4,),
-                            Text(
+                            text(
                               AppLocalizations.of(context).translate('history'),
-                              style:
-                              TextStyle(color: GlobalVariables.white, fontSize: GlobalVariables.textSizeSMedium),
+                              textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSMedium,
                             ),
 
                           ],
@@ -87,9 +86,9 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                       ),
                     ),
                   ],
-                  title: Text(
+                  title: text(
                     AppLocalizations.of(context).translate('find_services'),
-                    style: TextStyle(color: GlobalVariables.white, fontSize: 16),
+                    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
                   ),
                   //bottom: getTabLayout(),
                   //elevation: 0,
@@ -178,7 +177,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                                   child: Container(
                                       alignment: Alignment.center,
                                       margin: EdgeInsets.fromLTRB(2, 5, 2, 4),
-                                      child: text(value.servicesCategoryList[position].Category_Name,fontSize: 14.0,maxLine: 2)),
+                                      child: text(value.servicesCategoryList[position].Category_Name,fontSize: GlobalVariables.textSizeSMedium,maxLine: 2)),
                                 ),
                               ],
                             ),

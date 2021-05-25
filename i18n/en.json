@@ -369,5 +369,34 @@
   "start_date": "Start Date",
   "end_date": "End Date",
   "search_expense": "Search Expense",
-  "search_by_heads": "Search by heads"
+  "search_by_heads": "Search by heads",
+  "send_notification": "Send Notification",
+  "send_email":"Send Email",
+  "send_sms": "Send SMS",
+  "broadcast": "Broadcast",
+  "send_to": "Send To",
+  "description": "Description",
+  "sms_type": "SMS Types",
+  "template_message": "Template Message",
+  "note": "NOTE",
+  "sms_note_message": "SMS will be delivered to users even if they are registered with DnD. If you need more templates, please contact us on 8055551809/ 8850409901 with your Suggestions.",
+  "important_communication_1": "Important communication about",
+  "important_communication_2": "sent to your Registered Email Address. Please check your Email for further details.",
+  "meeting_on": " Meeting on ",
+  "venue": " Venue",
+  "attend_meeting": " Please attend without fail.",
+  "water_supply_available": "Water Supply will be available on ",
+  "water_supply_necessary_arrangements": " Please make necessary arrangements.",
+  "water_outage_on": "Water Outage on ",
+  "fire_drill_on": "Fire Drill on  ",
+  "fire_drill_participate_without_fail": " Please participate without fail.",
+  "service_down_due_to": "Due to ",
+  "service_down_from": "Service is down from",
+  "power_outage_on": "Power Outage on ",
+  "at": " at ",
+  "to": " to ",
+  "send": "Send"
+
+
+
 }

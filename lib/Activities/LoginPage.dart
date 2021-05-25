@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:dio/dio.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -89,19 +91,19 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                         child: RichText(
                             text: TextSpan(children: [
                           WidgetSpan(
-                              child: SvgPicture.asset(
+                              child: AppAssetsImage(
                                   GlobalVariables.loginIconPath)),
                           TextSpan(
                               text: " " +
                                   AppLocalizations.of(context)
                                       .translate('login'),
                               style: TextStyle(
-                                  fontSize: 18, color: GlobalVariables.green)),
+                                  fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.green)),
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate('to_your_account'),
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize:  GlobalVariables.textSizeLargeMedium,
                                   color: GlobalVariables.lightGray))
                         ])),
                       ),
@@ -118,9 +120,9 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             hintStyle: TextStyle(
                               color: GlobalVariables.lightGray,
                             ),
-                            suffixIcon: Icon(
+                            suffixIcon: AppIcon(
                               Icons.mail,
-                              color: GlobalVariables.lightGreen,
+                              iconColor: GlobalVariables.lightGreen,
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -161,9 +163,9 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 }
                                 setState(() {});
                               },
-                              icon: Icon(
+                              icon: AppIcon(
                                 Icons.remove_red_eye,
-                                color: GlobalVariables.lightGreen,
+                                iconColor: GlobalVariables.lightGreen,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -226,11 +228,10 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
                                             color: GlobalVariables.green)),
-                                    child: Text(
+                                    child: text(
                                       AppLocalizations.of(context)
                                           .translate('login'),
-                                      style: TextStyle(
-                                          fontSize: GlobalVariables.textSizeMedium),
+                                          fontSize: GlobalVariables.textSizeMedium,
                                     ),
                                   ),
                                 ),
@@ -247,12 +248,11 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                             builder: (context) =>
                                                 BaseOtpWithMobile()));
                                   },
-                                  child: Text(
+                                  child:text(
                                     AppLocalizations.of(context)
                                         .translate('login_with_otp'),
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 18),
+                                   textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeLargeMedium,
                                   ),
                                 ),
                               ),
@@ -272,12 +272,11 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 flex: 1,
                                 child: Container(
                                   //color: GlobalVariables.black,
-                                  child: Text(
+                                  child: text(
                                     AppLocalizations.of(context)
                                         .translate('forget_password'),
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 18),
+                                    textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeLargeMedium,
                                   ),
                                 ),
                               ),
@@ -292,13 +291,12 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     children: <Widget>[
                                       Container(
                                         alignment: Alignment.topRight,
-                                        child: Text(
+                                        child: text(
                                             AppLocalizations.of(context)
                                                 .translate("don't_hv_acc"),
-                                            style: TextStyle(
-                                                color: GlobalVariables.black,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w300)),
+                                            textColor: GlobalVariables.black,
+                                                fontSize: GlobalVariables.textSizeMedium,
+                                                fontWeight: FontWeight.w300),
                                       ),
                                       Container(
                                         alignment: Alignment.topRight,
@@ -310,13 +308,12 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                                     builder: (context) =>
                                                         BaseRegister()));
                                           },
-                                          child: Text(
+                                          child: text(
                                               AppLocalizations.of(context)
                                                   .translate('register'),
-                                              style: TextStyle(
-                                                  color: GlobalVariables.green,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
+                                              textColor: GlobalVariables.green,
+                                                  fontSize: GlobalVariables.textSizeLargeMedium,
+                                                  fontWeight: FontWeight.bold),
                                         ),
                                       )
                                     ],
@@ -382,7 +379,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 height: MediaQuery.of(context).size.height,
                                 //color: GlobalVariables.black,
                                 //alignment: Alignment.center,
-                                child: Image.network(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
+                                child: AppNetworkImage(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
                               ),
                             ): Container(),
                           ),

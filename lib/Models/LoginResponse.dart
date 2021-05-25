@@ -38,6 +38,9 @@ class LoginDashBoardResponse extends ChangeNotifier {
 
       duesRs = value.DUES.toString();
       duesDate = value.DUE_DATE.toString();
+      if(duesRs==null){
+        duesRs='0.0';
+      }
       if (duesRs.length == 0) {
         duesRs = "0.0";
       }

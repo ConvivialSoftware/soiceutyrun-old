@@ -8,6 +8,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseFeedback extends StatefulWidget {
@@ -52,14 +54,14 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Icon(
+                child: AppIcon(
                   Icons.arrow_back,
-                  color: GlobalVariables.white,
+                  iconColor: GlobalVariables.white,
                 ),
               ),
-              title: Text(
+              title: text(
                 AppLocalizations.of(context).translate('feedback'),
-                style: TextStyle(color: GlobalVariables.white),
+                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
               ),
             ),
             body: getBaseLayout(),
@@ -126,7 +128,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                       hintText:
                       AppLocalizations.of(context).translate('title'),
                       hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
+                          color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                       border: InputBorder.none),
                 ),
               ),
@@ -148,7 +150,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                       hintText: AppLocalizations.of(context)
                           .translate('complaint_desc'),
                       hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
+                          color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                       border: InputBorder.none),
                 ),
               ),
@@ -195,22 +197,22 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                                 });
                               }
                             },
-                            icon: Icon(
+                            icon: AppIcon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.mediumGreen,
                             ),
-                            label: Text(
+                            label: text(
                               AppLocalizations.of(context).translate(
                                   'attach_photo'),
-                              style: TextStyle(color: GlobalVariables.green),
+                              textColor: GlobalVariables.green,
                             ),
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text(
+                          child: text(
                             'OR',
-                            style: TextStyle(color: GlobalVariables.lightGray),
+                            textColor: GlobalVariables.lightGray,
                           ),
                         ),
                         Container(
@@ -232,14 +234,14 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                                   });
                                 }
                               },
-                              icon: Icon(
+                              icon: AppIcon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.mediumGreen,
                               ),
-                              label: Text(
+                              label: text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.green),
+                               textColor: GlobalVariables.green,
                               )),
                         ),
                       ],
@@ -264,9 +266,9 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide(color: GlobalVariables.green)),
-                    child: Text(
+                    child: text(
                       AppLocalizations.of(context).translate('submit'),
-                      style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
+                      fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                 ),

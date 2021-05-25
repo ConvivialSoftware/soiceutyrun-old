@@ -13,28 +13,26 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseAppNotificationSettings extends StatefulWidget {
   @override
-  _BaseAppNotificationSettingsState createState() => _BaseAppNotificationSettingsState();
+  _BaseAppNotificationSettingsState createState() =>
+      _BaseAppNotificationSettingsState();
 }
 
-class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSettings> {
-
-  var userId = "",
-      name = "",
-      photo = "",
-      societyId="",
-      flat="",
-      block="";
+class _BaseAppNotificationSettingsState
+    extends State<BaseAppNotificationSettings> {
+  var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
 
-  bool isInAppCallNotification= true;
-  bool isDailyEntryNotification= true;
-  //bool isDailyExitNotification= false;
-  bool isGuestEntryNotification= true;
-  //bool isGuestExitNotification= false;
+  bool isInAppCallNotification = true;
+  bool isDailyEntryNotification = true;
 
+  //bool isDailyExitNotification= false;
+  bool isGuestEntryNotification = true;
+
+  //bool isGuestExitNotification= false;
 
   @override
   void initState() {
@@ -45,7 +43,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
   @override
   Widget build(BuildContext context) {
     return Builder(
-      builder: (context)=>Scaffold(
+      builder: (context) => Scaffold(
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -54,14 +52,14 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('app_notification_settings'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -71,9 +69,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
 
   getBaseLayout() {
     return Container(
-      width: MediaQuery.of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       //height: double.maxFinite,
       //height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -85,7 +81,8 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0),
                 getAppNotificationSettingsLayout(),
               ],
             ),
@@ -106,8 +103,10 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
     societyId = await GlobalFunctions.getSocietyId();
-    isDailyEntryNotification = await GlobalFunctions.getDailyEntryNotification();
-    isGuestEntryNotification = await GlobalFunctions.getGuestEntryNotification();
+    isDailyEntryNotification =
+        await GlobalFunctions.getDailyEntryNotification();
+    isGuestEntryNotification =
+        await GlobalFunctions.getGuestEntryNotification();
     isInAppCallNotification = await GlobalFunctions.getInAppCallNotification();
     print('UserId : ' + userId);
     print('Name : ' + name);
@@ -125,11 +124,11 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
     return SingleChildScrollView(
       child: Container(
         child: Column(
-           children: [
-             inAppCall(),
-             dailyHelps(),
-             yourGuest(),
-           ],
+          children: [
+            inAppCall(),
+            dailyHelps(),
+            yourGuest(),
+          ],
         ),
       ),
     );
@@ -137,12 +136,13 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
 
   inAppCall() {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
+      margin:
+          EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
       child: Card(
-        shape: (RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0))),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
         elevation: 2.0,
-       // shadowColor: GlobalVariables.green.withOpacity(0.3),
+        // shadowColor: GlobalVariables.green.withOpacity(0.3),
         margin: EdgeInsets.all(15),
         color: GlobalVariables.white,
         child: Column(
@@ -153,15 +153,22 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: SvgPicture.asset(GlobalVariables.inAppCallIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+                    child: SvgPicture.asset(
+                      GlobalVariables.inAppCallIconPath,
+                      width: 30,
+                      height: 30,
+                      color: GlobalVariables.grey,
+                    ),
                   ),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      child: Text(AppLocalizations.of(context).translate('in_app_call'),style: TextStyle(
-                          fontSize: 16,fontWeight: FontWeight.bold,color: GlobalVariables.green
-                      ),),
+                      child: text(
+                          AppLocalizations.of(context).translate('in_app_call'),
+                          fontSize: GlobalVariables.textSizeMedium,
+                          fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.green),
                     ),
                   ),
                   Container(
@@ -172,7 +179,8 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                         print("VALUE : $value");
                         setState(() {
                           isInAppCallNotification = value;
-                          GlobalFunctions.setInAppCallNotification(isInAppCallNotification);
+                          GlobalFunctions.setInAppCallNotification(
+                              isInAppCallNotification);
                         });
                       },
                     ),
@@ -183,9 +191,11 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
             Container(
               alignment: Alignment.topLeft,
               margin: EdgeInsets.fromLTRB(20, 0, 0, 20),
-              child: Text(AppLocalizations.of(context).translate('in_app_call_text'),style: TextStyle(
-                  fontSize: 14,color: GlobalVariables.grey,
-              ),),
+              child: text(
+                AppLocalizations.of(context).translate('in_app_call_text'),
+                fontSize: GlobalVariables.textSizeSMedium,
+                textColor: GlobalVariables.grey,
+              ),
             )
           ],
         ),
@@ -194,14 +204,14 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
   }
 
   dailyHelps() {
-    print('isDailyEntryNotification1 : '+isDailyEntryNotification.toString());
+    print('isDailyEntryNotification1 : ' + isDailyEntryNotification.toString());
     return Container(
       //margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
       child: Card(
-        shape: (RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0))),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
         elevation: 2.0,
-       // shadowColor: GlobalVariables.green.withOpacity(0.3),
+        // shadowColor: GlobalVariables.green.withOpacity(0.3),
         margin: EdgeInsets.all(15),
         color: GlobalVariables.white,
         child: Container(
@@ -213,36 +223,40 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      child: SvgPicture.asset(GlobalVariables.dailyHelpsIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+                      child: SvgPicture.asset(
+                        GlobalVariables.dailyHelpsIconPath,
+                        width: 30,
+                        height: 30,
+                        color: GlobalVariables.grey,
+                      ),
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                        child: Text(AppLocalizations.of(context).translate('daily_helps'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.bold,color: GlobalVariables.green
-                        ),),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('daily_helps'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold,
+                            textColor: GlobalVariables.green),
                       ),
                     ),
                     Container(
                       child: Container(
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                        child: Text(AppLocalizations.of(context).translate('daily_helps_example'),style: TextStyle(
-                            fontSize: 14,color: GlobalVariables.grey
-                        ),),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('daily_helps_example'),
+                            fontSize: GlobalVariables.textSizeSMedium,
+                            textColor: GlobalVariables.grey),
                       ),
                     )
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: Divider(
-                  thickness: 1,
-                  color: GlobalVariables.lightGray,
-                ),
-              ),
+              divider(),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
@@ -250,15 +264,23 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: SvgPicture.asset(GlobalVariables.loginIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
+                      child: SvgPicture.asset(
+                        GlobalVariables.loginIconPath,
+                        width: 25,
+                        height: 25,
+                        color: GlobalVariables.grey,
+                      ),
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(AppLocalizations.of(context).translate('entry_notification'),style: TextStyle(
-                            fontSize: 16,color: GlobalVariables.grey,fontWeight: FontWeight.w500
-                        ),),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('entry_notification'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.grey,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
                     Container(
@@ -270,7 +292,8 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                           print("VALUE : $value");
                           setState(() {
                             isDailyEntryNotification = value;
-                            GlobalFunctions.setDailyEntryNotification(isDailyEntryNotification);
+                            GlobalFunctions.setDailyEntryNotification(
+                                isDailyEntryNotification);
                           });
                         },
                       ),
@@ -318,14 +341,14 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
   }
 
   yourGuest() {
-    print('isGuestEntryNotification1 : '+isGuestEntryNotification.toString());
+    print('isGuestEntryNotification1 : ' + isGuestEntryNotification.toString());
     return Container(
       //margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
       child: Card(
-        shape: (RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0))),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
         elevation: 2.0,
-       // shadowColor: GlobalVariables.green.withOpacity(0.3),
+        // shadowColor: GlobalVariables.green.withOpacity(0.3),
         margin: EdgeInsets.all(15),
         color: GlobalVariables.white,
         child: Container(
@@ -337,27 +360,29 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      child: SvgPicture.asset(GlobalVariables.guestIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
+                      child: SvgPicture.asset(
+                        GlobalVariables.guestIconPath,
+                        width: 30,
+                        height: 30,
+                        color: GlobalVariables.grey,
+                      ),
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(AppLocalizations.of(context).translate('your_guest'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.bold,color: GlobalVariables.green
-                        ),),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('your_guest'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold,
+                            textColor: GlobalVariables.green),
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: Divider(
-                  thickness: 1,
-                  color: GlobalVariables.lightGray,
-                ),
-              ),
+              divider(),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
@@ -365,28 +390,36 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: SvgPicture.asset(GlobalVariables.loginIconPath,width: 25,height: 25,color: GlobalVariables.grey,),
+                      child: SvgPicture.asset(
+                        GlobalVariables.loginIconPath,
+                        width: 25,
+                        height: 25,
+                        color: GlobalVariables.grey,
+                      ),
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(AppLocalizations.of(context).translate('entry_notification'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w500,color: GlobalVariables.grey
-                        ),),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('entry_notification'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.w500,
+                            textColor: GlobalVariables.grey),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: FlutterCustomSwitch(
                         activeColor: GlobalVariables.green,
-                        value:
-                        isGuestEntryNotification,
+                        value: isGuestEntryNotification,
                         onChanged: (value) {
                           print("VALUE : $value");
                           setState(() {
                             isGuestEntryNotification = value;
-                            GlobalFunctions.setGuestEntryNotification(isGuestEntryNotification);
+                            GlobalFunctions.setGuestEntryNotification(
+                                isGuestEntryNotification);
                           });
                         },
                       ),
@@ -394,7 +427,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                   ],
                 ),
               ),
-           /*   Container(
+              /*   Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,7 +437,7 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
                     ),
                     Expanded(
                       child: Container(
-                        alignment: Alignment.centerLeft,
+                        alignment: (Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
                         child: Text(AppLocalizations.of(context).translate('exit_notification'),style: TextStyle(
                             fontSize: 16,fontWeight: FontWeight.w600
@@ -432,6 +465,4 @@ class _BaseAppNotificationSettingsState extends State<BaseAppNotificationSetting
       ),
     );
   }
-
 }
-

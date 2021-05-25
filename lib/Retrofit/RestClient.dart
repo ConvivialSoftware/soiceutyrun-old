@@ -295,6 +295,133 @@ abstract class RestClient {
   @POST(GlobalVariables.deleteFamilyMemberAPI)
   Future<StatusMsgResponse> deleteFamilyMember(@Field(GlobalVariables.id) String id,@Field(GlobalVariables.societyId) String societyId);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastEmailAPI)
+  Future<DataResponse> broadcastMail(@Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.ATTACHMENT) String attachment,@Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.DESCRIPTION) String description
+      ,@Field(GlobalVariables.societyName) String Society_Name,@Field(GlobalVariables.societyEmail) String Society_Email,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastNotificationAPI)
+  Future<DataResponse> broadcastNotification(@Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,/*
+      @Field(GlobalVariables.ATTACHMENT) String attachment*/@Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.DESCRIPTION) String description
+      ,@Field(GlobalVariables.societyName) String Society_Name,@Field(GlobalVariables.societyEmail) String Society_Email,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.flatNoAPI)
+  Future<DataResponse> flatNo(@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> importantCommunicationSMS(
+  @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,@Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field(GlobalVariables.name) String name,
+      @Field(GlobalVariables.societyName) String societyName,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> meetingSMS(
+  @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field(GlobalVariables.meeting_name) String meeting_name,
+      @Field(GlobalVariables.meeting_date) String meeting_date,
+      @Field(GlobalVariables.time) String time,
+      @Field(GlobalVariables.minute) String minute,
+      @Field(GlobalVariables.time_type) String time_type,
+      @Field(GlobalVariables.venue) String venue,
+      @Field(GlobalVariables.societyName) String societyName,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> waterSupplySMS(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field("date4") String date4,
+      @Field("start_time4") String start_time4,
+      @Field("start_minute4") String start_minute4,
+      @Field("start_time_type4") String start_time_type4,
+      @Field("end_time4") String end_time4,
+      @Field("end_minute4") String end_minute4,
+      @Field("end_time_type4") String end_time_type4,
+      @Field(GlobalVariables.societyName) String societyName,);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> waterDisruptionSMS(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field("date3") String date3,
+      @Field("start_time3") String start_time3,
+      @Field("start_minute3") String start_minute3,
+      @Field("start_time_typ3") String start_time_type3,
+      @Field("end_time3") String end_time3,
+      @Field("end_minute3") String end_minute3,
+      @Field("end_time_type3") String end_time_type3,
+      @Field(GlobalVariables.societyName) String societyName,);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> fireDrillSMS(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field("date2") String date2,
+      @Field("start_time2") String start_time2,
+      @Field("start_minute2") String start_minute2,
+      @Field("start_time_type2") String start_time_type2,
+      @Field(GlobalVariables.societyName) String societyName,);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> serviceDownSMS(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field("reason") String reason,
+      @Field("reason1") String reason1,
+      @Field("date1") String date1,
+      @Field("start_time1") String start_time1,
+      @Field("start_minute1") String start_minute1,
+      @Field("start_time_type1") String start_time_type1,
+      @Field("end_time") String end_time,
+      @Field("end_minute") String end_minute,
+      @Field("end_time_type") String end_time_type,
+      @Field(GlobalVariables.societyName) String societyName,);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.broadcastSMSAPI)
+  Future<DataResponse> powerOutageSMS(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("FLATS[]") List<String> flats,
+      @Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.SMS_TYPE) String smsType,
+      @Field("date") String date,
+      @Field("start_time") String start_time,
+      @Field("start_minute") String start_minute,
+      @Field("start_time_type") String start_time_type,
+      @Field("time") String time,
+      @Field("minute") String minute,
+      @Field("time_type") String time_type,
+      @Field(GlobalVariables.societyName) String societyName,);
+
 }
 
 

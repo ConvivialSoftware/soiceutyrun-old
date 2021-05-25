@@ -6,6 +6,8 @@ import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -31,14 +33,14 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('add_near_by_shop'),
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,  fontSize: GlobalVariables.textSizeMedium
           ),
         ),
         body: getBaseLayout(),
@@ -80,7 +82,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 40, 20, 20),
       padding: EdgeInsets.all(20),
-     // height: MediaQuery.of(context).size.height / 0.5,
+      // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
           color: GlobalVariables.white,
           borderRadius: BorderRadius.circular(20)),
@@ -90,13 +92,11 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
           children: <Widget>[
             Container(
               alignment: Alignment.topLeft,
-              child: Text(
-                AppLocalizations.of(context).translate('add_near_by_shop'),
-                style: TextStyle(
-                    color: GlobalVariables.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
+              child: text(
+                  AppLocalizations.of(context).translate('add_near_by_shop'),
+                  textColor: GlobalVariables.green,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
+                  fontWeight: FontWeight.bold),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -107,14 +107,14 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                   border: Border.all(
                     color: GlobalVariables.mediumGreen,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('shop_name'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                    border: InputBorder.none
-                ),
+                    hintText:
+                        AppLocalizations.of(context).translate('shop_name'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 14),
+                    border: InputBorder.none),
               ),
             ),
             Row(
@@ -137,15 +137,16 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                         items: null,
                         onChanged: null,
                         isExpanded: true,
-                        icon: Icon(
+                        icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          color: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.mediumGreen,
                         ),
                         underline: SizedBox(),
-                        hint: Text(
-                          AppLocalizations.of(context).translate('service_type'),
-                          style: TextStyle(
-                              color: GlobalVariables.lightGray, fontSize: 14),
+                        hint: text(
+                          AppLocalizations.of(context)
+                              .translate('service_type'),
+                          textColor: GlobalVariables.lightGray,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -161,9 +162,9 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                       color: GlobalVariables.green,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Icon(
+                    child: AppIcon(
                       Icons.add,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
                 ),
@@ -177,21 +178,21 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     decoration: BoxDecoration(
-                      color: GlobalVariables.white,
-                      borderRadius: BorderRadius.circular(10),
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: GlobalVariables.mediumGreen,
                           width: 3.0,
-                        )
-                    ),
+                        )),
                     child: TextField(
                       maxLength: 10,
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context).translate('phone_number'),
-                        hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                        border: InputBorder.none,
-                        counterText: ''
-                      ),
+                          hintText: AppLocalizations.of(context)
+                              .translate('phone_number'),
+                          hintStyle: TextStyle(
+                              color: GlobalVariables.lightGray, fontSize: 14),
+                          border: InputBorder.none,
+                          counterText: ''),
                     ),
                   ),
                 ),
@@ -205,9 +206,9 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                       color: GlobalVariables.green,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Icon(
+                    child: AppIcon(
                       Icons.add,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
                 ),
@@ -217,38 +218,37 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10),
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: GlobalVariables.mediumGreen,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).translate('email_id'),
-                  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                  border: InputBorder.none
-                ),
+                    hintText:
+                        AppLocalizations.of(context).translate('email_id'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 14),
+                    border: InputBorder.none),
               ),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10),
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: GlobalVariables.mediumGreen,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).translate('website'),
-                  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                  border: InputBorder.none
-                ),
+                    hintText: AppLocalizations.of(context).translate('website'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 14),
+                    border: InputBorder.none),
               ),
             ),
             Align(
@@ -274,8 +274,7 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                           color: GlobalVariables.white,
                         ),
                         label: Text(
-                          AppLocalizations.of(context)
-                              .translate('add_photo'),
+                          AppLocalizations.of(context).translate('add_photo'),
                           style: TextStyle(color: GlobalVariables.white),
                         )),
                   ),
@@ -287,22 +286,18 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
               height: 45,
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: ButtonTheme(
-               // minWidth: MediaQuery.of(context).size.width/2,
+                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
                   color: GlobalVariables.green,
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: GlobalVariables.green)),
                   child: Text(
-                    AppLocalizations.of(context)
-                        .translate('submit'),
-                    style: TextStyle(
-                        fontSize: GlobalVariables.textSizeMedium),
+                    AppLocalizations.of(context).translate('submit'),
+                    style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
                   ),
                 ),
               ),
@@ -314,22 +309,22 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
   }
 
   getOtherVisitorCardLayout() {
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(5,0, 5,0),
-          padding: EdgeInsets.fromLTRB(5,0,5,0),
+          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
           child: Row(
             children: <Widget>[
               Flexible(
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseDelivery()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseDelivery()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -360,9 +355,10 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseHomeService()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseHomeService()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -395,9 +391,10 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseGuestOthers()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseGuestOthers()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -426,22 +423,17 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
               ),
             ],
           ),
-
         ),
       ],
     );
-
-
   }
 
   getSearchPropertyLayout() {
-
     return Container(
       margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightGreen,
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: GlobalVariables.lightGreen,
+          borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -452,17 +444,15 @@ class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             alignment: Alignment.center,
-            child: Text(
-                AppLocalizations.of(context)
-                    .translate('search_property'),
-                style: TextStyle(
-                  color: GlobalVariables.green,
-                    fontSize: GlobalVariables.varyLargeText,)),
+            child:
+                Text(AppLocalizations.of(context).translate('search_property'),
+                    style: TextStyle(
+                      color: GlobalVariables.green,
+                      fontSize: GlobalVariables.varyLargeText,
+                    )),
           )
         ],
       ),
     );
-
-
   }
 }

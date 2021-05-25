@@ -15,6 +15,7 @@ import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/MyUnitResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
@@ -67,14 +68,14 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Icon(
+                child: AppIcon(
                   Icons.arrow_back,
-                  color: GlobalVariables.white,
+                  iconColor: GlobalVariables.white,
                 ),
               ),
-              title: Text(
+              title: text(
                 AppLocalizations.of(context).translate('ledger'),
-                style: TextStyle(color: GlobalVariables.white),
+                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
               ),
             ),
             body: getBaseLayout(value),
@@ -107,12 +108,11 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       Flexible(
                         flex: 2,
                         child: Container(
-                          child: Text(
+                          child: text(
                             AppLocalizations.of(context).translate('ledger'),
-                            style: TextStyle(
-                                color: GlobalVariables.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                            textColor: GlobalVariables.white,
+                                fontSize: GlobalVariables.textSizeNormal,
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -132,9 +132,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                             value: _yearSelectedItem,
                             underline: SizedBox(),
                             isExpanded: true,
-                            icon: Icon(
+                            icon: AppIcon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.white,
+                              iconColor: GlobalVariables.white,
                             ),
                             iconSize: 20,
                             selectedItemBuilder: (BuildContext context) {
@@ -143,10 +143,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                                 return Container(
                                     alignment: Alignment.center,
                                     //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                                    child: Text(
+                                    child: text(
                                       _yearSelectedItem,
-                                      style: TextStyle(
-                                          color: GlobalVariables.white),
+                                      textColor: GlobalVariables.white,
                                     ));
                               }).toList();
                             },
@@ -226,23 +225,21 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Container(
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('total_outstanding'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Container(
-                                child: Text(
+                                child: text(
                                   "Rs. " +
                                       value.totalOutStanding.toStringAsFixed(2),
-                                  style: TextStyle(
-                                      color: GlobalVariables.red,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                                  textColor: GlobalVariables.red,
+                                      fontSize: GlobalVariables.textSizeLargeMedium,
+                                      fontWeight: FontWeight.bold,
                                 ),
                               )
                             ],
@@ -297,23 +294,21 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context)
                               .translate('opening_balance'),
-                          style: TextStyle(
-                              color: GlobalVariables.black,
+                          textColor: GlobalVariables.black,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Container(
-                      child: Text(
+                      child: text(
                         'Rs. ' + value.openingBalance,
-                        style: TextStyle(
-                            color: GlobalVariables.red,
+                        textColor: GlobalVariables.red,
                             fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -350,9 +345,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
           color: GlobalVariables.lightGreen,
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Text(
+            child: text(
               value.ledgerList[position].C_DATE,
-              style: TextStyle(color: GlobalVariables.grey, fontSize: 14),
+              textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeSMedium,
             ),
           ),
         ),
@@ -366,10 +361,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.all(5),
-                        child: Text(
+                        child: text(
                           value.ledgerList[position].LEDGER,
-                          style: TextStyle(
-                              color: GlobalVariables.grey, fontSize: 18),
+                          textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeLargeMedium,
                         ),
                       ),
                     ),
@@ -400,20 +394,19 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
-                        child: Text(
+                        child: text(
                           "Rs. " +
                               double.parse(value.ledgerList[position].AMOUNT
                                       .toString())
                                   .toStringAsFixed(2),
-                          style: TextStyle(
-                              color: value.ledgerList[position].TYPE
+                          textColor: value.ledgerList[position].TYPE
                                           .toLowerCase()
                                           .toString() ==
                                       'bill'
                                   ? GlobalVariables.red
                                   : GlobalVariables.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                              fontSize: GlobalVariables.textSizeMedium,
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     )
@@ -503,9 +496,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
             if (_yearListItems.length == 0) {
               _yearListItems.add(DropdownMenuItem(
                 value: MyUnitResponse.listYear[i].years,
-                child: Text(
+                child: text(
                   MyUnitResponse.listYear[i].years,
-                  style: TextStyle(color: GlobalVariables.green),
+                  textColor: GlobalVariables.green,
                 ),
               ));
             } else {
@@ -514,9 +507,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                   0,
                   DropdownMenuItem(
                     value: MyUnitResponse.listYear[i].years,
-                    child: Text(
+                    child: text(
                       MyUnitResponse.listYear[i].years,
-                      style: TextStyle(color: GlobalVariables.green),
+                      textColor: GlobalVariables.green,
                     ),
                   ));
               if (_yearSelectedItem == null) {
@@ -527,9 +520,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
           } else {
             _yearListItems.add(DropdownMenuItem(
               value: MyUnitResponse.listYear[i].years,
-              child: Text(
+              child: text(
                 MyUnitResponse.listYear[i].years,
-                style: TextStyle(color: GlobalVariables.green),
+                textColor: GlobalVariables.green,
               ),
             ));
           }
