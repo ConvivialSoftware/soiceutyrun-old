@@ -140,3 +140,13 @@ Widget divider({var thickness = 1.0}) {
     ),
   );
 }
+
+Widget verticalDivider({var thickness = 1.0}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+    child: VerticalDivider(
+      color: GlobalVariables.lightGray,
+      thickness: thickness,
+    ),
+  );
+}

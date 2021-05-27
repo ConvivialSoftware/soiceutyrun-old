@@ -19,6 +19,7 @@ import 'package:societyrun/Models/MyUnitResponse.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 
 void main() {
 
@@ -49,6 +50,7 @@ class BaseAppStart extends StatelessWidget {
   final gatePassResponse = GatePass();
   final loginDashboardResponse = LoginDashBoardResponse();
   final broadcastResponse = BroadcastResponse();
+  final userManagementResponse = UserManagementResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,7 @@ class BaseAppStart extends StatelessWidget {
             ChangeNotifierProvider<GatePass>.value(value: gatePassResponse),
             ChangeNotifierProvider<LoginDashBoardResponse>.value(value: loginDashboardResponse),
             ChangeNotifierProvider<BroadcastResponse>.value(value: broadcastResponse),
+            ChangeNotifierProvider<UserManagementResponse>.value(value: userManagementResponse),
           ],
           child: MaterialApp(
             theme: getThemeData(),

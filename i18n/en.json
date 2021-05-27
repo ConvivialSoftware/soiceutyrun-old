@@ -395,7 +395,18 @@
   "power_outage_on": "Power Outage on ",
   "at": " at ",
   "to": " to ",
-  "send": "Send"
+  "send": "Send",
+  "user": "User",
+  "user_management": "User Management",
+  "register_user": "Register User",
+  "unregister_user": "UnRegister User",
+  "active_user": "Active User",
+  "inactive_user": "InActive User",
+  "mobile_user": "Mobile User",
+  "not_mobile_user": "Not Mobile User",
+  "rental_request": "Rental Request",
+  "pending_request": "Pending Request",
+  "move_out_request": "Move Out Request"
 
 
 

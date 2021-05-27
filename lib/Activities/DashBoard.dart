@@ -31,6 +31,7 @@ import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/Notifications.dart';
 import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/OwnerServices.dart';
+import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -1617,6 +1618,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             items: [
               AppLocalizations.of(context).translate("assign_helpdesk"),
               AppLocalizations.of(context).translate("broadcast"),
+              AppLocalizations.of(context).translate("user_management"),
             ]),
       new RootTitle(
           title: AppLocalizations.of(context).translate('settings'),
@@ -2174,6 +2176,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       // GlobalFunctions.showToast("Coming Soon...");
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseBroadcast()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
+      });
+    }else if (item ==
+        AppLocalizations.of(context).translate('user_management')) {
+      //Redirect to  Help Desk
+      // GlobalFunctions.showToast("Coming Soon...");
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseUserManagement()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
