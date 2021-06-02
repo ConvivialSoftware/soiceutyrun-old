@@ -6,6 +6,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BroadcastResponse.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
@@ -88,7 +89,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
       new List<DropdownMenuItem<String>>();
   String _smsAmPmSelectedItem;
 
-  String societyName;
+  String societyName,smsCredit='0',smsSent='0',smsBalance="0";
 
   List<DropdownMenuItem<String>> _smsHours2ListItems =
       new List<DropdownMenuItem<String>>();
@@ -497,7 +498,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
+              /*Container(
                 alignment: Alignment.topLeft,
                 child: Text(
                   AppLocalizations.of(context).translate('broadcast'),
@@ -506,7 +507,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
-              ),
+              ),*/
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -794,7 +795,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
+              /*Container(
                 alignment: Alignment.topLeft,
                 child: Text(
                   AppLocalizations.of(context).translate('broadcast'),
@@ -803,7 +804,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
-              ),
+              ),*/
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -1221,262 +1222,407 @@ class _BaseBroadcastState extends State<BaseBroadcast>
 
   getSMSLayout(BroadcastResponse broadcastResponse) {
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
-        padding: EdgeInsets.all(
-            20), // height: MediaQuery.of(context).size.height / 0.5,
-        decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  AppLocalizations.of(context).translate('broadcast'),
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 2.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: _smsSendToListItems,
-                    value: _smsSendToSelectedItem,
-                    onChanged: (value) {
-                      _smsSendToSelectedItem = value;
-                      setState(() {
-                        print("value : " + value);
-                      });
-                    },
-                    isExpanded: true,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('send_to') + '*',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                    ),
-                  ),
-                ),
-              ),
-              _smsSendToSelectedItem == 'specific flat'
-                  ? Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              // height: double.infinity,
+              // color: GlobalVariables.black,
+              //width: MediaQuery.of(context).size.width / 1.2,
+              margin: EdgeInsets.fromLTRB(
+                  10,
+                  MediaQuery.of(context).size.height / 20,
+                  10,
+                  0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Card(
+                shape: (RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0))),
+                elevation: 2.0,
+                //  shadowColor: GlobalVariables.green.withOpacity(0.3),
+              //  margin: EdgeInsets.all(20),
+                color: GlobalVariables.white,
+                child: Stack(
+                  children: <Widget>[
+                    /*Container(
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButton(
-                          items: _smsFlatNoListItems,
-                          value: _smsFlatNoSelectedItem,
-                          onChanged: (value) {
-                            _smsFlatNoSelectedItem = value;
-                            setState(() {
-                              print("value : " + value);
-
-                              for (int i = 0;
-                                  i < broadcastResponse.flatMemberList.length;
-                                  i++) {
-                                if (broadcastResponse.flatMemberList[i].ID ==
-                                    value) {
-                                  _smsAssignFlatList
-                                      .add(broadcastResponse.flatMemberList[i]);
-                                  break;
-                                }
-                              }
-                              print('_mailAssignFlatList : ' +
-                                  _smsAssignFlatList.toString());
-                            });
-                          },
-                          isExpanded: true,
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
-                          ),
-                          underline: SizedBox(),
-                          hint: Text(
-                            AppLocalizations.of(context).translate('flat_no') +
-                                '*',
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray, fontSize: 14),
-                          ),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: AppAssetsImage(
+                          GlobalVariables.whileBGPath,
                         ),
                       ),
-                    )
-                  : SizedBox(),
-              _smsSendToSelectedItem == 'specific flat'
-                  ? Container(
-                      //: MediaQuery.of(context).size.width / 1.1,
-                      child: GridView.count(
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: 1,
-                      shrinkWrap: true,
-                      childAspectRatio:
-                          MediaQuery.of(context).size.width / 100.0,
-                      children: List.generate(
-                        _smsAssignFlatList.length,
-                        (index) {
-                          return Container(
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              decoration: BoxDecoration(
-                                  color: GlobalVariables.green,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: GlobalVariables.transparent,
-                                    width: 3.0,
-                                  )),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  text(
-                                    _smsAssignFlatList[index].BLOCK +
-                                        ' ' +
-                                        _smsAssignFlatList[index].FLAT +
-                                        ' ' +
-                                        _smsAssignFlatList[index].NAME +
-                                        '-' +
-                                        _smsAssignFlatList[index].TYPE,
-                                    textColor: GlobalVariables.white,
-                                    fontWeight: FontWeight.w500,
+                    ),*/
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: (){
+
+                                },
+                                child: Container(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(
+                                            AppLocalizations.of(context).translate('available'),
+                                            textColor: GlobalVariables.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: GlobalVariables.textSizeMedium),
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(smsCredit,
+                                            textColor: GlobalVariables.black,
+                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
                                   ),
-                                  AppIconButton(
-                                    Icons.clear,
-                                    iconColor: GlobalVariables.white,
-                                    onPressed: () {
-                                      _smsAssignFlatList.removeAt(index);
-                                      setState(() {
-                                        print('_mailAssignFlatList : ' +
-                                            _smsAssignFlatList.toString());
-                                      });
-                                    },
-                                  )
-                                ],
-                              ));
-                        },
+                                ),
+                              )
+                          ),
+                          Container(
+                              margin: EdgeInsets.all(5),
+                              //TODO: Divider
+                              height:100,
+                              width: 4,
+                              child: VerticalDivider(
+                                color: GlobalVariables.white,
+                              )),
+                          Flexible(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: (){
+
+                                },
+                                child: Container(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(AppLocalizations.of(context).translate('sent'),
+                                            textColor: GlobalVariables.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: GlobalVariables.textSizeMedium),
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(smsSent,
+                                            textColor: GlobalVariables.black,
+                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ),
+                          Container(
+                              margin: EdgeInsets.all(5),
+                              //TODO: Divider
+                              height:100,
+                              width: 4,
+                              child: VerticalDivider(
+                                color: GlobalVariables.white,
+                              )),
+                          Flexible(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: (){
+
+                                },
+                                child: Container(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(AppLocalizations.of(context).translate('balance'),
+                                            textColor: GlobalVariables.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: GlobalVariables.textSizeMedium),
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(smsBalance,
+                                            textColor: GlobalVariables.black,
+                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ),
+                        ],
                       ),
-                    ))
-                  : SizedBox(),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 2.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: _smsTypesListItems,
-                    value: _smsTypesSelectedItem,
-                    onChanged: (value) {
-                      _smsTypesSelectedItem = value;
-                      setState(() {
-                        print("value : " + value);
-                      });
-                    },
-                    isExpanded: true,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
                     ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('sms_type') + '*',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                    ),
-                  ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                child: text(
-                    AppLocalizations.of(context).translate('template_message') +
-                        '*',
-                    textColor: GlobalVariables.green,
-                    fontSize: GlobalVariables.textSizeMedium,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              getDynamicSmsTypeTemplateLayout(),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 20, 10, 40),
+            padding: EdgeInsets.all(
+                20), // height: MediaQuery.of(context).size.height / 0.5,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white,
+                borderRadius: BorderRadius.circular(20)),
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButton(
+                        items: _smsSendToListItems,
+                        value: _smsSendToSelectedItem,
+                        onChanged: (value) {
+                          _smsSendToSelectedItem = value;
+                          setState(() {
+                            print("value : " + value);
+                          });
+                        },
+                        isExpanded: true,
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: GlobalVariables.mediumGreen,
+                        ),
+                        underline: SizedBox(),
+                        hint: Text(
+                          AppLocalizations.of(context).translate('send_to') + '*',
+                          style: TextStyle(
+                              color: GlobalVariables.lightGray, fontSize: 14),
+                        ),
+                      ),
+                    ),
+                  ),
+                  _smsSendToSelectedItem == 'specific flat'
+                      ? Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: GlobalVariables.mediumGreen,
+                                width: 2.0,
+                              )),
+                          child: ButtonTheme(
+                            child: DropdownButton(
+                              items: _smsFlatNoListItems,
+                              value: _smsFlatNoSelectedItem,
+                              onChanged: (value) {
+                                _smsFlatNoSelectedItem = value;
+                                setState(() {
+                                  print("value : " + value);
+
+                                  for (int i = 0;
+                                      i < broadcastResponse.flatMemberList.length;
+                                      i++) {
+                                    if (broadcastResponse.flatMemberList[i].ID ==
+                                        value) {
+                                      _smsAssignFlatList
+                                          .add(broadcastResponse.flatMemberList[i]);
+                                      break;
+                                    }
+                                  }
+                                  print('_mailAssignFlatList : ' +
+                                      _smsAssignFlatList.toString());
+                                });
+                              },
+                              isExpanded: true,
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: GlobalVariables.mediumGreen,
+                              ),
+                              underline: SizedBox(),
+                              hint: Text(
+                                AppLocalizations.of(context).translate('flat_no') +
+                                    '*',
+                                style: TextStyle(
+                                    color: GlobalVariables.lightGray, fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                  _smsSendToSelectedItem == 'specific flat'
+                      ? Container(
+                          //: MediaQuery.of(context).size.width / 1.1,
+                          child: GridView.count(
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisCount: 1,
+                          shrinkWrap: true,
+                          childAspectRatio:
+                              MediaQuery.of(context).size.width / 100.0,
+                          children: List.generate(
+                            _smsAssignFlatList.length,
+                            (index) {
+                              return Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  decoration: BoxDecoration(
+                                      color: GlobalVariables.green,
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: GlobalVariables.transparent,
+                                        width: 3.0,
+                                      )),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      text(
+                                        _smsAssignFlatList[index].BLOCK +
+                                            ' ' +
+                                            _smsAssignFlatList[index].FLAT +
+                                            ' ' +
+                                            _smsAssignFlatList[index].NAME +
+                                            '-' +
+                                            _smsAssignFlatList[index].TYPE,
+                                        textColor: GlobalVariables.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      AppIconButton(
+                                        Icons.clear,
+                                        iconColor: GlobalVariables.white,
+                                        onPressed: () {
+                                          _smsAssignFlatList.removeAt(index);
+                                          setState(() {
+                                            print('_mailAssignFlatList : ' +
+                                                _smsAssignFlatList.toString());
+                                          });
+                                        },
+                                      )
+                                    ],
+                                  ));
+                            },
+                          ),
+                        ))
+                      : SizedBox(),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButton(
+                        items: _smsTypesListItems,
+                        value: _smsTypesSelectedItem,
+                        onChanged: (value) {
+                          _smsTypesSelectedItem = value;
+                          setState(() {
+                            print("value : " + value);
+                          });
+                        },
+                        isExpanded: true,
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: GlobalVariables.mediumGreen,
+                        ),
+                        underline: SizedBox(),
+                        hint: Text(
+                          AppLocalizations.of(context).translate('sms_type') + '*',
+                          style: TextStyle(
+                              color: GlobalVariables.lightGray, fontSize: 14),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     alignment: Alignment.topLeft,
                     child: text(
-                        AppLocalizations.of(context).translate('note') + ':',
-                        textColor: GlobalVariables.red,
+                        AppLocalizations.of(context).translate('template_message') +
+                            '*',
+                        textColor: GlobalVariables.green,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    width: 4,
+                    height: 16,
                   ),
-                  Flexible(
-                    child: Container(
-                      alignment: Alignment.topLeft,
-                      child: text(
-                          AppLocalizations.of(context)
-                              .translate('sms_note_message'),
-                          textColor: GlobalVariables.red,
-                          fontSize: GlobalVariables.textSizeMedium,
-                          fontWeight: FontWeight.w300),
+                  getDynamicSmsTypeTemplateLayout(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: text(
+                            AppLocalizations.of(context).translate('note') + ':',
+                            textColor: GlobalVariables.red,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Flexible(
+                        child: Container(
+                          alignment: Alignment.topLeft,
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('sms_note_message'),
+                              textColor: GlobalVariables.red,
+                              fontSize: GlobalVariables.textSizeMedium,
+                              fontWeight: FontWeight.w300),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    height: 45,
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: AppButton(
+                      textContent: AppLocalizations.of(context).translate('send'),
+                      onPressed: () {
+                        verifySMSData();
+                      },
                     ),
                   ),
                 ],
               ),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 45,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: AppButton(
-                  textContent: AppLocalizations.of(context).translate('send'),
-                  onPressed: () {
-                    verifySMSData();
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -3006,6 +3152,16 @@ class _BaseBroadcastState extends State<BaseBroadcast>
 
   Future<void> getSocietyName() async {
     societyName = await GlobalFunctions.getSocietyName();
+    smsCredit = await GlobalFunctions.getSMSCredit();
+    Provider.of<UserManagementResponse>(context,listen: false).getUserManagementDashboard().then((value) {
+
+      smsSent = value;
+      smsBalance = (int.parse(smsCredit)-int.parse(smsSent)).toString();
+      setState(() {
+
+      });
+
+    });
   }
 
   void verifySMSData() {

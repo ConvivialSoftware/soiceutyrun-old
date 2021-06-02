@@ -3325,4 +3325,378 @@ class RestAPI implements RestClient,
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
+
+  @override
+  Future<StatusMsgResponse> editUnitDetails(String societyId, String ID, String CONSUMER_NO,
+      String PARKING_SLOT, String AREA, String GSTIN_NO, String BILLING_NAME,String INTERCOM) async {
+    // TODO: implement editUnitDetails
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(ID, GlobalVariables.id);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.id: ID,
+      GlobalVariables.CONSUMER_NO: CONSUMER_NO,
+      GlobalVariables.PARKING_SLOT: PARKING_SLOT,
+      GlobalVariables.AREA: AREA,
+      GlobalVariables.GSTIN_NO: GSTIN_NO,
+      GlobalVariables.BILLING_NAME: BILLING_NAME,
+      GlobalVariables.INTERCOM: INTERCOM,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.id: ID,
+      GlobalVariables.CONSUMER_NO: CONSUMER_NO,
+      GlobalVariables.PARKING_SLOT: PARKING_SLOT,
+      GlobalVariables.AREA: AREA,
+      GlobalVariables.GSTIN_NO: GSTIN_NO,
+      GlobalVariables.BILLING_NAME: BILLING_NAME,
+      GlobalVariables.INTERCOM: INTERCOM,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.editUnitDetailsAPI);
+    final Response _result = await _dio.post(GlobalVariables.editUnitDetailsAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of editUnitDetails : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getUnitDetails(String societyId, String block) async {
+    // TODO: implement getUnitDetails
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+  //  ArgumentError.checkNotNull(block, GlobalVariables.block);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.block: block,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+  //  print(GlobalVariables.block + ": " + block);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.unitDetailsAPI);
+    final Response _result = await _dio.post(GlobalVariables.unitDetailsAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getUnitDetails : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<DataResponse> getUseTypeList(String societyId, String type) async {
+    // TODO: implement getUseTypeList
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(type, GlobalVariables.type);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.type: type,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print(GlobalVariables.type + ": " + type);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.userTypeListAPI);
+    final Response _result = await _dio.post(GlobalVariables.userTypeListAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getUserTypeListAPI : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getUserManagementDashboard(String societyId) async {
+    // TODO: implement getUserManagementDashboard
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.userManagementDashboardAPI);
+    final Response _result = await _dio.post(GlobalVariables.userManagementDashboardAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getUserManagementDashboard : ' + value.toString());
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> addMemberByAdmin(String socId, String block, String flat, String name,
+      String mobile, String Email, String livesHere, String membershipType, String address,
+      String profilePic, String notForModerator,String societyName) async {
+    // TODO: implement addMemberByAdmin
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(block, GlobalVariables.block);
+    ArgumentError.checkNotNull(flat, GlobalVariables.flat);
+    ArgumentError.checkNotNull(name, GlobalVariables.USER_NAME);
+    ArgumentError.checkNotNull(membershipType, GlobalVariables.TYPE);
+    ArgumentError.checkNotNull(livesHere, GlobalVariables.LIVES_HERE);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.NAME: name,
+      GlobalVariables.PHONE: mobile,
+      GlobalVariables.EMAIL: Email,
+      GlobalVariables.LIVES_HERE: livesHere,
+      GlobalVariables.TYPE: membershipType,
+      GlobalVariables.ADDRESS: address,
+      GlobalVariables.note: notForModerator,
+      GlobalVariables.IDENTITY_PROOF: profilePic,
+      GlobalVariables.societyName: societyName,
+    });
+
+    print('baseurl : ' + baseUrl + GlobalVariables.addMemberByAdminAPI);
+
+     print("from data" + {
+       GlobalVariables.societyName: societyName,
+       GlobalVariables.societyId: socId,
+       GlobalVariables.block: block,
+       GlobalVariables.flat: flat,
+       GlobalVariables.NAME: name,
+       GlobalVariables.PHONE: mobile,
+       GlobalVariables.EMAIL: Email,
+       GlobalVariables.LIVES_HERE: livesHere,
+       GlobalVariables.TYPE: membershipType,
+       GlobalVariables.ADDRESS: address,
+       GlobalVariables.note: notForModerator,
+       GlobalVariables.IDENTITY_PROOF: profilePic,
+     }.toString());
+    // print('attachment lengtth : ' + profilePic.length.toString());
+    final Response _result = await _dio.post(GlobalVariables.addMemberByAdminAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addMemberByAdmin : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getBlock(String societyId) async {
+    // TODO: implement getBlock
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    //  print(GlobalVariables.block + ": " + block);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.blockAPI);
+    final Response _result = await _dio.post(GlobalVariables.blockAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getBlock : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<DataResponse> getFlat(String societyId, String block) async {
+    // TODO: implement getFlat
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(block, GlobalVariables.block);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.block: block,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+      print({
+        GlobalVariables.societyId: societyId,
+        GlobalVariables.block: block,
+      }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.flatAPI);
+    final Response _result = await _dio.post(GlobalVariables.flatAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getFlat : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<DataResponse> getSMSData(String societyId) async {
+    // TODO: implement getSMSData
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print('baseurl : ' + baseUrl + GlobalVariables.smsDataAPI);
+    final Response _result = await _dio.post(GlobalVariables.smsDataAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of smsData : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<DataResponse> getMoveOutRequest(String societyId) async {
+    // TODO: implement getMoveOutRequest
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print('baseurl : ' + baseUrl + GlobalVariables.moveOutRequestAPI);
+    final Response _result = await _dio.post(GlobalVariables.moveOutRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getMoveOutRequest : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<DataResponse> getPendingRequest(String societyId) async {
+    // TODO: implement getPendingRequest
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print('baseurl : ' + baseUrl + GlobalVariables.pendingRequestAPI);
+    final Response _result = await _dio.post(GlobalVariables.pendingRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getPendingRequest : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<DataResponse> getRentalRequest(String societyId) async {
+    // TODO: implement getRentalRequest
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+    print('baseurl : ' + baseUrl + GlobalVariables.rentalRequestAPI);
+    final Response _result = await _dio.post(GlobalVariables.rentalRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getRentalRequest : ' + value.toString());
+    return DataResponse.fromJsonUnitDetails(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> getSendInvite(String societyId, String societyName, List<String> user_id) async {
+    // TODO: implement getSendInvite
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+     "user_id": user_id,
+      GlobalVariables.societyName: societyName,
+    });
+
+    print("data: " +
+        {
+          GlobalVariables.societyId: societyId,
+          "user_id": user_id,
+          GlobalVariables.societyName: societyName,
+        }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.sendInviteAPI);
+    final Response _result = await _dio.post(
+      GlobalVariables.sendInviteAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl, data: formData),
+    );
+    final value = _result.data;
+    print('value of getSendInvite : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> approvePendingRequest(String societyId, String societyName, String id) async {
+    // TODO: implement approvePendingRequest
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      "id": id,
+      GlobalVariables.societyName: societyName,
+    });
+
+    print("data: " +
+        {
+          GlobalVariables.societyId: societyId,
+          "id": id,
+          GlobalVariables.societyName: societyName,
+        }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.approvePendingRequestAPI);
+    final Response _result = await _dio.post(
+      GlobalVariables.approvePendingRequestAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl, data: formData),
+    );
+    final value = _result.data;
+    print('value of getSendInvite : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
 }

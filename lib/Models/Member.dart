@@ -38,7 +38,7 @@ class Member {
         BLOCK: json['BLOCK'],
         FLAT: json['FLAT'],
         EMAIL: json['EMAIL'],
-        Phone: json['Phone'],
+        Phone: json['Phone']?? '',
         PROFILE_PHOTO: json['PROFILE_PHOTO']);
   }
 }

@@ -120,10 +120,10 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                             SizedBox(
                               width: 4,
                             ),
-                            AppIcon(
-                              AppLocalizations.of(context).translate('my_ads'),
-                              iconColor: GlobalVariables.white,
-                                  iconSize: GlobalVariables.textSizeSMedium),
+                            text(
+                              AppLocalizations.of(context).translate('my_ads'),)
+                             // iconColor: GlobalVariables.white,
+                               //   iconSize: GlobalVariables.textSizeSMedium),
                           ],
                         ),
                       ),
@@ -365,7 +365,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                     children: [
                                       AppIcon(
                                         Icons.location_on,
-                                        iconSize: 20,
+                                        iconSize: 20.0,
                                         iconColor: GlobalVariables.lightGray,
                                       ),
                                       SizedBox(width: 2),
@@ -422,7 +422,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                                                 margin: EdgeInsets.only(top: 3),
                                                 child: AppIcon(
                                                   Icons.access_time,
-                                                  iconSize: 15,
+                                                  iconSize: 15.0,
                                                   iconColor: GlobalVariables.lightGray,
                                                 )),
                                             SizedBox(

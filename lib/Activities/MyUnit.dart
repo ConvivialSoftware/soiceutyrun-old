@@ -31,11 +31,12 @@ import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/Documents.dart';
 import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/Member.dart';
-import 'package:societyrun/Models/MyUnitResponse.dart';
+//import 'package:societyrun/Models/MyUnitResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Models/PayOption.dart';
 import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/Staff.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -205,9 +206,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       redirectToPage(pageName);
     }
     // TODO: implement build
-    return ChangeNotifierProvider<MyUnitResponse>.value(
+    return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of(context),
-      child: Consumer<MyUnitResponse>(
+      child: Consumer<UserManagementResponse>(
         builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
@@ -250,7 +251,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  getListItemLayout(var position, MyUnitResponse value) {
+  getListItemLayout(var position, UserManagementResponse value) {
     return Column(
       children: <Widget>[
         Container(
@@ -323,7 +324,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  getPendingListItemLayout(var position, MyUnitResponse value) {
+  getPendingListItemLayout(var position, UserManagementResponse value) {
     return Column(
       children: <Widget>[
         Container(
@@ -537,7 +538,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  getMyDuesLayout(MyUnitResponse value) {
+  getMyDuesLayout(UserManagementResponse value) {
     print('getMyDuesLayout Tab call');
     return GlobalVariables.isERPAccount
         ? SingleChildScrollView(
@@ -745,7 +746,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         : getNoERPAccountLayout();
   }
 
-  getMyHouseholdLayout(MyUnitResponse value) {
+  getMyHouseholdLayout(UserManagementResponse value) {
     print('MyHouseHold Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -790,7 +791,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                           BaseAddNewMember("family")));
                               print('result back : ' + result.toString());
                               if (result != 'back') {
-                                Provider.of<MyUnitResponse>(context,listen: false).getUnitMemberData();
+                                Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
                               }
                             },
                             child: Text(
@@ -838,6 +839,83 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                     ),
+
+
+              Container(
+                alignment: Alignment.topLeft, //color: GlobalVariables.white,
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        AppLocalizations.of(context).translate('my_tenant'),
+                        style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                        child: RaisedButton(
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BaseAddNewMember("family")));
+                            print('result back : ' + result.toString());
+                            if (result != 'back') {
+                              Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('plus_add'),
+                            style: TextStyle(
+                                color: GlobalVariables.white, fontSize: 12),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: GlobalVariables.green)),
+                          textColor: GlobalVariables.white,
+                          color: GlobalVariables.green,
+                        )),
+                  ],
+                ),
+              ),
+              value.tenantList.length > 0
+                  ? Container(
+                //padding: EdgeInsets.all(10),
+                margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                width: 600,
+                height: 190,
+                child: Builder(
+                    builder: (context) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: value.tenantList.length,
+                      itemBuilder: (context, position) {
+                        return getContactListItemLayout(
+                            value.tenantList, position, true);
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+              )
+                  : Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate('add_tenant_details'),
+                  style: TextStyle(
+                    color: GlobalVariables.grey,
+                  ),
+                ),
+              ),
+
+
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -934,7 +1012,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       builder: (context) => BaseAddVehicle()));
                               print('result back : ' + result.toString());
                               if (result != 'back') {
-                                Provider.of<MyUnitResponse>(context,listen: false).getUnitMemberData();
+                                Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
                               }
                             },
                             child: Text(
@@ -979,6 +1057,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   )),
                         )
                       : Container(
+                    alignment: Alignment.topLeft,
                           padding: EdgeInsets.all(20),
                           child: Text(
                             AppLocalizations.of(context)
@@ -1156,7 +1235,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   builder: (context) =>
                       BaseDisplayProfileInfo(userId, userType)));
           if (result == 'back') {
-            Provider.of<MyUnitResponse>(context,listen: false).getUnitMemberData();
+            Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
           }
         } else {
           print('_list[position] : ' + _list[position].toString());
@@ -1165,7 +1244,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               MaterialPageRoute(
                   builder: (context) => BaseStaffDetails(_list[position])));
           if (result == 'back') {
-            Provider.of<MyUnitResponse>(context,listen: false).getUnitMemberData();
+            Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
           }
         }
       },
@@ -1333,7 +1412,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   builder: (context) =>
                                       BaseEditProfileInfo(userId, societyId)));
                           if (result == 'profile') {
-                            Provider.of<MyUnitResponse>(context,listen: false).getUnitMemberData();
+                            Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
                           }
                         },
                         child: Container(
@@ -1358,6 +1437,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   Future<void> getSharedPreferenceData() async {
+    societyId = await GlobalFunctions.getSocietyId();
     userId = await GlobalFunctions.getUserId();
     name = await GlobalFunctions.getDisplayName();
     photo = await GlobalFunctions.getPhoto();
@@ -1368,6 +1448,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
 
+    print('societyId : ' + societyId);
     print('UserId : ' + userId);
     print('Name : ' + name);
     print('Photo : ' + photo);
@@ -1422,7 +1503,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
   }
 
-  getBillListItemLayout(int position, BuildContext context, MyUnitResponse value) {
+  getBillListItemLayout(int position, BuildContext context, UserManagementResponse value) {
     return Align(
       alignment: Alignment.center,
       child: Container(
@@ -1742,7 +1823,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         value.billList[position].INVOICE_NO,
                                         value.billList[position].AMOUNT)));
                             if (result == 'back') {
-                              Provider.of<MyUnitResponse>(context,listen: false).getAllBillData();
+                              Provider.of<UserManagementResponse>(context,listen: false).getAllBillData();
                             }
                           },
                           child: Container(
@@ -1805,7 +1886,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
   }
 
-  getVehicleRecentTransactionListItemLayout(int position, MyUnitResponse value) {
+  getVehicleRecentTransactionListItemLayout(int position, UserManagementResponse value) {
     return Container(
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -1881,7 +1962,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  deleteVehicleLayout(int position, MyUnitResponse value) {
+  deleteVehicleLayout(int position, UserManagementResponse value) {
     return Container(
       padding: EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width / 1.3,
@@ -2042,12 +2123,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   void openCheckOut(
-      int position, String razorKey, String orderId, String amount, MyUnitResponse myUnitResponse) {
+      int position, String razorKey, String orderId, String amount, UserManagementResponse UserManagementResponse) {
     //amount = value.billList[position].AMOUNT;
-    invoiceNo = myUnitResponse.billList[position].INVOICE_NO;
-    billType = myUnitResponse.billList[position].TYPE == 'Bill'
+    invoiceNo = UserManagementResponse.billList[position].INVOICE_NO;
+    billType = UserManagementResponse.billList[position].TYPE == 'Bill'
         ? 'Maintenance Bill'
-        : myUnitResponse.billList[position].TYPE;
+        : UserManagementResponse.billList[position].TYPE;
     print('amount : ' + amount.toString());
     print('RazorKey : ' + razorKey.toString());
 
@@ -2098,7 +2179,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   getListOfPaymentGateway(
-      BuildContext context, StateSetter setState, int position, MyUnitResponse value) {
+      BuildContext context, StateSetter setState, int position, UserManagementResponse value) {
     // GlobalFunctions.showToast(_selectedPaymentGateway.toString());
 
     print('NoLessPermission : '+
@@ -2559,7 +2640,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  void redirectToPaymentGateway(int position, String textAmount, MyUnitResponse value) {
+  void redirectToPaymentGateway(int position, String textAmount, UserManagementResponse value) {
     if (_selectedPaymentGateway == 'PayTM') {
       //Navigator.of(context).pop();
 
@@ -2579,7 +2660,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
   }
 
-  displaySocietyRunDisclaimer(MyUnitResponse value) {
+  displaySocietyRunDisclaimer(UserManagementResponse value) {
     return Container(
       padding: EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width / 1.3,
@@ -2659,7 +2740,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     );
   }
 
-  displayConsumerId(MyUnitResponse myUnitResponse) {
+  displayConsumerId(UserManagementResponse UserManagementResponse) {
     return Container(
       width: MediaQuery.of(context).size.width / 2,
       padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
@@ -2689,7 +2770,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ClipboardManager.copyToClipBoard(consumerId)
                           .then((value) {
                         GlobalFunctions.showToast("Copied to Clipboard");
-                        launch(myUnitResponse.payOptionList[0].PAYTM_URL);
+                        launch(UserManagementResponse.payOptionList[0].PAYTM_URL);
                       });
                     }),
                 Container(
@@ -2727,7 +2808,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             {
               if (!isDuesTabAPICall) {
                 if (GlobalVariables.isERPAccount) {
-                  Provider.of<MyUnitResponse>(context,listen: false)
+                  Provider.of<UserManagementResponse>(context,listen: false)
                       .getPayOption()
                       .then((payOptionList) {
                     if (payOptionList.length > 0) {
@@ -2755,7 +2836,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           case 1:
             {
               if (!isHouseholdTabAPICall) {
-                Provider.of<MyUnitResponse>(context,listen: false)
+                Provider.of<UserManagementResponse>(context,listen: false)
                     .getUnitMemberData()
                     .then((value) {});
               }
@@ -2801,7 +2882,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     });
   }
 
-  void emailBillDialog(BuildContext context, int position, MyUnitResponse value) {
+  void emailBillDialog(BuildContext context, int position, UserManagementResponse value) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
@@ -3140,12 +3221,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
   }
 
   void getRazorPayOrderID(
-      int position, String razorKey, String secret_key, double textAmount, MyUnitResponse myUnitResponse) {
+      int position, String razorKey, String secret_key, double textAmount, UserManagementResponse UserManagementResponse) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
         RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
     amount = textAmount * 100;
-    invoiceNo = myUnitResponse.billList[position].INVOICE_NO;
+    invoiceNo = UserManagementResponse.billList[position].INVOICE_NO;
     _progressDialog.show();
     RazorPayOrderRequest request = new RazorPayOrderRequest(
         amount: amount,
@@ -3159,12 +3240,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       orderId = value['id'];
       print('id : ' + orderId);
       postRazorPayTransactionOrderID(
-          value['id'], value['amount'].toString(), position,myUnitResponse);
+          value['id'], value['amount'].toString(), position,UserManagementResponse);
     });
   }
 
   Future<void> postRazorPayTransactionOrderID(
-      String orderId, String amount, int position, MyUnitResponse myUnitResponse) async {
+      String orderId, String amount, int position, UserManagementResponse UserManagementResponse) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -3187,14 +3268,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
         _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-        openCheckOut(position, myUnitResponse.payOptionList[0].KEY_ID, orderId, amount,myUnitResponse);
+        openCheckOut(position, UserManagementResponse.payOptionList[0].KEY_ID, orderId, amount,UserManagementResponse);
       } else {
         GlobalFunctions.showToast(value.message);
       }
     });
   }
 
-  String getBillPaymentStatus(int position, MyUnitResponse value) {
+  String getBillPaymentStatus(int position, UserManagementResponse value) {
     String status = '';
 
     final DateTime now = DateTime.now();
@@ -3217,7 +3298,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     return status;
   }
 
-  getBillPaymentStatusColor(int position, MyUnitResponse value) {
+  getBillPaymentStatusColor(int position, UserManagementResponse value) {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
@@ -3237,23 +3318,23 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     }
   }
 
-  Future<void> deleteVehicle(int position, MyUnitResponse myUnitResponse) async {
+  Future<void> deleteVehicle(int position, UserManagementResponse UserManagementResponse) async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
-    String id = myUnitResponse.vehicleList[position].ID;
+    String id = UserManagementResponse.vehicleList[position].ID;
     _progressDialog.show();
     restClient.deleteVehicle(id, societyId).then((value) {
       _progressDialog.hide();
       if (value.status) {
-        myUnitResponse.vehicleList.removeAt(position);
+        UserManagementResponse.vehicleList.removeAt(position);
         setState(() {});
       }
       GlobalFunctions.showToast(value.message);
     });
   }
 
-  void alreadyPaidDialog(int position, MyUnitResponse value) {
+  void alreadyPaidDialog(int position, UserManagementResponse value) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(

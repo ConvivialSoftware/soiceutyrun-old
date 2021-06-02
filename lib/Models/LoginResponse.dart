@@ -161,6 +161,7 @@ class LoginResponse {
   String google_parameter;
   String User_Status;
   String LoggedUsername;
+  String SMS_CREDIT;
 
   LoginResponse(
       {this.ID,
@@ -192,7 +193,9 @@ class LoginResponse {
       this.Staff_QR_Image,
       this.google_parameter,
       this.User_Status,
-      this.LoggedUsername});
+      this.LoggedUsername,
+      this.SMS_CREDIT,
+      });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
@@ -225,6 +228,8 @@ class LoginResponse {
         Staff_QR_Image: json["Staff_QR_Image"],
         google_parameter: json["google_parameter"],
         User_Status: json["User_Status"],
-        LoggedUsername: json["LoggedUsername"] ?? "");
+        LoggedUsername: json["LoggedUsername"] ?? "",
+        SMS_CREDIT: json["SMS_CREDIT"] ?? "0"
+    );
   }
 }

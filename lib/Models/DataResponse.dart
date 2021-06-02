@@ -7,6 +7,7 @@ class DataResponse {
   List<dynamic> bank;
   List<dynamic> category;
   List<dynamic> Year;
+  List<dynamic> unit;
   String message;
   String android_version;
   String android_type;
@@ -14,7 +15,7 @@ class DataResponse {
   String ios_type;
   bool status;
 
-  DataResponse({this.data, this.message, this.status,this.android_version,this.android_type,this.ios_version,this.ios_type,this.front,this.bank,this.category,this.Year});
+  DataResponse({this.data, this.message, this.status,this.android_version,this.android_type,this.ios_version,this.ios_type,this.front,this.bank,this.category,this.Year, this.unit});
 
 
   factory DataResponse.fromJson(Map<String, dynamic> map){
@@ -69,6 +70,18 @@ class DataResponse {
     return DataResponse(
         data: map[GlobalVariables.DATA],
         category : map[GlobalVariables.category],
+        status: map[GlobalVariables.STATUS],
+        message: map[GlobalVariables.MESSAGE]
+    );
+
+  }
+
+
+  factory DataResponse.fromJsonUnitDetails(Map<String, dynamic> map){
+
+    return DataResponse(
+        data: map[GlobalVariables.DATA],
+        unit : map[GlobalVariables.unit],
         status: map[GlobalVariables.STATUS],
         message: map[GlobalVariables.MESSAGE]
     );

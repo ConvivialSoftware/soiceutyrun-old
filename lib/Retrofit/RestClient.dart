@@ -422,6 +422,94 @@ abstract class RestClient {
       @Field("time_type") String time_type,
       @Field(GlobalVariables.societyName) String societyName,);
 
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.userManagementDashboardAPI)
+  Future<DataResponse> getUserManagementDashboard(@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.userTypeListAPI)
+  Future<DataResponse> getUseTypeList(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.type) String type,
+      );
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.unitDetailsAPI)
+  Future<DataResponse> getUnitDetails(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.block) String block,
+      );
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.editUnitDetailsAPI)
+  Future<StatusMsgResponse> editUnitDetails(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.id) String ID,
+      @Field(GlobalVariables.CONSUMER_NO) String CONSUMER_NO,
+      @Field(GlobalVariables.PARKING_SLOT) String PARKING_SLOT,
+      @Field(GlobalVariables.AREA) String AREA,
+      @Field(GlobalVariables.GSTIN_NO) String GSTIN_NO,
+      @Field(GlobalVariables.BILLING_NAME) String BILLING_NAME,
+      @Field(GlobalVariables.INTERCOM) String INTERCOM,
+      );
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.addMemberByAdminAPI)
+  Future<StatusMsgResponse> addMemberByAdmin(@Field(GlobalVariables.societyId) String socId,
+      @Field(GlobalVariables.block) String block, @Field(GlobalVariables.flat) String flat ,
+      @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.PHONE) String mobile,
+      @Field(GlobalVariables.Email) String Email, @Field(GlobalVariables.LIVES_HERE) String livesHere,
+      @Field(GlobalVariables.TYPE) String membershipType, @Field(GlobalVariables.ADDRESS) String additionalInfo,
+      @Field(GlobalVariables.IDENTITY_PROOF) String profilePic,
+      @Field(GlobalVariables.note) String notForModerator,
+      @Field(GlobalVariables.societyName) String societyName
+      );
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.blockAPI)
+  Future<DataResponse> getBlock(@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.flatAPI)
+  Future<DataResponse> getFlat(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.block) String block,
+      );
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.smsDataAPI)
+  Future<DataResponse> getSMSData(@Field(GlobalVariables.societyId) String societyId);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.rentalRequestAPI)
+  Future<DataResponse> getRentalRequest(@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.pendingRequestAPI)
+  Future<DataResponse> getPendingRequest(@Field(GlobalVariables.societyId) String societyId);
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.moveOutRequestAPI)
+  Future<DataResponse> getMoveOutRequest(@Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.sendInviteAPI)
+  Future<StatusMsgResponse> getSendInvite(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.societyName) String societyName,
+      @Field("user_id[]") List<String> user_id,);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.approvePendingRequestAPI)
+  Future<StatusMsgResponse> approvePendingRequest(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.societyName) String societyName,
+      @Field("id") String id,);
+
 }
 
 

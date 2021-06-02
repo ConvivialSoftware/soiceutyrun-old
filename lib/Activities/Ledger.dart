@@ -12,8 +12,9 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
-import 'package:societyrun/Models/MyUnitResponse.dart';
+//import 'package:societyrun/Models/MyUnitResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -55,9 +56,9 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
-    return ChangeNotifierProvider<MyUnitResponse>.value(
-      value: Provider.of<MyUnitResponse>(context),
-      child: Consumer<MyUnitResponse>(builder: (context, value, child) {
+    return ChangeNotifierProvider<UserManagementResponse>.value(
+      value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
             appBar: AppBar(
@@ -85,7 +86,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }
 
-  getBaseLayout(MyUnitResponse value) {
+  getBaseLayout(UserManagementResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height,
@@ -255,7 +256,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }
 
-  getRecentTransactionLayout(MyUnitResponse value) {
+  getRecentTransactionLayout(UserManagementResponse value) {
     return SingleChildScrollView(
       child: Container(
         // padding: EdgeInsets.all(5),
@@ -336,7 +337,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
     );
   }
 
-  getDateTransactionItemLayout(int position, MyUnitResponse value) {
+  getDateTransactionItemLayout(int position, UserManagementResponse value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -480,24 +481,24 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
   }*/
 
   getLedgerData(var year) async {
-    Provider.of<MyUnitResponse>(context, listen: false)
+    Provider.of<UserManagementResponse>(context, listen: false)
         .getLedgerData(year)
         .then((value) {
       _yearListItems = new List<DropdownMenuItem<String>>();
-      if (MyUnitResponse.listYear.length > 0) {
-        for (int i = 0; i < MyUnitResponse.listYear.length; i++) {
+      if (UserManagementResponse.listYear.length > 0) {
+        for (int i = 0; i < UserManagementResponse.listYear.length; i++) {
           print('_listYear : ' +
-              MyUnitResponse.listYear[i].Active_account.toString());
-          print('_listYear : ' + MyUnitResponse.listYear[i].years.toString());
-          if (MyUnitResponse.listYear[i].Active_account
+              UserManagementResponse.listYear[i].Active_account.toString());
+          print('_listYear : ' + UserManagementResponse.listYear[i].years.toString());
+          if (UserManagementResponse.listYear[i].Active_account
                   .toString()
                   .toLowerCase() ==
               'yes') {
             if (_yearListItems.length == 0) {
               _yearListItems.add(DropdownMenuItem(
-                value: MyUnitResponse.listYear[i].years,
+                value: UserManagementResponse.listYear[i].years,
                 child: text(
-                  MyUnitResponse.listYear[i].years,
+                  UserManagementResponse.listYear[i].years,
                   textColor: GlobalVariables.green,
                 ),
               ));
@@ -506,29 +507,29 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
               _yearListItems.insert(
                   0,
                   DropdownMenuItem(
-                    value: MyUnitResponse.listYear[i].years,
+                    value: UserManagementResponse.listYear[i].years,
                     child: text(
-                      MyUnitResponse.listYear[i].years,
+                      UserManagementResponse.listYear[i].years,
                       textColor: GlobalVariables.green,
                     ),
                   ));
               if (_yearSelectedItem == null) {
-                _yearSelectedItem = MyUnitResponse.listYear[i].years;
+                _yearSelectedItem = UserManagementResponse.listYear[i].years;
                 print('_yearSelectedItem : ' + _yearSelectedItem);
               }
             }
           } else {
             _yearListItems.add(DropdownMenuItem(
-              value: MyUnitResponse.listYear[i].years,
+              value: UserManagementResponse.listYear[i].years,
               child: text(
-                MyUnitResponse.listYear[i].years,
+                UserManagementResponse.listYear[i].years,
                 textColor: GlobalVariables.green,
               ),
             ));
           }
         }
         if (_yearSelectedItem == null) {
-          _yearSelectedItem = MyUnitResponse.listYear[0].years;
+          _yearSelectedItem = UserManagementResponse.listYear[0].years;
         }
       }
     });

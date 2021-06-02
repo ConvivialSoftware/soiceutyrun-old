@@ -1,0 +1,1262 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:societyrun/Activities/AboutSocietyRun.dart';
+import 'package:societyrun/Activities/AddNewMember.dart';
+import 'package:societyrun/Activities/AddVehicle.dart';
+import 'package:societyrun/Activities/AppNotificationSettings.dart';
+import 'package:societyrun/Activities/ChangePassword.dart';
+import 'package:societyrun/Activities/DisplayProfileInfo.dart';
+import 'package:societyrun/Activities/EditProfileInfo.dart';
+import 'package:societyrun/Activities/Feedback.dart';
+import 'package:societyrun/Activities/LoginPage.dart';
+import 'package:societyrun/Activities/StaffCategory.dart';
+import 'package:societyrun/Activities/StaffDetails.dart';
+import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class BaseUnitUserDetails extends StatefulWidget {
+  String block, flat;
+
+  BaseUnitUserDetails(this.block, this.flat);
+
+  @override
+  _BaseUnitUserDetailsState createState() => _BaseUnitUserDetailsState();
+}
+
+class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
+  TextEditingController billerNameTextController = TextEditingController();
+  TextEditingController areaTextController = TextEditingController();
+  TextEditingController intercomTextController = TextEditingController();
+  TextEditingController gstinNoTextController = TextEditingController();
+  TextEditingController parkingSlotTextController = TextEditingController();
+
+  List<DropdownMenuItem<String>> _unitRoleListItems =
+      new List<DropdownMenuItem<String>>();
+
+  String _unitRoleSelectedItem, societyId;
+
+  ProgressDialog _progressDialog;
+
+  @override
+  void initState() {
+    super.initState();
+    getUnitRole();
+    _unitRoleSelectedItem = 'Owned';
+
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getOneUnitDetailsMemberData(widget.block, widget.flat)
+        .then((value) {
+      billerNameTextController.text = value[0].BILLING_NAME;
+      areaTextController.text = value[0].AREA;
+      //intercomTextController.text = '0';
+      gstinNoTextController.text = value[0].GSTIN_NO;
+      parkingSlotTextController.text = value[0].PARKING_SLOT;
+      intercomTextController.text = value[0].INTERCOM;
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    return ChangeNotifierProvider<UserManagementResponse>.value(
+      value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context, value, child) {
+        return Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              elevation: 0,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: AppIcon(
+                  Icons.arrow_back,
+                  iconColor: GlobalVariables.white,
+                ),
+              ),
+              title: text(widget.block + ' ' + widget.flat,
+                  textColor: GlobalVariables.white,
+                  fontSize: GlobalVariables.textSizeMedium),
+            ),
+            body: getBaseLayout(value),
+          ),
+        );
+      }),
+    );
+  }
+
+  getBaseLayout(UserManagementResponse userManagementResponse) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      //height: double.maxFinite,
+      //height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: GlobalVariables.veryLightGray,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Flexible(
+            child: Stack(
+              children: <Widget>[
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0),
+                userManagementResponse.isLoading
+                    ? GlobalFunctions.loadingWidget(context)
+                    : getUnitUserDetailsLayout(userManagementResponse),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  getUnitUserDetailsLayout(UserManagementResponse userManagementResponse) {
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: [
+            profileLayout(userManagementResponse),
+            //getUnitUserList(),
+            getMyHouseholdLayout(userManagementResponse),
+          ],
+        ),
+      ),
+    );
+  }
+
+  profileLayout(UserManagementResponse userManagementResponse) {
+    return InkWell(
+      onTap: () {},
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          // height: double.infinity,
+          // color: GlobalVariables.black,
+          //width: MediaQuery.of(context).size.width / 1.2,
+          margin: EdgeInsets.fromLTRB(
+              0,
+              MediaQuery.of(context).size.height / 30,
+              0,
+              0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Card(
+            shape: (RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0))),
+            elevation: 2.0,
+            //  shadowColor: GlobalVariables.green.withOpacity(0.3),
+            margin: EdgeInsets.all(20),
+            color: GlobalVariables.white,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: AppAssetsImage(
+                      GlobalVariables.whileBGPath,
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                          padding: EdgeInsets.all(20),
+                          // alignment: Alignment.center,
+                          /* decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25)),*/
+                          child: AppAssetsImage(
+                            GlobalVariables.shopIconPath,
+                            imageWidth: 60.0,
+                            imageHeight: 60.0,
+                            borderColor: GlobalVariables.transparent,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 0.0,
+                          )),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                          alignment: Alignment.topLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                                .translate('biller_name') +
+                                            ' : ',
+                                        textColor: GlobalVariables.green,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    child: text(
+                                      userManagementResponse
+                                          .oneUnitDetailsList[0].BILLING_NAME,
+                                      textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                                .translate('area') +
+                                            ' : ',
+                                        textColor: GlobalVariables.green,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    child: text(
+                                      userManagementResponse
+                                          .oneUnitDetailsList[0].AREA,
+                                      textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                            .translate('consumer_no'),
+                                        textColor: GlobalVariables.green,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    child: text(
+                                      userManagementResponse
+                                          .oneUnitDetailsList[0].CONSUMER_NO,
+                                      textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                                .translate('gstin') +
+                                            ' : ',
+                                        textColor: GlobalVariables.green,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    child: text(
+                                      userManagementResponse
+                                          .oneUnitDetailsList[0].GSTIN_NO,
+                                      textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: IconButton(
+                            icon: AppIcon(
+                              Icons.edit,
+                              iconColor: GlobalVariables.green,
+                              iconSize: GlobalVariables.textSizeLarge,
+                            ),
+                            onPressed: () {
+                              showEditUnitDetailsLayout(userManagementResponse);
+                            }),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /* getUnitUserList() {
+    return Container(
+      //padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Builder(
+          builder: (context) => ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+                //scrollDirection: Axis.vertical,
+                itemCount: unitMemberList.length,
+                itemBuilder: (context, position) {
+                  return getUnitUserListItemLayout(position);
+                }, //  scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              )),
+    );
+  }
+
+  getUnitUserListItemLayout(int position) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.1,
+      margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: GlobalVariables.white),
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            child: text(unitMemberList[position].NAME,
+                textColor: GlobalVariables.green),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: text(unitMemberList[position].TYPE,
+                textColor: GlobalVariables.black,
+                fontSize: GlobalVariables.textSizeSMedium),
+          ),
+        ],
+      ),
+    );
+  }*/
+
+  getMyHouseholdLayout(UserManagementResponse value) {
+    print('MyHouseHold Tab Call');
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      //height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        color: GlobalVariables.veryLightGray,
+      ),
+      child: Column(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.topLeft, //color: GlobalVariables.white,
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        AppLocalizations.of(context).translate('my_family'),
+                        style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                   /* AppPermission.isUserAddMemberPermission
+                        ?*/ Container(
+                            child: RaisedButton(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BaseAddNewMember("family")));
+                              print('result back : ' + result.toString());
+                              if (result != 'back') {
+                                Provider.of<UserManagementResponse>(context,
+                                        listen: false)
+                                    .getUnitMemberData();
+                              }
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('plus_add'),
+                              style: TextStyle(
+                                  color: GlobalVariables.white, fontSize: 12),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(color: GlobalVariables.green)),
+                            textColor: GlobalVariables.white,
+                            color: GlobalVariables.green,
+                          ))
+                       // : Container(),
+                  ],
+                ),
+              ),
+              value.memberList.length > 0
+                  ? Container(
+                      //padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                      width: 600,
+                      height: 190,
+                      child: Builder(
+                          builder: (context) => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: value.memberList.length,
+                                itemBuilder: (context, position) {
+                                  return getContactListItemLayout(
+                                      value.memberList, position, true);
+                                },
+                                //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                    )
+                  : Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('add_family_details'),
+                        style: TextStyle(
+                          color: GlobalVariables.grey,
+                        ),
+                      ),
+                    ),
+              Container(
+                alignment: Alignment.topLeft, //color: GlobalVariables.white,
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        AppLocalizations.of(context).translate('my_tenant'),
+                        style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                        child: RaisedButton(
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BaseAddNewMember("family")));
+                        print('result back : ' + result.toString());
+                        if (result != 'back') {
+                          Provider.of<UserManagementResponse>(context,
+                                  listen: false)
+                              .getUnitMemberData();
+                        }
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('plus_add'),
+                        style: TextStyle(
+                            color: GlobalVariables.white, fontSize: 12),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: GlobalVariables.green)),
+                      textColor: GlobalVariables.white,
+                      color: GlobalVariables.green,
+                    )),
+                  ],
+                ),
+              ),
+              value.tenantList.length > 0
+                  ? Container(
+                      //padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                      width: 600,
+                      height: 190,
+                      child: Builder(
+                          builder: (context) => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: value.tenantList.length,
+                                itemBuilder: (context, position) {
+                                  return getContactListItemLayout(
+                                      value.tenantList, position, true);
+                                },
+                                //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                    )
+                  : Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('add_tenant_details'),
+                        style: TextStyle(
+                          color: GlobalVariables.grey,
+                        ),
+                      ),
+                    ),
+              Container(
+                alignment: Alignment.topLeft, //color: GlobalVariables.white,
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        AppLocalizations.of(context).translate('my_staff'),
+                        style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: true,
+                      child: Container(
+                          child: RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BaseStaffCategory(false)));
+                        },
+                        child: Text(
+                          AppLocalizations.of(context).translate('plus_add'),
+                          style: TextStyle(
+                              color: GlobalVariables.white, fontSize: 12),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: GlobalVariables.green)),
+                        textColor: GlobalVariables.white,
+                        color: GlobalVariables.green,
+                      )),
+                    ),
+                  ],
+                ),
+              ),
+              value.staffList.length > 0
+                  ? Container(
+                      //padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                      width: 600,
+                      height: 190,
+                      child: Builder(
+                          builder: (context) => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: value.staffList.length,
+                                itemBuilder: (context, position) {
+                                  return getContactListItemLayout(
+                                      value.staffList, position, false);
+                                },
+                                //  scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                              )),
+                    )
+                  : Container(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('add_staff_details'),
+                        style: TextStyle(
+                          color: GlobalVariables.grey,
+                        ),
+                      ),
+                    ),
+              Container(
+                alignment: Alignment.topLeft, //color: GlobalVariables.white,
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        AppLocalizations.of(context).translate('my_vehicle'),
+                        style: TextStyle(
+                          color: GlobalVariables.green,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    /*AppPermission.isSocAddVehiclePermission
+                        ? */Container(
+                            child: RaisedButton(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseAddVehicle()));
+                              print('result back : ' + result.toString());
+                              if (result != 'back') {
+                                Provider.of<UserManagementResponse>(context,
+                                        listen: false)
+                                    .getUnitMemberData();
+                              }
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('plus_add'),
+                              style: TextStyle(
+                                  color: GlobalVariables.white, fontSize: 12),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(color: GlobalVariables.green)),
+                            textColor: GlobalVariables.white,
+                            color: GlobalVariables.green,
+                          ))
+                       // : Container(),
+                  ],
+                ),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  value.vehicleList.length > 0
+                      ? Container(
+                          //height: 500,
+                          //padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Builder(
+                              builder: (context) => ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    // scrollDirection: Axis.horizontal,
+                                    itemCount: value.vehicleList.length,
+                                    itemBuilder: (context, position) {
+                                      return getVehicleRecentTransactionListItemLayout(
+                                          position, value);
+                                    },
+                                    //  scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                  )),
+                        )
+                      : Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.all(20),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('add_vehicle_details'),
+                            style: TextStyle(
+                              color: GlobalVariables.grey,
+                            ),
+                          ),
+                        ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  getContactListItemLayout(var _list, int position, bool family) {
+    var call = '', email = '', userId, userType;
+    if (family) {
+      call = _list[position].Phone.toString();
+      userId = _list[position].ID.toString();
+      userType = _list[position].TYPE.toString();
+      //    email = _list[position].EMAIL.toString();
+    } else {
+      call = _list[position].CONTACT.toString();
+      userId = _list[position].SID.toString();
+    }
+    if (call == 'null') {
+      call = '';
+    }
+
+    return InkWell(
+      onTap: () async {
+        print('userId : ' + userId);
+
+        if (family) {
+          var result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BaseDisplayProfileInfo(userId, userType)));
+          if (result == 'back') {
+            Provider.of<UserManagementResponse>(context, listen: false)
+                .getUnitMemberData();
+          }
+        } else {
+          print('_list[position] : ' + _list[position].toString());
+          var result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseStaffDetails(_list[position])));
+          if (result == 'back') {
+            Provider.of<UserManagementResponse>(context, listen: false)
+                .getUnitMemberData();
+          }
+        }
+      },
+      child: Container(
+        width: 150,
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: GlobalVariables.white),
+        child: Column(
+          children: <Widget>[
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: family
+                    ? _list[position].PROFILE_PHOTO.length == 0
+                        ? AppAssetsImage(
+                            GlobalVariables.componentUserProfilePath,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )
+                        : AppNetworkImage(
+                            _list[position].PROFILE_PHOTO,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )
+                    : _list[position].IMAGE.length == 0
+                        ? AppAssetsImage(
+                            GlobalVariables.componentUserProfilePath,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )
+                        : AppNetworkImage(
+                            _list[position].IMAGE,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )),
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Text(
+                  family ? _list[position].NAME : _list[position].STAFF_NAME,
+                  maxLines: 1,
+                  style: TextStyle(color: GlobalVariables.green, fontSize: 16),
+                )),
+            Container(
+              margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: Divider(
+                color: GlobalVariables.mediumGreen,
+                height: 1,
+              ),
+            ),
+            call.length > 0
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                    child:
+                        /*Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            launch("tel://" + call);
+                          },
+                          child: Container(
+                              child: Icon(
+                            Icons.call,
+                            color: GlobalVariables.lightGreen,
+                          )),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            String name = family
+                                ? _list[position].NAME
+                                : _list[position].STAFF_NAME;
+                            String title = '';
+                            String text =
+                                'Name : ' + name + '\nContact : ' + call;
+                            family
+                                ? title = _list[position].NAME
+                                : title = _list[position].STAFF_NAME;
+                            print('titlee : ' + title);
+                            GlobalFunctions.shareData(title, text);
+                          },
+                          child: Container(
+                              child: Icon(
+                            Icons.share,
+                            color: GlobalVariables.lightGreen,
+                          )),
+                        )
+                      ],
+                    ),*/
+                        Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              launch("tel://" + call);
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              child: Icon(
+                                Icons.call,
+                                color: GlobalVariables.green,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                            //TODO: Divider
+                            height: 30,
+                            width: 8,
+                            child: VerticalDivider(
+                              color: GlobalVariables.lightGray,
+                            )),
+                        Flexible(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () {
+                              String name = family
+                                  ? _list[position].NAME
+                                  : _list[position].STAFF_NAME;
+                              String title = '';
+                              String text =
+                                  'Name : ' + name + '\nContact : ' + call;
+                              family
+                                  ? title = _list[position].NAME
+                                  : title = _list[position].STAFF_NAME;
+                              print('titlee : ' + title);
+                              GlobalFunctions.shareData(title, text);
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              child: Icon(
+                                Icons.share,
+                                color: GlobalVariables.grey,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ))
+                : family
+                    ? InkWell(
+                        onTap: () async {
+                          var result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BaseEditProfileInfo(userId, societyId)));
+                          if (result == 'profile') {
+                            Provider.of<UserManagementResponse>(context,
+                                    listen: false)
+                                .getUnitMemberData();
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '+ ' +
+                                AppLocalizations.of(context)
+                                    .translate('add_phone'),
+                            style: TextStyle(
+                                color: GlobalVariables.lightGray,
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                      )
+                    : Container()
+          ],
+        ),
+      ),
+    );
+  }
+
+  getVehicleRecentTransactionListItemLayout(
+      int position, UserManagementResponse value) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: getIconForVehicle(value.vehicleList[position].WHEEL),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Text(
+                    value.vehicleList[position].MODEL,
+                    style:
+                        TextStyle(color: GlobalVariables.green, fontSize: 16),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Text(
+                      value.vehicleList[position].VEHICLE_NO,
+                      style:
+                          TextStyle(color: GlobalVariables.grey, fontSize: 16),
+                    ),
+                  ),
+                  /*AppPermission.isSocAddVehiclePermission
+                      ? */InkWell(
+                          onTap: () {
+                            print('Delete Position :' + position.toString());
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(builder:
+                                        (BuildContext context,
+                                            StateSetter setState) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0)),
+                                        child: deleteVehicleLayout(
+                                            position, value),
+                                      );
+                                    }));
+                          },
+                          child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                Icons.delete,
+                                color: GlobalVariables.mediumGreen,
+                              )),
+                        )
+                     // : Container(),
+                ],
+              )
+            ],
+          ),
+          position != value.vehicleList.length - 1
+              ? Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  child: Divider(
+                    color: GlobalVariables.mediumGreen,
+                    height: 2,
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  deleteVehicleLayout(int position, UserManagementResponse value) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      width: MediaQuery.of(context).size.width / 1.3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Text(
+              AppLocalizations.of(context).translate('sure_delete'),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: GlobalVariables.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        deleteVehicle(position, value);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('yes'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+                Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('no'),
+                        style: TextStyle(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  getIconForVehicle(String vehicleType) {
+    if (vehicleType == '4 Wheeler' ||
+        vehicleType == '4' ||
+        vehicleType == 'four') {
+      return Icon(
+        Icons.directions_car,
+        color: GlobalVariables.mediumGreen,
+      );
+    } else if (vehicleType == '2 Wheeler' ||
+        vehicleType == '2' ||
+        vehicleType == 'two') {
+      return Icon(
+        Icons.motorcycle,
+        color: GlobalVariables.mediumGreen,
+      );
+    } else {
+      return Icon(
+        Icons.motorcycle,
+        color: GlobalVariables.mediumGreen,
+      );
+    }
+  }
+
+  Future<void> deleteVehicle(
+      int position, UserManagementResponse UserManagementResponse) async {
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String id = UserManagementResponse.vehicleList[position].ID;
+    _progressDialog.show();
+    restClient.deleteVehicle(id, societyId).then((value) {
+      _progressDialog.hide();
+      if (value.status) {
+        UserManagementResponse.vehicleList.removeAt(position);
+        setState(() {});
+      }
+      GlobalFunctions.showToast(value.message);
+    });
+  }
+
+  showEditUnitDetailsLayout(UserManagementResponse userManagementResponse) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, StateSetter _setState) {
+              return Dialog(
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                child: Container(
+                  margin: EdgeInsets.only(top: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      color: GlobalVariables.white),
+                  // height: MediaQuery.of(context).size.width * 1.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            AppLocalizations.of(context).translate('update_unit_details'),
+                            style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        AppTextField(
+                            textHintContent: 'Enter BillerName',
+                            controllerCallback: billerNameTextController),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        AppTextField(
+                          textHintContent: 'Enter Area',
+                          controllerCallback: areaTextController,
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        AppTextField(
+                          textHintContent: 'Enter Intercom',
+                          controllerCallback: intercomTextController,
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        AppTextField(
+                            textHintContent: 'Enter GSTIN No',
+                            controllerCallback: gstinNoTextController),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        AppTextField(
+                            textHintContent: 'Enter Parking Slot',
+                            controllerCallback: parkingSlotTextController),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: GlobalVariables.mediumGreen,
+                                width: 2.0,
+                              )),
+                          child: ButtonTheme(
+                            //alignedDropdown: true,
+                            child: DropdownButton(
+                              items: _unitRoleListItems,
+                              onChanged: (value) {
+                                _unitRoleSelectedItem = value;
+                                print('_selctedItem:' +
+                                    _unitRoleSelectedItem.toString());
+                                setState(() {
+                                  _progressDialog.show();
+                                });
+                              },
+                              value: _unitRoleSelectedItem,
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              icon: AppIcon(
+                                Icons.keyboard_arrow_down,
+                                iconColor: GlobalVariables.green,
+                              ),
+                              iconSize: 20,
+                              selectedItemBuilder: (BuildContext context) {
+                                // String txt =  _societyListItems.elementAt(position).value;
+                                return _unitRoleListItems.map((e) {
+                                  return Container(
+                                      alignment: Alignment.topLeft,
+                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      child: text(
+                                        _unitRoleSelectedItem,
+                                        textColor: GlobalVariables.green,
+                                      ));
+                                }).toList();
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: AppButton(
+                              textContent: AppLocalizations.of(context)
+                                  .translate('submit'),
+                              onPressed: () async {
+                                String consumerNo =
+                                    await GlobalFunctions.getConsumerID();
+
+                                _progressDialog.show();
+
+                                Provider.of<UserManagementResponse>(context,
+                                        listen: false)
+                                    .editUnitDetails(
+                                        widget.block,
+                                        userManagementResponse
+                                            .unitDetailsList[0].ID,
+                                        consumerNo,
+                                        parkingSlotTextController.text,
+                                        areaTextController.text,
+                                        gstinNoTextController.text,
+                                        billerNameTextController.text,
+                                        intercomTextController.text)
+                                    .then((value) {
+                                  _progressDialog.hide();
+
+                                  GlobalFunctions.showToast(value.message);
+                                  if (value.status) {
+                                    Navigator.of(context).pop();
+                                  }
+                                });
+                              }),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
+  }
+
+  Future<void> getUnitRole() async {
+    societyId = await GlobalFunctions.getSocietyId();
+    List<String> _unitRoleList = ['Owned', 'Rented'];
+
+    for (int i = 0; i < _unitRoleList.length; i++) {
+      _unitRoleListItems.add(DropdownMenuItem(
+        value: _unitRoleList[i],
+        child: text(
+          _unitRoleList[i],
+          textColor: GlobalVariables.green,
+        ),
+      ));
+    }
+    if (_unitRoleSelectedItem == null) {
+      _unitRoleSelectedItem = _unitRoleListItems[0].value;
+    }
+    setState(() {});
+  }
+}

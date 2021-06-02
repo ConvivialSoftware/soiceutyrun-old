@@ -47,6 +47,7 @@ class GlobalVariables {
   static var keyGuestEntryNotification = "guest_entry_notification";
   static var keyInAppCallNotification = "in_app_call_notification";
   static var keyIsNewlyArrivedNotification = "isNewlyArrivedNotification";
+  static var keySMSCredit = "SMS_CREDIT";
 
   static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
@@ -225,6 +226,19 @@ class GlobalVariables {
   static const broadcastNotificationAPI = "Broadcast/send_notification";
   static const flatNoAPI = "Broadcast/Flatno";
   static const broadcastSMSAPI = "Broadcast/send_sms";
+  static const userManagementDashboardAPI = "Dashboard";
+  static const userTypeListAPI = "Dashboard/user_list_active";
+  static const unitDetailsAPI = "Dashboard/unit_data";
+  static const editUnitDetailsAPI = "Dashboard/edit_unit";
+  static const addMemberByAdminAPI = "Members/add_member_insert";
+  static const blockAPI = "Members/Block";
+  static const flatAPI = "Members/Flatno";
+  static const smsDataAPI = "Dashboard/SMS_data";
+  static const rentalRequestAPI = "Members/rental_request";
+  static const pendingRequestAPI = "Members/pending_member";
+  static const moveOutRequestAPI = "Members/moveout_member";
+  static const sendInviteAPI = "Members/send_invite";
+  static const approvePendingRequestAPI = "Members/approve_update";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -238,7 +252,7 @@ class GlobalVariables {
  // static const BaseURLDiscover = "https://mydemosites.in/";
   static const BaseURLDiscover = "https://societyrun.com//Flutter/Classified/Login/";
 
-  /*Api Name for BaseURLERP*/
+  /*Api Name for BaseURLDiscover*/
   static const displayClassifiedAPI = "display";
   static const displayOwnerClassifiedAPI = "my_classified";
   static const insertClassifiedAPI = "insert";
@@ -338,6 +352,8 @@ class GlobalVariables {
   static const Color lightCyan = const Color(0xFF73D7D3);
   static const Color lightOrange = const Color(0xFFFF9781);
   static const Color lightPurple = const Color(0xFF8998FE);
+  static const Color averageGray = const Color(0xFFaaaab3);
+  static const Color averageGreen = const Color(0xFFb1e3b1);
 
   /*Variables for URL FormData Key*/
 
@@ -356,6 +372,7 @@ class GlobalVariables {
   static const COMPLAINT_AREA = 'COMPLAINT_AREA';
   static const TYPE = 'TYPE';
   static const Type = 'Type';
+  static const type = 'type';
   static const CATEGORY = 'CATEGORY';
   static const PRIORITY = 'PRIORITY';
   static const NAME = 'NAME';
@@ -433,6 +450,18 @@ class GlobalVariables {
   static const SID = 'SID';
   static const Rate = 'Rate';
   static const id = 'id';
+  static const CONSUMER_NO = 'CONSUMER_NO';
+  static const PARKING_SLOT = 'PARKING_SLOT';
+  static const AREA = 'AREA';
+  static const GSTIN_NO = 'GSTIN_NO';
+  static const BILLING_NAME = 'BILLING_NAME';
+  static const INTERCOM = 'INTERCOM';
+  static const unit = 'unit';
+  static const member = 'member';
+  static const notForModerator = 'Not_For_Moderator';
+  static const note = 'note';
+  static const PHONE = 'PHONE';
+  static const EMAIL = 'EMAIL';
 
   /*Server Response Key*/
 

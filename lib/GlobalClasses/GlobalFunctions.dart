@@ -256,6 +256,18 @@ class GlobalFunctions {
     return "";
   }
 
+  static getSMSCredit() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences
+        .getKeys()
+        .contains(GlobalVariables.keySMSCredit)) {
+      print('keySMSCredit : ' +
+          sharedPreferences.getString(GlobalVariables.keySMSCredit));
+      return sharedPreferences.getString(GlobalVariables.keySMSCredit);
+    }
+    return "";
+  }
+
   static getDailyEntryNotification() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences
@@ -410,8 +422,8 @@ class GlobalFunctions {
         GlobalVariables.keyConsumerId, value.Consumer_no);
     sharedPreferences.setString(
         GlobalVariables.keyLoggedUsername, value.LoggedUsername);
-    sharedPreferences.setString(
-        GlobalVariables.keyGoogleCoordinate, value.google_parameter);
+    sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
+    sharedPreferences.setString(GlobalVariables.keySMSCredit, value.SMS_CREDIT);
     GlobalVariables.userNameValueNotifer.value = value.Name;
     GlobalVariables.userImageURLValueNotifer.value = value.Photo;
     GlobalVariables.userImageURLValueNotifer.notifyListeners();
@@ -827,6 +839,14 @@ class GlobalFunctions {
     var dFormat = DateFormat(format);
     DateTime oldDate = DateTime.parse(date);
     newDate = dFormat.format(oldDate);
+
+    return newDate;
+  }
+
+  static String getCurrentDate(String format) {
+    String newDate;
+    var dFormat = DateFormat(format);
+    newDate = dFormat.format(DateTime.now());
 
     return newDate;
   }

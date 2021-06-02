@@ -26,35 +26,38 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
-class BaseMobileUser extends StatefulWidget {
+class BaseRentalRequest extends StatefulWidget {
 
-  BaseMobileUser();
+  BaseRentalRequest();
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MobileUserState();
+    return RentalRequestState();
   }
 }
 
-class MobileUserState extends BaseStatefulState<BaseMobileUser>
+class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+ // TabController _tabController;
+/*
 
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '',userType='';
 
-//var photo="";
+*/
 
   ProgressDialog _progressDialog;
   
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-    getSharedPreferenceData();
-    _handleTabSelection();
+  //  _tabController = TabController(length: 2, vsync: this);
+  //  _tabController.addListener(_handleTabSelection);
+   // getSharedPreferenceData();
+//    _handleTabSelection();
+
+  Provider.of<UserManagementResponse>(context,listen: false).getRentalRequest();
 
   }
   @override
@@ -81,17 +84,17 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                   ),
                 ),
                 title: text(
-                  AppLocalizations.of(context).translate('mobile_user'),
+                  AppLocalizations.of(context).translate('rental_request'),
                   textColor: GlobalVariables.white,
                 ),
-                bottom: getTabLayout(),
-                elevation: 0,
+               // bottom: getTabLayout(),
+               // elevation: 0,
               ),
-              body: TabBarView(controller: _tabController, children: <Widget>[
-               getMobileUserLayout(value),
-                getUnMobileUserLayout(value),
+              body: /*TabBarView(controller: _tabController, children: <Widget>[
+               getRentalRequestLayout(value),
+          //      getTenantsLayout(value),
                 //getHelperLayout(),
-              ]),
+              ]),*/getRentalRequestLayout(value),
             ),
           );
         },
@@ -99,7 +102,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     );
   }
 
-  getTabLayout() {
+ /* getTabLayout() {
     return PreferredSize(
       preferredSize: Size.fromHeight(40.0),
       child: TabBar(
@@ -107,13 +110,13 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
           Container(
             width: MediaQuery.of(context).size.width / 2,
             child: Tab(
-              text: AppLocalizations.of(context).translate('mobile_user'),
+              text: AppLocalizations.of(context).translate('register_user'),
             ),
           ),
           Container(
             width: MediaQuery.of(context).size.width / 2,
             child: Tab(
-              text: AppLocalizations.of(context).translate('not_mobile_user'),
+              text: AppLocalizations.of(context).translate('unregister_user'),
             ),
           )
         ],
@@ -126,8 +129,8 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
       ),
     );
   }
-
-  getMobileUserLayout(UserManagementResponse value) {
+*/
+  getRentalRequestLayout(UserManagementResponse value) {
     // print('MyTicketLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -142,7 +145,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-               value.mobileUserList.length==0 ? GlobalFunctions.loadingWidget(context) :getMobileUserListDataLayout(value),
+               value.rentalRequestList.length>0 ? getRentalRequestListDataLayout(value) : GlobalFunctions.loadingWidget(context),
               ],
             ),
           ),
@@ -151,21 +154,21 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     );
   }
 
-  getMobileUserListDataLayout(UserManagementResponse value) {
+  getRentalRequestListDataLayout(UserManagementResponse value) {
     return SingleChildScrollView(
       child: Column(
         children: [
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: value.mobileUserList.length,
+                  itemCount: value.rentalRequestList.length,
                   itemBuilder: (context, position) {
-                    return getMobileUserListItemLayout(position,value);
+                    return getRentalRequestListItemLayout(position,value);
                   }, //  scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                 )),
@@ -175,16 +178,9 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     );
   }
 
-  getMobileUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
+  getRentalRequestListItemLayout(int position, UserManagementResponse value) {
 
-    var inDays = GlobalFunctions.getDaysFromDate(GlobalFunctions.getCurrentDate("yyyy-MM-dd"),
-        GlobalFunctions.convertDateFormat(userManagementResponse.activeUserList[position].LAST_LOGIN, "yyyy-MM-dd")
-    );
-    if(inDays.toString()=='0'){
-      inDays = 'Today';
-    }else{
-      inDays = inDays.toString()+ ' days';
-    }
+    List<Tenant> tenantDetailsList =  List<Tenant>.from(value.rentalRequestList[position].tenant_name.map((i) => Tenant.fromJson(i)));
 
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
@@ -200,33 +196,9 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  // padding: EdgeInsets.all(20),
-                  // alignment: Alignment.center,
-                  /* decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25)),*/
-                    child: photo.isEmpty
-                        ? AppAssetsImage(
-                      GlobalVariables.componentUserProfilePath,
-                      imageWidth: 60.0,
-                      imageHeight: 60.0,
-                      borderColor: GlobalVariables.grey,
-                      borderWidth: 1.0,
-                      fit: BoxFit.cover,
-                      radius: 30.0,
-                    )
-                        : AppNetworkImage(
-                      photo,
-                      imageWidth: 60.0,
-                      imageHeight: 60.0,
-                      borderColor: GlobalVariables.grey,
-                      borderWidth: 1.0,
-                      fit: BoxFit.cover,
-                      radius: 30.0,
-                    )),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     alignment: Alignment.topLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,14 +206,18 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              //  color:GlobalVariables.grey,
-                              child: text(userManagementResponse.mobileUserList[position].NAME,
-                                  textColor: GlobalVariables.green,
-                                  fontSize: GlobalVariables.textSizeLargeMedium,
-                                  fontWeight: FontWeight.bold,
-                                  textStyleHeight: 1.0
-                              ),
+                            Row(
+                              children: [
+                                Container(
+                                  //  color:GlobalVariables.grey,
+                                  child: text(tenantDetailsList[0].NAME,
+                                      textColor:GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeLargeMedium,
+                                      fontWeight: FontWeight.bold,
+                                      textStyleHeight: 1.0
+                                  ),
+                                ),
+                              ],
                             ),
                             Container(
                               padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -251,7 +227,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                                 radius: GlobalVariables.textSizeNormal,
                               ),
                               child: text(
-                                  userManagementResponse.mobileUserList[position].BLOCK + ' ' + userManagementResponse.mobileUserList[position].FLAT,
+                                  tenantDetailsList[0].BLOCK + ' ' + tenantDetailsList[0].FLAT,
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.white,
                                   fontWeight: FontWeight.bold
@@ -259,20 +235,30 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                             ),
                           ],
                         ),
-                        Container(
-                          child: text(
-                              userManagementResponse.mobileUserList[position].MOBILE,
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.black,
-                              textStyleHeight: 1.0
-                          ),
-                        ),
                         Row(
+                          children: [
+                            Container(
+                              child: AppIcon(Icons.date_range,iconColor: GlobalVariables.grey,),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Container(
+                              child: text(
+                                  GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.black,
+                                  textStyleHeight: 1.0
+                              ),
+                            ),
+                          ],
+                        ),
+                     /*   Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               child: text(
-                                  userManagementResponse.mobileUserList[position].TYPE,
+                                  userType,
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.black,
                                   textStyleHeight: 1.5
@@ -287,12 +273,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                                 Container(
                                   padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
                                   child: text(
-                                      userManagementResponse
-                                          .registerList[position]
-                                          .LAST_LOGIN ==
-                                          '0000-00-00 00:00:00'
-                                          ? 'Never' :
-                                          inDays.toString(),
+                                      '10 days',
                                       fontSize: GlobalVariables.textSizeSMedium,
                                       textColor: GlobalVariables.grey,
                                       textStyleHeight: 1.0
@@ -301,7 +282,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                               ],
                             )
                           ],
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
@@ -312,10 +293,10 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
         ],
       ),
     );
-  }
+  }/*
 
 
-  getUnMobileUserLayout(UserManagementResponse value) {
+  getTenantsLayout(UserManagementResponse value) {
    
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -330,16 +311,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
-                getUnMobileUserListDataLayout(value),
-                Container(
-                  padding: EdgeInsets.all(16),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: AppButton(textContent: 'Invite', onPressed: (){
-
-                    }),
-                  ),
-                )
+                getTenantsListDataLayout(value),
               ],
             ),
           ),
@@ -348,7 +320,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     );
   }
 
-  getUnMobileUserListDataLayout(UserManagementResponse value) {
+  getTenantsListDataLayout(UserManagementResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
@@ -363,14 +335,14 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
             // scrollDirection: Axis.vertical,
             itemCount: 5,
             itemBuilder: (context, position) {
-              return getUnMobileUserListItemLayout(position,value);
+              return getTenantsListItemLayout(position,value);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
     );
   }
 
-  getUnMobileUserListItemLayout(int position, UserManagementResponse value) {
+  getTenantsListItemLayout(int position, UserManagementResponse value) {
 
     PollOption pollOption = PollOption();
     pollOption.isSelected=false;
@@ -440,7 +412,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
         switch (index) {
           case 0:
             {
-              Provider.of<UserManagementResponse>(context,listen: false).getUseTypeList("Mobile user");
+
             }
             break;
           case 1:
@@ -477,5 +449,5 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     print('EmailId : ' + email);
     print('ConsumerId : ' + consumerId);
     setState(() {});
-  }
+  }*/
 }

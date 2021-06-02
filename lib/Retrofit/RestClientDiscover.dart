@@ -58,7 +58,8 @@ abstract class RestClientDiscover {
       @Field("C_Id") String C_Id,@Field("User_Id") String user_id,
       @Field("Society_Name") String societyName,@Field("Unit") String unit,
       @Field("Mobile") String mobile, @Field("Address") String address,
-      @Field("User_Name") String User_Name,@Field("User_Email") String User_Email,@Field("Profile_Image") String Profile_Image,@Field("SOCIETY_ID") String societyId);
+      @Field("User_Name") String User_Name,@Field("User_Email") String User_Email,
+      @Field("Profile_Image") String Profile_Image,@Field("SOCIETY_ID") String societyId);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.servicesCategory)

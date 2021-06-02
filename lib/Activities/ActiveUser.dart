@@ -12,6 +12,7 @@ import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/PollOption.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Models/StaffCount.dart';
@@ -39,7 +40,16 @@ class BaseActiveUser extends StatefulWidget {
 class ActiveUserState extends BaseStatefulState<BaseActiveUser>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+/*
 
+  var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
+  var email = '', phone = '', consumerId = '', societyName = '',userType='';
+*/
+
+List<String> inviteUserList = List<String>();
+
+
+var photo = "";
   ProgressDialog _progressDialog;
   
   @override
@@ -47,7 +57,6 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabSelection);
-
     _handleTabSelection();
 
   }
@@ -75,7 +84,7 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
                   ),
                 ),
                 title: text(
-                  AppLocalizations.of(context).translate('active_user')+'/'+AppLocalizations.of(context).translate('inactive_user'),
+                  AppLocalizations.of(context).translate('active_user'),
                   textColor: GlobalVariables.white,
                 ),
                 bottom: getTabLayout(),
@@ -101,13 +110,13 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
           Container(
             width: MediaQuery.of(context).size.width / 2,
             child: Tab(
-              text: AppLocalizations.of(context).translate('active_user'),
+              text: AppLocalizations.of(context).translate('user_who_logged'),
             ),
           ),
           Container(
             width: MediaQuery.of(context).size.width / 2,
             child: Tab(
-              text: AppLocalizations.of(context).translate('inactive_user'),
+              text: AppLocalizations.of(context).translate('user_yet_to_login'),
             ),
           )
         ],
@@ -136,7 +145,7 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                value.isLoading? GlobalFunctions.loadingWidget(context):getActiveUserListDataLayout(value),
+               value.activeUserList.length==0? GlobalFunctions.loadingWidget(context):getActiveUserListDataLayout(value),
               ],
             ),
           ),
@@ -145,7 +154,179 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
     );
   }
 
-  getUnActiveUserLayout(UserManagementResponse value) {
+  getActiveUserListDataLayout(UserManagementResponse userManagementResponse) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                  // scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: userManagementResponse.activeUserList.length,
+                  itemBuilder: (context, position) {
+                    return getActiveUserListItemLayout(position,userManagementResponse);
+                  }, //  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                )),
+          ),
+        ],
+      ),
+    );
+  }
+
+  getActiveUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
+
+    var inDays = GlobalFunctions.getDaysFromDate(GlobalFunctions.getCurrentDate("yyyy-MM-dd"),
+        GlobalFunctions.convertDateFormat(userManagementResponse.activeUserList[position].LAST_LOGIN, "yyyy-MM-dd")
+    );
+    if(inDays.toString()=='0'){
+      inDays = 'Today';
+    }else{
+      inDays = inDays.toString()+ ' days';
+    }
+
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.1,
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: GlobalVariables.white),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  // padding: EdgeInsets.all(20),
+                  // alignment: Alignment.center,
+                  /* decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25)),*/
+                    child: photo.isEmpty
+                        ? AppAssetsImage(
+                      GlobalVariables.componentUserProfilePath,
+                      imageWidth: 60.0,
+                      imageHeight: 60.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 1.0,
+                      fit: BoxFit.cover,
+                      radius: 30.0,
+                    )
+                        : AppNetworkImage(
+                      photo,
+                      imageWidth: 60.0,
+                      imageHeight: 60.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 1.0,
+                      fit: BoxFit.cover,
+                      radius: 30.0,
+                    )),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  //  color:GlobalVariables.grey,
+                                  child: text(userManagementResponse.activeUserList[position].NAME,
+                                      textColor:GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeLargeMedium,
+                                      fontWeight: FontWeight.bold,
+                                      textStyleHeight: 1.0
+                                  ),
+                                ),
+                                SizedBox(width: 8,),
+                                Container(
+                                  child: AppIcon(userManagementResponse.activeUserList[position].gcm_id.isNotEmpty ?  Icons.phone_android : Icons.language ,iconColor: GlobalVariables.mediumGreen,iconSize: GlobalVariables.textSizeNormal,),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              decoration: boxDecoration(
+                                bgColor: GlobalVariables.skyBlue,
+                                color: GlobalVariables.white,
+                                radius: GlobalVariables.textSizeNormal,
+                              ),
+                              child: text(
+                                  userManagementResponse.activeUserList[position].BLOCK + ' ' + userManagementResponse.activeUserList[position].FLAT,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.white,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          child: text(
+                              userManagementResponse.activeUserList[position].MOBILE,
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              textColor: GlobalVariables.black,
+                              textStyleHeight: 1.0
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: text(
+                                  userManagementResponse.activeUserList[position].TYPE,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.black,
+                                  textStyleHeight: 1.5
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  child: AppIcon(Icons.access_time,iconSize: GlobalVariables.textSizeSMedium,iconColor: GlobalVariables.grey,),
+                                ),
+                                SizedBox(width: 4,),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
+                                  child: text(
+                                      userManagementResponse
+                                          .registerList[position]
+                                          .LAST_LOGIN ==
+                                          '0000-00-00 00:00:00'
+                                          ? 'Never'
+                                          :  inDays,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      textColor: GlobalVariables.grey,
+                                      textStyleHeight: 1.0
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  getUnActiveUserLayout(UserManagementResponse userManagementResponse) {
    
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -160,7 +341,27 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
-                value.isLoading ? GlobalFunctions.loadingWidget(context): getUnActiveUserListDataLayout(value),
+                userManagementResponse.inactiveUserList.length==0? GlobalFunctions.loadingWidget(context):getUnActiveUserListDataLayout(userManagementResponse),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: AppButton(textContent: 'Invite', onPressed: (){
+
+                      _progressDialog.show();
+                      Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
+
+                        _progressDialog.hide();
+                        if(value.status){
+                          Navigator.of(context).pop();
+                        }
+
+                      });
+
+
+                    }),
+                  ),
+                )
               ],
             ),
           ),
@@ -169,8 +370,8 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
     );
   }
 
-  getUnActiveUserListDataLayout(UserManagementResponse value) {
-    return value.unRegisterList.length>0 ? Container(
+  getUnActiveUserListDataLayout(UserManagementResponse userManagementResponse) {
+    return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           10, MediaQuery.of(context).size.height / 20, 10, 0),
@@ -182,93 +383,118 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: value.unRegisterList.length,
+            itemCount: userManagementResponse.inactiveUserList.length,
             itemBuilder: (context, position) {
-              return getUnActiveUserListItemLayout(position,value);
+              return getUnActiveUserListItemLayout(position,userManagementResponse);
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    ):Container();
+    );
   }
 
-  getUnActiveUserListItemLayout(int position, UserManagementResponse value) {
+  getUnActiveUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
+
     return InkWell(
       onTap: () async {
         
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: GlobalVariables.white),
         child: Column(
           children: [
 
+            Row(
+              children: [
+                InkWell(
+                  onTap: (){
+
+                    if(inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)){
+                      inviteUserList.remove(userManagementResponse.inactiveUserList[position].USER_ID);
+                    }else{
+                      inviteUserList.add(userManagementResponse.inactiveUserList[position].USER_ID);
+                    }
+
+                    print('inviteUserList : '+inviteUserList.toString());
+                    setState(() {
+
+                    });
+
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)
+                            ? GlobalVariables.green
+                            : GlobalVariables.transparent,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)
+                              ? GlobalVariables.green
+                              : GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: AppIcon(
+                      Icons.check,
+                      iconColor: inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)
+                          ? GlobalVariables.white
+                          : GlobalVariables.transparent,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          //  color:GlobalVariables.grey,
+                          child: text(userManagementResponse.inactiveUserList[position].NAME,
+                              textColor:GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeMedium,
+                              fontWeight: FontWeight.bold,
+                              textStyleHeight: 1.0
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              child: text(
+                                  userManagementResponse.inactiveUserList[position].BLOCK+' '+userManagementResponse.inactiveUserList[position].FLAT +' - ',
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.black,
+                                  textStyleHeight: 1.0
+                              ),
+                            ),
+                            //SizedBox(width: 8,),
+                            Container(
+                              child: text(
+                                  userManagementResponse.inactiveUserList[position].TYPE,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.black,
+                                  textStyleHeight: 1.0
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
           ],
         ),
-      ),
-    );
-  }
-
-  getActiveUserListDataLayout(UserManagementResponse value) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: value.registerList.length,
-                      itemBuilder: (context, position) {
-                        return getActiveUserListItemLayout(position,value);
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-          ),
-        ],
-      ),
-    );
-  }
-
-  getVisitorsListItemLayout(int position, UserManagementResponse value) {
-
-    return InkWell(
-      onTap: () {
-
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: GlobalVariables.white),
-        child: Column(
-          children: <Widget>[
-
-          ],
-        ),
-      ),
-    );
-  }
-
-  getActiveUserListItemLayout(int position, UserManagementResponse value) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: GlobalVariables.white),
-      child: Column(
-        children: <Widget>[
-
-        ],
       ),
     );
   }
@@ -285,12 +511,12 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
         switch (index) {
           case 0:
             {
-
+              Provider.of<UserManagementResponse>(context,listen: false).getUseTypeList("logged In");
             }
             break;
           case 1:
             {
-
+              Provider.of<UserManagementResponse>(context,listen: false).getUseTypeList("yet to login");
             }
             break;
         }
@@ -300,5 +526,4 @@ class ActiveUserState extends BaseStatefulState<BaseActiveUser>
       }
     });
   }
-
 }
