@@ -239,6 +239,7 @@ class GlobalVariables {
   static const moveOutRequestAPI = "Members/moveout_member";
   static const sendInviteAPI = "Members/send_invite";
   static const approvePendingRequestAPI = "Members/approve_update";
+  static const deactivateUserAPI = "Members/deactivate_user";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";

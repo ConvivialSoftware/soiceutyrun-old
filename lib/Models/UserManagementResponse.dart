@@ -36,7 +36,7 @@ class UserManagementResponse extends ChangeNotifier {
   List<Block> blockList = List<Block>();
   List<Flat> flatList = List<Flat>();
   List<UnitDetails> unitDetailsList = List<UnitDetails>();
-  List<UnitDetails> oneUnitDetailsList = List<UnitDetails>();
+  List<UnitDetails> unitDetailsListForAdmin = List<UnitDetails>();
   List<Member> pendingRequestList = List<Member>();
   List<RentalRequest> rentalRequestList = List<RentalRequest>();
   List<RentalRequest> moveOutRequestList = List<RentalRequest>();
@@ -45,6 +45,11 @@ class UserManagementResponse extends ChangeNotifier {
   List<Member> tenantList = new List<Member>();
   List<Staff> staffList = new List<Staff>();
   List<Vehicle> vehicleList = new List<Vehicle>();
+
+  List<Member> memberListForAdmin = new List<Member>();
+  List<Member> tenantListForAdmin = new List<Member>();
+  List<Staff> staffListForAdmin = new List<Staff>();
+  List<Vehicle> vehicleListForAdmin = new List<Vehicle>();
 
   List<Receipt> pendingList = new List<Receipt>();
   List<PayOption> payOptionList = new List<PayOption>();
@@ -144,10 +149,13 @@ class UserManagementResponse extends ChangeNotifier {
     });
   }
 
-  Future<List<UnitDetails>> getOneUnitDetailsMemberData(
-      String block, String flat) async {
-    isLoading = true;
-    notifyListeners();
+  Future<List<UnitDetails>> getUnitDetailsMemberForAdminData(
+      String block, String flat,bool isDisplayLoading) async {
+
+    if(isDisplayLoading) {
+      isLoading = true;
+      notifyListeners();
+    }
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -163,32 +171,32 @@ class UserManagementResponse extends ChangeNotifier {
         List<dynamic> vehicles = value.vehicles;
         List<dynamic> unit = value.unit;
 
-        memberList = List<Member>.from(_members.map((i) => Member.fromJson(i)));
+        memberListForAdmin = List<Member>.from(_members.map((i) => Member.fromJson(i)));
         print('before memberList length : ' + memberList.length.toString());
-        staffList = List<Staff>.from(staff.map((i) => Staff.fromJson(i)));
-        vehicleList =
+        staffListForAdmin = List<Staff>.from(staff.map((i) => Staff.fromJson(i)));
+        vehicleListForAdmin =
             List<Vehicle>.from(vehicles.map((i) => Vehicle.fromJson(i)));
-        oneUnitDetailsList =
+        unitDetailsListForAdmin =
             List<UnitDetails>.from(unit.map((i) => UnitDetails.fromJson(i)));
-        tenantList = new List<Member>();
+        tenantListForAdmin = new List<Member>();
 
-        for(int i=0;i<memberList.length;i++){
-          if (memberList[i].TYPE == 'Tenant') {
-            tenantList.add(memberList[i]);
+        for(int i=0;i<memberListForAdmin.length;i++){
+          if (memberListForAdmin[i].TYPE == 'Tenant') {
+            tenantListForAdmin.add(memberListForAdmin[i]);
             //memberList.removeAt(i);
           }
         }
 
-        memberList.removeWhere((item) => item.TYPE == 'Tenant');
-        print('before tenantList length : ' + tenantList.length.toString());
+        memberListForAdmin.removeWhere((item) => item.TYPE == 'Tenant');
+        print('before tenantList length : ' + tenantListForAdmin.length.toString());
 
-        print('after memberList length : ' + memberList.length.toString());
+        print('after memberList length : ' + memberListForAdmin.length.toString());
       }
     });
 
     isLoading = false;
     notifyListeners();
-    return oneUnitDetailsList;
+    return unitDetailsListForAdmin;
   }
 
   Future<dynamic> getLedgerData(var year) async {
@@ -289,6 +297,10 @@ class UserManagementResponse extends ChangeNotifier {
 
     if (type == 'Mobile user')
       mobileUserList =
+          List<User>.from(result.data.map((i) => User.fromJson(i)));
+
+    if (type == 'Not Mobile user')
+      notMobileUserList =
           List<User>.from(result.data.map((i) => User.fromJson(i)));
 
     if (type == 'Not yet Registered')
@@ -507,7 +519,7 @@ class UserManagementResponse extends ChangeNotifier {
     return result;
   }
 
-  Future<StatusMsgResponse> deleteFamaliyMember(String id) async {
+  Future<StatusMsgResponse> deleteFamilyMember(String id) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
@@ -517,6 +529,18 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.deleteFamilyMember(id, societyId);
 
     getPendingRequest();
+    return result;
+  }
+
+  Future<StatusMsgResponse> deactivateUser(String id,String Reason,String block,String flat) async {
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
+
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    var result = await restClient.deactivateUser(societyId,Reason,id);
+
+    getUnitDetailsMemberForAdminData(block,flat,false);
     return result;
   }
 }
@@ -724,11 +748,11 @@ class RentalRequest {
       POLICE_VERIFICATION: map["POLICE_VERIFICATION"],
       AGREEMENT_FROM: map["AGREEMENT_FROM"],
       AGREEMENT_TO: map["AGREEMENT_TO"],
-      AGREEMENT: map["AGREEMENT"],
-      AUTH_FORM: map["AUTH_FORM"],
-      NOC_FORM: map["NOC_FORM"],
-      TENANT_CONSENT: map["TENANT_CONSENT"],
-      OWNER_CONSENT: map["OWNER_CONSENT"],
+      AGREEMENT: map["AGREEMENT"]??'',
+      AUTH_FORM: map["AUTH_FORM"]??'',
+      NOC_FORM: map["NOC_FORM"]??'',
+      TENANT_CONSENT: map["TENANT_CONSENT"]??'',
+      OWNER_CONSENT: map["OWNER_CONSENT"]??'',
       C_DATE: map["C_DATE"],
       STATUS: map["STATUS"],
       NOTE: map["NOTE"],
@@ -773,7 +797,7 @@ class Tenant {
       FLAT: map["FLAT"],
       ID: map["ID"],
       ADDRESS: map["ADDRESS"],
-      POLICE_VERIFICATION: map["POLICE_VERIFICATION"],
+      POLICE_VERIFICATION: map["POLICE_VERIFICATION"]??'',
       IDENTITY_PROOF: map["IDENTITY_PROOF"],
       DOB: map["DOB"],
     );

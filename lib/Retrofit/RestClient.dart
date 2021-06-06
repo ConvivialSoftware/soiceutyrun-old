@@ -510,6 +510,12 @@ abstract class RestClient {
       @Field(GlobalVariables.societyName) String societyName,
       @Field("id") String id,);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.deactivateUserAPI)
+  Future<StatusMsgResponse> deactivateUser(@Field(GlobalVariables.societyId) String societyId,
+      @Field("Reason") String Reason,
+      @Field("id") String id,);
+
 }
 
 

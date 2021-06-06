@@ -55,7 +55,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     _unitRoleSelectedItem = 'Owned';
 
     Provider.of<UserManagementResponse>(context, listen: false)
-        .getOneUnitDetailsMemberData(widget.block, widget.flat)
+        .getUnitDetailsMemberForAdminData(widget.block, widget.flat,true)
         .then((value) {
       billerNameTextController.text = value[0].BILLING_NAME;
       areaTextController.text = value[0].AREA;
@@ -213,7 +213,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
-                                          .oneUnitDetailsList[0].BILLING_NAME,
+                                          .unitDetailsListForAdmin[0].BILLING_NAME,
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),
@@ -235,7 +235,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
-                                          .oneUnitDetailsList[0].AREA,
+                                          .unitDetailsListForAdmin[0].AREA,
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),
@@ -256,7 +256,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
-                                          .oneUnitDetailsList[0].CONSUMER_NO,
+                                          .unitDetailsListForAdmin[0].CONSUMER_NO,
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),
@@ -278,7 +278,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
-                                          .oneUnitDetailsList[0].GSTIN_NO,
+                                          .unitDetailsListForAdmin[0].GSTIN_NO,
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),
@@ -414,7 +414,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   ],
                 ),
               ),
-              value.memberList.length > 0
+              value.memberListForAdmin.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
@@ -423,10 +423,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: Builder(
                           builder: (context) => ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: value.memberList.length,
+                                itemCount: value.memberListForAdmin.length,
                                 itemBuilder: (context, position) {
                                   return getContactListItemLayout(
-                                      value.memberList, position, true);
+                                      value.memberListForAdmin, position, true);
                                 },
                                 //  scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
@@ -488,7 +488,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   ],
                 ),
               ),
-              value.tenantList.length > 0
+              value.tenantListForAdmin.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
@@ -497,10 +497,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: Builder(
                           builder: (context) => ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: value.tenantList.length,
+                                itemCount: value.tenantListForAdmin.length,
                                 itemBuilder: (context, position) {
                                   return getContactListItemLayout(
-                                      value.tenantList, position, true);
+                                      value.tenantListForAdmin, position, true);
                                 },
                                 //  scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
@@ -559,7 +559,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   ],
                 ),
               ),
-              value.staffList.length > 0
+              value.staffListForAdmin.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
@@ -568,10 +568,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: Builder(
                           builder: (context) => ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: value.staffList.length,
+                                itemCount: value.staffListForAdmin.length,
                                 itemBuilder: (context, position) {
                                   return getContactListItemLayout(
-                                      value.staffList, position, false);
+                                      value.staffListForAdmin, position, false);
                                 },
                                 //  scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
@@ -637,7 +637,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  value.vehicleList.length > 0
+                  value.vehicleListForAdmin.length > 0
                       ? Container(
                           //height: 500,
                           //padding: EdgeInsets.all(10),
@@ -650,7 +650,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     // scrollDirection: Axis.horizontal,
-                                    itemCount: value.vehicleList.length,
+                                    itemCount: value.vehicleListForAdmin.length,
                                     itemBuilder: (context, position) {
                                       return getVehicleRecentTransactionListItemLayout(
                                           position, value);
@@ -921,13 +921,13 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: getIconForVehicle(value.vehicleList[position].WHEEL),
+                child: getIconForVehicle(value.vehicleListForAdmin[position].WHEEL),
               ),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Text(
-                    value.vehicleList[position].MODEL,
+                    value.vehicleListForAdmin[position].MODEL,
                     style:
                         TextStyle(color: GlobalVariables.green, fontSize: 16),
                   ),
@@ -938,7 +938,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: Text(
-                      value.vehicleList[position].VEHICLE_NO,
+                      value.vehicleListForAdmin[position].VEHICLE_NO,
                       style:
                           TextStyle(color: GlobalVariables.grey, fontSize: 16),
                     ),
@@ -974,7 +974,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
               )
             ],
           ),
-          position != value.vehicleList.length - 1
+          position != value.vehicleListForAdmin.length - 1
               ? Container(
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: Divider(
@@ -1072,12 +1072,12 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-    String id = UserManagementResponse.vehicleList[position].ID;
+    String id = UserManagementResponse.vehicleListForAdmin[position].ID;
     _progressDialog.show();
     restClient.deleteVehicle(id, societyId).then((value) {
       _progressDialog.hide();
       if (value.status) {
-        UserManagementResponse.vehicleList.removeAt(position);
+        UserManagementResponse.vehicleListForAdmin.removeAt(position);
         setState(() {});
       }
       GlobalFunctions.showToast(value.message);

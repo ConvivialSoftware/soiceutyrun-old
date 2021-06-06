@@ -3699,4 +3699,36 @@ class RestAPI implements RestClient,
     print('value of getSendInvite : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
+
+  @override
+  Future<StatusMsgResponse> deactivateUser(String societyId, String Reason, String id) async {
+    // TODO: implement deactivateUser
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      "id": id,
+      "Reason": Reason,
+    });
+
+    print("data: " +
+        {
+          GlobalVariables.societyId: societyId,
+          "id": id,
+          "Reason": Reason,
+        }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.deactivateUserAPI);
+    final Response _result = await _dio.post(
+      GlobalVariables.deactivateUserAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl, data: formData),
+    );
+    final value = _result.data;
+    print('value of deactivateUser : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+
 }

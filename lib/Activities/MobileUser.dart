@@ -46,6 +46,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
 
 //var photo="";
 
+  List<String> inviteUserList = List<String>();
   ProgressDialog _progressDialog;
   
   @override
@@ -177,8 +178,9 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
 
   getMobileUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
 
+    print('value.activeUserList : '+userManagementResponse.mobileUserList.length.toString());
     var inDays = GlobalFunctions.getDaysFromDate(GlobalFunctions.getCurrentDate("yyyy-MM-dd"),
-        GlobalFunctions.convertDateFormat(userManagementResponse.activeUserList[position].LAST_LOGIN, "yyyy-MM-dd")
+        GlobalFunctions.convertDateFormat(userManagementResponse.mobileUserList[position].LAST_LOGIN, "yyyy-MM-dd")
     );
     if(inDays.toString()=='0'){
       inDays = 'Today';
@@ -288,7 +290,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                                   padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
                                   child: text(
                                       userManagementResponse
-                                          .registerList[position]
+                                          .mobileUserList[position]
                                           .LAST_LOGIN ==
                                           '0000-00-00 00:00:00'
                                           ? 'Never' :
@@ -330,12 +332,21 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 180.0),
-                getUnMobileUserListDataLayout(value),
+                value.notMobileUserList.length==0 ? GlobalFunctions.loadingWidget(context) : getUnMobileUserListDataLayout(value),
                 Container(
                   padding: EdgeInsets.all(16),
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: AppButton(textContent: 'Invite', onPressed: (){
+                      _progressDialog.show();
+                      Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
+
+                        _progressDialog.hide();
+                        if(value.status){
+                          Navigator.of(context).pop();
+                        }
+
+                      });
 
                     }),
                   ),
@@ -361,7 +372,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
-            itemCount: 5,
+            itemCount: value.notMobileUserList.length,
             itemBuilder: (context, position) {
               return getUnMobileUserListItemLayout(position,value);
             }, //  scrollDirection: Axis.vertical,
@@ -370,13 +381,20 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     );
   }
 
-  getUnMobileUserListItemLayout(int position, UserManagementResponse value) {
+  getUnMobileUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
 
-    PollOption pollOption = PollOption();
-    pollOption.isSelected=false;
     return InkWell(
       onTap: () async {
+        if(inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)){
+          inviteUserList.remove(userManagementResponse.notMobileUserList[position].USER_ID);
+        }else{
+          inviteUserList.add(userManagementResponse.notMobileUserList[position].USER_ID);
+        }
 
+        print('inviteUserList : '+inviteUserList.toString());
+        setState(() {
+
+        });
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
@@ -393,19 +411,19 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                      color: pollOption.isSelected == true
+                      color: inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)
                           ? GlobalVariables.green
                           : GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
-                        color: pollOption.isSelected == true
+                        color: inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)
                             ? GlobalVariables.green
                             : GlobalVariables.mediumGreen,
                         width: 2.0,
                       )),
                   child: AppIcon(
                     Icons.check,
-                    iconColor: pollOption.isSelected == true
+                    iconColor: inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)
                         ? GlobalVariables.white
                         : GlobalVariables.transparent,
                   ),
@@ -413,9 +431,44 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                 Flexible(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: text(
-                      name,
-                      textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          //  color:GlobalVariables.grey,
+                          child: text(userManagementResponse.notMobileUserList[position].NAME,
+                              textColor:GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeMedium,
+                              fontWeight: FontWeight.bold,
+                              textStyleHeight: 1.0
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              child: text(
+                                  userManagementResponse.notMobileUserList[position].BLOCK+' '+userManagementResponse.notMobileUserList[position].FLAT +' - ',
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.black,
+                                  textStyleHeight: 1.0
+                              ),
+                            ),
+                            //SizedBox(width: 8,),
+                            Container(
+                              child: text(
+                                  userManagementResponse.notMobileUserList[position].TYPE,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.black,
+                                  textStyleHeight: 1.0
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -445,7 +498,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
             break;
           case 1:
             {
-
+              Provider.of<UserManagementResponse>(context,listen: false).getUseTypeList("Not Mobile user");
             }
             break;
         }

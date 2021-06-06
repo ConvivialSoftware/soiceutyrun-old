@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -27,7 +32,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 class BaseRentalRequest extends StatefulWidget {
-
   BaseRentalRequest();
 
   @override
@@ -39,7 +43,7 @@ class BaseRentalRequest extends StatefulWidget {
 
 class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
     with SingleTickerProviderStateMixin {
- // TabController _tabController;
+  // TabController _tabController;
 /*
 
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
@@ -48,27 +52,98 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
 */
 
   ProgressDialog _progressDialog;
-  
+  String _taskId,_localPath;
+  ReceivePort _port = ReceivePort();
+
   @override
   void initState() {
-    super.initState();
-  //  _tabController = TabController(length: 2, vsync: this);
-  //  _tabController.addListener(_handleTabSelection);
-   // getSharedPreferenceData();
-//    _handleTabSelection();
+    getLocalPath();
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState(() {
+        if (status == DownloadTaskStatus.complete) {
+          _openDownloadedFile(_taskId).then((success) {
+            if (!success) {
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(content: text('Cannot open this file')));
+            }
+          });
+        } else {
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(content: text('Download failed!')));
+        }
+      });
+    });
 
-  Provider.of<UserManagementResponse>(context,listen: false).getRentalRequest();
+    FlutterDownloader.registerCallback(downloadCallback);
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getRentalRequest();
+    super.initState();
 
   }
+
+  void getLocalPath() {
+    GlobalFunctions.localPath().then((value) {
+      print("External Directory Path" + value.toString());
+      _localPath = value;
+    });
+  }
+
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort send =
+    IsolateNameServer.lookupPortByName('downloader_send_port');
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+
+    send.send([id, status, progress]);
+  }
+
+  void downloadAttachment(var url, var _localPath) async {
+    GlobalFunctions.showToast("Downloading attachment....");
+    String localPath = _localPath + Platform.pathSeparator + "Download";
+    final savedDir = Directory(localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+    _taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: localPath,
+      headers: {"auth": "test_for_sql_encoding"},
+      //fileName: "SocietyRunImage/Document",
+      showNotification: true,
+      // show download progress in status bar (for Android)
+      openFileFromNotification:
+      true, // click on notification to open downloaded file (for Android)
+    );
+  }
+
+  Future<bool> _openDownloadedFile(String id) {
+    GlobalFunctions.showToast("Downloading completed");
+    return FlutterDownloader.open(taskId: id);
+  }
+
   @override
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
-        value: Provider.of(context),
+      value: Provider.of(context),
       child: Consumer<UserManagementResponse>(
-        builder: (context,value,child){
+        builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
               appBar: AppBar(
@@ -87,14 +162,16 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                   AppLocalizations.of(context).translate('rental_request'),
                   textColor: GlobalVariables.white,
                 ),
-               // bottom: getTabLayout(),
-               // elevation: 0,
+                // bottom: getTabLayout(),
+                // elevation: 0,
               ),
-              body: /*TabBarView(controller: _tabController, children: <Widget>[
+              body:
+                  /*TabBarView(controller: _tabController, children: <Widget>[
                getRentalRequestLayout(value),
           //      getTenantsLayout(value),
                 //getHelperLayout(),
-              ]),*/getRentalRequestLayout(value),
+              ]),*/
+                  getRentalRequestLayout(value),
             ),
           );
         },
@@ -102,7 +179,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
     );
   }
 
- /* getTabLayout() {
+  /* getTabLayout() {
     return PreferredSize(
       preferredSize: Size.fromHeight(40.0),
       child: TabBar(
@@ -145,7 +222,9 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-               value.rentalRequestList.length>0 ? getRentalRequestListDataLayout(value) : GlobalFunctions.loadingWidget(context),
+                value.rentalRequestList.length > 0
+                    ? getRentalRequestListDataLayout(value)
+                    : GlobalFunctions.loadingWidget(context),
               ],
             ),
           ),
@@ -164,14 +243,14 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                 10, MediaQuery.of(context).size.height / 15, 10, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
-                  // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: value.rentalRequestList.length,
-                  itemBuilder: (context, position) {
-                    return getRentalRequestListItemLayout(position,value);
-                  }, //  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                )),
+                      // scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: value.rentalRequestList.length,
+                      itemBuilder: (context, position) {
+                        return getRentalRequestListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
           ),
         ],
       ),
@@ -179,8 +258,13 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
   }
 
   getRentalRequestListItemLayout(int position, UserManagementResponse value) {
-
-    List<Tenant> tenantDetailsList =  List<Tenant>.from(value.rentalRequestList[position].tenant_name.map((i) => Tenant.fromJson(i)));
+    List<Tenant> tenantDetailsList = List<Tenant>.from(value
+        .rentalRequestList[position].tenant_name
+        .map((i) => Tenant.fromJson(i)));
+    var tenantName = '';
+    for (int i = 0; i < tenantDetailsList.length; i++) {
+      tenantName += ',' + tenantDetailsList[i].NAME;
+    }
 
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
@@ -210,35 +294,42 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                               children: [
                                 Container(
                                   //  color:GlobalVariables.grey,
-                                  child: text(tenantDetailsList[0].NAME,
-                                      textColor:GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeLargeMedium,
+                                  child: text(tenantName.replaceFirst(",", ""),
+                                      textColor: GlobalVariables.green,
+                                      fontSize:
+                                          GlobalVariables.textSizeLargeMedium,
                                       fontWeight: FontWeight.bold,
-                                      textStyleHeight: 1.0
-                                  ),
+                                      textStyleHeight: 1.0),
                                 ),
                               ],
                             ),
                             Container(
-                              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              padding: EdgeInsets.fromLTRB(15, 3, 15, 5),
                               decoration: boxDecoration(
                                 bgColor: GlobalVariables.skyBlue,
                                 color: GlobalVariables.white,
                                 radius: GlobalVariables.textSizeNormal,
                               ),
                               child: text(
-                                  tenantDetailsList[0].BLOCK + ' ' + tenantDetailsList[0].FLAT,
+                                  tenantDetailsList[0].BLOCK +
+                                      ' ' +
+                                      tenantDetailsList[0].FLAT,
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.white,
-                                  fontWeight: FontWeight.bold
-                              ),
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 4,
                         ),
                         Row(
                           children: [
                             Container(
-                              child: AppIcon(Icons.date_range,iconColor: GlobalVariables.grey,),
+                              child: AppIcon(
+                                Icons.date_range,
+                                iconColor: GlobalVariables.grey,
+                              ),
                             ),
                             SizedBox(
                               width: 4,
@@ -248,41 +339,193 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                                   GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.black,
-                                  textStyleHeight: 1.0
+                                  textStyleHeight: 1.0),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                if(value.rentalRequestList[position].AGREEMENT.isNotEmpty) {
+                                  downloadAttachment(
+                                      value.rentalRequestList[position]
+                                          .AGREEMENT, _localPath);
+                                }else{
+                                  GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                      child: AppIcon(
+                                        Icons.attach_file,
+                                        iconColor: GlobalVariables.skyBlue,
+                                      )),
+                                  SizedBox(width: 4,),
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                            .translate('agreement'),
+                                        fontSize: GlobalVariables.textSizeMedium,
+                                        textColor: GlobalVariables.skyBlue,
+                                        textStyleHeight: 1.0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: (){
+                                if(value.rentalRequestList[position].TENANT_CONSENT.isNotEmpty) {
+                                  downloadAttachment(
+                                      value.rentalRequestList[position]
+                                          .TENANT_CONSENT, _localPath);
+                                }else{
+                                  GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                      child: AppIcon(
+                                        Icons.attach_file,
+                                        iconColor: GlobalVariables.skyBlue,
+                                      )),
+                                  SizedBox(width: 4,),
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                            .translate('tenant_consent'),
+                                        fontSize: GlobalVariables.textSizeMedium,
+                                        textColor: GlobalVariables.skyBlue,
+                                        textStyleHeight: 1.0),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                     /*   Row(
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              child: text(
-                                  userType,
-                                  fontSize: GlobalVariables.textSizeSMedium,
-                                  textColor: GlobalVariables.black,
-                                  textStyleHeight: 1.5
+                            InkWell(
+                              onTap: (){
+                                if(value.rentalRequestList[position].OWNER_CONSENT.isNotEmpty) {
+                                  downloadAttachment(
+                                      value.rentalRequestList[position]
+                                          .OWNER_CONSENT, _localPath);
+                                }else{
+                                  GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                      child: AppIcon(
+                                        Icons.attach_file,
+                                        iconColor: GlobalVariables.skyBlue,
+                                      )),
+                                  SizedBox(width: 4,),
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                            .translate('owner_consent'),
+                                        fontSize: GlobalVariables.textSizeMedium,
+                                        textColor: GlobalVariables.skyBlue,
+                                        textStyleHeight: 1.0),
+                                  ),
+                                ],
                               ),
                             ),
-                            Row(
-                              children: [
-                                Container(
-                                  child: AppIcon(Icons.access_time,iconSize: GlobalVariables.textSizeSMedium,iconColor: GlobalVariables.grey,),
-                                ),
-                                SizedBox(width: 4,),
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
-                                  child: text(
-                                      '10 days',
-                                      fontSize: GlobalVariables.textSizeSMedium,
-                                      textColor: GlobalVariables.grey,
-                                      textStyleHeight: 1.0
+                            InkWell(
+                              onTap: (){
+                                if(value.rentalRequestList[position].AUTH_FORM.isNotEmpty) {
+                                  downloadAttachment(
+                                      value.rentalRequestList[position]
+                                          .AUTH_FORM, _localPath);
+                                }else{
+                                  GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                      child: AppIcon(
+                                        Icons.attach_file,
+                                        iconColor: GlobalVariables.skyBlue,
+                                      )),
+                                  SizedBox(width: 4,),
+                                  Container(
+                                    child: text(
+                                        AppLocalizations.of(context)
+                                            .translate('authorization_form'),
+                                        fontSize: GlobalVariables.textSizeMedium,
+                                        textColor: GlobalVariables.skyBlue,
+                                        textStyleHeight: 1.0),
                                   ),
-                                ),
-                              ],
-                            )
+                                ],
+                              ),
+                            ),
                           ],
-                        ),*/
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          child: Builder(
+                              builder: (context) => ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: tenantDetailsList.length,
+                                    itemBuilder: (context, position) {
+                                      return Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: (){
+                                              if(tenantDetailsList[position].POLICE_VERIFICATION.isNotEmpty) {
+                                                downloadAttachment(
+                                                    tenantDetailsList[position].POLICE_VERIFICATION, _localPath);
+                                              }else{
+                                                GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
+                                              }
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                    child: AppIcon(
+                                                      Icons.attach_file,
+                                                      iconColor: GlobalVariables.skyBlue,
+                                                    )),
+                                                SizedBox(width: 4,),
+                                                Container(
+                                                  child: text(
+                                                      tenantDetailsList[position].NAME+"'s "+AppLocalizations.of(context)
+                                                          .translate('police_verification'),
+                                                      fontSize: GlobalVariables.textSizeMedium,
+                                                      textColor: GlobalVariables.skyBlue,
+                                                      textStyleHeight: 1.0),
+                                                  alignment: Alignment.topLeft,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 16,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                    //  scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                  )),
+                        ),
                       ],
                     ),
                   ),
@@ -293,7 +536,8 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
         ],
       ),
     );
-  }/*
+  }
+/*
 
 
   getTenantsLayout(UserManagementResponse value) {

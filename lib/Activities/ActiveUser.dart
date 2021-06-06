@@ -155,6 +155,7 @@ var photo = "";
   }
 
   getActiveUserListDataLayout(UserManagementResponse userManagementResponse) {
+    print('value.activeUserList : '+userManagementResponse.activeUserList.length.toString());
     return SingleChildScrollView(
       child: Column(
         children: [

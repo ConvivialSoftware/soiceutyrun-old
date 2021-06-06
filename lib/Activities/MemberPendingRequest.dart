@@ -252,7 +252,7 @@ class MemberPendingRequestState
                                                               onPressed: () {
                                                                 Navigator.of(context).pop();
                                                                 _progressDialog.show();
-                                                                Provider.of<UserManagementResponse>(context,listen: false).deleteFamaliyMember(value.pendingRequestList[position].ID).then((value) {
+                                                                Provider.of<UserManagementResponse>(context,listen: false).deleteFamilyMember(value.pendingRequestList[position].ID).then((value) {
 
                                                                   _progressDialog.hide();
                                                                   GlobalFunctions.showToast(value.message);

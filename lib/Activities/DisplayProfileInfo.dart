@@ -3,14 +3,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseDisplayProfileInfo extends StatefulWidget {
@@ -32,8 +35,9 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
 
   List<ProfileInfo> _profileList = List<ProfileInfo>();
 
-  String userId,societyId,userType,loggedUserType='';
+  String userId,societyId,userType,loggedUserType='',loggedUserId;
   bool isEdit=false;
+  TextEditingController _reasonController = TextEditingController();
 
   DisplayProfileInfoState(this.userId,this.userType);
 
@@ -97,6 +101,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
   void geProfileData() async{
     societyId = await GlobalFunctions.getSocietyId();
     loggedUserType = await GlobalFunctions.getUserType();
+    loggedUserId = await GlobalFunctions.getUserId();
     print('loggedUserType : '+ loggedUserType.toString());
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -163,6 +168,10 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
       isDeleteOptionDisplay=true;
     }else if(loggedUserType.toLowerCase()=='owner family' && userType=='owner'){
       isDeleteOptionDisplay=false;
+    }else if(loggedUserType.toLowerCase()=='owner' && userType=='owner family'){
+      isDeleteOptionDisplay=true;
+    }else if(loggedUserType.toLowerCase()=='owner' && userType=='tenant'){
+      isDeleteOptionDisplay=true;
     }else if(loggedUserType.toLowerCase()=='owner' && userType=='owner'){
       isDeleteOptionDisplay=false;
     }else if(loggedUserType.toLowerCase()=='tenant' && userType=='tenant'){
@@ -170,11 +179,10 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
     }
 
     if(_profileList.length>0){
-      if(_profileList[0].ID==userId){
+      if(loggedUserId==userId){
         isDeleteOptionDisplay=false;
       }
     }
-
     return _profileList.length> 0 ? SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
@@ -568,9 +576,20 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
         children: <Widget>[
           Container(
             child: text(AppLocalizations.of(context).translate('sure_delete'),
-                  fontSize: 18,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
                   textColor: GlobalVariables.black,
                   fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(
+            height: 100,
+            child: AppTextField(
+              textHintContent:
+              AppLocalizations.of(context).translate('reason') +
+                  '*',
+              controllerCallback: _reasonController,
+              maxLines: 99,
+              contentPadding: EdgeInsets.only(top: 14),
             ),
           ),
           Container(
@@ -581,8 +600,12 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 Container(
                   child: FlatButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        deleteFamilyMember();
+                        if(_reasonController.text.length>0){
+                          Navigator.of(context).pop();
+                          moveOutMember();
+                        }else{
+                          GlobalFunctions.showToast('Please Enter Delete');
+                        }
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
@@ -611,13 +634,11 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
     );
   }
 
-  Future<void> deleteFamilyMember() async {
+  Future<void> moveOutMember() async {
 
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    societyId = await GlobalFunctions.getSocietyId();
+
     _progressDialog.show();
-    restClient.deleteFamilyMember(userId, societyId).then((value) {
+    Provider.of<UserManagementResponse>(context,listen: false).deactivateUser(userId, _reasonController.text,_profileList[0].BLOCK,_profileList[0].FLAT).then((value) {
       _progressDialog.hide();
       if(value.status){
         Navigator.of(context).pop('back');

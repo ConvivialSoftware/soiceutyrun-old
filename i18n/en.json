@@ -425,5 +425,12 @@
   "area": "Area",
   "gstin": "GSTIN",
   "my_tenant": "My Tenant",
-  "update_unit_details": "Update Unit Details"
+  "update_unit_details": "Update Unit Details",
+  "reason": "Reason",
+  "agreement": "Agreement",
+  "tenant_consent": "Tenant Consent",
+  "owner_consent": "Owner Consent",
+  "police_verification": "Police Verification",
+  "authorization_form": "Authorization Form",
+  "document_not_available": "Document not Available"
 }

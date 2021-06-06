@@ -92,7 +92,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       block,
       duesRs = "",
       duesDate = "";
-  var email = '', phone = '', consumerId = '', societyName = '';
+  var email = '', phone = '', consumerId = '', societyName = '',userType='';
 
   var amount, invoiceNo, referenceNo, billType, orderId;
 
@@ -764,7 +764,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           ),
           Column(
             children: <Widget>[
-              Container(
+              userType != 'Tenant'  ? Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
                 margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
@@ -809,9 +809,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         : Container(),
                   ],
                 ),
-              ),
-              value.memberList.length > 0
-                  ? Container(
+              ):Container(),
+              userType != 'Tenant' ?
+              value.memberList.length > 0 ? Container(
                       //padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
                       width: 600,
@@ -838,7 +838,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           color: GlobalVariables.grey,
                         ),
                       ),
-                    ),
+                    ) : Container(),
 
 
               Container(
@@ -864,7 +864,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        BaseAddNewMember("family")));
+                                        BaseAddNewMember("tenant")));
                             print('result back : ' + result.toString());
                             if (result != 'back') {
                               Provider.of<UserManagementResponse>(context,listen: false).getUnitMemberData();
@@ -1447,6 +1447,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     societyName = await GlobalFunctions.getSocietyName();
     flat = await GlobalFunctions.getFlat();
     block = await GlobalFunctions.getBlock();
+    userType = await GlobalFunctions.getUserType();
 
     print('societyId : ' + societyId);
     print('UserId : ' + userId);
@@ -1455,6 +1456,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     print('Phone : ' + phone);
     print('EmailId : ' + email);
     print('ConsumerId : ' + consumerId);
+    print('userType : ' + userType);
   }
 
   getSharedPreferenceDuesData() {
