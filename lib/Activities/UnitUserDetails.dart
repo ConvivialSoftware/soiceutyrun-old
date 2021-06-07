@@ -55,7 +55,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     _unitRoleSelectedItem = 'Owned';
 
     Provider.of<UserManagementResponse>(context, listen: false)
-        .getUnitDetailsMemberForAdminData(widget.block, widget.flat,true)
+        .getUnitDetailsMemberForAdminData(widget.block, widget.flat, true)
         .then((value) {
       billerNameTextController.text = value[0].BILLING_NAME;
       areaTextController.text = value[0].AREA;
@@ -213,7 +213,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
-                                          .unitDetailsListForAdmin[0].BILLING_NAME,
+                                          .unitDetailsListForAdmin[0]
+                                          .BILLING_NAME,
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),
@@ -256,7 +257,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
-                                          .unitDetailsListForAdmin[0].CONSUMER_NO,
+                                          .unitDetailsListForAdmin[0]
+                                          .CONSUMER_NO,
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),
@@ -373,44 +375,42 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('my_family'),
-                        style: TextStyle(
-                          color: GlobalVariables.green,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        textColor: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                   /* AppPermission.isUserAddMemberPermission
-                        ?*/ Container(
-                            child: RaisedButton(
-                            onPressed: () async {
-                              final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          BaseAddNewMember("family")));
-                              print('result back : ' + result.toString());
-                              if (result != 'back') {
-                                Provider.of<UserManagementResponse>(context,
-                                        listen: false)
-                                    .getUnitMemberData();
-                              }
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('plus_add'),
-                              style: TextStyle(
-                                  color: GlobalVariables.white, fontSize: 12),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: GlobalVariables.green)),
-                            textColor: GlobalVariables.white,
-                            color: GlobalVariables.green,
-                          ))
-                       // : Container(),
+                    /* AppPermission.isUserAddMemberPermission
+                        ?*/
+                    Container(
+                        child: RaisedButton(
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BaseAddNewMember("family")));
+                        print('result back : ' + result.toString());
+                        if (result != 'back') {
+                          Provider.of<UserManagementResponse>(context,
+                                  listen: false)
+                              .getUnitMemberData();
+                        }
+                      },
+                      child: text(
+                        AppLocalizations.of(context).translate('plus_add'),
+                        textColor: GlobalVariables.white,
+                        fontSize: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: GlobalVariables.green)),
+                      textColor: GlobalVariables.white,
+                      color: GlobalVariables.green,
+                    ))
+                    // : Container(),
                   ],
                 ),
               ),
@@ -435,12 +435,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   : Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.all(20),
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context)
                             .translate('add_family_details'),
-                        style: TextStyle(
-                          color: GlobalVariables.grey,
-                        ),
+                        textColor: GlobalVariables.grey,
                       ),
                     ),
               Container(
@@ -450,13 +448,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('my_tenant'),
-                        style: TextStyle(
-                          color: GlobalVariables.green,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        textColor: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Container(
@@ -474,11 +470,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                               .getUnitMemberData();
                         }
                       },
-                      child: Text(
-                        AppLocalizations.of(context).translate('plus_add'),
-                        style: TextStyle(
-                            color: GlobalVariables.white, fontSize: 12),
-                      ),
+                      child: text(
+                          AppLocalizations.of(context).translate('plus_add'),
+                          textColor: GlobalVariables.white,
+                          fontSize: 12),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(color: GlobalVariables.green)),
@@ -509,12 +504,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   : Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.all(20),
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context)
                             .translate('add_tenant_details'),
-                        style: TextStyle(
-                          color: GlobalVariables.grey,
-                        ),
+                        textColor: GlobalVariables.grey,
                       ),
                     ),
               Container(
@@ -524,13 +517,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('my_staff'),
-                        style: TextStyle(
-                          color: GlobalVariables.green,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        textColor: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Visibility(
@@ -544,11 +535,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   builder: (context) =>
                                       BaseStaffCategory(false)));
                         },
-                        child: Text(
-                          AppLocalizations.of(context).translate('plus_add'),
-                          style: TextStyle(
-                              color: GlobalVariables.white, fontSize: 12),
-                        ),
+                        child: text(
+                            AppLocalizations.of(context).translate('plus_add'),
+                            textColor: GlobalVariables.white,
+                            fontSize: 12),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                             side: BorderSide(color: GlobalVariables.green)),
@@ -579,12 +569,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                     )
                   : Container(
                       padding: EdgeInsets.all(20),
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context)
                             .translate('add_staff_details'),
-                        style: TextStyle(
-                          color: GlobalVariables.grey,
-                        ),
+                        textColor: GlobalVariables.grey,
                       ),
                     ),
               Container(
@@ -594,14 +582,12 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('my_vehicle'),
-                        style: TextStyle(
-                          color: GlobalVariables.green,
+                          textColor: GlobalVariables.green,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
                     ),
                     /*AppPermission.isSocAddVehiclePermission
                         ? */Container(
@@ -662,12 +648,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       : Container(
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.all(20),
-                          child: Text(
+                          child: text(
                             AppLocalizations.of(context)
                                 .translate('add_vehicle_details'),
-                            style: TextStyle(
-                              color: GlobalVariables.grey,
-                            ),
+                            textColor: GlobalVariables.grey,
                           ),
                         ),
                 ],
@@ -771,10 +755,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                           )),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text(
+                child: text(
                   family ? _list[position].NAME : _list[position].STAFF_NAME,
-                  maxLines: 1,
-                  style: TextStyle(color: GlobalVariables.green, fontSize: 16),
+                  maxLine: 1,
+                  textColor: GlobalVariables.green,
+                  fontSize: 16,
                 )),
             Container(
               margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -834,9 +819,9 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                             },
                             child: Container(
                               width: double.infinity,
-                              child: Icon(
+                              child: AppIcon(
                                 Icons.call,
-                                color: GlobalVariables.green,
+                                iconColor: GlobalVariables.green,
                               ),
                             ),
                           ),
@@ -866,9 +851,9 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                             },
                             child: Container(
                               width: double.infinity,
-                              child: Icon(
+                              child: AppIcon(
                                 Icons.share,
-                                color: GlobalVariables.grey,
+                                iconColor: GlobalVariables.grey,
                               ),
                             ),
                           ),
@@ -892,14 +877,13 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                         child: Container(
                           margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
                           alignment: Alignment.center,
-                          child: Text(
+                          child: text(
                             '+ ' +
                                 AppLocalizations.of(context)
                                     .translate('add_phone'),
-                            style: TextStyle(
-                                color: GlobalVariables.lightGray,
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal),
+                            textColor: GlobalVariables.lightGray,
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
                       )
@@ -921,15 +905,16 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: getIconForVehicle(value.vehicleListForAdmin[position].WHEEL),
+                child: getIconForVehicle(
+                    value.vehicleListForAdmin[position].WHEEL),
               ),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(
+                  child: text(
                     value.vehicleListForAdmin[position].MODEL,
-                    style:
-                        TextStyle(color: GlobalVariables.green, fontSize: 16),
+                    textColor: GlobalVariables.green,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -937,39 +922,38 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                 children: [
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Text(
+                    child: text(
                       value.vehicleListForAdmin[position].VEHICLE_NO,
-                      style:
-                          TextStyle(color: GlobalVariables.grey, fontSize: 16),
+                      textColor: GlobalVariables.grey,
+                      fontSize: 16,
                     ),
                   ),
                   /*AppPermission.isSocAddVehiclePermission
-                      ? */InkWell(
-                          onTap: () {
-                            print('Delete Position :' + position.toString());
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    StatefulBuilder(builder:
-                                        (BuildContext context,
-                                            StateSetter setState) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25.0)),
-                                        child: deleteVehicleLayout(
-                                            position, value),
-                                      );
-                                    }));
-                          },
-                          child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              child: Icon(
-                                Icons.delete,
-                                color: GlobalVariables.mediumGreen,
-                              )),
-                        )
-                     // : Container(),
+                      ? */
+                  InkWell(
+                    onTap: () {
+                      print('Delete Position :' + position.toString());
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              StatefulBuilder(builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(25.0)),
+                                  child: deleteVehicleLayout(position, value),
+                                );
+                              }));
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: AppIcon(
+                          Icons.delete,
+                          iconColor: GlobalVariables.mediumGreen,
+                        )),
+                  )
+                  // : Container(),
                 ],
               )
             ],
@@ -996,12 +980,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: Text(
+            child: text(
               AppLocalizations.of(context).translate('sure_delete'),
-              style: TextStyle(
-                  fontSize: 18,
-                  color: GlobalVariables.black,
-                  fontWeight: FontWeight.bold),
+              fontSize: 18,
+              textColor: GlobalVariables.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -1015,12 +998,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                         Navigator.of(context).pop();
                         deleteVehicle(position, value);
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                        textColor: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
                 Container(
@@ -1028,12 +1010,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context).translate('no'),
-                        style: TextStyle(
-                            color: GlobalVariables.green,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                        textColor: GlobalVariables.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
               ],
@@ -1048,21 +1029,21 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     if (vehicleType == '4 Wheeler' ||
         vehicleType == '4' ||
         vehicleType == 'four') {
-      return Icon(
+      return AppIcon(
         Icons.directions_car,
-        color: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.mediumGreen,
       );
     } else if (vehicleType == '2 Wheeler' ||
         vehicleType == '2' ||
         vehicleType == 'two') {
-      return Icon(
+      return AppIcon(
         Icons.motorcycle,
-        color: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.mediumGreen,
       );
     } else {
-      return Icon(
+      return AppIcon(
         Icons.motorcycle,
-        color: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.mediumGreen,
       );
     }
   }
@@ -1106,12 +1087,12 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       children: <Widget>[
                         Container(
                           alignment: Alignment.topLeft,
-                          child: Text(
-                            AppLocalizations.of(context).translate('update_unit_details'),
-                            style: TextStyle(
-                                color: GlobalVariables.green,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                          child: text(
+                            AppLocalizations.of(context)
+                                .translate('update_unit_details'),
+                            textColor: GlobalVariables.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(

@@ -10,6 +10,8 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -62,14 +64,14 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('staff_category'),
-            style: TextStyle(color: GlobalVariables.white),
+              textColor: GlobalVariables.white,
           ),
         ):null,
         body:  getStaffCategoryLayout(),
@@ -143,16 +145,16 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
               children: [
                 Expanded(
                   child: Container(
-                    child: Text(_staffListCount[position].ROLE),
+                    child: text(_staffListCount[position].ROLE),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(_staffListCount[position].Role_count),
+                  child: text(_staffListCount[position].Role_count),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Icon(Icons.arrow_forward_ios,color: GlobalVariables.lightGray,),
+                  child: AppIcon(Icons.arrow_forward_ios,iconColor: GlobalVariables.lightGray,),
                 ),
               ],
             ),

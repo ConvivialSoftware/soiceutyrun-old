@@ -54,7 +54,7 @@ dependencies:
  ## crypto: 2.1.5
   salt: 0.1.2
   #firebase
-  firebase_messaging: 7.0.3
+  firebase_messaging: ^10.0.1
   flutter_local_notifications: ^1.4.4+2
   notification_permissions: ^0.4.8
 
@@ -101,6 +101,9 @@ dev_dependencies:
   intl_translation: ^0.17.1
   retrofit_generator: any
   build_runner: any
+
+dependency_overrides:
+  intl: 0.17.0-nullsafety.2
 
 flutter_icons:
   ios : true

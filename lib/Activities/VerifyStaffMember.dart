@@ -9,6 +9,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseVerifyStaffMember extends StatefulWidget {
@@ -48,14 +50,14 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('staff_mobile_no'),
-            style: TextStyle(color: GlobalVariables.white),
+              textColor: GlobalVariables.white,
           ),
         ),
         body: Container(),
@@ -108,9 +110,9 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                       hintStyle: TextStyle(
                         color: GlobalVariables.lightGray,
                       ),
-                      suffixIcon: Icon(
+                      suffixIcon: AppIcon(
                         Icons.phone_android,
-                        color: GlobalVariables.lightGreen,
+                        iconColor: GlobalVariables.lightGreen,
                       ),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -150,12 +152,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('one_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                                 fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -179,12 +180,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('two_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                                 fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -208,12 +208,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('three_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                                 fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -242,12 +241,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                             AppLocalizations.of(context).translate('four_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -271,12 +269,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('five_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -300,12 +297,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('six_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -334,12 +330,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('seven_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -363,12 +358,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('eight_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -392,12 +386,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('nine_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -449,12 +442,11 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                               color: GlobalVariables.green,
                               width: 2.0,
                             )),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context).translate('zero_num'),
-                          style: TextStyle(
-                              color: GlobalVariables.green,
+                            textColor: GlobalVariables.green,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -568,9 +560,8 @@ _progressDialog.show();
         children: <Widget>[
           
           Container(
-            child: Text(AppLocalizations.of(context).translate('add_staff_for_other_flat') , style: TextStyle(
-              color: GlobalVariables.black,fontSize: 18
-            ),),
+            child: text(AppLocalizations.of(context).translate('add_staff_for_other_flat') , textColor: GlobalVariables.black,fontSize: 18
+            ),
           ),
           Align(
             alignment: Alignment.topRight,
@@ -584,14 +575,14 @@ _progressDialog.show();
                     //   alignment: Alignment.topRight,
                     child: FlatButton(onPressed: (){
                       Navigator.of(context).pop();
-                    }, child: Text(AppLocalizations.of(context).translate('no'))),
+                    }, child: text(AppLocalizations.of(context).translate('no'))),
                   ),
                   Container(
                   //  alignment: Alignment.topRight,
                     child: FlatButton(onPressed: (){
                       Navigator.of(context).pop();
                       addMember();
-                    }, child: Text(AppLocalizations.of(context).translate('yes'))),
+                    }, child: text(AppLocalizations.of(context).translate('yes'))),
                   ),
                 ],
               ),

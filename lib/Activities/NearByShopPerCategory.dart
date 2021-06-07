@@ -120,15 +120,14 @@ class NearByShopPerCategoryState
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(
+                    child: AppIcon(
                       Icons.arrow_back,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
-                  title: Text(
+                  title: text(
                     AppLocalizations.of(context).translate('exclusive_offer'),
-                    style:
-                        TextStyle(color: GlobalVariables.white, fontSize: 16),
+                      textColor: GlobalVariables.white, fontSize: 16,
                   ),
                   bottom: value.nearByShopCategoryList.isNotEmpty
                       ? getTabLayout(value)
@@ -403,9 +402,9 @@ class NearByShopPerCategoryState
                         shape: CircleBorder(),
                       ),
                       child: IconButton(
-                        icon: Icon(
+                        icon: AppIcon(
                           Icons.arrow_forward,
-                          color: GlobalVariables.green,
+                          iconColor: GlobalVariables.green,
                         ),
                         iconSize: 28,
                       ),

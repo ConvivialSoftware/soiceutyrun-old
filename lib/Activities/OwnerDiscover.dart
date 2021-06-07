@@ -110,15 +110,14 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(
+                    child: AppIcon(
                       Icons.arrow_back,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
-                  title: Text(
+                  title: text(
                     AppLocalizations.of(context).translate('my_classified'),
-                    style:
-                        TextStyle(color: GlobalVariables.white, fontSize: 16),
+                    textColor: GlobalVariables.white, fontSize: 16,
                   ),
                   /*bottom: value.ownerClassifiedCategoryList.isNotEmpty
                       ? getTabLayout(value)
@@ -228,9 +227,9 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                           builder: (context) => BaseAddNearByShop()));
                 }*/
               },
-              child: Icon(
+              child: AppIcon(
                 Icons.add,
-                color: GlobalVariables.white,
+                iconColor: GlobalVariables.white,
               ),
               backgroundColor: GlobalVariables.green,
             ),
@@ -354,10 +353,10 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Icon(
+                                      AppIcon(
                                         Icons.location_on,
-                                        size: 20,
-                                        color: GlobalVariables.lightGray,
+                                        iconSize: 20,
+                                        iconColor: GlobalVariables.lightGray,
                                       ),
                                       SizedBox(width: 2),
                                       Flexible(
@@ -384,10 +383,10 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                           children: [
                                             Container(
                                                 margin: EdgeInsets.only(top: 3),
-                                                child: Icon(
+                                                child: AppIcon(
                                                   Icons.date_range,
-                                                  size: 15,
-                                                  color: GlobalVariables.lightGray,
+                                                  iconSize: 15,
+                                                  iconColor: GlobalVariables.lightGray,
                                                 )),
                                             SizedBox(
                                               width: 4,
@@ -409,10 +408,10 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                           children: [
                                             Container(
                                                 margin: EdgeInsets.only(top: 3),
-                                                child: Icon(
+                                                child: AppIcon(
                                                   Icons.access_time,
-                                                  size: 15,
-                                                  color: GlobalVariables.lightGray,
+                                                  iconSize: 15,
+                                                  iconColor: GlobalVariables.lightGray,
                                                 )),
                                             SizedBox(
                                               width: 4,

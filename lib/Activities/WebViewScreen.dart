@@ -5,6 +5,8 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseWebViewScreen extends StatefulWidget {
 
@@ -37,7 +39,7 @@ class WebViewScreenState extends BaseStatefulState<BaseWebViewScreen> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).translate('app_name')),
+          title: text(AppLocalizations.of(context).translate('app_name')),
           backgroundColor: GlobalVariables.green,
           //centerTitle: true,
           leading: getIconButton(),
@@ -62,8 +64,8 @@ class WebViewScreenState extends BaseStatefulState<BaseWebViewScreen> {
   }
 
   getIconButton() {
-    return IconButton(
-        icon: Icon(Icons.arrow_back, color: GlobalVariables.white),
+    return AppIconButton(
+        Icons.arrow_back, iconColor: GlobalVariables.white,
         onPressed: () => Navigator.of(context).pop());
   }
 }

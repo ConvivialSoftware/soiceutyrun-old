@@ -6,6 +6,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
@@ -49,14 +50,14 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Icon(
+                    child: AppIcon(
                       Icons.arrow_back,
-                      color: GlobalVariables.white,
+                      iconColor: GlobalVariables.white,
                     ),
                   ),
-                  title: Text(
+                  title: text(
                     AppLocalizations.of(context).translate('my_services'),
-                    style: TextStyle(color: GlobalVariables.white),
+                      textColor: GlobalVariables.white,
                   ),
                 ),
                 body: value.isLoading ? GlobalFunctions.loadingWidget(context) : getBaseLayout(value),
@@ -147,10 +148,10 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                     children: [
                                       Container(
                                           margin: EdgeInsets.only(top: 3),
-                                          child: Icon(
+                                          child: AppIcon(
                                             Icons.date_range,
-                                            size: 15,
-                                            color: GlobalVariables.grey,
+                                            iconSize: 15,
+                                            iconColor: GlobalVariables.grey,
                                           )),
                                       SizedBox(
                                         width: 4,
@@ -188,11 +189,11 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                   child:  Row(
                                     children: <Widget>[
                                       Container(
-                                          child: Icon(
+                                          child: AppIcon(
                                             Icons.star,
-                                            color:
+                                            iconColor:
                                             GlobalVariables.orangeYellow,
-                                            size: 15,
+                                            iconSize: 15,
                                           )),
                                       InkWell(
 
@@ -264,29 +265,29 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                   itemBuilder: (context, index) {
                     switch (index) {
                       case 0:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_very_dissatisfied,
-                          color: Colors.red,
+                          iconColor: Colors.red,
                         );
                       case 1:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_dissatisfied,
-                          color: Colors.redAccent,
+                          iconColor: Colors.redAccent,
                         );
                       case 2:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_neutral,
-                          color: Colors.amber,
+                          iconColor: Colors.amber,
                         );
                       case 3:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_satisfied,
-                          color: Colors.lightGreen,
+                          iconColor: Colors.lightGreen,
                         );
                       case 4:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_very_satisfied,
-                          color: Colors.green,
+                          iconColor: Colors.green,
                         );
                       default:
                         return Container();
@@ -306,12 +307,11 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Text(_myRate.toString(),
+                child: text(_myRate.toString(),
                   //myRate.toStringAsFixed(1).toString(),
-                  style: TextStyle(
-                      color: GlobalVariables.skyBlue,
+    textColor: GlobalVariables.skyBlue,
                       fontSize: 20,
-                      fontWeight: FontWeight.w800),
+                      fontWeight: FontWeight.w800,
                 ),
               ),
             ],
@@ -359,9 +359,9 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                           'Please Select Rate at least grater that Zero');
                     }
                   },
-                  child: Text(
+                  child: text(
                     'Submit',
-                    style: TextStyle(color: GlobalVariables.white),
+                      textColor: GlobalVariables.white,
                   )),
             ),
           )

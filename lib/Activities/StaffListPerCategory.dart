@@ -72,14 +72,14 @@ class StaffListPerCategoryState
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Icon(
+                child: AppIcon(
                   Icons.arrow_back,
-                  color: GlobalVariables.white,
+                  iconColor: GlobalVariables.white,
                 ),
               ),
-              title: Text(
+              title: text(
                 _roleName,
-                style: TextStyle(color: GlobalVariables.white),
+                  textColor: GlobalVariables.white,
               ),
             ),
             body: getStaffListPerCategoryLayout(value),
@@ -226,12 +226,11 @@ class StaffListPerCategoryState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text(
+                          child: text(
                             value.staffList[position].STAFF_NAME,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
+                        textColor: GlobalVariables.green,
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -239,37 +238,33 @@ class StaffListPerCategoryState
                           child: Row(
                             children: <Widget>[
                               Container(
-                                  child: Icon(
+                                  child: AppIcon(
                                 Icons.star,
-                                color: GlobalVariables.skyBlue,
-                                size: 15,
+                                iconColor: GlobalVariables.skyBlue,
+                                iconSize: 15,
                               )),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   totalRate.toStringAsFixed(1).toString(),
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
+                                  textColor: GlobalVariables.grey,
                                     fontSize: 12,
-                                  ),
                                 ),
                               ),
                               Container(
                                   margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                  child: Icon(
+                                  child: AppIcon(
                                     Icons.fiber_manual_record,
-                                    color: GlobalVariables.orangeYellow,
-                                    size: 10,
+                                    iconColor: GlobalVariables.orangeYellow,
+                                    iconSize: 10,
                                   )),
                               Container(
                                 alignment: Alignment.topLeft,
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   _workHouseList.length.toString() + ' House',
-                                  style: TextStyle(
-                                    color: GlobalVariables.green,
+                                  textColor: GlobalVariables.green,
                                     fontSize: 12,
-                                  ),
                                 ),
                               ),
                             ],
@@ -280,9 +275,9 @@ class StaffListPerCategoryState
                   ),
                 ),
                 Container(
-                  child: Icon(
+                  child: AppIcon(
                     Icons.arrow_forward_ios,
-                    color: GlobalVariables.lightGray,
+                    iconColor: GlobalVariables.lightGray,
                   ),
                 ),
               ],

@@ -6,6 +6,7 @@ import 'package:societyrun/Activities/AddSociety.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -203,10 +204,9 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                               side: BorderSide(color: GlobalVariables.green)),
-                          child: Text(
+                          child: text(
                             AppLocalizations.of(context).translate('register'),
-                            style:
-                                TextStyle(fontSize: GlobalVariables.textSizeMedium),
+                            fontSize: GlobalVariables.textSizeMedium,
                           ),
                         ),
                       ),

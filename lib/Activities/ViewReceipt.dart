@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
@@ -62,7 +63,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
           centerTitle: true,
           elevation: 0,
           actions: [
-            IconButton(icon: Icon(Icons.mail), onPressed: (){
+            AppIconButton(Icons.mail, onPressed: (){
               emailReceiptDialog(context);
             }),
           ],
@@ -70,14 +71,14 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('receipt')+ ' #'+invoiceNo,
-            style: TextStyle(color: GlobalVariables.white),
+              textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -321,17 +322,16 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                         Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Text(
+                          child: text(
                             GlobalFunctions.convertDateFormat(
                                 _receiptList[0].PAYMENT_DATE,
                                 'dd-MM-yyyy') /*+
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
                                     _receiptList[0].END_DATE, 'dd-MM-yyyy')*/,
-                            style: TextStyle(
-                                color: GlobalVariables.green,
+                              textColor: GlobalVariables.green,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -380,23 +380,19 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
-                                        ? IconButton(
-                                        icon: Icon(
+                                        ? AppIconButton(
                                           Icons.edit,
-                                          color: GlobalVariables.green,
-                                          size: 24,
-                                        ),
+                                          iconColor: GlobalVariables.green,
+                                          iconSize: 24,
                                         onPressed: () {
                                           _emailTextController.clear();
                                           isEditEmail = true;
                                           _stateState(() {});
                                         })
-                                        : IconButton(
-                                        icon: Icon(
+                                        : AppIconButton(
                                           Icons.cancel,
-                                          color: GlobalVariables.grey,
-                                          size: 24,
-                                        ),
+                                          iconColor: GlobalVariables.grey,
+                                          iconSize: 24,
                                         onPressed: () {
                                           _emailTextController.clear();
                                           _emailTextController.text = email;
@@ -440,11 +436,10 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                   borderRadius: BorderRadius.circular(10),
                                   side:
                                   BorderSide(color: GlobalVariables.green)),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
-                                style: TextStyle(
-                                    fontSize: GlobalVariables.textSizeMedium),
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ),

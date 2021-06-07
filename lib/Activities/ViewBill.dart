@@ -8,6 +8,7 @@ import 'package:societyrun/Models/BillDetails.dart';
 import 'package:societyrun/Models/BillHeads.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
@@ -69,7 +70,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
           centerTitle: true,
           elevation: 0,
           actions: [
-            IconButton(icon: Icon(Icons.mail), onPressed: (){
+            AppIconButton(Icons.mail, onPressed: (){
               emailBillDialog(context);
             }),
           ],
@@ -77,14 +78,14 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('bill')+ ' #'+invoiceNo,
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -274,16 +275,13 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                                   Expanded(
                                                     child: Container(
                                                       padding: EdgeInsets.all(5),
-                                                      child: Text(_billHeadsList[position].HEAD_NAME,style: TextStyle(
-                                                          color: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                                      ),),
+                                                      child: text(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                                                      ),
                                                     ),
                                                   ),
                                                   Container(
                                                     padding: EdgeInsets.all(5),
-                                                    child: Text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),style: TextStyle(
-                                                        color:  GlobalVariables.red,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
-                                                    ),),
+                                                    child: text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),textColor:  GlobalVariables.red,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
                                                   )
                                                 ],
                                               ),
@@ -372,16 +370,12 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(5),
-                    child: Text(_billHeadsList[position].HEAD_NAME,style: TextStyle(
-                        color: GlobalVariables.grey,fontSize: 18
-                    ),),
+                    child: text(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.grey,fontSize: 18),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
-                  child: Text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),style: TextStyle(
-                      color:  GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold
-                  ),),
+                  child: text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),textColor:  GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -477,17 +471,16 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                         Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Text(
+                          child: text(
                             GlobalFunctions.convertDateFormat(
                                 _billDetailsList[0].START_DATE,
                                 'dd-MM-yyyy') +
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
                                     _billDetailsList[0].END_DATE, 'dd-MM-yyyy'),
-                            style: TextStyle(
-                                color: GlobalVariables.green,
+                              textColor: GlobalVariables.green,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -536,23 +529,19 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
-                                        ? IconButton(
-                                        icon: Icon(
+                                        ? AppIconButton(
                                           Icons.edit,
-                                          color: GlobalVariables.green,
-                                          size: 24,
-                                        ),
+                                          iconColor: GlobalVariables.green,
+                                          iconSize: 24,
                                         onPressed: () {
                                           _emailTextController.clear();
                                           isEditEmail = true;
                                           _stateState(() {});
                                         })
-                                        : IconButton(
-                                        icon: Icon(
+                                        : AppIconButton(
                                           Icons.cancel,
-                                          color: GlobalVariables.grey,
-                                          size: 24,
-                                        ),
+                                          iconColor: GlobalVariables.grey,
+                                          iconSize: 24,
                                         onPressed: () {
                                           _emailTextController.clear();
                                           _emailTextController.text = email;
@@ -599,11 +588,10 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                   borderRadius: BorderRadius.circular(10),
                                   side:
                                   BorderSide(color: GlobalVariables.green)),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
-                                style: TextStyle(
-                                    fontSize: GlobalVariables.textSizeMedium),
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ),

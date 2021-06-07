@@ -13,6 +13,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BaseStaffDetails extends StatefulWidget {
@@ -97,14 +99,14 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('staff_info'),
-            style: TextStyle(color: GlobalVariables.white),
+              textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -248,12 +250,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    child: Text(
+                    child:text(
                       _staff.STAFF_NAME,
-                      style: TextStyle(
-                          color: GlobalVariables.green,
+                  textColor: GlobalVariables.green,
                           fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.bold,
                     ),
                   ),
                   Container(
@@ -261,12 +262,10 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          child: Text(
+                          child: text(
                             _staff.CONTACT,
-                            style: TextStyle(
-                              color: GlobalVariables.grey,
+                      textColor: GlobalVariables.grey,
                               fontSize: 12,
-                            ),
                           ),
                         ),
                       ],
@@ -283,9 +282,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                               launch("tel:"+_staff.CONTACT);
                             },
                             child: Container(
-                              child: Icon(
+                              child: AppIcon(
                                 Icons.call,
-                                color: GlobalVariables.green,
+                                iconColor: GlobalVariables.green,
                               ),
                             ),
                           ),
@@ -309,9 +308,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                             },
                             child: Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Icon(
+                              child: AppIcon(
                                 Icons.share,
-                                color: GlobalVariables.grey,
+                                iconColor: GlobalVariables.grey,
                               ),
                             ),
                           ),
@@ -353,12 +352,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     Container(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Text(
+                      child: text(
                         totalRate.toStringAsFixed(1).toString(),
-                        style: TextStyle(
-                            color: GlobalVariables.skyBlue,
+                          textColor: GlobalVariables.skyBlue,
                             fontSize: 20,
-                            fontWeight: FontWeight.w800),
+                            fontWeight: FontWeight.w800,
                       ),
                     ),
                     /*Container(
@@ -419,12 +417,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       child: Container(
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                        child: Text(
+                        child: text(
                           'Work In ' +
                               _assignFlatList.length.toString() +
                               ' House',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                              fontSize: 16, fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -434,9 +431,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                               removeHouseHold();
                             },
                             child: Container(
-                              child: Icon(
+                              child: AppIcon(
                                 Icons.delete,
-                                color: GlobalVariables.green,
+                                iconColor: GlobalVariables.green,
                               ),
                             ),
                           )
@@ -471,11 +468,10 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                   color: GlobalVariables.transparent,
                                   width: 3.0,
                                 )),
-                            child: Text(
+                            child: text(
                               _assignFlatList[index],
-                              style: TextStyle(
-                                  color: GlobalVariables.white,
-                                  fontWeight: FontWeight.w500),
+                                textColor: GlobalVariables.white,
+                                  fontWeight: FontWeight.w500,
                             ));
                       },
                     ),
@@ -529,9 +525,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                                   showMyRattingBar(setState));
                                         }));
                               },
-                              child: Text(
+                              child: text(
                                 'Add Your Ratting',
-                                style: TextStyle(color: GlobalVariables.white),
+                                  textColor: GlobalVariables.white,
                               )),
                         ),
                 )
@@ -549,9 +545,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       onTap: () {
                         addHouseHold();
                       },
-                      child: Text(
+                      child: text(
                         'Add to Household',
-                        style: TextStyle(color: GlobalVariables.white),
+                          textColor: GlobalVariables.white,
                       )),
                 ),
         ),
@@ -570,29 +566,29 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
-              return Icon(
+              return AppIcon(
                 Icons.sentiment_very_dissatisfied,
-                color: Colors.red,
+                iconColor: Colors.red,
               );
             case 1:
-              return Icon(
+              return AppIcon(
                 Icons.sentiment_dissatisfied,
-                color: Colors.redAccent,
+                iconColor: Colors.redAccent,
               );
             case 2:
-              return Icon(
+              return AppIcon(
                 Icons.sentiment_neutral,
-                color: Colors.amber,
+                iconColor: Colors.amber,
               );
             case 3:
-              return Icon(
+              return AppIcon(
                 Icons.sentiment_satisfied,
-                color: Colors.lightGreen,
+                iconColor: Colors.lightGreen,
               );
             case 4:
-              return Icon(
+              return AppIcon(
                 Icons.sentiment_very_satisfied,
-                color: Colors.green,
+                iconColor: Colors.green,
               );
             default:
               return Container();
@@ -630,29 +626,29 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                   itemBuilder: (context, index) {
                     switch (index) {
                       case 0:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_very_dissatisfied,
-                          color: Colors.red,
+                          iconColor: Colors.red,
                         );
                       case 1:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_dissatisfied,
-                          color: Colors.redAccent,
+                          iconColor: Colors.redAccent,
                         );
                       case 2:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_neutral,
-                          color: Colors.amber,
+                          iconColor: Colors.amber,
                         );
                       case 3:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_satisfied,
-                          color: Colors.lightGreen,
+                          iconColor: Colors.lightGreen,
                         );
                       case 4:
-                        return Icon(
+                        return AppIcon(
                           Icons.sentiment_very_satisfied,
-                          color: Colors.green,
+                          iconColor: Colors.green,
                         );
                       default:
                         return Container();
@@ -670,12 +666,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Text(
+                child: text(
                   myRate.toStringAsFixed(1).toString(),
-                  style: TextStyle(
-                      color: GlobalVariables.skyBlue,
+                  textColor: GlobalVariables.skyBlue,
                       fontSize: 20,
-                      fontWeight: FontWeight.w800),
+                      fontWeight: FontWeight.w800,
                 ),
               ),
             ],
@@ -705,9 +700,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                   )),
               child: FlatButton(
                   onPressed: () {},
-                  child: Text(
+                  child: text(
                     'Submit',
-                    style: TextStyle(color: GlobalVariables.white),
+                      textColor: GlobalVariables.white,
                   )),
             ),
           )

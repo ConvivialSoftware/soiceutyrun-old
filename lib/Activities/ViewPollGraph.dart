@@ -5,6 +5,8 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Poll.dart';
 import 'package:societyrun/Models/PollOption.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseViewPollGraph extends StatefulWidget {
 
@@ -46,14 +48,14 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('poll_graph'),
-            style: TextStyle(color: GlobalVariables.white),
+              textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -121,10 +123,9 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                           child: Container(
                             margin: EdgeInsets.all(10),
                             alignment: Alignment.topLeft,
-                            child: Text(
-                              _poll.POLL_Q,style: TextStyle(
-                                color: GlobalVariables.black,fontSize: 20,fontWeight: FontWeight.bold
-                            ),),
+                            child: text(
+                              _poll.POLL_Q,textColor: GlobalVariables.black,fontSize: 20,fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
                         Builder(
@@ -152,22 +153,18 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                             children: [
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                child: Text(
+                                child: text(
                                   !GlobalFunctions.isDateSameOrGrater(_poll.EXPIRY_DATE) ? 'Active' : 'Expired',
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: 16
-                                  ),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                child: Text(
+                                child: text(
                                   "Total participants : "+ _totalParticipants.toString(),
-                                  style: TextStyle(
-                                    color: GlobalVariables.grey,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: 16
-                                  ),
                                 ),
                               ),
                             ],
@@ -195,18 +192,16 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
         children: [
           Flexible(
             child: Container(
-              child: Text(
-                (position+1).toString()+')  '+_optionList[position].ANS.toString()+' - ',style: TextStyle(
-                  color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
-              ),),
+              child: text(
+                (position+1).toString()+')  '+_optionList[position].ANS.toString()+' - ',textColor: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
+              ),
             ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Text(
-             _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' votes',style: TextStyle(
-                color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
-            ),),
+            child: text(
+             _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' votes',textColor: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
+            ),
           )
         ],
       ),

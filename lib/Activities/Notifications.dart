@@ -22,6 +22,8 @@ import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 
 import 'HelpDesk.dart';
@@ -63,14 +65,14 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.white,
+              iconColor: GlobalVariables.white,
             ),
           ),
-          title: Text(
+          title: text(
             AppLocalizations.of(context).translate('notification')+" ("+GlobalVariables.notificationCounterValueNotifer.value.toString()+")",
-            style: TextStyle(color: GlobalVariables.white),
+            textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -221,25 +223,22 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                     _dbNotificationList[position].title,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
+                                    maxLine: 1,
+                                    
+                                    textColor: GlobalVariables.green,
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
+                                        fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
                           Container(
                             margin: EdgeInsets.fromLTRB(_dbNotificationList[position].read==0 ? 15 : 10, 10, 0, 0),
-                            child: Text(
+                            child: text(
                               _dbNotificationList[position].body,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                              TextStyle(color: GlobalVariables.grey),
+                              maxLine: 2,
+                                textColor: GlobalVariables.grey
                             ),
                           ),
                         ],
@@ -249,8 +248,8 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                   Container(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                      child: Text(displayDate,
-                          style: TextStyle(color: GlobalVariables.grey)),
+                      child: text(displayDate,
+    textColor: GlobalVariables.grey),
                     ),
                   )
                 ],

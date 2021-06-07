@@ -60,14 +60,14 @@ class NearByShopPerCategoryItemDetailsState
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: AppIcon(
               Icons.arrow_back,
-              color: GlobalVariables.green,
+              iconColor: GlobalVariables.green,
             ),
           ),
-          title: Text(
+          title: text(
             'Offer Details',
-            style: TextStyle(color: GlobalVariables.green, fontSize: 16),
+              textColor: GlobalVariables.green, fontSize: 16,
           ),
         ),
         body: getBaseLayout(),
@@ -254,10 +254,10 @@ class NearByShopPerCategoryItemDetailsState
                                                       child: Container(
                                                     child: Row(
                                                       children: [
-                                                        Icon(
+                                                        AppIcon(
                                                           Icons.location_on,
-                                                          size: 24,
-                                                          color: GlobalVariables
+                                                          iconSize: 24,
+                                                          iconColor: GlobalVariables
                                                               .green,
                                                         ),
                                                         SizedBox(
@@ -615,10 +615,10 @@ class NearByShopPerCategoryItemDetailsState
                                                   "Copied to Clipboard");
                                             });
                                           },
-                                          child: Icon(
+                                          child: AppIcon(
                                             Icons.content_copy,
-                                            color: GlobalVariables.skyBlue,
-                                            size: 24,
+                                            iconColor: GlobalVariables.skyBlue,
+                                            iconSize: 24,
                                           ))
                                     ],
                                   ),

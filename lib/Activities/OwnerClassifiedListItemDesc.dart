@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -89,14 +90,14 @@ class CreateClassifiedListingState
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(
+                  child: AppIcon(
                     Icons.arrow_back,
-                    color: GlobalVariables.white,
+                    iconColor: GlobalVariables.white,
                   ),
                 ),
                 actions: [
                   PopupMenuButton(
-                      icon: Icon(Icons.more_vert, color: isMenuEnable ? GlobalVariables.white : GlobalVariables.transparent),
+                      icon: AppIcon(Icons.more_vert, iconColor: isMenuEnable ? GlobalVariables.white : GlobalVariables.transparent),
                       // add this line
                       itemBuilder: (_) => <PopupMenuItem<String>>[
                             if (widget.classifiedList.Status
@@ -172,16 +173,15 @@ class CreateClassifiedListingState
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Container(
-                                                child: Text(
+                                                child: text(
                                                   AppLocalizations.of(context)
                                                       .translate(
                                                           'sure_active_ads'),
-                                                  style: TextStyle(
                                                       fontSize: 18,
-                                                      color:
+                                                      textColor:
                                                           GlobalVariables.black,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.bold,
                                                 ),
                                               ),
                                               Container(
@@ -218,19 +218,18 @@ class CreateClassifiedListingState
                                                                       .message);
                                                             });
                                                           },
-                                                          child: Text(
+                                                          child: text(
                                                             AppLocalizations.of(
                                                                     context)
                                                                 .translate(
                                                                     'yes'),
-                                                            style: TextStyle(
-                                                                color:
+                                                                textColor:
                                                                     GlobalVariables
                                                                         .green,
                                                                 fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .bold),
+                                                                        .bold,
                                                           )),
                                                     ),
                                                     Container(
@@ -240,19 +239,18 @@ class CreateClassifiedListingState
                                                                     context)
                                                                 .pop();
                                                           },
-                                                          child: Text(
+                                                          child: text(
                                                             AppLocalizations.of(
                                                                     context)
                                                                 .translate(
                                                                     'no'),
-                                                            style: TextStyle(
-                                                                color:
+                                          textColor:
                                                                     GlobalVariables
                                                                         .green,
                                                                 fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .bold),
+                                                                        .bold,
                                                           )),
                                                     ),
                                                   ],
@@ -267,9 +265,9 @@ class CreateClassifiedListingState
                         }
                       })
                 ],
-                title: Text(
+                title: text(
                   AppLocalizations.of(context).translate('create_listing'),
-                  style: TextStyle(color: GlobalVariables.white, fontSize: 16),
+                    textColor: GlobalVariables.white, fontSize: 16,
                 ),
               ),
               body: getBaseLayout(value),
@@ -442,10 +440,10 @@ class CreateClassifiedListingState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
+                  AppIcon(
                     Icons.location_on,
-                    size: 20,
-                    color: GlobalVariables.lightGray,
+                    iconSize: 20,
+                    iconColor: GlobalVariables.lightGray,
                   ),
                   Flexible(
                     child: text(
@@ -858,8 +856,8 @@ class CreateClassifiedListingState
                                                                 .mediumGreen,
                                                         width: 2.0,
                                                       )),
-                                                  child: Icon(Icons.check,
-                                                      color: GlobalVariables
+                                                  child: AppIcon(Icons.check,
+                                                      iconColor: GlobalVariables
                                                           .white),
                                                 ),
                                                 Flexible(

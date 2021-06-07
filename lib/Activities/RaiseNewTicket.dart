@@ -69,9 +69,9 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
           for (int i = 0; i < value.length; i++) {
             __categoryListItems.add(DropdownMenuItem(
               value: value[i].COMPLAINT_CATEGORY,
-              child: Text(
+              child: text(
                 value[i].COMPLAINT_CATEGORY,
-                style: TextStyle(color: GlobalVariables.green),
+                  textColor: GlobalVariables.green,
               ),
             ));
           }
@@ -104,14 +104,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(
+                  child: AppIcon(
                     Icons.arrow_back,
-                    color: GlobalVariables.white,
+                    iconColor: GlobalVariables.white,
                   ),
                 ),
-                title: Text(
+                title: text(
                   AppLocalizations.of(context).translate('help_desk'),
-                  style: TextStyle(color: GlobalVariables.white),
+                    textColor: GlobalVariables.white,
                 ),
               ),
               body: getBaseLayout(value),
@@ -152,9 +152,9 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
       for (int i = 0; i < value.complaintCategoryList.length; i++) {
         __categoryListItems.add(DropdownMenuItem(
           value: value.complaintCategoryList[i].COMPLAINT_CATEGORY,
-          child: Text(
+          child: text(
             value.complaintCategoryList[i].COMPLAINT_CATEGORY,
-            style: TextStyle(color: GlobalVariables.green),
+              textColor: GlobalVariables.green,
           ),
         ));
       }
@@ -172,12 +172,11 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
             children: <Widget>[
               Container(
                 alignment: Alignment.topLeft,
-                child: Text(
+                child: text(
                   AppLocalizations.of(context).translate('raise_new_ticket'),
-                  style: TextStyle(
-                      color: GlobalVariables.green,
+                    textColor: GlobalVariables.green,
                       fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
                 ),
               ),
               AppTextField(
@@ -217,17 +216,16 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                           : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('personal'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+                                    textColor: GlobalVariables.green,
+                                      fontSize: 16,
                                 ),
                               ),
                             ],
@@ -261,17 +259,16 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                           : GlobalVariables.mediumGreen,
                                       width: 2.0,
                                     )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
+                                child: text(
                                   AppLocalizations.of(context)
                                       .translate('community'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 16),
+    textColor: GlobalVariables.green,
+                                      fontSize: 16,
                                 ),
                               ),
                             ],
@@ -299,17 +296,16 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     value: _categorySelectedItem,
                     onChanged: changeCategoryDropDownItem,
                     isExpanded: true,
-                    icon: Icon(
+                    icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.mediumGreen,
                     ),
                     underline: SizedBox(),
-                    hint: Text(
+                    hint: text(
                       AppLocalizations.of(context)
                               .translate('select_category') +
                           '*',
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
+                        textColor: GlobalVariables.lightGray, fontSize: 14,
                     ),
                   ),
                 ),
@@ -406,22 +402,22 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                 });
                               }
                             },
-                            icon: Icon(
+                            icon: AppIcon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.mediumGreen,
                             ),
-                            label: Text(
+                            label: text(
                               AppLocalizations.of(context)
                                   .translate('attach_photo'),
-                              style: TextStyle(color: GlobalVariables.green),
+                                textColor: GlobalVariables.green,
                             ),
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text(
+                          child: text(
                             'OR',
-                            style: TextStyle(color: GlobalVariables.lightGray),
+                              textColor: GlobalVariables.lightGray,
                           ),
                         ),
                         Container(
@@ -444,14 +440,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                   });
                                 }
                               },
-                              icon: Icon(
+                              icon: AppIcon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.mediumGreen,
                               ),
-                              label: Text(
+                              label: text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.green),
+                                  textColor: GlobalVariables.green,
                               )),
                         ),
                       ],
@@ -495,16 +491,15 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                   : GlobalVariables.transparent,
                               width: 2.0,
                             )),
-                        child: Icon(Icons.check, color: GlobalVariables.white),
+                        child: AppIcon(Icons.check, iconColor: GlobalVariables.white),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text(
+                      child: text(
                         AppLocalizations.of(context)
                             .translate('mark_as_urgent'),
-                        style: TextStyle(
-                            color: GlobalVariables.green, fontSize: 16),
+                          textColor: GlobalVariables.green, fontSize: 16,
                       ),
                     ),
                   ],

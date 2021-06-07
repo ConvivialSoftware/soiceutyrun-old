@@ -7,6 +7,8 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'base_stateful.dart';
 
@@ -81,11 +83,10 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                               child: InkWell(
                                 onTap: () {
                                 },
-                                child: Text(
+                                child: text(
                                   '+91',
-                                  style: TextStyle(
-                                      color: GlobalVariables.green,
-                                      fontSize: 18),
+                                    textColor: GlobalVariables.green,
+                                      fontSize: 18,
                                 ),
                               ),
                             ),
@@ -103,9 +104,9 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   hintStyle: TextStyle(
                                     color: GlobalVariables.lightGray,
                                   ),
-                                  suffixIcon: Icon(
+                                  suffixIcon: AppIcon(
                                     Icons.phone_android,
-                                    color: GlobalVariables.lightGreen,
+                                    iconColor: GlobalVariables.lightGreen,
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -140,9 +141,9 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                               hintStyle: TextStyle(
                                 color: GlobalVariables.lightGray,
                               ),
-                              suffixIcon: Icon(
+                              suffixIcon: AppIcon(
                                 Icons.mail,
-                                color: GlobalVariables.lightGreen,
+                                iconColor: GlobalVariables.lightGreen,
                               ),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -183,11 +184,10 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
                                             color: GlobalVariables.green)),
-                                    child: Text(
+                                    child: text(
                                       AppLocalizations.of(context)
                                           .translate('enter'),
-                                      style: TextStyle(
-                                          fontSize: GlobalVariables.textSizeMedium),
+                                          fontSize: GlobalVariables.textSizeMedium,
                                     ),
                                   ),
                                 ),
@@ -204,13 +204,12 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                       isEmail=true;
                                     setState(() {});
                                   },
-                                  child: Text(
+                                  child: text(
                                     isEmail ? AppLocalizations.of(context)
                                         .translate('opt_on_mobile') : AppLocalizations.of(context)
                                         .translate('opt_on_mail'),
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 18),
+                                      textColor: GlobalVariables.green,
+                                        fontSize: 18,
                                   ),
                                 ),
                               ),
