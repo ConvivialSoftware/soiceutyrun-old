@@ -20,7 +20,7 @@ class BaseAddNewMember extends StatefulWidget {
   String memberType;
 
   BaseAddNewMember(this.memberType);
-
+  
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState

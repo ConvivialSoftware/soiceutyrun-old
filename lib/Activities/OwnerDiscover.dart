@@ -117,7 +117,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                   ),
                   title: text(
                     AppLocalizations.of(context).translate('my_classified'),
-                    textColor: GlobalVariables.white, fontSize: 16,
+                    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
                   ),
                   /*bottom: value.ownerClassifiedCategoryList.isNotEmpty
                       ? getTabLayout(value)
@@ -313,7 +313,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                             borderColor: GlobalVariables.grey,
                             borderWidth: 1.0,
                             fit: BoxFit.fill,
-                            radius: 12.0,
+                            radius: GlobalVariables.textSizeSmall,
                             shape: BoxShape.rectangle,
                           ) : AppAssetsImage(
                                   GlobalVariables
@@ -323,7 +323,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                 borderColor: GlobalVariables.grey,
                                 borderWidth: 1.0,
                                 fit: BoxFit.fill,
-                                radius: 12.0,
+                                radius: GlobalVariables.textSizeSmall,
                                 shape: BoxShape.circle,
                               )
                               /*ClipRRect(
@@ -355,7 +355,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                                     children: [
                                       AppIcon(
                                         Icons.location_on,
-                                        iconSize: 20,
+                                        iconSize: GlobalVariables.textSizeNormal,
                                         iconColor: GlobalVariables.lightGray,
                                       ),
                                       SizedBox(width: 2),

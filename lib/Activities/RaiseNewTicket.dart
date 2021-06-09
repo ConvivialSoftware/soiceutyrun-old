@@ -175,7 +175,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                 child: text(
                   AppLocalizations.of(context).translate('raise_new_ticket'),
                     textColor: GlobalVariables.green,
-                      fontSize: 18,
+                      fontSize: GlobalVariables.textSizeLargeMedium,
                       fontWeight: FontWeight.bold,
                 ),
               ),
@@ -225,7 +225,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                   AppLocalizations.of(context)
                                       .translate('personal'),
                                     textColor: GlobalVariables.green,
-                                      fontSize: 16,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -268,7 +268,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                   AppLocalizations.of(context)
                                       .translate('community'),
     textColor: GlobalVariables.green,
-                                      fontSize: 16,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -305,7 +305,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       AppLocalizations.of(context)
                               .translate('select_category') +
                           '*',
-                        textColor: GlobalVariables.lightGray, fontSize: 14,
+                        textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                     ),
                   ),
                 ),
@@ -499,7 +499,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       child: text(
                         AppLocalizations.of(context)
                             .translate('mark_as_urgent'),
-                          textColor: GlobalVariables.green, fontSize: 16,
+                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                       ),
                     ),
                   ],

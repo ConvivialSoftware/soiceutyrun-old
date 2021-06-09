@@ -185,7 +185,7 @@ class CreateClassifiedListingState
                         _current = index;
                       });
                     }),
-                itemBuilder: (context, index) {
+                itemBuilder: (context, index,item) {
                   return Container(
                       margin: EdgeInsets.all(5.0),
                       child: ClipRRect(

@@ -52,11 +52,11 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                   TextSpan(
                       text: " " +
                           AppLocalizations.of(context).translate('register'),
-                      style: TextStyle(fontSize: 18, color: GlobalVariables.green)),
+                      style: TextStyle(fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.green)),
                   TextSpan(
                       text: AppLocalizations.of(context).translate('with_us'),
                       style: TextStyle(
-                          fontSize: 18, color: GlobalVariables.lightGray))
+                          fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.lightGray))
                 ])),
               ),
               Container(
@@ -234,7 +234,7 @@ class RegisterState extends BaseStatefulState<BaseRegister> {
                               },
                               style: TextStyle(
                                   color: GlobalVariables.green,
-                                  fontSize: 20,
+                                  fontSize: GlobalVariables.textSizeNormal,
                                   fontWeight: FontWeight.bold,
                                   height: 1.5)),
                         ],

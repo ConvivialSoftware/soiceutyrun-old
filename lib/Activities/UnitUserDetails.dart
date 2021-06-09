@@ -378,7 +378,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('my_family'),
                         textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -402,7 +402,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('plus_add'),
                         textColor: GlobalVariables.white,
-                        fontSize: 12,
+                        fontSize: GlobalVariables.textSizeSmall,
                       ),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -451,7 +451,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('my_tenant'),
                         textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -473,7 +473,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                           AppLocalizations.of(context).translate('plus_add'),
                           textColor: GlobalVariables.white,
-                          fontSize: 12),
+                          fontSize: GlobalVariables.textSizeSmall),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(color: GlobalVariables.green)),
@@ -520,7 +520,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('my_staff'),
                         textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -538,7 +538,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                         child: text(
                             AppLocalizations.of(context).translate('plus_add'),
                             textColor: GlobalVariables.white,
-                            fontSize: 12),
+                            fontSize: GlobalVariables.textSizeSmall),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                             side: BorderSide(color: GlobalVariables.green)),
@@ -585,7 +585,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('my_vehicle'),
                           textColor: GlobalVariables.green,
-                          fontSize: 16,
+                          fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                         ),
                     ),
@@ -608,7 +608,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                               AppLocalizations.of(context)
                                   .translate('plus_add'),
                               style: TextStyle(
-                                  color: GlobalVariables.white, fontSize: 12),
+                                  color: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall),
                             ),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -759,7 +759,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   family ? _list[position].NAME : _list[position].STAFF_NAME,
                   maxLine: 1,
                   textColor: GlobalVariables.green,
-                  fontSize: 16,
+                  fontSize: GlobalVariables.textSizeMedium,
                 )),
             Container(
               margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -882,7 +882,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                 AppLocalizations.of(context)
                                     .translate('add_phone'),
                             textColor: GlobalVariables.lightGray,
-                            fontSize: 18,
+                            fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
@@ -914,7 +914,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   child: text(
                     value.vehicleListForAdmin[position].MODEL,
                     textColor: GlobalVariables.green,
-                    fontSize: 16,
+                    fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
               ),
@@ -925,7 +925,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                     child: text(
                       value.vehicleListForAdmin[position].VEHICLE_NO,
                       textColor: GlobalVariables.grey,
-                      fontSize: 16,
+                      fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                   /*AppPermission.isSocAddVehiclePermission
@@ -982,7 +982,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
           Container(
             child: text(
               AppLocalizations.of(context).translate('sure_delete'),
-              fontSize: 18,
+              fontSize: GlobalVariables.textSizeLargeMedium,
               textColor: GlobalVariables.black,
               fontWeight: FontWeight.bold,
             ),
@@ -1001,7 +1001,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
                         textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -1013,7 +1013,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context).translate('no'),
                         textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -1091,7 +1091,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                             AppLocalizations.of(context)
                                 .translate('update_unit_details'),
                             textColor: GlobalVariables.green,
-                            fontSize: 18,
+                            fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -1162,7 +1162,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                 Icons.keyboard_arrow_down,
                                 iconColor: GlobalVariables.green,
                               ),
-                              iconSize: 20,
+                              iconSize: GlobalVariables.textSizeNormal,
                               selectedItemBuilder: (BuildContext context) {
                                 // String txt =  _societyListItems.elementAt(position).value;
                                 return _unitRoleListItems.map((e) {

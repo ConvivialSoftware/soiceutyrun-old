@@ -125,7 +125,7 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Remove",
                                           textColor: GlobalVariables.black,
-                                          fontSize: 14.0)),
+                                          fontSize: GlobalVariables.textSizeSMedium)),
                                   value: 'remove'),
                             if (value.ownerClassifiedList[0].Status
                                         .toLowerCase()
@@ -138,7 +138,7 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Edit",
                                           textColor: GlobalVariables.black,
-                                          fontSize: 14.0)),
+                                          fontSize: GlobalVariables.textSizeSMedium)),
                                   value: 'edit'),
                             if (inDaysCount > 30)
                               new PopupMenuItem<String>(
@@ -147,7 +147,7 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Activate This Ads",
                                           textColor: GlobalVariables.black,
-                                          fontSize: 14.0)),
+                                          fontSize: GlobalVariables.textSizeSMedium)),
                                   value: 'active'),
                           ],
                       onSelected: (index) async {
@@ -239,7 +239,7 @@ class CreateClassifiedListingState
                                                                 textColor:
                                                                     GlobalVariables
                                                                         .green,
-                                                                fontSize: 16,
+                                                                fontSize: GlobalVariables.textSizeMedium,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -260,7 +260,7 @@ class CreateClassifiedListingState
                                                                 textColor:
                                                                     GlobalVariables
                                                                         .green,
-                                                                fontSize: 16,
+                                                                fontSize: GlobalVariables.textSizeMedium,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -280,7 +280,7 @@ class CreateClassifiedListingState
                 ],
                 title:text(
                   AppLocalizations.of(context).translate('create_listing'),
-                  textColor: GlobalVariables.white, fontSize: 16,
+                  textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
                 ),
               ),
               body: !value.isLoading ? getBaseLayout(value) : GlobalFunctions.loadingWidget(context),
@@ -357,7 +357,7 @@ class CreateClassifiedListingState
                         _current = index;
                       });
                     }),
-                itemBuilder: (context, index) {
+                itemBuilder: (context, index,item) {
                   return Container(
                       margin: EdgeInsets.all(5.0),
                       child: ClipRRect(
@@ -552,7 +552,7 @@ class CreateClassifiedListingState
                 height: 10,
                 decoration: boxDecoration(
                     color: GlobalVariables.transparent,
-                    radius: 16,
+                    radius: GlobalVariables.textSizeMedium,
                     bgColor: GlobalVariables.lightGray),
               ),
               Container(
@@ -838,7 +838,7 @@ class CreateClassifiedListingState
                                                       child: text(
                                                           _selectOptionList[
                                                               position],
-                                                          fontSize: 14.0,
+                                                          fontSize: GlobalVariables.textSizeSMedium,
                                                           textColor:
                                                               GlobalVariables
                                                                   .black,
@@ -868,7 +868,7 @@ class CreateClassifiedListingState
                                 },
                                 child: Container(
                                     child: text('Close',
-                                        fontSize: 16.0,
+                                        fontSize: GlobalVariables.textSizeMedium,
                                         textColor: GlobalVariables.grey,
                                         fontWeight: FontWeight.w500)),
                               ),
@@ -895,7 +895,7 @@ class CreateClassifiedListingState
                                                 'giveaway'
                                             ? 'Submit'
                                             : 'Yes',
-                                        fontSize: 16.0,
+                                        fontSize: GlobalVariables.textSizeMedium,
                                         textColor: GlobalVariables.green,
                                         fontWeight: FontWeight.w500)),
                               )

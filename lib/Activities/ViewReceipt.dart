@@ -330,7 +330,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 GlobalFunctions.convertDateFormat(
                                     _receiptList[0].END_DATE, 'dd-MM-yyyy')*/,
                               textColor: GlobalVariables.green,
-                                fontSize: 18,
+                                fontSize: GlobalVariables.textSizeLargeMedium,
                                 fontWeight: FontWeight.bold,
                           ),
                         ),

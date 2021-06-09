@@ -825,7 +825,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         autoPlayAnimationDuration: Duration(milliseconds: 800),
                       ),
                       itemCount: loginDashBoardResponse.bannerList.length,
-                      itemBuilder: (BuildContext context, int itemIndex) =>
+                      itemBuilder: (BuildContext context, int itemIndex,int item) =>
                       loginDashBoardResponse.bannerList.length > 0
                               ? InkWell(
                                   onTap: () {

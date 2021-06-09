@@ -2687,7 +2687,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                 child: text(
                                   "Attachment",
                                   textColor: GlobalVariables.green,
-                                    fontSize: 10,
+                                    fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               )
                             ],

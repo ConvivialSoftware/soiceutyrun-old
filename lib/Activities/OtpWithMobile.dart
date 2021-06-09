@@ -65,12 +65,12 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                   AppLocalizations.of(context)
                                       .translate('login'),
                               style: TextStyle(
-                                  fontSize: 18, color: GlobalVariables.green)),
+                                  fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.green)),
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate('with_otp'),
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: GlobalVariables.textSizeLargeMedium,
                                   color: GlobalVariables.lightGray))
                         ])),
                       ),
@@ -86,7 +86,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                 child: text(
                                   '+91',
                                     textColor: GlobalVariables.green,
-                                      fontSize: 18,
+                                      fontSize: GlobalVariables.textSizeLargeMedium,
                                 ),
                               ),
                             ),
@@ -209,7 +209,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                         .translate('opt_on_mobile') : AppLocalizations.of(context)
                                         .translate('opt_on_mail'),
                                       textColor: GlobalVariables.green,
-                                        fontSize: 18,
+                                        fontSize: GlobalVariables.textSizeLargeMedium,
                                   ),
                                 ),
                               ),
@@ -290,7 +290,7 @@ class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
                                                   .translate('classified_ads'),
                                               style: TextStyle(
                                                   color: GlobalVariables.green,
-                                                  fontSize: 20,
+                                                  fontSize: GlobalVariables.textSizeNormal,
                                                   fontWeight: FontWeight.bold))),
                                     ),
                                     Container(

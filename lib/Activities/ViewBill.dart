@@ -370,12 +370,13 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(5),
-                    child: text(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.grey,fontSize: 18),
+                    child: text(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
-                  child: text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),textColor:  GlobalVariables.red,fontSize: 16,fontWeight: FontWeight.bold),
+                  child: text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),
+                      textColor:  GlobalVariables.red,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -479,7 +480,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                 GlobalFunctions.convertDateFormat(
                                     _billDetailsList[0].END_DATE, 'dd-MM-yyyy'),
                               textColor: GlobalVariables.green,
-                                fontSize: 18,
+                                fontSize: GlobalVariables.textSizeLargeMedium,
                                 fontWeight: FontWeight.bold,
                           ),
                         ),

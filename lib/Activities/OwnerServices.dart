@@ -310,7 +310,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                 child: text(_myRate.toString(),
                   //myRate.toStringAsFixed(1).toString(),
     textColor: GlobalVariables.skyBlue,
-                      fontSize: 20,
+                      fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.w800,
                 ),
               ),

@@ -73,8 +73,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
           androidChannelIdVisitor,
           androidChannelName,
           androidChannelDesc,
-          importance: Importance.Max,
-          priority: Priority.High,
+          importance: Importance.max,
+          priority: Priority.high,
           ticker: 'ticker',
           enableLights: true,
           color: Colors.green,
@@ -89,8 +89,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
           androidChannelIdOther,
           androidChannelName,
           androidChannelDesc,
-          importance: Importance.Max,
-          priority: Priority.High,
+          importance: Importance.max,
+          priority: Priority.high,
           ticker: 'ticker',
           enableLights: true,
           color: Colors.green,
@@ -104,7 +104,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
           IOSNotificationDetails(sound: "alert.caf");
 
       var platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+           android : androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
       GlobalVariables.isAlreadyTapped = false;
       print('onMessage myBackgroundMessageHandler after isAlreadyTapped : ' +
           GlobalVariables.isAlreadyTapped.toString());
@@ -170,7 +170,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         requestAlertPermission: true);
 
     var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+        android:initializationSettingsAndroid, iOS:initializationSettingsIOS);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
@@ -368,8 +368,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 androidChannelIdOther,
                 androidChannelName,
                 androidChannelDesc,
-                importance: Importance.Max,
-                priority: Priority.High,
+                importance: Importance.max,
+                priority: Priority.high,
                 ticker: 'ticker',
                 enableLights: true,
                 color: Colors.green,
@@ -381,7 +381,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               var iOSPlatformChannelSpecifics =
               IOSNotificationDetails(sound: "alert.caf");
               var platformChannelSpecifics = NotificationDetails(
-                  androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+                  android:androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
 
               try {
                 flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
@@ -398,8 +398,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 androidChannelIdVisitor,
                 androidChannelName,
                 androidChannelDesc,
-                importance: Importance.Max,
-                priority: Priority.High,
+                importance: Importance.max,
+                priority: Priority.high,
                 ticker: 'ticker',
                 enableLights: true,
                 color: Colors.green,
@@ -412,7 +412,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               var iOSPlatformChannelSpecifics =
                   IOSNotificationDetails(sound: "alert.caf");
               var platformChannelSpecifics = NotificationDetails(
-                  androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+                  android:androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
 
               try {
                 flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
@@ -429,8 +429,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                   androidChannelIdVisitor,
                   androidChannelName,
                   androidChannelDesc,
-                  importance: Importance.Max,
-                  priority: Priority.High,
+                  importance: Importance.max,
+                  priority: Priority.high,
                   ticker: 'ticker',
                   enableLights: true,
                   color: Colors.green,
@@ -444,8 +444,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 var iOSPlatformChannelSpecifics =
                     IOSNotificationDetails(sound: "alert.caf");
                 var platformChannelSpecifics = NotificationDetails(
-                    androidPlatformChannelSpecifics,
-                    iOSPlatformChannelSpecifics);
+                    android:androidPlatformChannelSpecifics,
+                    iOS:iOSPlatformChannelSpecifics);
 
                 try {
                   print('else showGuestNotification TRY');
@@ -466,8 +466,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 androidChannelIdOther,
                 androidChannelName,
                 androidChannelDesc,
-                importance: Importance.Max,
-                priority: Priority.High,
+                importance: Importance.max,
+                priority: Priority.high,
                 ticker: 'ticker',
                 enableLights: true,
                 color: Colors.green,
@@ -479,7 +479,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               var iOSPlatformChannelSpecifics =
                   IOSNotificationDetails(sound: "alert.caf");
               var platformChannelSpecifics = NotificationDetails(
-                  androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+                  android:androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
 
               try {
                 flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,

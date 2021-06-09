@@ -172,7 +172,7 @@ class AboutSocietyRunInfoState
                   viewportFraction: 1.0,
                 ),
                 itemCount: value.bannerList.length,
-                itemBuilder: (BuildContext context, int itemIndex) =>
+                itemBuilder: (BuildContext context, int itemIndex,int item) =>
                     value.bannerList.length > 0
                         ? InkWell(
                             onTap: () {

@@ -179,7 +179,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                                           style: TextStyle(
                                             color: GlobalVariables
                                                 .grey,
-                                            fontSize: 12,
+                                            fontSize: GlobalVariables.textSizeSmall,
                                           ),
                                         ),
                                       ),

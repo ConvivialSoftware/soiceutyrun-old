@@ -67,7 +67,7 @@ class NearByShopPerCategoryItemDetailsState
           ),
           title: text(
             'Offer Details',
-              textColor: GlobalVariables.green, fontSize: 16,
+              textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
           ),
         ),
         body: getBaseLayout(),
@@ -119,7 +119,7 @@ class NearByShopPerCategoryItemDetailsState
                                                   widget
                                                       .nearByShopList.exp_date,
                                                   'dd-MMM-yyyy'),
-                                          fontSize: 12.0,
+                                          fontSize: GlobalVariables.textSizeSmall,
                                         ),
                                       ),
                                     ],
@@ -197,9 +197,9 @@ class NearByShopPerCategoryItemDetailsState
                                                     },
                                                     child: Container(
                                                       margin: EdgeInsets.only(top: 8),
-                                                      child:Icon(Icons.call,
-                                                        size: 20,
-                                                        color: GlobalVariables.green,
+                                                      child:AppIcon(Icons.call,
+                                                        iconSize: GlobalVariables.textSizeNormal,
+                                                        iconColor: GlobalVariables.green,
                                                       ),
                                                     ),
                                                   ),
@@ -598,7 +598,7 @@ class NearByShopPerCategoryItemDetailsState
                                                     .nearByShopList.Offer_Code,
                                                 textColor:
                                                     GlobalVariables.black,
-                                                fontSize: 14.0,
+                                                fontSize: GlobalVariables.textSizeSMedium,
                                                 maxLine: 1,
                                                 fontWeight: FontWeight.w500)),
                                       ),
@@ -643,7 +643,7 @@ class NearByShopPerCategoryItemDetailsState
                               color: GlobalVariables.green,
                               child: text('Redeem',
                                   textColor: GlobalVariables.white,
-                                  fontSize: 14.0,
+                                  fontSize: GlobalVariables.textSizeSMedium,
                                   fontWeight: FontWeight.w500)),
                         )
                       ],

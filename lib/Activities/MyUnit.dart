@@ -273,7 +273,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   padding: EdgeInsets.all(5),
                   child: text(
                     value.ledgerList[position].LEDGER,
-                    textColor: GlobalVariables.grey, fontSize: 16,
+                    textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
               ),
@@ -282,7 +282,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 padding: EdgeInsets.all(5),
                 child: text(
                   "",
-    textColor: GlobalVariables.lightGray, fontSize: 14,
+    textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                 ),
               ),
               InkWell(
@@ -320,7 +320,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             'bill'
                             ? GlobalVariables.red
                             : GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -353,7 +353,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         value.pendingList[position].REFERENCE_NO,
                         textColor: GlobalVariables.green,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -367,7 +367,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             value.pendingList[position].PAYMENT_DATE,
                             'dd-MM-yyyy')
                             : "",
-                          textColor: GlobalVariables.grey, fontSize: 16,
+                          textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium,
                       ),
                     ),
                   ],
@@ -378,7 +378,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 padding: EdgeInsets.all(5),
                 child: text(
                   "",
-    textColor: GlobalVariables.lightGray, fontSize: 14,
+    textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                 ),
               ),
               InkWell(
@@ -394,7 +394,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         /*value.ledgerList[position].TYPE.toLowerCase().toString() ==
                             'bill' ? GlobalVariables.red :*/
                         GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -443,12 +443,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: <Widget>[
                         text(
                           AppLocalizations.of(context).translate('total_due'),
-                  textColor: GlobalVariables.mediumGreen, fontSize: 14,
+                  textColor: GlobalVariables.mediumGreen, fontSize: GlobalVariables.textSizeSMedium,
                         ),
                         text(
                           AppLocalizations.of(context).translate('due_date'),
                           textColor: GlobalVariables.mediumGreen,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                         ),
                       ],
                     ),
@@ -464,7 +464,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         text(
                           duesDate,
                             textColor: GlobalVariables.green,
-                              fontSize: 16,
+                              fontSize: GlobalVariables.textSizeMedium,
                               fontWeight: FontWeight.bold,
                         ),
                       ],
@@ -484,7 +484,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         child: text(
                           AppLocalizations.of(context).translate('pay_now'),
                           textColor: GlobalVariables.green,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                         ),
                       ),
                     )
@@ -596,7 +596,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       AppLocalizations.of(context)
                           .translate('pending_transaction'),
                       textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                     ),
                   )
@@ -655,7 +655,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                           .translate('view_more'),
                                       style: TextStyle(
                                           color: GlobalVariables.darkRed,
-                                          fontSize: 16,
+                                          fontSize: GlobalVariables.textSizeMedium,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -679,7 +679,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       AppLocalizations.of(context)
                           .translate('recent_transaction'),
                       textColor: GlobalVariables.green,
-                        fontSize: 16,
+                        fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                     ),
                   )
@@ -734,7 +734,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 AppLocalizations.of(context)
                                     .translate('view_more'),
                           textColor: GlobalVariables.green,
-                                    fontSize: 16,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -789,7 +789,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('my_family'),
     textColor: GlobalVariables.green,
-                          fontSize: 16,
+                          fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -811,7 +811,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           child: text(
                             AppLocalizations.of(context)
                                 .translate('plus_add'),
-    textColor: GlobalVariables.white, fontSize: 12,
+    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall,
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -863,7 +863,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('my_tenant'),
     textColor: GlobalVariables.green,
-                          fontSize: 16,
+                          fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -884,7 +884,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           child: text(
                             AppLocalizations.of(context)
                                 .translate('plus_add'),
-    textColor: GlobalVariables.white, fontSize: 12,
+    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall,
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -935,7 +935,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('my_staff'),
     textColor: GlobalVariables.green,
-                          fontSize: 16,
+                          fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -953,7 +953,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             child: text(
                               AppLocalizations.of(context).translate(
                                   'plus_add'),
-    textColor: GlobalVariables.white, fontSize: 12,
+    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall,
                             ),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -1002,7 +1002,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('my_vehicle'),
     textColor: GlobalVariables.green,
-                          fontSize: 16,
+                          fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -1023,7 +1023,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           child: text(
                             AppLocalizations.of(context)
                                 .translate('plus_add'),
-    textColor: GlobalVariables.white, fontSize: 12,
+    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall,
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -1148,7 +1148,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           text(
                             name,
                             textColor: GlobalVariables.green,
-                              fontSize: 20,
+                              fontSize: GlobalVariables.textSizeNormal,
                           ),
                         ],
                       ),
@@ -1192,7 +1192,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     AppLocalizations.of(context)
                                         .translate('share_contact'),
                                     textColor: GlobalVariables.green,
-                                      fontSize: 16,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
                               ],
@@ -1309,7 +1309,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 child: text(
                   family ? _list[position].NAME : _list[position].STAFF_NAME,
                   maxLine: 1,
-                    textColor: GlobalVariables.green, fontSize: 16,
+                    textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                 )),
             Container(
               margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -1431,7 +1431,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       AppLocalizations.of(context)
                           .translate('add_phone'),
                     textColor: GlobalVariables.lightGray,
-                      fontSize: 18,
+                      fontSize: GlobalVariables.textSizeLargeMedium,
                       fontWeight: FontWeight.normal,
                 ),
               ),
@@ -1556,7 +1556,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               : value.billList[position].TYPE
                               : '',
                           textColor: GlobalVariables.white,
-                            fontSize: 12,
+                            fontSize: GlobalVariables.textSizeSmall,
                         ),
                       ),
                       (value.billList[position].AMOUNT -
@@ -1565,13 +1565,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           ? text(
                         'Paid',
                           textColor: GlobalVariables.green,
-                            fontSize: 18,
+                            fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold,
                       )
                           : text(
                         getBillPaymentStatus(position, value),
                           textColor: getBillPaymentStatusColor(position, value),
-                            fontSize: 18,
+                            fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold,
                       ),
                     ],
@@ -1588,7 +1588,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   .toString())
                                   .toStringAsFixed(2),
                 textColor: GlobalVariables.green,
-                              fontSize: 24,
+                              fontSize: GlobalVariables.textSizeLarge,
                               fontWeight: FontWeight.bold,
                         ),
                         text(
@@ -1597,7 +1597,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               value.billList[position].DUE_DATE, "dd-MM-yyyy")
                               : '',
                             textColor: GlobalVariables.green,
-                              fontSize: 16,
+                              fontSize: GlobalVariables.textSizeMedium,
                               fontWeight: FontWeight.bold,
                         ),
                       ],
@@ -1912,7 +1912,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: text(
                     value.vehicleList[position].MODEL,
-    textColor: GlobalVariables.green, fontSize: 16,
+    textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
               ),
@@ -1922,7 +1922,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: text(
                       value.vehicleList[position].VEHICLE_NO,
-    textColor: GlobalVariables.grey, fontSize: 16,
+    textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                   AppPermission.isSocAddVehiclePermission
@@ -1982,7 +1982,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           Container(
             child:text(
               AppLocalizations.of(context).translate('sure_delete'),
-                  fontSize: 18,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
         textColor: GlobalVariables.black,
                   fontWeight: FontWeight.bold,
             ),
@@ -2001,7 +2001,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
     textColor: GlobalVariables.green,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -2013,7 +2013,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('no'),
     textColor: GlobalVariables.green,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -2242,7 +2242,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       alignment: Alignment.center,
                       child: text(
                         AppLocalizations.of(context).translate('change_amount'),
-                          textColor: GlobalVariables.black, fontSize: 18,
+                          textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeLargeMedium,
                       ),
                     ),
                     Container(
@@ -2264,7 +2264,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     child: text(
                                       'Rs. ',
                                         textColor: GlobalVariables.green,
-                                          fontSize: 20,
+                                          fontSize: GlobalVariables.textSizeNormal,
                                           fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -2278,7 +2278,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         keyboardType: TextInputType.number,
                                         style: TextStyle(
                                             color: GlobalVariables.green,
-                                            fontSize: 20,
+                                            fontSize: GlobalVariables.textSizeNormal,
                                             fontWeight: FontWeight.bold),
                                         decoration: InputDecoration(
                                           counterText: "",
@@ -2310,7 +2310,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                           Icons.edit,
                                           iconColor:
                                           GlobalVariables.green,
-                                          iconSize: 24,
+                                          iconSize: GlobalVariables.textSizeLarge,
                                         ),
                                         onPressed: () {
                                           _amountTextController
@@ -2475,7 +2475,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         AppLocalizations.of(context)
                             .translate('select_payment_option'),
     textColor: GlobalVariables.black,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.normal,
                       ),
                     )
@@ -2581,7 +2581,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       margin: EdgeInsets.fromLTRB(10, 15, 0, 5),
                       child: text(
                         AppLocalizations.of(context).translate('trans_charges'),
-    textColor: GlobalVariables.grey, fontSize: 12,
+    textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeSmall,
                       ),
                     ),
                   ],
@@ -2629,7 +2629,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('proceed'),
     textColor: GlobalVariables.white,
-                            fontSize: 20,
+                            fontSize: GlobalVariables.textSizeNormal,
                             fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -2704,7 +2704,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           Container(
             child: text(
               AppLocalizations.of(context).translate('disclaimer'),
-                  fontSize: 18,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
               textColor: GlobalVariables.black,
                   fontWeight: FontWeight.bold,
             ),
@@ -2717,7 +2717,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 padding: EdgeInsets.all(8),
                 child: text(
                   AppLocalizations.of(context).translate('disclaimer_info'),
-                  fontSize: 16, textColor: GlobalVariables.black,
+                  fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.black,
                 ),
               ),
             ),
@@ -2748,7 +2748,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('proceed'),
     textColor: GlobalVariables.green,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -2760,7 +2760,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: text(
                         AppLocalizations.of(context).translate('cancel'),
     textColor: GlobalVariables.green,
-                            fontSize: 16,
+                            fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -2786,7 +2786,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             child: text(
               consumerId,
           textColor: GlobalVariables.black,
-                  fontSize: 16,
+                  fontSize: GlobalVariables.textSizeMedium,
                   fontWeight: FontWeight.bold,
             ),
           ),
@@ -2812,7 +2812,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
                   child: text(
                     AppLocalizations.of(context).translate('copy'),
-                        fontSize: 12,
+                        fontSize: GlobalVariables.textSizeSmall,
                         fontWeight: FontWeight.bold,
     textColor: GlobalVariables.green,
                   ),
@@ -2946,7 +2946,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 .translate('email_bill'),
                             style: TextStyle(
                                 color: GlobalVariables.green,
-                                fontSize: 18,
+                                fontSize: GlobalVariables.textSizeLargeMedium,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),*/
@@ -2962,7 +2962,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         value.billList[position].END_DATE,
                                         'dd-MM-yyyy'),
                                   textColor: GlobalVariables.green,
-                                    fontSize: 16,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -2985,7 +2985,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   children: <Widget>[
                                     /*   Container(
                                 child: Text(AppLocalizations.of(context).translate('email_bill_to'),style: TextStyle(
-                                    color: GlobalVariables.grey,fontSize: 16,fontWeight: FontWeight.bold
+                                    color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
                                 ),),
                               ),*/
                                     Flexible(
@@ -3127,7 +3127,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             child: text(
               AppLocalizations.of(context).translate('erp_acc_not'),
     textColor: GlobalVariables.black,
-                  fontSize: 18,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
                   fontWeight: FontWeight.bold,
             ),
           ),
@@ -3428,7 +3428,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   child: Container(
                                       alignment: Alignment.topRight,
                                       child: text('Close',
-                                          fontSize: 16.0,
+                                          fontSize: GlobalVariables.textSizeMedium,
                                           textColor: GlobalVariables.grey,
                                           fontWeight: FontWeight.w500)),
                                 ),
@@ -3458,7 +3458,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                                 }));
                                       },
                                       child: text('Pay advance',
-                                          fontSize: 16.0,
+                                          fontSize: GlobalVariables.textSizeMedium,
                                           textColor: GlobalVariables.green,
                                           fontWeight: FontWeight.w500)),
                                 ),

@@ -229,7 +229,7 @@ class StaffListPerCategoryState
                           child: text(
                             value.staffList[position].STAFF_NAME,
                         textColor: GlobalVariables.green,
-                                fontSize: 16,
+                                fontSize: GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -248,7 +248,7 @@ class StaffListPerCategoryState
                                 child: text(
                                   totalRate.toStringAsFixed(1).toString(),
                                   textColor: GlobalVariables.grey,
-                                    fontSize: 12,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                 ),
                               ),
                               Container(
@@ -264,7 +264,7 @@ class StaffListPerCategoryState
                                 child: text(
                                   _workHouseList.length.toString() + ' House',
                                   textColor: GlobalVariables.green,
-                                    fontSize: 12,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                 ),
                               ),
                             ],

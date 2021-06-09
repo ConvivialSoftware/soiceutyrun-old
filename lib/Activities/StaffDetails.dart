@@ -253,7 +253,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     child:text(
                       _staff.STAFF_NAME,
                   textColor: GlobalVariables.green,
-                          fontSize: 16,
+                          fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -265,7 +265,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                           child: text(
                             _staff.CONTACT,
                       textColor: GlobalVariables.grey,
-                              fontSize: 12,
+                              fontSize: GlobalVariables.textSizeSmall,
                           ),
                         ),
                       ],
@@ -355,7 +355,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       child: text(
                         totalRate.toStringAsFixed(1).toString(),
                           textColor: GlobalVariables.skyBlue,
-                            fontSize: 20,
+                            fontSize: GlobalVariables.textSizeNormal,
                             fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -421,7 +421,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                           'Work In ' +
                               _assignFlatList.length.toString() +
                               ' House',
-                              fontSize: 16, fontWeight: FontWeight.w600,
+                              fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -669,7 +669,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                 child: text(
                   myRate.toStringAsFixed(1).toString(),
                   textColor: GlobalVariables.skyBlue,
-                      fontSize: 20,
+                      fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.w800,
                 ),
               ),

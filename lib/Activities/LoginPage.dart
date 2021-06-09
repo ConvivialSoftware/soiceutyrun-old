@@ -369,7 +369,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                   milliseconds: 800),
                             ),
                             itemCount: _bannerList.length,
-                            itemBuilder: (BuildContext context, int itemIndex) =>
+                            itemBuilder: (BuildContext context, int itemIndex,int item) =>
                             _bannerList.length> 0 ? InkWell(
                               onTap: (){
                                 //launch(_bannerList[itemIndex].Url);

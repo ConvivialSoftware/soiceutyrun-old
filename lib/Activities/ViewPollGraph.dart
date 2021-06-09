@@ -124,7 +124,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                             margin: EdgeInsets.all(10),
                             alignment: Alignment.topLeft,
                             child: text(
-                              _poll.POLL_Q,textColor: GlobalVariables.black,fontSize: 20,fontWeight: FontWeight.bold
+                              _poll.POLL_Q,textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
@@ -156,7 +156,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                                 child: text(
                                   !GlobalFunctions.isDateSameOrGrater(_poll.EXPIRY_DATE) ? 'Active' : 'Expired',
                                     textColor: GlobalVariables.grey,
-                                    fontSize: 16
+                                    fontSize: GlobalVariables.textSizeMedium
                                 ),
                               ),
                               Container(
@@ -164,7 +164,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                                 child: text(
                                   "Total participants : "+ _totalParticipants.toString(),
                                     textColor: GlobalVariables.grey,
-                                    fontSize: 16
+                                    fontSize: GlobalVariables.textSizeMedium
                                 ),
                               ),
                             ],
@@ -193,14 +193,14 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
           Flexible(
             child: Container(
               child: text(
-                (position+1).toString()+')  '+_optionList[position].ANS.toString()+' - ',textColor: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
+                (position+1).toString()+')  '+_optionList[position].ANS.toString()+' - ',textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
               ),
             ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
-             _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' votes',textColor: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.normal
+             _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' votes',textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
             ),
           )
         ],

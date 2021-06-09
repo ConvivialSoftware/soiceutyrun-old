@@ -127,7 +127,7 @@ class NearByShopPerCategoryState
                   ),
                   title: text(
                     AppLocalizations.of(context).translate('exclusive_offer'),
-                      textColor: GlobalVariables.white, fontSize: 16,
+                      textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
                   ),
                   bottom: value.nearByShopCategoryList.isNotEmpty
                       ? getTabLayout(value)
@@ -313,7 +313,7 @@ class NearByShopPerCategoryState
                                   GlobalFunctions.convertDateFormat(
                                       value.nearByShopList[position].exp_date,
                                       'dd-MMM-yyyy'),
-                              fontSize: 12.0,
+                              fontSize: GlobalVariables.textSizeSmall,
                             ),
                           ),
                         ],
@@ -353,9 +353,9 @@ class NearByShopPerCategoryState
                             },
                             child: Container(
                               margin: EdgeInsets.only(top: 8),
-                              child:Icon(Icons.call,
-                                size: 20,
-                                color: GlobalVariables.white,
+                              child:AppIcon(Icons.call,
+                                iconSize: GlobalVariables.textSizeNormal,
+                                iconColor: GlobalVariables.white,
                               ),
                             ),
                           ),

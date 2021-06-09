@@ -107,7 +107,7 @@ class NearByShopNotificationItemDetailsState
                   ),
                   title: text(
                     'Offer Details',
-                    textColor: GlobalVariables.green, fontSize: 16,
+                    textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
                 body: !value.isLoading ? getBaseLayout(value) : GlobalFunctions.loadingWidget(context),
@@ -160,7 +160,7 @@ class NearByShopNotificationItemDetailsState
                                               GlobalFunctions.convertDateFormat(
                                                   value.nearByShopList[0].exp_date,
                                                   'dd-MMM-yyyy'),
-                                          fontSize: 12.0,
+                                          fontSize:GlobalVariables.textSizeSmall,
                                         ),
                                       ),
                                     ],
@@ -635,7 +635,7 @@ class NearByShopNotificationItemDetailsState
                                                 value.nearByShopList[0].Offer_Code,
                                                 textColor:
                                                 GlobalVariables.black,
-                                                fontSize: 14.0,
+                                                fontSize: GlobalVariables.textSizeSMedium,
                                                 maxLine: 1,
                                                 fontWeight: FontWeight.w500)),
                                       ),
@@ -680,7 +680,7 @@ class NearByShopNotificationItemDetailsState
                               color: GlobalVariables.green,
                               child: text('Redeem',
                                   textColor: GlobalVariables.white,
-                                  fontSize: 14.0,
+                                  fontSize: GlobalVariables.textSizeSMedium,
                                   fontWeight: FontWeight.w500)),
                         )
                       ],

@@ -699,35 +699,50 @@ class GlobalFunctions {
   }
 
   static Future<String> getFilePath(BuildContext context) async {
-    return await FilePicker.getFilePath(
+    /*return await FilePicker.getFilePath(
       type: FileType.custom,
       allowCompression: true,
       allowedExtensions: ['jpg', 'jgpe', 'png'],
-      /*allowedExtensions: (_extension?.isNotEmpty ?? false)
+      *//*allowedExtensions: (_extension?.isNotEmpty ?? false)
             ? _extension?.replaceAll(' ', '')?.split(',')
-            : null*/
-    );
-    /*FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
+            : null*//*
+    );*/
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
     print('FilePickerResult : '+result.toString());
     print('result.files.single.path : '+result.files.single.path.toString());
 
-    return result.files.single.path;*/
+    return result.files.single.path;
   }
 
   static Future<Map<String,String>> getMultiFilePath(BuildContext context) async {
 
-    var result = await FilePicker.getMultiFilePath(
+    /*var result = await FilePicker.getMultiFilePath(
       type: FileType.custom,
       allowCompression: true,
       allowedExtensions: ['jpg', 'jgpe', 'png'],
-      /*allowedExtensions: (_extension?.isNotEmpty ?? false)
+      *//*allowedExtensions: (_extension?.isNotEmpty ?? false)
             ? _extension?.replaceAll(' ', '')?.split(',')
-            : null*/
+            : null*//*
     );
-    print('getMultiFilePath result : '+result.toString());
+    print('getMultiFilePath result : '+result.toString());*/
+    Map<String,String> map= Map<String,String>();
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,
+        allowedExtensions: ['jpg', 'jgpe', 'png'],
+      allowCompression: true,
+      type: FileType.custom,
+    );
 
-    return result;
+    List<String> keys = List<String>();
+    List<String> values = List<String>();
+    for(int i=0;i<result.files.length;i++){
+      keys.add(result.files[i].name);
+      values.add(result.files[i].path);
+    }
+
+   map =  Map.fromIterables(keys, values);
+    
+    return map;
   }
 
   static String convertFileToString(String attachmentFilePath) {

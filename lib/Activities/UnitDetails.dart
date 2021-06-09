@@ -112,7 +112,7 @@ class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.white,
                           ),
-                          iconSize: 20,
+                          iconSize: GlobalVariables.textSizeNormal,
                           selectedItemBuilder: (BuildContext context) {
                             // String txt =  _societyListItems.elementAt(position).value;
                             return _unitListItems.map((e) {

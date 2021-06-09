@@ -228,7 +228,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                                     maxLine: 1,
                                     
                                     textColor: GlobalVariables.green,
-                                        fontSize: 18,
+                                        fontSize: GlobalVariables.textSizeLargeMedium,
                                         fontWeight: FontWeight.bold),
                               ),
                             ],

@@ -94,7 +94,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                             TextSpan(text: AppLocalizations.of(context)
                                 .translate('otp_header_str'), style: TextStyle(
                                 color: GlobalVariables.black,
-                                fontSize: 16,
+                                fontSize: GlobalVariables.textSizeMedium,
                                 height: 1.5,
                                 wordSpacing: 1.0
                             )),
@@ -103,7 +103,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                                     'otp_header_str_with_mobile') +
                                 displayNumber.toString()), style: TextStyle(
                                 color: GlobalVariables.black,
-                                fontSize: 16,
+                                fontSize: GlobalVariables.textSizeMedium,
                                 wordSpacing: 1.0,
                                 height: 1.5
                             )),
@@ -117,7 +117,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                         fields: 6,
                         isTextObscure: false,
                         fieldWidth: 50.0,
-                        fontSize: 18.0,
+                        fontSize: GlobalVariables.textSizeLargeMedium,
                         onSubmit: (String pin) {
                           entered_pin = pin;
                           // GlobalFunctions.showToast(entered_pin);
@@ -182,7 +182,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                                       "resend"), textColor: isResendEnable
                                       ? GlobalVariables.green
                                       : GlobalVariables.grey,
-                                  fontSize: 20,
+                                  fontSize: GlobalVariables.textSizeNormal,
                                   fontWeight: FontWeight.bold,
                               ),
                             ),
