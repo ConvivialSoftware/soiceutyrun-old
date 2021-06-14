@@ -1387,11 +1387,23 @@ class RestAPI implements RestClient,
       //GlobalVariables.
     });
 
-    print('DOB : ' + dob);
-    print('phone : ' + phone);
-    print('Address : ' + address);
-
-    print('profilePhoto : ' + profilePhoto.toString());
+    print('profilePhoto : ' + {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.PROFILE_PHOTO: profilePhoto,
+      GlobalVariables.TYPE: type,
+      GlobalVariables.LIVES_HERE: livesHere,
+      GlobalVariables.NAME: name,
+      GlobalVariables.MOBILE: phone,
+      GlobalVariables.ALTERNATE_CONTACT1: altCon1,
+      GlobalVariables.GENDER: gender,
+      GlobalVariables.DOB: dob,
+      GlobalVariables.BLOOD_GROUP: bloodGroup,
+      GlobalVariables.OCCUPATION: occupation,
+      GlobalVariables.Email: email,
+      GlobalVariables.ADDRESS: address
+      //GlobalVariables.
+    }.toString());
     print('baseurl : ' + baseUrl + GlobalVariables.editProfileAPI);
     final Response _result = await _dio.post(GlobalVariables.editProfileAPI,
         options: RequestOptions(
@@ -3727,6 +3739,78 @@ class RestAPI implements RestClient,
     );
     final value = _result.data;
     print('value of deactivateUser : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> nocApprove(String societyId, String ID, String block,
+      String flat, String userId, String note, String societyName) async {
+    // TODO: implement nocApprove
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: ID,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.userID: userId,
+      GlobalVariables.NOTE: note,
+      GlobalVariables.societyName: societyName,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: ID,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.userID: userId,
+      GlobalVariables.NOTE: note,
+      GlobalVariables.societyName: societyName,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.nocApproveAPI);
+    final Response _result = await _dio.post(GlobalVariables.nocApproveAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of nocApproveAPI : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> addAgreement(String societyId, List<String> userID,
+      String agreementFrom, String agreementTo, String agreement, String rentedTo) async {
+    // TODO: implement addAgreement
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      "USER_ID[]": userID,
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.RENTED_TO: rentedTo,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      "USER_ID[]": userID,
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.RENTED_TO: rentedTo,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.addAgreementAPI);
+    final Response _result = await _dio.post(GlobalVariables.addAgreementAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addAgreementAPI : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 

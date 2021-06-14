@@ -543,6 +543,43 @@ class UserManagementResponse extends ChangeNotifier {
     getUnitDetailsMemberForAdminData(block,flat,false);
     return result;
   }
+
+  Future<StatusMsgResponse> nocApprove(
+      String ID,
+      String block,
+      String flat,
+      String userId,
+      String note,
+     ) async {
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
+
+    String societyId = await GlobalFunctions.getSocietyId();
+    String societyName = await GlobalFunctions.getSocietyName();
+
+    var result = await restClient.nocApprove(societyId, ID, block, flat, userId, note, societyName);
+
+    return result;
+  }
+
+
+  Future<StatusMsgResponse> addAgreement(
+      List<String> userId,
+      String agreementFrom,
+      String agreementTo,
+      String agreement,
+      String rentedTo,
+      ) async {
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
+
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    var result = await restClient.addAgreement(societyId, userId, agreementFrom, agreementTo, agreement, rentedTo);
+
+    return result;
+  }
+
 }
 
 class UserManagementDashBoard {
@@ -776,6 +813,8 @@ class Tenant {
       ADDRESS,
       POLICE_VERIFICATION,
       IDENTITY_PROOF,
+      EMAIL,
+      MOBILE,
       DOB;
 
   Tenant(
@@ -787,18 +826,22 @@ class Tenant {
       this.ADDRESS,
       this.POLICE_VERIFICATION,
       this.IDENTITY_PROOF,
+      this.EMAIL,
+      this.MOBILE,
       this.DOB});
 
   factory Tenant.fromJson(Map<String, dynamic> map) {
     return Tenant(
       NAME: map["NAME"],
-      PROFILE_PHOTO: map["PROFILE_PHOTO"],
+      PROFILE_PHOTO: map["PROFILE_PHOTO"]??'',
       BLOCK: map["BLOCK"],
       FLAT: map["FLAT"],
       ID: map["ID"],
       ADDRESS: map["ADDRESS"],
       POLICE_VERIFICATION: map["POLICE_VERIFICATION"]??'',
       IDENTITY_PROOF: map["IDENTITY_PROOF"],
+      EMAIL: map["EMAIL"]??'',
+      MOBILE: map["MOBILE"]??'',
       DOB: map["DOB"],
     );
   }

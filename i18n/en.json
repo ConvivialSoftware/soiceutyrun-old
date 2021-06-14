@@ -432,5 +432,16 @@
   "owner_consent": "Owner Consent",
   "police_verification": "Police Verification",
   "authorization_form": "Authorization Form",
-  "document_not_available": "Document not Available"
+  "document_not_available": "Document not Available",
+  "move_out": "Move Out",
+  "sure_move_out": "Are you sure you want to Move Out?",
+  "add_agreement": "Add Agreement",
+  "issue_NOC": "Do you want to issue NOC?",
+  "rented_to": "Rented To",
+  "family": "Family",
+  "group_bachelor": "Group(Bachelor)",
+  "attach_agreement": "Attach Agreement",
+  "attach_police_verification": "Police Verification",
+  "attach_identity_proof": "Identity Proof",
+  "take_identity_proof_picture": "Identity Proof"
 }

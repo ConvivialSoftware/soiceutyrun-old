@@ -386,7 +386,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       child: text(
                         'Ticket No: ' +
                             ( isOpenTicket ? value.openComplaintList[position].TICKET_NO : value.closeComplaintList[position].TICKET_NO),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
                     isAssignComplaint ? Container(
@@ -394,7 +394,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: text(
                         'Unit No: '+ (isOpenTicket ? value.openComplaintList[position].BLOCK+' '+value.openComplaintList[position].FLAT : value.closeComplaintList[position].BLOCK+' '+value.closeComplaintList[position].FLAT),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ):Container(),
                   ],
@@ -449,7 +449,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                                 isOpenTicket ? value.openComplaintList[position].SUBJECT : value.closeComplaintList[position].SUBJECT,
                                 maxLine: 1,
                                 textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeLargeMedium,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
                           ),
                           Container(
@@ -458,6 +458,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                               isOpenTicket ? value.openComplaintList[position].DESCRIPTION : value.closeComplaintList[position].DESCRIPTION,
                               maxLine: 2,
                               textColor: GlobalVariables.grey,
+                              fontSize: GlobalVariables.textSizeSMedium
                             ),
                           ),
                           /*Row(
@@ -556,7 +557,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                     child: text(
                         'Issued on: ' +
                             ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE,"dd-MM-yyyy")),
-                        textColor: GlobalVariables.grey),
+                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                   ),
                   Row(
                     children: <Widget>[
@@ -570,7 +571,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                         child: text(
                            ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT ) +
                                 ' Comments',
-                            textColor: GlobalVariables.grey),
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                       ),
                     ],
                   ),

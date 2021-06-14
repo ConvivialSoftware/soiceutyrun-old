@@ -36,7 +36,9 @@ class BroadcastResponse extends ChangeNotifier {
     String societyEmail = await GlobalFunctions.getSocietyEmail();
 
     List<String> ar = List<String>();
-    ar.add(flats);
+    for (int i = 0; i < flats.length; i++) {
+      ar.add(flats[i].ID);
+    }
     var result = await restClient.broadcastNotification(
         societyId, ar, sendTo, subject, description, societyName, societyEmail);
 
@@ -53,7 +55,9 @@ class BroadcastResponse extends ChangeNotifier {
     String societyEmail = await GlobalFunctions.getSocietyEmail();
 
     List<String> ar = List<String>();
-    ar.add(flats);
+    for (int i = 0; i < flats.length; i++) {
+      ar.add(flats[i].ID);
+    }
 
     var result = await restClient.broadcastMail(societyId, ar, attachment,
         sendTo, subject, description, societyName, societyEmail);

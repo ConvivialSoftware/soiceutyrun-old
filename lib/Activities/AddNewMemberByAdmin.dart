@@ -64,6 +64,8 @@ class AddNewMemberByAdminState
   new List<DropdownMenuItem<String>>();
   String _selectedLivesHere;
 
+  String _selectedIssueNOC;
+
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
 
@@ -351,6 +353,124 @@ class AddNewMemberByAdminState
                     ),
                   ),
                 ],
+              ),
+              Visibility(
+                visible: _selectedMembershipType=='Tenant' ,
+                child: Container(
+                  child: Column(
+                    children: [
+
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        alignment: Alignment.topLeft,
+                        child: text(AppLocalizations.of(context).translate('issue_NOC'),
+                          fontSize: GlobalVariables.textSizeSMedium,
+                          textColor: GlobalVariables.black,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              child: InkWell(
+                                //  splashColor: GlobalVariables.mediumGreen,
+                                onTap: () {
+                                  _selectedIssueNOC = AppLocalizations.of(context)
+                                      .translate('yes');
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: _selectedIssueNOC == AppLocalizations.of(context)
+                                                .translate('yes')
+                                                ? GlobalVariables.green
+                                                : GlobalVariables.white,
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: Border.all(
+                                              color: _selectedIssueNOC == AppLocalizations.of(context)
+                                                  .translate('yes')
+                                                  ? GlobalVariables.green
+                                                  : GlobalVariables.mediumGreen,
+                                              width: 2.0,
+                                            )),
+                                        child: AppIcon(Icons.check,
+                                            iconColor: GlobalVariables.white),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('yes'),
+                                          textColor: GlobalVariables.green,
+                                          fontSize: GlobalVariables.textSizeMedium,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: InkWell(
+                                //  splashColor: GlobalVariables.mediumGreen,
+                                onTap: () {
+                                  _selectedIssueNOC = AppLocalizations.of(context)
+                                      .translate('no');
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: _selectedIssueNOC == AppLocalizations.of(context)
+                                                .translate('no')
+                                                ? GlobalVariables.green
+                                                : GlobalVariables.white,
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: Border.all(
+                                              color: _selectedIssueNOC == AppLocalizations.of(context)
+                                                  .translate('no')
+                                                  ? GlobalVariables.green
+                                                  : GlobalVariables.mediumGreen,
+                                              width: 2.0,
+                                            )),
+                                        child: AppIcon(Icons.check,
+                                            iconColor: GlobalVariables.white),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('no'),
+                                            textColor: GlobalVariables.green,
+                                            fontSize: GlobalVariables.textSizeMedium),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+
+
+                    ],
+                  ),
+                ),
               ),
               Container(
                 height: 100,

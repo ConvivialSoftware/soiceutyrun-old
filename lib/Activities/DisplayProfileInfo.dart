@@ -604,7 +604,7 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                           Navigator.of(context).pop();
                           moveOutMember();
                         }else{
-                          GlobalFunctions.showToast('Please Enter Delete');
+                          GlobalFunctions.showToast('Please Enter Reason');
                         }
                       },
                       child: text(

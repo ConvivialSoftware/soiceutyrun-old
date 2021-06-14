@@ -240,6 +240,8 @@ class GlobalVariables {
   static const sendInviteAPI = "Members/send_invite";
   static const approvePendingRequestAPI = "Members/approve_update";
   static const deactivateUserAPI = "Members/deactivate_user";
+  static const nocApproveAPI = "Members/noc_approve";
+  static const addAgreementAPI = "Members/addAgreement";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -463,6 +465,10 @@ class GlobalVariables {
   static const note = 'note';
   static const PHONE = 'PHONE';
   static const EMAIL = 'EMAIL';
+  static const AGREEMENT_FROM = 'AGREEMENT_FROM';
+  static const AGREEMENT_TO = 'AGREEMENT_TO';
+  static const AGREEMENT = 'AGREEMENT';
+  static const RENTED_TO = 'RENTED_TO';
 
   /*Server Response Key*/
 

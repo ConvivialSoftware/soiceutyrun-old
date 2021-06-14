@@ -198,23 +198,38 @@ class MemberPendingRequestState
                                     value.pendingRequestList[position].FLAT,
                                 fontSize: GlobalVariables.textSizeSMedium,
                                 textColor: GlobalVariables.white,
-                                textStyleHeight: 1.0,
+                                textStyleHeight: 1.5,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: text(
-                                  value.pendingRequestList[position].TYPE,
-                                  fontSize: GlobalVariables.textSizeSMedium,
-                                  textColor: GlobalVariables.black,
-                                  textStyleHeight: 1.5),
-                            ),
-                          ],
+                        Visibility(
+                          visible: !value.pendingRequestList[position].EMAIL.isEmpty,
+                          child: Container(
+                            child: text(
+                                value.pendingRequestList[position].EMAIL,
+                                fontSize: GlobalVariables.textSizeSMedium,
+                                textColor: GlobalVariables.black,
+                                textStyleHeight: 1.5),
+                          ),
+                        ),
+                        Visibility(
+                          visible: !value.pendingRequestList[position].Phone.isEmpty,
+                          child: Container(
+                            child: text(
+                                value.pendingRequestList[position].Phone,
+                                fontSize: GlobalVariables.textSizeSMedium,
+                                textColor: GlobalVariables.black,
+                                textStyleHeight: 1.5),
+                          ),
+                        ),
+                        Container(
+                          child: text(
+                              value.pendingRequestList[position].TYPE,
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              textColor: GlobalVariables.black,
+                              textStyleHeight: 1.5),
                         ),
                         divider(),
                         Row(

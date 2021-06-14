@@ -345,6 +345,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
 
   @override
   Widget build(BuildContext context) {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<BroadcastResponse>.value(
       value: Provider.of(context),
       child: Consumer<BroadcastResponse>(
@@ -1122,6 +1123,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                 GlobalFunctions.convertFileToString(notificationAttachmentCompressFilePath);
           }
 */
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context, listen: false)
               .postNotificationBroadcast(
                   _notificationAssignFlatList,
@@ -1129,6 +1131,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   notificationSubject.text,
                   notificationDescription.text)
               .then((value) {
+                _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
 
                 if(value.status){
@@ -1192,6 +1195,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
             attachment = GlobalFunctions.convertFileToString(
                 mailAttachmentCompressFilePath);
           }
+          _progressDialog.show();
 
           Provider.of<BroadcastResponse>(context, listen: false)
               .postMailBroadcast(
@@ -1201,6 +1205,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   mailSubject.text,
                   mailDescription.text)
               .then((value) {
+
+                _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
 
             if(value.status){
@@ -3168,6 +3174,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
     switch (_smsTypesSelectedItem) {
       case "Important Communication":
         {
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context, listen: false)
               .importantCommunicationSMS(
                   _smsAssignFlatList,
@@ -3176,6 +3183,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   importantCommunicationController.text,
                   societyName)
               .then((value) {
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');
@@ -3187,6 +3195,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Meeting":
         {
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context, listen: false)
               .meetingSMS(
                   _smsAssignFlatList,
@@ -3200,6 +3209,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   meetingVenueController.text,
                   societyName)
               .then((value) {
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');
@@ -3211,12 +3221,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Water Supply":
         {
-
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context,listen: false).waterSupplySMS(_smsAssignFlatList, 
               _smsSendToSelectedItem, _smsTypesSelectedItem, waterSupplyDateController.text
               , _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, 
               _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
-
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');
@@ -3231,9 +3241,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Water Disruption":
         {
-
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context,listen: false).waterDisruptionSMS(_smsAssignFlatList, _smsSendToSelectedItem, _smsTypesSelectedItem, waterDisruptionDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsTypesSelectedItem, _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
-
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');
@@ -3248,10 +3258,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Fire Drill":
         {
-          
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context,listen: false).fireDrillSMS(_smsAssignFlatList, _smsSendToSelectedItem, 
               _smsTypesSelectedItem, fillDrillDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, societyName).then((value) {
-
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');
@@ -3266,9 +3276,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Service down":
         {
-          
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context,listen: false).serviceDownSMS(_smsAssignFlatList, _smsSendToSelectedItem, _smsTypesSelectedItem, serviceDownReason1Controller.text, serviceDownReason2Controller.text, serviceDownDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
-
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');
@@ -3282,9 +3292,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Power Outage":
         {
-
+          _progressDialog.show();
           Provider.of<BroadcastResponse>(context,listen: false).powerOutageSMS(_smsAssignFlatList, _smsSendToSelectedItem, _smsTypesSelectedItem, powerOutageDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
 
+            _progressDialog.hide();
             GlobalFunctions.showToast(value.message);
             if (value.status) {
               print('sms1 response : ');

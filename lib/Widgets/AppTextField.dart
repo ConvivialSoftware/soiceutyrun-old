@@ -45,16 +45,17 @@ class AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      decoration: BoxDecoration(
+      //padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+     /* decoration: BoxDecoration(
           color: GlobalVariables.white,
           borderRadius: BorderRadius.circular(widget.borderRadius),
           border: Border.all(
             color: widget.borderColor,
             width: widget.borderWidth,
-          )),
-      child: TextField(
+          )),*/
+      child:
+      TextField(
         controller: widget.controllerCallback,
         readOnly: widget.readOnly,
         maxLines: widget.maxLines,
@@ -63,20 +64,54 @@ class AppTextFieldState extends State<AppTextField> {
         textCapitalization:widget.textCapitalization,
         inputFormatters:widget.inputFormatters??<TextInputFormatter>[],
         obscureText: widget.obscureText,
-        /*style: TextStyle(
-            color: GlobalVariables.green
-        ),*/
         decoration: InputDecoration(
-            contentPadding: widget.contentPadding??EdgeInsets.zero,
-            hintText: widget.textHintContent,
-            hintStyle: TextStyle(
-                color: GlobalVariables.lightGray,
-                fontSize: GlobalVariables.textSizeSMedium),
-            border: InputBorder.none,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            borderSide: BorderSide(width: widget.borderWidth,color: widget.borderColor),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            borderSide: BorderSide(width: widget.borderWidth, color:widget.borderColor),
+          ),
+         // hintText: widget.textHintContent,
+        //  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+          labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+          labelText: widget.textHintContent,
+          alignLabelWithHint: false,
+          filled: false,
           counterText: widget.counterText,
           suffixIcon: widget.suffixIcon!=null ? widget.suffixIcon:null,
         ),
       ),
+      /*TextField(
+        controller: widget.controllerCallback,
+        readOnly: widget.readOnly,
+        maxLines: widget.maxLines,
+        keyboardType: widget.keyboardType,
+        maxLength: widget.maxLength,
+        textCapitalization:widget.textCapitalization,
+        inputFormatters:widget.inputFormatters??<TextInputFormatter>[],
+        obscureText: widget.obscureText,
+        *//*style: TextStyle(
+            color: GlobalVariables.green
+        ),*//*
+        decoration: InputDecoration(
+            contentPadding: widget.contentPadding??EdgeInsets.zero,
+           // hintText: widget.textHintContent,
+            hintStyle: TextStyle(
+                color: GlobalVariables.lightGray,
+                fontSize: GlobalVariables.textSizeSMedium),
+          labelStyle: TextStyle(
+              color: GlobalVariables.lightGray,
+              fontSize: GlobalVariables.textSizeSMedium),
+          labelText:  widget.textHintContent,
+          alignLabelWithHint: false,
+          filled: false,
+            border: InputBorder.none,
+          counterText: widget.counterText,
+          suffixIcon: widget.suffixIcon!=null ? widget.suffixIcon:null,
+        ),
+      ),*/
     );
   }
 

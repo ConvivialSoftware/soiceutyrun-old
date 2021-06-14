@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
+import 'package:societyrun/Activities/AddAgreement.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
+import 'package:societyrun/Activities/AddNewMemberByAdmin.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AppNotificationSettings.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
@@ -443,7 +445,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                     ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -455,31 +457,63 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Container(
-                        child: RaisedButton(
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BaseAddNewMember("family")));
-                        print('result back : ' + result.toString());
-                        if (result != 'back') {
-                          Provider.of<UserManagementResponse>(context,
-                                  listen: false)
-                              .getUnitMemberData();
-                        }
-                      },
-                      child: text(
-                          AppLocalizations.of(context).translate('plus_add'),
+                    Row(
+                      children: [
+                        Container(
+                            child: RaisedButton(
+                              onPressed: ()  {
+                                /* final result = await*/ Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => BaseAddAgreement(
+                                            widget.block,
+                                            widget.flat,true)));
+                                /*    print('result back : ' + result.toString());
+                                if (result != 'back') {
+                                  Provider.of<UserManagementResponse>(
+                                      context, listen: false).getUnitMemberData();
+                                }*/
+                              },
+                              child: text(
+                                AppLocalizations.of(context)
+                                    .translate('add_agreement'),
+                                textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: GlobalVariables.green)),
+                              textColor: GlobalVariables.white,
+                              color: GlobalVariables.green,
+                            )),
+                        SizedBox(width: 8,),
+                        Container(
+                            child: RaisedButton(
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BaseAddNewMemberByAdmin(
+                                        widget.block,
+                                        widget.flat)));
+                            print('result back : ' + result.toString());
+                            if (result != 'back') {
+                              Provider.of<UserManagementResponse>(context,
+                                      listen: false)
+                                  .getUnitMemberData();
+                            }
+                          },
+                          child: text(
+                              AppLocalizations.of(context).translate('plus_add'),
+                              textColor: GlobalVariables.white,
+                              fontSize: GlobalVariables.textSizeSmall),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: GlobalVariables.green)),
                           textColor: GlobalVariables.white,
-                          fontSize: GlobalVariables.textSizeSmall),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    )),
+                          color: GlobalVariables.green,
+                        )),
+                      ],
+                    ),
                   ],
                 ),
               ),

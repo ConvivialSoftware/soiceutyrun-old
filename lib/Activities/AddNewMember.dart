@@ -35,6 +35,14 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   String attachmentFileName;
   String attachmentCompressFilePath;
 
+  String attachmentPoliceVerificationFilePath;
+  String attachmentPoliceVerificationFileName;
+  String attachmentPoliceVerificationCompressFilePath;
+
+  String attachmentIdentityProofFilePath;
+  String attachmentIdentityProofFileName;
+  String attachmentIdentityProofCompressFilePath;
+
   AddNewMemberState(this.memberType);
 
   TextEditingController _nameController = TextEditingController();
@@ -313,7 +321,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __membershipTypeListItems,
                           value: _selectedMembershipType,
                           onChanged: changeMembershipTypeDropDownItem,
@@ -322,13 +330,20 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
-                          hint: text(
-                            AppLocalizations.of(context)
-                                    .translate('membership_type') +
-                                '*',
+                          //underline: SizedBox(),
+                         /* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
                             textColor: GlobalVariables.lightGray,
                             fontSize: GlobalVariables.textSizeSMedium,
+                          ),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                            labelText: AppLocalizations.of(context)
+                                .translate('membership_type') +
+                                '*',
+                              enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent))
+                           // border: new CustomBorderTextFieldSkin().getSkin(),
                           ),
                         ),
                       ),
@@ -485,6 +500,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                     AppLocalizations.of(context)
                                         .translate('attach_photo'),
                                     textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeSMedium
                                   ),
                                 ),
                               ),
@@ -522,8 +538,173 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                     label: text(
                                         AppLocalizations.of(context)
                                             .translate('take_picture'),
-                                        textColor: GlobalVariables.green)),
+                                        textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeSMedium
+                                    )),
                               ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 50,
+                            height: 50,
+                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                            decoration: attachmentIdentityProofFilePath == null
+                                ? BoxDecoration(
+                              color: GlobalVariables.mediumGreen,
+                              borderRadius: BorderRadius.circular(25),
+                              //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                            )
+                                : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image:
+                                    FileImage(File(attachmentIdentityProofFilePath)),
+                                    fit: BoxFit.cover),
+                                border: Border.all(
+                                    color: GlobalVariables.green,
+                                    width: 2.0)),
+                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                          ),
+                          Column(
+                            //mainAxisAlignment: MainAxisAlignment.start,
+                            //crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                child: FlatButton.icon(
+                                  onPressed: () {
+                                    if (isStoragePermission) {
+                                      openIdentityProofFile(context);
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                          Permission.storage)
+                                          .then((value) {
+                                        if (value) {
+                                          openIdentityProofFile(context);
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                  'download_permission'));
+                                        }
+                                      });
+                                    }
+                                  },
+                                  icon: AppIcon(
+                                    Icons.attach_file,
+                                    iconColor: GlobalVariables.mediumGreen,
+                                  ),
+                                  label: text(
+                                    AppLocalizations.of(context)
+                                        .translate('attach_identity_proof'),
+                                    textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeSMedium
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                //alignment: Alignment.center,
+                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: text(
+                                  'OR',
+                                  textColor: GlobalVariables.lightGray,
+                                ),
+                              ),
+                              Container(
+                                child: FlatButton.icon(
+                                    onPressed: () {
+                                      if (isStoragePermission) {
+                                        openIdentityProofCamera(context);
+                                      } else {
+                                        GlobalFunctions.askPermission(
+                                            Permission.storage)
+                                            .then((value) {
+                                          if (value) {
+                                            openIdentityProofCamera(context);
+                                          } else {
+                                            GlobalFunctions.showToast(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                    'download_permission'));
+                                          }
+                                        });
+                                      }
+                                    },
+                                    icon: AppIcon(
+                                      Icons.camera_alt,
+                                      iconColor: GlobalVariables.mediumGreen,
+                                    ),
+                                    label: text(
+                                        AppLocalizations.of(context)
+                                            .translate('take_identity_proof_picture'),
+                                        textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeSMedium
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                child: FlatButton.icon(
+                                  onPressed: () {
+                                    if (isStoragePermission) {
+                                      openPoliceVerificationFile(context);
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                          Permission.storage)
+                                          .then((value) {
+                                        if (value) {
+                                          openPoliceVerificationFile(context);
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                  'download_permission'));
+                                        }
+                                      });
+                                    }
+                                  },
+                                  icon: AppIcon(
+                                    Icons.attach_file,
+                                    iconColor: GlobalVariables.mediumGreen,
+                                  ),
+                                  label: text(
+                                    attachmentPoliceVerificationFileName!=null ? attachmentPoliceVerificationFileName : AppLocalizations.of(context)
+                                        .translate('attach_police_verification'),
+                                    textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeSMedium
+                                  ),
+                                ),
+                              ),
+
                             ],
                           ),
                         ],
@@ -687,6 +868,61 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     });
   }
 
+
+  void openIdentityProofFile(BuildContext context) {
+    GlobalFunctions.getFilePath(context).then((value) {
+      attachmentIdentityProofFilePath = value;
+      getCompressIdentityProofFilePath();
+    });
+  }
+
+  void openIdentityProofCamera(BuildContext context) {
+    GlobalFunctions.openCamera().then((value) {
+      attachmentIdentityProofFilePath = value.path;
+      getCompressIdentityProofFilePath();
+    });
+  }
+
+  void getCompressIdentityProofFilePath() {
+    attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(
+        attachmentIdentityProofFilePath.lastIndexOf('/') + 1, attachmentIdentityProofFilePath.length);
+    print('file Name : ' + attachmentIdentityProofFileName.toString());
+    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentIdentityProofFilePath, value.toString() + '/' + attachmentIdentityProofFileName)
+          .then((value) {
+        attachmentIdentityProofCompressFilePath = value.toString();
+        print('Cache file path : ' + attachmentIdentityProofCompressFilePath);
+        setState(() {});
+      });
+    });
+  }
+
+
+  void openPoliceVerificationFile(BuildContext context) {
+    GlobalFunctions.getFilePath(context).then((value) {
+      attachmentPoliceVerificationFilePath = value;
+      getCompressPoliceVerificationFilePath();
+    });
+  }
+
+  void getCompressPoliceVerificationFilePath() {
+    attachmentPoliceVerificationFileName = attachmentPoliceVerificationFilePath.substring(
+        attachmentPoliceVerificationFilePath.lastIndexOf('/') + 1, attachmentPoliceVerificationFilePath.length);
+    print('file Name : ' + attachmentPoliceVerificationFileName.toString());
+    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+          attachmentPoliceVerificationFilePath, value.toString() + '/' + attachmentPoliceVerificationFileName)
+          .then((value) {
+        attachmentPoliceVerificationCompressFilePath = value.toString();
+        print('Cache file path : ' + attachmentPoliceVerificationCompressFilePath);
+        setState(() {});
+      });
+    });
+  }
+
   void getBloodGroupData() {
     _bloodGroupList = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
     for (int i = 0; i < _bloodGroupList.length; i++) {
@@ -702,10 +938,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   }
 
   getMembershipTypeData() {
-//Tenantype
     GlobalFunctions.getUserType().then((value) {
       if (value.toLowerCase() != 'tenant') {
-        _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
+        if(memberType.toLowerCase()=='tenant'){
+          _membershipTypeList = ["Tenant"];
+        }else {
+          _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
+        }
       } else {
         _membershipTypeList = ["Tenant"];
       }
@@ -720,7 +959,6 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
       }
       setState(() {});
     });
-    // _selectedMembershipType = __membershipTypeListItems[0].value;
   }
 
   void gteLivesHereData() {
