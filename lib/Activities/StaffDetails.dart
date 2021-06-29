@@ -460,7 +460,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                         return Container(
                             alignment: Alignment.center,
                             margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                             decoration: BoxDecoration(
                                 color: GlobalVariables.green,
                                 borderRadius: BorderRadius.circular(20),

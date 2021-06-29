@@ -215,8 +215,9 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   Container(
                                     child: text(
                                       userManagementResponse
+                                          .unitDetailsListForAdmin.length > 0 ? userManagementResponse
                                           .unitDetailsListForAdmin[0]
-                                          .BILLING_NAME,
+                                          .BILLING_NAME:'',
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                     ),

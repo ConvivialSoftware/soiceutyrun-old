@@ -21,39 +21,39 @@ class BaseUserManagement extends StatefulWidget {
 }
 
 class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
-
   @override
   void initState() {
     super.initState();
-    Provider.of<UserManagementResponse>(context,listen: false).getUserManagementDashboard();
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getUserManagementDashboard();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserManagementResponse>.value(
-        value: Provider.of<UserManagementResponse>(context),
-      child: Consumer<UserManagementResponse>(builder: (context,value,child){
+      value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
             builder: (context) => Scaffold(
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
+                  appBar: AppBar(
+                    backgroundColor: GlobalVariables.green,
+                    centerTitle: true,
+                    leading: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: AppIcon(
+                        Icons.arrow_back,
+                        iconColor: GlobalVariables.white,
+                      ),
+                    ),
+                    title: text(
+                      AppLocalizations.of(context).translate('user_management'),
+                      textColor: GlobalVariables.white,
+                    ),
                   ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('user_management'),
-                  textColor: GlobalVariables.white,
-                ),
-              ),
-              body: getBaseUserLayout(value),
-            ));
+                  body: getBaseUserLayout(value),
+                ));
       }),
     );
   }
@@ -72,7 +72,9 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
               children: <Widget>[
                 //GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
                 //    getSearchLayout(),
-                userManagementResponse.isLoading ?GlobalFunctions.loadingWidget(context) : getUserManagementLayout(userManagementResponse),
+                userManagementResponse.isLoading
+                    ? GlobalFunctions.loadingWidget(context)
+                    : getUserManagementLayout(userManagementResponse),
               ],
             ),
           ),
@@ -93,10 +95,15 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
         child: Container(
           child: Column(
             children: <Widget>[
-              SizedBox(height: 16,),
+              SizedBox(
+                height: 16,
+              ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseUnitDetails(true)));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BaseUnitDetails(true)));
                 },
                 child: Container(
                   padding: EdgeInsets.all(
@@ -111,7 +118,7 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                         child: text('No of. Units',
                             textColor: GlobalVariables.white,
                             fontSize: GlobalVariables.textSizeMedium,
-                        fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 4,
@@ -130,10 +137,12 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                   ),
                 ),
               ),
-              SizedBox(height: 16,),
+              SizedBox(
+                height: 16,
+              ),
               Container(
                 padding: EdgeInsets.all(
-                  16), // height: MediaQuery.of(context).size.height / 0.5,
+                    16), // height: MediaQuery.of(context).size.height / 0.5,
                 decoration: BoxDecoration(
                     color: GlobalVariables.lightCyan,
                     borderRadius: BorderRadius.circular(15)),
@@ -150,38 +159,50 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseRegisteredUnit()));
+                                onTap: () {
+                                  if (int.parse(
+                                          userManagementResponse.registerUser) >
+                                      0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseRegisteredUnit()));
+                                  }
                                 },
                                 child: Container(
                                   child: Column(
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('registered_unit'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('registered_unit'),
                                             textColor: GlobalVariables.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeSMedium),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(userManagementResponse.registerUser,
+                                        child: text(
+                                            userManagementResponse.registerUser,
                                             textColor: GlobalVariables.white,
-                                            fontSize: GlobalVariables.textSizeXXLarge,
+                                            fontSize:
+                                                GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height:100,
+                              height: 100,
                               width: 4,
                               child: VerticalDivider(
                                 color: GlobalVariables.white,
@@ -189,38 +210,50 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseActiveUser()));
+                                onTap: () {
+                                  if (int.parse(
+                                          userManagementResponse.activeUser) >
+                                      0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseActiveUser()));
+                                  }
                                 },
                                 child: Container(
                                   child: Column(
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('active_user'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('active_user'),
                                             textColor: GlobalVariables.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeSMedium),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(userManagementResponse.activeUser,
+                                        child: text(
+                                            userManagementResponse.activeUser,
                                             textColor: GlobalVariables.white,
-                                            fontSize: GlobalVariables.textSizeXXLarge,
+                                            fontSize:
+                                                GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height:100,
+                              height: 100,
                               width: 4,
                               child: VerticalDivider(
                                 color: GlobalVariables.white,
@@ -228,34 +261,46 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseMobileUser()));
+                                onTap: () {
+                                  if (int.parse(
+                                          userManagementResponse.mobileUser) >
+                                      0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseMobileUser()));
+                                  }
                                 },
                                 child: Container(
                                   child: Column(
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('mobile_user'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('mobile_user'),
                                             textColor: GlobalVariables.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeSMedium),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(userManagementResponse.mobileUser,
+                                        child: text(
+                                            userManagementResponse.mobileUser,
                                             textColor: GlobalVariables.white,
-                                            fontSize: GlobalVariables.textSizeXXLarge,
+                                            fontSize:
+                                                GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                         ],
                       ),
                     ),
@@ -265,7 +310,9 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                   ],
                 ),
               ),
-              SizedBox(height: 16,),
+              SizedBox(
+                height: 16,
+              ),
               Container(
                 padding: EdgeInsets.all(
                     16), // height: MediaQuery.of(context).size.height / 0.5,
@@ -284,8 +331,16 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseRentalRequest()));
+                                onTap: () {
+                                  if (int.parse(userManagementResponse
+                                          .rentalRequest) >
+                                      0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseRentalRequest()));
+                                  }
                                 },
                                 child: Container(
                                   //color: GlobalVariables.lightGray,
@@ -293,30 +348,35 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('rental_request'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('rental_request'),
                                             textColor: GlobalVariables.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeSMedium),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(userManagementResponse.rentalRequest,
+                                        child: text(
+                                            userManagementResponse
+                                                .rentalRequest,
                                             textColor: GlobalVariables.white,
-                                            fontSize: GlobalVariables.textSizeXXLarge,
+                                            fontSize:
+                                                GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height:100,
+                              height: 100,
                               width: 4,
                               child: VerticalDivider(
                                 color: GlobalVariables.white,
@@ -324,39 +384,51 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseMemberPendingRequest()));
+                                onTap: () {
+                                  if (int.parse(userManagementResponse
+                                          .pendingRequest) >
+                                      0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseMemberPendingRequest()));
+                                  }
                                 },
                                 child: Container(
-
                                   child: Column(
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('pending_request'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('pending_request'),
                                             textColor: GlobalVariables.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeSMedium),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(userManagementResponse.pendingRequest,
+                                        child: text(
+                                            userManagementResponse
+                                                .pendingRequest,
                                             textColor: GlobalVariables.white,
-                                            fontSize: GlobalVariables.textSizeXXLarge,
+                                            fontSize:
+                                                GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height:100,
+                              height: 100,
                               width: 4,
                               child: VerticalDivider(
                                 color: GlobalVariables.white,
@@ -364,8 +436,16 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseMoveOutRequest()));
+                                onTap: () {
+                                  if (int.parse(userManagementResponse
+                                          .moveOutRequest) >
+                                      0) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseMoveOutRequest()));
+                                  }
                                 },
                                 child: Container(
                                   //color: GlobalVariables.lightGray,
@@ -373,26 +453,31 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('move_out_request'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('move_out_request'),
                                             textColor: GlobalVariables.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeSMedium),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(userManagementResponse.moveOutRequest,
+                                        child: text(
+                                            userManagementResponse
+                                                .moveOutRequest,
                                             textColor: GlobalVariables.white,
-                                            fontSize: GlobalVariables.textSizeXXLarge,
+                                            fontSize:
+                                                GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                         ],
                       ),
                     ),

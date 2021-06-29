@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -162,7 +163,9 @@ class GlobalFunctions {
 
   static getSocietyAddress() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keySocietyAddress)) {
+    if (sharedPreferences
+        .getKeys()
+        .contains(GlobalVariables.keySocietyAddress)) {
       print('keySocietyAddress : ' +
           sharedPreferences.getString(GlobalVariables.keySocietyAddress));
       return sharedPreferences.getString(GlobalVariables.keySocietyAddress);
@@ -258,9 +261,7 @@ class GlobalFunctions {
 
   static getSMSCredit() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
-        .getKeys()
-        .contains(GlobalVariables.keySMSCredit)) {
+    if (sharedPreferences.getKeys().contains(GlobalVariables.keySMSCredit)) {
       print('keySMSCredit : ' +
           sharedPreferences.getString(GlobalVariables.keySMSCredit));
       return sharedPreferences.getString(GlobalVariables.keySMSCredit);
@@ -422,7 +423,8 @@ class GlobalFunctions {
         GlobalVariables.keyConsumerId, value.Consumer_no);
     sharedPreferences.setString(
         GlobalVariables.keyLoggedUsername, value.LoggedUsername);
-    sharedPreferences.setString(GlobalVariables.keyGoogleCoordinate, value.google_parameter);
+    sharedPreferences.setString(
+        GlobalVariables.keyGoogleCoordinate, value.google_parameter);
     sharedPreferences.setString(GlobalVariables.keySMSCredit, value.SMS_CREDIT);
     GlobalVariables.userNameValueNotifer.value = value.Name;
     GlobalVariables.userImageURLValueNotifer.value = value.Photo;
@@ -575,7 +577,9 @@ class GlobalFunctions {
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(
             // alignment: Alignment.center,
-            child: CircularProgressIndicator()),
+            child: CircularProgressIndicator(
+          color: GlobalVariables.white,
+        )),
         messageTextStyle: TextStyle(
             color: GlobalVariables.white,
             fontSize: 14,
@@ -585,31 +589,34 @@ class GlobalFunctions {
   }
 
   static Widget loadingWidget(context) => Center(
-    child: Container(
-      height: 80,
-      width: MediaQuery.of(context).size.width/1.2,
-      decoration: BoxDecoration(
-        color: GlobalVariables.mediumGreen,
-        borderRadius: BorderRadius.all(Radius.circular(10.0))
-      ),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(left: 20),
-        child: Row(
-          children: [
-            CircularProgressIndicator(
-              strokeWidth: 4.0,
+        child: Container(
+          height: 80,
+          width: MediaQuery.of(context).size.width / 1.2,
+          decoration: BoxDecoration(
+              color: GlobalVariables.mediumGreen,
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                CircularProgressIndicator(
+                  strokeWidth: 4.0,
+                  color: GlobalVariables.white,
+                ),
+                SizedBox(
+                  width: 32.0,
+                ),
+                Text("Please Wait",
+                    style: TextStyle(
+                        color: GlobalVariables.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+              ],
             ),
-            SizedBox(width: 32.0,),
-            Text("Please Wait",style: TextStyle(
-                color: GlobalVariables.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold)),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   static getDownLoadProgressDialogInstance(BuildContext context) {
     ProgressDialog _progressDialog =
@@ -658,7 +665,7 @@ class GlobalFunctions {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1800,8),
+        firstDate: DateTime(1800, 8),
         lastDate: DateTime(3021));
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
@@ -674,7 +681,8 @@ class GlobalFunctions {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(selectedDate.year,selectedDate.month,selectedDate.day),
+        firstDate:
+            DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
         lastDate: DateTime(3021));
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
@@ -683,7 +691,7 @@ class GlobalFunctions {
   }
 
   static getSelectedDateForDOB(BuildContext context) async {
-    DateTime selectedDate = DateTime(DateTime.now().year-15);
+    DateTime selectedDate = DateTime(DateTime.now().year - 15);
 
     print('selected year : ' + selectedDate.year.toString());
 
@@ -703,45 +711,47 @@ class GlobalFunctions {
       type: FileType.custom,
       allowCompression: true,
       allowedExtensions: ['jpg', 'jgpe', 'png'],
-      *//*allowedExtensions: (_extension?.isNotEmpty ?? false)
+      */ /*allowedExtensions: (_extension?.isNotEmpty ?? false)
             ? _extension?.replaceAll(' ', '')?.split(',')
-            : null*//*
+            : null*/ /*
     );*/
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    FilePickerResult result =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
 
-    print('FilePickerResult : '+result.toString());
-    print('result.files.single.path : '+result.files.single.path.toString());
+    print('FilePickerResult : ' + result.toString());
+    print('result.files.single.path : ' + result.files.single.path.toString());
 
     return result.files.single.path;
   }
 
-  static Future<Map<String,String>> getMultiFilePath(BuildContext context) async {
-
+  static Future<Map<String, String>> getMultiFilePath(
+      BuildContext context) async {
     /*var result = await FilePicker.getMultiFilePath(
       type: FileType.custom,
       allowCompression: true,
       allowedExtensions: ['jpg', 'jgpe', 'png'],
-      *//*allowedExtensions: (_extension?.isNotEmpty ?? false)
+      */ /*allowedExtensions: (_extension?.isNotEmpty ?? false)
             ? _extension?.replaceAll(' ', '')?.split(',')
-            : null*//*
+            : null*/ /*
     );
     print('getMultiFilePath result : '+result.toString());*/
-    Map<String,String> map= Map<String,String>();
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,
-        allowedExtensions: ['jpg', 'jgpe', 'png'],
+    Map<String, String> map = Map<String, String>();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      allowedExtensions: ['jpg', 'jgpe', 'png'],
       allowCompression: true,
       type: FileType.custom,
     );
 
     List<String> keys = List<String>();
     List<String> values = List<String>();
-    for(int i=0;i<result.files.length;i++){
+    for (int i = 0; i < result.files.length; i++) {
       keys.add(result.files[i].name);
       values.add(result.files[i].path);
     }
 
-   map =  Map.fromIterables(keys, values);
-    
+    map = Map.fromIterables(keys, values);
+
     return map;
   }
 
@@ -1354,16 +1364,26 @@ class GlobalFunctions {
     }
   }
 
-  static noDataFoundLayout(BuildContext context,String textMessage){
+  static noDataFoundLayout(BuildContext context, String textMessage) {
     var width = MediaQuery.of(context).size.width;
     //var height = MediaQuery.of(context).size.height;
-    return  Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppAssetsImage(GlobalVariables.noDataFoundIconPath,imageWidth: width/1.5,imageHeight: width/2,),
-          SizedBox(height: 20,),
-          text(textMessage,textColor: GlobalVariables.green,fontWeight: FontWeight.w500,fontSize: GlobalVariables.textSizeMedium,maxLine: 2)
+          AppAssetsImage(
+            GlobalVariables.noDataFoundIconPath,
+            imageWidth: width / 1.5,
+            imageHeight: width / 2,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          text(textMessage,
+              textColor: GlobalVariables.green,
+              fontWeight: FontWeight.w500,
+              fontSize: GlobalVariables.textSizeMedium,
+              maxLine: 2)
         ],
       ),
     );

@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:societyrun/AWS/AWSClient.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/UploadItem.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
@@ -48,12 +53,17 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   String _selectedFlat;
 
   String _selectedRentedTo;
+  String _selectedIssueNOC;
 
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
 
   List<String> selectedUserList = List<String>();
 
+  FlutterUploader uploader = FlutterUploader();
+  StreamSubscription _progressSubscription;
+  StreamSubscription _resultSubscription;
+  Map<String, UploadItem> _tasks = {};
 
   @override
   void initState() {
@@ -74,6 +84,45 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
+
+    _progressSubscription = uploader.progress.listen((progress) {
+      final task = _tasks[progress.tag];
+      print("progress: ${progress.progress} , tag: ${progress.tag}");
+      if (task == null) return;
+      if (task.isCompleted()) return;
+      setState(() {
+        _tasks[progress.tag] =
+            task.copyWith(progress: progress.progress, status: progress.status);
+      });
+    });
+    _resultSubscription = uploader.result.listen((result) {
+      print(
+          "id: ${result.taskId}, status: ${result.status}, response: ${result.response}, statusCode: ${result.statusCode}, tag: ${result.tag}, headers: ${result.headers}");
+
+      final task = _tasks[result.tag];
+      if (task == null) return;
+
+      setState(() {
+        _tasks[result.tag] = task.copyWith(status: result.status);
+      });
+    }, onError: (ex, stacktrace) {
+      print("exception: $ex");
+      print("stacktrace: $stacktrace" ?? "no stacktrace");
+      final exp = ex as UploadException;
+      final task = _tasks[exp.tag];
+      if (task == null) return;
+
+      setState(() {
+        _tasks[exp.tag] = task.copyWith(status: exp.status);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _progressSubscription?.cancel();
+    _resultSubscription?.cancel();
   }
 
   @override
@@ -233,100 +282,155 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 alignment: Alignment.center,
-                child: text(
-                    widget.block+' '+widget.flat,
+                child: text(widget.block + ' ' + widget.flat,
                     fontSize: GlobalVariables.textSizeNormal,
                     textColor: GlobalVariables.green,
                     fontWeight: FontWeight.bold),
               ),
               Container(
-             //   color: GlobalVariables.grey,
+                //   color: GlobalVariables.grey,
                 //padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: Builder(
                     builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: widget.isAdmin ? userManagementResponse.tenantListForAdmin.length : userManagementResponse.tenantList.length,
-                      itemBuilder: (context, position) {
-                        return Container(
-                         // width: MediaQuery.of(context).size.width / 1.1,
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: GlobalVariables.white),
-                          child: Column(
-                            children: [
-
-                              Row(
+                          // scrollDirection: Axis.vertical,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: widget.isAdmin
+                              ? userManagementResponse.tenantListForAdmin.length
+                              : userManagementResponse.tenantList.length,
+                          itemBuilder: (context, position) {
+                            return Container(
+                              // width: MediaQuery.of(context).size.width / 1.1,
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: GlobalVariables.white),
+                              child: Column(
                                 children: [
-                                  InkWell(
-                                    onTap: (){
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          if (selectedUserList.contains(widget
+                                                  .isAdmin
+                                              ? userManagementResponse
+                                                  .tenantListForAdmin[position]
+                                                  .ID
+                                              : userManagementResponse
+                                                  .tenantList[position].ID)) {
+                                            selectedUserList.remove(
+                                                widget.isAdmin
+                                                    ? userManagementResponse
+                                                        .tenantListForAdmin[
+                                                            position]
+                                                        .ID
+                                                    : userManagementResponse
+                                                        .tenantList[position]
+                                                        .ID);
+                                          } else {
+                                            selectedUserList.add(widget.isAdmin
+                                                ? userManagementResponse
+                                                    .tenantListForAdmin[
+                                                        position]
+                                                    .ID
+                                                : userManagementResponse
+                                                    .tenantList[position].ID);
+                                          }
 
-                                      if(selectedUserList.contains(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].ID : userManagementResponse.tenantList[position].ID)){
-                                        selectedUserList.remove(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].ID : userManagementResponse.tenantList[position].ID);
-                                      }else{
-                                        selectedUserList.add(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].ID : userManagementResponse.tenantList[position].ID);
-                                      }
-
-                                      print('inviteUserList : '+selectedUserList.toString());
-                                      setState(() {
-
-                                      });
-
-
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: selectedUserList.contains(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].ID : userManagementResponse.tenantList[position].ID)
-                                              ? GlobalVariables.green
-                                              : GlobalVariables.transparent,
-                                          borderRadius: BorderRadius.circular(5),
-                                          border: Border.all(
-                                            color: selectedUserList.contains(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].ID : userManagementResponse.tenantList[position].ID)
-                                                ? GlobalVariables.green
-                                                : GlobalVariables.mediumGreen,
-                                            width: 2.0,
-                                          )),
-                                      child: AppIcon(
-                                        Icons.check,
-                                        iconColor: selectedUserList.contains(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].ID : userManagementResponse.tenantList[position].ID)
-                                            ? GlobalVariables.white
-                                            : GlobalVariables.transparent,
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Container(
-                                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.topLeft,
-                                            //  color:GlobalVariables.grey,
-                                            child: text(widget.isAdmin ? userManagementResponse.tenantListForAdmin[position].NAME : userManagementResponse.tenantList[position].NAME,
-                                                textColor:GlobalVariables.green,
-                                                fontSize: GlobalVariables.textSizeMedium,
-                                                fontWeight: FontWeight.bold,
-                                                textStyleHeight: 1.0
-                                            ),
+                                          print('inviteUserList : ' +
+                                              selectedUserList.toString());
+                                          setState(() {});
+                                        },
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: selectedUserList.contains(widget
+                                                          .isAdmin
+                                                      ? userManagementResponse
+                                                          .tenantListForAdmin[
+                                                              position]
+                                                          .ID
+                                                      : userManagementResponse
+                                                          .tenantList[position]
+                                                          .ID)
+                                                  ? GlobalVariables.green
+                                                  : GlobalVariables.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border: Border.all(
+                                                color: selectedUserList.contains(widget
+                                                            .isAdmin
+                                                        ? userManagementResponse
+                                                            .tenantListForAdmin[
+                                                                position]
+                                                            .ID
+                                                        : userManagementResponse
+                                                            .tenantList[
+                                                                position]
+                                                            .ID)
+                                                    ? GlobalVariables.green
+                                                    : GlobalVariables
+                                                        .mediumGreen,
+                                                width: 2.0,
+                                              )),
+                                          child: AppIcon(
+                                            Icons.check,
+                                            iconColor: selectedUserList
+                                                    .contains(widget.isAdmin
+                                                        ? userManagementResponse
+                                                            .tenantListForAdmin[
+                                                                position]
+                                                            .ID
+                                                        : userManagementResponse
+                                                            .tenantList[
+                                                                position]
+                                                            .ID)
+                                                ? GlobalVariables.white
+                                                : GlobalVariables.transparent,
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                      Flexible(
+                                        child: Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.topLeft,
+                                                //  color:GlobalVariables.grey,
+                                                child: text(
+                                                    widget.isAdmin
+                                                        ? userManagementResponse
+                                                            .tenantListForAdmin[
+                                                                position]
+                                                            .NAME
+                                                        : userManagementResponse
+                                                            .tenantList[
+                                                                position]
+                                                            .NAME,
+                                                    textColor:
+                                                        GlobalVariables.green,
+                                                    fontSize: GlobalVariables
+                                                        .textSizeMedium,
+                                                    fontWeight: FontWeight.bold,
+                                                    textStyleHeight: 1.0),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-
-                            ],
-                          ),
-                        );
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
+                            );
+                          }, //  scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                        )),
               ),
               divider(),
               Container(
@@ -342,7 +446,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                           fontWeight: FontWeight.bold),
                     ),*/
                     Container(
-                     // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         children: <Widget>[
                           Container(
@@ -453,7 +557,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('start_date'),
+                    AppLocalizations.of(context).translate('start_date'),
                 controllerCallback: _agreementStartDateController,
                 readOnly: true,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -461,8 +565,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   Icons.date_range,
                   iconColor: GlobalVariables.mediumGreen,
                   onPressed: () {
-                    GlobalFunctions.getSelectedDate(context)
-                        .then((value) {
+                    GlobalFunctions.getSelectedDate(context).then((value) {
                       _agreementStartDateController.text =
                           value.day.toString().padLeft(2, '0') +
                               "-" +
@@ -475,7 +578,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('end_date'),
+                    AppLocalizations.of(context).translate('end_date'),
                 controllerCallback: _agreementEndDateController,
                 readOnly: true,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -483,8 +586,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   Icons.date_range,
                   iconColor: GlobalVariables.mediumGreen,
                   onPressed: () {
-                    GlobalFunctions.getSelectedDate(context)
-                        .then((value) {
+                    GlobalFunctions.getSelectedDate(context).then((value) {
                       _agreementEndDateController.text =
                           value.day.toString().padLeft(2, '0') +
                               "-" +
@@ -495,6 +597,142 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   },
                 ),
               ),
+              widget.isAdmin
+                  ? Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                            alignment: Alignment.topLeft,
+                            child: text(
+                                AppLocalizations.of(context)
+                                    .translate('issue_NOC'),
+                                fontSize: GlobalVariables.textSizeSMedium,
+                                textColor: GlobalVariables.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: InkWell(
+                                    //  splashColor: GlobalVariables.mediumGreen,
+                                    onTap: () {
+                                      _selectedIssueNOC =
+                                          AppLocalizations.of(context)
+                                              .translate('yes');
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                color: _selectedIssueNOC ==
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate('yes')
+                                                    ? GlobalVariables.green
+                                                    : GlobalVariables.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                border: Border.all(
+                                                  color: _selectedIssueNOC ==
+                                                          AppLocalizations.of(
+                                                                  context)
+                                                              .translate('yes')
+                                                      ? GlobalVariables.green
+                                                      : GlobalVariables
+                                                          .mediumGreen,
+                                                  width: 2.0,
+                                                )),
+                                            child: AppIcon(Icons.check,
+                                                iconColor:
+                                                    GlobalVariables.white),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.fromLTRB(
+                                                10, 0, 0, 0),
+                                            child: text(
+                                              AppLocalizations.of(context)
+                                                  .translate('yes'),
+                                              textColor: GlobalVariables.green,
+                                              fontSize: GlobalVariables
+                                                  .textSizeMedium,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: InkWell(
+                                    //  splashColor: GlobalVariables.mediumGreen,
+                                    onTap: () {
+                                      _selectedIssueNOC =
+                                          AppLocalizations.of(context)
+                                              .translate('no');
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                color: _selectedIssueNOC ==
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate('no')
+                                                    ? GlobalVariables.green
+                                                    : GlobalVariables.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                border: Border.all(
+                                                  color: _selectedIssueNOC ==
+                                                          AppLocalizations.of(
+                                                                  context)
+                                                              .translate('no')
+                                                      ? GlobalVariables.green
+                                                      : GlobalVariables
+                                                          .mediumGreen,
+                                                  width: 2.0,
+                                                )),
+                                            child: AppIcon(Icons.check,
+                                                iconColor:
+                                                    GlobalVariables.white),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.fromLTRB(
+                                                10, 0, 0, 0),
+                                            child: text(
+                                                AppLocalizations.of(context)
+                                                    .translate('no'),
+                                                textColor:
+                                                    GlobalVariables.green,
+                                                fontSize: GlobalVariables
+                                                    .textSizeMedium),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : SizedBox(),
               Row(
                 children: <Widget>[
                   Flexible(
@@ -503,7 +741,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         children: <Widget>[
-                         /* Container(
+                          /* Container(
                             width: 50,
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
@@ -550,14 +788,18 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                     Icons.attach_file,
                                     iconColor: GlobalVariables.mediumGreen,
                                   ),
-                                  label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('attach_agreement'),
-                                    textColor: GlobalVariables.green,
+                                  label: Flexible(
+                                    child: text(
+                                      attachmentFileName != null
+                                          ? attachmentFileName
+                                          : AppLocalizations.of(context)
+                                              .translate('attach_agreement'),
+                                      textColor: GlobalVariables.green,
+                                    ),
                                   ),
                                 ),
                               ),
-                           /*   Container(
+                              /*   Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 child: text(
                                   'OR',
@@ -609,6 +851,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   textContent: AppLocalizations.of(context).translate('submit'),
                   onPressed: () {
                     verifyInfo();
+                    AWSClient().downloadData('uploads', 'file-sample_150kB.pdf');
                   },
                 ),
               ),
@@ -622,7 +865,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   void verifyInfo() {
     if (_selectedBlock != null) {
       if (_selectedFlat != null) {
-        if(_selectedRentedTo!=null){
+        if (_selectedRentedTo != null) {
           if (_agreementStartDateController.text.length > 0) {
             if (_agreementEndDateController.text.length > 0) {
               addAgreement();
@@ -632,7 +875,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
           } else {
             GlobalFunctions.showToast('Please Enter Start Date');
           }
-        }else{
+        } else {
           GlobalFunctions.showToast('Please Select Rented To');
         }
       } else {
@@ -644,50 +887,113 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   }
 
   Future<void> addAgreement() async {
+    if (_selectedRentedTo ==
+        AppLocalizations.of(context).translate('group_bachelor')) {
+      _selectedRentedTo = "Group";
+    }
+    //_progressDialog.show();
 
-    _progressDialog.show();
-    Provider.of<UserManagementResponse>(context).addAgreement(selectedUserList, _agreementStartDateController.text, _agreementEndDateController.text, '', _selectedRentedTo).then((value) {
-      _progressDialog.hide();
+    if (attachmentFilePath != null && attachmentFileName != null) {
+      print('attachmentFilePath : ' + attachmentFilePath.toString());
+      print('attachmentFileName : ' + attachmentFileName.toString());
+      print('attachmentFileName : ' +
+          attachmentFilePath.replaceAll(attachmentFileName, "").toString());
 
-      GlobalFunctions.showToast(value.message);
-      if(value.status){
-        Navigator.of(context).pop();
-      }
+      File file = File(attachmentFilePath);
+      Uint8List bytes = file.readAsBytesSync();
+      _progressDialog.show();
+      AWSClient()
+          .uploadData('uploads', attachmentFileName, bytes)
+          .then((value) {
+        _progressDialog.hide();
+      });
+/*
 
-    });
 
+
+       final tag = "File upload ${_tasks.length + 1}";
+            final taskId = await uploader.enqueue(
+                url: "https://societyrun.com//Uploads/",
+                //required: url to upload to
+                files: [
+                  FileItem(
+                      filename: attachmentFileName,
+                      savedDir: attachmentFilePath.replaceAll(
+                          attachmentFileName, ""),
+                      fieldname: "file")
+                ],
+                // required: list of files that you want to upload
+                method: UploadMethod.POST,
+                // HTTP method  (POST or PUT or PATCH)
+                // headers: {"admin": "1234", "admin1": "1234"},
+                //  data: {"name": "john"}, // any data you want to send in upload request
+                showNotification: true,
+                // send local notification (android only) for upload status
+                tag: attachmentFileName); // unique tag for upload task
+
+            setState(() {
+              _tasks.putIfAbsent(
+                  tag,
+                      () =>
+                      UploadItem(
+                        id: taskId,
+                        tag: tag,
+                        type: MediaType.Pdf,
+                        status: UploadTaskStatus.enqueued,
+                      ));
+            });
+*/
+
+    }
+    /*if (!widget.isAdmin) {
+      Provider.of<UserManagementResponse>(context, listen: false)
+          .addAgreement(
+              selectedUserList,
+              _agreementStartDateController.text,
+              _agreementEndDateController.text,
+              attachmentFileName,
+              _selectedRentedTo)
+          .then((value) async {
+        _progressDialog.hide();
+
+        GlobalFunctions.showToast(value.message);
+        if (value.status) {
+          // Navigator.of(context).pop();
+
+        }
+      });
+    } else {
+      Provider.of<UserManagementResponse>(context, listen: false)
+          .adminAddAgreement(
+              selectedUserList,
+              _agreementStartDateController.text,
+              _agreementEndDateController.text,
+              attachmentFileName,
+              _selectedRentedTo,
+              widget.block,
+              widget.flat,
+              _selectedIssueNOC)
+          .then((value) async {
+        _progressDialog.hide();
+
+        GlobalFunctions.showToast(value.message);
+        if (value.status) {
+          //    Navigator.of(context).pop();
+
+        }
+      });
+    }*/
   }
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
       attachmentFilePath = value;
-      getCompressFilePath();
+      attachmentFileName = attachmentFilePath.substring(
+          attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+      print('file Name : ' + attachmentFileName.toString());
+      setState(() {});
     });
   }
-
-  void openCamera(BuildContext context) {
-    GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath = value.path;
-      getCompressFilePath();
-    });
-  }
-
-  void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
-    print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(
-              attachmentFilePath, value.toString() + '/' + attachmentFileName)
-          .then((value) {
-        attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
-        setState(() {});
-      });
-    });
-  }
-
 
   void setBlockData(List<Block> _blockList) {
     for (int i = 0; i < _blockList.length; i++) {

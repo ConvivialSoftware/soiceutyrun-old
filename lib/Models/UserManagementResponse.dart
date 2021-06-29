@@ -559,6 +559,8 @@ class UserManagementResponse extends ChangeNotifier {
 
     var result = await restClient.nocApprove(societyId, ID, block, flat, userId, note, societyName);
 
+    getRentalRequest();
+    getUserManagementDashboard();
     return result;
   }
 
@@ -576,6 +578,28 @@ class UserManagementResponse extends ChangeNotifier {
     String societyId = await GlobalFunctions.getSocietyId();
 
     var result = await restClient.addAgreement(societyId, userId, agreementFrom, agreementTo, agreement, rentedTo);
+
+    return result;
+  }
+
+
+  Future<StatusMsgResponse> adminAddAgreement(
+      List<String> userId,
+      String agreementFrom,
+      String agreementTo,
+      String agreement,
+      String rentedTo,
+      String block,
+      String flat,
+      String nocIssue,
+      ) async {
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
+
+    String societyId = await GlobalFunctions.getSocietyId();
+    String societyName = await GlobalFunctions.getSocietyName();
+
+    var result = await restClient.adminAddAgreementAPI(societyId, userId, agreementFrom, agreementTo, agreement, rentedTo,block,flat,societyName,nocIssue);
 
     return result;
   }

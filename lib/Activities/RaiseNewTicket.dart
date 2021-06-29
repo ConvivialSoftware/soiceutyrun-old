@@ -71,7 +71,8 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
               value: value[i].COMPLAINT_CATEGORY,
               child: text(
                 value[i].COMPLAINT_CATEGORY,
-                  textColor: GlobalVariables.green,
+                  textColor: GlobalVariables.black,
+                  fontSize: GlobalVariables.textSizeSMedium
               ),
             ));
           }
@@ -149,12 +150,14 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     print('Out If');
     if(value.complaintCategoryList.length>0){
       print('In If');
+      __categoryListItems = new  List<DropdownMenuItem<String>>();
       for (int i = 0; i < value.complaintCategoryList.length; i++) {
         __categoryListItems.add(DropdownMenuItem(
           value: value.complaintCategoryList[i].COMPLAINT_CATEGORY,
           child: text(
             value.complaintCategoryList[i].COMPLAINT_CATEGORY,
-              textColor: GlobalVariables.green,
+              textColor: GlobalVariables.black,
+            fontSize: GlobalVariables.textSizeSMedium
           ),
         ));
       }
@@ -291,7 +294,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       width: 2.0,
                     )),
                 child: ButtonTheme(
-                  child: DropdownButton(
+                  child: DropdownButtonFormField(
                     items: __categoryListItems,
                     value: _categorySelectedItem,
                     onChanged: changeCategoryDropDownItem,
@@ -300,12 +303,23 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       Icons.keyboard_arrow_down,
                       iconColor: GlobalVariables.mediumGreen,
                     ),
-                    underline: SizedBox(),
+                    /*underline: SizedBox(),
                     hint: text(
                       AppLocalizations.of(context)
                               .translate('select_category') +
                           '*',
                         textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
+                    ),*/
+                    decoration: InputDecoration(
+                      //filled: true,
+                      //fillColor: Hexcolor('#ecedec'),
+                        labelText: AppLocalizations.of(context)
+                            .translate('select_category') +
+                            '*',
+                        labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent))
+                      // border: new CustomBorderTextFieldSkin().getSkin(),
                     ),
                   ),
                 ),
@@ -410,6 +424,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               AppLocalizations.of(context)
                                   .translate('attach_photo'),
                                 textColor: GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeSMedium
                             ),
                           ),
                         ),
@@ -418,6 +433,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                           child: text(
                             'OR',
                               textColor: GlobalVariables.lightGray,
+
                           ),
                         ),
                         Container(
@@ -448,6 +464,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
                                   textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeSMedium
                               )),
                         ),
                       ],
@@ -499,7 +516,8 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       child: text(
                         AppLocalizations.of(context)
                             .translate('mark_as_urgent'),
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
+                          textColor: GlobalVariables.green,
+                          fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
                   ],

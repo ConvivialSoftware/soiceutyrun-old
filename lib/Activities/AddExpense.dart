@@ -221,7 +221,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: _paidByListItems,
                           value: _selectedPaidBy,
                           onChanged: changePaidByDropDownItem,
@@ -230,12 +230,23 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                          /*underline: SizedBox(),
                           hint: text(
                             AppLocalizations.of(context).translate('paid_by') +
                                 '*',
                             textColor: GlobalVariables.lightGray,
                             fontSize: GlobalVariables.textSizeSMedium,
+                          ),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('paid_by') +
+                                  '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
                           ),
                         ),
                       ),
@@ -267,7 +278,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                       width: 2.0,
                     )),
                 child: ButtonTheme(
-                  child: DropdownButton(
+                  child: DropdownButtonFormField(
                     items: _bankAccountListItems,
                     value: _selectedBankAccount,
                     onChanged: changeFromAccountDropDownItem,
@@ -276,12 +287,23 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                       Icons.keyboard_arrow_down,
                       iconColor: GlobalVariables.mediumGreen,
                     ),
-                    underline: SizedBox(),
+                    /*underline: SizedBox(),
                     hint: text(
                       AppLocalizations.of(context).translate('from_account') +
                           '*',
                       textColor: GlobalVariables.lightGray,
                       fontSize: GlobalVariables.textSizeSMedium,
+                    ),*/
+                    decoration: InputDecoration(
+                      //filled: true,
+                      //fillColor: Hexcolor('#ecedec'),
+                        labelText: AppLocalizations.of(context)
+                            .translate('from_account') +
+                            '*',
+                        labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent))
+                      // border: new CustomBorderTextFieldSkin().getSkin(),
                     ),
                   ),
                 ),

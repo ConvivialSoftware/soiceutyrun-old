@@ -1130,13 +1130,18 @@ class RestAPI implements RestClient,
       GlobalVariables.flat: flat,
       GlobalVariables.block: block,
       GlobalVariables.INVOICE_NO: invoiceNo,
+      //"Bill_no": invoiceNo,
       'YEAR': year
     });
-    print(GlobalVariables.societyId + ":" + socId);
-    print(GlobalVariables.flat + ":" + flat);
-    print(GlobalVariables.block + ":" + block);
-    print(GlobalVariables.INVOICE_NO + ":" + invoiceNo);
-    print('YEAR' + ":" + year.toString());
+
+    print('getBillData' + ":" + {
+      GlobalVariables.societyId: socId,
+      GlobalVariables.flat: flat,
+      GlobalVariables.block: block,
+      GlobalVariables.INVOICE_NO: invoiceNo,
+     // "Bill_no": invoiceNo,
+      'YEAR': year
+    }.toString());
 
     print('baseurlERP : ' + baseUrl + GlobalVariables.billAPI);
     final Response _result = await _dio.post(GlobalVariables.billAPI,
@@ -3785,7 +3790,7 @@ class RestAPI implements RestClient,
     // TODO: implement addAgreement
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
-      "USER_ID[]": userID,
+      "USER_ID": userID,
       GlobalVariables.AGREEMENT_FROM: agreementFrom,
       GlobalVariables.AGREEMENT_TO: agreementTo,
       GlobalVariables.AGREEMENT: agreement,
@@ -3794,7 +3799,7 @@ class RestAPI implements RestClient,
 
     print({
       GlobalVariables.societyId: societyId,
-      "USER_ID[]": userID,
+      "USER_ID": userID.toString(),
       GlobalVariables.AGREEMENT_FROM: agreementFrom,
       GlobalVariables.AGREEMENT_TO: agreementTo,
       GlobalVariables.AGREEMENT: agreement,
@@ -3803,6 +3808,50 @@ class RestAPI implements RestClient,
 
     print('baseurl : ' + baseUrl + GlobalVariables.addAgreementAPI);
     final Response _result = await _dio.post(GlobalVariables.addAgreementAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addAgreementAPI : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> adminAddAgreementAPI(String societyId, List<String> userID,
+      String agreementFrom, String agreementTo, String agreement, String rentedTo,
+      String block, String flat, String societyName, String nocIssue) async {
+    // TODO: implement adminAddAgreementAPI
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      "USER_ID": userID,
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.RENTED_TO: rentedTo,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.societyName: societyName,
+      GlobalVariables.Noc_Issue: nocIssue,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      "USER_ID": userID,
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.RENTED_TO: rentedTo,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.societyName: societyName,
+      GlobalVariables.Noc_Issue: nocIssue,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.adminAddAgreementAPI);
+    final Response _result = await _dio.post(GlobalVariables.adminAddAgreementAPI,
         options: RequestOptions(
           //method: GlobalVariables.Post,
             headers: <String, dynamic>{

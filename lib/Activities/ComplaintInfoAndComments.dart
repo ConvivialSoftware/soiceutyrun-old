@@ -262,7 +262,7 @@ class ComplaintInfoAndCommentsState
                                         child: text(
                                           complaints.STATUS,
                                          textColor: GlobalVariables.white,
-                                              fontSize: GlobalVariables.textSizeSmall,
+                                          fontSize: GlobalVariables.textSizeSmall,
                                         ),
                                         decoration: BoxDecoration(
                                             color: MyUnitState
@@ -274,7 +274,7 @@ class ComplaintInfoAndCommentsState
                                       Container(
                                         child: text(
                                           'Ticket No: ' + complaints.TICKET_NO,
-                                         textColor: GlobalVariables.green,
+                                         textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium
                                           ),
                                       ),
                                     ],
@@ -283,7 +283,7 @@ class ComplaintInfoAndCommentsState
                                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     child: text(complaints.SUBJECT,
                                         textColor: GlobalVariables.green,
-                                            fontSize: GlobalVariables.textSizeLargeMedium,
+                                        fontSize: GlobalVariables.textSizeMedium,
                                             fontWeight: FontWeight.bold),
                                   ),
                                   Container(
@@ -291,6 +291,7 @@ class ComplaintInfoAndCommentsState
                                     child: text(
                                       complaints.DESCRIPTION,
                                      textColor: GlobalVariables.grey,
+                                        fontSize: GlobalVariables.textSizeSMedium
                                     ),
                                   ),
                                   complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
@@ -730,6 +731,7 @@ class ComplaintInfoAndCommentsState
                                       AppLocalizations.of(context)
                                           .translate('submit'),
                                           fontSize: GlobalVariables.textSizeMedium,
+                                      textColor: GlobalVariables.white,
                                       maxLine: 1,
                                     ),
                                   ),

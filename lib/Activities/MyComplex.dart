@@ -1776,7 +1776,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       //  color: GlobalVariables.lightGreen,
                       child: text(
                         field,
-                        textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium,
+                        textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeSMedium,
                         maxLine: 1,
                       ),
                     )),
@@ -2575,9 +2575,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               child: Container(
                                 child: text(
                                   value.documentList[position].TITLE,
-                                  maxLine: 1,
+                                  //maxLine: 1,
                                  textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontSize: GlobalVariables.textSizeSMedium,
                                     fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -2696,12 +2696,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       )
                     : Container(),
                 Container(
-                  margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: text(
                       value.documentList[position].USER_NAME == null
                           ? 'Posted By: - '
                           : 'Posted By: ' + value.documentList[position].USER_NAME,
-                      textColor: GlobalVariables.mediumGreen),
+                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
                 ),
               ],
             ),

@@ -449,7 +449,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __membershipTypeListItems,
                           value: _selectedMembershipType,
                           onChanged: changeMembershipTypeDropDownItem,
@@ -458,10 +458,21 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                          /*underline: SizedBox(),
                           hint: text(
                             AppLocalizations.of(context).translate('membership_type')+'*',
                             textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
+                          ),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('membership_type') +
+                                  '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
                           ),
                         ),
                       ),
@@ -481,7 +492,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __livesHereListItems,
                           value: _selectedLivesHere,
                           onChanged: changeLivesHereDropDownItem,
@@ -490,10 +501,21 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                          /*underline: SizedBox(),
                           hint: text(
                             AppLocalizations.of(context).translate('lives_here')+'*',
                             textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
+                          ),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('lives_here') +
+                                  '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
                           ),
                         ),
                       ),
@@ -541,7 +563,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __bloodGroupListItems,
                           value: _selectedBloodGroup,
                           onChanged: changeBloodGroupDropDownItem,
@@ -550,10 +572,20 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                         /* underline: SizedBox(),
                           hint: text(
                             AppLocalizations.of(context).translate('blood_group'),
                             textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
+                          ),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('blood_group') ,
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
                           ),
                         ),
                       ),

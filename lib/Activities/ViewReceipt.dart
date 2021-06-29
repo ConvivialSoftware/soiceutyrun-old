@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -35,10 +40,12 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   ProgressDialog _progressDialog;
   TextEditingController _emailTextController = TextEditingController();
   bool isEditEmail = false;
+  String _taskId;
+  ReceivePort _port = ReceivePort();
 
   @override
   void initState() {
-    super.initState();
+
     getSharedPrefData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -49,7 +56,75 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             .translate('pls_check_internet_connectivity'));
       }
     });
+
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState(() {
+        if (status == DownloadTaskStatus.complete) {
+          _openDownloadedFile(_taskId).then((success) {
+            if (!success) {
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(content: text('Cannot open this file')));
+            }
+          });
+        } else {
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(content: text('Download failed!')));
+        }
+      });
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
+    super.initState();
+
   }
+
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort send =
+    IsolateNameServer.lookupPortByName('downloader_send_port');
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+
+    send.send([id, status, progress]);
+  }
+
+  void downloadAttachment(var url, var _localPath) async {
+    GlobalFunctions.showToast("Downloading attachment....");
+    String localPath = _localPath + Platform.pathSeparator + "Download";
+    final savedDir = Directory(localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+    _taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: localPath,
+      headers: {"auth": "test_for_sql_encoding"},
+      //fileName: "SocietyRunImage/Document",
+      showNotification: true,
+      // show download progress in status bar (for Android)
+      openFileFromNotification:
+      true, // click on notification to open downloaded file (for Android)
+    );
+  }
+
+  Future<bool> _openDownloadedFile(String id) {
+    GlobalFunctions.showToast("Downloading completed");
+    return FlutterDownloader.open(taskId: id);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +138,18 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
           centerTitle: true,
           elevation: 0,
           actions: [
-            AppIconButton(Icons.mail, onPressed: (){
+            AppIconButton(
+                Icons.mail,
+                iconColor: GlobalVariables.white,
+                onPressed: (){
               emailReceiptDialog(context);
             }),
+            AppIconButton(
+                Icons.download_sharp,
+                iconColor: GlobalVariables.white,
+                onPressed: (){
+//downloadAttachment(url, _localPath);
+                }),
           ],
           leading: InkWell(
             onTap: () {
@@ -439,6 +523,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
+                                textColor: GlobalVariables.white,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),

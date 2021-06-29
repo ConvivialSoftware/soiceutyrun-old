@@ -116,9 +116,8 @@ class StaffListPerCategoryState
     return value.staffList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
-            padding: EdgeInsets.all(20),
+            margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 20, 10, 0),
+            padding: EdgeInsets.all(10),
             // height: MediaQuery.of(context).size.height / 0.5,
             decoration: BoxDecoration(
                 color: GlobalVariables.white,

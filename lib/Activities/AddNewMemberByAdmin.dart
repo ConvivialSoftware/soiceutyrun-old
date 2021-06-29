@@ -64,8 +64,6 @@ class AddNewMemberByAdminState
   new List<DropdownMenuItem<String>>();
   String _selectedLivesHere;
 
-  String _selectedIssueNOC;
-
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
 
@@ -297,7 +295,7 @@ class AddNewMemberByAdminState
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __membershipTypeListItems,
                           value: _selectedMembershipType,
                           onChanged: changeMembershipTypeDropDownItem,
@@ -306,13 +304,24 @@ class AddNewMemberByAdminState
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                          /*underline: SizedBox(),
                           hint: text(
                             AppLocalizations.of(context)
                                 .translate('membership_type') +
                                 '*',
                             textColor: GlobalVariables.lightGray,
                             fontSize: GlobalVariables.textSizeSMedium,
+                          ),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('membership_type') +
+                                  '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
                           ),
                         ),
                       ),
@@ -332,7 +341,7 @@ class AddNewMemberByAdminState
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __livesHereListItems,
                           value: _selectedLivesHere,
                           onChanged: changeLivesHereDropDownItem,
@@ -341,20 +350,31 @@ class AddNewMemberByAdminState
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                         /* underline: SizedBox(),
                           hint: text(
                               AppLocalizations.of(context)
                                   .translate('lives_here') +
                                   '*',
                               textColor: GlobalVariables.lightGray,
-                              fontSize: GlobalVariables.textSizeSMedium),
+                              fontSize: GlobalVariables.textSizeSMedium),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('lives_here') +
+                                  '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              Visibility(
+             /* Visibility(
                 visible: _selectedMembershipType=='Tenant' ,
                 child: Container(
                   child: Column(
@@ -471,7 +491,7 @@ class AddNewMemberByAdminState
                     ],
                   ),
                 ),
-              ),
+              ),*/
               Container(
                 height: 100,
                 child: AppTextField(

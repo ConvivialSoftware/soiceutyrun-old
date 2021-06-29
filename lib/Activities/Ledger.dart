@@ -299,7 +299,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                           AppLocalizations.of(context)
                               .translate('opening_balance'),
                           textColor: GlobalVariables.black,
-                              fontSize: 20,
+                              fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -308,7 +308,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                       child: text(
                         'Rs. ' + value.openingBalance,
                         textColor: GlobalVariables.red,
-                            fontSize: 20,
+                            fontSize: GlobalVariables.textSizeNormal,
                             fontWeight: FontWeight.bold,
                       ),
                     ),

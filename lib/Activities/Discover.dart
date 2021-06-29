@@ -121,7 +121,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                               width: 4,
                             ),
                             text(
-                              AppLocalizations.of(context).translate('my_ads'),)
+                              AppLocalizations.of(context).translate('my_ads'),textColor: GlobalVariables.white)
                              // iconColor: GlobalVariables.white,
                                //   iconSize: GlobalVariables.textSizeSMedium),
                           ],

@@ -321,7 +321,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                       width: 2.0,
                     )),
                 child: ButtonTheme(
-                  child: DropdownButton(
+                  child: DropdownButtonFormField(
                     items: __bankListItems,
                     value: _bankSelectedItem,
                     onChanged: changeBankDropDownItem,
@@ -330,10 +330,21 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                       Icons.keyboard_arrow_down,
                       iconColor: GlobalVariables.mediumGreen,
                     ),
-                    underline: SizedBox(),
+                    /*underline: SizedBox(),
                     hint: text(
                       AppLocalizations.of(context).translate('select_bank')+'*',
                       textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
+                    ),*/
+                    decoration: InputDecoration(
+                      //filled: true,
+                      //fillColor: Hexcolor('#ecedec'),
+                        labelText: AppLocalizations.of(context)
+                            .translate('select_bank') +
+                            '*',
+                        labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent))
+                      // border: new CustomBorderTextFieldSkin().getSkin(),
                     ),
                   ),
                 ),

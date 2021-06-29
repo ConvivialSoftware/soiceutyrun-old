@@ -539,6 +539,21 @@ abstract class RestClient {
       @Field(GlobalVariables.AGREEMENT) String agreement,
       @Field(GlobalVariables.RENTED_TO) String rentedTo,
       );
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.adminAddAgreementAPI)
+  Future<StatusMsgResponse> adminAddAgreementAPI(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("USER_ID[]") List<String> userID,
+      @Field(GlobalVariables.AGREEMENT_FROM) String agreementFrom,
+      @Field(GlobalVariables.AGREEMENT_TO) String agreementTo,
+      @Field(GlobalVariables.AGREEMENT) String agreement,
+      @Field(GlobalVariables.RENTED_TO) String rentedTo,
+      @Field(GlobalVariables.block) String block,
+      @Field(GlobalVariables.flat) String flat,
+      @Field(GlobalVariables.societyName) String societyName,
+      @Field(GlobalVariables.Noc_Issue) String nocIssue,
+      );
 }
 
 

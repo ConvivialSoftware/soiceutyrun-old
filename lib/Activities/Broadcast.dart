@@ -599,17 +599,16 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                       //: MediaQuery.of(context).size.width / 1.1,
                       child: GridView.count(
                       physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: 1,
+                      crossAxisCount: 2,
                       shrinkWrap: true,
-                      childAspectRatio:
-                          MediaQuery.of(context).size.width / 100.0,
+                      childAspectRatio: MediaQuery.of(context).size.width / 150.0,
                       children: List.generate(
                         _notificationAssignFlatList.length,
                         (index) {
                           return Container(
                               alignment: Alignment.center,
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               decoration: BoxDecoration(
                                   color: GlobalVariables.green,
                                   borderRadius: BorderRadius.circular(20),
@@ -620,19 +619,23 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  text(
-                                    _notificationAssignFlatList[index].BLOCK +
-                                        ' ' +
-                                        _notificationAssignFlatList[index]
-                                            .FLAT +
-                                        ' ' +
-                                        _notificationAssignFlatList[index]
-                                            .NAME +
-                                        '-' +
-                                        _notificationAssignFlatList[index].TYPE,
-                                    textColor: GlobalVariables.white,
-                                    fontWeight: FontWeight.w500,
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    child: text(
+                                      _notificationAssignFlatList[index].BLOCK +
+                                          ' ' +
+                                          _notificationAssignFlatList[index]
+                                              .FLAT +
+                                          ' ' /*+
+                                          _notificationAssignFlatList[index]
+                                              .NAME +
+                                          '-' +
+                                          _notificationAssignFlatList[index].TYPE*/,
+                                      textColor: GlobalVariables.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                   AppIconButton(
                                     Icons.clear,
@@ -897,17 +900,17 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                       //: MediaQuery.of(context).size.width / 1.1,
                       child: GridView.count(
                       physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: 1,
+                      crossAxisCount: 2,
                       shrinkWrap: true,
                       childAspectRatio:
-                          MediaQuery.of(context).size.width / 100.0,
+                          MediaQuery.of(context).size.width / 150.0,
                       children: List.generate(
                         _mailAssignFlatList.length,
                         (index) {
                           return Container(
                               alignment: Alignment.center,
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               decoration: BoxDecoration(
                                   color: GlobalVariables.green,
                                   borderRadius: BorderRadius.circular(20),
@@ -919,16 +922,19 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  text(
-                                    _mailAssignFlatList[index].BLOCK +
-                                        ' ' +
-                                        _mailAssignFlatList[index].FLAT +
-                                        ' ' +
-                                        _mailAssignFlatList[index].NAME +
-                                        '-' +
-                                        _mailAssignFlatList[index].TYPE,
-                                    textColor: GlobalVariables.white,
-                                    fontWeight: FontWeight.w500,
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    child: text(
+                                      _mailAssignFlatList[index].BLOCK +
+                                          ' ' +
+                                          _mailAssignFlatList[index].FLAT +
+                                          ' ' /*+
+                                          _mailAssignFlatList[index].NAME +
+                                          '-' +
+                                          _mailAssignFlatList[index].TYPE*/,
+                                      textColor: GlobalVariables.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                   AppIconButton(
                                     Icons.clear,
@@ -1482,17 +1488,17 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           //: MediaQuery.of(context).size.width / 1.1,
                           child: GridView.count(
                           physics: NeverScrollableScrollPhysics(),
-                          crossAxisCount: 1,
+                          crossAxisCount: 2,
                           shrinkWrap: true,
                           childAspectRatio:
-                              MediaQuery.of(context).size.width / 100.0,
+                              MediaQuery.of(context).size.width / 150.0,
                           children: List.generate(
                             _smsAssignFlatList.length,
                             (index) {
                               return Container(
                                   alignment: Alignment.center,
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                   decoration: BoxDecoration(
                                       color: GlobalVariables.green,
                                       borderRadius: BorderRadius.circular(20),
@@ -1504,16 +1510,19 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      text(
-                                        _smsAssignFlatList[index].BLOCK +
-                                            ' ' +
-                                            _smsAssignFlatList[index].FLAT +
-                                            ' ' +
-                                            _smsAssignFlatList[index].NAME +
-                                            '-' +
-                                            _smsAssignFlatList[index].TYPE,
-                                        textColor: GlobalVariables.white,
-                                        fontWeight: FontWeight.w500,
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                        child: text(
+                                          _smsAssignFlatList[index].BLOCK +
+                                              ' ' +
+                                              _smsAssignFlatList[index].FLAT +
+                                              ' ' /*+
+                                              _smsAssignFlatList[index].NAME +
+                                              '-' +
+                                              _smsAssignFlatList[index].TYPE*/,
+                                          textColor: GlobalVariables.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                       AppIconButton(
                                         Icons.clear,

@@ -577,8 +577,15 @@ class _BaseRentalRequestUserDetailsState extends State<BaseRentalRequestUserDeta
                         Navigator.of(context).pop();
 
                         _progressDialog.show();
+                        Provider.of<UserManagementResponse>(context,listen: false).nocApprove(widget.rentalRequest.ID, tenantDetailsList[0].BLOCK, tenantDetailsList[0].FLAT, widget.rentalRequest.U_ID, _reasonController.text).then((value) {
 
-                     //   Provider.of<UserManagementResponse>(context).nocApprove(widget.rentalRequest.ID, widget.rentalRequest., flat, userId, note)
+                          _progressDialog.hide();
+                          GlobalFunctions.showToast(value.message);
+                          if(value.status){
+                            Navigator.of(context).pop();
+                          }
+
+                        });
 
                       }else{
                         GlobalFunctions.showToast('Please Enter Note');

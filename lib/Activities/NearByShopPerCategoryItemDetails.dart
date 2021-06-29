@@ -256,7 +256,7 @@ class NearByShopPerCategoryItemDetailsState
                                                       children: [
                                                         AppIcon(
                                                           Icons.location_on,
-                                                          iconSize: 24,
+                                                          iconSize: 24.0,
                                                           iconColor: GlobalVariables
                                                               .green,
                                                         ),

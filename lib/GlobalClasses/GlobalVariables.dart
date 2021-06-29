@@ -241,7 +241,8 @@ class GlobalVariables {
   static const approvePendingRequestAPI = "Members/approve_update";
   static const deactivateUserAPI = "Members/deactivate_user";
   static const nocApproveAPI = "Members/noc_approve";
-  static const addAgreementAPI = "Members/addAgreement";
+  static const addAgreementAPI = "Members/add_agreement";
+  static const adminAddAgreementAPI = "Members/admin_add_agreement";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -294,6 +295,7 @@ class GlobalVariables {
   static const ledgerAPI = "AndroidApi/ledger";
   static const viewBillsAPI = "AndroidApi/view";
   static const billAPI = "AndroidApi/Billview1";
+  //static const billAPI = "AndroidApi/Bill_view";
   static const receiptAPI = "AndroidApi/receiptview1";
   static const bankAPI = "AndroidApi/bank";
   static const insertPaymentAPI = "AndroidApi/insertpayment_razorpay";
@@ -469,6 +471,7 @@ class GlobalVariables {
   static const AGREEMENT_TO = 'AGREEMENT_TO';
   static const AGREEMENT = 'AGREEMENT';
   static const RENTED_TO = 'RENTED_TO';
+  static const Noc_Issue = 'Noc_Issue';
 
   /*Server Response Key*/
 

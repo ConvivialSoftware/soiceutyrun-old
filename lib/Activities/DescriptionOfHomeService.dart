@@ -264,7 +264,7 @@ class DescriptionOfHomeServiceState
                   margin: EdgeInsets.only(right: 8, top: 8),
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 8),
-                  child: FittedBox(child: text(widget._services.Discount+'% Discount', fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
+                  child: FittedBox(child: text(widget._services.Discount, fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
                 ),
               ),
             ],

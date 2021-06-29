@@ -79,7 +79,7 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
 class AppAssetsImage extends StatefulWidget {
   var image, radius, fit, borderColor, borderWidth, imageWidth, imageHeight,shape;
 
-  AppAssetsImage(this.image, { this.imageWidth, this.imageHeight,
+  AppAssetsImage(this.image, { this.imageWidth=24.0, this.imageHeight=24.0,
      this.radius = 0.0, this.fit = BoxFit
           .fill,this.borderColor=Colors.transparent, this.borderWidth=1.0,this.shape=BoxShape.circle});
 
@@ -102,8 +102,8 @@ class _AppAssetsImageState extends State<AppAssetsImage> {
           ),
           child: widget.image.toString().contains(".svg") ? SvgPicture.asset(
             widget.image,
-            width: widget.imageWidth,
-            height: widget.imageHeight,
+            width: double.parse(widget.imageWidth.toString()),
+            height: double.parse(widget.imageHeight.toString()),
             fit: widget.fit,
           ) : Container(
             decoration: BoxDecoration(
@@ -196,7 +196,7 @@ class _AppIconState extends State<AppIcon> {
     return Icon(
           widget.icon,
           color: widget.iconColor,
-          size: widget.iconSize,
+          size: double.parse(widget.iconSize.toString()),
         );
   }
 }

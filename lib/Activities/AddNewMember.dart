@@ -341,6 +341,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             labelText: AppLocalizations.of(context)
                                 .translate('membership_type') +
                                 '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
                               enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.transparent))
                            // border: new CustomBorderTextFieldSkin().getSkin(),
@@ -363,7 +364,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __livesHereListItems,
                           value: _selectedLivesHere,
                           onChanged: changeLivesHereDropDownItem,
@@ -372,13 +373,24 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
-                          hint: text(
+                         // underline: SizedBox(),
+                          /*hint: text(
                               AppLocalizations.of(context)
                                       .translate('lives_here') +
                                   '*',
                               textColor: GlobalVariables.lightGray,
-                              fontSize: GlobalVariables.textSizeSMedium),
+                              fontSize: GlobalVariables.textSizeSMedium),*/
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('lives_here') +
+                                  '*',
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
                         ),
                       ),
                     ),
@@ -409,7 +421,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             width: 2.0,
                           )),
                       child: ButtonTheme(
-                        child: DropdownButton(
+                        child: DropdownButtonFormField(
                           items: __bloodGroupListItems,
                           value: _selectedBloodGroup,
                           onChanged: changeBloodGroupDropDownItem,
@@ -418,13 +430,23 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.mediumGreen,
                           ),
-                          underline: SizedBox(),
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('blood_group'),
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
+                          /*underline: SizedBox(),
                           hint: text(
                             AppLocalizations.of(context)
                                 .translate('blood_group'),
                             textColor: GlobalVariables.lightGray,
                             fontSize: GlobalVariables.textSizeSMedium,
-                          ),
+                          ),*/
                         ),
                       ),
                     ),

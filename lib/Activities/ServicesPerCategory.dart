@@ -91,7 +91,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
   getHomeCareListDataLayout(ServicesResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 10, 0, 0),
       child: Builder(
           builder: (context) => ListView.builder(
              scrollDirection: Axis.vertical,
@@ -119,75 +119,97 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(left: 16,top: 8,right: 16,bottom: 8),
-                  child: Column(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              child: Column(
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            text(value.servicesList[position].Name,
+                                fontSize: GlobalVariables.textSizeNormal,
+                                maxLine: 2,
+                                textColor: GlobalVariables.black,fontWeight: FontWeight.bold),
+                            SizedBox(height: 4),
+                            text(value.servicesList[position].Title,
+                                textColor:
+                                GlobalVariables.grey,
+                                fontSize:
+                                GlobalVariables.textSizeSMedium,
+                                fontWeight: FontWeight.bold,
+                                maxLine: 2),
+                            SizedBox(height: 8),
+                            Container(
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  text(value.servicesList[position].Name,
-                                      fontSize: GlobalVariables.textSizeSMedium,
-                                      maxLine: 2,
-                                      textColor: GlobalVariables.green,fontWeight: FontWeight.w500),
-                                  SizedBox(height: 4),
-                                  text(value.servicesList[position].Title,
-                                      textColor:
-                                      GlobalVariables.grey,
-                                      fontSize:
-                                      GlobalVariables.textSizeSmall,
-                                      maxLine: 2),
+                                children: [
+                                  Container(
+                                    child:  Row(
+                                      children: <Widget>[
+                                        Container(
+                                            child: AppIcon(
+                                              Icons.star,
+                                              iconColor:
+                                              GlobalVariables.orangeYellow,
+                                              iconSize: 15,
+                                            )),
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              5, 0, 0, 0),
+                                          child: Text(
+                                            value.servicesList[position]
+                                                .Rating,
+                                            style: TextStyle(
+                                              color: GlobalVariables
+                                                  .grey,
+                                              fontSize: GlobalVariables.textSizeSmall,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          )
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.start,
+                          ],
+                        ),
                       ),
-                      Divider(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(
+                        width: 1,
+                        height: 120,
+                        child: Center(
+                          child: Container(
+                            width: 1,
+                            margin: EdgeInsetsDirectional.only(top: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                left: Divider.createBorderSide(context, color: GlobalVariables.lightGray, width: 1),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Container(
-                            child: text('Rs. '+value.servicesList[position].Price,
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeSmall,
+                            child: text('Price Starts from',
+                                textColor: GlobalVariables.grey,
+                                fontSize: GlobalVariables.textSizeSMedium,
                                 fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child:  Row(
-                                    children: <Widget>[
-                                      Container(
-                                          child: AppIcon(
-                                            Icons.star,
-                                            iconColor:
-                                            GlobalVariables.orangeYellow,
-                                            iconSize: 15,
-                                          )),
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(
-                                            5, 0, 0, 0),
-                                        child: Text(
-                                          value.servicesList[position]
-                                              .Rating,
-                                          style: TextStyle(
-                                            color: GlobalVariables
-                                                .grey,
-                                            fontSize: GlobalVariables.textSizeSmall,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                            child: text('Rs. '+value.servicesList[position].Price,
+                                textColor: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeNormal,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            child: text(value.servicesList[position].Discount +'% OFF',
+                                textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                fontWeight: FontWeight.bold),
                           ),
                           //SizedBox(width: 10),
                         ],
@@ -197,8 +219,8 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                 ),
                 Container(
                   width: 4,
-                  height: 35,
-                  margin: EdgeInsets.only(top: 16),
+                  height: 50,
+                  margin: EdgeInsets.only(top: 32),
                   color: position % 2 == 0 ? GlobalVariables.lightPurple : GlobalVariables.orangeYellow,
                 )
               ],

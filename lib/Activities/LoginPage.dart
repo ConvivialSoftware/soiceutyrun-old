@@ -380,7 +380,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 height: MediaQuery.of(context).size.height,
                                 //color: GlobalVariables.black,
                                 //alignment: Alignment.center,
-                                child: AppNetworkImage(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,),
+                                child: AppNetworkImage(_bannerList[itemIndex].IMAGE,fit: BoxFit.fitWidth,shape: BoxShape.rectangle,),
                               ),
                             ): Container(),
                           ),
