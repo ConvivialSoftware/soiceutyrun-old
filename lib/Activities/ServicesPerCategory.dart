@@ -206,7 +206,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                                 fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            child: text(value.servicesList[position].Discount +'% OFF',
+                            child: text(value.servicesList[position].Discount,
                                 textColor: GlobalVariables.green,
                                 fontSize: GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold),

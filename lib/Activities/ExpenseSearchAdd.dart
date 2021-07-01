@@ -145,7 +145,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                           child: text(
                               AppLocalizations.of(context)
                                   .translate('add_expense'),
-                              fontSize: GlobalVariables.textSizeNormal,
+                              fontSize: GlobalVariables.textSizeMedium,
                               textColor: GlobalVariables.green,
                               fontWeight: FontWeight.bold),
                         )
@@ -188,7 +188,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                           child: text(
                               AppLocalizations.of(context)
                                   .translate('search_expense'),
-                              fontSize: GlobalVariables.textSizeNormal,
+                              fontSize: GlobalVariables.textSizeMedium,
                               textColor: GlobalVariables.green,
                               fontWeight: FontWeight.bold),
                         )
@@ -255,59 +255,62 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                                   height: 8,
                                 ),
                                 Row(
+                                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       alignment: Alignment.topLeft,
                                       child: text('Financial Year : ',
                                           maxLine: 3,
-                                          fontSize: GlobalVariables.textSizeMedium,
+                                          fontSize: GlobalVariables.textSizeSMedium,
                                           textColor: GlobalVariables.green,
                                           fontWeight: FontWeight.w500),
                                     ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      width: 150,
-                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                      decoration: BoxDecoration(
-                                          color: GlobalVariables.white,
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: GlobalVariables.mediumGreen,
-                                            width: 2.0,
-                                          )),
-                                      child: ButtonTheme(
-                                        //alignedDropdown: true,
-                                        child: DropdownButton(
-                                          items: _yearListItems,
-                                          onChanged: (value) {
-                                            _yearSelectedItem = value;
-                                            print('_selctedItem:' +
-                                                _yearSelectedItem.toString());
-                                            _setState(() {
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.topLeft,
+                                        width: 150,
+                                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        decoration: BoxDecoration(
+                                            color: GlobalVariables.white,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: GlobalVariables.mediumGreen,
+                                              width: 2.0,
+                                            )),
+                                        child: ButtonTheme(
+                                          //alignedDropdown: true,
+                                          child: DropdownButton(
+                                            items: _yearListItems,
+                                            onChanged: (value) {
+                                              _yearSelectedItem = value;
+                                              print('_selctedItem:' +
+                                                  _yearSelectedItem.toString());
+                                              _setState(() {
 
-                                            });
-                                          },
-                                          value: _yearSelectedItem,
-                                          underline: SizedBox(),
-                                          isExpanded: true,
-                                          icon: AppIcon(
-                                            Icons.keyboard_arrow_down,
-                                            iconColor: GlobalVariables.mediumGreen,
+                                              });
+                                            },
+                                            value: _yearSelectedItem,
+                                            underline: SizedBox(),
+                                            isExpanded: true,
+                                            icon: AppIcon(
+                                              Icons.keyboard_arrow_down,
+                                              iconColor: GlobalVariables.mediumGreen,
+                                            ),
+                                            iconSize: 20,
+                                            selectedItemBuilder: (BuildContext context) {
+                                              // String txt =  _societyListItems.elementAt(position).value;
+                                              return _yearListItems.map((e) {
+                                                return Container(
+                                                    alignment: Alignment.center,
+                                                    //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                                                    child: text(
+                                                      _yearSelectedItem,
+                                                      textColor: GlobalVariables.green,
+                                                    ));
+                                              }).toList();
+                                            },
                                           ),
-                                          iconSize: 20,
-                                          selectedItemBuilder: (BuildContext context) {
-                                            // String txt =  _societyListItems.elementAt(position).value;
-                                            return _yearListItems.map((e) {
-                                              return Container(
-                                                  alignment: Alignment.center,
-                                                  //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                                                  child: text(
-                                                    _yearSelectedItem,
-                                                    textColor: GlobalVariables.green,
-                                                  ));
-                                            }).toList();
-                                          },
                                         ),
                                       ),
                                     ),
@@ -557,7 +560,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
       if(_yearSelectedItem==null){
         _yearSelectedItem = _listYear[0].years;
       }
-      
+
       _progressDialog.hide();
       setState(() {
         showSearchWiseBottomSheet();

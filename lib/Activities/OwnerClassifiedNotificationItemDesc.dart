@@ -424,7 +424,7 @@ class CreateClassifiedListingState
                             value.ownerClassifiedList[0].City +
                             ', ' +
                             value.ownerClassifiedList[0].Pincode,
-                        textColor: GlobalVariables.lightGray,
+                        textColor: GlobalVariables.grey,
                         fontSize: GlobalVariables.textSizeSmall,
                         maxLine: 4),
                   ),

@@ -186,7 +186,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   getAddAgreementLayout(UserManagementResponse userManagementResponse) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(20),
         // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
@@ -279,18 +279,18 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   ),
                 ],
               ),*/
-              Container(
+             /* Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 alignment: Alignment.center,
                 child: text(widget.block + ' ' + widget.flat,
                     fontSize: GlobalVariables.textSizeNormal,
                     textColor: GlobalVariables.green,
                     fontWeight: FontWeight.bold),
-              ),
+              ),*/
               Container(
                 //   color: GlobalVariables.grey,
                 //padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Builder(
                     builder: (context) => ListView.builder(
                           // scrollDirection: Axis.vertical,
@@ -851,7 +851,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   textContent: AppLocalizations.of(context).translate('submit'),
                   onPressed: () {
                     verifyInfo();
-                    AWSClient().downloadData('uploads', 'file-sample_150kB.pdf');
+                    //AWSClient().downloadData('uploads', 'file-sample_150kB.pdf');
                   },
                 ),
               ),
@@ -899,7 +899,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       print('attachmentFileName : ' +
           attachmentFilePath.replaceAll(attachmentFileName, "").toString());
 
-      File file = File(attachmentFilePath);
+    /*  File file = File(attachmentFilePath);
       Uint8List bytes = file.readAsBytesSync();
       _progressDialog.show();
       AWSClient()
@@ -907,8 +907,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
           .then((value) {
         _progressDialog.hide();
       });
-/*
-
+*/
 
 
        final tag = "File upload ${_tasks.length + 1}";
@@ -942,10 +941,9 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                         status: UploadTaskStatus.enqueued,
                       ));
             });
-*/
 
     }
-    /*if (!widget.isAdmin) {
+    if (!widget.isAdmin) {
       Provider.of<UserManagementResponse>(context, listen: false)
           .addAgreement(
               selectedUserList,
@@ -958,7 +956,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
         GlobalFunctions.showToast(value.message);
         if (value.status) {
-          // Navigator.of(context).pop();
+           Navigator.of(context).pop();
 
         }
       });
@@ -978,11 +976,11 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
         GlobalFunctions.showToast(value.message);
         if (value.status) {
-          //    Navigator.of(context).pop();
+              Navigator.of(context).pop();
 
         }
       });
-    }*/
+    }
   }
 
   void openFile(BuildContext context) {

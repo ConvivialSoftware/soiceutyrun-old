@@ -307,15 +307,14 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('contact1')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
+                      child: text(AppLocalizations.of(context).translate('contact1')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium),
                     ),
                     Container(
                    //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].Phone==null ? '': _profileList[0].Phone,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                      ),),
+                      child: text(_profileList[0].Phone==null ? '': _profileList[0].Phone,
+                          textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                      ),
                     )
                   ],
                 ),
@@ -325,16 +324,21 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 padding: EdgeInsets.all(5),
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('contact2')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        child: text(AppLocalizations.of(context).translate('contact2')+ " : ",
+                  textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium),
+                      ),
                     ),
-                    Container(
-                     // margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].ALTERNATE_CONTACT1,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                      ),),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                       // margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: text(_profileList[0].ALTERNATE_CONTACT1,
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -345,15 +349,36 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('email')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
+                      child: text(AppLocalizations.of(context).translate('email')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                      ),
+                    ),
+                    Flexible(
+                      child: Container(
+                      //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: text(_profileList[0].Email==null ? '': _profileList[0].Email,
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: text(AppLocalizations.of(context).translate('gender')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                      ),
                     ),
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].Email==null ? '': _profileList[0].Email,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                      ),),
+                      child: text(_profileList[0].GENDER,
+                          textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                      ),
                     )
                   ],
                 ),
@@ -364,34 +389,15 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('gender')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
-                    ),
-                    Container(
-                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].GENDER,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                      ),),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('blood_group')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
+                      child: text(AppLocalizations.of(context).translate('blood_group')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                      ),
                     ),
                     Container(
                       //margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].BLOOD_GROUP,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize:GlobalVariables.textSizeMedium
-                      ),),
+                      child: text(_profileList[0].BLOOD_GROUP,
+                          textColor: GlobalVariables.grey,fontSize:GlobalVariables.textSizeMedium
+                      ),
                     )
                   ],
                 ),
@@ -402,15 +408,15 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('date_of_birth')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
+                      child: text(AppLocalizations.of(context).translate('date_of_birth')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                      ),
                     ),
                     _profileList[0].DOB!=null && _profileList[0].DOB.length!=0 ? Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].DOB=='0000-00-00' ? '':GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy"),style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                      ),),
+                      child: text(_profileList[0].DOB=='0000-00-00' ? '':GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy"),
+                          textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                      ),
                     ):Container()
                   ],
                 ),
@@ -423,15 +429,15 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   child: Row(
                     children: <Widget>[
                       Container(
-                        child: AutoSizeText(AppLocalizations.of(context).translate('anniversary_date')+ " : ",style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18
-                        ),),
+                        child: text(AppLocalizations.of(context).translate('anniversary_date')+ " : ",
+                            textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                        ),
                       ),
                       Container(
                      //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                        child: AutoSizeText(/*GlobalFunctions.convertDateFormat(_profileList[0].ANNIVERSARY_DATE, "dd-MM-yyyy")*/'',style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                        ),),
+                        child: text(/*GlobalFunctions.convertDateFormat(_profileList[0].ANNIVERSARY_DATE, "dd-MM-yyyy")*/'',
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                        ),
                       )
                     ],
                   ),
@@ -443,20 +449,20 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: AutoSizeText(AppLocalizations.of(context).translate('occupation')+ " : ",style: TextStyle(
-                          color: GlobalVariables.green,fontSize: 18
-                      ),),
+                      child: text(AppLocalizations.of(context).translate('occupation')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                      ),
                     ),
                     Container(
                     //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: AutoSizeText(_profileList[0].OCCUPATION,style: TextStyle(
-                          color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                      ),),
+                      child: text(_profileList[0].OCCUPATION,
+                          textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                      ),
                     )
                   ],
                 ),
               ),
-              Visibility(
+             /* Visibility(
                 visible: false,
                 child: Container(
                   margin: EdgeInsets.all(5),
@@ -464,16 +470,16 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   child: Row(
                     children: <Widget>[
                       Container(
-                        child: AutoSizeText(AppLocalizations.of(context).translate('hobbies')+ " : ",style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18
-                        ),),
+                        child: text(AppLocalizations.of(context).translate('hobbies')+ " : ",
+                            textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                        ),
                       ),
                       Container(
                      //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                        child: AutoSizeText(''/*_profileList                     [0].HOBBIES*/,style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                        ),),
-                      )
+                        child: text(''*//*_profileList                     [0].HOBBIES*//*,
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -486,39 +492,37 @@ class DisplayProfileInfoState extends BaseStatefulState<BaseDisplayProfileInfo> 
                   child: Row(
                     children: <Widget>[
                       Container(
-                        child: AutoSizeText(AppLocalizations.of(context).translate('language_known')+ " : ",style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18
-                        ),),
+                        child: text(AppLocalizations.of(context).translate('language_known')+ " : ",
+                            textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium
+                        ),
                       ),
                       Container(
                       //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                        child: AutoSizeText('',/*_profileList[0].LANGUAGES,*/style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                        ),),
+                        child: text('',*//*_profileList[0].LANGUAGES,*//*
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
+                        ),
                       )
                     ],
                   ),
                 ),
-              ),
+              ),*/
               Container(
-                margin: EdgeInsets.fromLTRB(5,20,5,5),
+                margin: EdgeInsets.fromLTRB(5,5,5,5),
                 padding: EdgeInsets.all(5),
                 child: Row(
                   children: <Widget>[
-                    Flexible(
-                      child: Container(
-                        child: AutoSizeText(AppLocalizations.of(context).translate('address')+ " : ",style: TextStyle(
-                            color: GlobalVariables.green,fontSize: 18
-                        ),),
+                    Container(
+                      child: text(AppLocalizations.of(context).translate('address')+ " : ",
+                          textColor: GlobalVariables.green,fontSize: 18
                       ),
                     ),
                     Flexible(
                       child: Container(
                         //color : GlobalVariables.green,
                         //   margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                        child: AutoSizeText(_profileList[0].ADDRESS,style: TextStyle(
-                            color: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium
-                        ),maxLines: 2,)
+                        child: text(_profileList[0].ADDRESS,
+                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,
+                        maxLine: 3,)
                         ,
                       ),
                     )

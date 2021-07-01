@@ -441,7 +441,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: <Widget>[
                         text(
                           AppLocalizations.of(context).translate('total_due'),
-                          textColor: GlobalVariables.mediumGreen,
+                          textColor: GlobalVariables.green,
                           fontSize: GlobalVariables.textSizeSMedium,
                         ),
                         text(
@@ -470,7 +470,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                     Container(
                       color: GlobalVariables.mediumGreen,
-                      margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: Divider(
                         height: 1,
                         color: GlobalVariables.mediumGreen,
@@ -2241,8 +2241,17 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 ),
                 child: Column(
                   children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: AppIconButton(
+                        Icons.close,
+                        iconColor: GlobalVariables.green,
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },),
+                    ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                     // margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.center,
                       child: text(
@@ -2644,7 +2653,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             ],
           ),
         ),
-        Align(
+      /*  Align(
           alignment: Alignment.center,
           child: Container(
               transform: Matrix4.translationValues(
@@ -2664,7 +2673,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   Navigator.pop(context);
                 },
               )),
-        ),
+        ),*/
         //_buildDialogCloseWidget(),
       ],
     );

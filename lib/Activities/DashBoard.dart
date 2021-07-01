@@ -304,11 +304,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                               child: Container(
                                                 alignment: Alignment.center,
                                                // margin: EdgeInsets.only(bottom: 4),
-                                                child: Text(
+                                                child: text(
                                                   newNotificationCounterValue.toString(),
-                                                     style: TextStyle(
-                                                         color: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium
-                                                     ),
+
+                                                         textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium
+
                                                 ),
                                               ),
                                             ),
@@ -1129,14 +1129,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   builder: (BuildContext context,
                                       String userNameValueNotifer,
                                       Widget child) {
-                                    return AutoSizeText(
+                                    return text(
                                       userNameValueNotifer,
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          color: GlobalVariables.black,
+                                   maxLine: 1,
+                                   //   textAlign: TextAlign.left,
+                                          textColor: GlobalVariables.black,
                                           fontSize: GlobalVariables.textSizeLargeMedium,
-                                          fontWeight: FontWeight.bold),
-                                      maxLines: 1,
+                                          fontWeight: FontWeight.bold
                                     );
                                   }),
                             ),
@@ -1144,16 +1143,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               margin: EdgeInsets.all(
                                   5), //   color: GlobalVariables.green,
                               //TODO : CustomerID
-                              child: AutoSizeText(
+                              child: text(
                                 (AppLocalizations.of(context)
                                         .translate("str_consumer_id") +
                                     ' : ' +
                                     snapshot
                                         .data[GlobalVariables.keyConsumerId]),
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: GlobalVariables.grey, fontSize: 15),
-                                maxLines: 1,
+                                //textAlign: TextAlign.left,
+
+                                    textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeSmall,
+                                maxLine: 1,
                               ),
                             ),
                             Container(
@@ -1297,11 +1296,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         child: Container(
                                           margin:
                                               EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                          child: AutoSizeText(
+                                          child: text(
                                             _list[i].title,
-                                            style: TextStyle(
-                                                color: GlobalVariables.grey,
-                                                fontSize: GlobalVariables.textSizeSMedium),
+                                                textColor: GlobalVariables.grey,
+                                                fontSize: GlobalVariables.textSizeSMedium,
                                           ),
                                         ),
                                       ),
@@ -1421,15 +1419,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       child: FittedBox(
                         fit: BoxFit.contain,
                         alignment: Alignment.topLeft,
-                        child: AutoSizeText(
+                        child: text(
                           loginResponse.Society_Name +
                               " " +
                               loginResponse.BLOCK +
                               " " +
                               loginResponse.FLAT,
-                          style: TextStyle(
-                              color: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall),
-                          maxLines: 1,
+                              textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall,
+                          maxLine: 1,
                         ),
                       ),
                     ));
@@ -1439,15 +1436,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   child: FittedBox(
                     fit: BoxFit.contain,
                     alignment: Alignment.topLeft,
-                    child: AutoSizeText(
+                    child: text(
                       loginResponse.Society_Name +
                           " " +
                           loginResponse.BLOCK +
                           " " +
                           loginResponse.FLAT,
-                      style:
-                          TextStyle(color: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall),
-                      maxLines: 1,
+                      textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall,
+                      maxLine: 1,
                     ),
                   ),
                 ));
@@ -1458,15 +1454,14 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 child: FittedBox(
                   fit: BoxFit.contain,
                   alignment: Alignment.topLeft,
-                  child: AutoSizeText(
+                  child: text(
                     loginResponse.Society_Name +
                         " " +
                         loginResponse.BLOCK +
                         " " +
                         loginResponse.FLAT,
-                    style:
-                        TextStyle(color: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall),
-                    maxLines: 1,
+                 textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall,
+                    maxLine: 1,
                   ),
                 ),
               ));
@@ -1743,7 +1738,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               text(
                                 AppLocalizations.of(context)
                                     .translate('total_due'),
-                                textColor: GlobalVariables.mediumGreen,
+                                textColor: GlobalVariables.green,
                                     fontSize: GlobalVariables.textSizeSMedium,
                               ),
                               double.parse(loginDashBoardResponse.duesRs) > 0
@@ -1789,7 +1784,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           ),
                           Container(
                             color: GlobalVariables.mediumGreen,
-                            margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                             child: Divider(
                               height: 1,
                               color: GlobalVariables.mediumGreen,
@@ -1907,7 +1902,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     side: BorderSide(color: GlobalVariables.green)),
                 child: text(
                   AppLocalizations.of(context).translate('i_am_interested'),
-    fontSize: GlobalVariables.textSizeMedium,
+    fontSize: GlobalVariables.textSizeMedium,textColor: GlobalVariables.white
                 ),
               ),
             ),

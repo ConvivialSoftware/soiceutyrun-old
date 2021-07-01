@@ -832,6 +832,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: text(
           _bloodGroupList[i],
           textColor: GlobalVariables.black,
+            fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w600
         ),
       ));
     }
@@ -847,6 +848,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: text(
           _membershipTypeList[i],
           textColor: GlobalVariables.black,
+          fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w600
         ),
       ));
     }
@@ -862,6 +864,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: text(
           _livesHereList[i],
          textColor: GlobalVariables.black,
+            fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w600
         ),
       ));
     }

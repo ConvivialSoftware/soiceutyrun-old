@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'GlobalVariables.dart';
@@ -87,6 +88,15 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: AppIconButton(
+                      Icons.close,
+                      iconColor: GlobalVariables.green,
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },),
+                  ),
                   SizedBox(
                     height: 30,
                   ),
@@ -142,15 +152,15 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
             ),
           ],
         ),
-        Container(
+     /*   Container(
           margin: EdgeInsets.only(left: MediaQuery.of(context).size.width/1.7,),
           //alignment: Alignment.topRight,
           child: Container(
             //alignment: Alignment.topRight,
-            /*transform: Matrix4.translationValues(
+            *//*transform: Matrix4.translationValues(
                       MediaQuery.of(context).size.width * 0.3,
                       -MediaQuery.of(context).size.width * 0.33,
-                      0.0),*/
+                      0.0),*//*
               width: 42.0,
               height: 42.0,
               decoration: BoxDecoration(
@@ -165,7 +175,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                 },
               )
           ),
-        ),
+        ),*/
         /*Align(
           alignment: Alignment.center,
           child: Container(

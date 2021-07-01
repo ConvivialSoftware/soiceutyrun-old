@@ -487,12 +487,11 @@ class GlobalFunctions {
                 /*child: SvgPicture.asset(
                               GlobalVariables.overviewTxtPath,
                             )*/
-                child: Text(
+                child: text(
                   title,
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                      textColor: GlobalVariables.green,
+                      fontSize: GlobalVariables.textSizeLargeMedium,
+                      fontWeight: FontWeight.bold
                 ),
               ),
             ),
@@ -583,6 +582,7 @@ class GlobalFunctions {
         messageTextStyle: TextStyle(
             color: GlobalVariables.white,
             fontSize: 14,
+            fontFamily: 'sans-serif',
             fontWeight: FontWeight.bold));
 
     return _progressDialog;
@@ -607,11 +607,10 @@ class GlobalFunctions {
                 SizedBox(
                   width: 32.0,
                 ),
-                Text("Please Wait",
-                    style: TextStyle(
-                        color: GlobalVariables.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold)),
+                text("Please Wait",
+                        textColor: GlobalVariables.white,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                        fontWeight: FontWeight.bold),
               ],
             ),
           ),
@@ -633,6 +632,7 @@ class GlobalFunctions {
         messageTextStyle: TextStyle(
             color: GlobalVariables.white,
             fontSize: 14,
+            fontFamily: 'sans-serif',
             fontWeight: FontWeight.bold));
 
     return _progressDialog;
@@ -923,11 +923,10 @@ class GlobalFunctions {
                           )),
                       Container(
                         margin: EdgeInsets.all(10),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context)
                               .translate('coming_soon_text'),
-                          style: TextStyle(
-                              color: GlobalVariables.black, fontSize: 18),
+                              textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeLargeMedium,
                         ),
                       )
                     ],
@@ -971,13 +970,11 @@ class GlobalFunctions {
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(15, 25, 15, 15),
-                            child: Text(
+                            child: text(
                               AppLocalizations.of(context)
                                   .translate('account_deactivate'),
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: GlobalVariables.black,
-                              ),
+                                fontSize: GlobalVariables.textSizeMedium,
+                                textColor: GlobalVariables.black,
                             )),
                         Container(
                           height: 50,
@@ -996,11 +993,10 @@ class GlobalFunctions {
                                   borderRadius: BorderRadius.circular(10),
                                   side:
                                       BorderSide(color: GlobalVariables.green)),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
-                                style: TextStyle(
-                                    fontSize: GlobalVariables.textSizeMedium),
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ),
@@ -1049,14 +1045,13 @@ class GlobalFunctions {
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
-                            child: Text(
+                            child: text(
                               AppLocalizations.of(context)
                                   .translate('app_update'),
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                textColor: GlobalVariables.black,
                               ),
-                            )),
+                            ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -1078,12 +1073,12 @@ class GlobalFunctions {
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
                                             color: GlobalVariables.green)),
-                                    child: Text(
+                                    child: text(
                                       AppLocalizations.of(context)
                                           .translate('later'),
-                                      style: TextStyle(
                                           fontSize:
-                                              GlobalVariables.textSizeMedium),
+                                              GlobalVariables.textSizeMedium,
+                                      textColor: GlobalVariables.white
                                     ),
                                   ),
                                 ),
@@ -1112,12 +1107,12 @@ class GlobalFunctions {
                                       borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
                                           color: GlobalVariables.green)),
-                                  child: Text(
+                                  child: text(
                                     AppLocalizations.of(context)
                                         .translate('update'),
-                                    style: TextStyle(
                                         fontSize:
-                                            GlobalVariables.textSizeMedium),
+                                            GlobalVariables.textSizeMedium,
+                                    textColor: GlobalVariables.white
                                   ),
                                 ),
                               ),
@@ -1253,23 +1248,20 @@ class GlobalFunctions {
                         Container(
                             alignment: Alignment.center,
                             margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
-                            child: Text(
+                            child: text(
                               AppLocalizations.of(context).translate('oops'),
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: GlobalVariables.green,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: GlobalVariables.textSizeLargeMedium,
+                                  textColor: GlobalVariables.green,
+                                  fontWeight: FontWeight.bold,
                             )),
                         Container(
                             alignment: Alignment.topLeft,
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 15),
-                            child: Text(
+                            child: text(
                               AppLocalizations.of(context)
                                   .translate('not_allow_run_app'),
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: GlobalVariables.black,
-                              ),
+                                fontSize: GlobalVariables.textSizeMedium,
+                                textColor: GlobalVariables.black,
                             )),
                         Container(
                           alignment: Alignment.topRight,
@@ -1294,11 +1286,10 @@ class GlobalFunctions {
                                   borderRadius: BorderRadius.circular(10),
                                   side:
                                       BorderSide(color: GlobalVariables.green)),
-                              child: Text(
+                              child: text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
-                                style: TextStyle(
-                                    fontSize: GlobalVariables.textSizeMedium),
+                                    fontSize: GlobalVariables.textSizeMedium
                               ),
                             ),
                           ),
@@ -1340,11 +1331,10 @@ class GlobalFunctions {
                       )),
                       Container(
                         margin: EdgeInsets.all(10),
-                        child: Text(
+                        child: text(
                           AppLocalizations.of(context)
                               .translate('contact_for_permission_text'),
-                          style: TextStyle(
-                              color: GlobalVariables.grey, fontSize: 16),
+                              textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium
                         ),
                       )
                     ],

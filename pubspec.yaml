@@ -204,7 +204,10 @@ flutter:
     - assets/other_assets/no_data_found.png
     - assets/other_assets/paid.png
     - assets/other_assets/document_image.svg
-
+  fonts:
+    - family: sans-serif
+      fonts:
+        - asset: assets/fonts/montserrat_regular.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

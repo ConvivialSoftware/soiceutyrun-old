@@ -39,6 +39,7 @@ Widget text(var text,
           color: textColor,
           height: textStyleHeight,
           letterSpacing: latterSpacing,
+          fontFamily: 'sans-serif',
           fontWeight: fontWeight));
 }
 
@@ -56,6 +57,7 @@ Widget htmlText(var text,
     defaultTextStyle: TextStyle(
         fontSize: double.parse(fontSize.toString()),
         color: textColor,
+        fontFamily: 'sans-serif',
         height: textStyleHeight,
         letterSpacing: latterSpacing,
         fontWeight: fontWeight
@@ -128,6 +130,7 @@ Widget longText(var text,
           fontSize: fontSize,
           color: textColor,
           height: 1.5,
+          fontFamily: 'sans-serif',
           letterSpacing: latterSpacing));
 }
 

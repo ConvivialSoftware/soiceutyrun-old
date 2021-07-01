@@ -281,7 +281,7 @@ class DirectoryState extends State<BaseDirectory> {
                                 margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                                 child: AppIcon(
                                   Icons.call,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.green,
                                   iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
@@ -314,30 +314,28 @@ class DirectoryState extends State<BaseDirectory> {
                       ),
                     ),
                     email
-                        ? Flexible(
-                            child: InkWell(
-                              onTap: () {
-                                Uri _emailUri = Uri(
-                                    scheme: 'mailto',
-                                    path: emailId,
-                                    queryParameters: {'subject': ''});
-                                launch(_emailUri.toString());
-                              },
-                              child: Container(
-                                // color: GlobalVariables.lightGray,
-                                // color: GlobalVariables.black,
-                                // height: 10,
-                                alignment: Alignment.topRight,
-                                margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                child: AppIcon(
-                                  Icons.email,
-                                  iconColor: GlobalVariables.mediumGreen,
-                                  iconSize: GlobalVariables.textSizeLarge,
-                                ),
-                              ),
+                        ? InkWell(
+                          onTap: () {
+                            Uri _emailUri = Uri(
+                                scheme: 'mailto',
+                                path: emailId,
+                                queryParameters: {'subject': ''});
+                            launch(_emailUri.toString());
+                          },
+                          child: Container(
+                            // color: GlobalVariables.lightGray,
+                            // color: GlobalVariables.black,
+                            // height: 10,
+                            alignment: Alignment.topRight,
+                            margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
+                            child: AppIcon(
+                              Icons.email,
+                              iconColor: GlobalVariables.mediumGreen,
+                              iconSize: GlobalVariables.textSizeLarge,
                             ),
-                          )
-                        : Container(
+                          ),
+                        )
+                        : SizedBox(
                             // width: 24,height: 24,
                             ),
                   ],
@@ -391,7 +389,7 @@ class DirectoryState extends State<BaseDirectory> {
                                 margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                                 child: AppIcon(
                                   Icons.call,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.green,
                                   iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
