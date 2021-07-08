@@ -8,6 +8,7 @@ import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'GlobalVariables.dart';
@@ -67,9 +68,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width / 1.5,
-              //padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(top: 15),
+              width: MediaQuery.of(context).size.width / 1.2,
              // margin: EdgeInsets.only(top: 70.0),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -90,45 +89,50 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                 children: [
                   Align(
                     alignment: Alignment.topRight,
-                    child: AppIconButton(
-                      Icons.close,
-                      iconColor: GlobalVariables.green,
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    _popupTitle,
-                    style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 18,
-                        fontWeight: FontWeight.bold
+                    child: Container(
+                      margin: EdgeInsets.only(top: 5,right: 5),
+                      child: AppIconButton(
+                        Icons.close,
+                        iconColor: GlobalVariables.green,
+                        iconSize: 24.0,
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                   Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(
-                      _body,
-                      style: TextStyle(
-                          color: GlobalVariables.black,
-                          fontSize: 16,),
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        text(
+                            _popupTitle,
+                            textColor : GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: text(
+                            _body,
+                            textColor: GlobalVariables.black,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                 ],
               ),
             ),
             Container(
-              width: MediaQuery.of(context).size.width / 1.5,
+              width: MediaQuery.of(context).size.width / 1.2,
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
               decoration: BoxDecoration(
                 color: GlobalVariables.green,

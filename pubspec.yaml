@@ -83,6 +83,7 @@ dependencies:
   dotted_border: ^1.0.7
   #svg_cached_network_image: ^1.0.0+1
   after_layout: ^1.1.0
+  flutter_full_pdf_viewer: ^1.0.6
   #social_share: 2.0.6
   #dynamic_widget: ^2.0.1
   #overlay_dialog: ^0.0.3
@@ -204,6 +205,15 @@ flutter:
     - assets/other_assets/no_data_found.png
     - assets/other_assets/paid.png
     - assets/other_assets/document_image.svg
+    - assets/other_assets/active_user.png
+    - assets/other_assets/mobile_user.png
+    - assets/other_assets/registered_user.png
+    - assets/other_assets/pending_request.png
+    - assets/other_assets/rental_request.png
+    - assets/other_assets/move_out_request.png
+    - assets/other_assets/apartment.png
+    - assets/other_assets/smile.png
+    - assets/other_assets/sad.png
   fonts:
     - family: sans-serif
       fonts:

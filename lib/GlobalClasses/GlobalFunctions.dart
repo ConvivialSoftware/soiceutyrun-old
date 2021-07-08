@@ -743,8 +743,8 @@ class GlobalFunctions {
       type: FileType.custom,
     );
 
-    List<String> keys = List<String>();
-    List<String> values = List<String>();
+    List<String> keys = <String>[];
+    List<String> values = <String>[];
     for (int i = 0; i < result.files.length; i++) {
       keys.add(result.files[i].name);
       values.add(result.files[i].path);
@@ -803,10 +803,20 @@ class GlobalFunctions {
   }
 
   static Future<String> localPath() async {
-    final directory = Platform.isAndroid
+   /* final directory = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    return directory.path;
+    return directory.path;*/
+    String path;
+
+    if(Platform.isAndroid){
+      path =  await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    }else{
+      final directory = await getApplicationDocumentsDirectory();
+      path = directory.path;
+    }
+
+    return path;
   }
 
   static Future<String> getTemporaryDirectoryPath() async {
@@ -844,10 +854,6 @@ class GlobalFunctions {
           true, // click on notification to open downloaded file (for Android)
     );
     return taskId;
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    return FlutterDownloader.open(taskId: id);
   }
 
   static Future<void> shareData(var title, var text) async {
@@ -1377,6 +1383,31 @@ class GlobalFunctions {
         ],
       ),
     );
+  }
+
+  static Future<bool> convertBase64StringToFile(String base64String,String fileName) async {
+
+    try {
+      base64String = base64String.replaceAll('\n', '');
+      base64String = base64String.replaceAll('\r', '');
+      var decodedBytes = base64Decode(base64String);
+      //decodedBytes = base64Decode(base64String.replaceAll('\r', ''));
+
+      String path = (await GlobalFunctions.localPath());
+      print('path : ' + path.toString());
+      File file = new File('$path/$fileName');
+      await file.writeAsBytes(decodedBytes.buffer.asUint8List());
+
+      // final File file = File(_localPath + '/' + fileName);
+      print('file path : ' + '$path/$fileName');
+      // await file.writeAsBytes(decodedBytes.buffer.asUint8List());
+      print('complete');
+      return true;
+    }catch(e){
+      print(e.toString());
+      return false;
+    }
+
   }
 
 /*static void checkRedirectFromBackgroundNotification(BuildContext context) {

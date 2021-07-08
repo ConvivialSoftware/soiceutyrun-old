@@ -3863,5 +3863,60 @@ class RestAPI implements RestClient,
     return StatusMsgResponse.fromJson(value);
   }
 
+  @override
+  Future<DataResponse> getBillPDFData(String socId, String billNo) async {
+    // TODO: implement getBillPDFData
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      "Bill_no": billNo,
+    });
+
+    print("data: " +
+        {
+          GlobalVariables.societyId: socId,
+          "Bill_no": billNo,
+        }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.billPDFAPI);
+    final Response _result = await _dio.post(
+      GlobalVariables.billPDFAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl, data: formData),
+    );
+    final value = _result.data;
+    //print('value of getBillPDFData : ' + value.toString());
+    return DataResponse.fromJsonDataAsString(value);
+  }
+
+  @override
+  Future<DataResponse> getReceiptPDFData(String socId, String receiptNo) async {
+    // TODO: implement getBillPDFData
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      "Receipt_no": receiptNo,
+    });
+
+    print("data: " +
+        {
+          GlobalVariables.societyId: socId,
+          "Receipt_no": receiptNo,
+        }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.receiptPDFAPI);
+    final Response _result = await _dio.post(
+      GlobalVariables.receiptPDFAPI,
+      options: RequestOptions(
+        //method: GlobalVariables.Post,
+          headers: <String, dynamic>{
+            "Authorization": GlobalVariables.AUTH,
+          }, baseUrl: baseUrl, data: formData),
+    );
+    final value = _result.data;
+    //print('value of getBillPDFData : ' + value.toString());
+    return DataResponse.fromJsonDataAsString(value);
+  }
 
 }

@@ -435,7 +435,7 @@ class AboutSocietyRunInfoState
                             flex: 4,
                             child: Container(
                               alignment: Alignment.topLeft,
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
                               child: text(SocietyRun.puneAddress,
                                   maxLine: 5,
                                   textColor: GlobalVariables.grey,
@@ -466,7 +466,7 @@ class AboutSocietyRunInfoState
                               flex: 4,
                               child: Container(
                                 alignment: Alignment.topLeft,
-                                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
                                 child: text(
                                   SocietyRun.mumbaiAddress,
                                   maxLine: 5,

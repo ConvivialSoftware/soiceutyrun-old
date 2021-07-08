@@ -55,6 +55,7 @@ class GlobalVariables {
   static var drawerImagePath =
       "assets/other_assets/societyrun-logo_colored.svg";
   static var appIconPath = "assets/other_assets/societyrun-logo.svg";
+  static var appLogoGreenIcon = "assets/images/societyrun_icon.png";
   static var splashIconPath = "assets/other_assets/splash_socityrun.png";
   static var myFlatIconPath = "assets/menu_assets/myhome_icon.svg";
   static var myBuildingIconPath = "assets/menu_assets/building_icon_menu.svg";
@@ -121,6 +122,15 @@ class GlobalVariables {
   static var noDataFoundIconPath = "assets/other_assets/no_data_found.png";
   static var paidIconPath = "assets/other_assets/paid.png";
   static var documentImageIconPath = "assets/other_assets/document_image.svg";
+  static var activeUserIconPath = "assets/other_assets/active_user.png";
+  static var mobileUserIconPath = "assets/other_assets/mobile_user.png";
+  static var registeredUserIconPath = "assets/other_assets/registered_user.png";
+  static var rentalRequestIconPath = "assets/other_assets/rental_request.png";
+  static var pendingRequestIconPath = "assets/other_assets/pending_request.png";
+  static var moveOutRequestIconPath = "assets/other_assets/move_out_request.png";
+  static var apartmentIconPath = "assets/other_assets/apartment.png";
+  static var smileIconPath = "assets/other_assets/smile.png";
+  static var sadIconPath = "assets/other_assets/sad.png";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -295,7 +305,8 @@ class GlobalVariables {
   static const ledgerAPI = "AndroidApi/ledger";
   static const viewBillsAPI = "AndroidApi/view";
   static const billAPI = "AndroidApi/Billview1";
-  //static const billAPI = "AndroidApi/Bill_view";
+  static const billPDFAPI = "AndroidApi/Bill_view";
+  static const receiptPDFAPI = "AndroidApi/Receipt_view";
   static const receiptAPI = "AndroidApi/receiptview1";
   static const bankAPI = "AndroidApi/bank";
   static const insertPaymentAPI = "AndroidApi/insertpayment_razorpay";
@@ -546,8 +557,7 @@ class SocietyRun {
   static const salesEmail = "sales@societyrun.com";
   static const supportEmail = "support@societyrun.com";
   static const puneAddress = "Office No. - 906, Rama Equator, Morwadi, Pimpri- 411018";
-  static const mumbaiAddress =
-      "F70, Haware Fantasia Business Park,Near Vashi Station & Inorbit Mall,Vashi, Navi Mumbai - 400705";
+  static const mumbaiAddress = "F149 Fantasia Business Park, Vashi, Navi Mumbai - 400705";
 //static const versionCode="1.0.0";
 }
 

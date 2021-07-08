@@ -281,18 +281,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                               imageHeight: GlobalVariables.textSizeNormal,
                                             ),
                                           ),
-                                          Container(
+                                          newNotificationCounterValue>0 ? Container(
                                             alignment: Alignment.topRight,
                                             margin: EdgeInsets.only(left: 8),
                                             child: Container(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.04,
+                                                  0.05,
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.04,
+                                                  0.05,
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: GlobalVariables
@@ -307,12 +307,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                 child: text(
                                                   newNotificationCounterValue.toString(),
 
-                                                         textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium
+                                                         textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSmall
 
                                                 ),
                                               ),
                                             ),
-                                          ),
+                                          ) : SizedBox(),
                                         ],
                                       );
                                     }),

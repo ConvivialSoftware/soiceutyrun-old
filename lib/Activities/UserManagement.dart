@@ -109,26 +109,37 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                   padding: EdgeInsets.all(
                       16), // height: MediaQuery.of(context).size.height / 0.5,
                   decoration: BoxDecoration(
-                      color: GlobalVariables.lightOrange,
+                      color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(15)),
                   child: Column(
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        child: text('No of. Units',
-                            textColor: GlobalVariables.white,
-                            fontSize: GlobalVariables.textSizeMedium,
+                        child: text(userManagementResponse.noOfUnits,
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeXXLarge,
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 4,
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        child: text(userManagementResponse.noOfUnits,
-                            textColor: GlobalVariables.white,
-                            fontSize: GlobalVariables.textSizeXXLarge,
-                            fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(left: 4),
+                            child: AppAssetsImage(GlobalVariables.apartmentIconPath,imageColor: GlobalVariables.grey),
+                          ),
+                          SizedBox(width: 4,),
+                          Container(
+                            alignment: Alignment.center,
+                            child: text('Units',
+                                textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeNormal,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 8,
@@ -138,20 +149,31 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                 ),
               ),
               SizedBox(
-                height: 16,
+                height: 32,
               ),
               Container(
-                padding: EdgeInsets.all(
-                    16), // height: MediaQuery.of(context).size.height / 0.5,
+                alignment: Alignment.topLeft,
+                child: text(
+                    AppLocalizations.of(context)
+                        .translate('user_statistics'),
+                    textColor: GlobalVariables.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: GlobalVariables
+                        .textSizeNormal),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+               // padding: EdgeInsets.all(8),
+                padding: EdgeInsets.only(bottom: 12),
+                // height: MediaQuery.of(context).size.height / 0.5,
                 decoration: BoxDecoration(
-                    color: GlobalVariables.lightCyan,
+                    color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(15)),
 
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 4,
-                    ),
                     Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,27 +195,34 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                 child: Container(
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 4),
+                                            child: text(
+                                                userManagementResponse.registerUser,
+                                                textColor: GlobalVariables.green,
+                                                fontSize:
+                                                GlobalVariables.textSizeXXLarge,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 4,),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 4),
+                                            child: AppAssetsImage(GlobalVariables.registeredUserIconPath,imageColor: GlobalVariables.grey),
+                                          ),
+                                        ],
+                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
                                             AppLocalizations.of(context)
-                                                .translate('registered_unit'),
-                                            textColor: GlobalVariables.white,
+                                                .translate('register_user'),
+                                            textColor: GlobalVariables.green,
                                             fontWeight: FontWeight.bold,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(
-                                            userManagementResponse.registerUser,
-                                            textColor: GlobalVariables.white,
-                                            fontSize:
-                                                GlobalVariables.textSizeXXLarge,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -202,10 +231,10 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height: 100,
+                              height: 50,
                               width: 4,
                               child: VerticalDivider(
-                                color: GlobalVariables.white,
+                                color: GlobalVariables.grey,
                               )),
                           Flexible(
                               flex: 1,
@@ -224,27 +253,34 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                 child: Container(
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: text(
+                                                userManagementResponse.activeUser,
+                                                textColor: GlobalVariables.green,
+                                                fontSize:
+                                                GlobalVariables.textSizeXXLarge,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 4,),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 4),
+                                            child: AppAssetsImage(GlobalVariables.activeUserIconPath,imageColor: GlobalVariables.grey),
+                                          ),
+                                        ],
+                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
                                             AppLocalizations.of(context)
                                                 .translate('active_user'),
-                                            textColor: GlobalVariables.white,
+                                            textColor: GlobalVariables.green,
                                             fontWeight: FontWeight.bold,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(
-                                            userManagementResponse.activeUser,
-                                            textColor: GlobalVariables.white,
-                                            fontSize:
-                                                GlobalVariables.textSizeXXLarge,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -253,10 +289,10 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height: 100,
+                              height: 50,
                               width: 4,
                               child: VerticalDivider(
-                                color: GlobalVariables.white,
+                                color: GlobalVariables.grey,
                               )),
                           Flexible(
                               flex: 1,
@@ -275,27 +311,34 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                 child: Container(
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: text(
+                                                userManagementResponse.mobileUser,
+                                                textColor: GlobalVariables.green,
+                                                fontSize:
+                                                GlobalVariables.textSizeXXLarge,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 4,),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 4),
+                                            child: AppAssetsImage(GlobalVariables.mobileUserIconPath,imageColor: GlobalVariables.grey),
+                                          ),
+                                        ],
+                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
                                             AppLocalizations.of(context)
                                                 .translate('mobile_user'),
-                                            textColor: GlobalVariables.white,
+                                            textColor: GlobalVariables.green,
                                             fontWeight: FontWeight.bold,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(
-                                            userManagementResponse.mobileUser,
-                                            textColor: GlobalVariables.white,
-                                            fontSize:
-                                                GlobalVariables.textSizeXXLarge,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -311,19 +354,29 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                 ),
               ),
               SizedBox(
-                height: 16,
+                height: 32,
               ),
               Container(
-                padding: EdgeInsets.all(
-                    16), // height: MediaQuery.of(context).size.height / 0.5,
+                alignment: Alignment.topLeft,
+                child: text(
+                    AppLocalizations.of(context)
+                        .translate('user_request'),
+                    textColor: GlobalVariables.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: GlobalVariables
+                        .textSizeNormal),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 16),
+               // padding: EdgeInsets.all(16), // height: MediaQuery.of(context).size.height / 0.5,
                 decoration: BoxDecoration(
-                    color: GlobalVariables.lightPurple,
+                    color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(15)),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 4,
-                    ),
                     Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -346,28 +399,35 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                   //color: GlobalVariables.lightGray,
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: text(
+                                                userManagementResponse
+                                                    .rentalRequest,
+                                                textColor: GlobalVariables.green,
+                                                fontSize:
+                                                GlobalVariables.textSizeXXLarge,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 4,),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 4),
+                                            child: AppAssetsImage(GlobalVariables.rentalRequestIconPath,imageColor: GlobalVariables.grey),
+                                          ),
+                                        ],
+                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
                                             AppLocalizations.of(context)
                                                 .translate('rental_request'),
-                                            textColor: GlobalVariables.white,
+                                            textColor: GlobalVariables.green,
                                             fontWeight: FontWeight.bold,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(
-                                            userManagementResponse
-                                                .rentalRequest,
-                                            textColor: GlobalVariables.white,
-                                            fontSize:
-                                                GlobalVariables.textSizeXXLarge,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -376,10 +436,10 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height: 100,
+                              height: 50,
                               width: 4,
                               child: VerticalDivider(
-                                color: GlobalVariables.white,
+                                color: GlobalVariables.grey,
                               )),
                           Flexible(
                               flex: 1,
@@ -398,28 +458,35 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                 child: Container(
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: text(
+                                                userManagementResponse
+                                                    .pendingRequest,
+                                                textColor: GlobalVariables.green,
+                                                fontSize:
+                                                GlobalVariables.textSizeXXLarge,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 4,),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 4),
+                                            child: AppAssetsImage(GlobalVariables.pendingRequestIconPath,imageColor: GlobalVariables.grey),
+                                          ),
+                                        ],
+                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
                                             AppLocalizations.of(context)
                                                 .translate('pending_request'),
-                                            textColor: GlobalVariables.white,
+                                            textColor: GlobalVariables.green,
                                             fontWeight: FontWeight.bold,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(
-                                            userManagementResponse
-                                                .pendingRequest,
-                                            textColor: GlobalVariables.white,
-                                            fontSize:
-                                                GlobalVariables.textSizeXXLarge,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -428,10 +495,10 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height: 100,
+                              height: 50,
                               width: 4,
                               child: VerticalDivider(
-                                color: GlobalVariables.white,
+                                color: GlobalVariables.grey,
                               )),
                           Flexible(
                               flex: 1,
@@ -451,28 +518,35 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                   //color: GlobalVariables.lightGray,
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: text(
+                                                userManagementResponse
+                                                    .moveOutRequest,
+                                                textColor: GlobalVariables.green,
+                                                fontSize:
+                                                GlobalVariables.textSizeXXLarge,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 4,),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 4),
+                                            child: AppAssetsImage(GlobalVariables.moveOutRequestIconPath,imageColor: GlobalVariables.grey),
+                                          ),
+                                        ],
+                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
                                             AppLocalizations.of(context)
                                                 .translate('move_out_request'),
-                                            textColor: GlobalVariables.white,
+                                            textColor: GlobalVariables.green,
                                             fontWeight: FontWeight.bold,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(
-                                            userManagementResponse
-                                                .moveOutRequest,
-                                            textColor: GlobalVariables.white,
-                                            fontSize:
-                                                GlobalVariables.textSizeXXLarge,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -480,9 +554,6 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                               )),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 4,
                     ),
                   ],
                 ),

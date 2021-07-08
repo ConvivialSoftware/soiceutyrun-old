@@ -132,7 +132,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
       displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME, 'hh:mm aa');
     }
 
-    var image  =  GlobalVariables.appImagePath;
+    var image  =  GlobalVariables.appLogoGreenIcon;
     if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_FVISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_SInApp ||
@@ -174,19 +174,19 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(16),
         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(10),
             color: GlobalVariables.white),
         child: Column(
           children: <Widget>[
-
             Container(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
+                  Flexible(
+                    flex: 1,
                     child: Visibility(
                       visible: true,
                       child: Container(
@@ -197,21 +197,24 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                             color: GlobalVariables.transparent,
                             shape: BoxShape.circle
                         ),
-                        child: image.toLowerCase().contains(".svg") ? SvgPicture.asset(image,color: GlobalVariables.green,):Image.asset(image),
+                        child: image.toLowerCase().contains(".svg") ? AppAssetsImage(image,imageColor: GlobalVariables.green,):AppAssetsImage(image,imageColor: GlobalVariables.green,),
                       ),
                     ),
                   ),
-                  Expanded(
+                  Flexible(
+                    flex: 6,
                     child: Container(
                       margin: EdgeInsets.fromLTRB(
                           5, 0, 0, 0), //alignment: Alignment.topLeft,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _dbNotificationList[position].read==0 ? Container(
+                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 width: 8,
                                 height: 8,
                                 decoration: BoxDecoration(
@@ -221,34 +224,38 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                               ):Container(
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: text(
-                                    _dbNotificationList[position].title,
-                                    maxLine: 1,
-                                    
-                                    textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeLargeMedium,
-                                        fontWeight: FontWeight.bold),
+                              Flexible(
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: text(
+                                      _dbNotificationList[position].title,
+                                      maxLine: 3,
+                                      textColor: GlobalVariables.green,
+                                          fontSize: GlobalVariables.textSizeMedium,
+                                          fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ],
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(_dbNotificationList[position].read==0 ? 15 : 10, 10, 0, 0),
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.fromLTRB(_dbNotificationList[position].read==0 ? 15 : 10, 0, 0, 0),
                             child: text(
-                              _dbNotificationList[position].body,
-                              maxLine: 2,
-                                textColor: GlobalVariables.grey
+                                _dbNotificationList[position].body,
+                                // maxLine: 2,
+                                textColor: GlobalVariables.grey,
+                                fontSize: GlobalVariables.textSizeSMedium
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Container(
+                  Flexible(
+                    flex: 0,
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                      child: text(displayDate,
+                      margin: EdgeInsets.fromLTRB(3, 5, 0, 0),
+                      child: text(displayDate,fontSize: GlobalVariables.textSizeSmall,
     textColor: GlobalVariables.grey),
                     ),
                   )
@@ -264,8 +271,11 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
   void getNotificationData() async {
     String userId = await GlobalFunctions.getUserId();
     var _list =  await SQLiteDbProvider.db.getUnReadNotification(userId);
-    _dbNotificationList = List<DBNotificationPayload>.from(_list.map((i)=>DBNotificationPayload.fromJson(i)));
-    setState(() {});
+    if(_list!=null) {
+      _dbNotificationList = List<DBNotificationPayload>.from(
+          _list.map((i) => DBNotificationPayload.fromJson(i)));
+      setState(() {});
+    }
 
   }
 

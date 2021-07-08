@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -5,6 +6,8 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -48,10 +51,15 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
   String _taskId;
   ReceivePort _port = ReceivePort();
 
+  bool isStoragePermission = false;
+
   @override
   void initState() {
     getSharedPrefData();
     //getTransactionList();
+    GlobalFunctions.checkPermission(Permission.storage).then((value) {
+      isStoragePermission = value;
+    });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBillData();
@@ -151,7 +159,21 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                 Icons.download_sharp,
                 iconColor: GlobalVariables.white,
                 onPressed: (){
-//downloadAttachment(url, _localPath);
+                  if (isStoragePermission) {
+                    print('true');
+                    getPDF();
+                  } else {
+                    GlobalFunctions.askPermission(Permission.storage)
+                        .then((value) {
+                      if (value) {
+                        getPDF();
+                      } else {
+                        GlobalFunctions.showToast(AppLocalizations.of(context)
+                            .translate('download_permission'));
+                      }
+                    });
+                  }
+
                 }),
           ],
           leading: InkWell(
@@ -712,6 +734,47 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
         default:
       }
     });
+  }
+
+  Future<void> getPDF() async {
+
+    final dio = Dio();
+    final RestClientERP restClientERP =
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClientERP
+        .getBillPDFData(societyId, widget.invoiceNo)
+        .then((value) {
+      print('Response : ' + value.dataString.toString());
+
+      GlobalFunctions.convertBase64StringToFile(value.dataString,'Bill'+widget.invoiceNo+'.pdf').then((value) {
+
+        if(value){
+          GlobalFunctions.showToast('check Download folder');
+        }else{
+          GlobalFunctions.showToast('Download failed');
+        }
+
+      });
+      _progressDialog.hide();
+    }).catchError((Object obj) {
+      print('obj : ' + obj.toString());
+      if (_progressDialog.isShowing()) {
+        _progressDialog.hide();
+      }
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            print('res : ' + res.toString());
+          }
+          break;
+        default:
+      }
+    });
+
   }
 
 }

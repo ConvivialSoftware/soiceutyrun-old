@@ -94,6 +94,13 @@ abstract class RestClientERP {
   @POST(GlobalVariables.receiptMailAPI)
   Future<StatusMsgResponse> getReceiptMail(@Field("SOCIETY_ID") String socId,@Field("RECEIPT_NO") String receiptNo,@Field("Email_id") String emailId,@Field("YEAR") String year);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.billPDFAPI)
+  Future<DataResponse> getBillPDFData(@Field("SOCIETY_ID") String socId,@Field("Bill_no") String billNo);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.receiptPDFAPI)
+  Future<DataResponse> getReceiptPDFData(@Field("SOCIETY_ID") String socId,@Field("Receipt_no") String billNo);
 }
 
 

@@ -1280,21 +1280,21 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(
-                                            AppLocalizations.of(context).translate('available'),
+                                        child: text(smsCredit,
                                             textColor: GlobalVariables.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeMedium),
+                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
                                         height: 16,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(smsCredit,
+                                        child: text(
+                                            AppLocalizations.of(context).translate('available'),
                                             textColor: GlobalVariables.black,
-                                            fontSize: GlobalVariables.textSizeNormal,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: GlobalVariables.textSizeMedium),
                                       ),
                                     ],
                                   ),
@@ -1318,16 +1318,6 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                 child: Container(
                                   child: Column(
                                     children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('sent'),
-                                            textColor: GlobalVariables.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeMedium),
-                                      ),
-                                      SizedBox(
-                                        height: 16,
-                                      ),
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(smsSent,
@@ -1335,6 +1325,18 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                             fontSize: GlobalVariables.textSizeNormal,
                                             fontWeight: FontWeight.bold),
                                       ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: text(AppLocalizations.of(context).translate('sent'),
+                                            textColor: GlobalVariables.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: GlobalVariables.textSizeMedium),
+                                      ),
+
+
                                     ],
                                   ),
                                 ),
@@ -1359,20 +1361,20 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                     children: [
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('balance'),
+                                        child: text(smsBalance,
                                             textColor: GlobalVariables.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeMedium),
+                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
                                         height: 16,
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(smsBalance,
+                                        child: text(AppLocalizations.of(context).translate('balance'),
                                             textColor: GlobalVariables.black,
-                                            fontSize: GlobalVariables.textSizeNormal,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: GlobalVariables.textSizeMedium),
                                       ),
                                     ],
                                   ),

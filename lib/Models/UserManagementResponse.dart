@@ -143,6 +143,12 @@ class UserManagementResponse extends ChangeNotifier {
           }
         }
         memberList.removeWhere((item) => item.TYPE == 'Tenant');
+        for (int i = 0; i < memberList.length; i++) {
+          if (memberList[i].ID == userId) {
+            memberList.removeAt(i);
+            break;
+          }
+        }
       }
       isLoading = false;
       notifyListeners();

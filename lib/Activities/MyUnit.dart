@@ -841,6 +841,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             AppLocalizations.of(context)
                                 .translate('add_family_details'),
                             textColor: GlobalVariables.grey,
+                            fontSize: GlobalVariables.textSizeSMedium
                           ),
                         )
                   : Container(),
@@ -945,6 +946,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         AppLocalizations.of(context)
                             .translate('add_tenant_details'),
                         textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
               Container(
@@ -1011,6 +1013,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         AppLocalizations.of(context)
                             .translate('add_staff_details'),
                         textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
               Container(
@@ -1090,6 +1093,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             AppLocalizations.of(context)
                                 .translate('add_vehicle_details'),
                             textColor: GlobalVariables.grey,
+                              fontSize: GlobalVariables.textSizeSMedium
                           ),
                         ),
                 ],
@@ -1337,7 +1341,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             ),
             call.length > 0
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                    margin: EdgeInsets.fromLTRB(16, 5, 16, 0),
                     child:
                         /*Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1442,14 +1446,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           }
                         },
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                          margin: EdgeInsets.fromLTRB(15, 5, 15, 0),
                           alignment: Alignment.center,
                           child: text(
                             '+ ' +
                                 AppLocalizations.of(context)
                                     .translate('add_phone'),
                             textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeLargeMedium,
+                            fontSize: GlobalVariables.textSizeSMedium,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
@@ -1786,6 +1790,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                               }
                             } else {
                               alreadyPaidDialog(position, value);
+                              //paymentSuccessDialog('SASADSAFF');
+                              //paymentFailureDialog();
                               /*GlobalFunctions.showToast(
                                   AppLocalizations.of(context)
                                       .translate('already_paid'));*/
@@ -3164,34 +3170,54 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0)),
                 child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(15),
+                  width: MediaQuery.of(context).size.width/1.2,
                   color: GlobalVariables.transparent,
                   // width: MediaQuery.of(context).size.width/3,
                   // height: MediaQuery.of(context).size.height/4,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: AppIconButton(
+                          Icons.close,
+                          iconColor: GlobalVariables.green,
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },),
+                      ),
                       Container(
-                        child: SvgPicture.asset(
+                        //color: GlobalVariables.grey,
+                        child: AppAssetsImage(
                           GlobalVariables.successIconPath,
-                          width: 50,
-                          height: 50,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
+                          //imageColor: GlobalVariables.green,
                         ),
                       ),
                       Container(
+                        alignment: Alignment.center,
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: text(AppLocalizations.of(context)
-                              .translate('successful_payment'))),
+                              .translate('successful_payment'),
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              fontWeight: FontWeight.bold,
+                              textColor: GlobalVariables.black)),
+                      SizedBox(height: 8,),
                       Container(
+                          alignment: Alignment.center,
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: text(AppLocalizations.of(context)
                                   .translate('transaction_id') +
                               ' : ' +
-                              paymentId.toString())),
+                              paymentId.toString(),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold),
+                        ),
                       Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
                           child: text(AppLocalizations.of(context)
-                              .translate('thank_you_payment'))),
+                              .translate('thank_you_payment'),textColor: GlobalVariables.skyBlue,fontWeight: FontWeight.bold),),
                     ],
                   ),
                 ),
@@ -3215,26 +3241,35 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: AppIconButton(
+                          Icons.close,
+                          iconColor: GlobalVariables.green,
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },),
+                      ),
                       Container(
-                        child: SvgPicture.asset(
+                        child: AppAssetsImage(
                           GlobalVariables.failureIconPath,
-                          width: 50,
-                          height: 50,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
                         ),
                       ),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: text(AppLocalizations.of(context)
-                              .translate('failure_to_pay'))),
+                              .translate('failure_to_pay'),textColor: GlobalVariables.black,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeMedium)),
 
                       /* Container(
                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                            child: Text(AppLocalizations.of(context)
                                .translate('order_amount'))),*/
                       Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
                           child: text(AppLocalizations.of(context)
-                              .translate('payment_failed_try_again'))),
+                              .translate('payment_failed_try_again'),textColor: GlobalVariables.skyBlue,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeSMedium)),
                     ],
                   ),
                 ),
@@ -3400,7 +3435,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   child: text('Close',
                                       fontSize: GlobalVariables.textSizeMedium,
                                       textColor: GlobalVariables.grey,
-                                      fontWeight: FontWeight.w500)),
+                                      fontWeight: FontWeight.bold)),
                             ),
                             Container(
                               child: InkWell(
@@ -3431,7 +3466,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   child: text('Pay advance',
                                       fontSize: GlobalVariables.textSizeMedium,
                                       textColor: GlobalVariables.green,
-                                      fontWeight: FontWeight.w500)),
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ],
                         ),
