@@ -44,13 +44,13 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   TextEditingController _agreementStartDateController = TextEditingController();
   TextEditingController _agreementEndDateController = TextEditingController();
 
-  List<DropdownMenuItem<String>> _blockListItems =
+  /*List<DropdownMenuItem<String>> _blockListItems =
       new List<DropdownMenuItem<String>>();
   String _selectedBlock;
 
   List<DropdownMenuItem<String>> _flatListItems =
       new List<DropdownMenuItem<String>>();
-  String _selectedFlat;
+  String _selectedFlat;*/
 
   String _selectedRentedTo;
   String _selectedIssueNOC;
@@ -71,14 +71,14 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
     Provider.of<UserManagementResponse>(context, listen: false)
         .getBlock()
         .then((value) {
-      setBlockData(value);
-      _selectedBlock = widget.block;
+      //setBlockData(value);
+      //_selectedBlock = widget.block;
       print('widget.block : ' + widget.block.toString());
       print('widget.flat : ' + widget.flat.toString());
       Provider.of<UserManagementResponse>(context, listen: false)
           .getFlat(widget.block)
           .then((value) {
-        setFlatData(value);
+        //setFlatData(value);
       });
     });
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -557,7 +557,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               ),
               AppTextField(
                 textHintContent:
-                    AppLocalizations.of(context).translate('start_date'),
+                    AppLocalizations.of(context).translate('start_date')+'*',
                 controllerCallback: _agreementStartDateController,
                 readOnly: true,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -578,7 +578,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               ),
               AppTextField(
                 textHintContent:
-                    AppLocalizations.of(context).translate('end_date'),
+                    AppLocalizations.of(context).translate('end_date')+'*',
                 controllerCallback: _agreementEndDateController,
                 readOnly: true,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -793,7 +793,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                       attachmentFileName != null
                                           ? attachmentFileName
                                           : AppLocalizations.of(context)
-                                              .translate('attach_agreement'),
+                                              .translate('attach_agreement')+'*',
                                       textColor: GlobalVariables.green,
                                     ),
                                   ),
@@ -863,26 +863,26 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   }
 
   void verifyInfo() {
-    if (_selectedBlock != null) {
-      if (_selectedFlat != null) {
-        if (_selectedRentedTo != null) {
-          if (_agreementStartDateController.text.length > 0) {
-            if (_agreementEndDateController.text.length > 0) {
+    if(selectedUserList.isNotEmpty) {
+      if (_selectedRentedTo != null) {
+        if (_agreementStartDateController.text.length > 0) {
+          if (_agreementEndDateController.text.length > 0) {
+            if (attachmentFilePath != null) {
               addAgreement();
             } else {
-              GlobalFunctions.showToast('Please Enter End Date');
+              GlobalFunctions.showToast('Please Select Agreement File');
             }
           } else {
-            GlobalFunctions.showToast('Please Enter Start Date');
+            GlobalFunctions.showToast('Please Enter End Date');
           }
         } else {
-          GlobalFunctions.showToast('Please Select Rented To');
+          GlobalFunctions.showToast('Please Enter Start Date');
         }
       } else {
-        GlobalFunctions.showToast("Please Select Flat");
+        GlobalFunctions.showToast('Please Select Rented To');
       }
-    } else {
-      GlobalFunctions.showToast("Please Select Block");
+    }else{
+      GlobalFunctions.showToast('Please Select User');
     }
   }
 
@@ -944,6 +944,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
     }
     if (!widget.isAdmin) {
+      _progressDialog.show();
       Provider.of<UserManagementResponse>(context, listen: false)
           .addAgreement(
               selectedUserList,
@@ -961,6 +962,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
         }
       });
     } else {
+      _progressDialog.show();
       Provider.of<UserManagementResponse>(context, listen: false)
           .adminAddAgreement(
               selectedUserList,
@@ -993,7 +995,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
     });
   }
 
-  void setBlockData(List<Block> _blockList) {
+  /*void setBlockData(List<Block> _blockList) {
     for (int i = 0; i < _blockList.length; i++) {
       _blockListItems.add(DropdownMenuItem(
         value: _blockList[i].BLOCK,
@@ -1024,5 +1026,5 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       _selectedFlat = widget.flat;
     }
     setState(() {});
-  }
+  }*/
 }

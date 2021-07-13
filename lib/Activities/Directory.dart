@@ -146,7 +146,7 @@ class DirectoryState extends State<BaseDirectory> {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
+          18, MediaQuery.of(context).size.height / 15, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -243,11 +243,11 @@ class DirectoryState extends State<BaseDirectory> {
 
     return directory.directoryType != 'Emergency'
         ? Container(
-            width: MediaQuery.of(context).size.width / 1.1,
-            padding: EdgeInsets.all(15),
+            //width: MediaQuery.of(context).size.width / 1.1,
+            padding: EdgeInsets.all(16),
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(10),
                 color: GlobalVariables.white),
             child: Column(
               children: <Widget>[

@@ -117,7 +117,7 @@ class CreateClassifiedListingState
                             builder: (BuildContext context, StateSetter setState) {
                               return Dialog(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0)),
+                                    borderRadius: BorderRadius.circular(10.0)),
                                 child: Container(
                                   padding: EdgeInsets.all(20),
                                   color: GlobalVariables.transparent,
@@ -164,12 +164,12 @@ class CreateClassifiedListingState
     print('Address : '+widget.classifiedList.Address+','+widget.classifiedList.Locality+' - '+widget.classifiedList.City+(widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '': ' '));
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
+        margin: EdgeInsets.fromLTRB(18, 30, 18, 10),
         padding: EdgeInsets.all(8),
         // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           padding: EdgeInsets.all(8),
           child: Column(

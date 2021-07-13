@@ -45,6 +45,7 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -262,13 +263,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(5),
+          //padding: EdgeInsets.all(5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(5),
+                  //padding: EdgeInsets.all(5),
                   child: text(
                     value.ledgerList[position].LEDGER,
                     textColor: GlobalVariables.grey,
@@ -278,7 +279,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ),
               Container(
                 alignment: Alignment.topRight,
-                padding: EdgeInsets.all(5),
+                //padding: EdgeInsets.all(5),
                 child: text(
                   "",
                   textColor: GlobalVariables.lightGray,
@@ -336,7 +337,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(5),
+         // padding: EdgeInsets.all(5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -363,8 +364,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                 value.pendingList[position].PAYMENT_DATE,
                                 'dd-MM-yyyy')
                             : "",
-                        textColor: GlobalVariables.grey,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
+                        textStyleHeight: 1.0
                       ),
                     ),
                   ],
@@ -372,7 +374,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ),
               Container(
                 alignment: Alignment.topRight,
-                padding: EdgeInsets.all(5),
+                //padding: EdgeInsets.all(5),
                 child: text(
                   "",
                   textColor: GlobalVariables.lightGray,
@@ -382,7 +384,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               InkWell(
                 onTap: () {},
                 child: Container(
-                  padding: EdgeInsets.all(5),
+                  //padding: EdgeInsets.all(5),
                   child: text(
                     "Rs. " +
                         double.parse(
@@ -400,10 +402,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             ],
           ),
         ),
+        SizedBox(height: 10,),
         Divider(
           color: GlobalVariables.mediumGreen,
           height: 1,
         ),
+        SizedBox(height: 10,),
       ],
     );
   }
@@ -417,7 +421,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
         child: Card(
           shape: (RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0))),
+              borderRadius: BorderRadius.circular(10.0))),
           elevation: 1.0,
           margin: EdgeInsets.all(20),
           color: GlobalVariables.white,
@@ -560,7 +564,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.fromLTRB(
-                              0, MediaQuery.of(context).size.height / 60, 0, 0),
+                              10, MediaQuery.of(context).size.height / 15, 10, 0),
                           child: Builder(
                               builder: (context) => ListView.builder(
                                     physics:
@@ -577,11 +581,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             ? Container(
                                 alignment: Alignment.topLeft,
                                 //color: GlobalVariables.white,
-                                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                                 child: text(
                                   AppLocalizations.of(context)
                                       .translate('pending_transaction'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.black,
                                   fontSize: GlobalVariables.textSizeMedium,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -589,13 +593,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             : Container(),
                         value.pendingList.length > 0
                             ? Container(
-                                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                padding: EdgeInsets.all(16),
+                                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(25),
-                                        topRight: Radius.circular(25))),
+                                    borderRadius: BorderRadius.all(Radius.circular(10))),
                                 child: Builder(
                                     builder: (context) => ListView.builder(
                                           physics:
@@ -613,7 +615,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                         )),
                               )
                             : Container(),
-                        value.pendingList.length > 0
+                        /*value.pendingList.length > 0
                             ? Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(10),
@@ -624,7 +626,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                     borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(25),
                                         bottomRight: Radius.circular(25))),
-                                /*child: InkWell(
+                                *//*child: InkWell(
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -652,18 +654,18 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   )
                                 ],
                               ),
-                            )*/
+                            )*//*
                               )
-                            : Container(),
+                            : Container(),*/
                         value.ledgerList.length > 0
                             ? Container(
                                 alignment: Alignment.topLeft,
                                 //color: GlobalVariables.white,
-                                margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
                                 child: text(
                                   AppLocalizations.of(context)
                                       .translate('recent_transaction'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.black,
                                   fontSize: GlobalVariables.textSizeMedium,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -671,13 +673,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             : Container(),
                         value.ledgerList.length > 0
                             ? Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          padding: EdgeInsets.all(16),
+                          margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(25),
-                                        topRight: Radius.circular(25))),
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10))),
                                 child: Builder(
                                     builder: (context) => ListView.builder(
                                           physics:
@@ -697,14 +699,14 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         value.ledgerList.length > 0
                             ? Container(
                                 width: double.infinity,
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                            padding: EdgeInsets.all(16),
+                            margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                                 //color: GlobalVariables.white,
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.white,
                                     borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(25),
-                                        bottomRight: Radius.circular(25))),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10))),
                                 child: InkWell(
                                   onTap: () {
                                     Navigator.push(
@@ -767,7 +769,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ? Container(
                       alignment:
                           Alignment.topLeft, //color: GlobalVariables.white,
-                      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      margin: EdgeInsets.fromLTRB(18, 0, 18, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -775,7 +777,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                             child: text(
                               AppLocalizations.of(context)
                                   .translate('my_family'),
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.black,
                               fontSize: GlobalVariables.textSizeMedium,
                               fontWeight: FontWeight.bold,
                             ),
@@ -819,7 +821,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   ? value.memberList.length > 0
                       ? Container(
                           //padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                          margin: EdgeInsets.fromLTRB(18, 10, 0, 0),
                           width: 600,
                           height: 190,
                           child: Builder(
@@ -838,23 +840,22 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.all(20),
                           child: text(
-                            AppLocalizations.of(context)
-                                .translate('add_family_details'),
-                            textColor: GlobalVariables.grey,
-                            fontSize: GlobalVariables.textSizeSMedium
-                          ),
+                              AppLocalizations.of(context)
+                                  .translate('add_family_details'),
+                              textColor: GlobalVariables.grey,
+                              fontSize: GlobalVariables.textSizeSMedium),
                         )
                   : Container(),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                margin: EdgeInsets.fromLTRB(18, 10, 18, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
                         AppLocalizations.of(context).translate('my_tenant'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -924,7 +925,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               value.tenantList.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                      margin: EdgeInsets.fromLTRB(18, 10, 0, 0),
                       width: 600,
                       height: 190,
                       child: Builder(
@@ -943,22 +944,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.all(20),
                       child: text(
-                        AppLocalizations.of(context)
-                            .translate('add_tenant_details'),
-                        textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
+                          AppLocalizations.of(context)
+                              .translate('add_tenant_details'),
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium),
                     ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                margin: EdgeInsets.fromLTRB(18, 10, 18, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
                         AppLocalizations.of(context).translate('my_staff'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -992,7 +992,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               value.staffList.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                      margin: EdgeInsets.fromLTRB(18, 10, 0, 0),
                       width: 600,
                       height: 190,
                       child: Builder(
@@ -1010,22 +1010,21 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   : Container(
                       padding: EdgeInsets.all(20),
                       child: text(
-                        AppLocalizations.of(context)
-                            .translate('add_staff_details'),
-                        textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
+                          AppLocalizations.of(context)
+                              .translate('add_staff_details'),
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium),
                     ),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                margin: EdgeInsets.fromLTRB(18, 10, 18, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
                         AppLocalizations.of(context).translate('my_vehicle'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1068,7 +1067,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ? Container(
                           //height: 500,
                           //padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                          margin: EdgeInsets.fromLTRB(18, 10, 18, 20),
                           decoration: BoxDecoration(
                               color: GlobalVariables.white,
                               borderRadius: BorderRadius.circular(10)),
@@ -1090,11 +1089,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.all(20),
                           child: text(
-                            AppLocalizations.of(context)
-                                .translate('add_vehicle_details'),
-                            textColor: GlobalVariables.grey,
-                              fontSize: GlobalVariables.textSizeSMedium
-                          ),
+                              AppLocalizations.of(context)
+                                  .translate('add_vehicle_details'),
+                              textColor: GlobalVariables.grey,
+                              fontSize: GlobalVariables.textSizeSMedium),
                         ),
                 ],
               ),
@@ -1116,16 +1114,16 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
           // color: GlobalVariables.black,
           //width: MediaQuery.of(context).size.width / 1.2,
           margin: EdgeInsets.fromLTRB(
-              0,
-              MediaQuery.of(context).size.height / 30,
-              0,
+              10,
+              MediaQuery.of(context).size.height / 15,
+              10,
               0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Card(
             shape: (RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0))),
+                borderRadius: BorderRadius.circular(10.0))),
             elevation: 15.0,
             shadowColor: GlobalVariables.green.withOpacity(0.3),
-            margin: EdgeInsets.all(20),
+            margin: EdgeInsets.all(8),
             color: GlobalVariables.white,
             child: Stack(
               children: <Widget>[
@@ -1166,12 +1164,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       borderColor: GlobalVariables.grey,
                                       borderWidth: 2.0,
                                       fit: BoxFit.cover,
-                                      radius: 10.0,
+                                      radius: 40.0,
                                     )),
                           text(
                             name,
                             textColor: GlobalVariables.green,
                             fontSize: GlobalVariables.textSizeNormal,
+                            fontWeight: FontWeight.bold
                           ),
                         ],
                       ),
@@ -1279,7 +1278,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         width: 150,
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(10),
             color: GlobalVariables.white),
         child: Column(
           children: <Widget>[
@@ -1287,43 +1286,43 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: family
                     ? _list[position].PROFILE_PHOTO.length == 0
-                        ? AppAssetsImage(
-                            GlobalVariables.componentUserProfilePath,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )
-                        : AppNetworkImage(
-                            _list[position].PROFILE_PHOTO,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )
+                    ? AppAssetsImage(
+                  GlobalVariables.componentUserProfilePath,
+                  imageWidth: 70.0,
+                  imageHeight: 70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
+                    : AppNetworkImage(
+                  _list[position].PROFILE_PHOTO,
+                  imageWidth: 70.0,
+                  imageHeight: 70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
                     : _list[position].IMAGE.length == 0
-                        ? AppAssetsImage(
-                            GlobalVariables.componentUserProfilePath,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )
-                        : AppNetworkImage(
-                            _list[position].IMAGE,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )),
+                    ? AppAssetsImage(
+                  GlobalVariables.componentUserProfilePath,
+                  imageWidth: 70.0,
+                  imageHeight: 70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )
+                    : AppNetworkImage(
+                  _list[position].IMAGE,
+                  imageWidth: 70.0,
+                  imageHeight: 70.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 35.0,
+                )),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: text(
@@ -1341,9 +1340,9 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             ),
             call.length > 0
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(16, 5, 16, 0),
-                    child:
-                        /*Row(
+                margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                child:
+                /*Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         InkWell(
@@ -1378,87 +1377,87 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         )
                       ],
                     ),*/
-                        Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              launch("tel://" + call);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              child: AppIcon(
-                                Icons.call,
-                                iconColor: GlobalVariables.green,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                            //TODO: Divider
-                            height: 30,
-                            width: 8,
-                            child: VerticalDivider(
-                              color: GlobalVariables.lightGray,
-                            )),
-                        Flexible(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              String name = family
-                                  ? _list[position].NAME
-                                  : _list[position].STAFF_NAME;
-                              String title = '';
-                              String text =
-                                  'Name : ' + name + '\nContact : ' + call;
-                              family
-                                  ? title = _list[position].NAME
-                                  : title = _list[position].STAFF_NAME;
-                              print('titlee : ' + title);
-                              GlobalFunctions.shareData(title, text);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              child: AppIcon(
-                                Icons.share,
-                                iconColor: GlobalVariables.grey,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ))
-                : family
-                    ? InkWell(
-                        onTap: () async {
-                          var result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BaseEditProfileInfo(userId, societyId)));
-                          if (result == 'profile') {
-                            Provider.of<UserManagementResponse>(context,
-                                    listen: false)
-                                .getUnitMemberData();
-                          }
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          launch("tel://" + call);
                         },
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                          alignment: Alignment.center,
-                          child: text(
-                            '+ ' +
-                                AppLocalizations.of(context)
-                                    .translate('add_phone'),
-                            textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                            fontWeight: FontWeight.normal,
+                          width: double.infinity,
+                          child: AppIcon(
+                            Icons.call,
+                            iconColor: GlobalVariables.green,
                           ),
                         ),
-                      )
-                    : Container()
+                      ),
+                    ),
+                    Container(
+                      //TODO: Divider
+                        height: 30,
+                        width: 8,
+                        child: VerticalDivider(
+                          color: GlobalVariables.lightGray,
+                        )),
+                    Flexible(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          String name = family
+                              ? _list[position].NAME
+                              : _list[position].STAFF_NAME;
+                          String title = '';
+                          String text =
+                              'Name : ' + name + '\nContact : ' + call;
+                          family
+                              ? title = _list[position].NAME
+                              : title = _list[position].STAFF_NAME;
+                          print('titlee : ' + title);
+                          GlobalFunctions.shareData(title, text);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          child: AppIcon(
+                            Icons.share,
+                            iconColor: GlobalVariables.grey,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+                : family
+                ? InkWell(
+              onTap: () async {
+                var result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            BaseEditProfileInfo(userId, societyId)));
+                if (result == 'profile') {
+                  Provider.of<UserManagementResponse>(context,
+                      listen: false)
+                      .getUnitMemberData();
+                }
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                alignment: Alignment.center,
+                child: text(
+                  '+ ' +
+                      AppLocalizations.of(context)
+                          .translate('add_phone'),
+                  textColor: GlobalVariables.lightGray,
+                  fontSize: GlobalVariables.textSizeLargeMedium,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            )
+                : Container()
           ],
         ),
       ),
@@ -1538,18 +1537,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       int position, BuildContext context, UserManagementResponse value) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        // color: GlobalVariables.black,
-        //width: MediaQuery.of(context).size.width / 1.2,
-        margin:
-            EdgeInsets.fromLTRB(10, 10, 10, 10), //padding: EdgeInsets.all(0),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: GlobalVariables.white),
+      child: AppContainer(
         child: Stack(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              //margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: SvgPicture.asset(
@@ -1558,7 +1550,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              //margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
               child: Column(
                 children: <Widget>[
                   Row(
@@ -1567,7 +1559,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       Container(
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                           color:
                               getBillTypeColor(value.billList[position].TYPE),
                         ),
@@ -1638,7 +1630,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         InkWell(
                           onTap: () {
@@ -1968,7 +1960,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(25.0)),
+                                                BorderRadius.circular(10.0)),
                                         child: deleteVehicleLayout(
                                             position, value),
                                       );
@@ -2235,8 +2227,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   color: Colors.white,
                   // borderRadius: BorderRadius.circular(20),
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32.0),
-                      topRight: Radius.circular(32.0)),
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
@@ -2252,12 +2244,13 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       child: AppIconButton(
                         Icons.close,
                         iconColor: GlobalVariables.green,
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.pop(context);
-                        },),
+                        },
+                      ),
                     ),
                     Container(
-                     // margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      // margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.center,
                       child: text(
@@ -2618,8 +2611,8 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 decoration: BoxDecoration(
                   color: GlobalVariables.green,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                      bottomRight: Radius.circular(32.0)),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)),
                 ),
                 child: InkWell(
                   onTap: () {
@@ -2659,7 +2652,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
             ],
           ),
         ),
-      /*  Align(
+        /*  Align(
           alignment: Alignment.center,
           child: Container(
               transform: Matrix4.translationValues(
@@ -2696,7 +2689,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   builder: (BuildContext context, StateSetter setState) {
                 return Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: displaySocietyRunDisclaimer(value),
                 );
               }));
@@ -2752,7 +2745,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                   return Dialog(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(25.0)),
+                                            BorderRadius.circular(10.0)),
                                     child: displayConsumerId(value),
                                   );
                                 }));
@@ -2937,7 +2930,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
 
               return Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     margin: EdgeInsets.all(10),
                     padding: EdgeInsets.all(10),
@@ -3168,10 +3161,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Container(
                   padding: EdgeInsets.all(15),
-                  width: MediaQuery.of(context).size.width/1.2,
+                  width: MediaQuery.of(context).size.width / 1.2,
                   color: GlobalVariables.transparent,
                   // width: MediaQuery.of(context).size.width/3,
                   // height: MediaQuery.of(context).size.height/4,
@@ -3183,9 +3176,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         child: AppIconButton(
                           Icons.close,
                           iconColor: GlobalVariables.green,
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.pop(context);
-                          },),
+                          },
+                        ),
                       ),
                       Container(
                         //color: GlobalVariables.grey,
@@ -3197,27 +3191,38 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         ),
                       ),
                       Container(
-                        alignment: Alignment.center,
+                          alignment: Alignment.center,
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: text(AppLocalizations.of(context)
-                              .translate('successful_payment'),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('successful_payment'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
                               textColor: GlobalVariables.black)),
-                      SizedBox(height: 8,),
+                      SizedBox(
+                        height: 8,
+                      ),
                       Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: text(AppLocalizations.of(context)
-                                  .translate('transaction_id') +
-                              ' : ' +
-                              paymentId.toString(),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold),
-                        ),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: text(
+                            AppLocalizations.of(context)
+                                    .translate('transaction_id') +
+                                ' : ' +
+                                paymentId.toString(),
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold),
+                      ),
                       Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                          child: text(AppLocalizations.of(context)
-                              .translate('thank_you_payment'),textColor: GlobalVariables.skyBlue,fontWeight: FontWeight.bold),),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('thank_you_payment'),
+                            textColor: GlobalVariables.skyBlue,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
@@ -3232,7 +3237,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Container(
                   padding: EdgeInsets.all(20),
                   color: GlobalVariables.transparent,
@@ -3246,9 +3251,10 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         child: AppIconButton(
                           Icons.close,
                           iconColor: GlobalVariables.green,
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.pop(context);
-                          },),
+                          },
+                        ),
                       ),
                       Container(
                         child: AppAssetsImage(
@@ -3259,8 +3265,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       ),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: text(AppLocalizations.of(context)
-                              .translate('failure_to_pay'),textColor: GlobalVariables.black,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeMedium)),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('failure_to_pay'),
+                              textColor: GlobalVariables.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeMedium)),
 
                       /* Container(
                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -3268,8 +3278,12 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                                .translate('order_amount'))),*/
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                          child: text(AppLocalizations.of(context)
-                              .translate('payment_failed_try_again'),textColor: GlobalVariables.skyBlue,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeSMedium)),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('payment_failed_try_again'),
+                              textColor: GlobalVariables.skyBlue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeSMedium)),
                     ],
                   ),
                 ),
@@ -3402,7 +3416,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Container(
                   padding: EdgeInsets.all(20),
                   color: GlobalVariables.transparent,

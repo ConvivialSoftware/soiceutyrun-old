@@ -271,7 +271,7 @@ class _BaseRentalRequestUserDetailsState extends State<BaseRentalRequestUserDeta
                             ],
                           ),
                         ),
-                        InkWell(
+                      /*  InkWell(
                           onTap: (){
                             if(widget.rentalRequest.TENANT_CONSENT.isNotEmpty) {
                               downloadAttachment(
@@ -300,13 +300,13 @@ class _BaseRentalRequestUserDetailsState extends State<BaseRentalRequestUserDeta
                               ),
                             ],
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                     SizedBox(
                       height: 16,
                     ),
-                    Row(
+                    /*Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -374,7 +374,7 @@ class _BaseRentalRequestUserDetailsState extends State<BaseRentalRequestUserDeta
                     ),
                     SizedBox(
                       height: 16,
-                    ),
+                    ),*/
                   ],
                 ),
               ),
@@ -393,7 +393,7 @@ class _BaseRentalRequestUserDetailsState extends State<BaseRentalRequestUserDeta
                           builder: (BuildContext context, StateSetter setState) {
                             return Dialog(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25.0)),
+                                  borderRadius: BorderRadius.circular(10.0)),
                               child: approveMemberLayout(),
                             );
                           }));

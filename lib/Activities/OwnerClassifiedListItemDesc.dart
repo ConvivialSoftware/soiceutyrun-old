@@ -162,7 +162,7 @@ class CreateClassifiedListingState
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(25.0)),
+                                                BorderRadius.circular(10.0)),
                                         child: Container(
                                           padding: EdgeInsets.all(20),
                                           width: MediaQuery.of(context)
@@ -323,12 +323,12 @@ class CreateClassifiedListingState
   getCreateClassifiedListingLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
+        margin: EdgeInsets.fromLTRB(18, 30, 18, 10),
         padding: EdgeInsets.all(8),
         // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           padding: EdgeInsets.all(8),
           child: Column(
@@ -361,7 +361,7 @@ class CreateClassifiedListingState
                                             return Dialog(
                                               // backgroundColor: GlobalVariables.transparent,
                                                 shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(25.0)),
+                                                    borderRadius: BorderRadius.circular(10.0)),
                                                 child: Container(
                                                   // color: GlobalVariables.transparent,
                                                   padding: EdgeInsets.all(16),
@@ -786,7 +786,7 @@ class CreateClassifiedListingState
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     padding: EdgeInsets.all(16),
                     child: Column(

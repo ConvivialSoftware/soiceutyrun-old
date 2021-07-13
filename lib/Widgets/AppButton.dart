@@ -14,7 +14,7 @@ class AppButton extends StatefulWidget {
     @required this.onPressed,
     this.bgColor = GlobalVariables.green,
     this.textColor = GlobalVariables.white,
-    this.radius = 10.0,this.fontWeight=FontWeight.w500});
+    this.radius = 10.0,this.fontWeight=FontWeight.w600});
 
   @override
   State<StatefulWidget> createState() {

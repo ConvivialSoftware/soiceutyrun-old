@@ -74,8 +74,8 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                 color: Colors.white,
                 // borderRadius: BorderRadius.circular(20),
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32.0),
-                    topRight: Radius.circular(32.0)),
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black26,
@@ -137,8 +137,8 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
               decoration: BoxDecoration(
                 color: GlobalVariables.green,
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(32.0),
-                    bottomRight: Radius.circular(32.0)),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0)),
               ),
               child: Container(
                 child: IconButton(

@@ -107,7 +107,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
+          18, MediaQuery.of(context).size.height / 15, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -241,7 +241,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                             alignment: Alignment.topLeft,
                             margin: EdgeInsets.fromLTRB(_dbNotificationList[position].read==0 ? 15 : 10, 0, 0, 0),
                             child: text(
-                                _dbNotificationList[position].body,
+                                _dbNotificationList[position].body??'',
                                 // maxLine: 2,
                                 textColor: GlobalVariables.grey,
                                 fontSize: GlobalVariables.textSizeSMedium

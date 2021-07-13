@@ -79,7 +79,7 @@ class _GatePassDialogState extends State<GatePassDialog> {
       margin: EdgeInsets.only(top: ovalRadius),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black26,

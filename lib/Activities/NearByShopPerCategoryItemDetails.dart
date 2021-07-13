@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -97,7 +98,8 @@ class NearByShopPerCategoryItemDetailsState
                         Column(
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.all(GlobalVariables.spacing_standard_new),
+                              margin: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(12),
                               child: Column(
                                 children: <Widget>[
                                   Row(
@@ -105,6 +107,7 @@ class NearByShopPerCategoryItemDetailsState
                                     children: [
                                       Container(
                                         alignment: Alignment.topRight,
+                                        margin: EdgeInsets.only(top: 16,),
                                         padding: EdgeInsets.only(
                                             left: 5,
                                             right: 5,
@@ -125,18 +128,19 @@ class NearByShopPerCategoryItemDetailsState
                                     ],
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(top: 10),
+                                    margin: EdgeInsets.only(top: 8),
+                                   // padding: ,
                                     child: AppNetworkImage(
                                       widget.nearByShopList.Img_Name,
                                       imageWidth: width,
                                       imageHeight: width * 0.6,
-                                      fit: BoxFit.fill,
+                                      //fit: BoxFit.fill,
                                       shape: BoxShape.rectangle,
                                       borderColor: GlobalVariables.transparent,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: GlobalVariables.spacing_xlarge,
+                                    height: 60,
                                   ),
                                   Container(
                                     width: double.infinity,
@@ -284,9 +288,10 @@ class NearByShopPerCategoryItemDetailsState
                                           ),
                                         ),
                                         Container(
+                                          margin: EdgeInsets.only(top: 30),
                                           alignment: Alignment.center,
                                           transform: Matrix4.translationValues(
-                                              0.0, -70.0, 0.0),
+                                              0.0, -100.0, 0.0),
                                           decoration: BoxDecoration(
                                               color: GlobalVariables.white,
                                               border: Border.all(

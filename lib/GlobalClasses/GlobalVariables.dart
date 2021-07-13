@@ -65,6 +65,7 @@ class GlobalVariables {
   static var mySupportIconPath = "assets/menu_assets/Support_icon_menu.svg";
   static var myAdminIconPath = "assets/menu_assets/admin_icon_menu.svg";
   static var settingsIconPath = "assets/menu_assets/settings.svg";
+  static var switchIconPath = "assets/menu_assets/switch.svg";
   static var headerIconPath = "assets/other_assets/Header_bg.svg";
   static var loginIconPath = "assets/other_assets/login_icon.svg";
   static var mailIconPath = "assets/other_assets/mail_icon.svg";

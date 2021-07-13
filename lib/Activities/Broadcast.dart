@@ -288,7 +288,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
       _smsHours2SelectedItem = _smsHours2ListItems[0].value;
     }
 
-    minList.add(Minutes("0", "0"));
+    minList.add(Minutes("00", "00"));
     minList.add(Minutes("15", "15"));
     minList.add(Minutes("30", "30"));
     minList.add(Minutes("45", "45"));
@@ -365,7 +365,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   ),
                 ),
                 title: text(
-                  AppLocalizations.of(context).translate('my_gate'),
+                  AppLocalizations.of(context).translate('broadcast'),
                   textColor: GlobalVariables.white,
                 ),
                 bottom: getTabLayout(),
@@ -490,12 +490,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   getNotificationLayout(BroadcastResponse broadcastResponse) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
+        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -608,10 +608,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           return Container(
                               alignment: Alignment.center,
                               margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                               decoration: BoxDecoration(
                                   color: GlobalVariables.green,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: GlobalVariables.transparent,
                                     width: 3.0,
@@ -790,12 +790,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   getMailLayout(BroadcastResponse broadcastResponse) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
+        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -910,10 +910,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           return Container(
                               alignment: Alignment.center,
                               margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                               decoration: BoxDecoration(
                                   color: GlobalVariables.green,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: GlobalVariables.transparent,
                                     width: 3.0,
@@ -1243,9 +1243,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
               // color: GlobalVariables.black,
               //width: MediaQuery.of(context).size.width / 1.2,
               margin: EdgeInsets.fromLTRB(
-                  10,
+                  18,
                   MediaQuery.of(context).size.height / 20,
-                  10,
+                  18,
                   0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Card(
                 shape: (RoundedRectangleBorder(
@@ -1390,12 +1390,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 20, 10, 40),
+            margin: EdgeInsets.fromLTRB(18, 20, 18, 40),
             padding: EdgeInsets.all(
                 20), // height: MediaQuery.of(context).size.height / 0.5,
             decoration: BoxDecoration(
                 color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(20)),
+                borderRadius: BorderRadius.circular(10)),
             child: Container(
               child: Column(
                 children: <Widget>[
@@ -1500,10 +1500,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               return Container(
                                   alignment: Alignment.center,
                                   margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                   decoration: BoxDecoration(
                                       color: GlobalVariables.green,
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
                                         color: GlobalVariables.transparent,
                                         width: 3.0,

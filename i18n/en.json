@@ -445,5 +445,6 @@
   "attach_identity_proof": "Identity Proof",
   "take_identity_proof_picture": "Identity Proof",
   "user_statistics": "User Statistics",
-  "user_request": "User Request"
+  "user_request": "User Request",
+  "switch_society": "Switch Society"
 }

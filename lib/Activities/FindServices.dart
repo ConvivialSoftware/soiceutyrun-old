@@ -12,6 +12,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
@@ -127,11 +128,13 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
   getServiceTypeDataLayout(ServicesResponse value) {
 
     return Container(
-      margin: EdgeInsets.fromLTRB(5, MediaQuery.of(context).size.height / 10, 5,
+      margin: EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 15, 18,
           0), //color: GlobalVariables.black,
       child: Container(
           child: Builder(
-              builder: (context) => GridView.builder(
+              builder: (context) =>
+
+                  /*GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                     ),
@@ -186,7 +189,57 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                       );
                     }, //  scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                  ))
+                  )*/
+            GridView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: value.servicesCategoryList.length,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                //setStatusBarColor(Banking_app_Background);
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                BaseServicesPerCategory(value.servicesCategoryList[index].Category_Name)));
+                  },
+                  child: Container(
+                   // margin: EdgeInsets.only(left: 6, right: 6, top: 6, bottom: 6),
+                    //padding: EdgeInsets.all(6),
+                    decoration: boxDecoration(
+                       // backgroundColor: Banking_whitePureColor,
+                        //boxShadow: defaultBoxShadow(),
+                        radius: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        AppNetworkImage(
+                          value.servicesCategoryList[index].image,
+                          imageWidth:35.0,
+                          imageHeight:35.0,
+                          borderColor: GlobalVariables.grey,
+                          borderWidth: 1.0,
+                          radius: 0.0,
+                        ),
+                        SizedBox(height: 10,),
+                        Text(value.servicesCategoryList[index].Category_Name,
+                            style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
+                            textAlign: TextAlign.center,
+                            maxLines: 3),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.9,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12),
+            ),
+          )
           ),
     );
   }

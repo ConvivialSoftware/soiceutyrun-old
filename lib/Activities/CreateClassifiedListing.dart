@@ -184,12 +184,12 @@ class CreateClassifiedListingState
   getCreateClassifiedListingLayout(OwnerClassifiedResponse value) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
+        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,9 +384,10 @@ class CreateClassifiedListingState
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 140,
+                    //width: 140,
                     alignment: Alignment.center,
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     decoration: BoxDecoration(
@@ -482,9 +483,11 @@ class CreateClassifiedListingState
                         )),
                   ),
                   SizedBox(width: 16,),
-                  Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: text('* select up-to 5 photos',fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.grey)),
+                  Flexible(
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: text('* select up-to 5 photos,',fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.grey,maxLine: 3)),
+                  ),
                 ],
               ),
               imagesMap.length > 0 && imagePathList.length > 0
@@ -685,7 +688,7 @@ class CreateClassifiedListingState
                                   textColor: GlobalVariables.green,
                                   fontWeight: FontWeight.bold,
                                   fontSize: GlobalVariables.textSizeMedium,
-                                  textStyleHeight: 1.0),
+                                  textStyleHeight: 1.5),
                               text(mail,
                                   textColor: GlobalVariables.grey,
                                   fontWeight: FontWeight.bold,
@@ -695,7 +698,7 @@ class CreateClassifiedListingState
                                   textColor: GlobalVariables.grey,
                                   fontWeight: FontWeight.bold,
                                   fontSize: GlobalVariables.textSizeSmall,
-                                  textStyleHeight: 1.0),
+                                  textStyleHeight: 1.5),
                             ],
                           ),
                         ),

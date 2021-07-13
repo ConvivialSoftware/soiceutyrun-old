@@ -161,7 +161,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                 borderRadius: BorderRadius.circular(10.0))),
             elevation: 2.0,
             //  shadowColor: GlobalVariables.green.withOpacity(0.3),
-            margin: EdgeInsets.all(20),
+            margin: EdgeInsets.all(16),
             color: GlobalVariables.white,
             child: Stack(
               children: <Widget>[
@@ -373,14 +373,14 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
             children: <Widget>[
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                margin: EdgeInsets.fromLTRB(18, 0, 18, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
                         AppLocalizations.of(context).translate('my_family'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -420,7 +420,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
               value.memberListForAdmin.length > 0
                   ? Container(
                       //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
+                      margin: EdgeInsets.fromLTRB(18, 10, 0, 0),
                       width: 600,
                       height: 190,
                       child: Builder(
@@ -441,7 +441,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context)
                             .translate('add_family_details'),
-                        textColor: GlobalVariables.grey,
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
               Container(
@@ -542,7 +543,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context)
                             .translate('add_tenant_details'),
-                        textColor: GlobalVariables.grey,
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
               Container(
@@ -607,7 +609,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       child: text(
                         AppLocalizations.of(context)
                             .translate('add_staff_details'),
-                        textColor: GlobalVariables.grey,
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium
                       ),
                     ),
               Container(
@@ -686,7 +689,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                           child: text(
                             AppLocalizations.of(context)
                                 .translate('add_vehicle_details'),
-                            textColor: GlobalVariables.grey,
+                              textColor: GlobalVariables.grey,
+                              fontSize: GlobalVariables.textSizeSMedium
                           ),
                         ),
                 ],
@@ -743,7 +747,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
         width: 150,
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(10),
             color: GlobalVariables.white),
         child: Column(
           children: <Widget>[
@@ -976,7 +980,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                 return Dialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
-                                          BorderRadius.circular(25.0)),
+                                          BorderRadius.circular(10.0)),
                                   child: deleteVehicleLayout(position, value),
                                 );
                               }));
@@ -1111,7 +1115,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                 child: Container(
                   margin: EdgeInsets.only(top: 15),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: GlobalVariables.white),
                   // height: MediaQuery.of(context).size.width * 1.0,
                   child: Padding(

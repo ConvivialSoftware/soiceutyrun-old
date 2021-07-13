@@ -186,7 +186,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
             Container(
               //padding: EdgeInsets.all(10),
               margin: EdgeInsets.fromLTRB(
-                  10, MediaQuery.of(context).size.height / 15, 10, 0),
+                  18, MediaQuery.of(context).size.height / 15, 18, 0),
               child: Builder(
                   builder: (context) => ListView.builder(
                     // scrollDirection: Axis.vertical,
@@ -418,7 +418,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                 borderRadius: BorderRadius.circular(10.0))),
             elevation: 2.0,
             //  shadowColor: GlobalVariables.green.withOpacity(0.3),
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(8),
             color: GlobalVariables.white,
             child: Column(
               children: [

@@ -111,11 +111,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 builder: (context) => BaseAppNotificationSettings()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        margin: EdgeInsets.fromLTRB(18, 20, 18, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -160,25 +160,26 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
           // color: GlobalVariables.black,
           //width: MediaQuery.of(context).size.width / 1.2,
           margin: EdgeInsets.fromLTRB(
-              0,
+              18,
               MediaQuery.of(context).size.height / 30,
-              0,
+              18,
               0), //margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Card(
             shape: (RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0))),
+                borderRadius: BorderRadius.circular(10.0))),
             elevation: 2.0,
             //  shadowColor: GlobalVariables.green.withOpacity(0.3),
-            margin: EdgeInsets.all(20),
+            //margin: EdgeInsets.all(20),
             color: GlobalVariables.white,
             child: Stack(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: AppAssetsImage(
                       GlobalVariables.whileBGPath,
+                      imageHeight: 50,
                     ),
                   ),
                 ),
@@ -356,11 +357,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             MaterialPageRoute(builder: (context) => BaseChangePassword()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        margin: EdgeInsets.fromLTRB(18, 10, 18, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -401,11 +402,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             MaterialPageRoute(builder: (context) => BaseAboutSocietyRunInfo()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        margin: EdgeInsets.fromLTRB(18, 10, 18, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -446,11 +447,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             context, MaterialPageRoute(builder: (context) => BaseFeedback()));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        margin: EdgeInsets.fromLTRB(18, 10, 18, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -493,17 +494,17 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                     builder: (BuildContext context, StateSetter setState) {
                   return Dialog(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0)),
+                        borderRadius: BorderRadius.circular(10.0)),
                     child: displayLogoutLayout(),
                   );
                 }));
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        margin: EdgeInsets.fromLTRB(18, 10, 18, 10),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

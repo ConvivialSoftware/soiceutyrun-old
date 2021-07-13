@@ -17,6 +17,7 @@ import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -261,8 +262,8 @@ class NearByShopPerCategoryState
     return Container(
       //padding: EdgeInsets.all(10),
       margin:
-          EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 25, 0, 0),
-      padding: EdgeInsets.all(10),
+          EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
+     // padding: EdgeInsets.all(10),
       // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
           color: GlobalVariables.transparent,
@@ -284,7 +285,8 @@ class NearByShopPerCategoryState
   getNearByShopPerCategoryListItemLayout(
       int position, NearByShopResponse value) {
     return Container(
-        margin: EdgeInsets.only(left: 8, right: 8, bottom: 16),
+        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         decoration: boxDecoration(
           radius: 10,
           showShadow: false,

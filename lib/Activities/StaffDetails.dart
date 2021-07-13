@@ -196,7 +196,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.fromLTRB(
-            10, MediaQuery.of(context).size.height / 20, 10, 0),
+            18, MediaQuery.of(context).size.height / 20, 18, 0),
         child: Column(
           children: [
             staffPersonalDetails(),
@@ -215,13 +215,13 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(10),
           color: GlobalVariables.white),
       child: Row(
         children: [
           //profileLayout(),
           Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.only(left: 10),
               // alignment: Alignment.center,
               /* decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25)),*/
@@ -244,7 +244,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     )),
           Expanded(
             child: Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
               alignment: Alignment.topLeft,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,7 +332,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Card(
         shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
         elevation: 2.0,
         // shadowColor: GlobalVariables.green.withOpacity(0.3),
         //margin: EdgeInsets.all(15),
@@ -392,7 +392,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Card(
         shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
         elevation: 2.0,
         // shadowColor: GlobalVariables.green.withOpacity(0.3),
         // margin: EdgeInsets.all(15),
@@ -463,7 +463,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                             decoration: BoxDecoration(
                                 color: GlobalVariables.green,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: GlobalVariables.transparent,
                                   width: 3.0,
@@ -520,7 +520,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          25.0)),
+                                                          10.0)),
                                               child:
                                                   showMyRattingBar(setState));
                                         }));

@@ -117,7 +117,7 @@ class DescriptionOfHomeServiceState
             alignment: Alignment.bottomCenter,
             child: Container(
                 width: width,
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.all(18),
                 child: AppButton(textContent: "Book Service", onPressed: () {
 
                   if(_bookingDateController.text.length>0) {
@@ -186,12 +186,12 @@ class DescriptionOfHomeServiceState
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 50, 10, 0),
+          18, MediaQuery.of(context).size.height / 50, 18, 0),
       child: Column(
         children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: text(
               widget._services.Name,
               textColor: GlobalVariables.white,
@@ -201,7 +201,7 @@ class DescriptionOfHomeServiceState
           ),
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(15, 5, 0, 0),
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
             child: text(
               widget._services.Title,
               textColor: GlobalVariables.lightGray,

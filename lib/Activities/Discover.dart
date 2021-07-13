@@ -254,7 +254,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     return Container(
       //padding: EdgeInsets.all(10),
       margin:
-          EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 15, 0, 0),
+          EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -285,218 +285,218 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
           GlobalFunctions.setBaseContext(context);
         });
       },
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Container(
-            decoration: boxDecoration(radius: 10),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  padding:
-                      EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
-                  child: Column(
+      child: Container(
+        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.only(top: 16,bottom: 16,right: 16),
+        decoration: boxDecoration(radius: 10),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              padding:
+                  EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
+              child: Column(
+                children: <Widget>[
+                  Row(
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                              //color: GlobalVariables.grey,
-                              child:
-                                  /*false
-                                ? AppAssetsImage(
-                              GlobalVariables
-                                  .componentUserProfilePath,
-                              width / 5.5,
-                              width / 6,
-                              borderColor: GlobalVariables.grey,
-                              borderWidth: 1.0,
-                              fit: BoxFit.fill,
-                              radius: 12.0,
-                              shape: BoxShape.rectangle
-                            )
-                                : */
-                                  imageList.length > 0
-                                      ? AppNetworkImage(
-                                          imageList[0].Img_Name,
-                                          imageWidth: width / 5.5,
-                                          imageHeight: width / 5.5,
-                                          borderColor: GlobalVariables.grey,
-                                          borderWidth: 1.0,
-                                          fit: BoxFit.fill,
-                                          radius: 12.0,
-                                          shape: BoxShape.rectangle,
-                                        )
-                                      : AppAssetsImage(
-                                          GlobalVariables
-                                              .componentUserProfilePath,
-                                          imageWidth: width / 5.5,
-                                          imageHeight: width / 5.5,
-                                          borderColor: GlobalVariables.grey,
-                                          borderWidth: 1.0,
-                                          fit: BoxFit.fill,
-                                          radius: 12.0,
-                                          shape: BoxShape.circle,
-                                        )
-                              /*ClipRRect(
-                              child: CachedNetworkImage(
-                                imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
-                                width: width / 5.5,
-                                height: width / 6,
-                                fit: BoxFit.fill,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),*/
-                              ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  text(value.classifiedList[position].Title,
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                      maxLine: 2,
-                                      textColor: GlobalVariables.green,
-                                      fontWeight: FontWeight.w500),
-                                  SizedBox(height: 4),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AppIcon(
-                                        Icons.location_on,
-                                        iconSize: 20.0,
-                                        iconColor: GlobalVariables.lightGray,
-                                      ),
-                                      SizedBox(width: 2),
-                                      Flexible(
-                                        child: text(
-                                            value.classifiedList[position]
-                                                    .Locality +
-                                                ' - ' +
-                                                value.classifiedList[position]
-                                                    .City,
-                                            textColor:
-                                                GlobalVariables.lightGray,
-                                            fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                            maxLine: 2),
-                                      ),
-                                    ],
+                      Container(
+                          //color: GlobalVariables.grey,
+                          child:
+                              /*false
+                            ? AppAssetsImage(
+                          GlobalVariables
+                              .componentUserProfilePath,
+                          width / 5.5,
+                          width / 6,
+                          borderColor: GlobalVariables.grey,
+                          borderWidth: 1.0,
+                          fit: BoxFit.fill,
+                          radius: 12.0,
+                          shape: BoxShape.rectangle
+                        )
+                            : */
+                              imageList.length > 0
+                                  ? AppNetworkImage(
+                                      imageList[0].Img_Name,
+                                      imageWidth: width / 5.5,
+                                      imageHeight: width / 5.5,
+                                      borderColor: GlobalVariables.grey,
+                                      borderWidth: 1.0,
+                                      fit: BoxFit.fill,
+                                      radius: 12.0,
+                                      shape: BoxShape.rectangle,
+                                    )
+                                  : AppAssetsImage(
+                                      GlobalVariables
+                                          .componentUserProfilePath,
+                                      imageWidth: width / 5.5,
+                                      imageHeight: width / 5.5,
+                                      borderColor: GlobalVariables.grey,
+                                      borderWidth: 1.0,
+                                      fit: BoxFit.fill,
+                                      radius: 12.0,
+                                      shape: BoxShape.circle,
+                                    )
+                          /*ClipRRect(
+                          child: CachedNetworkImage(
+                            imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
+                            width: width / 5.5,
+                            height: width / 6,
+                            fit: BoxFit.fill,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),*/
+                          ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              text(value.classifiedList[position].Title,
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  maxLine: 2,
+                                  textColor: GlobalVariables.green,
+                                  fontWeight: FontWeight.w500),
+                              SizedBox(height: 4),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  AppIcon(
+                                    Icons.location_on,
+                                    iconSize: 20.0,
+                                    iconColor: GlobalVariables.lightGray,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: (daysCount + 1) > 7
-                                            ? Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                margin: EdgeInsets.only(top: 3),
-                                                child: AppIcon(
-                                                  Icons.date_range,
-                                                  iconSize: 15.0,
-                                                  iconColor: GlobalVariables.lightGray,
-                                                )),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            text(
-                                                GlobalFunctions.convertDateFormat(
-                                                    value.classifiedList[position]
-                                                        .C_Date,
-                                                    'dd-MMM-yyyy'),
-                                                textColor: GlobalVariables.lightGray,
-                                                fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                                fontWeight: FontWeight.normal),
-                                          ],
-                                        )
-                                            : Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                margin: EdgeInsets.only(top: 3),
-                                                child: AppIcon(
-                                                  Icons.access_time,
-                                                  iconSize: 15.0,
-                                                  iconColor: GlobalVariables.lightGray,
-                                                )),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            text(
-                                                daysCount == 0
-                                                    ? 'Today'
-                                                    : daysCount == 1
-                                                    ? 'Yesterday '
-                                                    : daysCount.toString() +
-                                                    ' days ago',
-                                                textColor: GlobalVariables.lightGray,
-                                                fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                                fontWeight: FontWeight.normal),
-                                          ],
-                                        ),
-                                      ),
-                                      value.classifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
-                                        child: text(value.classifiedList[position].Status,
-                                            fontSize: GlobalVariables.textSizeSmall,
-                                            maxLine: 1,
-                                            textColor: GlobalVariables.red,
-                                            fontWeight: FontWeight.normal),
-                                      ): daysCount>30 ?  text('Inactive',
-                                          fontSize: GlobalVariables.textSizeSmall,
-                                          maxLine: 1,
-                                          textColor: GlobalVariables.red,
-                                          fontWeight: FontWeight.normal) : SizedBox(),
-                                    ],
+                                  SizedBox(width: 2),
+                                  Flexible(
+                                    child: text(
+                                        value.classifiedList[position]
+                                                .Locality +
+                                            ' - ' +
+                                            value.classifiedList[position]
+                                                .City,
+                                        textColor:
+                                            GlobalVariables.lightGray,
+                                        fontSize:
+                                            GlobalVariables.textSizeSmall,
+                                        maxLine: 2),
                                   ),
                                 ],
                               ),
-                            ),
-                          )
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.start,
-                      ),
-                      Divider(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: text(
-                                'Rs. ' + value.classifiedList[position].Price,
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                fontWeight: FontWeight.bold),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: (daysCount + 1) > 7
+                                        ? Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin: EdgeInsets.only(top: 3),
+                                            child: AppIcon(
+                                              Icons.date_range,
+                                              iconSize: 15.0,
+                                              iconColor: GlobalVariables.lightGray,
+                                            )),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        text(
+                                            GlobalFunctions.convertDateFormat(
+                                                value.classifiedList[position]
+                                                    .C_Date,
+                                                'dd-MMM-yyyy'),
+                                            textColor: GlobalVariables.lightGray,
+                                            fontSize:
+                                            GlobalVariables.textSizeSmall,
+                                            fontWeight: FontWeight.normal),
+                                      ],
+                                    )
+                                        : Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin: EdgeInsets.only(top: 3),
+                                            child: AppIcon(
+                                              Icons.access_time,
+                                              iconSize: 15.0,
+                                              iconColor: GlobalVariables.lightGray,
+                                            )),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        text(
+                                            daysCount == 0
+                                                ? 'Today'
+                                                : daysCount == 1
+                                                ? 'Yesterday '
+                                                : daysCount.toString() +
+                                                ' days ago',
+                                            textColor: GlobalVariables.lightGray,
+                                            fontSize:
+                                            GlobalVariables.textSizeSmall,
+                                            fontWeight: FontWeight.normal),
+                                      ],
+                                    ),
+                                  ),
+                                  value.classifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
+                                    child: text(value.classifiedList[position].Status,
+                                        fontSize: GlobalVariables.textSizeSmall,
+                                        maxLine: 1,
+                                        textColor: GlobalVariables.red,
+                                        fontWeight: FontWeight.normal),
+                                  ): daysCount>30 ?  text('Inactive',
+                                      fontSize: GlobalVariables.textSizeSmall,
+                                      maxLine: 1,
+                                      textColor: GlobalVariables.red,
+                                      fontWeight: FontWeight.normal) : SizedBox(),
+                                ],
+                              ),
+                            ],
                           ),
-                          Container(
-                            child: text(value.classifiedList[position].Type,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                maxLine: 2,
-                                textColor: GlobalVariables.orangeYellow,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          //SizedBox(width: 10),
-                        ],
+                        ),
                       )
                     ],
+                    mainAxisAlignment: MainAxisAlignment.start,
                   ),
-                ),
-                Container(
-                  width: 4,
-                  height: 35,
-                  margin: EdgeInsets.only(top: 16),
-                  color: position % 2 == 0
-                      ? GlobalVariables.grey
-                      : GlobalVariables.lightOrange,
-                )
-              ],
+                  Divider(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: text(
+                            'Rs. ' + value.classifiedList[position].Price,
+                            textColor: GlobalVariables.black,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Container(
+                        child: text(value.classifiedList[position].Type,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            maxLine: 2,
+                            textColor: GlobalVariables.orangeYellow,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      //SizedBox(width: 10),
+                    ],
+                  )
+                ],
+              ),
             ),
-          )),
+            Container(
+              width: 4,
+              height: 35,
+              margin: EdgeInsets.only(top: 16),
+              color: position % 2 == 0
+                  ? GlobalVariables.grey
+                  : GlobalVariables.lightOrange,
+            )
+          ],
+        ),
+      ),
     );
   }
 

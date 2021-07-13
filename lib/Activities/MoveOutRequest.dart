@@ -26,6 +26,7 @@ import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -204,7 +205,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 15, 10, 0),
+                18, MediaQuery.of(context).size.height / 15, 18, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
@@ -234,23 +235,15 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context)=> BaseMoveOutRequestUserDetails(value.moveOutRequestList[position])));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: GlobalVariables.white),
+      child: AppContainer(
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       alignment: Alignment.topLeft,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,30 +258,30 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
                                     child: text(tenantName.replaceFirst(",", ""),
                                         textColor: GlobalVariables.green,
                                         fontSize:
-                                        GlobalVariables.textSizeLargeMedium,
+                                        GlobalVariables.textSizeMedium,
                                         fontWeight: FontWeight.bold,
                                         textStyleHeight: 1.0),
                                   ),
                                 ],
                               ),
                               Container(
-                                padding: EdgeInsets.fromLTRB(15, 3, 15, 5),
+                                padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                                 decoration: boxDecoration(
                                   bgColor: GlobalVariables.skyBlue,
                                   color: GlobalVariables.white,
-                                  radius: GlobalVariables.textSizeNormal,
+                                  radius: GlobalVariables.textSizeSmall,
                                 ),
                                 child: text(
                                     tenantDetailsList[0].BLOCK +
                                         ' ' +
                                         tenantDetailsList[0].FLAT,
-                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.white,
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                        SizedBox(
+                          SizedBox(
                             height: 4,
                           ),
                           Row(
@@ -297,6 +290,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
                                 child: AppIcon(
                                   Icons.date_range,
                                   iconColor: GlobalVariables.grey,
+                                  iconSize: GlobalVariables.textSizeSmall,
                                 ),
                               ),
                               SizedBox(
@@ -305,7 +299,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
                               Container(
                                 child: text(
                                     GlobalFunctions.convertDateFormat(value.moveOutRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
-                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.black,
                                     textStyleHeight: 1.0),
                               ),

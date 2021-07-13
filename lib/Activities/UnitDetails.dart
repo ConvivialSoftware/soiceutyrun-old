@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -31,7 +32,7 @@ class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
   @override
   void initState() {
     super.initState();
-    Provider.of<UserManagementResponse>(context,listen: false).getUnitDetails(null).then((value) {
+    Provider.of<UserManagementResponse>(context,listen: false).getUnitDetails("").then((value) {
       getUnitData(value);
     });
   }
@@ -67,12 +68,15 @@ class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
   }
 
   getBaseUnitLayout(UserManagementResponse userManagementResponse) {
-    return userManagementResponse.isLoading ? GlobalFunctions.loadingWidget(context) :Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
+    return userManagementResponse.isLoading ?
+    GlobalFunctions.loadingWidget(context) :
+    Container(
+     // margin: EdgeInsets.all(8),
+      //width: MediaQuery.of(context).size.width,
+      //height: MediaQuery.of(context).size.height,
+      /*decoration: BoxDecoration(
         color: GlobalVariables.white,
-      ),
+      ),*/
       child: Column(
         children: <Widget>[
           Flexible(
@@ -87,9 +91,9 @@ class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
                       width: 120,
                       alignment: Alignment.center,
                       margin: EdgeInsets.fromLTRB(
-                          10, MediaQuery.of(context).size.height / 30, 30, 0),
+                          10, MediaQuery.of(context).size.height / 30, 16, 0),
                      padding: EdgeInsets.only(right: 20),
-                     decoration: boxDecoration(radius: 30.0,color: GlobalVariables.green,bgColor: GlobalVariables.green),
+                     decoration: boxDecoration(radius: 10.0,color: GlobalVariables.green,bgColor: GlobalVariables.green),
                      // color: GlobalVariables.black,
                       child: ButtonTheme(
                         //alignedDropdown: true,
@@ -140,33 +144,43 @@ class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
   }
 
   getUnitListDataLayout(UserManagementResponse userManagementResponse) {
+
+    List<UnitDetails> unitDetailsList = List<UnitDetails>();
+    if(widget.isAppbarDisplay){
+      unitDetailsList = userManagementResponse.unitDetailsList;
+    }else{
+      unitDetailsList = userManagementResponse.unitDetailsList;
+      for(int i=0;i<unitDetailsList.length;i++){
+        unitDetailsList.removeWhere((item) => item.unitMember.length == 0);
+      }
+    }
+
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 10, 10, 0),
+      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 10, 10, 0),
       child: Builder(
           builder: (context) => GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                 ),
-                itemCount: userManagementResponse.unitDetailsList.length,
+                itemCount: unitDetailsList.length,
                 itemBuilder: (context, position) {
                   return InkWell(
                     onTap: () {
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>  BaseUnitUserDetails(userManagementResponse.unitDetailsList[position].BLOCK,userManagementResponse.unitDetailsList[position].FLAT)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>  BaseUnitUserDetails(unitDetailsList[position].BLOCK,unitDetailsList[position].FLAT)));
 
                     },
                     child: Container(
                       alignment: Alignment.center,
                       //width: width / 4,
                       // height: width / 4,
-                      margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      margin: EdgeInsets.fromLTRB(8, 8, 8, 8),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         color: position%2==0 ? GlobalVariables.averageGray : GlobalVariables.averageGreen,
                       ),
-                      child: text(userManagementResponse.unitDetailsList[position].BLOCK +' '+userManagementResponse.unitDetailsList[position].FLAT,
+                      child: text(unitDetailsList[position].BLOCK +' '+unitDetailsList[position].FLAT,
                           textColor: GlobalVariables.white,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeMedium),
                     ),
                   );

@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -106,12 +107,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     return _staffListCount.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
-      padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
-      decoration: BoxDecoration(
-          color: GlobalVariables.white,
-          borderRadius: BorderRadius.circular(20)),
-
+          10, MediaQuery.of(context).size.height / 15, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -133,38 +129,27 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
                 builder: (context) =>
                     BaseStaffListPerCategory(_staffListCount[position].ROLE)));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: GlobalVariables.white),
+      child: AppContainer(
+       // width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           children: [
             Row(
-              children: [
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
                 Expanded(
                   child: Container(
-                    child: text(_staffListCount[position].ROLE),
+                    child: text(_staffListCount[position].ROLE,fontSize: GlobalVariables.textSizeMedium),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: text(_staffListCount[position].Role_count),
+                  child: text(_staffListCount[position].Role_count,fontSize: GlobalVariables.textSizeSMedium),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: AppIcon(Icons.arrow_forward_ios,iconColor: GlobalVariables.lightGray,),
                 ),
               ],
-            ),
-            Container(
-              //color: GlobalVariables.black,
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Divider(
-                thickness: 1,
-                color: GlobalVariables.lightGray,
-              ),
             ),
           ],
         ),

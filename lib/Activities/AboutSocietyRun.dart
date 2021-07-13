@@ -150,12 +150,12 @@ class AboutSocietyRunInfoState
   getAboutSocietyRunLayout(LoginDashBoardResponse value) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
+        margin: EdgeInsets.fromLTRB(18, 40, 18, 10),
         padding: EdgeInsets.all(
             10), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
             Container(

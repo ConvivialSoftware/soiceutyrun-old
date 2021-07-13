@@ -177,7 +177,7 @@ class CreateClassifiedListingState
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(25.0)),
+                                                BorderRadius.circular(10.0)),
                                         child: Container(
                                           padding: EdgeInsets.all(20),
                                           width: MediaQuery.of(context)
@@ -756,7 +756,7 @@ class CreateClassifiedListingState
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     padding: EdgeInsets.all(16),
                     child: Column(

@@ -222,15 +222,15 @@ class ComplaintInfoAndCommentsState
       controller: _scrollController,
       child: complaints.SUBJECT != null
           ? Container(
-              margin: EdgeInsets.fromLTRB(10, 40, 10, 80),
-              padding: EdgeInsets.all(0),
+              margin: EdgeInsets.fromLTRB(18, 40, 18, 80),
+              //padding: EdgeInsets.all(0),
               //  height: MediaQuery.of(context).size.height - 210,
               decoration: BoxDecoration(
                   color: GlobalVariables.transparent,
-                  borderRadius: BorderRadius.circular(5)),
+                  borderRadius: BorderRadius.circular(10)),
               child: Container(
                 //  width: MediaQuery.of(context).size.width / 1.1,
-                padding: EdgeInsets.all(10),
+                //padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(
                     0, 20, 0, 0), // color: GlobalVariables.grey,
                 child: Column(
@@ -239,7 +239,7 @@ class ComplaintInfoAndCommentsState
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         children: <Widget>[
                           Flexible(
@@ -512,7 +512,7 @@ class ComplaintInfoAndCommentsState
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
                             color: GlobalVariables.white,
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(10)),
                         margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -747,7 +747,7 @@ class ComplaintInfoAndCommentsState
                             padding: EdgeInsets.all(20),
                             decoration: BoxDecoration(
                                 color: GlobalVariables.white,
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(10)),
                             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: Column(
                               children: [
@@ -787,13 +787,13 @@ class ComplaintInfoAndCommentsState
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        margin: EdgeInsets.fromLTRB(18, 10, 18, 10),
         //  margin: EdgeInsets.fromLTRB(20, 40, 20,40),
        // height: 50,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: GlobalVariables.lightGray,
               width: 2,

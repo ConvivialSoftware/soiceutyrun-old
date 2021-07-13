@@ -72,7 +72,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   //List<LoginResponse> _societyList = new List<LoginResponse>();
   LoginResponse _selectedSocietyLogin;
-  var username, password, societyId, flat, block; /*duesRs = "0.0", duesDate = ""*/
+  var username, password, societyId, flat, block;
+
+  /*duesRs = "0.0", duesDate = ""*/
 
   List<RootTitle> _list = new List<RootTitle>();
   int _currentIndex = 0;
@@ -81,7 +83,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   var name = '';
   var email = '', phone = '';
-  var photo = '';
+  var photo = '',consumerId,societyName;
 
   //List<Banners> _bannerList = List<Banners>();
 
@@ -97,9 +99,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     WidgetsBinding.instance.addObserver(this);
     GlobalFunctions.isAllowForRunApp().then((value) {
       if (value) {
-        getDisplayName();
-        getMobile();
-        getPhoto();
+        getSharedPreferenceData();
         SQLiteDbProvider.db.getDataBaseInstance();
         GlobalFunctions.getAppPackageInfo();
         GlobalFunctions.checkInternetConnection().then((internet) {
@@ -150,11 +150,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   @override
   Widget build(BuildContext context) {
-
     FirebaseMessagingHandler().getToken();
     print('DashBoard context : ' + context.toString());
     print('BaseStatefulState context : ' + BaseStatefulState.getCtx.toString());
-    print('DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
+    print(
+        'DashBoard _dashboardSacfoldKey : ' + _dashboardSacfoldKey.toString());
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getExpandableListViewData(context);
@@ -162,217 +162,241 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     // TODO: implement build
     //  GlobalFunctions.showToast("Dashboard state page");
     return ChangeNotifierProvider<LoginDashBoardResponse>.value(
-        value: Provider.of<LoginDashBoardResponse>(context),
+      value: Provider.of<LoginDashBoardResponse>(context),
       child: Consumer<LoginDashBoardResponse>(
-          builder: (context,value,child){
-            return Builder(
-              builder: (context) => Scaffold(
-                key: _dashboardSacfoldKey,
-                // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
-                body: WillPopScope(child: getBodyLayout(value), onWillPop: onWillPop),
-                drawer: getDrawerLayout(value),
-                // bottomNavigationBar: getBottomNavigationBar(),
-              ),
-            );
-          },
+        builder: (context, value, child) {
+          return Builder(
+            builder: (context) => Scaffold(
+              key: _dashboardSacfoldKey,
+              // appBar: CustomAppBar.ScafoldKey(AppLocalizations.of(context).translate('overview'),context,_dashboardSacfoldKey),
+              body: WillPopScope(
+                  child: getBodyLayout(value), onWillPop: onWillPop),
+              drawer: getDrawerLayout(value),
+              // bottomNavigationBar: getBottomNavigationBar(),
+            ),
+          );
+        },
       ),
     );
   }
 
   getBodyLayout(LoginDashBoardResponse value) {
-    return value.isLoading ? GlobalFunctions.loadingWidget(context) : Stack(
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: GlobalVariables.white,
-          ),
-          child: Column(
+    return value.isLoading
+        ? GlobalFunctions.loadingWidget(context)
+        : Stack(
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(
-                    child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: SvgPicture.asset(
-                          GlobalVariables.headerIconPath,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.fill,
-                        )),
-                  ),
-                  Container(
-                    // color: GlobalVariables.black,
-                    margin: EdgeInsets.fromLTRB(
-                        0, MediaQuery.of(context).size.height / 30, 0, 0),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  color: GlobalVariables.white,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
                       children: <Widget>[
                         Container(
-                          //  color: GlobalVariables.grey,
                           child: SizedBox(
-                              child: GestureDetector(
-                            onTap: () {
-                              _dashboardSacfoldKey.currentState.openDrawer();
-                            },
-                            child: SvgPicture.asset(
-                              GlobalVariables.topBreadCrumPath,
-                            ),
-                          )),
+                              width: MediaQuery.of(context).size.width,
+                              child: SvgPicture.asset(
+                                GlobalVariables.headerIconPath,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.fill,
+                              )),
                         ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(
-                                0,
-                                0,
-                                MediaQuery.of(context).size.width / 70,
-                                0), // color: GlobalVariables.green,
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              /*child: SvgPicture.asset(
+                        Container(
+                          // color: GlobalVariables.black,
+                          margin: EdgeInsets.fromLTRB(
+                              0, MediaQuery.of(context).size.height / 30, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //  color: GlobalVariables.grey,
+                                child: SizedBox(
+                                    child: GestureDetector(
+                                  onTap: () {
+                                    _dashboardSacfoldKey.currentState
+                                        .openDrawer();
+                                  },
+                                  child: SvgPicture.asset(
+                                    GlobalVariables.topBreadCrumPath,
+                                  ),
+                                )),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      0,
+                                      0,
+                                      MediaQuery.of(context).size.width / 70,
+                                      0), // color: GlobalVariables.green,
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    /*child: SvgPicture.asset(
                               GlobalVariables.overviewTxtPath,
                             )*/
-                              child: text(
-                                'OVERVIEW',
-                                textColor: GlobalVariables.white,
-                                    fontSize: GlobalVariables.textSizeLargeMedium,
-                                    fontWeight: FontWeight.bold,
+                                    child: text(
+                                      'OVERVIEW',
+                                      textColor: GlobalVariables.white,
+                                      fontSize:
+                                          GlobalVariables.textSizeLargeMedium,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Container(
+                                    //color: GlobalVariables.grey,
+                                    margin: EdgeInsets.fromLTRB(0, 10, 20, 0),
+                                    child: SizedBox(
+                                        child: GestureDetector(
+                                      onTap: () {
+                                        //GlobalFunctions.comingSoonDialog(context);
+                                        //if(GlobalVariables.notificationCounterValueNotifer.value>0) {
+                                        Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BaseNotifications()))
+                                            .then((value) {
+                                          GlobalFunctions.setBaseContext(
+                                              _dashboardSacfoldKey
+                                                  .currentContext);
+                                        });
+                                        //}
+                                      },
+                                      child: ValueListenableBuilder(
+                                          valueListenable: GlobalVariables
+                                              .notificationCounterValueNotifer,
+                                          builder: (BuildContext context,
+                                              int newNotificationCounterValue,
+                                              Widget child) {
+                                            return Stack(
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 5),
+                                                  //color: GlobalVariables.grey,
+                                                  child: AppAssetsImage(
+                                                    GlobalVariables
+                                                        .notificationBellIconPath,
+                                                    imageWidth: GlobalVariables
+                                                        .textSizeNormal,
+                                                    imageHeight: GlobalVariables
+                                                        .textSizeNormal,
+                                                  ),
+                                                ),
+                                                newNotificationCounterValue > 0
+                                                    ? Container(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        margin: EdgeInsets.only(
+                                                            left: 8),
+                                                        child: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.05,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.05,
+                                                          decoration: BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: GlobalVariables
+                                                                  .orangeYellow,
+                                                              border: Border.all(
+                                                                  color: GlobalVariables
+                                                                      .transparent,
+                                                                  width: 1)),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            // margin: EdgeInsets.only(bottom: 4),
+                                                            child: text(
+                                                                newNotificationCounterValue
+                                                                    .toString(),
+                                                                textColor:
+                                                                    GlobalVariables
+                                                                        .white,
+                                                                fontSize:
+                                                                    GlobalVariables
+                                                                        .textSizeSmall),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox(),
+                                              ],
+                                            );
+                                          }),
+                                    )),
+                                  ),
+                                  Container(
+                                    //  color: GlobalVariables.grey,
+                                    margin: EdgeInsets.fromLTRB(
+                                        0, 10, 20, 0), // alignment: Alignment
+                                    child: SizedBox(
+                                        child: ValueListenableBuilder(
+                                            valueListenable: GlobalVariables
+                                                .userImageURLValueNotifer,
+                                            builder: (BuildContext context,
+                                                String userImageURLValueNotifer,
+                                                Widget child) {
+                                              return GestureDetector(
+                                                  onTap: () {
+                                                    // GlobalFunctions.showToast('profile_user');
+                                                    navigateToProfilePage();
+                                                  },
+                                                  child:
+                                                      userImageURLValueNotifer
+                                                              .isEmpty
+                                                          ? AppAssetsImage(
+                                                              GlobalVariables
+                                                                  .componentUserProfilePath,
+                                                              imageWidth: 20.0,
+                                                              imageHeight: 20.0,
+                                                              borderColor:
+                                                                  GlobalVariables
+                                                                      .grey,
+                                                              borderWidth: 1.0,
+                                                              fit: BoxFit.cover,
+                                                              radius: 10.0,
+                                                            )
+                                                          : AppNetworkImage(
+                                                              userImageURLValueNotifer,
+                                                              imageWidth: 20.0,
+                                                              imageHeight: 20.0,
+                                                              borderColor:
+                                                                  GlobalVariables
+                                                                      .grey,
+                                                              borderWidth: 1.0,
+                                                              fit: BoxFit.cover,
+                                                              radius: 10.0,
+                                                            ));
+                                            })),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Container(
-                              //color: GlobalVariables.grey,
-                              margin: EdgeInsets.fromLTRB(0, 10, 20, 0),
-                              child: SizedBox(
-                                  child: GestureDetector(
-                                onTap: () {
-                                  //GlobalFunctions.comingSoonDialog(context);
-                                  //if(GlobalVariables.notificationCounterValueNotifer.value>0) {
-                                  Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BaseNotifications()))
-                                      .then((value) {
-                                    GlobalFunctions.setBaseContext(
-                                        _dashboardSacfoldKey.currentContext);
-                                  });
-                                  //}
-                                },
-                                child: ValueListenableBuilder(
-                                    valueListenable: GlobalVariables
-                                        .notificationCounterValueNotifer,
-                                    builder: (BuildContext context,
-                                        int newNotificationCounterValue,
-                                        Widget child) {
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(top: 5),
-                                            //color: GlobalVariables.grey,
-                                            child: AppAssetsImage(
-                                              GlobalVariables
-                                                  .notificationBellIconPath,
-                                              imageWidth: GlobalVariables.textSizeNormal,
-                                              imageHeight: GlobalVariables.textSizeNormal,
-                                            ),
-                                          ),
-                                          newNotificationCounterValue>0 ? Container(
-                                            alignment: Alignment.topRight,
-                                            margin: EdgeInsets.only(left: 8),
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.05,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.05,
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: GlobalVariables
-                                                      .orangeYellow,
-                                                  border: Border.all(
-                                                      color: GlobalVariables
-                                                          .transparent,
-                                                      width: 1)),
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                               // margin: EdgeInsets.only(bottom: 4),
-                                                child: text(
-                                                  newNotificationCounterValue.toString(),
-
-                                                         textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSmall
-
-                                                ),
-                                              ),
-                                            ),
-                                          ) : SizedBox(),
-                                        ],
-                                      );
-                                    }),
-                              )),
-                            ),
-                            Container(
-                              //  color: GlobalVariables.grey,
-                              margin: EdgeInsets.fromLTRB(
-                                  0, 10, 20, 0), // alignment: Alignment
-                              child: SizedBox(
-                                  child: ValueListenableBuilder(
-                                      valueListenable: GlobalVariables
-                                          .userImageURLValueNotifer,
-                                      builder: (BuildContext context,
-                                          String userImageURLValueNotifer,
-                                          Widget child) {
-                                        return GestureDetector(
-                                            onTap: () {
-                                              // GlobalFunctions.showToast('profile_user');
-                                              navigateToProfilePage();
-                                            },
-                                            child: userImageURLValueNotifer
-                                                    .isEmpty
-                                                ? AppAssetsImage(
-                                                    GlobalVariables
-                                                        .componentUserProfilePath,
-                                                    imageWidth: 20.0,
-                                                    imageHeight: 20.0,
-                                                    borderColor:
-                                                        GlobalVariables.grey,
-                                                    borderWidth: 1.0,
-                                                    fit: BoxFit.cover,
-                                                    radius: 10.0,
-                                                  )
-                                                : AppNetworkImage(
-                                                    userImageURLValueNotifer,
-                                                    imageWidth: 20.0,
-                                                    imageHeight: 20.0,
-                                                    borderColor:
-                                                        GlobalVariables.grey,
-                                                    borderWidth: 1.0,
-                                                    fit: BoxFit.cover,
-                                                    radius: 10.0,
-                                                  ));
-                                      })),
-                            ),
-                          ],
-                        ),
+                        duesLayout(value),
                       ],
                     ),
-                  ),
-                  duesLayout(value),
-                ],
+                    getHomePage(value)
+                  ],
+                ),
               ),
-              getHomePage(value)
             ],
-          ),
-        ),
-      ],
-    );
+          );
   }
 
   /* getBottomNavigationBar() {
@@ -561,7 +585,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               //getMyUnitPage();
                               redirectToPage(AppLocalizations.of(context)
-                                  .translate('my_unit'));
+                                  .translate('my_unit'),context);
                             },
                             child: Container(
                               // color: GlobalVariables.black,
@@ -576,8 +600,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                      child: text(AppLocalizations.of(context)
-                                          .translate('my_unit'),fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('my_unit'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                 ],
                               ),
                             ),
@@ -589,7 +616,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               // getMyComplexPage();
                               redirectToPage(AppLocalizations.of(context)
-                                  .translate('my_complex'));
+                                  .translate('my_complex'),context);
                             },
                             child: Container(
                               //    color: GlobalVariables.green,
@@ -603,8 +630,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                      child: text(AppLocalizations.of(context)
-                                          .translate('my_complex'),fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('my_complex'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                 ],
                               ),
                             ),
@@ -617,7 +647,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               // getHelpDeskPage();
                               if (AppPermission.isSocHelpDeskPermission)
                                 redirectToPage(AppLocalizations.of(context)
-                                    .translate('help_desk'));
+                                    .translate('help_desk'),context);
                               else
                                 GlobalFunctions
                                     .contactChairPersonForPermissionDialog(
@@ -635,8 +665,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                      child: text(AppLocalizations.of(context)
-                                          .translate('help_desk'),fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('help_desk'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                 ],
                               ),
                             ),
@@ -657,7 +690,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               // getClubFacilitiesPage();
                               redirectToPage(AppLocalizations.of(context)
-                                  .translate('classified'));
+                                  .translate('classified'),context);
                             },
                             child: Container(
                               //    color: GlobalVariables.black,
@@ -671,8 +704,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                      child: text(AppLocalizations.of(context)
-                                          .translate('classified'),fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('classified'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                 ],
                               ),
                             ),
@@ -685,7 +721,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               // getMyGatePage();
                               if (AppPermission.isSocGatePassPermission)
                                 redirectToPage(AppLocalizations.of(context)
-                                    .translate('my_gate'));
+                                    .translate('my_gate'),context);
                               else
                                 GlobalFunctions
                                     .contactChairPersonForPermissionDialog(
@@ -703,8 +739,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                      child: text(AppLocalizations.of(context)
-                                          .translate('my_gate'),fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('my_gate'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                 ],
                               ),
                             ),
@@ -716,7 +755,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             onTap: () {
                               /*getMorePage();*/
                               redirectToPage(AppLocalizations.of(context)
-                                  .translate('more'));
+                                  .translate('more'),context);
                             },
                             child: Container(
                               //     color: GlobalVariables.black,
@@ -730,8 +769,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   ),
                                   Container(
                                       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                      child: text(AppLocalizations.of(context)
-                                          .translate('more'),fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('more'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                 ],
                               ),
                             ),
@@ -751,7 +793,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               onTap: () {
                                 //GlobalFunctions.comingSoonDialog(context);
                                 redirectToPage(AppLocalizations.of(context)
-                                    .translate('exclusive_offer'));
+                                    .translate('exclusive_offer'),context);
                               },
                               child: Container(
                                 padding: EdgeInsets.all(10),
@@ -768,8 +810,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     SizedBox(
                                       width: 2,
                                     ),
-                                    text(AppLocalizations.of(context)
-                                        .translate('exclusive_offer'),fontSize: GlobalVariables.textSizeSMedium)
+                                    text(
+                                        AppLocalizations.of(context)
+                                            .translate('exclusive_offer'),
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium)
                                   ],
                                 ),
                               ),
@@ -803,7 +848,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     SizedBox(
                                       width: 2,
                                     ),
-                                    text(AppLocalizations.of(context).translate('find_services'),fontSize: GlobalVariables.textSizeSMedium),
+                                    text(
+                                        AppLocalizations.of(context)
+                                            .translate('find_services'),
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium),
                                   ],
                                 ),
                               ),
@@ -825,11 +874,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         autoPlayAnimationDuration: Duration(milliseconds: 800),
                       ),
                       itemCount: loginDashBoardResponse.bannerList.length,
-                      itemBuilder: (BuildContext context, int itemIndex,int item) =>
-                      loginDashBoardResponse.bannerList.length > 0
+                      itemBuilder: (BuildContext context, int itemIndex,
+                              int item) =>
+                          loginDashBoardResponse.bannerList.length > 0
                               ? InkWell(
                                   onTap: () {
-                                 /*   print('SocietyID : ' + societyId);
+                                    /*   print('SocietyID : ' + societyId);
                                     print('Name : ' + name);
                                     print('Mobile : ' + phone);
                                     print('Unit : ' + block + ' ' + flat);
@@ -861,7 +911,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 BaseWebViewScreen(
-                                                    loginDashBoardResponse.bannerList[itemIndex].Url +
+                                                    loginDashBoardResponse
+                                                            .bannerList[
+                                                                itemIndex]
+                                                            .Url +
                                                         '?' +
                                                         'SID=' +
                                                         societyId.toString() +
@@ -884,11 +937,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     //color: GlobalVariables.black,
                                     //alignment: Alignment.center,
                                     child: AppNetworkImage(
-                                      loginDashBoardResponse.bannerList[itemIndex].IMAGE,
+                                      loginDashBoardResponse
+                                          .bannerList[itemIndex].IMAGE,
                                       fit: BoxFit.fitWidth,
                                       shape: BoxShape.rectangle,
                                       borderColor: GlobalVariables.transparent,
-                                     // radius: GlobalVariables.textSizeMedium,
+                                      // radius: GlobalVariables.textSizeMedium,
                                     ),
                                   ),
                                 )
@@ -967,29 +1021,29 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       return Container(
         width: MediaQuery.of(context).size.width * 0.75,
         child: Drawer(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  /*child: Image.asset(GlobalVariables.appLogoPath,
-                    width: 250, height: 80, fit: BoxFit.fill),*/
-                  margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
-                  padding: EdgeInsets.all(5),
-                  alignment: Alignment.topLeft,
-                  child: AppAssetsImage(
-                    GlobalVariables.drawerImagePath,
-                    imageHeight: 40.0,
-                  ),
+          child: Column(
+            children: <Widget>[
+              /*Container(
+                */ /*child: Image.asset(GlobalVariables.appLogoPath,
+                  width: 250, height: 80, fit: BoxFit.fill),*/ /*
+                margin: EdgeInsets.fromLTRB(10, 35, 5, 1),
+                padding: EdgeInsets.all(5),
+                alignment: Alignment.topLeft,
+                child: AppAssetsImage(
+                  GlobalVariables.drawerImagePath,
+                  imageHeight: 40.0,
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  padding: EdgeInsets.all(5),
-                  color: GlobalVariables.veryLightGray,
+              ),*/
+              SafeArea(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(0, 30, 30, 0),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: GlobalVariables.green, borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0), topRight: Radius.circular(10.0))),
                   child: getHeaderLayout(value),
                 ),
-                getListData(),
-              ],
-            ),
+              ),
+              getListData(),
+            ],
           ),
         ),
       );
@@ -1004,38 +1058,41 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           print('header data snap map : ' + snapshot.data.toString());
           return Column(
             children: <Widget>[
-              Container(
+              /*Container(
                 //color:GlobalVariables.white,
                 //  padding: EdgeInsets.all(5),
                 margin: EdgeInsets.fromLTRB(5, 0, 5,
                     0), // width: MediaQuery.of(context).size.width / 2.2,
                 //  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                /*    decoration: BoxDecoration(
+                *//*    decoration: BoxDecoration(
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(10)
                                 ),
-                            */
+                            *//*
                 //TODO : Dropdown
                 child:
-                    /*AppDropDown<String>(
+                    *//*AppDropDown<String>(
                   _societyListItems,
                   changeDropDownItem,
                   value: _selectedItem,
                   icon: Icons.keyboard_arrow_down,
                   iconColor: GlobalVariables.black,
-                ),*/
+                ),*//*
                     DropdownButton(
                   items: _societyListItems,
-                  onChanged: (value){
-
+                  onChanged: (value) {
                     GlobalFunctions.checkInternetConnection().then((internet) {
                       if (internet) {
                         setState(() {
                           _selectedItem = value;
                           print('_selctedItem:' + _selectedItem.toString());
-                          for (int i = 0; i < loginDashBoardResponse.societyList.length; i++) {
-                            if (_selectedItem == loginDashBoardResponse.societyList[i].ID) {
-                              _selectedSocietyLogin = loginDashBoardResponse.societyList[i];
+                          for (int i = 0;
+                              i < loginDashBoardResponse.societyList.length;
+                              i++) {
+                            if (_selectedItem ==
+                                loginDashBoardResponse.societyList[i].ID) {
+                              _selectedSocietyLogin =
+                                  loginDashBoardResponse.societyList[i];
                               _selectedSocietyLogin.PASSWORD = password;
                               GlobalFunctions.saveDataToSharedPreferences(
                                   _selectedSocietyLogin);
@@ -1053,8 +1110,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             .translate('pls_check_internet_connectivity'));
                       }
                     });
-
-
                   },
                   value: _selectedItem,
                   underline: SizedBox(),
@@ -1065,20 +1120,21 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   ),
                   //iconSize: 20,
                 ),
-              ),
+              ),*/
               Container(
                 //color: GlobalVariables.black,
                 //margin: EdgeInsets.all(5),
                 // padding: EdgeInsets.all(5),
+
                 child: Row(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     InkWell(
                       onTap: () {
                         navigateToProfilePage();
                       },
                       child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                         // margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
                           //color: GlobalVariables.red,
                           //TODO: userImage
                           child: ValueListenableBuilder(
@@ -1093,8 +1149,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                             .componentUserProfilePath,
                                         imageWidth: 70.0,
                                         imageHeight: 70.0,
-                                        borderColor: GlobalVariables.grey,
-                                        borderWidth: 1.0,
+                                        borderColor: GlobalVariables.mediumGreen,
+                                        borderWidth: 5.0,
                                         fit: BoxFit.cover,
                                         radius: 30.0,
                                       )
@@ -1102,8 +1158,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         userImageURLValueNotifer,
                                         imageWidth: 70.0,
                                         imageHeight: 70.0,
-                                        borderColor: GlobalVariables.grey,
-                                        borderWidth: 1.0,
+                                        borderColor: GlobalVariables.mediumGreen,
+                                        borderWidth: 5.0,
                                         fit: BoxFit.cover,
                                         radius: 30.0,
                                       );
@@ -1111,17 +1167,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     ),
                     Flexible(
                       child: Container(
-                        alignment: AlignmentDirectional.center,
+                        //alignment: AlignmentDirectional.center,
                         //color: GlobalVariables.red,
                         //  padding: EdgeInsets.all(5),
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
                         child: Column(
-                          mainAxisSize: MainAxisSize.max,
+                          //mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  5, 0, 0, 5), //color: GlobalVariables.green,
+                            //color: GlobalVariables.green,
                               //TODO : UserName
                               child: ValueListenableBuilder(
                                   valueListenable:
@@ -1129,19 +1185,20 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   builder: (BuildContext context,
                                       String userNameValueNotifer,
                                       Widget child) {
-                                    return text(
-                                      userNameValueNotifer,
-                                   maxLine: 1,
-                                   //   textAlign: TextAlign.left,
-                                          textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeLargeMedium,
-                                          fontWeight: FontWeight.bold
-                                    );
+                                    return text(userNameValueNotifer,
+                                       // maxLine: 1,
+                                        //   textAlign: TextAlign.left,
+                                        textColor: GlobalVariables.white,
+                                        fontSize:
+                                            GlobalVariables.textSizeLargeMedium,
+                                        textStyleHeight: 1.5,
+                                        fontWeight: FontWeight.bold);
                                   }),
                             ),
+                            SizedBox(height: 4,),
                             Container(
-                              margin: EdgeInsets.all(
-                                  5), //   color: GlobalVariables.green,
+                              //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              // margin: EdgeInsets.all(5), //   color: GlobalVariables.green,
                               //TODO : CustomerID
                               child: text(
                                 (AppLocalizations.of(context)
@@ -1151,67 +1208,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         .data[GlobalVariables.keyConsumerId]),
                                 //textAlign: TextAlign.left,
 
-                                    textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeSmall,
+                                textColor: GlobalVariables.white,
+                                fontSize: GlobalVariables.textSizeSmall,
+                                textStyleHeight: 1.5,
                                 maxLine: 1,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(
-                                  5), //  color: GlobalVariables.green,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Visibility(
-                                    visible: false,
-                                    child: InkWell(
-                                      onTap: () {
-                                        GlobalFunctions.showToast("Logout");
-                                        GlobalFunctions
-                                            .clearSharedPreferenceData();
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              0, 0, 5, 5), //TODO: logout
-                                          child: GestureDetector(
-                                            onTap: () {},
-                                            child: text(
-                                              'Logout',
-                                             // textAlign: TextAlign.left,
-                                                fontSize: GlobalVariables.textSizeLargeMedium,
-                                                textColor: GlobalVariables.grey,
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: false,
-                                    child: Container(
-                                        margin: EdgeInsets.all(5),
-                                        //TODO: Divider
-                                        height: 20,
-                                        width: 8,
-                                        child: VerticalDivider(
-                                          color: GlobalVariables.black,
-                                        )),
-                                  ),
-                                  Visibility(
-                                    visible: false,
-                                    child: Container(
-                                        margin: EdgeInsets.fromLTRB(
-                                            5, 0, 5, 5), //Todo: setting
-                                        child: GestureDetector(
-                                          onTap: () {},
-                                          child: text(
-                                            'Setting',
-                                           // textAlign: TextAlign.left,
-                                            fontSize: GlobalVariables.textSizeLargeMedium,
-                                              textColor: GlobalVariables.grey,
-                                          ),
-                                        )),
-                                  )
-                                ],
                               ),
                             ),
                           ],
@@ -1221,6 +1221,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   ],
                 ),
               ),
+              SizedBox(height: 16,),
+              text(
+                block+' '+flat+' '+societyName,textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium,
+                textStyleHeight: 1.5,
+                maxLine: 1,
+              ),
+             /* Container(
+                color: GlobalVariables.grey,
+                alignment: Alignment.center,
+                child: text(block+' '+flat+' '+societyName,textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium),
+              )*/
             ],
           );
         } else {
@@ -1243,7 +1254,16 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     return Flexible(
       child: Container(
         //color: GlobalVariables.black,
-        child: ListView.builder(
+        child: Theme(
+          data: ThemeData(accentColor: GlobalVariables.green),
+          child: ListView.builder(
+            itemCount: _list.length,
+            itemBuilder: (BuildContext context, int index) => EntryItem(
+              _list[index],index,context
+            ),
+          ),
+        ),
+        /*ListView.builder(
             shrinkWrap: true,
             itemCount: _list.length,
             itemBuilder: (context, i) {
@@ -1356,7 +1376,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       ],
                     ),
                   ));
-            }),
+            }),*/
       ),
     );
   }
@@ -1373,16 +1393,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
 
   Future<void> getAllSocietyData() async {
-
     String loggedUsername = await GlobalFunctions.getLoggedUserName();
     if (loggedUsername.length == 0) {
       GlobalFunctions.notAllowForRunAppDialog(context);
     } else {
-
       Provider.of<LoginDashBoardResponse>(context, listen: false)
           .getAllSocietyData(loggedUsername, context)
           .then((_societyList) async {
-
         password = await GlobalFunctions.getPassword();
         societyId = await GlobalFunctions.getSocietyId();
         String loginId = await GlobalFunctions.getLoginId();
@@ -1425,7 +1442,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               loginResponse.BLOCK +
                               " " +
                               loginResponse.FLAT,
-                              textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall,
+                          textColor: GlobalVariables.black,
+                          fontSize: GlobalVariables.textSizeSmall,
                           maxLine: 1,
                         ),
                       ),
@@ -1442,7 +1460,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                           loginResponse.BLOCK +
                           " " +
                           loginResponse.FLAT,
-                      textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall,
+                      textColor: GlobalVariables.black,
+                      fontSize: GlobalVariables.textSizeSmall,
                       maxLine: 1,
                     ),
                   ),
@@ -1460,7 +1479,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         loginResponse.BLOCK +
                         " " +
                         loginResponse.FLAT,
-                 textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSmall,
+                    textColor: GlobalVariables.black,
+                    fontSize: GlobalVariables.textSizeSmall,
                     maxLine: 1,
                   ),
                 ),
@@ -1534,7 +1554,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
   void changeDropDownItem(String value) {
     print('clickable value : ' + value.toString());
-
   }
 
   void getExpandableListViewData(BuildContext context) {
@@ -1546,8 +1565,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           rootIconData: GlobalVariables.myFlatIconPath,
           //innerIconData: Icons.,
           items: [
-            AppLocalizations.of(context).translate("my_dues"),
-            AppLocalizations.of(context).translate("my_household"),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("my_dues"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("my_household"),
+            )
             // AppLocalizations.of(context).translate("my_documents"),
           ]),
       new RootTitle(
@@ -1555,23 +1578,39 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           rootIconData: GlobalVariables.myBuildingIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
           items: [
-            AppLocalizations.of(context).translate("announcement"),
-            AppLocalizations.of(context).translate("meetings"),
-            AppLocalizations.of(context).translate("poll_survey"),
-            AppLocalizations.of(context).translate("documents"),
-            AppLocalizations.of(context).translate("directory"),
-            AppLocalizations.of(context).translate("events")
+            RootTitle(
+              title: AppLocalizations.of(context).translate("announcement"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("meetings"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("poll_survey"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("documents"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("directory"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("events"),
+            ),
           ]),
       new RootTitle(
           title: AppLocalizations.of(context).translate('discover'),
           rootIconData: GlobalVariables.myServiceIconPath,
           //innerIconData: GlobalVariables.myFlatIconPath,
           items: [
-            // AppLocalizations.of(context).translate("my_classified"),
-            AppLocalizations.of(context).translate("classified"),
-            //AppLocalizations.of(context).translate("my_services"),
-            AppLocalizations.of(context).translate("services"),
-            AppLocalizations.of(context).translate("exclusive_offer"),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("classified"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("services"),
+            ),
+            RootTitle(
+              title: AppLocalizations.of(context).translate("exclusive_offer"),
+            ),
           ]),
       /* new RootTitle(
           title: AppLocalizations.of(context).translate('facilities'),
@@ -1584,8 +1623,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.myGateIconPath,
             //innerIconData: GlobalVariables.myFlatIconPath,
             items: [
-              AppLocalizations.of(context).translate("my_activities"),
-              AppLocalizations.of(context).translate("helpers"),
+              RootTitle(
+                  title:
+                      AppLocalizations.of(context).translate("my_activities")),
+              RootTitle(
+                  title: AppLocalizations.of(context).translate("helpers")),
             ]),
       if (AppPermission.isSocHelpDeskPermission)
         new RootTitle(
@@ -1611,13 +1653,26 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.myAdminIconPath,
             //  innerIconData: GlobalVariables.myFlatIconPath,
             items: [
-              AppLocalizations.of(context).translate("assign_helpdesk"),
-              AppLocalizations.of(context).translate("broadcast"),
-              AppLocalizations.of(context).translate("user_management"),
+              RootTitle(
+                title:
+                AppLocalizations.of(context).translate("assign_helpdesk"),
+              ),
+              RootTitle(
+                title: AppLocalizations.of(context).translate("broadcast"),
+              ),
+              RootTitle(
+                title:
+                AppLocalizations.of(context).translate("user_management"),
+              ),
             ]),
       new RootTitle(
           title: AppLocalizations.of(context).translate('settings'),
           rootIconData: GlobalVariables.settingsIconPath,
+          //  innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      new RootTitle(
+          title: AppLocalizations.of(context).translate('switch_society'),
+          rootIconData: GlobalVariables.switchIconPath,
           //  innerIconData: GlobalVariables.myFlatIconPath,
           items: []),
     ];
@@ -1682,9 +1737,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }*/
 
   getDuesData() async {
-
-    Provider.of<LoginDashBoardResponse>(context,listen: false).getDuesData().then((value) {
-
+    Provider.of<LoginDashBoardResponse>(context, listen: false)
+        .getDuesData()
+        .then((value) {
       if (_dashboardSacfoldKey.currentState != null) {
         if (_dashboardSacfoldKey.currentState.isDrawerOpen) {
           Navigator.of(context).pop();
@@ -1698,7 +1753,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     });
   }
 
-
   duesLayout(LoginDashBoardResponse loginDashBoardResponse) {
     print('duesDate : ' + loginDashBoardResponse.duesDate.toString());
     print('duesRS : ' + loginDashBoardResponse.duesRs.toString());
@@ -1711,7 +1765,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             0, MediaQuery.of(context).size.height / 10, 0, 0),
         child: Card(
           shape: (RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0))),
+              borderRadius: BorderRadius.circular(10.0))),
           elevation: 20.0,
           shadowColor: GlobalVariables.green.withOpacity(0.3),
           margin: EdgeInsets.all(20),
@@ -1724,6 +1778,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   alignment: Alignment.centerRight,
                   child: AppAssetsImage(
                     GlobalVariables.whileBGPath,
+                    imageHeight: 50,
                   ),
                 ),
               ),
@@ -1739,20 +1794,22 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                 AppLocalizations.of(context)
                                     .translate('total_due'),
                                 textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeSMedium,
+                                fontSize: GlobalVariables.textSizeSMedium,
                               ),
                               double.parse(loginDashBoardResponse.duesRs) > 0
                                   ? text(
-                                      getBillPaymentStatus(loginDashBoardResponse),
-                                      textColor: getBillPaymentStatusColor(loginDashBoardResponse),
-                                          fontSize: GlobalVariables.textSizeSMedium,
-                                          fontWeight: FontWeight.bold,
+                                      getBillPaymentStatus(
+                                          loginDashBoardResponse),
+                                      textColor: getBillPaymentStatusColor(
+                                          loginDashBoardResponse),
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      fontWeight: FontWeight.bold,
                                     )
                                   : text(
                                       'Paid',
                                       textColor: GlobalVariables.green,
-                                          fontSize: GlobalVariables.textSizeSMedium,
-                                          fontWeight: FontWeight.bold,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      fontWeight: FontWeight.bold,
                                     ),
                             ],
                           ),
@@ -1761,23 +1818,29 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             children: <Widget>[
                               text(
                                 " Rs. " +
-                                    double.parse(loginDashBoardResponse.duesRs).toStringAsFixed(2),
+                                    double.parse(loginDashBoardResponse.duesRs)
+                                        .toStringAsFixed(2),
                                 textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeLarge,
-                                    fontWeight: FontWeight.bold,
+                                fontSize: GlobalVariables.textSizeLarge,
+                                fontWeight: FontWeight.bold,
                               ),
                               Visibility(
-                                visible:
-                                    double.parse(loginDashBoardResponse.duesRs) > 0 ? true : false,
+                                visible: double.parse(
+                                            loginDashBoardResponse.duesRs) >
+                                        0
+                                    ? true
+                                    : false,
                                 child: text(
-                                  loginDashBoardResponse.duesDate.length > 0 && loginDashBoardResponse.duesDate != '-'
+                                  loginDashBoardResponse.duesDate.length > 0 &&
+                                          loginDashBoardResponse.duesDate != '-'
                                       ? GlobalFunctions.convertDateFormat(
-                                      loginDashBoardResponse.duesDate, 'dd-MM-yyyy')
+                                          loginDashBoardResponse.duesDate,
+                                          'dd-MM-yyyy')
                                       : '-',
                                   //textAlign: TextAlign.center,
                                   textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                      fontWeight: FontWeight.bold,
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -1811,7 +1874,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     AppLocalizations.of(context)
                                         .translate('transaction_history'),
                                     textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeMedium,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
                                 GestureDetector(
@@ -1831,7 +1894,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     AppLocalizations.of(context)
                                         .translate('pay_now'),
                                     textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeMedium,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
                               ],
@@ -1873,8 +1936,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             child: text(
               AppLocalizations.of(context).translate('erp_acc_not'),
               textColor: GlobalVariables.black,
-                  fontSize: GlobalVariables.textSizeLargeMedium,
-                  fontWeight: FontWeight.bold,
+              fontSize: GlobalVariables.textSizeLargeMedium,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -1901,9 +1964,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide(color: GlobalVariables.green)),
                 child: text(
-                  AppLocalizations.of(context).translate('i_am_interested'),
-    fontSize: GlobalVariables.textSizeMedium,textColor: GlobalVariables.white
-                ),
+                    AppLocalizations.of(context).translate('i_am_interested'),
+                    fontSize: GlobalVariables.textSizeMedium,
+                    textColor: GlobalVariables.white),
               ),
             ),
           ),
@@ -1912,35 +1975,31 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     );
   }
 
-  getDisplayName() {
-    GlobalFunctions.getDisplayName().then((value) {
-      name = value;
-      GlobalVariables.userNameValueNotifer.notifyListeners();
-    });
+  Future<void> getSharedPreferenceData() async {
+    //userId = await GlobalFunctions.getUserId();
+    name = await GlobalFunctions.getDisplayName();
+    GlobalVariables.userNameValueNotifer.notifyListeners();
+    photo = await GlobalFunctions.getPhoto();
+    GlobalVariables.userImageURLValueNotifer.notifyListeners();
+    phone = await GlobalFunctions.getMobile();
+    email = await GlobalFunctions.getUserName();
+    consumerId = await GlobalFunctions.getConsumerID();
+    societyName = await GlobalFunctions.getSocietyName();
+    flat = await GlobalFunctions.getFlat();
+    block = await GlobalFunctions.getBlock();
+    societyId = await GlobalFunctions.getSocietyId();
+
+   // print('UserId : ' + userId);
+    print('Name : ' + name);
+    print('Photo : ' + photo);
+    print('Phone : ' + phone);
+    print('EmailId : ' + email);
+    print('ConsumerId : ' + consumerId);
+    print('societyName : ' + societyName);
+    setState(() {});
   }
 
-  getMobile() {
-    GlobalFunctions.getMobile().then((value) {
-      phone = value;
-      getEmail();
-    });
-  }
-
-  getEmail() {
-    GlobalFunctions.getUserId().then((value) {
-      email = value;
-    });
-  }
-
-  void getPhoto() {
-    GlobalFunctions.getPhoto().then((value) {
-      photo = value;
-      GlobalVariables.userImageURLValueNotifer.notifyListeners();
-      print('profile image : ' + photo.toString());
-    });
-  }
-
-  Future<void> redirectToPage(String item) async {
+  Future<void> redirectToPage(String item,BuildContext context) async {
     if (item == AppLocalizations.of(context).translate('my_unit')) {
       //Redirect to my Unit
       final result = await Navigator.push(
@@ -2165,16 +2224,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
-    }else if (item ==
-        AppLocalizations.of(context).translate('broadcast')) {
+    } else if (item == AppLocalizations.of(context).translate('broadcast')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
-      Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BaseBroadcast()))
+      Navigator.push(
+              context, MaterialPageRoute(builder: (context) => BaseBroadcast()))
           .then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });
-    }else if (item ==
+    } else if (item ==
         AppLocalizations.of(context).translate('user_management')) {
       //Redirect to  Help Desk
       // GlobalFunctions.showToast("Coming Soon...");
@@ -2231,7 +2289,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (BuildContext context, StateSetter setState) {
                 return Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: displayLogoutLayout(),
                 );
               }));
@@ -2248,9 +2306,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           Container(
             child: text(
               AppLocalizations.of(context).translate('sure_logout'),
-                  fontSize: GlobalVariables.textSizeLargeMedium,
-                  textColor: GlobalVariables.black,
-                  fontWeight: FontWeight.bold,
+              fontSize: GlobalVariables.textSizeLargeMedium,
+              textColor: GlobalVariables.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -2266,9 +2324,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                       textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
                 Container(
@@ -2279,8 +2337,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       child: text(
                         AppLocalizations.of(context).translate('no'),
                         textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
               ],
@@ -2315,7 +2373,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             builder: (context) => BaseDisplayProfileInfo(userId, userType)));
     if (result == 'profile') {
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
-      Provider.of<LoginDashBoardResponse>(context,listen: false).geProfileData().then((value) {});
+      Provider.of<LoginDashBoardResponse>(context, listen: false)
+          .geProfileData()
+          .then((value) {});
     } else {
       GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
     }
@@ -2460,8 +2520,123 @@ class RootTitle {
   String rootIconData;
 
   //IconData innerIconData;
-  List<String> items;
+  List<RootTitle> items;
 
   RootTitle(
-      {this.title, this.rootIconData, /* this.innerIconData, */ this.items});
+      {this.title,
+      this.rootIconData,
+      /* this.innerIconData, */ this.items = const <RootTitle>[]});
+}
+
+class EntryItem extends StatefulWidget {
+  const EntryItem(this.entry, this.position, this.context);
+
+  final context;
+  final position;
+  final RootTitle entry;
+
+  @override
+  _EntryItemState createState() => _EntryItemState();
+}
+
+class _EntryItemState extends State<EntryItem> {
+
+  int _activeMeterIndex;
+  Widget _buildTitle(RootTitle root){
+    return Container(
+      // color: GlobalVariables.green,
+      //transform: Matrix4.translationValues(0, 0, -10.0),
+      child: Row(
+        children: <Widget>[
+          Container(
+              width: 26,
+              height: 26,
+              //  color: GlobalVariables.veryLightGray,
+              child: AppAssetsImage(
+                root.rootIconData,
+                imageColor: GlobalVariables.grey,
+                imageWidth: 25,
+                imageHeight: 25,
+              )),
+          Flexible(
+            child: Container(
+              alignment: Alignment.topLeft,
+              // color: GlobalVariables.lightGray,
+              margin: EdgeInsets.fromLTRB(20, 8, 0, 8),
+              child: text(
+                root.title,
+                textColor: GlobalVariables.black,
+                fontSize: GlobalVariables.textSizeMedium,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTiles(RootTitle root) {
+    if (root.items.isEmpty) {
+      return ListTile(
+        title: InkWell(
+            onTap: (){
+              DashBoardState().redirectToPage(root.title,context);
+            },
+            child: _buildTitle(root)),
+      );
+    }
+    return ExpansionTile(
+      key: PageStorageKey<RootTitle>(root),
+      title: _buildTitle(root),
+      children: root.items.map<Widget>(_buildChildrenTiles).toList(),
+
+    );
+  }
+
+  /*ExpansionTile(
+      onExpansionChanged: (value){
+        setState(() {
+          _activeMeterIndex = _activeMeterIndex == widget.position ? null : widget.position;
+        });
+      },
+      key: PageStorageKey<RootTitle>(root),
+      title: _buildTitle(root),
+      children: root.items.map<Widget>(_buildChildrenTiles).toList(),
+    );*/
+
+  Widget _buildChildrenTiles(RootTitle root) {
+    return InkWell(
+      onTap: (){
+        DashBoardState().redirectToPage(root.title,context);
+      },
+      child: Container(
+        // color: GlobalVariables.grey,
+        margin: EdgeInsets.fromLTRB(55, 0, 0, 0),
+        child: Row(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                  color: GlobalVariables.green, shape: BoxShape.circle),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(20, 8, 0, 8),
+              child: text(root.title,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  textColor: GlobalVariables.grey),
+            ),
+          ],
+        ),
+        // title: text(root.title,fontSize: GlobalVariables.textSizeSMedium,textColor: GlobalVariables.black),
+        //children: root.items.map<Widget>(_buildTiles).toList(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(widget.entry);
+  }
 }

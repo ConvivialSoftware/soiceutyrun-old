@@ -164,12 +164,12 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     }
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
+        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           child: Column(
             children: <Widget>[

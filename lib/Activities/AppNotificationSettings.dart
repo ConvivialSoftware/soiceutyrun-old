@@ -137,13 +137,13 @@ class _BaseAppNotificationSettingsState
   inAppCall() {
     return Container(
       margin:
-          EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
+          EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 30, 18, 0),
       child: Card(
         shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
         elevation: 2.0,
         // shadowColor: GlobalVariables.green.withOpacity(0.3),
-        margin: EdgeInsets.all(15),
+        //margin: EdgeInsets.all(15),
         color: GlobalVariables.white,
         child: Column(
           children: [
@@ -206,13 +206,13 @@ class _BaseAppNotificationSettingsState
   dailyHelps() {
     print('isDailyEntryNotification1 : ' + isDailyEntryNotification.toString());
     return Container(
-      //margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
+      margin: EdgeInsets.fromLTRB(18,15, 18, 0),
       child: Card(
         shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
         elevation: 2.0,
         // shadowColor: GlobalVariables.green.withOpacity(0.3),
-        margin: EdgeInsets.all(15),
+       // margin: EdgeInsets.all(15),
         color: GlobalVariables.white,
         child: Container(
           padding: EdgeInsets.all(15),
@@ -343,13 +343,13 @@ class _BaseAppNotificationSettingsState
   yourGuest() {
     print('isGuestEntryNotification1 : ' + isGuestEntryNotification.toString());
     return Container(
-      //margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 30, 0, 0),
+      margin: EdgeInsets.fromLTRB(18, 15, 18, 0),
       child: Card(
         shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0))),
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
         elevation: 2.0,
         // shadowColor: GlobalVariables.green.withOpacity(0.3),
-        margin: EdgeInsets.all(15),
+       // margin: EdgeInsets.all(15),
         color: GlobalVariables.white,
         child: Container(
           padding: EdgeInsets.all(15),

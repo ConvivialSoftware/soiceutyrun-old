@@ -21,6 +21,7 @@ import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -380,8 +381,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
       UserManagementResponse userManagementResponse) {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
+      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
       //padding: EdgeInsets.all(10),
       // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
@@ -405,13 +405,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
       int position, UserManagementResponse userManagementResponse) {
     return InkWell(
       onTap: () async {},
-      child: Container(
-        padding: EdgeInsets.all(16),
-        width: MediaQuery.of(context).size.width / 1.1,
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: GlobalVariables.white),
+      child: AppContainer(
         child: Column(
           children: [
             Row(
@@ -460,7 +454,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
             ),
           ],
         ),
-      ),
+      )
     );
   }
 

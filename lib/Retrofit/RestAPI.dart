@@ -3395,7 +3395,10 @@ class RestAPI implements RestClient,
       GlobalVariables.societyId: societyId,
       GlobalVariables.block: block,
     });
-    print(GlobalVariables.societyId + ": " + societyId);
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.block: block,
+    }.toString());
   //  print(GlobalVariables.block + ": " + block);
 
     print('baseurl : ' + baseUrl + GlobalVariables.unitDetailsAPI);

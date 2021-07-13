@@ -11,6 +11,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -144,12 +145,12 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
   getAlreadyPaidLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(20, 40, 20, 40),
+        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -666,13 +667,9 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
             builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0)),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  color: GlobalVariables.transparent,
-                   width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height/4,
-                  child: Column(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: AppContainer(
+                  child:  Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
@@ -682,15 +679,15 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                           imageHeight: 80,
                         ),
                       ),
-                     /* Container(
+                      /* Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: Text(AppLocalizations.of(context)
                               .translate('successful_payment'))),*/
                       Container(
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: text(AppLocalizations.of(context)
-                              .translate('already_paid_status'),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeLargeMedium,fontWeight: FontWeight.bold
-                          ),
+                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: text(AppLocalizations.of(context)
+                            .translate('already_paid_status'),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                        ),
                       ),Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: text(AppLocalizations.of(context)
@@ -703,12 +700,12 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                         child: FlatButton(onPressed: (){
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
-                        }, child: text(AppLocalizations.of(context).translate('okay'),textColor: GlobalVariables.green,fontSize: 20,fontWeight: FontWeight.bold
+                        }, child: text(AppLocalizations.of(context).translate('okay'),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
                         ),),
                       ),
                     ],
                   ),
-                ),
+                )
               );
             }));
   }

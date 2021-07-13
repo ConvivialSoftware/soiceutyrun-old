@@ -20,6 +20,7 @@ import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -127,7 +128,7 @@ class MemberPendingRequestState
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 12, 10, 0),
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -147,23 +148,15 @@ class MemberPendingRequestState
 
   getMemberPendingRequestListItemLayout(
       int position, UserManagementResponse value) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: GlobalVariables.white),
+    return AppContainer(
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     alignment: Alignment.topLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,24 +172,24 @@ class MemberPendingRequestState
                                       value.pendingRequestList[position].NAME,
                                       textColor: GlobalVariables.green,
                                       fontSize:
-                                          GlobalVariables.textSizeLargeMedium,
+                                      GlobalVariables.textSizeMedium,
                                       fontWeight: FontWeight.bold,
                                       textStyleHeight: 1.0),
                                 ),
                               ],
                             ),
                             Container(
-                              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                               decoration: boxDecoration(
                                 bgColor: GlobalVariables.skyBlue,
                                 color: GlobalVariables.white,
-                                radius: GlobalVariables.textSizeNormal,
+                                radius: GlobalVariables.textSizeSmall,
                               ),
                               child: text(
                                 value.pendingRequestList[position].BLOCK +
                                     ' ' +
                                     value.pendingRequestList[position].FLAT,
-                                fontSize: GlobalVariables.textSizeSMedium,
+                                fontSize: GlobalVariables.textSizeSmall,
                                 textColor: GlobalVariables.white,
                                 textStyleHeight: 1.5,
                                 fontWeight: FontWeight.bold,
@@ -227,8 +220,8 @@ class MemberPendingRequestState
                         Container(
                           child: text(
                               value.pendingRequestList[position].TYPE,
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeSmall,
+                              textColor: GlobalVariables.grey,
                               textStyleHeight: 1.5),
                         ),
                         divider(),
@@ -243,7 +236,7 @@ class MemberPendingRequestState
                                         builder: (BuildContext context, StateSetter setState) {
                                           return Dialog(
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(25.0)),
+                                                  borderRadius: BorderRadius.circular(10.0)),
                                               child: Container(
                                                 padding: EdgeInsets.all(20),
                                                 width: MediaQuery.of(context).size.width / 1.3,
@@ -307,7 +300,7 @@ class MemberPendingRequestState
                                 child: text(
                                     AppLocalizations.of(context)
                                         .translate('cancel'),
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontSize: GlobalVariables.textSizeSMedium,
                                     fontWeight: FontWeight.bold,
                                     textColor: GlobalVariables.green),
                               ),
@@ -320,64 +313,64 @@ class MemberPendingRequestState
                                     builder: (BuildContext context) => StatefulBuilder(
                                         builder: (BuildContext context, StateSetter setState) {
                                           return Dialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(25.0)),
-                                            child: Container(
-                                              padding: EdgeInsets.all(20),
-                                              width: MediaQuery.of(context).size.width / 1.3,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Container(
-                                                    child: text(
-                                                        AppLocalizations.of(context).translate('sure_approve'),
-                                                        fontSize: GlobalVariables.textSizeLargeMedium,
-                                                        textColor: GlobalVariables.black,
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
-                                                      children: <Widget>[
-                                                        Container(
-                                                          child: FlatButton(
-                                                            onPressed: () {
-                                                              Navigator.of(context).pop();
-                                                              _progressDialog.show();
-                                                              Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID).then((value) {
-
-                                                                _progressDialog.hide();
-                                                                GlobalFunctions.showToast(value.message);
-                                                                print('value : '+value.toString());
-
-                                                              });
-                                                            },
-                                                            child: text(
-                                                                AppLocalizations.of(context).translate('yes'),
-                                                                textColor: GlobalVariables.green,
-                                                                fontSize: GlobalVariables.textSizeMedium,
-                                                                fontWeight: FontWeight.bold),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          child: FlatButton(
-                                                            onPressed: () {
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                            child: text(
-                                                                AppLocalizations.of(context).translate('no'),
-                                                                textColor: GlobalVariables.green,
-                                                                fontSize: GlobalVariables.textSizeMedium,
-                                                                fontWeight: FontWeight.bold),
-                                                          ),
-                                                        ),
-                                                      ],
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0)),
+                                              child: Container(
+                                                padding: EdgeInsets.all(20),
+                                                width: MediaQuery.of(context).size.width / 1.3,
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child: text(
+                                                          AppLocalizations.of(context).translate('sure_approve'),
+                                                          fontSize: GlobalVariables.textSizeLargeMedium,
+                                                          textColor: GlobalVariables.black,
+                                                          fontWeight: FontWeight.bold),
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                            )
+                                                    Container(
+                                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                        children: <Widget>[
+                                                          Container(
+                                                            child: FlatButton(
+                                                              onPressed: () {
+                                                                Navigator.of(context).pop();
+                                                                _progressDialog.show();
+                                                                Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID).then((value) {
+
+                                                                  _progressDialog.hide();
+                                                                  GlobalFunctions.showToast(value.message);
+                                                                  print('value : '+value.toString());
+
+                                                                });
+                                                              },
+                                                              child: text(
+                                                                  AppLocalizations.of(context).translate('yes'),
+                                                                  textColor: GlobalVariables.green,
+                                                                  fontSize: GlobalVariables.textSizeMedium,
+                                                                  fontWeight: FontWeight.bold),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: FlatButton(
+                                                              onPressed: () {
+                                                                Navigator.of(context).pop();
+                                                              },
+                                                              child: text(
+                                                                  AppLocalizations.of(context).translate('no'),
+                                                                  textColor: GlobalVariables.green,
+                                                                  fontSize: GlobalVariables.textSizeMedium,
+                                                                  fontWeight: FontWeight.bold),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
                                           );
                                         }));
 
@@ -386,7 +379,7 @@ class MemberPendingRequestState
                                 child: text(
                                     AppLocalizations.of(context)
                                         .translate('Approve'),
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontSize: GlobalVariables.textSizeSMedium,
                                     fontWeight: FontWeight.bold,
                                     textColor: GlobalVariables.green),
                               ),

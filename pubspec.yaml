@@ -167,6 +167,7 @@ flutter:
     - assets/menu_assets/Support_icon_menu.svg
     - assets/menu_assets/admin_icon_menu.svg
     - assets/menu_assets/settings.svg
+    - assets/menu_assets/switch.svg
     - assets/bottom_menu/bottom_bg.svg
     - assets/bottom_menu/bottom_building_icon.svg
     - assets/bottom_menu/bottom_club_icon.svg

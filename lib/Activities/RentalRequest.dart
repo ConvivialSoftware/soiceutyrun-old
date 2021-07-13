@@ -26,6 +26,7 @@ import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -143,9 +144,8 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                value.rentalRequestList.length > 0
-                    ? getRentalRequestListDataLayout(value)
-                    : GlobalFunctions.loadingWidget(context),
+                !value.isLoading
+                    ? getRentalRequestListDataLayout(value) : GlobalFunctions.loadingWidget(context),
               ],
             ),
           ),
@@ -161,7 +161,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 15, 10, 0),
+                0, MediaQuery.of(context).size.height / 15, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -191,17 +191,11 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context)=> BaseRentalRequestUserDetails(value.rentalRequestList[position])));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: GlobalVariables.white),
+      child: AppContainer(
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(8),
+             // padding: EdgeInsets.all(8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -222,24 +216,24 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                                     child: text(tenantName.replaceFirst(",", ""),
                                         textColor: GlobalVariables.green,
                                         fontSize:
-                                            GlobalVariables.textSizeLargeMedium,
+                                        GlobalVariables.textSizeSMedium,
                                         fontWeight: FontWeight.bold,
                                         textStyleHeight: 1.0),
                                   ),
                                 ],
                               ),
                               Container(
-                                padding: EdgeInsets.fromLTRB(15, 3, 15, 5),
+                                padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                                 decoration: boxDecoration(
                                   bgColor: GlobalVariables.skyBlue,
                                   color: GlobalVariables.white,
-                                  radius: GlobalVariables.textSizeNormal,
+                                  radius: GlobalVariables.textSizeSmall,
                                 ),
                                 child: text(
                                     tenantDetailsList[0].BLOCK +
                                         ' ' +
                                         tenantDetailsList[0].FLAT,
-                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.white,
                                     fontWeight: FontWeight.bold),
                               ),

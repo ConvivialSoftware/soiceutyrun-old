@@ -20,6 +20,7 @@ import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -159,7 +160,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
@@ -188,21 +189,16 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
       inDays = inDays.toString()+ ' days';
     }
 
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: GlobalVariables.white),
+    return AppContainer(
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(8),
+            //padding: EdgeInsets.all(8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
+                  margin: EdgeInsets.only(top: 5),
                   // padding: EdgeInsets.all(20),
                   // alignment: Alignment.center,
                   /* decoration: BoxDecoration(
@@ -210,25 +206,25 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                     child: photo.isEmpty
                         ? AppAssetsImage(
                       GlobalVariables.componentUserProfilePath,
-                      imageWidth: 60.0,
-                      imageHeight: 60.0,
+                      imageWidth: 30.0,
+                      imageHeight: 30.0,
                       borderColor: GlobalVariables.grey,
                       borderWidth: 1.0,
                       fit: BoxFit.cover,
-                      radius: 30.0,
+                      radius: 15.0,
                     )
                         : AppNetworkImage(
                       photo,
-                      imageWidth: 60.0,
-                      imageHeight: 60.0,
+                      imageWidth: 30.0,
+                      imageHeight: 30.0,
                       borderColor: GlobalVariables.grey,
                       borderWidth: 1.0,
                       fit: BoxFit.cover,
-                      radius: 30.0,
+                      radius: 15.0,
                     )),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     alignment: Alignment.topLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,15 +242,15 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                               decoration: boxDecoration(
                                 bgColor: GlobalVariables.skyBlue,
                                 color: GlobalVariables.white,
-                                radius: GlobalVariables.textSizeNormal,
+                                radius: GlobalVariables.textSizeVerySmall,
                               ),
                               child: text(
                                   userManagementResponse.mobileUserList[position].BLOCK + ' ' + userManagementResponse.mobileUserList[position].FLAT,
-                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  fontSize: GlobalVariables.textSizeVerySmall,
                                   textColor: GlobalVariables.white,
                                   fontWeight: FontWeight.bold
                               ),
@@ -275,15 +271,15 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                             Container(
                               child: text(
                                   userManagementResponse.mobileUserList[position].TYPE,
-                                  fontSize: GlobalVariables.textSizeSMedium,
-                                  textColor: GlobalVariables.black,
-                                  textStyleHeight: 1.5
+                                  fontSize: GlobalVariables.textSizeSmall,
+                                  textColor: GlobalVariables.grey,
+                                  textStyleHeight: 1.0
                               ),
                             ),
                             Row(
                               children: [
                                 Container(
-                                  child: AppIcon(Icons.access_time,iconSize: GlobalVariables.textSizeSMedium,iconColor: GlobalVariables.grey,),
+                                  child: AppIcon(Icons.access_time,iconSize: GlobalVariables.textSizeSmall,iconColor: GlobalVariables.grey,),
                                 ),
                                 SizedBox(width: 4,),
                                 Container(
@@ -294,8 +290,8 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                                           .LAST_LOGIN ==
                                           '0000-00-00 00:00:00'
                                           ? 'Never' :
-                                          inDays.toString(),
-                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      inDays.toString(),
+                                      fontSize: GlobalVariables.textSizeSmall,
                                       textColor: GlobalVariables.grey,
                                       textStyleHeight: 1.0
                                   ),
@@ -363,10 +359,10 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
-      padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
+          10, MediaQuery.of(context).size.height / 15, 10, 0),
+      //padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
-          color: GlobalVariables.white,
+          color: GlobalVariables.transparent,
           borderRadius: BorderRadius.circular(20)),
 
       child: Builder(
@@ -396,15 +392,9 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
 
         });
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: GlobalVariables.white),
+      child: AppContainer(
         child: Column(
           children: [
-
             Row(
               children: [
                 Container(
@@ -477,7 +467,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
 
           ],
         ),
-      ),
+      )
     );
   }
 

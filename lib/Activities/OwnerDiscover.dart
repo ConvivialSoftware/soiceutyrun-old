@@ -243,7 +243,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
     return Container(
       //padding: EdgeInsets.all(10),
       margin:
-          EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 15, 0, 0),
+          EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 15, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,

@@ -123,7 +123,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
               // height: MediaQuery.of(context).size.height / 0.5,
               decoration: BoxDecoration(
                   color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(10)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -166,7 +166,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
               // height: MediaQuery.of(context).size.height / 0.5,
               decoration: BoxDecoration(
                   color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(10)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -223,14 +223,15 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
           return StatefulBuilder(builder: (BuildContext context, _setState){
             return Dialog(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0)),
+                  borderRadius: BorderRadius.circular(10.0)),
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: GlobalVariables.white),
                     // height: MediaQuery.of(context).size.width * 1.0,
                     child: SingleChildScrollView(
@@ -377,7 +378,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                                       Container(
                                         width: double.infinity,
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                                         decoration: BoxDecoration(
                                             color: GlobalVariables.white,
                                             borderRadius: BorderRadius.circular(10),

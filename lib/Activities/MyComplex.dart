@@ -26,6 +26,7 @@ import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Models/Poll.dart';
 import 'package:societyrun/Models/PollOption.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
@@ -265,7 +266,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         ? Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -280,13 +281,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   }
 
   getNewsBoardListItemLayout(var position, MyComplexResponse value) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
+    return AppContainer(
+      /*width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
+          color: GlobalVariables.white),*/
       child: Column(
         children: <Widget>[
           Container(
@@ -670,7 +671,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         ? Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -685,13 +686,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   }
 
   getMeetingsListItemLayout(var position, MyComplexResponse value) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
+    return AppContainer(
+      /*width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
+          color: GlobalVariables.white),*/
       child: Column(
         children: <Widget>[
           Container(
@@ -1081,7 +1082,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 20, 10, 0),
+          10, MediaQuery.of(context).size.height / 15, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -1129,13 +1130,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('>>>>> ' + position.toString());
     print('>>>>> value.pollList[position].VOTED_TO.length : ' +
         value.pollList[position].VOTED_TO.length.toString());
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
+    return AppContainer(
+     /* width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
+          color: GlobalVariables.white),*/
       child: Column(
         children: <Widget>[
           Container(
@@ -1416,7 +1417,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 150.0),
-                Align(
+               /* Align(
                   alignment: Alignment.topCenter,
                   child: Container(
                     width:
@@ -1429,7 +1430,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     ),
                     // child: getSearchFilerLayout(),
                   ),
-                ),
+                ),*/
                 value.isLoading ? GlobalFunctions.loadingWidget(context):  getDirectoryListDataLayout(value),
               ],
             ),
@@ -1568,27 +1569,30 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return Column(
       children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          //color: GlobalVariables.grey,
+          margin: EdgeInsets.only(left: 8,top: 8),
+          //padding: EdgeInsets.only(left: 16),
           alignment: Alignment.topLeft,
           child: text(
             type,
             textColor: position == 0
                     ? GlobalVariables.white
-                    : GlobalVariables.green,
-                fontSize: GlobalVariables.textSizeNormal,
+                    : GlobalVariables.black,
+            fontSize: GlobalVariables.textSizeMedium,
+            fontWeight: FontWeight.bold,
           ),
         ),
         Container(
           // padding: EdgeInsets.all(5),
-          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+          //margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
 
           // color: GlobalVariables.grey,
           child: Column(
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width / 0.5,
-                padding: EdgeInsets.all(
-                    10), // margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                //width: MediaQuery.of(context).size.width / 0.5,
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.only(left: 8,right: 8,top: 16),
                 //color: GlobalVariables.white,
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
@@ -1618,10 +1622,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   }
                 },
                 child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(
-                        10), //margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    //color: GlobalVariables.white,
+                    padding: EdgeInsets.all(16),
+                    margin: EdgeInsets.only(left: 8,right: 8,bottom: 8),
                     decoration: BoxDecoration(
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.only(
@@ -2053,7 +2055,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     width:
                         MediaQuery.of(context).size.width / 1.1, // height: 50,
                     margin: EdgeInsets.fromLTRB(
-                        0, MediaQuery.of(context).size.height / 15, 0, 0),
+                        10, MediaQuery.of(context).size.height / 15, 10, 0),
                     decoration: BoxDecoration(
                       color: GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(30),
@@ -2085,7 +2087,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 //  color: GlobalVariables.grey,
                 //padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(
-                    10, MediaQuery.of(context).size.height / 40, 10, 0),
+                    10, MediaQuery.of(context).size.height / 15, 10, 0),
                 child: Builder(
                     builder: (context) => ListView.builder(
                           // scrollDirection: Axis.vertical,
@@ -2102,13 +2104,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   getEventsListItemLayout(var position, MyComplexResponse value) {
     // int _default;
 
-    return Container(
-      width: MediaQuery.of(context).size.width / 0.5,
+    return AppContainer(
+    /*  width: MediaQuery.of(context).size.width / 0.5,
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
+          color: GlobalVariables.white),*/
       child: Column(
         children: <Widget>[
           Container(
@@ -2520,7 +2522,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('getDocumentListDataLayout Tab Call');
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(20, 80, 20, 0),
+      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height/15, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -2535,13 +2537,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getDocumentListItemLayout(int position, MyComplexResponse value) {
     print('getDocumentListItemLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
+    return AppContainer(
+     /* width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),
+          color: GlobalVariables.white),*/
       child: Column(
         children: <Widget>[
           Container(

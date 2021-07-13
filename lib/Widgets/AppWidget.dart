@@ -136,7 +136,7 @@ Widget longText(var text,
 
 Widget divider({var thickness = 1.0}) {
   return Padding(
-    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+    padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
     child: Divider(
       color: GlobalVariables.lightGray,
       thickness: thickness,

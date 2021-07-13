@@ -94,7 +94,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
   getHomeCareListDataLayout(ServicesResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+      margin: EdgeInsets.fromLTRB(18, 40, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
              scrollDirection: Axis.vertical,
@@ -209,7 +209,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius:
                                                             BorderRadius.circular(
-                                                                25.0)),
+                                                                10.0)),
                                                         child: showMyRattingBar(setState,servicesList[position].S_Id));
                                                   }));
 

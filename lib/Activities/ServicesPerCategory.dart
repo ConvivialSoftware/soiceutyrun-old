@@ -91,7 +91,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
   getHomeCareListDataLayout(ServicesResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 10, 0, 0),
+      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
       child: Builder(
           builder: (context) => ListView.builder(
              scrollDirection: Axis.vertical,
@@ -111,121 +111,121 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
             builder: (context) =>
                 BaseDescriptionOfHomeService(value.servicesList[position],)));
       },
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Container(
-            decoration: boxDecoration(radius: 10),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 16,top: 8,right: 16,bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Container(
+        margin: EdgeInsets.all(8),
+       // padding: EdgeInsets.only(top: 8,right: 8,bottom: 8),
+        decoration: boxDecoration(radius: 10),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 16,top: 8,right: 16,bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        text(value.servicesList[position].Name,
+                            fontSize: GlobalVariables.textSizeNormal,
+                            maxLine: 2,
+                            textColor: GlobalVariables.black,fontWeight: FontWeight.bold),
+                        SizedBox(height: 4),
+                        text(value.servicesList[position].Title,
+                            textColor:
+                            GlobalVariables.grey,
+                            fontSize:
+                            GlobalVariables.textSizeSMedium,
+                            fontWeight: FontWeight.bold,
+                            maxLine: 2),
+                        SizedBox(height: 8),
+                        Container(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child:  Row(
+                                  children: <Widget>[
+                                    Container(
+                                        child: AppIcon(
+                                          Icons.star,
+                                          iconColor:
+                                          GlobalVariables.orangeYellow,
+                                          iconSize: 15,
+                                        )),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          5, 0, 0, 0),
+                                      child: Text(
+                                        value.servicesList[position]
+                                            .Rating,
+                                        style: TextStyle(
+                                          color: GlobalVariables
+                                              .grey,
+                                          fontSize: GlobalVariables.textSizeSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 1,
+                    height: 120,
+                    child: Center(
+                      child: Container(
+                        width: 1,
+                        margin: EdgeInsetsDirectional.only(top: 10, bottom: 10),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: Divider.createBorderSide(context, color: GlobalVariables.lightGray, width: 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            text(value.servicesList[position].Name,
-                                fontSize: GlobalVariables.textSizeNormal,
-                                maxLine: 2,
-                                textColor: GlobalVariables.black,fontWeight: FontWeight.bold),
-                            SizedBox(height: 4),
-                            text(value.servicesList[position].Title,
-                                textColor:
-                                GlobalVariables.grey,
-                                fontSize:
-                                GlobalVariables.textSizeSMedium,
-                                fontWeight: FontWeight.bold,
-                                maxLine: 2),
-                            SizedBox(height: 8),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child:  Row(
-                                      children: <Widget>[
-                                        Container(
-                                            child: AppIcon(
-                                              Icons.star,
-                                              iconColor:
-                                              GlobalVariables.orangeYellow,
-                                              iconSize: 15,
-                                            )),
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              5, 0, 0, 0),
-                                          child: Text(
-                                            value.servicesList[position]
-                                                .Rating,
-                                            style: TextStyle(
-                                              color: GlobalVariables
-                                                  .grey,
-                                              fontSize: GlobalVariables.textSizeSmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: text('Price Starts from',
+                            textColor: GlobalVariables.grey,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                            fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        width: 1,
-                        height: 120,
-                        child: Center(
-                          child: Container(
-                            width: 1,
-                            margin: EdgeInsetsDirectional.only(top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                left: Divider.createBorderSide(context, color: GlobalVariables.lightGray, width: 1),
-                              ),
-                            ),
-                          ),
-                        ),
+                      Container(
+                        child: text('Rs. '+value.servicesList[position].Price,
+                            textColor: GlobalVariables.black,
+                            fontSize: GlobalVariables.textSizeNormal,
+                            fontWeight: FontWeight.bold),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            child: text('Price Starts from',
-                                textColor: GlobalVariables.grey,
-                                fontSize: GlobalVariables.textSizeSMedium,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                            child: text('Rs. '+value.servicesList[position].Price,
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeNormal,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                            child: text(value.servicesList[position].Discount,
-                                textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          //SizedBox(width: 10),
-                        ],
-                      )
+                      Container(
+                        child: text(value.servicesList[position].Discount,
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      //SizedBox(width: 10),
                     ],
-                  ),
-                ),
-                Container(
-                  width: 4,
-                  height: 50,
-                  margin: EdgeInsets.only(top: 32),
-                  color: position % 2 == 0 ? GlobalVariables.lightPurple : GlobalVariables.orangeYellow,
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          )),
+            Container(
+              width: 4,
+              height: 50,
+              margin: EdgeInsets.only(top: 32),
+              color: position % 2 == 0 ? GlobalVariables.lightPurple : GlobalVariables.orangeYellow,
+            )
+          ],
+        ),
+      ),
     );
   }
 

@@ -188,160 +188,150 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   }
 
   getBaseLayout() {
-    return _receiptList.length>0 ? Container(
-      width: MediaQuery.of(context).size.width,
-     // height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-
-                _receiptList.length>0 ?   Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 20, 10, 0),
-                      // margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
-                      padding: EdgeInsets.all(
-                          16), // height: MediaQuery.of(context).size.height / 0.5,
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Column(
-                        //mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            alignment: Alignment.topRight,
-                            child: text(GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") ,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                          ),
-                          SizedBox(height: 4,),
-                          Container(
-                            alignment: Alignment.center,
-                            child: text('Rs. '+double.parse((_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 4,),
-                          Container(
-                            alignment: Alignment.center,
-                            child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
-                          )
-                        ],
+    return _receiptList.length>0 ? SingleChildScrollView(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+       // height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: GlobalVariables.veryLightGray,
+        ),
+        child: Stack(
+          children: <Widget>[
+            GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                context, 150.0),
+            _receiptList.length>0 ?   Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 20, 10, 0),
+                  // margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
+                  padding: EdgeInsets.all(
+                      16), // height: MediaQuery.of(context).size.height / 0.5,
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Column(
+                    //mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: text(GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") ,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                       ),
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 15, 10, 10),
-                      padding: EdgeInsets.all(
-                          10), // height: MediaQuery.of(context).size.height / 0.5,
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Column(
-                        children: <Widget>[
-
-                          Container(
-                            margin: EdgeInsets.fromLTRB(
-                                10, 5, 10, 0),
-                            alignment: Alignment.topLeft,
-                            child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-
-
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  child: text(AppLocalizations.of(context).translate('name')+ " : ",
-                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                  ),
-                                ),
-                                Container(
-                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                  child: text(_receiptList[0].NAME,
-                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-
-
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  child: text(AppLocalizations.of(context).translate('transaction_mode')+ " : ",
-                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                  ),
-                                ),
-                                Container(
-                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                  child: text(_receiptList[0].TRANSACTION_MODE!=null ? _receiptList[0].TRANSACTION_MODE: '-',
-                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  child: text(AppLocalizations.of(context).translate('reference_no')+ " : ",
-                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                  ),
-                                ),
-                                Container(
-                                  //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                  child: text(_receiptList[0].REFERENCE_NO !=null ? _receiptList[0].REFERENCE_NO: '-',
-                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            child: Row(
-                            //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  child: text(AppLocalizations.of(context).translate('narration')+ " : ",
-                                      textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Container(
-                                    child: text(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-',
-                                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium,maxLine: 99,)
-                                    ,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                      SizedBox(height: 4,),
+                      Container(
+                        alignment: Alignment.center,
+                        child: text('Rs. '+double.parse((_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ],
-                ) : SizedBox(),
+                      SizedBox(height: 4,),
+                      Container(
+                        alignment: Alignment.center,
+                        child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 15, 10, 10),
+                  padding: EdgeInsets.all(
+                      10), // height: MediaQuery.of(context).size.height / 0.5,
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Column(
+                    children: <Widget>[
 
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            10, 5, 10, 0),
+                        alignment: Alignment.topLeft,
+                        child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: text(AppLocalizations.of(context).translate('name')+ " : ",
+                                  textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                              ),
+                            ),
+                            Container(
+                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: text(_receiptList[0].NAME,
+                                  textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: text(AppLocalizations.of(context).translate('transaction_mode')+ " : ",
+                                  textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                              ),
+                            ),
+                            Container(
+                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: text(_receiptList[0].TRANSACTION_MODE!=null ? _receiptList[0].TRANSACTION_MODE: '-',
+                                  textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: text(AppLocalizations.of(context).translate('reference_no')+ " : ",
+                                  textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                              ),
+                            ),
+                            Container(
+                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: text(_receiptList[0].REFERENCE_NO !=null ? _receiptList[0].REFERENCE_NO: '-',
+                                  textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Row(
+                        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: text(AppLocalizations.of(context).translate('narration')+ " : ",
+                                  textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
+                              ),
+                            ),
+                            Flexible(
+                              child: Container(
+                                child: text(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-',
+                                  textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium,maxLine: 99,)
+                                ,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-        ],
+            ) : SizedBox(),
+
+          ],
+        ),
       ),
     ) : Container();
   }
@@ -411,7 +401,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
 
               return Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     margin: EdgeInsets.all(5),
                     padding: EdgeInsets.all(10),

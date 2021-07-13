@@ -914,7 +914,7 @@ class GlobalFunctions {
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.all(30),
@@ -960,7 +960,7 @@ class GlobalFunctions {
                 onWillPop: () {},
                 child: Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(30),
@@ -1035,7 +1035,7 @@ class GlobalFunctions {
                 },
                 child: Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(30),
@@ -1237,7 +1237,7 @@ class GlobalFunctions {
                 },
                 child: Dialog(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0)),
+                      borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(20),
@@ -1320,7 +1320,7 @@ class GlobalFunctions {
                 builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.all(10),

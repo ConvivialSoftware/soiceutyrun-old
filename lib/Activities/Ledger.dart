@@ -102,7 +102,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     context, 200.0),
                 value.isLoading ? SizedBox() : Container(
                   margin: EdgeInsets.fromLTRB(
-                      10, MediaQuery.of(context).size.height / 30, 10, 0),
+                      18, MediaQuery.of(context).size.height / 30, 18, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -202,8 +202,8 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 ),
                 value.isLoading ? GlobalFunctions.loadingWidget(context) :   value.ledgerList.length > 0
                     ? Container(
-                        margin: EdgeInsets.fromLTRB(10,
-                            MediaQuery.of(context).size.height / 8, 10, 100),
+                        margin: EdgeInsets.fromLTRB(18,
+                            MediaQuery.of(context).size.height / 8, 18, 100),
                         alignment: Alignment.topLeft,
                         //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                         // padding: EdgeInsets.all(15),
@@ -216,7 +216,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 value.isLoading ? SizedBox(): Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                          margin: EdgeInsets.fromLTRB(18, 10, 18, 20),
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -272,7 +272,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                                   (BuildContext context, StateSetter setState) {
                             return Dialog(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25.0)),
+                                  borderRadius: BorderRadius.circular(10.0)),
                               child: Flexible(
                                 child: Container(
                                   padding: EdgeInsets.all(16),
