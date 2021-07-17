@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -94,6 +95,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -118,393 +120,414 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-                getAddNewMemberLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+        getAddNewMemberLayout(),
+      ],
     );
   }
 
   getAddNewMemberLayout() {
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
-        padding: EdgeInsets.all(20),
-        // height: MediaQuery.of(context).size.height / 0.5,
-        decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(10)),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('name') + '*',
-                controllerCallback: _nameController,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedGender = "Male";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
+      child: AppContainer(
+        child: Column(
+          children: <Widget>[
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('name') + '*',
+              controllerCallback: _nameController,
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: InkWell(
+                      //  splashColor: GlobalVariables.mediumGreen,
+                      onTap: () {
+                        _selectedGender = "Male";
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: _selectedGender == "Male"
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
                                     color: _selectedGender == "Male"
                                         ? GlobalVariables.green
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _selectedGender == "Male"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
+                                        : GlobalVariables.mediumGreen,
+                                    width: 2.0,
+                                  )),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: text(
+                                AppLocalizations.of(context)
+                                    .translate('male'),
+                                textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                  AppLocalizations.of(context)
-                                      .translate('male'),
-                                  textColor: GlobalVariables.green,
-                                  fontSize: GlobalVariables.textSizeMedium,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedGender = "Female";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: InkWell(
+                      //  splashColor: GlobalVariables.mediumGreen,
+                      onTap: () {
+                        _selectedGender = "Female";
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: _selectedGender == "Female"
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
                                     color: _selectedGender == "Female"
                                         ? GlobalVariables.green
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _selectedGender == "Female"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('female'),
-                                    textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeMedium),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('date_of_birth'),
-                controllerCallback: _dobController,
-                readOnly: true,
-                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                suffixIcon: AppIconButton(
-                  Icons.date_range,
-                  iconColor: GlobalVariables.mediumGreen,
-                  onPressed: () {
-                    GlobalFunctions.getSelectedDateForDOB(context)
-                        .then((value) {
-                      _dobController.text =
-                          value.day.toString().padLeft(2, '0') +
-                              "-" +
-                              value.month.toString().padLeft(2, '0') +
-                              "-" +
-                              value.year.toString();
-                    });
-                  },
-                ),
-              ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('contact1') + '*',
-                controllerCallback: _mobileController,
-                keyboardType: TextInputType.number,
-                maxLength: 10,
-                contentPadding: EdgeInsets.only(top: 14),
-                suffixIcon: AppIconButton(
-                  Icons.phone_android,
-                  iconColor: GlobalVariables.mediumGreen,
-                ),
-              ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('contact2'),
-                controllerCallback: _alterMobileController,
-                keyboardType: TextInputType.number,
-                maxLength: 10,
-                contentPadding: EdgeInsets.only(top: 14),
-                suffixIcon: AppIconButton(
-                  Icons.phone_android,
-                  iconColor: GlobalVariables.mediumGreen,
-                ),
-              ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('email_id'),
-                controllerCallback: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                contentPadding: EdgeInsets.only(top: 14),
-                suffixIcon: AppIconButton(
-                  Icons.email,
-                  iconColor: GlobalVariables.mediumGreen,
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 3,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButtonFormField(
-                          items: __membershipTypeListItems,
-                          value: _selectedMembershipType,
-                          onChanged: changeMembershipTypeDropDownItem,
-                          isExpanded: true,
-                          icon: AppIcon(
-                            Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.mediumGreen,
-                          ),
-                          //underline: SizedBox(),
-                         /* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
-                            textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                          ),*/
-                          decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
-                            labelText: AppLocalizations.of(context)
-                                .translate('membership_type') +
-                                '*',
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                              enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent))
-                           // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
+                                        : GlobalVariables.mediumGreen,
+                                    width: 2.0,
+                                  )),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: text(
+                                  AppLocalizations.of(context)
+                                      .translate('female'),
+                                  textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeMedium),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButtonFormField(
-                          items: __livesHereListItems,
-                          value: _selectedLivesHere,
-                          onChanged: changeLivesHereDropDownItem,
-                          isExpanded: true,
-                          icon: AppIcon(
-                            Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.mediumGreen,
-                          ),
-                         // underline: SizedBox(),
-                          /*hint: text(
-                              AppLocalizations.of(context)
-                                      .translate('lives_here') +
-                                  '*',
-                              textColor: GlobalVariables.lightGray,
-                              fontSize: GlobalVariables.textSizeSMedium),*/
-                          decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
-                              labelText: AppLocalizations.of(context)
-                                  .translate('lives_here') +
-                                  '*',
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  )
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 3,
-                    child: AppTextField(
-                      textHintContent:
-                          AppLocalizations.of(context).translate('occupation'),
-                      controllerCallback: _occupationController,
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('date_of_birth'),
+              controllerCallback: _dobController,
+              readOnly: true,
+              contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              suffixIcon: AppIconButton(
+                Icons.date_range,
+                iconColor: GlobalVariables.mediumGreen,
+                onPressed: () {
+                  GlobalFunctions.getSelectedDateForDOB(context)
+                      .then((value) {
+                    _dobController.text =
+                        value.day.toString().padLeft(2, '0') +
+                            "-" +
+                            value.month.toString().padLeft(2, '0') +
+                            "-" +
+                            value.year.toString();
+                  });
+                },
+              ),
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('contact1') + '*',
+              controllerCallback: _mobileController,
+              keyboardType: TextInputType.number,
+              maxLength: 10,
+              contentPadding: EdgeInsets.only(top: 14),
+              suffixIcon: AppIconButton(
+                Icons.phone_android,
+                iconColor: GlobalVariables.mediumGreen,
+              ),
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('contact2'),
+              controllerCallback: _alterMobileController,
+              keyboardType: TextInputType.number,
+              maxLength: 10,
+              contentPadding: EdgeInsets.only(top: 14),
+              suffixIcon: AppIconButton(
+                Icons.phone_android,
+                iconColor: GlobalVariables.mediumGreen,
+              ),
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('email_id'),
+              controllerCallback: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              contentPadding: EdgeInsets.only(top: 14),
+              suffixIcon: AppIconButton(
+                Icons.email,
+                iconColor: GlobalVariables.mediumGreen,
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 3,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButtonFormField(
+                        items: __membershipTypeListItems,
+                        value: _selectedMembershipType,
+                        onChanged: changeMembershipTypeDropDownItem,
+                        isExpanded: true,
+                        icon: AppIcon(
+                          Icons.keyboard_arrow_down,
+                          iconColor: GlobalVariables.mediumGreen,
+                        ),
+                        //underline: SizedBox(),
+                       /* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
+                          textColor: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium,
+                        ),*/
+                        decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                          labelText: AppLocalizations.of(context)
+                              .translate('membership_type') +
+                              '*',
+                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent))
+                         // border: new CustomBorderTextFieldSkin().getSkin(),
+                        ),
+                      ),
                     ),
                   ),
-                  Flexible(
-                    flex: 2,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButtonFormField(
-                          items: __bloodGroupListItems,
-                          value: _selectedBloodGroup,
-                          onChanged: changeBloodGroupDropDownItem,
-                          isExpanded: true,
-                          icon: AppIcon(
-                            Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.mediumGreen,
-                          ),
-                          decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
-                              labelText: AppLocalizations.of(context)
-                                  .translate('blood_group'),
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
-                          /*underline: SizedBox(),
-                          hint: text(
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButtonFormField(
+                        items: __livesHereListItems,
+                        value: _selectedLivesHere,
+                        onChanged: changeLivesHereDropDownItem,
+                        isExpanded: true,
+                        icon: AppIcon(
+                          Icons.keyboard_arrow_down,
+                          iconColor: GlobalVariables.mediumGreen,
+                        ),
+                       // underline: SizedBox(),
+                        /*hint: text(
                             AppLocalizations.of(context)
-                                .translate('blood_group'),
+                                    .translate('lives_here') +
+                                '*',
                             textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                          ),*/
+                            fontSize: GlobalVariables.textSizeSMedium),*/
+                        decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                            labelText: AppLocalizations.of(context)
+                                .translate('lives_here') +
+                                '*',
+                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent))
+                          // border: new CustomBorderTextFieldSkin().getSkin(),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-              Container(
-                height: 100,
-                child: AppTextField(
-                  textHintContent:
-                      AppLocalizations.of(context).translate('address'),
-                  controllerCallback: _addressController,
-                  maxLines: 99,
-                  contentPadding: EdgeInsets.only(top: 14),
                 ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 3,
+                  child: AppTextField(
+                    textHintContent:
+                        AppLocalizations.of(context).translate('occupation'),
+                    controllerCallback: _occupationController,
+                  ),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.mediumGreen,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButtonFormField(
+                        items: __bloodGroupListItems,
+                        value: _selectedBloodGroup,
+                        onChanged: changeBloodGroupDropDownItem,
+                        isExpanded: true,
+                        icon: AppIcon(
+                          Icons.keyboard_arrow_down,
+                          iconColor: GlobalVariables.mediumGreen,
+                        ),
+                        decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                            labelText: AppLocalizations.of(context)
+                                .translate('blood_group'),
+                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent))
+                          // border: new CustomBorderTextFieldSkin().getSkin(),
+                        ),
+                        /*underline: SizedBox(),
+                        hint: text(
+                          AppLocalizations.of(context)
+                              .translate('blood_group'),
+                          textColor: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium,
+                        ),*/
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              height: 100,
+              child: AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('address'),
+                controllerCallback: _addressController,
+                maxLines: 99,
+                contentPadding: EdgeInsets.only(top: 14),
               ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath == null
-                                ? BoxDecoration(
-                                    color: GlobalVariables.mediumGreen,
-                                    borderRadius: BorderRadius.circular(25),
-                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                                  )
-                                : BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image:
-                                            FileImage(File(attachmentFilePath)),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(
-                                        color: GlobalVariables.green,
-                                        width: 2.0)),
-                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                child: FlatButton.icon(
+            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 50,
+                          height: 50,
+                          margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                          decoration: attachmentFilePath == null
+                              ? BoxDecoration(
+                                  color: GlobalVariables.mediumGreen,
+                                  borderRadius: BorderRadius.circular(25),
+                                  //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                )
+                              : BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image:
+                                          FileImage(File(attachmentFilePath)),
+                                      fit: BoxFit.cover),
+                                  border: Border.all(
+                                      color: GlobalVariables.green,
+                                      width: 2.0)),
+                          //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              child: FlatButton.icon(
+                                onPressed: () {
+                                  if (isStoragePermission) {
+                                    openFile(context);
+                                  } else {
+                                    GlobalFunctions.askPermission(
+                                            Permission.storage)
+                                        .then((value) {
+                                      if (value) {
+                                        openFile(context);
+                                      } else {
+                                        GlobalFunctions.showToast(
+                                            AppLocalizations.of(context)
+                                                .translate(
+                                                    'download_permission'));
+                                      }
+                                    });
+                                  }
+                                },
+                                icon: AppIcon(
+                                  Icons.attach_file,
+                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconSize: 20.0,
+                                ),
+                                label: text(
+                                  AppLocalizations.of(context)
+                                      .translate('attach_photo'),
+                                  textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeSMedium
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: text(
+                                'OR',
+                                textColor: GlobalVariables.lightGray,
+                                fontSize: GlobalVariables.textSizeSMedium
+                              ),
+                            ),
+                            Container(
+                              child: FlatButton.icon(
                                   onPressed: () {
                                     if (isStoragePermission) {
-                                      openFile(context);
+                                      openCamera(context);
                                     } else {
                                       GlobalFunctions.askPermission(
                                               Permission.storage)
                                           .then((value) {
                                         if (value) {
-                                          openFile(context);
+                                          openCamera(context);
                                         } else {
                                           GlobalFunctions.showToast(
                                               AppLocalizations.of(context)
@@ -515,239 +538,204 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                     }
                                   },
                                   icon: AppIcon(
-                                    Icons.attach_file,
+                                    Icons.camera_alt,
                                     iconColor: GlobalVariables.mediumGreen,
+                                    iconSize: 20.0,
                                   ),
                                   label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('attach_photo'),
-                                    textColor: GlobalVariables.green,
+                                      AppLocalizations.of(context)
+                                          .translate('take_picture'),
+                                      textColor: GlobalVariables.green,
                                       fontSize: GlobalVariables.textSizeSMedium
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: text(
-                                  'OR',
-                                  textColor: GlobalVariables.lightGray,
-                                ),
-                              ),
-                              Container(
-                                child: FlatButton.icon(
-                                    onPressed: () {
-                                      if (isStoragePermission) {
-                                        openCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openCamera(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
-                                          }
-                                        });
-                                      }
-                                    },
-                                    icon: AppIcon(
-                                      Icons.camera_alt,
-                                      iconColor: GlobalVariables.mediumGreen,
-                                    ),
-                                    label: text(
-                                        AppLocalizations.of(context)
-                                            .translate('take_picture'),
-                                        textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeSMedium
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentIdentityProofFilePath == null
-                                ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
-                              borderRadius: BorderRadius.circular(25),
-                              //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                            )
-                                : BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image:
-                                    FileImage(File(attachmentIdentityProofFilePath)),
-                                    fit: BoxFit.cover),
-                                border: Border.all(
-                                    color: GlobalVariables.green,
-                                    width: 2.0)),
-                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
-                          Column(
-                            //mainAxisAlignment: MainAxisAlignment.start,
-                            //crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                child: FlatButton.icon(
-                                  onPressed: () {
-                                    if (isStoragePermission) {
-                                      openIdentityProofFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openIdentityProofFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                  'download_permission'));
-                                        }
-                                      });
-                                    }
-                                  },
-                                  icon: AppIcon(
-                                    Icons.attach_file,
-                                    iconColor: GlobalVariables.mediumGreen,
-                                  ),
-                                  label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('attach_identity_proof'),
-                                    textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeSMedium
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                //alignment: Alignment.center,
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: text(
-                                  'OR',
-                                  textColor: GlobalVariables.lightGray,
-                                ),
-                              ),
-                              Container(
-                                child: FlatButton.icon(
-                                    onPressed: () {
-                                      if (isStoragePermission) {
-                                        openIdentityProofCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                            Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openIdentityProofCamera(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                    'download_permission'));
-                                          }
-                                        });
-                                      }
-                                    },
-                                    icon: AppIcon(
-                                      Icons.camera_alt,
-                                      iconColor: GlobalVariables.mediumGreen,
-                                    ),
-                                    label: text(
-                                        AppLocalizations.of(context)
-                                            .translate('take_identity_proof_picture'),
-                                        textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeSMedium
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                child: FlatButton.icon(
-                                  onPressed: () {
-                                    if (isStoragePermission) {
-                                      openPoliceVerificationFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openPoliceVerificationFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                  'download_permission'));
-                                        }
-                                      });
-                                    }
-                                  },
-                                  icon: AppIcon(
-                                    Icons.attach_file,
-                                    iconColor: GlobalVariables.mediumGreen,
-                                  ),
-                                  label: text(
-                                    attachmentPoliceVerificationFileName!=null ? attachmentPoliceVerificationFileName : AppLocalizations.of(context)
-                                        .translate('attach_police_verification'),
-                                    textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeSMedium
-                                  ),
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 45,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: AppButton(
-                  textContent: AppLocalizations.of(context).translate('submit'),
-                  onPressed: () {
-                    verifyInfo();
-                  },
                 ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 50,
+                          height: 50,
+                          margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                          decoration: attachmentIdentityProofFilePath == null
+                              ? BoxDecoration(
+                            color: GlobalVariables.mediumGreen,
+                            borderRadius: BorderRadius.circular(25),
+                            //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                          )
+                              : BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image:
+                                  FileImage(File(attachmentIdentityProofFilePath)),
+                                  fit: BoxFit.cover),
+                              border: Border.all(
+                                  color: GlobalVariables.green,
+                                  width: 2.0)),
+                          //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                        ),
+                        Column(
+                          //mainAxisAlignment: MainAxisAlignment.start,
+                          //crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              child: FlatButton.icon(
+                                onPressed: () {
+                                  if (isStoragePermission) {
+                                    openIdentityProofFile(context);
+                                  } else {
+                                    GlobalFunctions.askPermission(
+                                        Permission.storage)
+                                        .then((value) {
+                                      if (value) {
+                                        openIdentityProofFile(context);
+                                      } else {
+                                        GlobalFunctions.showToast(
+                                            AppLocalizations.of(context)
+                                                .translate(
+                                                'download_permission'));
+                                      }
+                                    });
+                                  }
+                                },
+                                icon: AppIcon(
+                                  Icons.attach_file,
+                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconSize: 20.0,
+                                ),
+                                label: text(
+                                  AppLocalizations.of(context)
+                                      .translate('attach_identity_proof'),
+                                  textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeSMedium
+                                ),
+                              ),
+                            ),
+                            Container(
+                              //alignment: Alignment.center,
+                              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: text(
+                                'OR',
+                                textColor: GlobalVariables.lightGray,
+                                  fontSize: GlobalVariables.textSizeSMedium
+                              ),
+                            ),
+                            Container(
+                              child: FlatButton.icon(
+                                  onPressed: () {
+                                    if (isStoragePermission) {
+                                      openIdentityProofCamera(context);
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                          Permission.storage)
+                                          .then((value) {
+                                        if (value) {
+                                          openIdentityProofCamera(context);
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                  'download_permission'));
+                                        }
+                                      });
+                                    }
+                                  },
+                                  icon: AppIcon(
+                                    Icons.camera_alt,
+                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconSize: 20.0,
+                                  ),
+                                  label: text(
+                                      AppLocalizations.of(context)
+                                          .translate('take_identity_proof_picture'),
+                                      textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeSMedium
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            _selectedMembershipType =="Tenant" ? Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Row(
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              child: FlatButton.icon(
+                                onPressed: () {
+                                  if (isStoragePermission) {
+                                    openPoliceVerificationFile(context);
+                                  } else {
+                                    GlobalFunctions.askPermission(
+                                        Permission.storage)
+                                        .then((value) {
+                                      if (value) {
+                                        openPoliceVerificationFile(context);
+                                      } else {
+                                        GlobalFunctions.showToast(
+                                            AppLocalizations.of(context)
+                                                .translate(
+                                                'download_permission'));
+                                      }
+                                    });
+                                  }
+                                },
+                                icon: AppIcon(
+                                  Icons.attach_file,
+                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconSize: 20.0,
+                                ),
+                                label: text(
+                                  attachmentPoliceVerificationFileName!=null ? attachmentPoliceVerificationFileName : AppLocalizations.of(context)
+                                      .translate('attach_police_verification'),
+                                  textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeSMedium
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ) : SizedBox(),
+            Container(
+              alignment: Alignment.topLeft,
+              height: 45,
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: AppButton(
+                textContent: AppLocalizations.of(context).translate('submit'),
+                onPressed: () {
+                  verifyInfo();
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

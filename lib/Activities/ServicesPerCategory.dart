@@ -5,9 +5,10 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
+import 'package:intl/intl.dart';
 import 'base_stateful.dart';
 
 class BaseServicesPerCategory extends StatefulWidget {
@@ -66,32 +67,18 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
   }
 
   getBaseLayout(ServicesResponse value) {
-    return value.servicesList.length >0 ? Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-                getHomeCareListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return value.servicesList.length >0 ? Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+        getHomeCareListDataLayout(value),
+      ],
     ):GlobalFunctions.noDataFoundLayout(context, "No Services Found for "+ widget.category);
   }
 
   getHomeCareListDataLayout(ServicesResponse value) {
     return Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
+      margin: EdgeInsets.only(top: 8.0),
       child: Builder(
           builder: (context) => ListView.builder(
              scrollDirection: Axis.vertical,
@@ -111,14 +98,10 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
             builder: (context) =>
                 BaseDescriptionOfHomeService(value.servicesList[position],)));
       },
-      child: Container(
-        margin: EdgeInsets.all(8),
-       // padding: EdgeInsets.only(top: 8,right: 8,bottom: 8),
-        decoration: boxDecoration(radius: 10),
+      child: AppContainer(
         child: Stack(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 16,top: 8,right: 16,bottom: 8),
+            IntrinsicHeight(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -126,18 +109,9 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        text(value.servicesList[position].Name,
-                            fontSize: GlobalVariables.textSizeNormal,
-                            maxLine: 2,
-                            textColor: GlobalVariables.black,fontWeight: FontWeight.bold),
+                        primaryText(value.servicesList[position].Name,),
                         SizedBox(height: 4),
-                        text(value.servicesList[position].Title,
-                            textColor:
-                            GlobalVariables.grey,
-                            fontSize:
-                            GlobalVariables.textSizeSMedium,
-                            fontWeight: FontWeight.bold,
-                            maxLine: 2),
+                        secondaryText(value.servicesList[position].Title,),
                         SizedBox(height: 8),
                         Container(
                           child: Row(
@@ -145,25 +119,19 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                             children: [
                               Container(
                                 child:  Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
                                         child: AppIcon(
-                                          Icons.star,
-                                          iconColor:
+                                          Icons.star, iconColor:
                                           GlobalVariables.orangeYellow,
-                                          iconSize: 15,
                                         )),
                                     Container(
                                       margin: EdgeInsets.fromLTRB(
                                           5, 0, 0, 0),
-                                      child: Text(
+                                      child: secondaryText(
                                         value.servicesList[position]
-                                            .Rating,
-                                        style: TextStyle(
-                                          color: GlobalVariables
-                                              .grey,
-                                          fontSize: GlobalVariables.textSizeSmall,
-                                        ),
+                                            .Rating,fontSize: GlobalVariables.textSizeSmall
                                       ),
                                     ),
                                   ],
@@ -175,7 +143,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                       ],
                     ),
                   ),
-                  SizedBox(
+                 /* SizedBox(
                     width: 1,
                     height: 120,
                     child: Center(
@@ -189,7 +157,8 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
+                  VerticalDivider(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
@@ -200,16 +169,24 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                             fontWeight: FontWeight.bold),
                       ),
                       Container(
-                        child: text('Rs. '+value.servicesList[position].Price,
+                        child: text('Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price)),
                             textColor: GlobalVariables.black,
-                            fontSize: GlobalVariables.textSizeNormal,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        child: text(value.servicesList[position].Discount,
-                            textColor: GlobalVariables.green,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          text('Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price)),
+                              textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeSmall,
+                              textDecoration: TextDecoration.lineThrough,
+                              fontWeight: FontWeight.bold),
+                          SizedBox(width: 4,),
+                          text('('+value.servicesList[position].Discount+'%)',
+                              textColor: GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeSmall,
+                              fontWeight: FontWeight.bold)
+                        ],
                       ),
                       //SizedBox(width: 10),
                     ],
@@ -217,12 +194,12 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                 ],
               ),
             ),
-            Container(
+            /*Container(
               width: 4,
               height: 50,
               margin: EdgeInsets.only(top: 32),
               color: position % 2 == 0 ? GlobalVariables.lightPurple : GlobalVariables.orangeYellow,
-            )
+            )*/
           ],
         ),
       ),

@@ -57,6 +57,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         //resizeToAvoidBottomPadding: false,
         appBar: !isHideAppBar ? AppBar(
           backgroundColor: GlobalVariables.green,
@@ -81,25 +82,12 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
   }
 
   getStaffCategoryLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                getStaffCategoryListDataLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 180.0),
+        getStaffCategoryListDataLayout(),
+      ],
     );
   }
 
@@ -107,7 +95,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     return _staffListCount.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 15, 10, 0),
+          0, 16, 0, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -130,6 +118,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
                     BaseStaffListPerCategory(_staffListCount[position].ROLE)));
       },
       child: AppContainer(
+        isListItem: true,
        // width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           children: [
@@ -138,12 +127,12 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    child: text(_staffListCount[position].ROLE,fontSize: GlobalVariables.textSizeMedium),
+                    child: primaryText(_staffListCount[position].ROLE),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: text(_staffListCount[position].Role_count,fontSize: GlobalVariables.textSizeSMedium),
+                  child: text(_staffListCount[position].Role_count,fontSize: GlobalVariables.textSizeSmall),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),

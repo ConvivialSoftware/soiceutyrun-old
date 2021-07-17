@@ -12,6 +12,7 @@ import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -97,6 +98,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
         builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -124,25 +126,12 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
   }
 
   getBaseLayout(HelpDeskResponse value) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-               value.isLoading ? GlobalFunctions.loadingWidget(context) : getRaiseTicketLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+       value.isLoading ? GlobalFunctions.loadingWidget(context) : getRaiseTicketLayout(value),
+      ],
     );
   }
 
@@ -163,379 +152,380 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
       }
     }
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
+      child: AppContainer(
+       /* margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(10)),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topLeft,
-                child: text(
-                  AppLocalizations.of(context).translate('raise_new_ticket'),
-                    textColor: GlobalVariables.green,
-                      fontSize: GlobalVariables.textSizeLargeMedium,
-                      fontWeight: FontWeight.bold,
-                ),
+            borderRadius: BorderRadius.circular(10)),*/
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.topLeft,
+              child: text(
+                AppLocalizations.of(context).translate('raise_new_ticket'),
+                  textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.textSizeLargeMedium,
+                    fontWeight: FontWeight.bold,
               ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('subject') + '*',
-                controllerCallback: complaintSubject,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('subject') + '*',
+              controllerCallback: complaintSubject,
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: InkWell(
+                      //  splashColor: GlobalVariables.mediumGreen,
+                      onTap: () {
 /*
-                          AppLocalizations.of(context)
-                              .translate('personal')*/
-                          complaintType = "Personal";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
+                        AppLocalizations.of(context)
+                            .translate('personal')*/
+                        complaintType = "Personal";
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: complaintType == "Personal"
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
                                     color: complaintType == "Personal"
                                         ? GlobalVariables.green
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: complaintType == "Personal"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
+                                        : GlobalVariables.mediumGreen,
+                                    width: 2.0,
+                                  )),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: text(
+                                AppLocalizations.of(context)
+                                    .translate('personal'),
+                                  textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                  AppLocalizations.of(context)
-                                      .translate('personal'),
-                                    textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          complaintType = "Community";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: InkWell(
+                      //  splashColor: GlobalVariables.mediumGreen,
+                      onTap: () {
+                        complaintType = "Community";
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: complaintType != "Personal"
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
                                     color: complaintType != "Personal"
                                         ? GlobalVariables.green
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: complaintType != "Personal"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                  AppLocalizations.of(context)
-                                      .translate('community'),
+                                        : GlobalVariables.mediumGreen,
+                                    width: 2.0,
+                                  )),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: text(
+                                AppLocalizations.of(context)
+                                    .translate('community'),
     textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                ),
+                                    fontSize: GlobalVariables.textSizeMedium,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 2.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButtonFormField(
-                    items: __categoryListItems,
-                    value: _categorySelectedItem,
-                    onChanged: changeCategoryDropDownItem,
-                    isExpanded: true,
-                    icon: AppIcon(
-                      Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.mediumGreen,
-                    ),
-                    /*underline: SizedBox(),
-                    hint: text(
-                      AppLocalizations.of(context)
-                              .translate('select_category') +
-                          '*',
-                        textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
-                    ),*/
-                    decoration: InputDecoration(
-                      //filled: true,
-                      //fillColor: Hexcolor('#ecedec'),
-                        labelText: AppLocalizations.of(context)
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              decoration: BoxDecoration(
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: GlobalVariables.mediumGreen,
+                    width: 2.0,
+                  )),
+              child: ButtonTheme(
+                child: DropdownButtonFormField(
+                  items: __categoryListItems,
+                  value: _categorySelectedItem,
+                  onChanged: changeCategoryDropDownItem,
+                  isExpanded: true,
+                  icon: AppIcon(
+                    Icons.keyboard_arrow_down,
+                    iconColor: GlobalVariables.mediumGreen,
+                  ),
+                  /*underline: SizedBox(),
+                  hint: text(
+                    AppLocalizations.of(context)
                             .translate('select_category') +
-                            '*',
-                        labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent))
-                      // border: new CustomBorderTextFieldSkin().getSkin(),
-                    ),
+                        '*',
+                      textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
+                  ),*/
+                  decoration: InputDecoration(
+                    //filled: true,
+                    //fillColor: Hexcolor('#ecedec'),
+                      labelText: AppLocalizations.of(context)
+                          .translate('select_category') +
+                          '*',
+                      labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent))
+                    // border: new CustomBorderTextFieldSkin().getSkin(),
                   ),
                 ),
               ),
-              Container(
-                height: 150,
-                child: AppTextField(
-                  textHintContent:
-                      AppLocalizations.of(context).translate('complaint_desc') +
-                          '*',
-                  controllerCallback: complaintDesc,
-                  maxLines: 99,
-                  contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                ),
-                /*padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: TextField(
-                  controller: complaintDesc,
-                  maxLines: 99,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)
-                          .translate('complaint_desc')+'*',
-                      hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 14),
-                      border: InputBorder.none),
-                ),*/
+            ),
+            Container(
+              height: 150,
+              child: AppTextField(
+                textHintContent:
+                    AppLocalizations.of(context).translate('complaint_desc') +
+                        '*',
+                controllerCallback: complaintDesc,
+                maxLines: 99,
+                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    /*Container(
-                      width:50,
-                      height: 50,
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      decoration: attachmentFilePath==null ? BoxDecoration(
-                        color: GlobalVariables.mediumGreen,
-                        borderRadius: BorderRadius.circular(25),
+              /*padding: EdgeInsets.all(10),
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              decoration: BoxDecoration(
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: GlobalVariables.mediumGreen,
+                    width: 3.0,
+                  )),
+              child: TextField(
+                controller: complaintDesc,
+                maxLines: 99,
+                decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)
+                        .translate('complaint_desc')+'*',
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 14),
+                    border: InputBorder.none),
+              ),*/
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  /*Container(
+                    width:50,
+                    height: 50,
+                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    decoration: attachmentFilePath==null ? BoxDecoration(
+                      color: GlobalVariables.mediumGreen,
+                      borderRadius: BorderRadius.circular(25),
 
-                      ) : BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: FileImage(File(attachmentFilePath)),
-                              fit: BoxFit.cover
+                    ) : BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: FileImage(File(attachmentFilePath)),
+                            fit: BoxFit.cover
+                        ),
+                        border: Border.all(color: GlobalVariables.green,width: 2.0)
+                    ),
+                    //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                  )*/
+                  attachmentFilePath == null
+                      ? AppAssetsImage(
+                          GlobalVariables.componentUserProfilePath,
+                          imageWidth: 50.0,
+                          imageHeight: 50.0,
+                          borderColor: GlobalVariables.grey,
+                          borderWidth: 1.0,
+                          fit: BoxFit.cover,
+                          radius: 25.0,
+                        )
+                      : AppFileImage(
+                          attachmentFilePath,
+                          imageWidth: 50.0,
+                          imageHeight: 50.0,
+                          borderColor: GlobalVariables.grey,
+                          borderWidth: 1.0,
+                          fit: BoxFit.cover,
+                          radius: 25.0,
+                        ),
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        child: FlatButton.icon(
+                          onPressed: () {
+                            if (isStoragePermission) {
+                              openFile(context);
+                            } else {
+                              GlobalFunctions.askPermission(
+                                      Permission.storage)
+                                  .then((value) {
+                                if (value) {
+                                  openFile(context);
+                                } else {
+                                  GlobalFunctions.showToast(
+                                      AppLocalizations.of(context)
+                                          .translate('download_permission'));
+                                }
+                              });
+                            }
+                          },
+                          icon: AppIcon(
+                            Icons.attach_file,
+                            iconColor: GlobalVariables.mediumGreen,
+                            iconSize: 20.0,
                           ),
-                          border: Border.all(color: GlobalVariables.green,width: 2.0)
+                          label: text(
+                            AppLocalizations.of(context)
+                                .translate('attach_photo'),
+                              textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium
+                          ),
+                        ),
                       ),
-                      //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                    )*/
-                    attachmentFilePath == null
-                        ? AppAssetsImage(
-                            GlobalVariables.componentUserProfilePath,
-                            imageWidth: 50.0,
-                            imageHeight: 50.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 25.0,
-                          )
-                        : AppFileImage(
-                            attachmentFilePath,
-                            imageWidth: 50.0,
-                            imageHeight: 50.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 25.0,
-                          ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          child: FlatButton.icon(
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: text(
+                          'OR',
+                            textColor: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium
+
+                        ),
+                      ),
+                      Container(
+                        child: FlatButton.icon(
                             onPressed: () {
                               if (isStoragePermission) {
-                                openFile(context);
+                                openCamera(context);
                               } else {
                                 GlobalFunctions.askPermission(
                                         Permission.storage)
                                     .then((value) {
                                   if (value) {
-                                    openFile(context);
+                                    openCamera(context);
                                   } else {
                                     GlobalFunctions.showToast(
                                         AppLocalizations.of(context)
-                                            .translate('download_permission'));
+                                            .translate(
+                                                'download_permission'));
                                   }
                                 });
                               }
                             },
                             icon: AppIcon(
-                              Icons.attach_file,
+                              Icons.camera_alt,
                               iconColor: GlobalVariables.mediumGreen,
+                              iconSize: 20.0,
                             ),
                             label: text(
                               AppLocalizations.of(context)
-                                  .translate('attach_photo'),
+                                  .translate('take_picture'),
                                 textColor: GlobalVariables.green,
-                              fontSize: GlobalVariables.textSizeSMedium
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: text(
-                            'OR',
-                              textColor: GlobalVariables.lightGray,
-
-                          ),
-                        ),
-                        Container(
-                          child: FlatButton.icon(
-                              onPressed: () {
-                                if (isStoragePermission) {
-                                  openCamera(context);
-                                } else {
-                                  GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                      .then((value) {
-                                    if (value) {
-                                      openCamera(context);
-                                    } else {
-                                      GlobalFunctions.showToast(
-                                          AppLocalizations.of(context)
-                                              .translate(
-                                                  'download_permission'));
-                                    }
-                                  });
-                                }
-                              },
-                              icon: AppIcon(
-                                Icons.camera_alt,
-                                iconColor: GlobalVariables.mediumGreen,
-                              ),
-                              label: text(
-                                AppLocalizations.of(context)
-                                    .translate('take_picture'),
-                                  textColor: GlobalVariables.green,
-                                  fontSize: GlobalVariables.textSizeSMedium
-                              )),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              /*   Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  attachmentFileName==null ? "" : attachmentFileName,
-                  style: TextStyle(
-                      color: GlobalVariables.green,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),*/
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        complaintPriority == "No"
-                            ? complaintPriority = "Yes"
-                            : complaintPriority = "No";
-                        setState(() {});
-                      },
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            color: complaintPriority == "No"
-                                ? GlobalVariables.white
-                                : GlobalVariables.green,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: complaintPriority == "No"
-                                  ? GlobalVariables.mediumGreen
-                                  : GlobalVariables.transparent,
-                              width: 2.0,
+                                fontSize: GlobalVariables.textSizeSMedium
                             )),
-                        child: AppIcon(Icons.check, iconColor: GlobalVariables.white),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: text(
-                        AppLocalizations.of(context)
-                            .translate('mark_as_urgent'),
-                          textColor: GlobalVariables.green,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 45,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: AppButton(
-                  textContent: AppLocalizations.of(context).translate('submit'),
-                  onPressed: () {
-                    verifyData();
-                  },
-                ),
+            ),
+
+            /*   Container(
+              alignment: Alignment.topLeft,
+              child: Text(
+                attachmentFileName==null ? "" : attachmentFileName,
+                style: TextStyle(
+                    color: GlobalVariables.green,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
+            ),*/
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      complaintPriority == "No"
+                          ? complaintPriority = "Yes"
+                          : complaintPriority = "No";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: complaintPriority == "No"
+                              ? GlobalVariables.white
+                              : GlobalVariables.green,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: complaintPriority == "No"
+                                ? GlobalVariables.mediumGreen
+                                : GlobalVariables.transparent,
+                            width: 2.0,
+                          )),
+                      child: AppIcon(Icons.check, iconColor: GlobalVariables.white),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: text(
+                      AppLocalizations.of(context)
+                          .translate('mark_as_urgent'),
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              height: 45,
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: AppButton(
+                textContent: AppLocalizations.of(context).translate('submit'),
+                onPressed: () {
+                  verifyData();
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

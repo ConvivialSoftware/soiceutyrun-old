@@ -47,7 +47,7 @@ class BaseMyComplex extends StatefulWidget {
 class MyComplexState extends BaseStatefulState<BaseMyComplex>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  
+
   var name, _localPath;
   String _taskId;
   ReceivePort _port = ReceivePort();
@@ -61,6 +61,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   String pageName;
 
   bool isStoragePermission = false;
+
 /*
   bool isAnnouncementTabAPICall = false;
   bool isMeetingsTabAPICall = false;
@@ -169,6 +170,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       child: Consumer<MyComplexResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
+            backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
               backgroundColor: GlobalVariables.green,
               centerTitle: true,
@@ -181,10 +183,9 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   iconColor: GlobalVariables.white,
                 ),
               ),
-              title: text(
-                AppLocalizations.of(context).translate('my_complex'),
-                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-              ),
+              title: text(AppLocalizations.of(context).translate('my_complex'),
+                  textColor: GlobalVariables.white,
+                  fontSize: GlobalVariables.textSizeMedium),
               bottom: getTabLayout(),
               elevation: 0,
             ),
@@ -238,25 +239,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getNewsBoardLayout(MyComplexResponse value) {
     print('getNewsBoardLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                value.isLoading ? GlobalFunctions.loadingWidget(context):getNewsBoardListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getNewsBoardListDataLayout(value),
+      ],
     );
   }
 
@@ -265,14 +254,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     return value.announcementList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 15, 10, 0),
+            margin: EdgeInsets.only(top: 8),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
                       itemCount: value.announcementList.length,
                       itemBuilder: (context, position) {
-                        return getNewsBoardListItemLayout(position,value);
+                        return getNewsBoardListItemLayout(position, value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -282,12 +270,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getNewsBoardListItemLayout(var position, MyComplexResponse value) {
     return AppContainer(
-      /*width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),*/
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -297,21 +280,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: value.announcementList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            imageWidth: 26.0,
-                            imageHeight: 26.0,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
-                            radius: 13.0,
+                            radius: 20.0,
                           )
                         : AppNetworkImage(
                             value.announcementList[position].USER_PHOTO,
-                            imageWidth: 26.0,
-                            imageHeight: 26.0,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
-                            radius: 13.0,
+                            radius: 20.0,
                           )),
                 Expanded(
                   child: Container(
@@ -322,191 +305,72 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: text(
+                          child: primaryText(
                             value.announcementList[position].USER_NAME,
-                            textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeSmall,
-                                fontWeight: FontWeight.bold,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: text(
-                                  value.announcementList[position].BLOCK.length > 0
-                                      ? value.announcementList[position]
-                                              .BLOCK
-                                              .toString() +
-                                          value.announcementList[position]
-                                              .FLAT
-                                              .toString()
-                                      : 'Maintainnance Staff',
-                                  textColor: GlobalVariables.grey,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: text(
+                                    value.announcementList[position].BLOCK
+                                                .length >
+                                            0
+                                        ? value.announcementList[position].BLOCK
+                                                .toString() +
+                                            value
+                                                .announcementList[position].FLAT
+                                                .toString()
+                                        : 'Maintainnance Staff',
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                width: 1,
-                                color: GlobalVariables.grey,
-                                child: Divider(
-                                  height: 10,
-                                ),
-                              ),
-                              Container(
-                                child: text(
-                                  value.announcementList[position].C_DATE,
-                                  textColor: GlobalVariables.grey,
+                                VerticalDivider(),
+                                Container(
+                                  child: text(
+                                    value.announcementList[position].C_DATE,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
-                                ),
-                              )
-                            ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
                 ),
-                /*   Visibility(
-                  visible: false,
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: BoxDecoration(
-                        color:
-                            getNewsTypeColor(value.announcementList[position].CATEGORY),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      value.announcementList[position].CATEGORY,
-                      style: TextStyle(
-                        color: GlobalVariables.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),*/
               ],
             ),
           ),
-          Container(
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(
-              value.announcementList[position].SUBJECT,
-              textColor: GlobalVariables.green,
-              fontSize: GlobalVariables.textSizeNormal,
-              fontWeight: FontWeight.bold,
-              //  maxLines: 1,
-              //  overflow: TextOverflow.ellipsis,
-            ),
+          SizedBox(
+            height: 16,
           ),
           Container(
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: htmlText(
-                value.announcementList[position].DESCRIPTION,
-                textColor: GlobalVariables.grey,
-                fontSize: GlobalVariables.textSizeSMedium,
-              ) /*Text(
-              value.announcementList[position].DESCRIPTION,
-              style: TextStyle(
-                color: GlobalVariables.mediumGreen,
-                fontSize: 14,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),*/
-              ),
-          /*Visibility(
-            visible: false,
-            child: Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        */ /*_newsBoardList[position].likeCount +*/ /* " Likes",
-                        style: TextStyle(
-                          color: GlobalVariables.lightGray,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      width: 1,
-                      color: GlobalVariables.lightGray,
-                      child: Divider(
-                        height: 10,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: Text(
-                        */ /*_newsBoardList[position].commentCount +*/ /* " Comments",
-                        style: TextStyle(
-                          color: GlobalVariables.lightGray,
-                          fontSize: 10,
-                        ),
-                      ),
-                    )
-                  ],
-                )),
-          ),*/
-          value.announcementList[position].ATTACHMENT.length > 0
-              ? Container(
-                  height: 2,
-                  color: GlobalVariables.mediumGreen,
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Divider(
-                    height: 2,
-                  ),
-                )
-              : Container(),
-          /* Visibility(
-            visible: false,
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    child: Icon(Icons.mode_comment,
-                        color: GlobalVariables.mediumGreen),
-                  ),
-                  Container(
-                    child: Text(
-                      " Likes",
-                      style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child: Icon(
-                      Icons.mode_comment,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      " Comments",
-                      style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            alignment: Alignment.topLeft,
+            child: primaryText(
+              value.announcementList[position].SUBJECT,
             ),
-          ),*/
+          ),
+          SizedBox(height: 8,),
+          Container(
+              child: htmlText(
+            value.announcementList[position].DESCRIPTION,
+            textColor: GlobalVariables.grey,
+            fontSize: GlobalVariables.textSizeSMedium,
+          )),
+          value.announcementList[position].ATTACHMENT.length > 0
+              ? Divider()
+              : Container(),
           value.announcementList[position].ATTACHMENT.length > 0
               ? InkWell(
-                  onTap: () async {
-                    //: https://societyrun.com//Uploads/fb4c12f20c92a8e63bbaaa8e3f680fd3.jpg,
+                  onTap: () {
                     String url = value.announcementList[position].ATTACHMENT;
 
                     print("storagePermiassion : " +
@@ -525,25 +389,18 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       });
                     }
                   },
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                            child: AppIcon(
-                          Icons.attach_file,
-                          iconColor: GlobalVariables.mediumGreen,
-                        )),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: text(
-                            "Attachment",
-                            textColor: GlobalVariables.green,
-                              fontSize: GlobalVariables.textSizeVerySmall,
-                          ),
-                        )
-                      ],
-                    ),
+                  child: Row(
+                    children: <Widget>[
+                      AppIcon(
+                        Icons.attach_file,
+                        iconColor: GlobalVariables.mediumGreen,
+                      ),
+                      text(
+                        "Attachment",
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSmall,
+                      )
+                    ],
                   ),
                 )
               : Container()
@@ -643,25 +500,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getMeetingsLayout(MyComplexResponse value) {
     print('getMeetingsLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                value.isLoading ? GlobalFunctions.loadingWidget(context): getMeetingsListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getMeetingsListDataLayout(value),
+      ],
     );
   }
 
@@ -669,15 +514,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('getMeetingsListDataLayout Tab Call');
     return value.meetingList.length > 0
         ? Container(
-            //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 15, 10, 0),
+            margin: EdgeInsets.only(top: 8),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
                       itemCount: value.meetingList.length,
                       itemBuilder: (context, position) {
-                        return getMeetingsListItemLayout(position,value);
+                        return getMeetingsListItemLayout(position, value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -687,12 +530,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getMeetingsListItemLayout(var position, MyComplexResponse value) {
     return AppContainer(
-      /*width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),*/
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -702,21 +540,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: value.meetingList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            imageWidth: 26.0,
-                            imageHeight: 26.0,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
-                            radius: 13.0,
+                            radius: 20.0,
                           )
                         : AppNetworkImage(
                             value.meetingList[position].USER_PHOTO,
-                            imageWidth: 26.0,
-                            imageHeight: 26.0,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
                             borderColor: GlobalVariables.transparent,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
-                            radius: 13.0,
+                            radius: 20.0,
                           ) /*Image.asset(
                     GlobalVariables.componentUserProfilePath,
                     width: 26,
@@ -732,279 +570,154 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: text(
+                          child: primaryText(
                             value.meetingList[position].USER_NAME,
-                            textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeSmall,
-                                fontWeight: FontWeight.bold,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                            /*textColor: GlobalVariables.green,
+                            fontWeight: FontWeight.bold,*/
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: text(
-                                  value.meetingList[position].BLOCK.length > 0
-                                      ? value.meetingList[position]
-                                              .BLOCK
-                                              .toString() +
-                                          ' ' +
-                                          value.meetingList[position].FLAT.toString()
-                                      : 'Maintainnance Staff',
-                                  textColor: GlobalVariables.grey,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: text(
+                                    value.meetingList[position].BLOCK.length > 0
+                                        ? value.meetingList[position].BLOCK
+                                                .toString() +
+                                            ' ' +
+                                            value.meetingList[position].FLAT
+                                                .toString()
+                                        : 'Maintainnance Staff',
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                width: 1,
-                                color: GlobalVariables.grey,
-                                child: Divider(
-                                  height: 10,
-                                ),
-                              ),
-                              Container(
-                                child: text(
-                                  value.meetingList[position].C_DATE,
-                                  textColor: GlobalVariables.grey,
+                                VerticalDivider(),
+                                Container(
+                                  child: text(
+                                    value.meetingList[position].C_DATE,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
-                                ),
-                              )
-                            ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
                 ),
-                /* Visibility(
-                  visible: false,
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: BoxDecoration(
-                        color:
-                        getNewsTypeColor(value.meetingList[position].CATEGORY),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      value.meetingList[position].CATEGORY,
-                      style: TextStyle(
-                        color: GlobalVariables.white,
-                        fontSize: 12,
+              ],
+            ),
+          ),
+          SizedBox(height: 16,),
+          Container(
+              alignment: Alignment.topLeft,
+              child: primaryText(value.meetingList[position].SUBJECT,)),
+          SizedBox(height: 8,),
+          htmlText(
+            value.meetingList[position].DESCRIPTION,
+            textColor: GlobalVariables.grey,
+            fontSize: GlobalVariables.textSizeSMedium,
+          ),
+          SizedBox(height: 8,),
+          Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: AppIcon(
+                        Icons.location_on,
+                        iconColor: GlobalVariables.mediumGreen,
+                        iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
-                  ),
-                ),*/
-              ],
-            ),
-          ),
-          Container(
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(value.meetingList[position].SUBJECT,
-                textColor: GlobalVariables.green,
-                fontSize: GlobalVariables.textSizeNormal,
-                fontWeight: FontWeight.bold),
-            //  maxLines: 1,
-            //  overflow: TextOverflow.ellipsis,
-          ),
-          Container(
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: htmlText(
-                value.meetingList[position].DESCRIPTION,
-                textColor: GlobalVariables.grey,
-                fontSize: GlobalVariables.textSizeSMedium,
-              ) /*Text(
-              value.announcementList[position].DESCRIPTION,
-              style: TextStyle(
-                color: GlobalVariables.mediumGreen,
-                fontSize: 14,
+                    SizedBox(width: 8,),
+                    /*Container(
+                      child: text(
+                        "Venue : ",
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                      ),
+                    ),*/
+                    Container(
+                      child: text(
+                        value.meetingList[position].VENUE,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),*/
-              ),
-          Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: AppIcon(
-                          Icons.location_on,
-                          iconColor: GlobalVariables.mediumGreen,
-                          iconSize: GlobalVariables.textSizeNormal,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          "Venue : ",
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                      Container(
-                        child: text(
-                          value.meetingList[position].VENUE,
-                          textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: AppIcon(
-                          Icons.date_range,
-                          iconColor: GlobalVariables.mediumGreen,
-                          iconSize: GlobalVariables.textSizeNormal,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          "Date : ",
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          value.meetingList[position]
-                              .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
-                          textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: AppIcon(
-                          Icons.access_time,
-                          iconColor: GlobalVariables.mediumGreen,
-                          iconSize: GlobalVariables.textSizeNormal,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          "Time : ",
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          value.meetingList[position]
-                              .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
-                          textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          /* Visibility(
-            visible: false,
-            child: Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              SizedBox(height: 4,),
+              Container(
                 child: Row(
                   children: <Widget>[
                     Container(
-                      child: Text(
-                        */ /*_newsBoardList[position].likeCount +*/ /* " Likes",
-                        style: TextStyle(
-                          color: GlobalVariables.lightGray,
-                          fontSize: 10,
-                        ),
+                      child: AppIcon(
+                        Icons.date_range,
+                        iconColor: GlobalVariables.mediumGreen,
+                        iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
+                    SizedBox(width: 8,),
+                /*    Container(
+                      child: text(
+                        "Date : ",
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                      ),
+                    )*/
                     Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      width: 1,
-                      color: GlobalVariables.lightGray,
-                      child: Divider(
-                        height: 10,
+                      child: text(
+                        value.meetingList[position]
+                            .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: Text(
-                        */ /*_newsBoardList[position].commentCount +*/ /* " Comments",
-                        style: TextStyle(
-                          color: GlobalVariables.lightGray,
-                          fontSize: 10,
-                        ),
-                      ),
-                    )
                   ],
-                )),
-          ),*/
-          value.meetingList[position].ATTACHMENT.length > 0
-              ? Container(
-                  height: 2,
-                  color: GlobalVariables.mediumGreen,
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Divider(
-                    height: 2,
-                  ),
-                )
-              : Container(),
-          /*Visibility(
-            visible: false,
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    child: Icon(Icons.mode_comment,
-                        color: GlobalVariables.mediumGreen),
-                  ),
-                  Container(
-                    child: Text(
-                      " Likes",
-                      style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child: Icon(
-                      Icons.mode_comment,
-                      color: GlobalVariables.mediumGreen,
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      " Comments",
-                      style: TextStyle(
-                        color: GlobalVariables.mediumGreen,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),*/
+              SizedBox(height: 4,),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: AppIcon(
+                        Icons.access_time,
+                        iconColor: GlobalVariables.mediumGreen,
+                        iconSize: GlobalVariables.textSizeNormal,
+                      ),
+                    ),
+                    SizedBox(width: 8,),
+                    Container(
+                      child: text(
+                        value.meetingList[position]
+                            .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          value.meetingList[position].ATTACHMENT.length > 0
+              ? Divider()
+              : Container(),
           value.meetingList[position].ATTACHMENT.length > 0
               ? InkWell(
                   onTap: () {
@@ -1027,7 +740,6 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Row(
                       children: <Widget>[
                         Container(
@@ -1035,12 +747,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           Icons.attach_file,
                           iconColor: GlobalVariables.mediumGreen,
                         )),
+                        SizedBox(width: 4,),
                         Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: text(
                             "Attachment",
                             textColor: GlobalVariables.green,
-                              fontSize: GlobalVariables.textSizeVerySmall,
+                            fontSize: GlobalVariables.textSizeSmall,
                           ),
                         )
                       ],
@@ -1055,25 +767,14 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getPollSurveyLayout(MyComplexResponse value) {
     print('getPollSurveyLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                value.isLoading ? GlobalFunctions.loadingWidget(context):   getPollSurveyListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getPollSurveyListDataLayout(value),
+      ],
     );
   }
 
@@ -1081,14 +782,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('getPollSurveyListDataLayout Tab Call');
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 15, 10, 0),
+      margin: EdgeInsets.only(top: 8),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
                 itemCount: value.pollList.length,
                 itemBuilder: (context, position) {
-                  return getPollSurveyListItemLayout(position,value);
+                  return getPollSurveyListItemLayout(position, value);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
@@ -1103,24 +803,28 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
             .toString());
     print('SECRET_POLL : ' + value.pollList[position].SECRET_POLL.toString());
     print('VOTED_TO : ' + value.pollList[position].VOTED_TO.length.toString());
-    if (!GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE) &&
+    if (!GlobalFunctions.isDateExpireForPoll(
+            value.pollList[position].EXPIRY_DATE) &&
         (value.pollList[position].VOTED_TO.length > 0) &&
         value.pollList[position].SECRET_POLL.toLowerCase() == 'no') {
       print('>>> 1st');
       value.pollList[position].isGraphView = true;
     }
-    if (GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE)) {
+    if (GlobalFunctions.isDateExpireForPoll(
+        value.pollList[position].EXPIRY_DATE)) {
       print('>>> 2nd');
       value.pollList[position].isGraphView = true;
     }
 
-    if (!GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE) &&
+    if (!GlobalFunctions.isDateExpireForPoll(
+            value.pollList[position].EXPIRY_DATE) &&
         (value.pollList[position].VOTED_TO.length == 0)) {
       print('>>> 3rd');
       value.pollList[position].isGraphView = false;
     }
 
-    if (!GlobalFunctions.isDateExpireForPoll(value.pollList[position].EXPIRY_DATE) &&
+    if (!GlobalFunctions.isDateExpireForPoll(
+            value.pollList[position].EXPIRY_DATE) &&
         (value.pollList[position].VOTED_TO.length > 0) &&
         value.pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
       print('>>> 4th');
@@ -1131,12 +835,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('>>>>> value.pollList[position].VOTED_TO.length : ' +
         value.pollList[position].VOTED_TO.length.toString());
     return AppContainer(
-     /* width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),*/
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -1146,21 +845,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   child: value.pollList[position].USER_PHOTO.isEmpty
                       ? AppAssetsImage(
                           GlobalVariables.componentUserProfilePath,
-                          imageWidth: 26.0,
-                          imageHeight: 26.0,
+                          imageWidth: 40.0,
+                          imageHeight: 40.0,
                           borderColor: GlobalVariables.transparent,
                           borderWidth: 1.0,
                           fit: BoxFit.cover,
-                          radius: 13.0,
+                          radius: 20.0,
                         )
                       : AppNetworkImage(
                           value.pollList[position].USER_PHOTO,
-                          imageWidth: 26.0,
-                          imageHeight: 26.0,
+                          imageWidth: 40.0,
+                          imageHeight: 40.0,
                           borderColor: GlobalVariables.transparent,
                           borderWidth: 1.0,
                           fit: BoxFit.cover,
-                          radius: 13.0,
+                          radius: 20.0,
                         ),
                 ),
                 Expanded(
@@ -1171,88 +870,78 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Container(
-                          child: text(
-                            value.pollList[position].USER_NAME,
-                            textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeSmall,
-                                fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: primaryText(value.pollList[position].USER_NAME,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                              ),
+                            ),
+                            Container(
+                              //margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                  color: !GlobalFunctions.isDateSameOrGrater(
+                                      value.pollList[position].EXPIRY_DATE)
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.red,
+                                  shape: BoxShape.circle),
+                            ),
+                          ],
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: text(
-                                  value.pollList[position].BLOCK +
-                                      ' ' +
-                                      value.pollList[position].FLAT,
-                                  textColor: GlobalVariables.grey,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: text(
+                                    value.pollList[position].BLOCK +
+                                        ' ' +
+                                        value.pollList[position].FLAT,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                width: 1,
-                                color: GlobalVariables.grey,
-                                child: Divider(
-                                  height: 10,
-                                ),
-                              ),
-                              Container(
-                                child: text(
-                                  value.pollList[position].C_DATE,
-                                  textColor: GlobalVariables.grey,
+                                VerticalDivider(),
+                                Container(
+                                  child: text(
+                                    value.pollList[position].C_DATE,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
-                                ),
-                              )
-                            ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                      color: !GlobalFunctions.isDateSameOrGrater(
-                              value.pollList[position].EXPIRY_DATE)
-                          ? GlobalVariables.green
-                          : GlobalVariables.red,
-                      shape: BoxShape.circle),
-                ),
               ],
             ),
           ),
+          SizedBox(height: 16,),
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(value.pollList[position].POLL_Q,
-                textColor: GlobalVariables.green,
-                fontSize: GlobalVariables.textSizeNormal,
-                fontWeight: FontWeight.bold),
+            child: primaryText(value.pollList[position].POLL_Q,),
           ),
+          SizedBox(height: 8,),
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
             child: htmlText(
               value.pollList[position].DESCRIPTION,
               textColor: GlobalVariables.grey,
               fontSize: GlobalVariables.textSizeSMedium,
             ),
           ),
-          getVoteLayout(position,value),
-          Container(
-            height: 2,
-            color: GlobalVariables.mediumGreen,
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Divider(
-              height: 2,
-            ),
-          ),
+          SizedBox(height: 8,),
+          getVoteLayout(position, value),
+          SizedBox(height: 4,),
+          Divider(),
           Row(
             children: [
               Expanded(
@@ -1260,22 +949,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Row(
                     children: <Widget>[
-                      /*  Visibility(
-                        visible: false,
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          width: 1,
-                          height: 20,
-                          color: GlobalVariables.mediumGreen,
-                          child: Divider(
-                            height: 10,
-                          ),
-                        ),
-                      ),*/
                       (!GlobalFunctions.isDateSameOrGrater(
                                   value.pollList[position].EXPIRY_DATE) &&
                               (value.pollList[position].VOTED_TO.length > 0) &&
-                              value.pollList[position].SECRET_POLL.toLowerCase() ==
+                              value.pollList[position].SECRET_POLL
+                                      .toLowerCase() ==
                                   'yes')
                           ? Container(
                               margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -1288,18 +966,19 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                   text(
                                     "VOTED",
                                     textColor: GlobalVariables.red,
-                                        fontSize: GlobalVariables.textSizeSMedium,
-                                        fontWeight: FontWeight.bold,
+                                    fontSize: GlobalVariables.textSizeSmall,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   text(
                                     "  (Result On " +
                                         GlobalFunctions.convertDateFormat(
-                                            value.pollList[position].EXPIRY_DATE,
+                                            value
+                                                .pollList[position].EXPIRY_DATE,
                                             "dd MMM yy") +
                                         ")",
                                     textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeSMedium,
-                                        fontWeight: FontWeight.bold,
+                                    fontSize: GlobalVariables.textSizeSmall,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ],
                               ),
@@ -1313,8 +992,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   ? InkWell(
                       onTap: () {
                         List<PollOption> _optionList = List<PollOption>.from(
-                            value.pollList[position]
-                                .OPTION
+                            value.pollList[position].OPTION
                                 .map((i) => PollOption.fromJson(i)));
                         Navigator.push(
                             context,
@@ -1323,24 +1001,27 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                     value.pollList[position], _optionList)));
                       },
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          //  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: GlobalFunctions.isDateSameOrGrater(
                                         value.pollList[position].EXPIRY_DATE) &&
-                                    (value.pollList[position].VOTED_TO.length > 0)
+                                    (value.pollList[position].VOTED_TO.length >
+                                        0)
                                 ? text(
                                     "See Poll Result",
                                     textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeSMedium,
-                                        fontWeight: FontWeight.bold,
+                                    fontSize: GlobalVariables.textSizeSmall,
+                                    fontWeight: FontWeight.bold,
                                   )
                                 : Container(),
                           ),
+                          SizedBox(width: 8,),
                           Container(
                             alignment: Alignment.topRight,
                             padding: EdgeInsets.all(8),
-                            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            //margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             decoration: BoxDecoration(
                               color: GlobalVariables.green,
                               borderRadius: BorderRadius.circular(35),
@@ -1363,8 +1044,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       onTap: () {
                         String optionId = '';
                         List<PollOption> _optionList = List<PollOption>.from(
-                            value.pollList[position]
-                                .OPTION
+                            value.pollList[position].OPTION
                                 .map((i) => PollOption.fromJson(i)));
                         for (int i = 0; i < _optionList.length; i++) {
                           if (_optionList[i].ANS_ID ==
@@ -1377,8 +1057,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           }
                         }
 
-                        addPollVote(value.pollList[position].ID, optionId, position,
-                            _optionList,value);
+                        addPollVote(value.pollList[position].ID, optionId,
+                            position, _optionList, value);
                       },
                       child: Container(
                         alignment: Alignment.topRight,
@@ -1401,40 +1081,17 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
       ),
     );
   }
-  
+
   getDirectoryLayout(MyComplexResponse value) {
     print('getDirectoryLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
+    return SingleChildScrollView(
+      child: Stack(
         children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-               /* Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width:
-                        MediaQuery.of(context).size.width / 1.1, //height: 60,
-                    margin: EdgeInsets.fromLTRB(
-                        0, MediaQuery.of(context).size.height / 15, 0, 0),
-                    decoration: BoxDecoration(
-                      color: GlobalVariables.transparent,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    // child: getSearchFilerLayout(),
-                  ),
-                ),*/
-                value.isLoading ? GlobalFunctions.loadingWidget(context):  getDirectoryListDataLayout(value),
-              ],
-            ),
-          ),
+          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+              context, 150.0),
+          value.isLoading
+              ? GlobalFunctions.loadingWidget(context)
+              : getDirectoryListDataLayout(value),
         ],
       ),
     );
@@ -1543,116 +1200,67 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     print('getDirectoryListDataLayout Tab Call');
     return value.directoryList.length > 0
         ? Container(
-            // color: GlobalVariables.grey,
-            //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 40, 10, 0),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                      itemCount: value.directoryList.length,
-                      itemBuilder: (context, position) {
-                        return getDirectoryListItemLayout(position,value);
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-          )
+      margin: EdgeInsets.only(top: 8),
+          child: Builder(
+              builder: (context) => ListView.builder(
+                     physics: NeverScrollableScrollPhysics(),
+                    itemCount: value.directoryList.length,
+                    itemBuilder: (context, position) {
+                      return getDirectoryListItemLayout(position, value);
+                    }, //  scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                  )),
+        )
         : Container();
   }
 
   getDirectoryListItemLayout(int position, MyComplexResponse value) {
-    // int _default;
 
-    //Committee
     String type = value.directoryList[position].directoryType;
-    // print('Type : '+type);
+
     return Column(
       children: <Widget>[
         Container(
-          //color: GlobalVariables.grey,
-          margin: EdgeInsets.only(left: 8,top: 8),
-          //padding: EdgeInsets.only(left: 16),
-          alignment: Alignment.topLeft,
-          child: text(
-            type,
-            textColor: position == 0
-                    ? GlobalVariables.white
-                    : GlobalVariables.black,
-            fontSize: GlobalVariables.textSizeMedium,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          // padding: EdgeInsets.all(5),
-          //margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-
-          // color: GlobalVariables.grey,
-          child: Column(
-            children: <Widget>[
-              Container(
-                //width: MediaQuery.of(context).size.width / 0.5,
-                padding: EdgeInsets.all(16),
-                margin: EdgeInsets.only(left: 8,right: 8,top: 16),
-                //color: GlobalVariables.white,
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10))),
-                child: Builder(
-                    builder: (context) => ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: value.directoryList[position]
-                            .directoryTypeWiseList
-                            .length,
-                        itemBuilder: (context, childPosition) {
-                          return getDirectoryTypeWiseItemLayout(
-                              position, childPosition, type,value);
-                        })),
+          margin: EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              text(
+                type,
+                textColor:
+                    position == 0 ? GlobalVariables.white : GlobalVariables.black,
+                fontSize: GlobalVariables.textSizeMedium,
+                fontWeight: FontWeight.bold,
               ),
               InkWell(
-                onTap: () {
-                  if (type != 'Near By Shops') {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                BaseDirectory(value.directoryList[position])));
-                  }
-                },
-                child: Container(
-                    padding: EdgeInsets.all(16),
-                    margin: EdgeInsets.only(left: 8,right: 8,bottom: 8),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10))),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: text(
-                            type == 'Near By Shops'
-                                ? 'Coming Soon...'
-                                : AppLocalizations.of(context)
-                                    .translate('view_more'),
-                            textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        type != 'Near By Shops'
-                            ? Container(
-                                child: AppIcon(
-                                  Icons.fast_forward,
-                                  iconColor: GlobalVariables.green,
-                                ),
-                              )
-                            : Container()
-                      ],
-                    )),
-              ),
+                  onTap: (){
+                    if (type != 'Near By Shops') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  BaseDirectory(value.directoryList[position])));
+                    }
+                  },
+                  child: smallTextContainerOutlineLayout(AppLocalizations.of(context).translate('see_all'))),
+            ],
+          ),
+        ),
+        AppContainer(
+          isListItem: true,
+          child: Column(
+            children: <Widget>[
+              Builder(
+                  builder: (context) => ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: value.directoryList[position]
+                          .directoryTypeWiseList.length,
+                      itemBuilder: (context, childPosition) {
+                        return getDirectoryTypeWiseItemLayout(
+                            position, childPosition, type, value);
+                      })),
             ],
           ),
         )
@@ -1663,79 +1271,63 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   getDirectoryTypeWiseItemLayout(
     int position,
     int childPosition,
-    String type, MyComplexResponse value,
+    String type,
+    MyComplexResponse value,
   ) {
-    // print('Type : '+type);
 
-    //bool phone=false,email=false;
     String name = '', field = '', permission = '';
     if (type == 'Committee') {
-      name = value.directoryList[position].directoryTypeWiseList[childPosition].NAME;
+      name = value
+          .directoryList[position].directoryTypeWiseList[childPosition].NAME;
 
-      field =
-          value.directoryList[position].directoryTypeWiseList[childPosition].POST;
+      field = value
+          .directoryList[position].directoryTypeWiseList[childPosition].POST;
 
-      /* value.directoryList[position]
-          .directoryTypeWiseList[childPosition].EMAIL.length!= 0 ? email=true : email=false;
-
-      value.directoryList[position]
-          .directoryTypeWiseList[childPosition].PHONE.length != 0 ? phone=true : phone=false;*/
     }
 
     if (type == 'Emergency') {
-      name = value.directoryList[position]
-                  .directoryTypeWiseList[childPosition]
+      name = value.directoryList[position].directoryTypeWiseList[childPosition]
                   .Name ==
               null
           ? ''
-          : value.directoryList[position].directoryTypeWiseList[childPosition].Name;
+          : value.directoryList[position].directoryTypeWiseList[childPosition]
+              .Name;
 
-      field = value.directoryList[position]
-                  .directoryTypeWiseList[childPosition]
+      field = value.directoryList[position].directoryTypeWiseList[childPosition]
                   .Category ==
               null
           ? ''
-          : value.directoryList[position]
-              .directoryTypeWiseList[childPosition]
+          : value.directoryList[position].directoryTypeWiseList[childPosition]
               .Category;
 
       print('name : ' + name);
       print('field : ' + field);
-      /*value.directoryList[position]
-          .directoryTypeWiseList[childPosition].Contact_No.length != 0 ? phone=true : phone=false;*/
+
     }
 
     if (type == 'Neighbours') {
-      name = value.directoryList[position].directoryTypeWiseList[childPosition].NAME;
+      name = value
+          .directoryList[position].directoryTypeWiseList[childPosition].NAME;
 
-      field = value.directoryList[position]
-              .directoryTypeWiseList[childPosition]
+      field = value.directoryList[position].directoryTypeWiseList[childPosition]
               .BLOCK +
           "-" +
-          value.directoryList[position].directoryTypeWiseList[childPosition].FLAT;
+          value.directoryList[position].directoryTypeWiseList[childPosition]
+              .FLAT;
 
-      /* permission = value.directoryList[position]
-          .directoryTypeWiseList[childPosition].PERMISSIONS;
-      if(permission!=null && permission.contains('memberPhone')){
-        phone = true;
-      }else{
-        phone = false;
-      }
-*/
     }
 
     if (type == 'Near By Shops') {
-      name = value.directoryList[position].directoryTypeWiseList[childPosition].name;
+      name = value
+          .directoryList[position].directoryTypeWiseList[childPosition].name;
 
-      field =
-          value.directoryList[position].directoryTypeWiseList[childPosition].field;
+      field = value
+          .directoryList[position].directoryTypeWiseList[childPosition].field;
     }
     if (name == null) name = '';
 
     if (field == null) field = '';
 
-    // print("("+field+")");
-    //phone = true;
 
     return Container(
       //width: 200,
@@ -1756,40 +1348,39 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Flexible(
-                    flex: 3,
-                    child: Container(
-                      //color: GlobalVariables.lightGray,
-                      margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                      alignment: Alignment.topLeft, //height: 10,
-                      //color: GlobalVariables.grey,
-                      child: text(
-                        name,
-                        textColor: GlobalVariables.green,
-                          fontSize: GlobalVariables.textSizeMedium,
-                        maxLine: 1,
-                      ),
-                    )),
+                  flex: 2,
+                  child: Container(
+                    alignment: Alignment.topLeft, //height: 10,
+                    child: primaryText(
+                      name,
+                      // textColor: GlobalVariables.green,
+                      // fontSize: GlobalVariables.textSizeMedium,
+                      // maxLine: 1,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 2,),
                 Flexible(
-                    flex: 2,
-                    child: Container(
-                      //  color: GlobalVariables.grey,
-                      margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                      alignment: Alignment.topRight, // height: 10,
-                      //  color: GlobalVariables.lightGreen,
-                      child: text(
-                        field,
-                        textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeSMedium,
-                        maxLine: 1,
-                      ),
-                    )),
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    child: text(
+                      field,
+                      textColor: GlobalVariables.grey,
+                      fontSize: GlobalVariables.textSizeSMedium,
+                      maxLine: 1,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
+          childPosition != value.directoryList[position].directoryTypeWiseList.length-1 ?  Divider() : SizedBox(),
         ],
       ),
     );
   }
-  
+
   /* getDocumentsLayout() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -2036,39 +1627,28 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getEventsLayout(MyComplexResponse value) {
     print('getEventsLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width:
-                        MediaQuery.of(context).size.width / 1.1, // height: 50,
-                    margin: EdgeInsets.fromLTRB(
-                        10, MediaQuery.of(context).size.height / 15, 10, 0),
-                    decoration: BoxDecoration(
-                      color: GlobalVariables.transparent,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    // child: getSearchFilerLayout(),
-                  ),
-                ),
-                value.isLoading ? GlobalFunctions.loadingWidget(context):   getEventsDataLayout(value),
-              ],
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+    /*    Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            width:
+                MediaQuery.of(context).size.width / 1.1, // height: 50,
+            margin: EdgeInsets.fromLTRB(
+                10, MediaQuery.of(context).size.height / 15, 10, 0),
+            decoration: BoxDecoration(
+              color: GlobalVariables.transparent,
+              borderRadius: BorderRadius.circular(30),
             ),
+            // child: getSearchFilerLayout(),
           ),
-        ],
-      ),
+        ),*/
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getEventsDataLayout(value),
+      ],
     );
   }
 
@@ -2084,16 +1664,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );*/
         value.eventList.length > 0
             ? Container(
-                //  color: GlobalVariables.grey,
-                //padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(
-                    10, MediaQuery.of(context).size.height / 15, 10, 0),
+                margin: EdgeInsets.only(top:8),
                 child: Builder(
                     builder: (context) => ListView.builder(
                           // scrollDirection: Axis.vertical,
                           itemCount: value.eventList.length,
                           itemBuilder: (context, position) {
-                            return getEventsListItemLayout(position,value);
+                            return getEventsListItemLayout(position, value);
                           }, //  scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                         )),
@@ -2105,12 +1682,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     // int _default;
 
     return AppContainer(
-    /*  width: MediaQuery.of(context).size.width / 0.5,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),*/
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -2120,21 +1692,21 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: value.eventList[position].USER_PHOTO.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
-                            imageWidth: 26.0,
-                            imageHeight: 26.0,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
                             borderColor: GlobalVariables.grey,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
-                            radius: 10.0,
+                            radius: 20.0,
                           )
                         : AppNetworkImage(
                             value.eventList[position].USER_PHOTO,
-                            imageWidth: 26.0,
-                            imageHeight: 26.0,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
                             borderColor: GlobalVariables.grey,
                             borderWidth: 1.0,
                             fit: BoxFit.cover,
-                            radius: 10.0,
+                            radius: 40.0,
                           )),
                 Expanded(
                   child: Container(
@@ -2145,44 +1717,37 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: text(
+                          child: primaryText(
                             value.eventList[position].USER_NAME,
-                            textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeSmall,
-                                fontWeight: FontWeight.bold,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: text(
-                                  value.eventList[position].BLOCK.length > 0
-                                      ? value.eventList[position].BLOCK +
-                                          ' ' +
-                                          value.eventList[position].FLAT
-                                      : "Maintannance Staff",
-                                  textColor: GlobalVariables.grey,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: text(
+                                    value.eventList[position].BLOCK.length > 0
+                                        ? value.eventList[position].BLOCK +
+                                            ' ' +
+                                            value.eventList[position].FLAT
+                                        : "Maintannance Staff",
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                width: 1,
-                                color: GlobalVariables.grey,
-                                child: Divider(
-                                  height: 10,
-                                ),
-                              ),
-                              Container(
-                                child: text(
-                                  value.eventList[position].C_DATE,
-                                  textColor: GlobalVariables.grey,
+                                VerticalDivider(),
+                                Container(
+                                  child: text(
+                                    value.eventList[position].C_DATE,
+                                    textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
-                                ),
-                              )
-                            ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -2192,131 +1757,98 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
               ],
             ),
           ),
+          SizedBox(height: 16,),
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: text(value.eventList[position].SUBJECT,
-                textColor: GlobalVariables.green,
-                fontSize: GlobalVariables.textSizeNormal,
-                fontWeight: FontWeight.bold
-                //maxLines: 1,
-                //overflow: TextOverflow.ellipsis,
-                ),
+            child: primaryText(value.eventList[position].SUBJECT,),
           ),
+          SizedBox(height: 8,),
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
             child: htmlText(
               value.eventList[position].DESCRIPTION,
               textColor: GlobalVariables.grey,
               fontSize: GlobalVariables.textSizeSMedium,
-            ) /*Text(
-              value.eventList[position].DESCRIPTION,
-              style: TextStyle(
-                color: GlobalVariables.mediumGreen,
-                fontSize: 14,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )*/
-            ,
+            )
           ),
-          Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: AppIcon(
-                          Icons.location_on,
-                          iconColor: GlobalVariables.mediumGreen,
-                          iconSize: GlobalVariables.textSizeNormal,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          "Venue : ",
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                      Container(
-                        child: text(
-                          value.eventList[position].VENUE,
-                          textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                    ],
+          SizedBox(height: 8,),
+          Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: AppIcon(
+                      Icons.location_on,
+                      iconColor: GlobalVariables.mediumGreen,
+                      iconSize: GlobalVariables.textSizeNormal,
+                    ),
                   ),
-                ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: AppIcon(
-                          Icons.date_range,
-                          iconColor: GlobalVariables.mediumGreen,
-                          iconSize: GlobalVariables.textSizeNormal,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          "Date : ",
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          value.eventList[position].START_DATE +
-                              ' to ' +
-                              value.eventList[position].END_DATE,
-                          textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                    ],
+                 SizedBox(width: 8,),
+                  Container(
+                    child: text(
+                      value.eventList[position].VENUE,
+                      textColor: GlobalVariables.green,
+                      fontSize: GlobalVariables.textSizeSMedium,
+                      textStyleHeight: 1.0
+                    ),
                   ),
+                ],
+              ),
+              SizedBox(height: 4,),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: AppIcon(
+                        Icons.date_range,
+                        iconColor: GlobalVariables.mediumGreen,
+                        iconSize: GlobalVariables.textSizeNormal,
+                      ),
+                    ),
+                    SizedBox(width: 8,),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                      child: text(
+                        value.eventList[position].START_DATE +
+                            ' to ' +
+                            value.eventList[position].END_DATE,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: AppIcon(
-                          Icons.access_time,
-                          iconColor: GlobalVariables.mediumGreen,
-                          iconSize: GlobalVariables.textSizeNormal,
-                        ),
+              ),
+              SizedBox(height: 4,),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: AppIcon(
+                        Icons.access_time,
+                        iconColor: GlobalVariables.mediumGreen,
+                        iconSize: GlobalVariables.textSizeNormal,
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          "Time : ",
-                          textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeSMedium,
-                        ),
+                    ),
+                    SizedBox(width: 8,),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
+                      child: text(
+                        value.eventList[position].START_TIME +
+                            ' to ' +
+                            value.eventList[position].END_TIME,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                        child: text(
-                          value.eventList[position].START_TIME +
-                              ' to ' +
-                              value.eventList[position].END_TIME,
-                          textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           value.eventList[position].ATTACHMENT.length > 0
               ? Container(
@@ -2363,7 +1895,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           child: text(
                             "Attachment",
                             textColor: GlobalVariables.green,
-                              fontSize: GlobalVariables.textSizeVerySmall,
+                            fontSize: GlobalVariables.textSizeVerySmall,
                           ),
                         )
                       ],
@@ -2438,51 +1970,52 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         switch (index) {
           case 0:
             {
-                Provider.of<MyComplexResponse>(context, listen: false)
-                    .getAnnouncementData('Announcement');
-         
+              Provider.of<MyComplexResponse>(context, listen: false)
+                  .getAnnouncementData('Announcement');
             }
             break;
           case 1:
             {
               //if (!isMeetingsTabAPICall) {
-                Provider.of<MyComplexResponse>(context, listen: false)
-                    .getAnnouncementData('Meeting');
-                // getMeetingData('Meeting');
+              Provider.of<MyComplexResponse>(context, listen: false)
+                  .getAnnouncementData('Meeting');
+              // getMeetingData('Meeting');
               //}
             }
             break;
           case 2:
             {
               //if (!isPollTabAPICall) {
-                Provider.of<MyComplexResponse>(context, listen: false)
-                    .getAnnouncementPollData('Poll');
-                // getAnnouncementPollData('Poll');
+              Provider.of<MyComplexResponse>(context, listen: false)
+                  .getAnnouncementPollData('Poll');
+              // getAnnouncementPollData('Poll');
               //}
             }
             break;
           case 3:
             {
-             // if (!isDocumentsTabAPICall) {
-                Provider.of<MyComplexResponse>(context, listen: false).getDocumentData();
+              // if (!isDocumentsTabAPICall) {
+              Provider.of<MyComplexResponse>(context, listen: false)
+                  .getDocumentData();
               //}
             }
             break;
           case 4:
             {
               //if (!isDirectoryTabAPICall) {
-                //getNeighboursDirectoryData();
-              Provider.of<MyComplexResponse>(context, listen: false).getAllMemberDirectoryData();
+              //getNeighboursDirectoryData();
+              Provider.of<MyComplexResponse>(context, listen: false)
+                  .getAllMemberDirectoryData();
               //}
             }
             break;
           case 5:
             {
-            //  if (!isEventsTabAPICall) {
-                Provider.of<MyComplexResponse>(context, listen: false)
-                    .getAnnouncementData('Event');
-                //getEventData('Event');
-             // }
+              //  if (!isEventsTabAPICall) {
+              Provider.of<MyComplexResponse>(context, listen: false)
+                  .getAnnouncementData('Event');
+              //getEventData('Event');
+              // }
             }
             break;
         }
@@ -2495,61 +2028,35 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getDocumentsLayout(MyComplexResponse value) {
     print('MyDocumentsLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0), //ticketOpenClosedLayout(),
-                // documentOwnCommonLayout(),
-                value.isLoading ? GlobalFunctions.loadingWidget(context): getDocumentListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0), //ticketOpenClosedLayout(),
+        // documentOwnCommonLayout(),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getDocumentListDataLayout(value),
+      ],
     );
   }
 
   getDocumentListDataLayout(MyComplexResponse value) {
     print('getDocumentListDataLayout Tab Call');
     return Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height/15, 10, 0),
+      margin : EdgeInsets.only(top: 8),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
                 itemCount: value.documentList.length,
                 itemBuilder: (context, position) {
-                  return getDocumentListItemLayout(position,value);
+                  return getDocumentListItemLayout(position, value);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
     );
   }
 
-  getDocumentListItemLayout(int position, MyComplexResponse value) {
-    print('getDocumentListItemLayout Tab Call');
-    return AppContainer(
-     /* width: MediaQuery.of(context).size.width / 1.1,
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: GlobalVariables.white),*/
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(
+  /* Container(
                   child: Container(
                     child: SvgPicture.asset(
                       GlobalVariables.pdfIconPath,
@@ -2558,155 +2065,133 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       height: 40,
                     ),
                   ),
+                ),*/
+  getDocumentListItemLayout(int position, MyComplexResponse value) {
+    print('getDocumentListItemLayout Tab Call');
+    return AppContainer(
+      isListItem: true,
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Flexible(
+                  flex:2,
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    child: primaryText(
+                      value.documentList[position].TITLE,
+                    ),
+                  ),
                 ),
                 Flexible(
+                  flex: 1,
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(
-                        15, 0, 0, 0), //alignment: Alignment.topLeft,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Container(
-                            // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Flexible(
-                              flex: 2,
-                              child: Container(
-                                child: text(
-                                  value.documentList[position].TITLE,
-                                  //maxLine: 1,
-                                 textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeSMedium,
-                                    fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: text(
-                                    value.documentList[position].DOCUMENT_CATEGORY,
-                                    textColor: GlobalVariables.white,
-                                    fontSize: GlobalVariables.textSizeSmall
-                                ),
-                                decoration: BoxDecoration(
-                                    color: getDocumentTypeColor(
-                                        value.documentList[position]
-                                            .DOCUMENT_CATEGORY),
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                            ),
-                          ],
-                        )),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: text(
-                            value.documentList[position].DESCRIPTION,
-                            maxLine: 3,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                            //    overflow: TextOverflow.ellipsis,
-                            textColor: GlobalVariables.black,
-                          ),
-                        ),
-                      ],
-                    ),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: text(
+                        value.documentList[position]
+                            .DOCUMENT_CATEGORY,
+                        textColor: GlobalVariables.white,
+                        fontSize: GlobalVariables.textSizeSmall),
+                    decoration: BoxDecoration(
+                        color: getDocumentTypeColor(value
+                            .documentList[position]
+                            .DOCUMENT_CATEGORY),
+                        borderRadius: BorderRadius.circular(5)),
                   ),
                 )
               ],
             ),
           ),
+          SizedBox(height: 16,),
           Container(
-            height: 1,
-            color: GlobalVariables.mediumGreen,
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            child: Divider(
-              height: 1,
+            alignment: Alignment.topLeft,
+            child: secondaryText(
+              value.documentList[position].DESCRIPTION,
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                /*  Visibility(
-                  visible:false,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                          child: SvgPicture.asset(
-                            GlobalVariables.downloadIconPath,
-                            color: GlobalVariables.lightGray,
-                            width: 25,
-                            height: 20,
-                          )),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(
-                            "Document Name",
-                            style: TextStyle(color: GlobalVariables.mediumGreen)),
-                      ),
-                    ],
-                  ),
-                ),*/
-                value.documentList[position].DOCUMENT.length != null
-                    ? Container(
-                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: InkWell(
-                          onTap: () {
-                            print("storagePermiassion : " +
-                                isStoragePermission.toString());
-                            if (isStoragePermission) {
-                              downloadAttachment(
-                                  value.documentList[position].DOCUMENT, _localPath);
-                            } else {
-                              GlobalFunctions.askPermission(Permission.storage)
-                                  .then((value1) {
-                                if (value1) {
-                                  downloadAttachment(
-                                      value.documentList[position].DOCUMENT,
-                                      _localPath);
-                                } else {
-                                  GlobalFunctions.showToast(
-                                      AppLocalizations.of(context)
-                                          .translate('download_permission'));
-                                }
-                              });
-                            }
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                  child: AppIcon(
-                                Icons.attach_file,
-                                iconColor: GlobalVariables.mediumGreen,
-                              )),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                child: text(
-                                  "Attachment",
-                                  textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeVerySmall,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    : Container(),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: text(
-                      value.documentList[position].USER_NAME == null
-                          ? 'Posted By: - '
-                          : 'Posted By: ' + value.documentList[position].USER_NAME,
-                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              /*  Visibility(
+                visible:false,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        child: SvgPicture.asset(
+                          GlobalVariables.downloadIconPath,
+                          color: GlobalVariables.lightGray,
+                          width: 25,
+                          height: 20,
+                        )),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(
+                          "Document Name",
+                          style: TextStyle(color: GlobalVariables.mediumGreen)),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),*/
+              value.documentList[position].DOCUMENT.length != null
+                  ? Container(
+                      // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: InkWell(
+                        onTap: () {
+                          print("storagePermiassion : " +
+                              isStoragePermission.toString());
+                          if (isStoragePermission) {
+                            downloadAttachment(
+                                value.documentList[position].DOCUMENT,
+                                _localPath);
+                          } else {
+                            GlobalFunctions.askPermission(Permission.storage)
+                                .then((value1) {
+                              if (value1) {
+                                downloadAttachment(
+                                    value.documentList[position].DOCUMENT,
+                                    _localPath);
+                              } else {
+                                GlobalFunctions.showToast(
+                                    AppLocalizations.of(context)
+                                        .translate('download_permission'));
+                              }
+                            });
+                          }
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                child: AppIcon(
+                              Icons.attach_file,
+                              iconColor: GlobalVariables.mediumGreen,
+                            )),
+                            SizedBox(width: 4,),
+                            Container(
+                              child: text(
+                                "Attachment",
+                                textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSmall,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
+              SizedBox(width: 4,),
+              text(
+                  value.documentList[position].USER_NAME == null
+                      ? 'Posted By: - '
+                      : 'Posted By: ' +
+                          value.documentList[position].USER_NAME,
+                  textColor: GlobalVariables.grey,
+                  fontSize: GlobalVariables.textSizeSmall),
+            ],
           )
         ],
       ),
@@ -2729,7 +2214,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         break;
     }
   }
-  
+
   getVoteLayout(int position, MyComplexResponse value) {
     //  print("value.pollList[position].SECRET_POLL : "+value.pollList[position].SECRET_POLL.toString());
     // print("value.pollList[position].OPTION : "+value.pollList[position].OPTION.toString());
@@ -2748,7 +2233,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 shrinkWrap: true,
                 itemCount: _optionList.length,
                 itemBuilder: (BuildContext context, int i) {
-                  return getPollOptionListItemLayout(position, _optionList[i],value);
+                  return getPollOptionListItemLayout(
+                      position, _optionList[i], value);
                 }),
           ),
         ),
@@ -2756,7 +2242,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
     );
   }
 
-  getPollOptionListItemLayout(int position, PollOption pollOption, MyComplexResponse value) {
+  getPollOptionListItemLayout(
+      int position, PollOption pollOption, MyComplexResponse value) {
     if (value.pollList[position].VOTED_TO.length > 0) {
       if (pollOption.ANS_ID.toString().toLowerCase() ==
           value.pollList[position].VOTED_TO.toLowerCase()) {
@@ -2819,7 +2306,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: text(
                         pollOption.ANS == null ? '' : pollOption.ANS,
-                        textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
                       ),
                     ),
                   ),
@@ -2850,7 +2338,8 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         myComplexValue.pollList[position].VOTED_TO = optionId;
         myComplexValue.pollList[position].VOTE_PERMISSION = 'NO';
 
-        if (myComplexValue.pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
+        if (myComplexValue.pollList[position].SECRET_POLL.toLowerCase() ==
+            'yes') {
           setState(() {});
           GlobalFunctions.showToast(value.message +
               '. You can view result of poll after ' +
@@ -2860,14 +2349,12 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      BaseViewPollGraph(myComplexValue.pollList[position], optionList)));
+                  builder: (context) => BaseViewPollGraph(
+                      myComplexValue.pollList[position], optionList)));
         }
       } else {
         GlobalFunctions.showToast(value.message);
       }
     });
   }
-
 }
-

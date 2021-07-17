@@ -56,9 +56,9 @@
   "pending_transaction": "Unapproved Receipt",
   "share_address": "Share Address",
   "view_more":"View more",
-  "my_family": "My Family",
+  "my_family": "Family",
   "plus_add": "+Add",
-  "my_staff": "My Staff",
+  "my_staff": "Staff",
   "news_board": "News Board",
   "announcement": "Announcement",
   "poll_survey": "Poll/Survey",
@@ -424,7 +424,7 @@
   "biller_name": "Biller Name",
   "area": "Area",
   "gstin": "GSTIN",
-  "my_tenant": "My Tenant",
+  "my_tenant": "Tenant",
   "update_unit_details": "Update Unit Details",
   "reason": "Reason",
   "agreement": "Agreement",
@@ -446,5 +446,6 @@
   "take_identity_proof_picture": "Identity Proof",
   "user_statistics": "User Statistics",
   "user_request": "User Request",
-  "switch_society": "Switch Society"
+  "switch_society": "Switch Society",
+  "see_all": "See All"
 }

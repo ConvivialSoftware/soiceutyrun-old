@@ -74,6 +74,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
         child: Consumer<HelpDeskResponse>(builder: (context, value, child){
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               //resizeToAvoidBottomPadding: false,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
@@ -106,27 +107,14 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
         Navigator.pop(context);
         return;
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: GlobalVariables.veryLightGray,
-        ),
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              child: Stack(
-                children: <Widget>[
-                  GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                      context, 180.0),
-                   ticketOpenClosedLayout() , //ticketFilterLayout(),
-                  !value.isLoading ?  getTicketListDataLayout(value) : GlobalFunctions.loadingWidget(context),
-                  !isAssignComplaint ? addTicketFabLayout(): Container(),
-                ],
-              ),
-            ),
-          ],
-        ),
+      child: Stack(
+        children: <Widget>[
+          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+              context, 180.0),
+           ticketOpenClosedLayout() , //ticketFilterLayout(),
+          !value.isLoading ?  getTicketListDataLayout(value) : GlobalFunctions.loadingWidget(context),
+          !isAssignComplaint ? addTicketFabLayout(): Container(),
+        ],
       ),
     );
   }
@@ -135,13 +123,12 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
+        //width: MediaQuery.of(context).size.width / 1.1,
         height: 50,
-        margin: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height / 60, 0, 0),
+        margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
         decoration: BoxDecoration(
-          color: GlobalVariables.white,
-          borderRadius: BorderRadius.circular(30),
+          color: GlobalVariables.transparent,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,8 +142,8 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   decoration: BoxDecoration(
                       color: firstTicketContainerColor,
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0))),
+                          topLeft: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0))),
                   child: ButtonTheme(
                     minWidth: 190,
                     height: 50,
@@ -191,8 +178,8 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   decoration: BoxDecoration(
                       color: secondTicketContainerColor,
                       borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30.0),
-                          bottomRight: Radius.circular(30.0))),
+                          topRight: Radius.circular(10.0),
+                          bottomRight: Radius.circular(10.0))),
                   child: ButtonTheme(
                     minWidth: 190,
                     height: 50,
@@ -321,10 +308,11 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
 
 
   getTicketListDataLayout(HelpDeskResponse value) {
+    print(' value.openComplaintList.length :'+ value.openComplaintList.length.toString());
+    print(' value.closeComplaintList.length :'+ value.closeComplaintList.length.toString());
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 10, 10, 0),
+      margin: EdgeInsets.fromLTRB(0, 80, 0, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -355,6 +343,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
         }
       },
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: <Widget>[
             Row(
@@ -366,11 +355,12 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                     isOpenTicket ? value.openComplaintList[position].STATUS : value.closeComplaintList[position].STATUS,
                     textColor: GlobalVariables.white,
                     fontSize: GlobalVariables.textSizeSmall,
+                    textStyleHeight: 1.0
                   ),
                   decoration: BoxDecoration(
                       color: getTicketCategoryColor(
                           isOpenTicket ? value.openComplaintList[position].STATUS : value.closeComplaintList[position].STATUS),
-                      borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(5)),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -381,7 +371,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       child: text(
                           'Ticket No: ' +
                               ( isOpenTicket ? value.openComplaintList[position].TICKET_NO : value.closeComplaintList[position].TICKET_NO),
-                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSmall
                       ),
                     ),
                     isAssignComplaint ? Container(
@@ -389,7 +379,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: text(
                           'Unit No: '+ (isOpenTicket ? value.openComplaintList[position].BLOCK+' '+value.openComplaintList[position].FLAT : value.closeComplaintList[position].BLOCK+' '+value.closeComplaintList[position].FLAT),
-                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium
+                          textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSmall
                       ),
                     ):Container(),
                   ],
@@ -422,8 +412,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                   ),
                   Flexible(
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(
-                          5, 0, 0, 0), //alignment: Alignment.topLeft,
+                      //margin: EdgeInsets.fromLTRB(5, 0, 0, 0), //alignment: Alignment.topLeft,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -439,20 +428,15 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                           )),*/
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: text(
+                            child: primaryText(
                                 isOpenTicket ? value.openComplaintList[position].SUBJECT : value.closeComplaintList[position].SUBJECT,
-                                maxLine: 1,
-                                textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                fontWeight: FontWeight.bold),
+                                maxLine: 1,),
                           ),
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: text(
+                            child: secondaryText(
                                 isOpenTicket ? value.openComplaintList[position].DESCRIPTION : value.closeComplaintList[position].DESCRIPTION,
-                                maxLine: 2,
-                                textColor: GlobalVariables.grey,
-                                fontSize: GlobalVariables.textSizeSMedium
+                              maxLine: 1,
                             ),
                           ),
                           /*Row(
@@ -533,44 +517,33 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
                 ),
               ],
             ) : Container(),*/
-            Container(
-              height: 1,
-              color: GlobalVariables.mediumGreen,
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Divider(
-                height: 1,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: text(
-                        'Issued on: ' +
-                            ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE,"dd-MM-yyyy")),
-                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                          child: AppIcon(
-                            Icons.chat_bubble,
-                            iconColor: GlobalVariables.lightGray,
-                          )),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                        child: text(
-                            ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT ) +
-                                ' Comments',
-                            textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: text(
+                      'Issued on: ' +
+                          ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE,"dd-MM-yyyy")),
+                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    AppIcon(
+                      Icons.insert_comment_outlined,
+                      iconColor: GlobalVariables.lightGray,
+                      iconSize: 20.0,
+                    ),
+                    SizedBox(width: 3,),
+                    text(
+                        ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT ) +
+                            ' Comments',
+                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
+                  ],
+                ),
+              ],
             )
           ],
         ),

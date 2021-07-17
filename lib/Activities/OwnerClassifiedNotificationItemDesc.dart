@@ -10,9 +10,11 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:intl/intl.dart';
 import 'base_stateful.dart';
 
 class BaseOwnerClassifiedNotificationItemDesc extends StatefulWidget {
@@ -64,7 +66,6 @@ class CreateClassifiedListingState
         value: Provider.of<OwnerClassifiedResponse>(context),
         child: Consumer<OwnerClassifiedResponse>(
           builder: (context, value, child) {
-
 
           if(value.ownerClassifiedList.length>0) {
             imageList = List<ClassifiedImage>.from(
@@ -335,205 +336,162 @@ class CreateClassifiedListingState
 
   getCreateClassifiedListingLayout(OwnerClassifiedResponse value) {
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
-        padding: EdgeInsets.all(8),
-        // height: MediaQuery.of(context).size.height / 0.5,
-        decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          padding: EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CarouselSlider.builder(
-                itemCount: imageList.length,
-                options: CarouselOptions(
-                    autoPlay: true,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _current = index;
-                      });
-                    }),
-                itemBuilder: (context, index,item) {
-                  return Container(
-                      margin: EdgeInsets.all(5.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          child: Stack(
-                            children: <Widget>[
-                              CachedNetworkImage(
-                                  imageUrl: imageList[index].Img_Name,
-                                  fit: BoxFit.cover,
-                                  width: 1000.0,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.8),
-                            ],
-                          )));
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: imageList.map((url) {
-                  int index = imageList.indexOf(url);
-                  //print('_current : ' + _current.toString());
-                  //('index : ' + index.toString());
-                  return Container(
-                    width: 8.0,
-                    height: 8.0,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _current == index
-                          ? Color.fromRGBO(0, 0, 0, 0.9)
-                          : Color.fromRGBO(0, 0, 0, 0.4),
-                    ),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 16),
-              text(value.ownerClassifiedList[0].Title,
-                  fontSize: GlobalVariables.textSizeMedium,
-                  maxLine: 2,
-                  textColor: GlobalVariables.green,
-                  fontWeight: FontWeight.w500),
-              text(value.ownerClassifiedList[0].Society_Name,
-                  fontSize: GlobalVariables.textSizeSmall,
-                  maxLine: 2,
-                  textColor: GlobalVariables.grey,
-                  fontWeight: FontWeight.w500),
-              SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.location_on,
-                    size: 20,
-                    color: GlobalVariables.lightGray,
+      child: AppContainer(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CarouselSlider.builder(
+              itemCount: imageList.length,
+              options: CarouselOptions(
+                  autoPlay: true,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }),
+              itemBuilder: (context, index,item) {
+                return Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        child: Stack(
+                          children: <Widget>[
+                            CachedNetworkImage(
+                                imageUrl: imageList[index].Img_Name,
+                                fit: BoxFit.cover,
+                                width: 1000.0,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.8),
+                          ],
+                        )));
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: imageList.map((url) {
+                int index = imageList.indexOf(url);
+                //print('_current : ' + _current.toString());
+                //('index : ' + index.toString());
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _current == index
+                        ? Color.fromRGBO(0, 0, 0, 0.9)
+                        : Color.fromRGBO(0, 0, 0, 0.4),
                   ),
-                  Flexible(
-                    child: text(
-                        value.ownerClassifiedList[0].Address +
-                            ', ' +
-                            value.ownerClassifiedList[0].Locality +
-                            ', ' +
-                            value.ownerClassifiedList[0].City +
-                            ', ' +
-                            value.ownerClassifiedList[0].Pincode,
-                        textColor: GlobalVariables.grey,
-                        fontSize: GlobalVariables.textSizeSmall,
-                        maxLine: 4),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    //padding: EdgeInsets.all(4),
-                    /*decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(8))),*/
-                    child: text('Rs. ' + value.ownerClassifiedList[0].Price,
-                        textColor: GlobalVariables.black,
-                        fontSize: GlobalVariables.textSizeNormal,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    //padding: EdgeInsets.only(top: 2,bottom: 4,left: 16,right: 16),
-                    child: text(value.ownerClassifiedList[0].Type,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        fontWeight: FontWeight.bold,
-                        textColor: GlobalVariables.orangeYellow),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Divider(
-                thickness: 1,
-                color: GlobalVariables.lightGray,
-              ),
-              SizedBox(height: 4),
-              text('Description',
-                  textColor: GlobalVariables.green,
-                  fontSize: GlobalVariables.textSizeMedium,
-                  fontWeight: FontWeight.w500),
-              SizedBox(height: 8),
-              Container(
-                  //margin: EdgeInsets.only(left: 8),
-                  child: longText(
-                      value.ownerClassifiedList[0].Description
-                      /*+'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
-                      +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
-                      +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
-                      +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'*/
-                      ,
-                      textColor: GlobalVariables.grey,
-                      fontSize: GlobalVariables.textSizeSMedium,
-                      islongTxt: true)),
-              SizedBox(height: 8),
-              Divider(
-                thickness: 1,
-                color: GlobalVariables.lightGray,
-              ),
-              SizedBox(height: 4),
-              text('Details',
-                  textColor: GlobalVariables.green,
-                  fontSize: GlobalVariables.textSizeMedium,
-                  fontWeight: FontWeight.w500),
-              SizedBox(height: 4),
-              Container(
-                child: Column(
-                  children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          text('Posted',
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.grey),
-                          text(
-                              GlobalFunctions.convertDateFormat(
-                                  value.ownerClassifiedList[0].C_Date, 'dd-MM-yyyy'),
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.grey)
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          text('Posted By',
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.grey),
-                          text(value.ownerClassifiedList[0].Name,
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.grey)
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                  ],
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 16),
+            primaryText(value.ownerClassifiedList[0].Title,),
+            //SizedBox(height: 2),
+            secondaryText(value.ownerClassifiedList[0].Society_Name,),
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AppIcon(
+                  Icons.location_on,
+                  iconSize: GlobalVariables.textSizeNormal,
+                  iconColor: GlobalVariables.grey,
                 ),
-              )
-            ],
-          ),
+                SizedBox(width: 4,),
+                Flexible(
+                  child: text(value.ownerClassifiedList[0].Address+', '+value.ownerClassifiedList[0].Locality+', '+value.ownerClassifiedList[0].City+', '+value.ownerClassifiedList[0].Pincode,
+                      /*widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '':widget.classifiedList.Pincode.toString())*/
+                      textColor: GlobalVariables.grey,
+                      fontSize: GlobalVariables.textSizeSmall,
+                      maxLine: 4),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  //padding: EdgeInsets.all(4),
+                  /*decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(8))),*/
+                  child: text('Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price)),
+                      textColor: GlobalVariables.black,
+                      fontSize: GlobalVariables.textSizeNormal,
+                      fontWeight: FontWeight.w500),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.orangeYellow,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: text(value.ownerClassifiedList[0].Type,
+                      fontSize: GlobalVariables.textSizeSmall,
+                      fontWeight: FontWeight.bold,
+                      textColor: GlobalVariables.white),
+                ),
+              ],
+            ),
+            //SizedBox(height: 4),
+            Divider(),
+            primaryText('Description',
+              textColor: GlobalVariables.green,),
+            SizedBox(height: 8),
+            Container(
+              //margin: EdgeInsets.only(left: 8),
+                child: secondaryText(
+                  value.ownerClassifiedList[0].Description
+                  /*+'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
+                    +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
+                    +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
+                    +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'*/
+                  ,
+                )),
+            Divider(),
+            // SizedBox(height: 4),
+            primaryText('Details',),
+            SizedBox(height: 4),
+            Container(
+              child: Column(
+                children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        secondaryText('Posted',),
+                        secondaryText(GlobalFunctions.convertDateFormat(value.ownerClassifiedList[0].C_Date, 'dd-MM-yyyy'),)
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        secondaryText('Posted By',),
+                        secondaryText(value.ownerClassifiedList[0].Name,)
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

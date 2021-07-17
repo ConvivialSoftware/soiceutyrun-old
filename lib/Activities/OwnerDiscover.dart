@@ -14,9 +14,11 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
+import 'package:intl/intl.dart';
 
 class BaseOwnerDiscover extends StatefulWidget {
   String pageName;
@@ -103,6 +105,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
             return DefaultTabController(
               length: value.ownerClassifiedCategoryList.length,
               child: Scaffold(
+                backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
                   backgroundColor: GlobalVariables.green,
                   centerTitle: true,
@@ -160,43 +163,16 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
   }*/
 
   getOwnerClassifiedLayout(OwnerClassifiedResponse value) {
-    /*OwnerClassifiedResponse _OwnerClassifiedResponse = OwnerClassifiedResponse();
-    for (int i = 0; i < value.ownerClassifiedList.length; i++) {
-      var category = value
-          .ownerClassifiedCategoryList[
-              _tabController == null ? 0 : _tabController.index]
-          .Category_Name;
-      print('category : ' + category.toString());
-      if (category.toLowerCase() ==
-          value.ownerClassifiedList[i].Category.toLowerCase()) {
-        _OwnerClassifiedResponse.ownerClassifiedList.add(value.ownerClassifiedList[i]);
-        //print('runtime : '+_classifiedValue.runtimeType.toString());
-      }
-    }
-    print('getClassifiedLayout Tab Call');*/
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                value.ownerClassifiedList.isNotEmpty
-                    ? getOwnerClassifiedListDataLayout(value)
-                    : GlobalFunctions.noDataFoundLayout(context,'No Data Found'),
-                addClassifiedOwnerDiscoverFabLayout(
-                    GlobalVariables.CreateClassifiedListingPage),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        value.ownerClassifiedList.isNotEmpty
+            ? getOwnerClassifiedListDataLayout(value)
+            : GlobalFunctions.noDataFoundLayout(context,'No Data Found'),
+        addClassifiedOwnerDiscoverFabLayout(
+            GlobalVariables.CreateClassifiedListingPage),
+      ],
     );
   }
 
@@ -242,8 +218,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
   getOwnerClassifiedListDataLayout(OwnerClassifiedResponse value) {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin:
-          EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 15, 18, 0),
+      margin: EdgeInsets.only(top: 8),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -277,209 +252,170 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
          // GlobalFunctions.setBaseContext(context);
         });
       },
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Container(
-            decoration: boxDecoration(radius: 10),
-            child: Stack(
+      child: AppContainer(
+        child: Column(
+          children: <Widget>[
+            Row(
               children: <Widget>[
                 Container(
-                  padding:
-                      EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                              //color: GlobalVariables.grey,
-                              child:
-                                  /*false
-                                ? AppAssetsImage(
-                              GlobalVariables
-                                  .componentUserProfilePath,
-                              width / 5.5,
-                              width / 6,
-                              borderColor: GlobalVariables.grey,
-                              borderWidth: 1.0,
-                              fit: BoxFit.fill,
-                              radius: 12.0,
-                              shape: BoxShape.rectangle
-                            )
-                                : */
-                              imageList.length>0 ? AppNetworkImage(
-                            imageList[0].Img_Name,
-                            imageWidth: width / 5.5,
-                            imageHeight: width / 5.5,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.fill,
-                            radius: GlobalVariables.textSizeSmall,
-                            shape: BoxShape.rectangle,
-                          ) : AppAssetsImage(
-                                  GlobalVariables
-                                      .componentUserProfilePath,
-                                imageWidth: width / 5.5,
-                                imageHeight: width / 5.5,
-                                borderColor: GlobalVariables.grey,
-                                borderWidth: 1.0,
-                                fit: BoxFit.fill,
-                                radius: GlobalVariables.textSizeSmall,
-                                shape: BoxShape.circle,
+                    //color: GlobalVariables.grey,
+                    child:
+                        /*false
+                      ? AppAssetsImage(
+                    GlobalVariables
+                        .componentUserProfilePath,
+                    width / 5.5,
+                    width / 6,
+                    borderColor: GlobalVariables.grey,
+                    borderWidth: 1.0,
+                    fit: BoxFit.fill,
+                    radius: 12.0,
+                    shape: BoxShape.rectangle
+                  )
+                      : */
+                    imageList.length>0 ? AppNetworkImage(
+                  imageList[0].Img_Name,
+                      imageWidth: 70.0,
+                      imageHeight: 70.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 1.0,
+                      fit: BoxFit.fill,
+                      radius: 35.0,
+                ) : AppAssetsImage(
+                        GlobalVariables
+                            .componentUserProfilePath,
+                      imageWidth: 70.0,
+                      imageHeight: 70.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 1.0,
+                      fit: BoxFit.fill,
+                      radius: 35.0,
+                    )
+                    /*ClipRRect(
+                    child: CachedNetworkImage(
+                      imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
+                      width: width / 5.5,
+                      height: width / 6,
+                      fit: BoxFit.fill,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),*/
+                    ),
+                Expanded(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        primaryText(value.ownerClassifiedList[position].Title,),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AppIcon(
+                              Icons.location_on,
+                              iconColor: GlobalVariables.grey,
+                            ),
+                            SizedBox(width: 4),
+                            Flexible(
+                              child: text(
+                                  value.ownerClassifiedList[position]
+                                      .Locality+' - '+value.ownerClassifiedList[position]
+                                      .City,
+                                  textStyleHeight: 1.0,
+                                  fontSize: GlobalVariables.textSizeSmall,),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 4,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: (daysCount + 1) > 7
+                                  ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      child: AppIcon(
+                                        Icons.date_range,
+                                        iconColor: GlobalVariables.grey,
+                                      )),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  text(
+                                      GlobalFunctions.convertDateFormat(
+                                          value.ownerClassifiedList[position]
+                                              .C_Date,
+                                          'dd-MMM-yyyy'),
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSmall,),
+                                ],
                               )
-                              /*ClipRRect(
-                              child: CachedNetworkImage(
-                                imageUrl: "https://iqonic.design/themeforest-images/prokit/images/theme3/t3_dish3.jpg",
-                                width: width / 5.5,
-                                height: width / 6,
-                                fit: BoxFit.fill,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),*/
-                              ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  text(value.ownerClassifiedList[position].Title,
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                      maxLine: 2,
-                                      textColor: GlobalVariables.green,
-                                      fontWeight: FontWeight.w500),
-                                  SizedBox(height: 4),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AppIcon(
-                                        Icons.location_on,
-                                        iconSize: GlobalVariables.textSizeNormal,
-                                        iconColor: GlobalVariables.lightGray,
-                                      ),
-                                      SizedBox(width: 2),
-                                      Flexible(
-                                        child: text(
-                                            value.ownerClassifiedList[position]
-                                                .Locality+' - '+value.ownerClassifiedList[position]
-                                                .City,
-                                            textColor:
-                                                GlobalVariables.lightGray,
-                                            fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                            maxLine: 2),
-                                      ),
-                                    ],
+                                  : Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      child: AppIcon(
+                                        Icons.access_time,
+                                        iconColor: GlobalVariables.grey,
+                                      )),
+                                  SizedBox(
+                                    width: 4,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: (daysCount + 1) > 7
-                                            ? Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                margin: EdgeInsets.only(top: 3),
-                                                child: AppIcon(
-                                                  Icons.date_range,
-                                                  iconSize: 15,
-                                                  iconColor: GlobalVariables.lightGray,
-                                                )),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            text(
-                                                GlobalFunctions.convertDateFormat(
-                                                    value.ownerClassifiedList[position]
-                                                        .C_Date,
-                                                    'dd-MMM-yyyy'),
-                                                textColor: GlobalVariables.lightGray,
-                                                fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                                fontWeight: FontWeight.normal),
-                                          ],
-                                        )
-                                            : Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                margin: EdgeInsets.only(top: 3),
-                                                child: AppIcon(
-                                                  Icons.access_time,
-                                                  iconSize: 15,
-                                                  iconColor: GlobalVariables.lightGray,
-                                                )),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            text(daysCount==0 ? 'Today' : daysCount==1 ? 'Yesterday ': daysCount.toString() + ' days ago',
-                                                textColor: GlobalVariables.lightGray,
-                                                fontSize:
-                                                GlobalVariables.textSizeSmall,
-                                                fontWeight: FontWeight.normal),
-                                          ],
-                                        ),
-                                      ),
-                                      value.ownerClassifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
-                                        child: text(value.ownerClassifiedList[position].Status,
-                                            fontSize: GlobalVariables.textSizeSmall,
-                                            maxLine: 1,
-                                            textColor: GlobalVariables.red,
-                                            fontWeight: FontWeight.normal),
-                                      ): daysCount>30 ?  text('Inactive',
-                                          fontSize: GlobalVariables.textSizeSmall,
-                                          maxLine: 1,
-                                          textColor: GlobalVariables.red,
-                                          fontWeight: FontWeight.normal) : SizedBox(),
-                                    ],
-                                  ),
+                                  text(daysCount==0 ? 'Today' : daysCount==1 ? 'Yesterday ': daysCount.toString() + ' days ago',
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSmall,),
                                 ],
                               ),
                             ),
-                          )
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.start,
-                      ),
-                      Divider(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: text(
-                                'Rs. ' + value.ownerClassifiedList[position].Price,
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                            child: text(value.ownerClassifiedList[position].Type,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                maxLine: 2,
-                                textColor: GlobalVariables.orangeYellow,
-                                fontWeight: FontWeight.w500),
-                          ),
-
-                          //SizedBox(width: 10),
-                        ],
-                      )
-                    ],
+                            value.ownerClassifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
+                              child: text(value.ownerClassifiedList[position].Status,
+                                  fontSize: GlobalVariables.textSizeSmall,
+                                  maxLine: 1,
+                                  textColor: GlobalVariables.red,
+                                  fontWeight: FontWeight.normal),
+                            ): daysCount>30 ?  text('Inactive',
+                                fontSize: GlobalVariables.textSizeSmall,
+                                maxLine: 1,
+                                textColor: GlobalVariables.red,
+                                fontWeight: FontWeight.normal) : SizedBox(),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  width: 4,
-                  height: 35,
-                  margin: EdgeInsets.only(top: 16),
-                  color: position % 2 == 0
-                      ? GlobalVariables.grey
-                      : GlobalVariables.lightOrange,
                 )
               ],
+              mainAxisAlignment: MainAxisAlignment.start,
             ),
-          )),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  child: text(
+                      'Rs. ' + NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[position].Price)),
+                      textColor: GlobalVariables.black,
+                      fontSize: GlobalVariables.textSizeMedium,
+                      fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.orangeYellow,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: text(value.ownerClassifiedList[position].Type,
+                    fontSize: GlobalVariables.textSizeSmall,
+                    textColor: GlobalVariables.white,),
+                ),
+                //SizedBox(width: 10),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 

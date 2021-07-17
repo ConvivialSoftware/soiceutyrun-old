@@ -164,7 +164,7 @@ class _AppFileImageState extends State<AppFileImage> {
 class AppIconButton extends StatefulWidget {
   var icon,iconColor,iconSize,onPressed;
 
-  AppIconButton(this.icon, {this.iconSize=24.0, this.iconColor=Colors.grey,this.onPressed,});
+  AppIconButton(this.icon, {this.iconSize=20.0, this.iconColor=Colors.grey,this.onPressed,});
 
   @override
   _AppIconButtonState createState() => _AppIconButtonState();
@@ -175,6 +175,8 @@ class _AppIconButtonState extends State<AppIconButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        padding: EdgeInsets.zero,
+        constraints: BoxConstraints(),
         onPressed: widget.onPressed,
         icon: AppIcon(widget.icon,iconColor: widget.iconColor,iconSize: widget.iconSize,)
     );
@@ -185,7 +187,7 @@ class _AppIconButtonState extends State<AppIconButton> {
 class AppIcon extends StatefulWidget {
   var icon,iconColor,iconSize;
 
-  AppIcon(this.icon,{this.iconColor=GlobalVariables.grey,this.iconSize=24.0});
+  AppIcon(this.icon,{this.iconColor=GlobalVariables.grey,this.iconSize=20.0});
 
   @override
   _AppIconState createState() => _AppIconState();

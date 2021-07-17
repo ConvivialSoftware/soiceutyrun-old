@@ -124,6 +124,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         builder: (context,value,child){
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -185,59 +186,32 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   getMyActivitiesLayout(GatePass value) {
     // print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                // getSocietyDataLayout(),
-                //   activitiesFilterDateLayout(),
-                value.isLoading? GlobalFunctions.loadingWidget(context):getActivitiesListDataLayout(value),
-                addActivitiesFabLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        // getSocietyDataLayout(),
+        //   activitiesFilterDateLayout(),
+        value.isLoading? GlobalFunctions.loadingWidget(context):getActivitiesListDataLayout(value),
+        addActivitiesFabLayout(),
+      ],
     );
   }
   
   getStaffCategoryLayout(GatePass value) {
     print(value.staffListCount.toString());
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                value.isLoading ? GlobalFunctions.loadingWidget(context): getStaffCategoryListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 180.0),
+        value.isLoading ? GlobalFunctions.loadingWidget(context): getStaffCategoryListDataLayout(value),
+      ],
     );
   }
 
   getStaffCategoryListDataLayout(GatePass value) {
     return value.staffListCount.length>0 ? Container(
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 15, 10, 0),
+      margin: EdgeInsets.fromLTRB(0,16, 0, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -260,6 +234,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     BaseStaffListPerCategory(value.staffListCount[position].ROLE)));
       },
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: <Widget>[
             Row(
@@ -485,7 +460,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       child: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(15),
             child: FloatingActionButton(
               onPressed: () {
                 //GlobalFunctions.showToast('Fab CLick');
@@ -526,9 +501,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       child: Column(
         children: [
           Container(
-            //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 20, 10, 0),
+            margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -541,7 +514,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     )),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 60),
+            margin: EdgeInsets.fromLTRB(0, 8, 0, 16),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -605,6 +578,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 }));
       },
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: <Widget>[
             Container(
@@ -614,40 +588,36 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       ? AppAssetsImage(
                     GlobalVariables
                         .componentUserProfilePath,
-                    imageWidth:20.0,
-                    imageHeight:20.0,
+                    imageWidth:40.0,
+                    imageHeight:40.0,
                     borderColor: GlobalVariables.grey,
                     borderWidth: 1.0,
                     fit: BoxFit.cover,
-                    radius: 10.0,
+                   // radius: 10.0,
                   )
                       : AppNetworkImage(
                     value.visitorList[position].IMAGE,
-                    imageWidth:20.0,
-                    imageHeight:20.0,
+                    imageWidth:40.0,
+                    imageHeight:40.0,
                     borderColor: GlobalVariables.grey,
                     borderWidth: 1.0,
                     fit: BoxFit.cover,
-                    radius: 13.0,
+                    //radius: 10.0,
                   ),
+                  SizedBox(width: 8,),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      padding: EdgeInsets.only(left: 8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Container(
-                            child: text(
+                            child: primaryText(
                               value.visitorList[position].VISITOR_NAME,
-                              textColor: GlobalVariables.green,
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                            //margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                             child: Row(
                               children: <Widget>[
                                 Container(
@@ -669,14 +639,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     children: [
                       Container(
                         // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         decoration: BoxDecoration(
                             color:value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
                             value.visitorList[position].STATUS.toLowerCase() ==
                                 'in'
                                 ? GlobalVariables.green
                                 : GlobalVariables.red,
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(5)),
                         child: text(value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
                         value.visitorList[position].STATUS.toLowerCase() == 'in'
                             ? 'Arrived'
@@ -699,135 +669,127 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 ],
               ),
             ),
+            SizedBox(height: 8,),
             value.visitorList[position].FROM_VISITOR.length>0 && value.visitorList[position].FROM_VISITOR!=null? Container(
-              margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                      child: AppIcon(
+                      //margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                      child: AppIconButton(
                         Icons.location_on,
                         iconColor: GlobalVariables.mediumGreen,
-                        iconSize: 25,
+                        iconSize: 20.0,
                       )),
+                  SizedBox(width: 18,),
                   Container(
                     alignment: Alignment.topLeft,
-                    margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: text(
+                    //margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                    child: secondaryText(
                       value.visitorList[position].FROM_VISITOR,
-                      textColor: GlobalVariables.grey,
-                      fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                 ],
               ),
             ): Container(),
+            SizedBox(height: 8,),
             Container(
-              margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                      child: AppIcon(
+                     // margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                      child: AppIconButton(
                         Icons.person,
                         iconColor: GlobalVariables.mediumGreen,
-                        iconSize: 25,
+                        iconSize: 20.0,
                       )),
+                  SizedBox(width: 18,),
                   Container(
                     alignment: Alignment.topLeft,
-                    margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: text(
+                    //margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                    child: secondaryText(
                       visitorStatus,
-                      textColor: GlobalVariables.grey,
-                      fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                 ],
               ),
             ),
+           Divider(),
             Container(
-              height: 3,
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: Divider(
-                height: 3,
-                color: GlobalVariables.lightGray,
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment:  MainAxisAlignment.spaceAround,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: InkWell(
-                      onTap: () {
-                        if (visitorUserStatus.toLowerCase() != 'wrong entry') {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  StatefulBuilder(
-                                      builder: (BuildContext context,
-                                          StateSetter setState) {
-                                        return Dialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(10.0)),
-                                            child: displayWrongEntryLayout(
-                                                position,value)
-                                        );
-                                      }));
-                        }
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: AppIcon(
-                                /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
-                                iconColor: visitorUserStatus.toLowerCase() != 'wrong entry' ?  GlobalVariables.mediumGreen : GlobalVariables.lightGreen,
-                                iconSize: 25,
-                              )
+              child: IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            if (visitorUserStatus.toLowerCase() != 'wrong entry') {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      StatefulBuilder(
+                                          builder: (BuildContext context,
+                                              StateSetter setState) {
+                                            return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius
+                                                        .circular(10.0)),
+                                                child: displayWrongEntryLayout(
+                                                    position,value)
+                                            );
+                                          }));
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: AppIconButton(
+                                    /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
+                                    iconColor: visitorUserStatus.toLowerCase() != 'wrong entry' ?  GlobalVariables.mediumGreen : GlobalVariables.lightGreen,
+                                    iconSize: 20.0,
+                                  )
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: text(
+                                  visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
+                                  textColor: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
+                                  fontSize: GlobalVariables.textSizeSmall,
+                                ),
+                              ),
+                            ],
                           ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            child: text(
-                              visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
-                              textColor: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
-                              fontSize: GlobalVariables.textSizeMedium,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      // width: 20,
-                      height: 35,
-                      child: VerticalDivider(
-                        width:GlobalVariables.textSizeNormal,
-                        color: GlobalVariables.lightGray,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: IconButton(
-                        icon: AppIcon(
-                          Icons.call,
-                          iconColor: GlobalVariables.green,
                         ),
-                        onPressed: () {
-                          launch('tel://' + value.visitorList[position].CONTACT);
-                        }),
-                  ),
-                ],
+                      ),
+                    ),
+                    VerticalDivider(),
+                    Flexible(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: AppIconButton(
+                              Icons.call,
+                              iconColor: GlobalVariables.green,
+                            onPressed: () {
+                              launch('tel://' + value.visitorList[position].CONTACT);
+                            }),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Visibility(
+         /*   Visibility(
               visible: false,
               child: Container(
                 margin: EdgeInsets.fromLTRB(50, 5, 0, 0),
@@ -913,7 +875,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   ],
                 ),
               ),
-            )
+            )*/
           ],
         ),
       )
@@ -922,6 +884,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   getScheduleVisitorListItemLayout(int position, GatePass value) {
     return AppContainer(
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -929,46 +892,34 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               children: <Widget>[
                 Container(
                   child: CircleAvatar(
-                    backgroundColor: GlobalVariables.mediumGreen,
-                    child: SvgPicture.asset(
+                    backgroundColor: GlobalVariables.grey,
+                    child: AppAssetsImage(
                       getVisitorStatusIcon('visitor'),
-                      width: 20,
-                      height: 20,
-                      color: GlobalVariables.white,
+                      imageWidth: 20,
+                      imageHeight: 20,
+                      imageColor: GlobalVariables.white,
                     ),
                   ),
                 ),
+                SizedBox(width: 8,),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    padding: EdgeInsets.only(left: 8.0),
+                    //padding: EdgeInsets.only(left: 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
-                          child: text(
+                          child: primaryText(
                             value.scheduleVisitorList[position].NAME,
-                            textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: text(
-                                  GlobalFunctions.convertDateFormat(
-                                      value.scheduleVisitorList[position].DATE,
-                                      'dd-MM-yyyy'),
-                                  textColor: GlobalVariables.grey,
-                                  fontSize: GlobalVariables.textSizeSmall,
-                                ),
-                              ),
-                            ],
-                          ),
+                        text(
+                          GlobalFunctions.convertDateFormat(
+                              value.scheduleVisitorList[position].DATE,
+                              'dd-MM-yyyy'),
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSmall,
                         )
                       ],
                     ),
@@ -982,7 +933,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                       decoration: BoxDecoration(
                           color: GlobalVariables.skyBlue,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(5)),
                       child: text(
                         'Expected',
                         textColor: GlobalVariables.white,
@@ -1003,11 +954,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               ],
             ),
           ),
+          SizedBox(height: 8,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                  alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: AppIcon(
                     Icons.vpn_key,
                     iconColor: GlobalVariables.mediumGreen,
@@ -1015,140 +968,112 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   )),
               Container(
                 alignment: Alignment.topLeft,
-                margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                child: text(
+                margin: EdgeInsets.only(left: 12),
+                child: secondaryText(
                   value.scheduleVisitorList[position].PASS_CODE,
-                  textColor: GlobalVariables.grey,
-                  fontSize: GlobalVariables.textSizeMedium,
+                /*  textColor: GlobalVariables.grey,
+                  fontSize: GlobalVariables.textSizeMedium,*/
                 ),
               ),
             ],
           ),
+          Divider(),
           Container(
-            height: 3,
-            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child: Divider(
-              height: 3,
-              color: GlobalVariables.lightGray,
-            ),
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: IconButton(
-                        icon: AppIcon(
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Align(
+                      alignment : Alignment.center,
+                      child: AppIconButton(
                           Icons.share,
                           iconColor: GlobalVariables.green,
-                        ),
-                        onPressed: () async {
-                          String googleParameter =
-                          await GlobalFunctions.getGoogleCoordinate();
-                          String userName = await GlobalFunctions.getDisplayName();
-                          DateTime earlier = DateTime.parse(
-                              value.scheduleVisitorList[position].DATE);
+                          iconSize: 20,
+                          onPressed: () async {
+                            String googleParameter =
+                            await GlobalFunctions.getGoogleCoordinate();
+                            String userName = await GlobalFunctions.getDisplayName();
+                            DateTime earlier = DateTime.parse(
+                                value.scheduleVisitorList[position].DATE);
 
-                          DateTime date = DateTime.now();
-                          String todayDate = GlobalFunctions.convertDateFormat(
-                              earlier.toIso8601String(), 'dd MMM');
-                          String currentTime =
-                          GlobalFunctions.convertDateFormat(
-                              date.toIso8601String(), 'hh:mm aa');
-                          String mapUrl = "http://www.google.com/maps/place/" +
-                              googleParameter;
+                            DateTime date = DateTime.now();
+                            String todayDate = GlobalFunctions.convertDateFormat(
+                                earlier.toIso8601String(), 'dd MMM');
+                            String currentTime =
+                            GlobalFunctions.convertDateFormat(
+                                date.toIso8601String(), 'hh:mm aa');
+                            String mapUrl = "http://www.google.com/maps/place/" +
+                                googleParameter;
 
-                          String sharedMsg = userName +
-                              ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
-                              GlobalFunctions.convertDateFormat(value.scheduleVisitorList[position].DATE, "dd MMM yyyy")  +
-                              ' till' +
-                              ' 11: 59 PM. ' +
-                              'Please use ' +
-                              value.scheduleVisitorList[position].PASS_CODE +
-                              ' as entry code at gate. ' +
-                              'Google coordinates : <a href=' +
-                              mapUrl +
-                              '>' +
-                              mapUrl +
-                              '</a>' +
-                              '';
-                          var sharedDocument = parse(sharedMsg);
-                          String sharedParsedString =
-                              parse(sharedDocument.body.text)
-                                  .documentElement
-                                  .text;
+                            String sharedMsg = userName +
+                                ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
+                                GlobalFunctions.convertDateFormat(value.scheduleVisitorList[position].DATE, "dd MMM yyyy")  +
+                                ' till' +
+                                ' 11: 59 PM. ' +
+                                'Please use ' +
+                                value.scheduleVisitorList[position].PASS_CODE +
+                                ' as entry code at gate. ' +
+                                'Google coordinates : <a href=' +
+                                mapUrl +
+                                '>' +
+                                mapUrl +
+                                '</a>' +
+                                '';
+                            var sharedDocument = parse(sharedMsg);
+                            String sharedParsedString =
+                                parse(sharedDocument.body.text)
+                                    .documentElement
+                                    .text;
 
-                          GlobalFunctions.shareData(
-                              'PassCode', sharedParsedString);
-                        }),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    width: 20,
-                    height: 35,
-                    child: VerticalDivider(
-                      width: 20,
-                      color: GlobalVariables.lightGray,
+                            GlobalFunctions.shareData(
+                                'PassCode', sharedParsedString);
+                          }),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: IconButton(
-                        icon: AppIcon(
+                  VerticalDivider(),
+                  Flexible(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: AppIconButton(
                           Icons.call,
                           iconColor: GlobalVariables.green,
-                        ),
-                        onPressed: () {
-                          launch('tel://' +
-                              value.scheduleVisitorList[position].MOBILE_NO);
-                        }),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    width: 20,
-                    height: 35,
-                    child: VerticalDivider(
-                      width: 20,
-                      color: GlobalVariables.lightGray,
+                          iconSize: 20,
+                          onPressed: () {
+                            launch('tel://' +
+                                value.scheduleVisitorList[position].MOBILE_NO);
+                          }),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: IconButton(
-                        icon: AppIcon(
+                  VerticalDivider(),
+                  Flexible(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: AppIconButton(
                           Icons.delete,
                           iconColor: GlobalVariables.green,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  StatefulBuilder(
-                                      builder: (BuildContext context, StateSetter setState) {
-                                        return Dialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10.0)),
-                                            child: displayDeleteExpectedVisitorLayout(position,value)
-                                        );
-                                      }));
+                          iconSize: 20,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(
+                                        builder: (BuildContext context, StateSetter setState) {
+                                          return Dialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0)),
+                                              child: displayDeleteExpectedVisitorLayout(position,value)
+                                          );
+                                        }));
 
-                        }),
+                          }),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         ],
@@ -1158,41 +1083,39 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   scheduleVisitorLayout() {
 
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.1,
+    return AppContainer(
+     /* width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(25),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: GlobalVariables.white),
+          color: GlobalVariables.white),*/
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
-            child: text(
+            child: primaryText(
               AppLocalizations.of(context)
                   .translate('visitor_arriving_on'),
-              textColor: GlobalVariables.green,
-                  fontSize: GlobalVariables.textSizeLargeMedium,
-                  fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 16,),
           Align(
             alignment: Alignment.topLeft,
             child: Container(
-              //alignment: Alignment.topLeft,
-              //width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              height: 50,
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
               decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                /*borderRadius: BorderRadius.circular(10),
-      border: Border.all(
-      color: GlobalVariables.mediumGreen,
-      width: 3.0,
-      )*/
-              ),
+                  color: GlobalVariables.white,
+                  borderRadius:
+                  BorderRadius.circular(10),
+                  border: Border.all(
+                    color: GlobalVariables.mediumGreen,
+                    width: 2.0,
+                  )),
               child: StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState){
                   return DropdownButton(
@@ -1687,22 +1610,25 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   children: [
                     Align(
                       alignment: Alignment.topRight,
-                      child: AppIconButton(
-                        Icons.close,
-                        iconColor: GlobalVariables.green,
-                        onPressed: (){
-                        Navigator.pop(context);
-                      },),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: AppIconButton(
+                          Icons.close,
+                          iconColor: GlobalVariables.green,
+                          onPressed: (){
+                          Navigator.pop(context);
+                        },),
+                      ),
                     ),
                     SizedBox(
-                      height: 70,
+                      height: 20,
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                       decoration: BoxDecoration(
                           color: visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
                           visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(5)),
                       child: text(visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
                         visitorList[position].STATUS.toLowerCase() == 'in'
                             ? 'Arrived'
@@ -1717,6 +1643,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         InkWell(
                           onTap: () {
@@ -1762,48 +1689,40 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     }));
                           },
                           child: CircleAvatar(
-                            radius: 25,
+                            radius: 20,
                             backgroundColor: GlobalVariables.mediumGreen,
                             backgroundImage:
                                 NetworkImage(visitorList[position].IMAGE),
                           ),
                         ),
                         SizedBox(
-                          width: 20.0,
+                          width: 10.0,
                         ),
-                        text(
+                        primaryText(
                           visitorList[position].VISITOR_NAME,
-                          textColor: GlobalVariables.green,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
                         ),
                         SizedBox(
                           width: 10.0,
                         ),
-                        Container(
-                          //margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
-                          child: IconButton(
-                            icon: AppIcon(Icons.call),
-                            iconSize: 25.0,
-                            color: GlobalVariables.mediumGreen,
-                            onPressed: () {
-                              launch('tel://' + visitorList[position].CONTACT);
-                            },
-                          ),
+                        AppIconButton(
+                         Icons.call,
+                          iconSize: 20.0,
+                          iconColor: GlobalVariables.green,
+                          onPressed: () {
+                            launch('tel://' + visitorList[position].CONTACT);
+                          },
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                        child: Divider(
-                          thickness: 1,
-                          color: GlobalVariables.lightGray,
-                        )),
+                   Padding(
+                     padding: const EdgeInsets.only(left: 16.0,right: 16.0,),
+                     child: Divider(),
+                   ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                      margin: EdgeInsets.fromLTRB(16,10,16,16),
                       child: Column(
                         children: [
                           Container(
@@ -1811,19 +1730,19 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                               children: <Widget>[
                                 Container(
                                     alignment: Alignment.topLeft,
-                                    child: AppIcon(
+                                    child: AppIconButton(
                                       Icons.access_time,
                                       iconColor: GlobalVariables.mediumGreen,
-                                      iconSize: 25.0,
+                                      iconSize: 20.0,
                                     )),
+                                SizedBox(width: 8,),
                                 Flexible(
                                   child: Container(
                                     alignment: Alignment.topLeft,
-                                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                     child: text(
                                       Date + ' ' + Time,
-                                      textColor: GlobalVariables.black,
-                                        fontSize: GlobalVariables.textSizeMedium,
+                                      textColor: GlobalVariables.grey,
+                                      fontSize: GlobalVariables.textSizeSmall,
                                     ),
                                   ),
                                 ),
@@ -1831,46 +1750,44 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                             child: Row(
                               children: <Widget>[
                                 Container(
                                     alignment: Alignment.topLeft,
-                                    child: AppIcon(
+                                    child: AppIconButton(
                                       Icons.person,
                                       iconColor: GlobalVariables.mediumGreen,
-                                      iconSize: 25,
+                                      iconSize: 20.0,
                                     )),
+                                SizedBox(width: 8,),
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: text(
                                     visitorStatus,
-                                    textColor: GlobalVariables.black,
-                                      fontSize: GlobalVariables.textSizeMedium,
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                             child: Row(
                               children: <Widget>[
                                 Container(
                                     alignment: Alignment.topLeft,
-                                    child: AppIcon(
+                                    child: AppIconButton(
                                       Icons.location_on,
                                       iconColor: GlobalVariables.mediumGreen,
-                                      iconSize: 25.0,
+                                      iconSize: 20.0,
                                     )),
+                                SizedBox(width: 8,),
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: text(
                                     visitorList[position].FROM_VISITOR,
-                                   textColor: GlobalVariables.black,
-                                      fontSize: GlobalVariables.textSizeMedium,
+                                   textColor: GlobalVariables.grey,
+                                      fontSize: GlobalVariables.textSizeSmall,
                                   ),
                                 ),
                               ],
@@ -1888,7 +1805,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         Align(
           alignment: Alignment.center,
           child: Container(
-            transform: Matrix4.translationValues(0.0, -120.0, 0.0),
+            transform: Matrix4.translationValues(0.0, -100.0, 0.0),
             width: MediaQuery.of(context).size.width * 0.3,
             height: MediaQuery.of(context).size.width * 0.3,
             decoration: BoxDecoration(

@@ -5,6 +5,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 import 'package:flutter_html/html_parser.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:societyrun/Widgets/AppImage.dart';
 
 BoxDecoration boxDecoration({double radius = 2,
   Color color = Colors.transparent,
@@ -23,8 +24,28 @@ BoxDecoration boxDecoration({double radius = 2,
   );
 }
 
-Widget text(var text,
-    {var fontSize = GlobalVariables.textSizeLargeMedium,
+Widget primaryText(var text,
+    {var fontSize = GlobalVariables.textSizeMedium,
+      textColor = GlobalVariables.green,
+      var isCentered = false,
+      var maxLine = 99999,
+      var latterSpacing = 0.5,
+      var fontWeight = FontWeight.bold,var textStyleHeight=1.5}) {
+  return Text(text,
+      textAlign: isCentered ? TextAlign.center : TextAlign.start,
+      maxLines: maxLine,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+          fontSize: double.parse(fontSize.toString()),
+          color: textColor,
+          height: textStyleHeight,
+          letterSpacing: latterSpacing,
+          fontFamily: 'sans-serif',
+          fontWeight: fontWeight));
+}
+
+Widget secondaryText(var text,
+    {var fontSize = GlobalVariables.textSizeSMedium,
       textColor = GlobalVariables.grey,
       var isCentered = false,
       var maxLine = 99999,
@@ -41,6 +62,29 @@ Widget text(var text,
           letterSpacing: latterSpacing,
           fontFamily: 'sans-serif',
           fontWeight: fontWeight));
+}
+
+Widget text(var text,
+    {var fontSize = GlobalVariables.textSizeLargeMedium,
+      textColor = GlobalVariables.grey,
+      var isCentered = false,
+      var maxLine = 99999,
+      var textDecoration = TextDecoration.none,
+      var latterSpacing = 0.5,
+      var fontWeight = FontWeight.normal,var textStyleHeight=1.5}) {
+  return Text(text,
+      textAlign: isCentered ? TextAlign.center : TextAlign.start,
+      maxLines: maxLine,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+          fontSize: double.parse(fontSize.toString()),
+          color: textColor,
+          height: textStyleHeight,
+          letterSpacing: latterSpacing,
+          fontFamily: 'sans-serif',
+          fontWeight: fontWeight,
+          decoration: textDecoration
+      ));
 }
 
 Widget htmlText(var text,
@@ -134,11 +178,11 @@ Widget longText(var text,
           letterSpacing: latterSpacing));
 }
 
-Widget divider({var thickness = 1.0}) {
+Widget divider({var thickness = 0.5}) {
   return Padding(
     padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
     child: Divider(
-      color: GlobalVariables.lightGray,
+      color: GlobalVariables.veryLightGray,
       thickness: thickness,
     ),
   );
@@ -152,4 +196,31 @@ Widget verticalDivider({var thickness = 1.0}) {
       thickness: thickness,
     ),
   );
+}
+
+Widget smallTextContainerOutlineLayout(textString){
+
+  return Container(
+    padding: EdgeInsets.fromLTRB(15, 3, 15, 3),
+    decoration: BoxDecoration(
+        color: GlobalVariables.green,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: GlobalVariables.transparent,
+          width: 1.0,
+        )),
+    child: Row(
+      children: [
+        text(
+            textString,
+            textColor: GlobalVariables.white,
+            fontSize:
+            GlobalVariables.textSizeSmall,
+            fontWeight: FontWeight.normal),
+        //SizedBox(width: 8,),
+       // AppIcon(Icons.arrow_forward_ios_sharp,iconColor: GlobalVariables.white,iconSize: 12,)
+      ],
+    ),
+  );
+
 }

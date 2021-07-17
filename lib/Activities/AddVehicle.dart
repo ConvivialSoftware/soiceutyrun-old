@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -38,6 +39,7 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -62,163 +64,142 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-                getAddVehicleLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+        getAddVehicleLayout(),
+      ],
     );
   }
 
   getAddVehicleLayout() {
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
-        padding: EdgeInsets.all(20),
-        // height: MediaQuery.of(context).size.height / 0.5,
-        decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(10)),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('vehicle_no') + '*',
-                controllerCallback: _vehicleNoController,
-                textCapitalization: TextCapitalization.characters,
-                inputFormatters: [
-                  new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedVehicleType = "2 Wheeler";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
+      child: AppContainer(
+        child: Column(
+          children: <Widget>[
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('vehicle_no') + '*',
+              controllerCallback: _vehicleNoController,
+              textCapitalization: TextCapitalization.characters,
+              inputFormatters: [
+                new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: InkWell(
+                      //  splashColor: GlobalVariables.mediumGreen,
+                      onTap: () {
+                        _selectedVehicleType = "2 Wheeler";
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: _selectedVehicleType == "2 Wheeler"
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
                                     color: _selectedVehicleType == "2 Wheeler"
                                         ? GlobalVariables.green
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _selectedVehicleType == "2 Wheeler"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('2_wheeler'),
-                                    textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeMedium),
-                              ),
-                            ],
-                          ),
+                                        : GlobalVariables.mediumGreen,
+                                    width: 2.0,
+                                  )),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: text(
+                                  AppLocalizations.of(context)
+                                      .translate('2_wheeler'),
+                                  textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeMedium),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedVehicleType = "4 Wheeler";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: InkWell(
+                      //  splashColor: GlobalVariables.mediumGreen,
+                      onTap: () {
+                        _selectedVehicleType = "4 Wheeler";
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: _selectedVehicleType == "4 Wheeler"
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
                                     color: _selectedVehicleType == "4 Wheeler"
                                         ? GlobalVariables.green
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _selectedVehicleType == "4 Wheeler"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
+                                        : GlobalVariables.mediumGreen,
+                                    width: 2.0,
+                                  )),
+                              child: AppIcon(Icons.check,
+                                  iconColor: GlobalVariables.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: text(
+                                AppLocalizations.of(context)
+                                    .translate('4_wheeler'),
+                                textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                  AppLocalizations.of(context)
-                                      .translate('4_wheeler'),
-                                  textColor: GlobalVariables.green,
-                                  fontSize: GlobalVariables.textSizeMedium,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('model_name') + '*',
-                controllerCallback: _vehicleModelController,
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('model_name') + '*',
+              controllerCallback: _vehicleModelController,
+            ),
+            AppTextField(
+              textHintContent:
+                  AppLocalizations.of(context).translate('sticker'),
+              controllerCallback: _vehicleStickerController,
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              height: 45,
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: AppButton(
+                textContent: AppLocalizations.of(context).translate('submit'),
+                onPressed: () {
+                  verifyVehicle();
+                },
               ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('sticker'),
-                controllerCallback: _vehicleStickerController,
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 45,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: AppButton(
-                  textContent: AppLocalizations.of(context).translate('submit'),
-                  onPressed: () {
-                    verifyVehicle();
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

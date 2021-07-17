@@ -610,7 +610,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                               decoration: BoxDecoration(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.grey,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: GlobalVariables.transparent,
@@ -912,7 +912,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                               decoration: BoxDecoration(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.grey,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: GlobalVariables.transparent,
@@ -1502,7 +1502,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                   margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
                                   padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                   decoration: BoxDecoration(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.grey,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
                                         color: GlobalVariables.transparent,

@@ -8,10 +8,11 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
+import 'package:intl/intl.dart';
 import 'base_stateful.dart';
 
 class BaseDescriptionOfHomeService extends StatefulWidget {
@@ -64,6 +65,7 @@ class DescriptionOfHomeServiceState
             print('Consumer Value : ' + value.servicesList.toString());
             return Builder(
               builder: (context) => Scaffold(
+                backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
                   backgroundColor: GlobalVariables.green,
                   centerTitle: true,
@@ -90,108 +92,96 @@ class DescriptionOfHomeServiceState
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
+    return Column(
+      children: <Widget>[
+        Flexible(
+          child: SingleChildScrollView(
             child: Stack(
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      getHomeCareDescriptionListDataLayout(),
-                    ],
-                  ),
+                Column(
+                  children: <Widget>[
+                    getHomeCareDescriptionListDataLayout(),
+                  ],
                 ),
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-                width: width,
-                margin: EdgeInsets.all(18),
-                child: AppButton(textContent: "Book Service", onPressed: () {
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+              width: width,
+              margin: EdgeInsets.all(16),
+              child: AppButton(textContent: "Book Service", onPressed: () {
 
-                  if(_bookingDateController.text.length>0) {
-                    if (_requirementController.text.length > 0) {
-                      _progressDialog.show();
-                      Provider.of<ServicesResponse>(context, listen: false)
-                          .bookServicePerCategory(widget._services.Id,
-                          _requirementController.text.toString(),
-                          _nameController.text, _mobileController.text,
-                          _emailController.text, _bookingDateController.text)
-                          .then((value) {
-                        _progressDialog.hide();
-                        if (value.status) {
-                          Navigator.of(context).pop();
-                        }
-                        _requirementController.text='';
-                        _bookingDateController.text='';
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                StatefulBuilder(
-                                    builder: (BuildContext context,
-                                        StateSetter setState) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                25.0)),
-                                        child: Container(
-                                          padding: EdgeInsets.all(16),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                  child: AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 50.0,imageHeight: 50.0,)
-                                              ),
-                                              Container(
-                                                child: text(value.message,
-                                                    fontSize: GlobalVariables
-                                                        .textSizeSMedium,
-                                                    maxLine: 99),
-                                              ),
-                                            ],
-                                          ),
+                if(_bookingDateController.text.length>0) {
+                  if (_requirementController.text.length > 0) {
+                    _progressDialog.show();
+                    Provider.of<ServicesResponse>(context, listen: false)
+                        .bookServicePerCategory(widget._services.Id,
+                        _requirementController.text.toString(),
+                        _nameController.text, _mobileController.text,
+                        _emailController.text, _bookingDateController.text)
+                        .then((value) {
+                      _progressDialog.hide();
+                      if (value.status) {
+                        Navigator.of(context).pop();
+                      }
+                      _requirementController.text='';
+                      _bookingDateController.text='';
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      StateSetter setState) {
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25.0)),
+                                      child: Container(
+                                        padding: EdgeInsets.all(16),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                                child: AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 50.0,imageHeight: 50.0,)
+                                            ),
+                                            Container(
+                                              child: text(value.message,
+                                                  fontSize: GlobalVariables
+                                                      .textSizeSMedium,
+                                                  maxLine: 99),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                    }));
-                      });
-                    } else {
-                      GlobalFunctions.showToast(
-                          'Please Enter Your Requirement');
-                    }
-                  }else{
-                    GlobalFunctions.showToast('Please Select Booking Date');
+                                      ),
+                                    );
+                                  }));
+                    });
+                  } else {
+                    GlobalFunctions.showToast(
+                        'Please Enter Your Requirement');
                   }
+                }else{
+                  GlobalFunctions.showToast('Please Select Booking Date');
+                }
 
-                },textColor: GlobalVariables.white,)),
-          ),
-        ],
-      ),
+              },textColor: GlobalVariables.white,)),
+        ),
+      ],
     );
   }
 
   getHomeCareDescriptionListDataLayout() {
-
-
     return Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          18, MediaQuery.of(context).size.height / 50, 18, 0),
       child: Column(
         children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            padding: EdgeInsets.only(left: 16,top: 16),
             child: text(
               widget._services.Name,
               textColor: GlobalVariables.white,
@@ -199,9 +189,10 @@ class DescriptionOfHomeServiceState
                   fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 4,),
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+            padding: EdgeInsets.only(left: 16),
             child: text(
               widget._services.Title,
               textColor: GlobalVariables.lightGray,
@@ -210,31 +201,22 @@ class DescriptionOfHomeServiceState
           ),
           Stack(
             children: [
-              Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10)),
+              AppContainer(
+
                 child: Column(
                   children: <Widget>[
                     Container(
                       alignment: Alignment.topLeft,
-                      child: text(
+                      child: primaryText(
                         'Service Description',
-                        textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
                       ),
                     ),
+                    SizedBox(height: 8,),
                     Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: text(
+                      //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: secondaryText(
                         widget._services.Description,
-                        textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeSMedium,
                       ),
                     ),
                     /*Container(
@@ -257,64 +239,48 @@ class DescriptionOfHomeServiceState
                 ),
               ),
               Positioned(
-                right: -5,
+                right: 16,
                 top: -5,
                 child: Container(
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.only(right: 8, top: 8),
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 8),
+                  decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 5),
                   child: FittedBox(child: text(widget._services.Discount, fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10)),
+          AppContainer(
+            isListItem: true,
             child: Column(
               children: <Widget>[
                 Container(
                   alignment: Alignment.topLeft,
-                  child: text(
+                  child: primaryText(
                     'Charges',
-                    textColor: GlobalVariables.green,
-                        fontSize: GlobalVariables.textSizeMedium,
-                        fontWeight: FontWeight.bold,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Builder(
-                      builder: (context) => ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                          itemCount: _serviceChargesList.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int position) {
-                            return getHomeCareChargesListItemLayout(position);
-                          })),
-                ),
+                SizedBox(height: 8,),
+                Builder(
+                    builder: (context) => ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                        itemCount: _serviceChargesList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int position) {
+                          return getHomeCareChargesListItemLayout(position);
+                        })),
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10)),
+          AppContainer(
+            isListItem: true,
             child: Column(
               children: <Widget>[
                 Container(
                   alignment: Alignment.topLeft,
-                  child: text(
+                  child: primaryText(
                     'Tell us your requirement',
-                    textColor: GlobalVariables.green,
-                        fontSize: GlobalVariables.textSizeMedium,
-                        fontWeight: FontWeight.bold,
                   ),
                 ),
                 Container(
@@ -335,12 +301,8 @@ class DescriptionOfHomeServiceState
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10)),
+          AppContainer(
+            isListItem: true,
             child: AppTextField(
               textHintContent:
               AppLocalizations.of(context).translate('booking_date'),
@@ -364,21 +326,14 @@ class DescriptionOfHomeServiceState
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10)),
+          AppContainer(
+           isListItem:true,
             child: Column(
               children: <Widget>[
                 Container(
                   alignment: Alignment.topLeft,
-                  child: text(
+                  child: primaryText(
                     'Requester Details',
-                    textColor: GlobalVariables.green,
-                        fontSize: GlobalVariables.textSizeMedium,
-                        fontWeight: FontWeight.bold,
                   ),
                 ),
                 Container(
@@ -391,13 +346,14 @@ class DescriptionOfHomeServiceState
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         photo.isEmpty ? Image.asset(
                           GlobalVariables.componentUserProfilePath,
-                          width: 26,
-                          height: 26,
+                          width: 40,
+                          height: 40,
                         ): CircleAvatar(
-                          radius: 13,
+                          radius: 20,
                           backgroundColor: GlobalVariables.mediumGreen,
                           backgroundImage: NetworkImage(photo),
                         ),
@@ -410,28 +366,23 @@ class DescriptionOfHomeServiceState
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Container(
-                                  child: text(
+                                  child: primaryText(
                                     name,
-                                    textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeMedium,
-                                        fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Container(
                                   //margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                                   child: Container(
-                                    child: text(
+                                    child: secondaryText(
                                       mail,
-                                      textColor: GlobalVariables.lightGray,
-                                        fontSize: GlobalVariables.textSizeSmall,
+                                      fontSize: GlobalVariables.textSizeSmall
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  child: text(
+                                  child: secondaryText(
                                     mobile,
-                                   textColor: GlobalVariables.lightGray,
-                                      fontSize: GlobalVariables.textSizeSmall,
+                                      fontSize: GlobalVariables.textSizeSmall
                                   ),
                                 )
                               ],
@@ -515,7 +466,7 @@ class DescriptionOfHomeServiceState
 
   getHomeCareChargesListItemLayout(int position) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 5, 0, 0), // width: 100,
+      margin: EdgeInsets.fromLTRB(0, 4, 0, 0), // width: 100,
       // color: GlobalVariables.grey,
       child: Column(
         children: <Widget>[
@@ -523,9 +474,11 @@ class DescriptionOfHomeServiceState
             // height: 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
                         width: 8,
@@ -534,31 +487,24 @@ class DescriptionOfHomeServiceState
                             color: GlobalVariables.green,
                             borderRadius: BorderRadius.circular(50)),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: text(
-                          _serviceChargesList[position].Service_Title,
-                          textColor: GlobalVariables.grey,
-                        ),
+                      SizedBox(width: 8,),
+                      secondaryText(
+                        _serviceChargesList[position].Service_Title,
+                        textStyleHeight: 1.0
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  child: text(
-                    _serviceChargesList[position].Service_Price,
-                    textColor: GlobalVariables.green,
-                  ),
+                text(
+                  'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price)),
+                  textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
                 )
               ],
             ),
           ),
           _serviceChargesList.length-1!=position ? Container(
             margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child: Divider(
-              color: GlobalVariables.grey,
-              height: 3,
-            ),
+            child:Divider()
           ):Container()
         ],
       ),
@@ -606,21 +552,32 @@ class DescriptionOfHomeServiceState
                             height: 16,
                           ),
                           Container(
+                            alignment: Alignment.topRight,
+                            height: 45,
+                           // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: AppButton(
+                              textContent: AppLocalizations.of(context).translate('submit'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                name = _nameController.text;
+                                mail = _emailController.text;
+                                mobile = _mobileController.text;
+                                setState(() {
+
+                                });
+                              },
+                            ),
+                          ),
+                         /* Container(
                             width: MediaQuery.of(context).size.width,
                             child: FlatButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop();
-                                  name = _nameController.text;
-                                  mail = _emailController.text;
-                                  mobile = _mobileController.text;
-                                  setState(() {
 
-                                  });
                                 },
                                 color: GlobalVariables.green,
                                 child: text('Submit',textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w500)
                             ),
-                          )
+                          )*/
                         ],
                       ),
                     ),

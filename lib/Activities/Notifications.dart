@@ -228,7 +228,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                                 child: Container(
                                   margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                   child: text(
-                                      _dbNotificationList[position].title,
+                                      _dbNotificationList[position].title??'',
                                       maxLine: 3,
                                       textColor: GlobalVariables.green,
                                           fontSize: GlobalVariables.textSizeMedium,

@@ -96,6 +96,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -120,25 +121,12 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-                getAlreadyPaidLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+        getAlreadyPaidLayout(),
+      ],
     );
   }
 
@@ -171,47 +159,6 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                   },
                 ),
               ),
-              /*Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                alignment: Alignment.center,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.mediumGreen,
-                      width: 3.0,
-                    )),
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: TextField(
-                    controller: _dateController,
-                    readOnly: true,
-                    style: TextStyle(
-                        color: GlobalVariables.green
-                    ),
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        hintText: "Date",
-                        hintStyle: TextStyle(color: GlobalVariables.veryLightGray),
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          onPressed: (){
-                            // GlobalFunctions.showToast('iDate icon click');
-                            GlobalFunctions.getSelectedDate(context).then((value){
-                              _dateController.text = value.day.toString().padLeft(2,'0')+"-"+value.month.toString().padLeft(2,'0')+"-"+value.year.toString();
-                              insertedDate =value.toLocal().year.toString()+"-"+value.toLocal().month.toString().padLeft(2,'0')+"-"+value.day.toString().padLeft(2,'0');
-                            });
-                          },
-                          icon: Icon(
-                            Icons.date_range,
-                            color: GlobalVariables.mediumGreen,
-                          ),
-                        )),
-                  ),
-                ),
-              ),*/
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
@@ -415,10 +362,12 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                             icon: AppIcon(
                               Icons.attach_file,
                               iconColor: GlobalVariables.mediumGreen,
+                              iconSize: 20.0,
                             ),
                             label: text(
                               AppLocalizations.of(context).translate('attach_photo'),
                               textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSMedium
                             ),
                           ),
                         ),
@@ -427,6 +376,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                           child: text(
                             'OR',
                             textColor: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium
                           ),
                         ),
                         Container(
@@ -449,11 +399,13 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                               icon: AppIcon(
                                 Icons.camera_alt,
                                 iconColor: GlobalVariables.mediumGreen,
+                                iconSize: 20.0,
                               ),
                               label: text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
                                 textColor: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeSMedium
                               )),
                         ),
                       ],

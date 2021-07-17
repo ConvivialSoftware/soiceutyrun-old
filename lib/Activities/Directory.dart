@@ -11,6 +11,7 @@ import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/MyComplexResponse.dart';
 import 'package:societyrun/Models/NeighboursDirectory.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,14 +46,17 @@ class DirectoryState extends State<BaseDirectory> {
   @override
   void initState() {
     super.initState();
-
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if (directory.directoryType == 'Neighbours') {
       isNeighbours = true;
       isCommittee = false;
       isEmergency = false;
-      /* value.committeeList.clear();
-      value.emergencyList.clear();*/
-      Provider.of<MyComplexResponse>(context, listen: false).getNeighboursDirectoryData();
+      _progressDialog.show();
+      Provider.of<MyComplexResponse>(context, listen: false)
+          .getNeighboursDirectoryData()
+          .then((value) {
+        _progressDialog.hide();
+      });
     }
 
     if (directory.directoryType == 'Committee') {
@@ -61,8 +65,12 @@ class DirectoryState extends State<BaseDirectory> {
       isEmergency = false;
       /* value.committeeList.clear();
       value.emergencyList.clear();*/
+      _progressDialog.show();
       Provider.of<MyComplexResponse>(context, listen: false)
-          .getCommitteeDirectoryData();
+          .getCommitteeDirectoryData()
+          .then((value) {
+        _progressDialog.hide();
+      });
     }
     if (directory.directoryType == 'Emergency') {
       isCommittee = false;
@@ -70,20 +78,24 @@ class DirectoryState extends State<BaseDirectory> {
       isEmergency = true;
       /*  value.committeeList.clear();
       value.committeeList.clear();*/
+      _progressDialog.show();
       Provider.of<MyComplexResponse>(context, listen: false)
-          .getEmergencyDirectoryData();
+          .getEmergencyDirectoryData()
+          .then((value) {
+        _progressDialog.hide();
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<MyComplexResponse>.value(
         value: Provider.of(context),
         child: Consumer<MyComplexResponse>(builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               //resizeToAvoidBottomPadding: false,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
@@ -112,25 +124,13 @@ class DirectoryState extends State<BaseDirectory> {
 
   getDirectoryLayout(MyComplexResponse value) {
     print('getDirectoryLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                value.isLoading?  GlobalFunctions.loadingWidget(context) :  getDirectoryListDataLayout(value)
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getDirectoryListDataLayout(value)
+      ],
     );
   }
 
@@ -139,27 +139,25 @@ class DirectoryState extends State<BaseDirectory> {
 
     if (isNeighbours) length = value.neighbourList.length;
 
-    if (isCommittee) length =value.committeeList.length;
+    if (isCommittee) length = value.committeeList.length;
 
     if (isEmergency) length = value.emergencyList.length;
 
     return Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          18, MediaQuery.of(context).size.height / 15, 18, 0),
+      margin: EdgeInsets.only(top: 8),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
                 itemCount: length,
                 itemBuilder: (context, position) {
-                  return getDirectoryDescListItemLayout(position,value);
+                  return getDirectoryDescListItemLayout(position, value);
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
     );
   }
 
-  getDirectoryDescListItemLayout(int position,MyComplexResponse value) {
+  getDirectoryDescListItemLayout(int position, MyComplexResponse value) {
     bool phone = false, email = false;
     String name = '',
         field = '',
@@ -184,9 +182,13 @@ class DirectoryState extends State<BaseDirectory> {
               ' ' +
               value.committeeList[position].FLAT;
 
-      value.committeeList[position].EMAIL.length != 0 ? email = true : email = false;
+      value.committeeList[position].EMAIL.length != 0
+          ? email = true
+          : email = false;
 
-      value.committeeList[position].PHONE.length != 0 ? phone = true : phone = false;
+      value.committeeList[position].PHONE.length != 0
+          ? phone = true
+          : phone = false;
 
       if (phone) callNumber = value.committeeList[position].PHONE;
 
@@ -242,13 +244,8 @@ class DirectoryState extends State<BaseDirectory> {
     }
 
     return directory.directoryType != 'Emergency'
-        ? Container(
-            //width: MediaQuery.of(context).size.width / 1.1,
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: GlobalVariables.white),
+        ? AppContainer(
+            isListItem: true,
             child: Column(
               children: <Widget>[
                 Row(
@@ -256,12 +253,8 @@ class DirectoryState extends State<BaseDirectory> {
                     !isEmergency
                         ? Expanded(
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                              child: text(
+                              child: primaryText(
                                 flat,
-                                textColor: GlobalVariables.black,
-                                    fontSize: GlobalVariables.textSizeMedium,
-                                    fontWeight: FontWeight.bold,
                               ),
                             ),
                           )
@@ -274,15 +267,10 @@ class DirectoryState extends State<BaseDirectory> {
                                 launch("tel://" + callNumber);
                               },
                               child: Container(
-                                //color: GlobalVariables.lightGray,
-                                // color: GlobalVariables.black,
-                                // height: 10,
                                 alignment: Alignment.topRight,
-                                margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                                 child: AppIcon(
                                   Icons.call,
                                   iconColor: GlobalVariables.green,
-                                  iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
                             ),
@@ -291,86 +279,66 @@ class DirectoryState extends State<BaseDirectory> {
                   ],
                 ),
                 !isEmergency
-                    ? Container(
-                        height: 1,
-                        color: GlobalVariables.lightGray,
-                        margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: Divider(
-                          height: 1,
-                        ),
-                      )
+                    ? Divider()
                     : Container(),
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
-                        child: text(
+                        child: secondaryText(
                           name,
-                          textColor: GlobalVariables.black,
-                              fontSize: GlobalVariables.textSizeLargeMedium,
-                              fontWeight: FontWeight.bold,
+                         /* textColor: GlobalVariables.black,
+                          fontSize: GlobalVariables.textSizeLargeMedium,
+                          fontWeight: FontWeight.bold,*/
                         ),
                       ),
                     ),
                     email
                         ? InkWell(
-                          onTap: () {
-                            Uri _emailUri = Uri(
-                                scheme: 'mailto',
-                                path: emailId,
-                                queryParameters: {'subject': ''});
-                            launch(_emailUri.toString());
-                          },
-                          child: Container(
-                            // color: GlobalVariables.lightGray,
-                            // color: GlobalVariables.black,
-                            // height: 10,
-                            alignment: Alignment.topRight,
-                            margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                            child: AppIcon(
-                              Icons.email,
-                              iconColor: GlobalVariables.mediumGreen,
-                              iconSize: GlobalVariables.textSizeLarge,
+                            onTap: () {
+                              Uri _emailUri = Uri(
+                                  scheme: 'mailto',
+                                  path: emailId,
+                                  queryParameters: {'subject': ''});
+                              launch(_emailUri.toString());
+                            },
+                            child: Container(
+                              alignment: Alignment.topRight,
+                              child: AppIcon(
+                                Icons.email,
+                                iconColor: GlobalVariables.mediumGreen,
+                              ),
                             ),
-                          ),
-                        )
+                          )
                         : SizedBox(
                             // width: 24,height: 24,
                             ),
                   ],
                 ),
+                SizedBox(height: 8,),
                 Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-                  child: text(
-                    field,
-                    textColor: GlobalVariables.grey,
-                      fontSize: GlobalVariables.textSizeSmall
-                  ),
+                  child: text(field,
+                      textColor: GlobalVariables.grey,
+                      fontSize: GlobalVariables.textSizeSmall),
                 ),
               ],
             ),
           )
-        : Container(
-            width: MediaQuery.of(context).size.width / 1.1,
-            padding: EdgeInsets.all(15),
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: GlobalVariables.white),
+        : AppContainer(
+           isListItem: true,
             child: Column(
               children: <Widget>[
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
-                        child: text(
+                       // margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
+                        child: primaryText(
                           name,
-                          textColor: GlobalVariables.black,
-                              fontSize: GlobalVariables.textSizeLargeMedium,
-                              fontWeight: FontWeight.bold,
+                         /* textColor: GlobalVariables.black,
+                          fontSize: GlobalVariables.textSizeLargeMedium,
+                          fontWeight: FontWeight.bold,*/
                         ),
                       ),
                     ),
@@ -382,15 +350,10 @@ class DirectoryState extends State<BaseDirectory> {
                                 launch("tel://" + callNumber);
                               },
                               child: Container(
-                                //color: GlobalVariables.lightGray,
-                                // color: GlobalVariables.black,
-                                // height: 10,
                                 alignment: Alignment.topRight,
-                                margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                                 child: AppIcon(
                                   Icons.call,
                                   iconColor: GlobalVariables.green,
-                                  iconSize: GlobalVariables.textSizeLarge,
                                 ),
                               ),
                             ),
@@ -398,28 +361,17 @@ class DirectoryState extends State<BaseDirectory> {
                         : Container(),
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
-                        child: text(
-                          address,
-                          textColor: GlobalVariables.black,
-                              fontSize: GlobalVariables.textSizeLargeMedium,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                  ],
-                ),
+                Divider(),
                 Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-                  child: text(
-                    field,
-                    textColor: GlobalVariables.grey,
-                      fontSize: GlobalVariables.textSizeMedium
-                  ),
+                  child: secondaryText(address,),
+                ),
+                SizedBox(height: 4,),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: text(field,
+                      textColor: GlobalVariables.grey,
+                      fontSize: GlobalVariables.textSizeSmall),
                 ),
               ],
             ),

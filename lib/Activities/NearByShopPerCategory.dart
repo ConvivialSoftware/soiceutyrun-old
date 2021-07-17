@@ -114,6 +114,7 @@ class NearByShopPerCategoryState
             return DefaultTabController(
               length: value.nearByShopCategoryList.length,
               child: Scaffold(
+                backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
                   backgroundColor: GlobalVariables.green,
                   centerTitle: true,
@@ -233,38 +234,21 @@ class NearByShopPerCategoryState
     }
 
     String tabName = value.nearByShopCategoryList[tabIndex].Category_Name;
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.white30,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                //GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
-                _nearByShopResponse.nearByShopList.isNotEmpty
-                    ? getNearByShopPerCategoryListDataLayout(
-                        _nearByShopResponse)
-                    : GlobalFunctions.noDataFoundLayout(context,
-                        'No Exclusive Offer Found For ' + tabName.toString()),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        //GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
+        _nearByShopResponse.nearByShopList.isNotEmpty
+            ? getNearByShopPerCategoryListDataLayout(
+                _nearByShopResponse)
+            : GlobalFunctions.noDataFoundLayout(context,
+                'No Exclusive Offer Found For ' + tabName.toString()),
+      ],
     );
   }
 
   getNearByShopPerCategoryListDataLayout(NearByShopResponse value) {
     return Container(
-      //padding: EdgeInsets.all(10),
-      margin:
-          EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
-     // padding: EdgeInsets.all(10),
-      // height: MediaQuery.of(context).size.height / 0.5,
+      margin: EdgeInsets.only(top: 8),
       decoration: BoxDecoration(
           color: GlobalVariables.transparent,
           borderRadius: BorderRadius.circular(20)),
@@ -285,7 +269,7 @@ class NearByShopPerCategoryState
   getNearByShopPerCategoryListItemLayout(
       int position, NearByShopResponse value) {
     return Container(
-        margin: EdgeInsets.all(8),
+        margin: EdgeInsets.all(16),
         padding: EdgeInsets.all(16),
         decoration: boxDecoration(
           radius: 10,
@@ -296,98 +280,96 @@ class NearByShopPerCategoryState
           children: <Widget>[
             Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            alignment: Alignment.topRight,
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, top: 1, bottom: 1),
-                            decoration: boxDecoration(
-                                bgColor: GlobalVariables.white, radius: 30),
-                            child: text(
-                              'Till ' +
-                                  GlobalFunctions.convertDateFormat(
-                                      value.nearByShopList[position].exp_date,
-                                      'dd-MMM-yyyy'),
-                              fontSize: GlobalVariables.textSizeSmall,
-                            ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          alignment: Alignment.topRight,
+                          padding: EdgeInsets.only(
+                              left: 10, right: 10, top: 2, bottom: 2),
+                          decoration: boxDecoration(
+                              bgColor: GlobalVariables.white, radius: 5),
+                          child: text(
+                            'Till ' +
+                                GlobalFunctions.convertDateFormat(
+                                    value.nearByShopList[position].exp_date,
+                                    'dd-MMM-yyyy'),
+                            fontSize: GlobalVariables.textSizeSmall,
                           ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: AppNetworkImage(
-                          value.nearByShopList[position].Img_Name,
-                          imageWidth: width,
-                          imageHeight: width * 0.5,
-                          borderColor: GlobalVariables.transparent,
-                          shape: BoxShape.rectangle,
                         ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: AppNetworkImage(
+                        value.nearByShopList[position].Img_Name,
+                        imageWidth: width,
+                        imageHeight: width * 0.5,
+                        borderColor: GlobalVariables.transparent,
+                        shape: BoxShape.rectangle,
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                                child: text(
-                                    value.nearByShopList[position].Title,
-                                    fontWeight: FontWeight.bold,
-                                    maxLine: 3,
-                                    textColor: Color(int.parse(value
-                                        .nearByShopList[position].title_bg)))),
-                          ),
-                          InkWell(
-                            onTap: (){
-                             /* var url = "https://wa.me/?text="+value.nearByShopList[position].Category+'\n'+value.nearByShopList[position].Title;
-                              SocialShare.shareWhatsapp(url);*/
-                              //launch(url);
-                              launch("tel://" + value.nearByShopList[position].vendor_mobile);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(top: 8),
-                              child:AppIcon(Icons.call,
-                                iconSize: GlobalVariables.textSizeNormal,
-                                iconColor: GlobalVariables.white,
-                              ),
-                            ),
-                          ),
-                         /* SizedBox(
-                            width: 16,
-                          ),
-                          Container(
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                              child: text(
+                                  value.nearByShopList[position].Title,
+                                  fontWeight: FontWeight.bold,
+                                  maxLine: 3,
+                                  textColor: Color(int.parse(value
+                                      .nearByShopList[position].title_bg)))),
+                        ),
+                        InkWell(
+                          onTap: (){
+                           /* var url = "https://wa.me/?text="+value.nearByShopList[position].Category+'\n'+value.nearByShopList[position].Title;
+                            SocialShare.shareWhatsapp(url);*/
+                            //launch(url);
+                            launch("tel://" + value.nearByShopList[position].vendor_mobile);
+                          },
+                          child: Container(
                             margin: EdgeInsets.only(top: 8),
-                            child: Icon(
-                              Icons.favorite,
-                              size: 24,
-                              color: GlobalVariables.red,
+                            child:AppIcon(Icons.call,
+                              iconSize: GlobalVariables.textSizeNormal,
+                              iconColor: GlobalVariables.white,
                             ),
-                          ),*/
-                          // Image.asset(t3_ic_search)
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      text(value.nearByShopList[position].short_description,
-                          textColor: Color(int.parse(
-                              value.nearByShopList[position].title_bg)),
-                          fontSize: GlobalVariables.textSizeMedium,
-                          maxLine: 2),
-                    ],
-                  ),
+                          ),
+                        ),
+                       /* SizedBox(
+                          width: 16,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 8),
+                          child: Icon(
+                            Icons.favorite,
+                            size: 24,
+                            color: GlobalVariables.red,
+                          ),
+                        ),*/
+                        // Image.asset(t3_ic_search)
+                      ],
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    text(value.nearByShopList[position].short_description,
+                        textColor: Color(int.parse(
+                            value.nearByShopList[position].title_bg)),
+                        fontSize: GlobalVariables.textSizeMedium,
+                        maxLine: 2),
+                  ],
                 ),
+                SizedBox(height: 16,),
                 Container(
-                  padding: EdgeInsets.all(5),
+                  //padding: EdgeInsets.all(5),
                   alignment: Alignment.topRight,
                   child: InkWell(
                     onTap: () {

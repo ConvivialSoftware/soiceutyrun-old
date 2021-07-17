@@ -16,6 +16,7 @@ import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/OpeningBalance.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -61,6 +62,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
       child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
+            backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
               backgroundColor: GlobalVariables.green,
               centerTitle: true,
@@ -87,172 +89,106 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
   }
 
   getBaseLayout(UserManagementResponse value) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      // height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-                value.isLoading ? SizedBox() : Container(
-                  margin: EdgeInsets.fromLTRB(
-                      18, MediaQuery.of(context).size.height / 30, 18, 0),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+        value.isLoading ? SizedBox() :
+        Container(
+          margin: EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                flex: 2,
+                child: Container(
+                  child: primaryText(
+                    AppLocalizations.of(context).translate('ledger'),
+                    textColor: GlobalVariables.white,
+                        //fontSize: GlobalVariables.textSizeNormal,
+                        fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 2,
+                child: ButtonTheme(
+                  //alignedDropdown: true,
+                  child: DropdownButton(
+                    items: _yearListItems,
+                    onChanged: (value) {
+                      _yearSelectedItem = value;
+                      print('_selctedItem:' +
+                          _yearSelectedItem.toString());
+
+                      getLedgerData(_yearSelectedItem);
+                    },
+                    value: _yearSelectedItem,
+                    underline: SizedBox(),
+                    isExpanded: true,
+                    icon: AppIcon(
+                      Icons.keyboard_arrow_down,
+                      iconColor: GlobalVariables.white,
+                    ),
+                    iconSize: 20,
+                    selectedItemBuilder: (BuildContext context) {
+                      // String txt =  _societyListItems.elementAt(position).value;
+                      return _yearListItems.map((e) {
+                        return Container(
+                            alignment: Alignment.center,
+                            //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                            child: text(
+                              _yearSelectedItem,
+                              textColor: GlobalVariables.white,
+                                fontSize: GlobalVariables.textSizeSmall
+                            ));
+                      }).toList();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        value.isLoading ? GlobalFunctions.loadingWidget(context) :   value.ledgerList.length > 0
+            ? Container(
+                margin: EdgeInsets.fromLTRB(16, 70, 16, 100),
+                alignment: Alignment.topLeft,
+                //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                // padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10)),
+                child: getRecentTransactionLayout(value),
+              )
+            : Container(),
+        value.isLoading ? SizedBox(): Align(
+                alignment: Alignment.bottomCenter,
+                child: AppContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          child: text(
-                            AppLocalizations.of(context).translate('ledger'),
-                            textColor: GlobalVariables.white,
-                                fontSize: GlobalVariables.textSizeNormal,
-                                fontWeight: FontWeight.bold,
-                          ),
+                      Container(
+                        child: primaryText(
+                          AppLocalizations.of(context)
+                              .translate('total_outstanding'),
+                          textColor: GlobalVariables.black,
                         ),
                       ),
-                      Flexible(
-                        flex: 2,
-                        child: ButtonTheme(
-                          //alignedDropdown: true,
-                          child: DropdownButton(
-                            items: _yearListItems,
-                            onChanged: (value) {
-                              _yearSelectedItem = value;
-                              print('_selctedItem:' +
-                                  _yearSelectedItem.toString());
-
-                              getLedgerData(_yearSelectedItem);
-                            },
-                            value: _yearSelectedItem,
-                            underline: SizedBox(),
-                            isExpanded: true,
-                            icon: AppIcon(
-                              Icons.keyboard_arrow_down,
-                              iconColor: GlobalVariables.white,
-                            ),
-                            iconSize: 20,
-                            selectedItemBuilder: (BuildContext context) {
-                              // String txt =  _societyListItems.elementAt(position).value;
-                              return _yearListItems.map((e) {
-                                return Container(
-                                    alignment: Alignment.center,
-                                    //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                                    child: text(
-                                      _yearSelectedItem,
-                                      textColor: GlobalVariables.white,
-                                    ));
-                              }).toList();
-                            },
-                          ),
+                      Container(
+                        child: primaryText(
+                          "Rs. " +
+                              value.totalOutStanding.toStringAsFixed(2),
+                          textColor: GlobalVariables.red,
+                           // fontSize: GlobalVariables.textSizeLargeMedium
                         ),
-                      ),
-                      /*Flexible(
-                        flex: 2,
-                        child: ButtonTheme(
-                          child: DropdownButton(
-                            items: _yearListItems,
-                            value: _yearSelectedItem,
-                            onChanged: (value){
-                              setState(() {
-                                _yearSelectedItem = value;
-                                print('_selctedItem:' + _yearSelectedItem.toString());
-                              });
-                            },
-                            isExpanded: true,
-                            selectedItemBuilder: (BuildContext context){
-                              // String txt =  _societyListItems.elementAt(position).value;
-                              return _yearListItems.map((e) {
-                                return Container(
-                                    alignment: Alignment.center,
-                                    //margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                                    child: Text(_yearSelectedItem,style: TextStyle(color: GlobalVariables.white),));
-                              }).toList();
-                            },
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
-                            ),
-                            underline: SizedBox(),
-                            hint: Text(
-                              AppLocalizations.of(context).translate('select_year')+'*',
-                              style: TextStyle(
-                                  color: GlobalVariables.white, fontSize: 14),
-                            ),
-                          ),
-                        ),
-                      ),*/
-                      /*Visibility(
-                        visible: false,
-                        child: Container(
-                          child: Icon(
-                            Icons.filter,
-                            color: GlobalVariables.mediumGreen,
-                          ),
-                        ),
-                      )*/
+                      )
                     ],
                   ),
                 ),
-                value.isLoading ? GlobalFunctions.loadingWidget(context) :   value.ledgerList.length > 0
-                    ? Container(
-                        margin: EdgeInsets.fromLTRB(18,
-                            MediaQuery.of(context).size.height / 8, 18, 100),
-                        alignment: Alignment.topLeft,
-                        //   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        // padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: getRecentTransactionLayout(value),
-                      )
-                    : Container(),
-                value.isLoading ? SizedBox(): Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(18, 10, 18, 20),
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: GlobalVariables.white,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: text(
-                                  AppLocalizations.of(context)
-                                      .translate('total_outstanding'),
-                                  textColor: GlobalVariables.black,
-                                      fontSize: GlobalVariables.textSizeMedium,
-                                      fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Container(
-                                child: text(
-                                  "Rs. " +
-                                      value.totalOutStanding.toStringAsFixed(2),
-                                  textColor: GlobalVariables.red,
-                                      fontSize: GlobalVariables.textSizeLargeMedium,
-                                      fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
+              )
 
-              ],
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -295,20 +231,19 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        child: text(
+                        child: primaryText(
                           AppLocalizations.of(context)
                               .translate('opening_balance'),
                           textColor: GlobalVariables.black,
-                              fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Container(
-                      child: text(
+                      child: primaryText(
                         'Rs. ' + value.openingBalance,
                         textColor: GlobalVariables.red,
-                            fontSize: GlobalVariables.textSizeNormal,
+                            //fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -353,7 +288,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
           ),
         ),
         Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(8),
             child: Column(
               children: <Widget>[
                 Row(
@@ -364,7 +299,8 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                         padding: EdgeInsets.all(5),
                         child: text(
                           value.ledgerList[position].LEDGER,
-                          textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeLargeMedium,
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ),
@@ -406,7 +342,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                                       'bill'
                                   ? GlobalVariables.red
                                   : GlobalVariables.green,
-                              fontSize: GlobalVariables.textSizeMedium,
+                              fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -414,13 +350,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                   ],
                 ),
                 position != value.ledgerList.length - 1
-                    ? Container(
-                        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Divider(
-                          color: GlobalVariables.lightGreen,
-                          height: 3,
-                        ),
-                      )
+                    ? Divider()
                     : Container(),
               ],
             ))
@@ -500,6 +430,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 child: text(
                   UserManagementResponse.listYear[i].years,
                   textColor: GlobalVariables.green,
+                  fontSize: GlobalVariables.textSizeSmall
                 ),
               ));
             } else {
@@ -511,6 +442,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     child: text(
                       UserManagementResponse.listYear[i].years,
                       textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeSmall
                     ),
                   ));
               if (_yearSelectedItem == null) {
@@ -524,6 +456,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
               child: text(
                 UserManagementResponse.listYear[i].years,
                 textColor: GlobalVariables.green,
+                  fontSize: GlobalVariables.textSizeSmall
               ),
             ));
           }

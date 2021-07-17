@@ -77,6 +77,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
       child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
+            backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
               backgroundColor: GlobalVariables.green,
               centerTitle: true,
@@ -102,29 +103,14 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
   }
 
   getBaseLayout(UserManagementResponse userManagementResponse) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      //height: double.maxFinite,
-      //height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                userManagementResponse.isLoading
-                    ? GlobalFunctions.loadingWidget(context)
-                    : getUnitUserDetailsLayout(userManagementResponse),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        userManagementResponse.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getUnitUserDetailsLayout(userManagementResponse),
+      ],
     );
   }
 
@@ -371,90 +357,91 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              Container(
-                alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(18, 0, 18, 0),
+               Container(
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
-                        AppLocalizations.of(context).translate('my_family'),
+                        AppLocalizations.of(context)
+                            .translate('my_family'),
                         textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    /* AppPermission.isUserAddMemberPermission
-                        ?*/
-                    Container(
+                   Container(
                         child: RaisedButton(
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BaseAddNewMember("family")));
-                        print('result back : ' + result.toString());
-                        if (result != 'back') {
-                          Provider.of<UserManagementResponse>(context,
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BaseAddNewMember("family")));
+                            print('result back : ' + result.toString());
+                            if (result != 'back') {
+                              Provider.of<UserManagementResponse>(
+                                  context,
                                   listen: false)
-                              .getUnitMemberData();
-                        }
-                      },
-                      child: text(
-                        AppLocalizations.of(context).translate('plus_add'),
-                        textColor: GlobalVariables.white,
-                        fontSize: GlobalVariables.textSizeSmall,
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: GlobalVariables.green)),
-                      textColor: GlobalVariables.white,
-                      color: GlobalVariables.green,
-                    ))
-                    // : Container(),
+                                  .getUnitMemberData();
+                            }
+                          },
+                          child: text(
+                            AppLocalizations.of(context)
+                                .translate('plus_add'),
+                            textColor: GlobalVariables.white,
+                            fontSize: GlobalVariables.textSizeSmall,
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                  color: GlobalVariables.green)),
+                          textColor: GlobalVariables.white,
+                          color: GlobalVariables.green,
+                        ))
                   ],
                 ),
               ),
-              value.memberListForAdmin.length > 0
+               value.memberListForAdmin.length > 0
                   ? Container(
-                      //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(18, 10, 0, 0),
-                      width: 600,
-                      height: 190,
-                      child: Builder(
-                          builder: (context) => ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: value.memberListForAdmin.length,
-                                itemBuilder: (context, position) {
-                                  return getContactListItemLayout(
-                                      value.memberListForAdmin, position, true);
-                                },
-                                //  scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                              )),
-                    )
+                alignment: Alignment.topLeft,
+                //padding: EdgeInsets.all(10),
+                margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                height: 190,
+                child: Builder(
+                    builder: (context) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: value.memberListForAdmin.length,
+                      itemBuilder: (context, position) {
+                        return getContactListItemLayout(
+                            value.memberListForAdmin, position, true);
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+              )
                   : Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.all(20),
-                      child: text(
-                        AppLocalizations.of(context)
-                            .translate('add_family_details'),
-                          textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
-                    ),
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.all(20),
+                child: text(
+                    AppLocalizations.of(context)
+                        .translate('add_family_details'),
+                    textColor: GlobalVariables.grey,
+                    fontSize: GlobalVariables.textSizeSMedium),
+              ),
+              SizedBox(height: 16,),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
                         AppLocalizations.of(context).translate('my_tenant'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -463,23 +450,18 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       children: [
                         Container(
                             child: RaisedButton(
-                              onPressed: ()  {
+                              onPressed: () {
                                 /* final result = await*/ Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => BaseAddAgreement(
-                                            widget.block,
-                                            widget.flat,true)));
-                                /*    print('result back : ' + result.toString());
-                                if (result != 'back') {
-                                  Provider.of<UserManagementResponse>(
-                                      context, listen: false).getUnitMemberData();
-                                }*/
+                                        builder: (context) =>
+                                            BaseAddAgreement(widget.block, widget.flat, false)));
                               },
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('add_agreement'),
-                                textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall,
+                                textColor: GlobalVariables.white,
+                                fontSize: GlobalVariables.textSizeSmall,
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -487,33 +469,35 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                               textColor: GlobalVariables.white,
                               color: GlobalVariables.green,
                             )),
-                        SizedBox(width: 8,),
+                        SizedBox(
+                          width: 8,
+                        ),
                         Container(
                             child: RaisedButton(
-                          onPressed: () async {
-                            final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BaseAddNewMemberByAdmin(
-                                        widget.block,
-                                        widget.flat)));
-                            print('result back : ' + result.toString());
-                            if (result != 'back') {
-                              Provider.of<UserManagementResponse>(context,
+                              onPressed: () async {
+                                final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BaseAddNewMember("tenant")));
+                                print('result back : ' + result.toString());
+                                if (result != 'back') {
+                                  Provider.of<UserManagementResponse>(context,
                                       listen: false)
-                                  .getUnitMemberData();
-                            }
-                          },
-                          child: text(
-                              AppLocalizations.of(context).translate('plus_add'),
+                                      .getUnitMemberData();
+                                }
+                              },
+                              child: text(
+                                AppLocalizations.of(context).translate('plus_add'),
+                                textColor: GlobalVariables.white,
+                                fontSize: GlobalVariables.textSizeSmall,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: GlobalVariables.green)),
                               textColor: GlobalVariables.white,
-                              fontSize: GlobalVariables.textSizeSmall),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: GlobalVariables.green)),
-                          textColor: GlobalVariables.white,
-                          color: GlobalVariables.green,
-                        )),
+                              color: GlobalVariables.green,
+                            )),
                       ],
                     ),
                   ],
@@ -521,42 +505,43 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
               ),
               value.tenantListForAdmin.length > 0
                   ? Container(
-                      //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
-                      width: 600,
-                      height: 190,
-                      child: Builder(
-                          builder: (context) => ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: value.tenantListForAdmin.length,
-                                itemBuilder: (context, position) {
-                                  return getContactListItemLayout(
-                                      value.tenantListForAdmin, position, true);
-                                },
-                                //  scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                              )),
-                    )
+                alignment: Alignment.topLeft,
+                //padding: EdgeInsets.all(10),
+                margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                //  width: 600,
+                height: 190,
+                child: Builder(
+                    builder: (context) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: value.tenantListForAdmin.length,
+                      itemBuilder: (context, position) {
+                        return getContactListItemLayout(
+                            value.tenantListForAdmin, position, true);
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+              )
                   : Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.all(20),
-                      child: text(
-                        AppLocalizations.of(context)
-                            .translate('add_tenant_details'),
-                          textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
-                    ),
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.all(20),
+                child: text(
+                    AppLocalizations.of(context)
+                        .translate('add_tenant_details'),
+                    textColor: GlobalVariables.grey,
+                    fontSize: GlobalVariables.textSizeSMedium),
+              ),
+              SizedBox(height: 16,),
               Container(
                 alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       child: text(
                         AppLocalizations.of(context).translate('my_staff'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -565,134 +550,135 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       visible: true,
                       child: Container(
                           child: RaisedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BaseStaffCategory(false)));
-                        },
-                        child: text(
-                            AppLocalizations.of(context).translate('plus_add'),
-                            textColor: GlobalVariables.white,
-                            fontSize: GlobalVariables.textSizeSmall),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: GlobalVariables.green)),
-                        textColor: GlobalVariables.white,
-                        color: GlobalVariables.green,
-                      )),
-                    ),
-                  ],
-                ),
-              ),
-              value.staffListForAdmin.length > 0
-                  ? Container(
-                      //padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(15, 10, 20, 0),
-                      width: 600,
-                      height: 190,
-                      child: Builder(
-                          builder: (context) => ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: value.staffListForAdmin.length,
-                                itemBuilder: (context, position) {
-                                  return getContactListItemLayout(
-                                      value.staffListForAdmin, position, false);
-                                },
-                                //  scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                              )),
-                    )
-                  : Container(
-                      padding: EdgeInsets.all(20),
-                      child: text(
-                        AppLocalizations.of(context)
-                            .translate('add_staff_details'),
-                          textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
-                    ),
-              Container(
-                alignment: Alignment.topLeft, //color: GlobalVariables.white,
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      child: text(
-                        AppLocalizations.of(context).translate('my_vehicle'),
-                          textColor: GlobalVariables.green,
-                          fontSize: GlobalVariables.textSizeMedium,
-                          fontWeight: FontWeight.bold,
-                        ),
-                    ),
-                    /*AppPermission.isSocAddVehiclePermission
-                        ? */Container(
-                            child: RaisedButton(
-                            onPressed: () async {
-                              final result = await Navigator.push(
+                            onPressed: () {
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => BaseAddVehicle()));
-                              print('result back : ' + result.toString());
-                              if (result != 'back') {
-                                Provider.of<UserManagementResponse>(context,
-                                        listen: false)
-                                    .getUnitMemberData();
-                              }
+                                      builder: (context) =>
+                                          BaseStaffCategory(false)));
                             },
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('plus_add'),
-                              style: TextStyle(
-                                  color: GlobalVariables.white, fontSize: GlobalVariables.textSizeSmall),
+                            child: text(
+                              AppLocalizations.of(context).translate('plus_add'),
+                              textColor: GlobalVariables.white,
+                              fontSize: GlobalVariables.textSizeSmall,
                             ),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 side: BorderSide(color: GlobalVariables.green)),
                             textColor: GlobalVariables.white,
                             color: GlobalVariables.green,
-                          ))
-                       // : Container(),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+              value.staffListForAdmin.length > 0
+                  ? Container(
+                alignment: Alignment.topLeft,
+                //padding: EdgeInsets.all(10),
+                margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                // width: 600,
+                height: 190,
+                child: Builder(
+                    builder: (context) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: value.staffListForAdmin.length,
+                      itemBuilder: (context, position) {
+                        return getContactListItemLayout(
+                            value.staffListForAdmin, position, false);
+                      },
+                      //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+              )
+                  : Container(
+                padding: EdgeInsets.all(20),
+                child: text(
+                    AppLocalizations.of(context)
+                        .translate('add_staff_details'),
+                    textColor: GlobalVariables.grey,
+                    fontSize: GlobalVariables.textSizeSMedium),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                alignment: Alignment.topLeft, //color: GlobalVariables.white,
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: text(
+                        AppLocalizations.of(context).translate('my_vehicle'),
+                        textColor: GlobalVariables.black,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                        child: RaisedButton(
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BaseAddVehicle()));
+                            print('result back : ' + result.toString());
+                            if (result != 'back') {
+                              Provider.of<UserManagementResponse>(context,
+                                  listen: false)
+                                  .getUnitMemberData();
+                            }
+                          },
+                          child: text(
+                            AppLocalizations.of(context)
+                                .translate('plus_add'),
+                            textColor: GlobalVariables.white,
+                            fontSize: GlobalVariables.textSizeSmall,
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: GlobalVariables.green)),
+                          textColor: GlobalVariables.white,
+                          color: GlobalVariables.green,
+                        ))
                   ],
                 ),
               ),
               Column(
-                mainAxisSize: MainAxisSize.min,
+               // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   value.vehicleListForAdmin.length > 0
                       ? Container(
-                          //height: 500,
-                          //padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                          decoration: BoxDecoration(
-                              color: GlobalVariables.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Builder(
-                              builder: (context) => ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    // scrollDirection: Axis.horizontal,
-                                    itemCount: value.vehicleListForAdmin.length,
-                                    itemBuilder: (context, position) {
-                                      return getVehicleRecentTransactionListItemLayout(
-                                          position, value);
-                                    },
-                                    //  scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                  )),
-                        )
+                    //height: 500,
+                    //padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.fromLTRB(16, 0, 16, 20),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Builder(
+                        builder: (context) => ListView.builder(
+                          physics:
+                          const NeverScrollableScrollPhysics(),
+                          // scrollDirection: Axis.horizontal,
+                          itemCount: value.vehicleListForAdmin.length,
+                          itemBuilder: (context, position) {
+                            return getVehicleRecentTransactionListItemLayout(
+                                position, value);
+                          },
+                          //  scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                        )),
+                  )
                       : Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.all(20),
-                          child: text(
-                            AppLocalizations.of(context)
-                                .translate('add_vehicle_details'),
-                              textColor: GlobalVariables.grey,
-                              fontSize: GlobalVariables.textSizeSMedium
-                          ),
-                        ),
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.all(20),
+                    child: text(
+                        AppLocalizations.of(context)
+                            .translate('add_vehicle_details'),
+                        textColor: GlobalVariables.grey,
+                        fontSize: GlobalVariables.textSizeSMedium),
+                  ),
                 ],
               ),
             ],
@@ -720,7 +706,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     return InkWell(
       onTap: () async {
         print('userId : ' + userId);
-
+        print('societyId : ' + societyId);
         if (family) {
           var result = await Navigator.push(
               context,
@@ -755,76 +741,85 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: family
                     ? _list[position].PROFILE_PHOTO.length == 0
-                        ? AppAssetsImage(
-                            GlobalVariables.componentUserProfilePath,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )
-                        : AppNetworkImage(
-                            _list[position].PROFILE_PHOTO,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )
+                    ? AppAssetsImage(
+                  GlobalVariables.componentUserProfilePath,
+                  imageWidth: 50.0,
+                  imageHeight: 50.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 25.0,
+                )
+                    : AppNetworkImage(
+                  _list[position].PROFILE_PHOTO,
+                  imageWidth: 50.0,
+                  imageHeight: 50.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 25.0,
+                )
                     : _list[position].IMAGE.length == 0
-                        ? AppAssetsImage(
-                            GlobalVariables.componentUserProfilePath,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )
-                        : AppNetworkImage(
-                            _list[position].IMAGE,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                            borderColor: GlobalVariables.grey,
-                            borderWidth: 1.0,
-                            fit: BoxFit.cover,
-                            radius: 35.0,
-                          )),
+                    ? AppAssetsImage(
+                  GlobalVariables.componentUserProfilePath,
+                  imageWidth: 50.0,
+                  imageHeight: 50.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 25.0,
+                )
+                    : AppNetworkImage(
+                  _list[position].IMAGE,
+                  imageWidth: 50.0,
+                  imageHeight: 50.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 25.0,
+                )),
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: text(
                   family ? _list[position].NAME : _list[position].STAFF_NAME,
-                  maxLine: 1,
+                  maxLine: 2,
+                  isCentered: true,
                   textColor: GlobalVariables.green,
                   fontSize: GlobalVariables.textSizeMedium,
                 )),
-            Container(
-              margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
-              child: Divider(
-                color: GlobalVariables.mediumGreen,
-                height: 1,
-              ),
-            ),
+            Divider(),
             call.length > 0
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
-                    child:
-                        /*Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        InkWell(
+              // margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                child:
+                IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: InkWell(
                           onTap: () {
                             launch("tel://" + call);
                           },
                           child: Container(
-                              child: Icon(
-                            Icons.call,
-                            color: GlobalVariables.lightGreen,
-                          )),
+                            width: double.infinity,
+                            child: AppIconButton(
+                              Icons.call,
+                              iconColor: GlobalVariables.green,
+                              iconSize: 20.0,
+                            ),
+                          ),
                         ),
-                        InkWell(
+                      ),
+                      SizedBox(
+                          height: 30,
+                          child: verticalDivider()
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: InkWell(
                           onTap: () {
                             String name = family
                                 ? _list[position].NAME
@@ -839,94 +834,46 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                             GlobalFunctions.shareData(title, text);
                           },
                           child: Container(
-                              child: Icon(
-                            Icons.share,
-                            color: GlobalVariables.lightGreen,
-                          )),
-                        )
-                      ],
-                    ),*/
-                        Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              launch("tel://" + call);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              child: AppIcon(
-                                Icons.call,
-                                iconColor: GlobalVariables.green,
-                              ),
+                            width: double.infinity,
+                            child: AppIconButton(
+                              Icons.share,
+                              iconColor: GlobalVariables.grey,
+                              iconSize: 20.0,
                             ),
-                          ),
-                        ),
-                        Container(
-                            //TODO: Divider
-                            height: 30,
-                            width: 8,
-                            child: VerticalDivider(
-                              color: GlobalVariables.lightGray,
-                            )),
-                        Flexible(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              String name = family
-                                  ? _list[position].NAME
-                                  : _list[position].STAFF_NAME;
-                              String title = '';
-                              String text =
-                                  'Name : ' + name + '\nContact : ' + call;
-                              family
-                                  ? title = _list[position].NAME
-                                  : title = _list[position].STAFF_NAME;
-                              print('titlee : ' + title);
-                              GlobalFunctions.shareData(title, text);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              child: AppIcon(
-                                Icons.share,
-                                iconColor: GlobalVariables.grey,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ))
-                : family
-                    ? InkWell(
-                        onTap: () async {
-                          var result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BaseEditProfileInfo(userId, societyId)));
-                          if (result == 'profile') {
-                            Provider.of<UserManagementResponse>(context,
-                                    listen: false)
-                                .getUnitMemberData();
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                          alignment: Alignment.center,
-                          child: text(
-                            '+ ' +
-                                AppLocalizations.of(context)
-                                    .translate('add_phone'),
-                            textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeLargeMedium,
-                            fontWeight: FontWeight.normal,
                           ),
                         ),
                       )
-                    : Container()
+                    ],
+                  ),
+                ))
+                : family
+                ? InkWell(
+              onTap: () async {
+                var result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            BaseEditProfileInfo(userId, societyId)));
+                if (result == 'profile') {
+                  Provider.of<UserManagementResponse>(context,
+                      listen: false)
+                      .getUnitMemberData();
+                }
+              },
+              child: Container(
+                //margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                alignment: Alignment.center,
+                child: text(
+                  '+ ' +
+                      AppLocalizations.of(context)
+                          .translate('add_phone'),
+                  textColor: GlobalVariables.grey,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            )
+                : Container()
           ],
         ),
       ),
@@ -936,8 +883,8 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
   getVehicleRecentTransactionListItemLayout(
       int position, UserManagementResponse value) {
     return Container(
-      padding: EdgeInsets.all(5),
-      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+      //padding: EdgeInsets.all(10),
+      margin: position==0 ? EdgeInsets.only(top: 10) : EdgeInsets.all(0),
       child: Column(
         children: <Widget>[
           Row(
@@ -954,10 +901,12 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                     value.vehicleListForAdmin[position].MODEL,
                     textColor: GlobalVariables.green,
                     fontSize: GlobalVariables.textSizeMedium,
+                    textStyleHeight: 1.0
                   ),
                 ),
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -965,6 +914,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                       value.vehicleListForAdmin[position].VEHICLE_NO,
                       textColor: GlobalVariables.grey,
                       fontSize: GlobalVariables.textSizeMedium,
+                      textStyleHeight: 1.0
                     ),
                   ),
                   /*AppPermission.isSocAddVehiclePermission
@@ -980,7 +930,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                 return Dialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
-                                          BorderRadius.circular(10.0)),
+                                          BorderRadius.circular(25.0)),
                                   child: deleteVehicleLayout(position, value),
                                 );
                               }));
@@ -997,15 +947,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
               )
             ],
           ),
-          position != value.vehicleListForAdmin.length - 1
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  child: Divider(
-                    color: GlobalVariables.mediumGreen,
-                    height: 2,
-                  ),
-                )
-              : Container(),
+           Divider()
         ],
       ),
     );
@@ -1071,6 +1013,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
       return AppIcon(
         Icons.directions_car,
         iconColor: GlobalVariables.mediumGreen,
+        iconSize: 20.0,
       );
     } else if (vehicleType == '2 Wheeler' ||
         vehicleType == '2' ||
@@ -1078,11 +1021,13 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
       return AppIcon(
         Icons.motorcycle,
         iconColor: GlobalVariables.mediumGreen,
+        iconSize: 20.0,
       );
     } else {
       return AppIcon(
         Icons.motorcycle,
         iconColor: GlobalVariables.mediumGreen,
+        iconSize: 20.0,
       );
     }
   }

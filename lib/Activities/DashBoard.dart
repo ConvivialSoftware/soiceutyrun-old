@@ -43,6 +43,7 @@ import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppDropDown.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -563,16 +564,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            // color: GlobalVariables.grey,
-            width: MediaQuery.of(context).size.width / 1.1,
-            margin: EdgeInsets.fromLTRB(
-                0,
-                MediaQuery.of(context).size.height / 100,
-                0,
-                0), //color: GlobalVariables.black,
+            //color: GlobalVariables.black,
             child: Container(
               //color: GlobalVariables.green,
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -590,7 +585,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             child: Container(
                               // color: GlobalVariables.black,
                               width: 100,
-                              height: 100,
+                              height: 80,
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -621,7 +616,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             child: Container(
                               //    color: GlobalVariables.green,
                               width: 100,
-                              height: 100,
+                              height: 80,
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -656,7 +651,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             child: Container(
                               //   color: GlobalVariables.black,
                               width: 100,
-                              height: 100,
+                              height: 80,
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -680,7 +675,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   ),
                   Container(
                     //color: GlobalVariables.green,
-                    margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -695,7 +690,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             child: Container(
                               //    color: GlobalVariables.black,
                               width: 100,
-                              height: 100,
+                              height: 80,
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -730,7 +725,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             child: Container(
                               //   color: GlobalVariables.green,
                               width: 100,
-                              height: 100,
+                              height: 80,
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -760,7 +755,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             child: Container(
                               //     color: GlobalVariables.black,
                               width: 100,
-                              height: 100,
+                              height: 80,
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -783,7 +778,96 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.mediumGreen,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    margin: EdgeInsets.all(16),
+                    child: CarouselSlider.builder(
+                      options: CarouselOptions(
+                        height: 100.0,
+                        autoPlay: true,
+                        autoPlayInterval: Duration(seconds: 3),
+                        viewportFraction: 1.0,
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      ),
+                      itemCount: loginDashBoardResponse.bannerList.length,
+                      itemBuilder: (BuildContext context, int itemIndex,
+                          int item) =>
+                      loginDashBoardResponse.bannerList.length > 0
+                          ? InkWell(
+                        onTap: () {
+                          /*   print('SocietyID : ' + societyId);
+                                    print('Name : ' + name);
+                                    print('Mobile : ' + phone);
+                                    print('Unit : ' + block + ' ' + flat);
+*/
+                          /*  var societyIdMD5 = md5.convert(utf8.encode(societyId));
+                             var nameMD5 = md5.convert(utf8.encode(name));
+                             var mobileMD5 = md5.convert(utf8.encode(phone));
+                             var unitMD5 = md5.convert(utf8.encode(block+' '+flat));
+
+                              print('societyIdMD5 : '+ societyIdMD5.toString());
+                              print('nameMD5 : '+ nameMD5.toString());
+                              print('mobileMD5 : '+ mobileMD5.toString());
+                              print('unitMD5 : '+ unitMD5.toString());*/
+
+                          /* launch(_bannerList[itemIndex].Url +
+                                        '?' +
+                                        'SID=' +
+                                        societyId.toString() +
+                                        '&MOBILE=' +
+                                        phone.toString() +
+                                        '&NAME=' +
+                                        name.toString() +
+                                        '&UNIT=' +
+                                        block.toString() +
+                                        ' ' +
+                                        flat.toString());*/
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BaseWebViewScreen(
+                                          loginDashBoardResponse
+                                              .bannerList[
+                                          itemIndex]
+                                              .Url +
+                                              '?' +
+                                              'SID=' +
+                                              societyId.toString() +
+                                              '&MOBILE=' +
+                                              phone.toString() +
+                                              '&NAME=' +
+                                              name.toString() +
+                                              '&UNIT=' +
+                                              block.toString() +
+                                              ' ' +
+                                              flat.toString()))).then(
+                                  (value) {
+                                GlobalFunctions.setBaseContext(
+                                    _dashboardSacfoldKey.currentContext);
+                              });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          //color: GlobalVariables.black,
+                          //alignment: Alignment.center,
+                          child: AppNetworkImage(
+                            loginDashBoardResponse
+                                .bannerList[itemIndex].IMAGE,
+                            fit: BoxFit.fitWidth,
+                            shape: BoxShape.rectangle,
+                            borderColor: GlobalVariables.transparent,
+                            // radius: GlobalVariables.textSizeMedium,
+                          ),
+                        ),
+                      )
+                          : Container(),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 16,right: 16,bottom: 16),
                     child: Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -864,10 +948,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     decoration: BoxDecoration(
                         color: GlobalVariables.mediumGreen,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
-                    margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    margin: EdgeInsets.only(left: 16,right: 16,top: 8),
                     child: CarouselSlider.builder(
                       options: CarouselOptions(
-                        height: 200.0,
+                        height: 100.0,
                         autoPlay: true,
                         autoPlayInterval: Duration(seconds: 3),
                         viewportFraction: 1.0,
@@ -1127,7 +1211,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 // padding: EdgeInsets.all(5),
 
                 child: Row(
-                   crossAxisAlignment: CrossAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     InkWell(
                       onTap: () {
@@ -1149,8 +1233,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                             .componentUserProfilePath,
                                         imageWidth: 70.0,
                                         imageHeight: 70.0,
-                                        borderColor: GlobalVariables.mediumGreen,
-                                        borderWidth: 5.0,
+                                        borderColor: GlobalVariables.grey,
+                                        borderWidth: 1.0,
                                         fit: BoxFit.cover,
                                         radius: 30.0,
                                       )
@@ -1158,8 +1242,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         userImageURLValueNotifer,
                                         imageWidth: 70.0,
                                         imageHeight: 70.0,
-                                        borderColor: GlobalVariables.mediumGreen,
-                                        borderWidth: 5.0,
+                                        borderColor: GlobalVariables.grey,
+                                        borderWidth: 1.0,
                                         fit: BoxFit.cover,
                                         radius: 30.0,
                                       );
@@ -1173,8 +1257,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
                         child: Column(
                           //mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          //crossAxisAlignment: CrossAxisAlignment.center,
+                          //mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
                             //color: GlobalVariables.green,
@@ -1185,35 +1269,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   builder: (BuildContext context,
                                       String userNameValueNotifer,
                                       Widget child) {
-                                    return text(userNameValueNotifer,
+                                    return primaryText('Hello,\n'+userNameValueNotifer,
                                        // maxLine: 1,
                                         //   textAlign: TextAlign.left,
-                                        textColor: GlobalVariables.white,
-                                        fontSize:
-                                            GlobalVariables.textSizeLargeMedium,
-                                        textStyleHeight: 1.5,
-                                        fontWeight: FontWeight.bold);
+                                        textColor: GlobalVariables.white,);
                                   }),
                             ),
                             SizedBox(height: 4,),
-                            Container(
-                              //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              // margin: EdgeInsets.all(5), //   color: GlobalVariables.green,
-                              //TODO : CustomerID
-                              child: text(
-                                (AppLocalizations.of(context)
-                                        .translate("str_consumer_id") +
-                                    ' : ' +
-                                    snapshot
-                                        .data[GlobalVariables.keyConsumerId]),
-                                //textAlign: TextAlign.left,
-
-                                textColor: GlobalVariables.white,
-                                fontSize: GlobalVariables.textSizeSmall,
-                                textStyleHeight: 1.5,
-                                maxLine: 1,
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -1222,6 +1284,24 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 ),
               ),
               SizedBox(height: 16,),
+              Container(
+                alignment: Alignment.topLeft,
+                //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                // margin: EdgeInsets.all(5), //   color: GlobalVariables.green,
+                //TODO : CustomerID
+                child: secondaryText(
+                  (AppLocalizations.of(context)
+                      .translate("str_consumer_id") +
+                      ' : ' +
+                      snapshot
+                          .data[GlobalVariables.keyConsumerId]),
+                  //textAlign: TextAlign.left,
+
+                  textColor: GlobalVariables.white,
+                  fontSize: GlobalVariables.textSizeSmall,
+                ),
+              ),
+              SizedBox(height: 8,),
               text(
                 block+' '+flat+' '+societyName,textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium,
                 textStyleHeight: 1.5,
@@ -1760,7 +1840,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       alignment: Alignment.center,
       child: Container(
         //color: GlobalVariables.black,
-        width: MediaQuery.of(context).size.width / 0.8,
+       // width: MediaQuery.of(context).size.width / 0.8,
         margin: EdgeInsets.fromLTRB(
             0, MediaQuery.of(context).size.height / 10, 0, 0),
         child: Card(
@@ -1768,7 +1848,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               borderRadius: BorderRadius.circular(10.0))),
           elevation: 20.0,
           shadowColor: GlobalVariables.green.withOpacity(0.3),
-          margin: EdgeInsets.all(20),
+          margin: EdgeInsets.all(16),
           color: GlobalVariables.white,
           child: Stack(
             children: <Widget>[
@@ -1784,7 +1864,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               ),
               GlobalVariables.isERPAccount
                   ? Container(
-                      margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                      margin: EdgeInsets.all(16),
                       child: Column(
                         children: <Widget>[
                           Row(
@@ -1817,7 +1897,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               text(
-                                " Rs. " +
+                                "Rs. " +
                                     double.parse(loginDashBoardResponse.duesRs)
                                         .toStringAsFixed(2),
                                 textColor: GlobalVariables.green,
@@ -1846,15 +1926,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             ],
                           ),
                           Container(
-                            color: GlobalVariables.mediumGreen,
-                            margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                            child: Divider(
-                              height: 1,
-                              color: GlobalVariables.mediumGreen,
-                            ),
+                            //color: GlobalVariables.mediumGreen,
+                            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: Divider()
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -1996,6 +2073,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     print('EmailId : ' + email);
     print('ConsumerId : ' + consumerId);
     print('societyName : ' + societyName);
+
+   /* var keys = GlobalFunctions.sharedPreferences.getKeys();
+
+    final prefsMap = Map<String, dynamic>();
+    for(String key in keys) {
+    prefsMap[key] = GlobalFunctions.sharedPreferences.get(key);
+    }
+
+    GlobalVariables.loggedUserInfoMap.value.addAll(prefsMap);
+
+    print('User map : '+ GlobalVariables.loggedUserInfoMap.value[GlobalVariables.keyName].toString());
+    //print('User map : '+ GlobalVariables.loggedUserInfoMap.value.toString());*/
     setState(() {});
   }
 

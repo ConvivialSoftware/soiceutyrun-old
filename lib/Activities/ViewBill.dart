@@ -16,6 +16,7 @@ import 'package:societyrun/Models/BillDetails.dart';
 import 'package:societyrun/Models/BillHeads.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -144,6 +145,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -155,6 +157,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                 onPressed: (){
               emailBillDialog(context);
             }),
+            SizedBox(width: 8,),
             AppIconButton(
                 Icons.download_sharp,
                 iconColor: GlobalVariables.white,
@@ -175,6 +178,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                   }
 
                 }),
+            SizedBox(width: 8,),
           ],
           leading: InkWell(
             onTap: () {
@@ -196,247 +200,127 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
   }
 
   getBaseLayout() {
-    return SingleChildScrollView(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        //margin: EdgeInsets.fromLTRB(16, MediaQuery.of(context).size.height / 15, 16, 0),
-       // height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: GlobalVariables.veryLightGray,
-        ),
-        child: Stack(
-          children: <Widget>[
-            GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                context, 150.0),
-            _billDetailsList.length>0  ?
-            Container(
-              margin: EdgeInsets.fromLTRB(16, MediaQuery.of(context).size.height / 15, 16, 0),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                   // margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
-                    padding: EdgeInsets.all(
-                        16), // height: MediaQuery.of(context).size.height / 0.5,
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topRight,
-                          child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                        ),
-                        SizedBox(height: 4,),
-                        Container(
-                          alignment: Alignment.center,
-                          child: text('Rs. '+double.parse(totalAmount.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 4,),
-                        Container(
-                          alignment: Alignment.center,
-                          child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                    padding: EdgeInsets.all(
-                        10), // height: MediaQuery.of(context).size.height / 0.5,
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.fromLTRB(
-                              10, 5, 10, 0),
-                          alignment: Alignment.topLeft,
-                          child: text("Details",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: text(AppLocalizations.of(context).translate('name')+ " : ",
-                                    textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                ),
-                              ),
-                              Container(
-                                //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                child: text(_billDetailsList[0].NAME,
-                                    textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        /*Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: text(AppLocalizations.of(context).translate('date')+ " : ",
-                                    textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                ),
-                              ),
-                              Container(
-                                //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].C_DATE,"dd-MM-yyyy"),
-                                    textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              )
-                            ],
-                          ),
-                        ),*/
-                       /* Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: text(AppLocalizations.of(context).translate('due_date')+ " : ",
-                                    textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                ),
-                              ),
-                              Container(
-                                //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                child: text(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),
-                                    textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              )
-                            ],
-                          ),
-                        ),*/
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: text(AppLocalizations.of(context).translate('bill_period')+ " : ",
-                                    textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                ),
-                              ),
-                              Container(
-                                //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                                child: text(_billDetailsList[0]
-                                    .TYPE
-                                    .toLowerCase()
-                                    .toString() ==
-                                    'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
-                                    textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                    padding: EdgeInsets.all(
-                        10), // height: MediaQuery.of(context).size.height / 0.5,
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.fromLTRB(
-                              10, 5, 10, 0),
-                          alignment: Alignment.topLeft,
-                          child: text("Charges",textColor : GlobalVariables.green,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        _billHeadsList.length>0 ? Container(
-                          //padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(
-                              10, 0, 10, 10),
-                          child: Builder(
-                              builder: (context) => ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                // scrollDirection: Axis.vertical,
-                                itemCount: _billHeadsList.length,
-                                itemBuilder: (context, position) {
-                                  return Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: Container(
-                                                  padding: EdgeInsets.all(5),
-                                                  child: text(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.all(5),
-                                                child: text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),textColor:  GlobalVariables.red,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                         /* position!=_recentTransactionList.length-1 ? Container(
-                                            margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                            child: Divider(
-                                              color: GlobalVariables.lightGreen,
-                                              height: 3,
-                                            ),
-                                          ):Container(),*/
-                                        ],
-                                      )
-                                  );
-                                }, //  scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                              )),
-                        ):Container(),
-                      ],
-                    ),
-                  ),
-
-
-                /*  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: GlobalVariables.white,
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        _billDetailsList.length>0  ?
+        SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(top: 8),
+            child: Column(
+              children: <Widget>[
+                AppContainer(
+                  isListItem: true,
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: secondaryText(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                       ),
-                      child: Row(
+                      SizedBox(height: 4,),
+                      Container(
+                        alignment: Alignment.center,
+                        child: primaryText('Rs. '+double.parse(totalAmount.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 4,),
+                      Container(
+                        alignment: Alignment.center,
+                        child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
+                      )
+                    ],
+                  ),
+                ),
+                AppContainer(
+                  isListItem: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      primaryText("Details",),
+                      Divider(),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
-                            child: Text(AppLocalizations.of(context).translate('total_amount'),style: TextStyle(
-                                color: GlobalVariables.black,fontSize: 16,fontWeight: FontWeight.bold
-                            ),),
+                            child: primaryText(AppLocalizations.of(context).translate('name')+ " : ",
+                              textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                            ),
                           ),
                           Container(
-                            child: Text('Rs. '+double.parse(totalAmount.toString()).toStringAsFixed(2),style: TextStyle(
-                                color: GlobalVariables.red,fontSize: 18,fontWeight: FontWeight.bold
-                            ),),
+                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                            child: secondaryText(_billDetailsList[0].NAME,),
                           )
                         ],
                       ),
-                    ),
-                  ),*/
-                ],
-              ),
-            ) : SizedBox(),
-          ],
-        ),
-      ),
+                      SizedBox(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: primaryText(AppLocalizations.of(context).translate('bill_period')+ " : ",
+                                textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                            ),
+                          ),
+                          Container(
+                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                            child: text(_billDetailsList[0]
+                                .TYPE
+                                .toLowerCase()
+                                .toString() ==
+                                'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
+                                textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                AppContainer(
+                 isListItem: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      primaryText("Charges",textColor : GlobalVariables.green),
+                      Divider(),
+                      _billHeadsList.length>0 ? Builder(
+                          builder: (context) => ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            // scrollDirection: Axis.vertical,
+                            itemCount: _billHeadsList.length,
+                            itemBuilder: (context, position) {
+                              return Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Container(
+                                              child: primaryText(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: secondaryText('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),textColor:  GlobalVariables.red,fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                     SizedBox(height: 4,)
+                                    ],
+                                  )
+                              );
+                            }, //  scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                          )):Container(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ) : SizedBox(),
+      ],
     );
   }
 

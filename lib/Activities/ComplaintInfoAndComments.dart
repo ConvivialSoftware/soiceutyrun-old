@@ -16,6 +16,8 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Comments.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -164,6 +166,7 @@ class ComplaintInfoAndCommentsState
 
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -179,7 +182,7 @@ class ComplaintInfoAndCommentsState
           ),
           title: text(
             AppLocalizations.of(context).translate('complaint') +
-                " " +
+                " #" +
                 complaints.TICKET_NO,
            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
@@ -190,27 +193,13 @@ class ComplaintInfoAndCommentsState
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      //height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
-                getComplaintInfoCommentLayout(),
-                addCommentLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 200.0),
+        getComplaintInfoCommentLayout(),
+        addCommentLayout(),
+      ],
     );
   }
 
@@ -221,564 +210,428 @@ class ComplaintInfoAndCommentsState
     return SingleChildScrollView(
       controller: _scrollController,
       child: complaints.SUBJECT != null
-          ? Container(
-              margin: EdgeInsets.fromLTRB(18, 40, 18, 80),
-              //padding: EdgeInsets.all(0),
-              //  height: MediaQuery.of(context).size.height - 210,
-              decoration: BoxDecoration(
-                  color: GlobalVariables.transparent,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Container(
-                //  width: MediaQuery.of(context).size.width / 1.1,
-                //padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(
-                    0, 20, 0, 0), // color: GlobalVariables.grey,
+          ? Column(
+            children: <Widget>[
+              AppContainer(
                 child: Column(
+                  //mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                        children: <Widget>[
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  10, 0, 10, 0), //alignment: Alignment.topLeft,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  Container(
-                                      // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                      child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                        child: text(
-                                          complaints.STATUS,
-                                         textColor: GlobalVariables.white,
-                                          fontSize: GlobalVariables.textSizeSmall,
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: MyUnitState
-                                                .getTicketCategoryColor(
-                                                    complaints.STATUS),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                      ),
-                                      Container(
-                                        child: text(
-                                          'Ticket No: ' + complaints.TICKET_NO,
-                                         textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium
-                                          ),
-                                      ),
-                                    ],
-                                  )),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: text(complaints.SUBJECT,
-                                        textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeMedium,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                    child: text(
-                                      complaints.DESCRIPTION,
-                                     textColor: GlobalVariables.grey,
-                                        fontSize: GlobalVariables.textSizeSMedium
-                                    ),
-                                  ),
-                                  complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
-                                    onTap: () {
-                                      if(complaints.ATTACHMENT!=null) {
-                                        String url = complaints.ATTACHMENT;
-                                        if (isStoragePermission) {
-                                          downloadAttachment(
-                                              url, _localPath);
-                                        } else {
-                                          GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                              .then((value) {
-                                            if (value) {
-                                              downloadAttachment(
-                                                  url, _localPath);
-                                            } else {
-                                              GlobalFunctions.showToast(
-                                                  AppLocalizations.of(
-                                                      context)
-                                                      .translate(
-                                                      'download_permission'));
-                                            }
-                                          });
-                                        }
-                                      }
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.topRight,
-                                            margin: EdgeInsets.fromLTRB(
-                                                5, 15, 5, 0),
-                                            child: AppIcon(
-                                              Icons.attach_file,
-                                              iconColor: GlobalVariables
-                                                  .mediumGreen,
-                                            )),
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: text(
-                                            "Attachment",
-                                            textColor: GlobalVariables.green,
-                                              fontSize: GlobalVariables.textSizeVerySmall,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ) : Container(),
-                                  isAssignComplaint
-                                      ? Container(
-                                          height: 1,
-                                          color: GlobalVariables.mediumGreen,
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                          child: Divider(
-                                            height: 3,
-                                          ),
-                                        )
-                                      : Container(),
-                                  isAssignComplaint
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0, 10, 0, 5),
-                                                  child: text(
-                                                    'Name: ',
-                                                    textColor: GlobalVariables
-                                                            .green,
-                                                        fontSize: GlobalVariables.textSizeSMedium,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0, 10, 0, 5),
-                                                  child: text(complaints.NAME,
-                                                      textColor: GlobalVariables
-                                                              .grey,
-                                                          fontSize: GlobalVariables.textSizeSMedium),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0, 15, 0, 0),
-                                                  child: text(
-                                                    'Unit No: ',
-                                                    textColor: GlobalVariables
-                                                            .green,
-                                                        fontSize: GlobalVariables.textSizeSMedium,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0, 15, 0, 0),
-                                                  child: text(
-                                                    complaints.BLOCK +
-                                                        ' ' +
-                                                        complaints.FLAT,
-                                                    textColor:
-                                                          GlobalVariables.grey,
-                                                      fontSize: GlobalVariables.textSizeSMedium,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      : Container(),
-                                  Container(
-                                    height: 1,
-                                    color: GlobalVariables.mediumGreen,
-                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Divider(
-                                      height: 3,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: text(
-                                              'Issued on: ',
-                                              textColor: GlobalVariables.green,
-                                                  fontSize: GlobalVariables.textSizeSMedium,
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: text(
-                                                GlobalFunctions
-                                                    .convertDateFormat(
-                                                        complaints.DATE,
-                                                        "dd-MM-yyyy"),
-                                                textColor: GlobalVariables.grey,
-                                                    fontSize: GlobalVariables.textSizeSMedium
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: text(
-                                              'Category: ',
-                                              textColor: GlobalVariables.green,
-                                                  fontSize: GlobalVariables.textSizeSMedium,
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: text(
-                                              complaints.CATEGORY,
-                                              textColor: GlobalVariables.grey,
-                                                fontSize: GlobalVariables.textSizeSMedium,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  /*Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                  child: Text(
-                                    'Area: ',
-                                    style: TextStyle(
-                                        color: GlobalVariables.green,
-                                        fontSize: 14),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                  child: Text(
-                                     complaints.COMPLAINT_AREA,
-                                    style: TextStyle(
-                                        color: GlobalVariables.mediumGreen,
-                                        fontSize: 14),
-                                  ),
-                                ),
-                              ],
+                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: text(
+                            complaints.STATUS,
+                           textColor: GlobalVariables.white,
+                            fontSize: GlobalVariables.textSizeSmall,
+                          ),
+                          decoration: BoxDecoration(
+                              color: MyUnitState
+                                  .getTicketCategoryColor(
+                                      complaints.STATUS),
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                           /* AppIcon(
+                              Icons.date_range_rounded,
+                              iconColor: GlobalVariables.grey,
+                              iconSize: 20.0,
                             ),*/
-                                ],
+                           // SizedBox(width: 3,),
+                            Container(
+                              child: text(
+                                  GlobalFunctions
+                                      .convertDateFormat(
+                                      complaints.DATE,
+                                      "dd-MM-yyyy"),
+                                  textColor: GlobalVariables.grey,
+                                  fontSize: GlobalVariables.textSizeSmall
                               ),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
+                      ],
+                    )),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: primaryText(complaints.SUBJECT,),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: secondaryText(
+                        complaints.DESCRIPTION,
                       ),
                     ),
-                    isAssignComplaint && complaints.STATUS.toLowerCase() == 'close' ? Container()
-                     : Visibility(
-                      visible:complaints.STATUS.toLowerCase() == 'new' ||
-                              complaints.STATUS.toLowerCase() == 'reopen' ||
-                              complaints.STATUS.toLowerCase() == 'in progress' ||
-                              complaints.STATUS.toLowerCase() == 'close' ||
-                              complaints.STATUS.toLowerCase() == 'on hold'
-                          ? true
-                          : false,
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            isAssignComplaint
-                                ? Flexible(
-                                    flex: 2,
-                                    child: Container(
-                                      height: 50,
-                                      width: double.infinity,
-                                      padding:
-                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      decoration: BoxDecoration(
-                                          color: GlobalVariables.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: GlobalVariables.mediumGreen,
-                                            width: 3.0,
-                                          )),
-                                      child: ButtonTheme(
-                                        child: DropdownButton(
-                                          items: _complaintStatusListItems,
-                                          onChanged: changeDropDownItem,
-                                          isExpanded: true,
-                                          value: _selectedItem,
-                                          icon: AppIcon(
-                                            Icons.keyboard_arrow_down,
-                                            iconColor: GlobalVariables.mediumGreen,
-                                          ),
-                                          underline: SizedBox(),
-                                          /* hint: Text(
-                              _selectedItem == null ? AppLocalizations.of(context).translate('status') : _selectedItem,
-                              style: TextStyle(
-                                  color: GlobalVariables.lightGray,
-                                  fontSize: 12),
-                            ),*/
-                                        ),
-                                      ),
+                    isAssignComplaint
+                        ? Divider()
+                        : SizedBox(),
+                    isAssignComplaint
+                        ? Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    child: text(
+                                      'Name: ',
+                                      textColor: GlobalVariables
+                                              .green,
+                                          fontSize: GlobalVariables.textSizeSmall,
                                     ),
-                                  )
-                                : complaints.STATUS.toLowerCase() == 'new' ||
-                                        complaints.STATUS.toLowerCase() ==
-                                            'reopen' ||
-                                        complaints.STATUS.toLowerCase() ==
-                                            'in progress' || complaints.STATUS.toLowerCase() == 'on hold'
-                                    ? Flexible(
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                _complaintType.toLowerCase() ==
+                                  ),
+                                  Container(
+                                    child: text(complaints.NAME,
+                                        textColor: GlobalVariables
+                                                .grey,
+                                            fontSize: GlobalVariables.textSizeSmall),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    child: text(
+                                      'Unit No: ',
+                                      textColor: GlobalVariables
+                                              .green,
+                                          fontSize: GlobalVariables.textSizeSmall,
+                                    ),
+                                  ),
+                                  Container(
+                                    child: text(
+                                      complaints.BLOCK +
+                                          ' ' +
+                                          complaints.FLAT,
+                                      textColor:
+                                            GlobalVariables.grey,
+                                        fontSize: GlobalVariables.textSizeSmall,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: text(
+                                'Category: ',
+                                textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeSmall,
+                              ),
+                            ),
+                            Container(
+                              child: text(
+                                complaints.CATEGORY,
+                                textColor: GlobalVariables.grey,
+                                  fontSize: GlobalVariables.textSizeSmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                        complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
+                          onTap: () {
+                            if(complaints.ATTACHMENT!=null) {
+                              String url = complaints.ATTACHMENT;
+                              if (isStoragePermission) {
+                                downloadAttachment(
+                                    url, _localPath);
+                              } else {
+                                GlobalFunctions.askPermission(
+                                    Permission.storage)
+                                    .then((value) {
+                                  if (value) {
+                                    downloadAttachment(
+                                        url, _localPath);
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        AppLocalizations.of(
+                                            context)
+                                            .translate(
+                                            'download_permission'));
+                                  }
+                                });
+                              }
+                            }
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  alignment: Alignment.topRight,
+                                  //margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
+                                  child: AppIcon(
+                                    Icons.attach_file,
+                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconSize: 20.0,
+                                  )),
+                              Container(
+                                //margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
+                                child: text(
+                                  "Attachment",
+                                  textColor: GlobalVariables.green,
+                                  fontSize: GlobalVariables.textSizeVerySmall,
+                                ),
+                              )
+                            ],
+                          ),
+                        ) : SizedBox(),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              isAssignComplaint && complaints.STATUS.toLowerCase() == 'close' ? SizedBox()
+               : Visibility(
+                visible:complaints.STATUS.toLowerCase() == 'new' ||
+                        complaints.STATUS.toLowerCase() == 'reopen' ||
+                        complaints.STATUS.toLowerCase() == 'in progress' ||
+                        complaints.STATUS.toLowerCase() == 'close' ||
+                        complaints.STATUS.toLowerCase() == 'on hold'
+                    ? true
+                    : false,
+                child: AppContainer(
+                  isListItem: true,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      isAssignComplaint
+                          ? Flexible(
+                              flex: 2,
+                              child: Container(
+                                height: 50,
+                                width: double.infinity,
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                decoration: BoxDecoration(
+                                    color: GlobalVariables.white,
+                                    borderRadius:
+                                        BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: GlobalVariables.mediumGreen,
+                                      width: 2.0,
+                                    )),
+                                child: ButtonTheme(
+                                  child: DropdownButton(
+                                    items: _complaintStatusListItems,
+                                    onChanged: changeDropDownItem,
+                                    isExpanded: true,
+                                    value: _selectedItem,
+                                    icon: AppIcon(
+                                      Icons.keyboard_arrow_down,
+                                      iconColor: GlobalVariables.mediumGreen,
+                                    ),
+                                    underline: SizedBox(),
+                                    /* hint: Text(
+                        _selectedItem == null ? AppLocalizations.of(context).translate('status') : _selectedItem,
+                        style: TextStyle(
+                            color: GlobalVariables.lightGray,
+                            fontSize: 12),
+                      ),*/
+                                  ),
+                                ),
+                              ),
+                            )
+                          : complaints.STATUS.toLowerCase() == 'new' ||
+                                  complaints.STATUS.toLowerCase() ==
+                                      'reopen' ||
+                                  complaints.STATUS.toLowerCase() ==
+                                      'in progress' || complaints.STATUS.toLowerCase() == 'on hold'
+                              ? Flexible(
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          _complaintType.toLowerCase() ==
+                                                      'new' ||
+                                                  _complaintType
+                                                          .toLowerCase() ==
+                                                      'reopen' ||
+                                                  _complaintType
+                                                          .toLowerCase() ==
+                                                      'in progress' ||
+                                              _complaintType
+                                                  .toLowerCase() ==
+                                                  'on hold'
+                                              ? _complaintType = "Close"
+                                              : _complaintType =
+                                                  complaints.STATUS;
+                                          setState(() {});
+                                        },
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: _complaintType
+                                                              .toLowerCase() ==
+                                                          'new' ||
+                                                      _complaintType
+                                                              .toLowerCase() ==
+                                                          'reopen' ||
+                                                      _complaintType
+                                                              .toLowerCase() ==
+                                                          'in progress' ||
+                                                  _complaintType
+                                                      .toLowerCase() ==
+                                                      'on hold'
+                                                  ? GlobalVariables.white
+                                                  : GlobalVariables.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5),
+                                              border: Border.all(
+                                                color: _complaintType
+                                                                .toLowerCase() ==
                                                             'new' ||
                                                         _complaintType
                                                                 .toLowerCase() ==
                                                             'reopen' ||
                                                         _complaintType
                                                                 .toLowerCase() ==
-                                                            'in progress' ||
+                                                            'in progress'||
                                                     _complaintType
                                                         .toLowerCase() ==
                                                         'on hold'
-                                                    ? _complaintType = "Close"
-                                                    : _complaintType =
-                                                        complaints.STATUS;
-                                                setState(() {});
-                                              },
-                                              child: Container(
-                                                width: 30,
-                                                height: 30,
-                                                decoration: BoxDecoration(
-                                                    color: _complaintType
-                                                                    .toLowerCase() ==
-                                                                'new' ||
-                                                            _complaintType
-                                                                    .toLowerCase() ==
-                                                                'reopen' ||
-                                                            _complaintType
-                                                                    .toLowerCase() ==
-                                                                'in progress' ||
-                                                        _complaintType
-                                                            .toLowerCase() ==
-                                                            'on hold'
-                                                        ? GlobalVariables.white
-                                                        : GlobalVariables.green,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                    border: Border.all(
-                                                      color: _complaintType
-                                                                      .toLowerCase() ==
-                                                                  'new' ||
-                                                              _complaintType
-                                                                      .toLowerCase() ==
-                                                                  'reopen' ||
-                                                              _complaintType
-                                                                      .toLowerCase() ==
-                                                                  'in progress'||
-                                                          _complaintType
-                                                              .toLowerCase() ==
-                                                              'on hold'
-                                                          ? GlobalVariables
-                                                              .mediumGreen
-                                                          : GlobalVariables
-                                                              .transparent,
-                                                      width: 2.0,
-                                                    )),
-                                                child: Icon(Icons.check,
-                                                    color:
-                                                        GlobalVariables.white),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  10, 0, 0, 0),
-                                              child: text(
-                                                AppLocalizations.of(context)
-                                                    .translate('close'),
-                                               textColor:
-                                                        GlobalVariables.green,
-                                                    fontSize: GlobalVariables.textSizeMedium,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Flexible(
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                _complaintType.toLowerCase() ==
-                                                        "close"
-                                                    ? _complaintType = "Reopen"
-                                                    : _complaintType = "Close";
-                                                setState(() {});
-                                              },
-                                              child: Container(
-                                                width: 30,
-                                                height: 30,
-                                                decoration: BoxDecoration(
-                                                    color: _complaintType
-                                                                .toLowerCase() ==
-                                                            "close"
-                                                        ? GlobalVariables.white
-                                                        : GlobalVariables.green,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                    border: Border.all(
-                                                      color: _complaintType
-                                                                  .toLowerCase() ==
-                                                              "close"
-                                                          ? GlobalVariables
-                                                              .mediumGreen
-                                                          : GlobalVariables
-                                                              .transparent,
-                                                      width: 2.0,
-                                                    )),
-                                                child: AppIcon(Icons.check,
-                                                    iconColor:
-                                                        GlobalVariables.white),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  10, 0, 0, 0),
-                                              child: text(
-                                                AppLocalizations.of(context)
-                                                    .translate('reopen'),
-                                                textColor:
-                                                        GlobalVariables.green,
-                                                    fontSize: GlobalVariables.textSizeMedium,
-                                              ),
-                                            ),
-                                          ],
+                                                    ? GlobalVariables
+                                                        .mediumGreen
+                                                    : GlobalVariables
+                                                        .transparent,
+                                                width: 2.0,
+                                              )),
+                                          child: Icon(Icons.check,
+                                              color:
+                                                  GlobalVariables.white),
                                         ),
                                       ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                //alignment: Alignment.center,
-                                height: 40,
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: ButtonTheme(
-                                  // minWidth: MediaQuery.of(context).size.width/2,
-                                  child: RaisedButton(
-                                    color: GlobalVariables.green,
-                                    onPressed: () {
-                                      print('_complaintType : '+_complaintType.toString());
-                                      print('_selectedItem : '+_selectedItem.toString());
-                                      if(isAssignComplaint){
-                                        isComment = false;
-                                        updateComplaintStatus(context);
-                                      }else{
-                                        if(_complaintType.toLowerCase()!='close' || _complaintType.toLowerCase()!='reopen'){
-                                          /*if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='completed'){
-                                            GlobalFunctions.showToast('Please Select the Complaint Status');
-                                          }else {*/
-                                            isComment = false;
-                                            updateComplaintStatus(context);
-                                         // }
-                                        }else{
-                                          GlobalFunctions.showToast('Please Select the Complaint Status');
-                                        }
-                                      }
-                                    },
-                                    textColor: GlobalVariables.white,
-                                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(
-                                            color: GlobalVariables.green)),
-                                    child: text(
-                                      AppLocalizations.of(context)
-                                          .translate('submit'),
-                                          fontSize: GlobalVariables.textSizeMedium,
-                                      textColor: GlobalVariables.white,
-                                      maxLine: 1,
-                                    ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            10, 0, 0, 0),
+                                        child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('close'),
+                                         textColor:
+                                                  GlobalVariables.green,
+                                              fontSize: GlobalVariables.textSizeMedium,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Flexible(
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          _complaintType.toLowerCase() ==
+                                                  "close"
+                                              ? _complaintType = "Reopen"
+                                              : _complaintType = "Close";
+                                          setState(() {});
+                                        },
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: _complaintType
+                                                          .toLowerCase() ==
+                                                      "close"
+                                                  ? GlobalVariables.white
+                                                  : GlobalVariables.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5),
+                                              border: Border.all(
+                                                color: _complaintType
+                                                            .toLowerCase() ==
+                                                        "close"
+                                                    ? GlobalVariables
+                                                        .mediumGreen
+                                                    : GlobalVariables
+                                                        .transparent,
+                                                width: 2.0,
+                                              )),
+                                          child: AppIcon(Icons.check,
+                                              iconColor:
+                                                  GlobalVariables.white),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            10, 0, 0, 0),
+                                        child: text(
+                                          AppLocalizations.of(context)
+                                              .translate('reopen'),
+                                          textColor:
+                                                  GlobalVariables.green,
+                                              fontSize: GlobalVariables.textSizeMedium,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
+                      Flexible(
+                        flex: 1,
+                        child: AppButton(
+                          textContent: AppLocalizations.of(context).translate('submit'),
+                          onPressed: (){
+                            print('_complaintType : '+_complaintType.toString());
+                            print('_selectedItem : '+_selectedItem.toString());
+                            if(isAssignComplaint){
+                              isComment = false;
+                              updateComplaintStatus(context);
+                            }else{
+                              if(_complaintType.toLowerCase()!='close' || _complaintType.toLowerCase()!='reopen'){
+                                /*if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='completed'){
+                                      GlobalFunctions.showToast('Please Select the Complaint Status');
+                                    }else {*/
+                                isComment = false;
+                                updateComplaintStatus(context);
+                                // }
+                              }else{
+                                GlobalFunctions.showToast('Please Select the Complaint Status');
+                              }
+                            }
+                          },
                         ),
                       ),
-                    ),
-                    _commentsList.length > 0
-                        ? Container(
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                  alignment: Alignment.topLeft,
-                                  child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('comments'),
-                                    textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeNormal,
-                                        fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: GlobalVariables.mediumGreen,
-                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  child: Divider(
-                                    height: 3,
-                                  ),
-                                ),
-                                getCommentsListData()
-                              ],
-                            ),
-                          )
-                        : Container(),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            )
+              _commentsList.length > 0
+                  ? AppContainer(
+                isListItem: true,
+                      child: Column(
+                        children: [
+                          Container(
+                            //margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            alignment: Alignment.topLeft,
+                            child: primaryText(
+                              AppLocalizations.of(context)
+                                  .translate('comments'),
+                            ),
+                          ),
+                          Divider(),
+                          getCommentsListData()
+                        ],
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          )
           : Container(),
     );
   }
@@ -787,7 +640,7 @@ class ComplaintInfoAndCommentsState
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
-        margin: EdgeInsets.fromLTRB(18, 10, 18, 10),
+        margin: EdgeInsets.fromLTRB(4, 10, 4, 10),
         //  margin: EdgeInsets.fromLTRB(20, 40, 20,40),
        // height: 50,
         padding: EdgeInsets.all(5),
@@ -796,7 +649,7 @@ class ComplaintInfoAndCommentsState
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: GlobalVariables.lightGray,
-              width: 2,
+              width: 1,
             )),
         child: Row(
           children: <Widget>[
@@ -889,7 +742,7 @@ class ComplaintInfoAndCommentsState
 
   getCommentsListData() {
     return Container(
-      //padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(bottom: 40),
       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
       child: Builder(
           builder: (context) => ListView.builder(
@@ -907,18 +760,75 @@ class ComplaintInfoAndCommentsState
   }
 
   getCommentsListDataListItemLayout(int position) {
+   // print('_commentsList[position].PROFILE_PHOTO : '+_commentsList[position].PROFILE_PHOTO.toString());
     return Container(
       //alignment: userId!=_commentsList[position].cmtUserID ? Alignment.topRight:Alignment.topLeft,
-      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-      child: Row(
+      //margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: GlobalVariables.lightGreen,
+                backgroundImage: userId != _commentsList[position].USER_ID
+                    ? _commentsList[position].PROFILE_PHOTO.isNotEmpty ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : AssetImage(GlobalVariables.componentUserProfilePath)
+                    : NetworkImage(photo),
+              ),
+              SizedBox(width: 8,),
+              Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          primaryText(
+                            _commentsList[position].NAME,
+                          ),
+                          text(
+                            _commentsList[position].C_WHEN != '0000-00-00 00:00:00'
+                                ? GlobalFunctions.convertDateFormat(
+                                _commentsList[position].C_WHEN,
+                                "hh:mm aa")
+                                : '',
+                            textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeVerySmall,
+                          ),
+                        ],
+                      ),
+                      text(
+                        _commentsList[position].C_WHEN != '0000-00-00 00:00:00'
+                            ? GlobalFunctions.convertDateFormat(
+                            _commentsList[position].C_WHEN,
+                            "dd-MM-yyyy")
+                            : '',
+                        textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeVerySmall,
+                      ),
+                    ],
+              )),
+            ],
+          ),
+          SizedBox(height: 8,),
+          text(
+              _commentsList[position].COMMENT,
+              textColor: GlobalVariables.black,
+              fontSize: GlobalVariables.textSizeSMedium,
+          ),
+          Divider(),
+        ],
+      ),
+      /*child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-              margin: userId == _commentsList[position].USER_ID
+             *//* margin: userId == _commentsList[position].USER_ID
                   ? EdgeInsets.fromLTRB(40, 0, 0, 0)
                   : EdgeInsets.fromLTRB(
-                      0, 0, 0, 0), // color: GlobalVariables.black,
+                      0, 0, 0, 0),*//* // color: GlobalVariables.black,
               child: CircleAvatar(
-                radius: 25,
+                radius: 10,
                 backgroundColor: GlobalVariables.lightGreen,
                 backgroundImage: userId != _commentsList[position].USER_ID
                     ? NetworkImage(_commentsList[position].PROFILE_PHOTO)
@@ -928,11 +838,10 @@ class ComplaintInfoAndCommentsState
             child: Container(
               //   color: GlobalVariables.grey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                     // color : GlobalVariables.lightGray,
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,
@@ -942,12 +851,12 @@ class ComplaintInfoAndCommentsState
                             _commentsList[position].NAME,
                             textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
                           ),
-                        ), /*Container(
+                        ), *//*Container(
                           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: Text(_commentsList[position].cmtLikeCount + " Likes",style: TextStyle(
                               color: GlobalVariables.green,fontSize: 16
                           ),),
-                        ),*/
+                        ),*//*
                       ],
                     ),
                   ),
@@ -975,9 +884,9 @@ class ComplaintInfoAndCommentsState
                               textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeSMedium,
                             ),
                           ),
-                        ), /*Container(
+                        ), *//*Container(
                           child: Icon(Icons.chat_bubble_outline,color: GlobalVariables.mediumGreen,)
-                        ),*/
+                        ),*//*
                       ],
                     ),
                   ),
@@ -986,7 +895,7 @@ class ComplaintInfoAndCommentsState
             ),
           ),
         ],
-      ),
+      ),*/
     );
   }
 
@@ -1015,6 +924,7 @@ class ComplaintInfoAndCommentsState
         child: text(
           _complaintStatusList[i].complaintStatus,
           textColor: GlobalVariables.green,
+          fontSize: GlobalVariables.textSizeSmall
         ),
       ));
     }

@@ -48,6 +48,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
             print('Consumer Value : ' + value.servicesCategoryList.toString());
             return Builder(
               builder: (context) => Scaffold(
+                backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
                   backgroundColor: GlobalVariables.green,
                   centerTitle: true,
@@ -69,7 +70,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                                 builder: (context) => BaseOwnerServices()));
                       },
                       child: Container(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: EdgeInsets.only(right: 16),
                         child: Row(
                           children: [
                             AppIcon(
@@ -103,33 +104,19 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
 
   getServiceLayout(ServicesResponse value) {
     print('getClassifiedLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                getServiceTypeDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        getServiceTypeDataLayout(value),
+      ],
     );
   }
 
   getServiceTypeDataLayout(ServicesResponse value) {
 
     return Container(
-      margin: EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 15, 18,
-          0), //color: GlobalVariables.black,
+      margin: EdgeInsets.all(16), //color: GlobalVariables.black,
       child: Container(
           child: Builder(
               builder: (context) =>
@@ -217,17 +204,18 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
                       children: <Widget>[
                         AppNetworkImage(
                           value.servicesCategoryList[index].image,
-                          imageWidth:35.0,
-                          imageHeight:35.0,
+                          imageWidth:30.0,
+                          imageHeight:30.0,
                           borderColor: GlobalVariables.grey,
                           borderWidth: 1.0,
                           radius: 0.0,
                         ),
-                        SizedBox(height: 10,),
-                        Text(value.servicesCategoryList[index].Category_Name,
-                            style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
-                            textAlign: TextAlign.center,
-                            maxLines: 3),
+                        SizedBox(height: 8,),
+                        text(value.servicesCategoryList[index].Category_Name,
+                            fontSize: GlobalVariables.textSizeSmall,
+                            isCentered: true,
+                            //textAlign: TextAlign.center,
+                            maxLine: 2),
                       ],
                     ),
                   ),

@@ -13,6 +13,7 @@ import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -64,6 +65,7 @@ class StaffListPerCategoryState
       child: Consumer<GatePass>(builder: (context,value,child){
         return Builder(
           builder: (context) => Scaffold(
+            backgroundColor: GlobalVariables.veryLightGray,
             //resizeToAvoidBottomPadding: false,
             appBar: AppBar(
               backgroundColor: GlobalVariables.green,
@@ -90,25 +92,12 @@ class StaffListPerCategoryState
   }
 
   getStaffListPerCategoryLayout(GatePass value) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                value.isLoading? GlobalFunctions.loadingWidget(context):  getStaffListPerCategoryListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 180.0),
+        value.isLoading? GlobalFunctions.loadingWidget(context):  getStaffListPerCategoryListDataLayout(value),
+      ],
     );
   }
 
@@ -116,12 +105,12 @@ class StaffListPerCategoryState
     return value.staffList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 15, 18, 0),
-            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(0,16, 0, 0),
+           // padding: EdgeInsets.all(10),
             // height: MediaQuery.of(context).size.height / 0.5,
-            decoration: BoxDecoration(
+          /*  decoration: BoxDecoration(
                 color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10)),*/
 
             child: Builder(
                 builder: (context) => ListView.builder(
@@ -180,20 +169,21 @@ class StaffListPerCategoryState
           Provider.of<GatePass>(context,listen: false).getStaffRoleDetailsData(widget._roleName);
         }
       },
-      child: Container(
+      child: AppContainer(
+        isListItem: true,
         width: MediaQuery.of(context).size.width / 1.1,
         // padding: EdgeInsets.all(10),
         // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        decoration: BoxDecoration(
+       /* decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: GlobalVariables.white),
+            color: GlobalVariables.white),*/
         child: Column(
           children: [
             Row(
               children: [
                 //profileLayout(),
                 Container(
-                    padding: EdgeInsets.all(10),
+                    //padding: EdgeInsets.all(10),
                     // alignment: Alignment.center,
                     /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
@@ -217,23 +207,22 @@ class StaffListPerCategoryState
                             radius: 35.0,
                           )
                     ),
+                SizedBox(width: 8,),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     alignment: Alignment.topLeft,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: text(
+                          child: primaryText(
                             value.staffList[position].STAFF_NAME,
-                        textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeMedium,
-                                fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
                           child: Row(
                             children: <Widget>[
                               Container(
@@ -281,16 +270,6 @@ class StaffListPerCategoryState
                 ),
               ],
             ),
-            position != value.staffList.length - 1
-                ? Container(
-                    //color: GlobalVariables.black,
-                    //margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: Divider(
-                      thickness: 1,
-                      color: GlobalVariables.lightGray,
-                    ),
-                  )
-                : Container(),
           ],
         ),
       ),

@@ -13,6 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,8 +76,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
 
     if (_staff.ASSIGN_FLATS.length > 0) {
       _assignFlatList = _staff.ASSIGN_FLATS.split(',');
-      for(int i=0;i<_assignFlatList.length;i++){
-        if(_assignFlatList[i].length==0){
+      for (int i = 0; i < _assignFlatList.length; i++) {
+        if (_assignFlatList[i].length == 0) {
           _assignFlatList.removeAt(i);
         }
       }
@@ -91,6 +92,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -106,7 +108,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
           ),
           title: text(
             AppLocalizations.of(context).translate('staff_info'),
-              textColor: GlobalVariables.white,
+            textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -128,28 +130,13 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         }*/
         return;
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        //height: double.maxFinite,
-        //height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: GlobalVariables.veryLightGray,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Flexible(
-              child: Stack(
-                children: <Widget>[
-                  GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                      context, 150.0),
-                  getStaffDetailsLayout(),
-                  addToHouseHoldLayout(),
-                ],
-              ),
-            ),
-          ],
-        ),
+      child: Stack(
+        children: <Widget>[
+          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+              context, 150.0),
+          getStaffDetailsLayout(),
+          addToHouseHoldLayout(),
+        ],
       ),
     );
   }
@@ -195,8 +182,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   getStaffDetailsLayout() {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(
-            18, MediaQuery.of(context).size.height / 20, 18, 0),
+        margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
         child: Column(
           children: [
             staffPersonalDetails(),
@@ -209,116 +195,117 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   }
 
   staffPersonalDetails() {
-    return Container(
+    return AppContainer(
       //width: MediaQuery.of(context).size.width / 1.1,
       // padding: EdgeInsets.all(10),
       // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: GlobalVariables.white),
-      child: Row(
+      child: Column(
         children: [
-          //profileLayout(),
-          Container(
-              padding: EdgeInsets.only(left: 10),
-              // alignment: Alignment.center,
-              /* decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25)),*/
-              child: _staff.IMAGE.length == 0
-                  ? Image.asset(
-                      GlobalVariables.componentUserProfilePath,
-                      width: 80,
-                      height: 80,
-                    )
-                  : Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(_staff.IMAGE),
-                              fit: BoxFit.cover),
-                          border: Border.all(
-                              color: GlobalVariables.grey, width: 2.0)),
-                    )),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
-              alignment: Alignment.topLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child:text(
-                      _staff.STAFF_NAME,
-                  textColor: GlobalVariables.green,
-                          fontSize: GlobalVariables.textSizeMedium,
-                          fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: text(
-                            _staff.CONTACT,
-                      textColor: GlobalVariables.grey,
-                              fontSize: GlobalVariables.textSizeSmall,
-                          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                  // padding: EdgeInsets.only(left: 10),
+                  // alignment: Alignment.center,
+                  /* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*/
+                  child: _staff.IMAGE.length == 0
+                      ? Image.asset(
+                          GlobalVariables.componentUserProfilePath,
+                          width: 70,
+                          height: 70,
+                        )
+                      : Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: NetworkImage(_staff.IMAGE),
+                                  fit: BoxFit.cover),
+                              border: Border.all(
+                                  color: GlobalVariables.grey, width: 2.0)),
+                        )),
+              SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: Container(
+                  //margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: primaryText(
+                          _staff.STAFF_NAME,
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              child: text(
+                                _staff.CONTACT,
+                                textColor: GlobalVariables.grey,
+                                fontSize: GlobalVariables.textSizeSmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  Visibility(
-                    visible: _staff.CONTACT.length > 0 ? true : false,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              launch("tel:"+_staff.CONTACT);
-                            },
-                            child: Container(
-                              child: AppIcon(
-                                Icons.call,
-                                iconColor: GlobalVariables.green,
-                              ),
-                            ),
-                          ),
-                          Container(
-                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              //TODO: Divider
-                              height: 30,
-                              width: 8,
-                              child: VerticalDivider(
-                                thickness: 1,
-                                color: GlobalVariables.grey,
-                              )),
-                          InkWell(
-                            onTap: () {
-                              GlobalFunctions.shareData(
-                                  _staff.STAFF_NAME,
-                                  'Name : ' +
-                                      _staff.STAFF_NAME +
-                                      '\nContact : ' +
-                                      _staff.CONTACT);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: AppIcon(
-                                Icons.share,
-                                iconColor: GlobalVariables.grey,
-                              ),
-                            ),
-                          ),
-                        ],
+                ),
+              ),
+            ],
+          ),
+          Divider(),
+          Visibility(
+            visible: _staff.CONTACT.length > 0 ? true : false,
+            child: Container(
+              //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: AppIconButton(
+                          Icons.call,
+                          iconColor: GlobalVariables.green,
+                          onPressed: () {
+                            launch("tel:" + _staff.CONTACT);
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    VerticalDivider(),
+                    Flexible(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: AppIconButton(
+                          Icons.share,
+                          iconColor: GlobalVariables.grey,
+                          onPressed: () {
+                            GlobalFunctions.shareData(
+                                _staff.STAFF_NAME,
+                                'Name : ' +
+                                    _staff.STAFF_NAME +
+                                    '\nContact : ' +
+                                    _staff.CONTACT);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -328,157 +315,136 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   }
 
   staffRateDetails() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Card(
-        shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
-        elevation: 2.0,
-        // shadowColor: GlobalVariables.green.withOpacity(0.3),
-        //margin: EdgeInsets.all(15),
-        color: GlobalVariables.white,
-        child: Container(
-          padding: EdgeInsets.all(15),
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.topLeft,
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    showRatting(),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: text(
-                        totalRate.toStringAsFixed(1).toString(),
-                          textColor: GlobalVariables.skyBlue,
-                            fontSize: GlobalVariables.textSizeNormal,
-                            fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    /*Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.white,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: GlobalVariables.lightGreen,
-                              width: 3.0,
-                            )),
-                        child: Text('View All')),*/
-                  ],
+    return AppContainer(
+      isListItem: true,
+      //padding: EdgeInsets.all(15),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                showRatting(),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: text(
+                    totalRate.toStringAsFixed(1).toString(),
+                    textColor: GlobalVariables.skyBlue,
+                    fontSize: GlobalVariables.textSizeLargeMedium,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
-              /*Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: Divider(
-                  thickness: 1,
-                  color: GlobalVariables.lightGray,
-                ),
-              ),*/
-            ],
+                /*Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: GlobalVariables.lightGreen,
+                          width: 3.0,
+                        )),
+                    child: Text('View All')),*/
+              ],
+            ),
           ),
-        ),
+          /*Container(
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+            child: Divider(
+              thickness: 1,
+              color: GlobalVariables.lightGray,
+            ),
+          ),*/
+        ],
       ),
     );
   }
 
   staffWorkHouse() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Card(
-        shape:
-            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
-        elevation: 2.0,
-        // shadowColor: GlobalVariables.green.withOpacity(0.3),
-        // margin: EdgeInsets.all(15),
-        color: GlobalVariables.white,
-        child: Container(
-          padding: EdgeInsets.all(15),
-          child: Column(
-            children: [
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: SvgPicture.asset(
-                        GlobalVariables.bottomHomeIconPath,
-                        width: 30,
-                        height: 30,
-                        color: GlobalVariables.grey,
-                      ),
+    return AppContainer(
+      child: Column(
+        children: [
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: SvgPicture.asset(
+                    GlobalVariables.bottomHomeIconPath,
+                    width: 20,
+                    height: 20,
+                    color: GlobalVariables.grey,
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: primaryText(
+                      'Works In ' +
+                          _assignFlatList.length.toString() +
+                          ' House',
                     ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                        child: text(
-                          'Work In ' +
-                              _assignFlatList.length.toString() +
-                              ' House',
-                              fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w600,
+                  ),
+                ),
+                isStaffAdded
+                    ? InkWell(
+                        onTap: () {
+                          removeHouseHold();
+                        },
+                        child: Container(
+                          child: AppIcon(
+                            Icons.delete,
+                            iconColor: GlobalVariables.green,
+                          ),
                         ),
-                      ),
-                    ),
-                    isStaffAdded
-                        ? InkWell(
-                            onTap: () {
-                              removeHouseHold();
-                            },
-                            child: Container(
-                              child: AppIcon(
-                                Icons.delete,
-                                iconColor: GlobalVariables.green,
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: Divider(
-                  thickness: 1,
-                  color: GlobalVariables.lightGray,
-                ),
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  child: GridView.count(
-                    crossAxisCount: 3,
-                    shrinkWrap: true,
-                    childAspectRatio: MediaQuery.of(context).size.width / 200.0,
-                    children: List.generate(
-                      _assignFlatList.length,
-                      (index) {
-                        return Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.green,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: GlobalVariables.transparent,
-                                  width: 3.0,
-                                )),
-                            child: text(
-                              _assignFlatList[index],
-                                textColor: GlobalVariables.white,
-                                  fontWeight: FontWeight.w500,
-                            ));
-                      },
-                    ),
-                  )),
-            ],
+                      )
+                    : Container(),
+              ],
+            ),
           ),
-        ),
+          Divider(),
+          Container(
+              width: MediaQuery.of(context).size.width / 1.1,
+              child: Container(
+                  //: MediaQuery.of(context).size.width / 1.1,
+                  child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                childAspectRatio: MediaQuery.of(context).size.width / 150.0,
+                children: List.generate(
+                  _assignFlatList.length,
+                  (index) {
+                    return Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.grey,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: GlobalVariables.white,
+                              width: 1.0,
+                            )),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: text(
+                            _assignFlatList[index],
+                            textColor: GlobalVariables.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ));
+                  },
+                ),
+              ))),
+        ],
       ),
     );
   }
@@ -499,10 +465,10 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       ? Container()
                       : Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                           decoration: BoxDecoration(
                               color: GlobalVariables.green,
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: GlobalVariables.transparent,
                                 width: 3.0,
@@ -525,18 +491,18 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                                   showMyRattingBar(setState));
                                         }));
                               },
-                              child: text(
-                                'Add Your Ratting',
+                              child: text('Add Your Ratting',
                                   textColor: GlobalVariables.white,
-                              )),
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textStyleHeight: 1.0)),
                         ),
                 )
               : Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   decoration: BoxDecoration(
                       color: GlobalVariables.green,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: GlobalVariables.transparent,
                         width: 3.0,
@@ -545,10 +511,10 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       onTap: () {
                         addHouseHold();
                       },
-                      child: text(
-                        'Add to Household',
+                      child: text('Add to Household',
                           textColor: GlobalVariables.white,
-                      )),
+                          fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0)),
                 ),
         ),
       ),
@@ -669,8 +635,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                 child: text(
                   myRate.toStringAsFixed(1).toString(),
                   textColor: GlobalVariables.skyBlue,
-                      fontSize: GlobalVariables.textSizeNormal,
-                      fontWeight: FontWeight.w800,
+                  fontSize: GlobalVariables.textSizeNormal,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],
@@ -702,7 +668,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                   onPressed: () {},
                   child: text(
                     'Submit',
-                      textColor: GlobalVariables.white,
+                    textColor: GlobalVariables.white,
                   )),
             ),
           )
@@ -736,7 +702,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     isRattingDone = true;
     restClient
         .addStaffRatting(societyId, block, flat, _staff.SID,
-        totalRate.toStringAsFixed(1).toString())
+            totalRate.toStringAsFixed(1).toString())
         .then((value) {
       _progressDialog.hide();
       if (value.status) {

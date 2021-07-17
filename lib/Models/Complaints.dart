@@ -27,6 +27,9 @@ class HelpDeskResponse extends ChangeNotifier{
         List<dynamic> _list = value.data;
         print('complaint list length : ' + _list.length.toString());
 
+        complaintList = List<Complaints>();
+        openComplaintList = List<Complaints>();
+        closeComplaintList = List<Complaints>();
         complaintList = List<Complaints>.from(_list.map((i)=>Complaints.fromJson(i)));
 
         // print("Complaint List : " + _complaintList.toString());

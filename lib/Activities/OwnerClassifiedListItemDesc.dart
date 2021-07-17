@@ -13,7 +13,7 @@ import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:intl/intl.dart';
 import 'base_stateful.dart';
 
 class BaseOwnerClassifiedListItemDesc extends StatefulWidget {
@@ -471,7 +471,7 @@ class CreateClassifiedListingState
                         color: Colors.transparent,
                         borderRadius:
                         BorderRadius.all(Radius.circular(8))),*/
-                    child: text('Rs. ' + widget.classifiedList.Price,
+                    child: text('Rs. ' + NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(widget.classifiedList.Price)),
                         textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeNormal,
                         fontWeight: FontWeight.w500),
