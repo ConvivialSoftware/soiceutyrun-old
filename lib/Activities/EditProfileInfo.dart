@@ -943,7 +943,12 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
           GlobalVariables.userNameValueNotifer.notifyListeners();
         }
         if(attachmentFileName!=null && attachmentFilePath!=null){
-          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          GlobalFunctions.getTemporaryDirectoryPath()
+              .then((value) {
+            GlobalFunctions.removeAllFilesFromDirectory(
+                value);
+          });
         }
         Navigator.of(context).pop('profile');
       }

@@ -7,6 +7,7 @@ import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
+import 'package:societyrun/Models/PaymentCharges.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
 import 'RestAPI.dart';
@@ -491,7 +492,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.pendingRequestAPI)
-  Future<DataResponse> getPendingRequest(@Field(GlobalVariables.societyId) String societyId);
+  Future<DataResponse> getPendingMemberRequest(@Field(GlobalVariables.societyId) String societyId);
 
 
   @FormUrlEncoded()
@@ -533,18 +534,22 @@ abstract class RestClient {
   @POST(GlobalVariables.addAgreementAPI)
   Future<StatusMsgResponse> addAgreement(
       @Field(GlobalVariables.societyId) String societyId,
-      @Field("USER_ID[]") List<String> userID,
+      @Field(GlobalVariables.block) String block,
+      @Field(GlobalVariables.flat) String flat,
+      @Field("user_details[]") List<Map<String,String>> userID,
       @Field(GlobalVariables.AGREEMENT_FROM) String agreementFrom,
       @Field(GlobalVariables.AGREEMENT_TO) String agreementTo,
       @Field(GlobalVariables.AGREEMENT) String agreement,
       @Field(GlobalVariables.RENTED_TO) String rentedTo,
+      @Field(GlobalVariables.Noc_Issue) String nocIssue,
+      @Field("isAdmin") bool isAdmin,
       );
 
   @FormUrlEncoded()
   @POST(GlobalVariables.adminAddAgreementAPI)
   Future<StatusMsgResponse> adminAddAgreementAPI(
       @Field(GlobalVariables.societyId) String societyId,
-      @Field("USER_ID[]") List<String> userID,
+      @Field("user_details[]") List<String> userID,
       @Field(GlobalVariables.AGREEMENT_FROM) String agreementFrom,
       @Field(GlobalVariables.AGREEMENT_TO) String agreementTo,
       @Field(GlobalVariables.AGREEMENT) String agreement,
@@ -554,6 +559,30 @@ abstract class RestClient {
       @Field(GlobalVariables.societyName) String societyName,
       @Field(GlobalVariables.Noc_Issue) String nocIssue,
       );
+
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.renewAgreementAPI)
+  Future<StatusMsgResponse> renewAgreement(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.ID) String id,
+      @Field(GlobalVariables.AGREEMENT_FROM) String agreementFrom,
+      @Field(GlobalVariables.AGREEMENT_TO) String agreementTo,
+      @Field(GlobalVariables.AGREEMENT) String agreement,
+      @Field(GlobalVariables.Type) bool isAdmin,
+      );
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.closeAgreementAPI)
+  Future<StatusMsgResponse> closeAgreement(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.ID) String id,
+      );
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.paymentChargesAPI)
+  Future<PaymentChargesResponse> getPaymentCharges();
+
 }
 
 

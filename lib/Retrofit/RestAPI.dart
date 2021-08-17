@@ -11,6 +11,8 @@ import 'package:societyrun/Models/GatePassResponse.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/MemberResponse.dart';
+import 'package:societyrun/Models/MonthExpensePendingRequestResponse.dart';
+import 'package:societyrun/Models/PaymentCharges.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
@@ -367,7 +369,7 @@ class RestAPI implements RestClient,
     ArgumentError.checkNotNull(flat, GlobalVariables.flat);
 
     //AppPermission.isUserAdminHelpDeskPermission=false;
-    FormData formData = !AppPermission.isUserAdminHelpDeskPermission
+    FormData formData = !AppUserPermission.isUserAdminPermission
         ? FormData.fromMap({
             GlobalVariables.societyId: socId,
             GlobalVariables.block: block,
@@ -1960,7 +1962,13 @@ class RestAPI implements RestClient,
       "HEADS": heads,
       "LEDGER_YEAR": ledgerYear,
     });
-    print(GlobalVariables.societyId + ": " + societyId);
+    print({
+      GlobalVariables.societyId: societyId,
+      "START_DATE": startDate,
+      "END_DATE": endDate,
+      "HEADS": heads,
+      "LEDGER_YEAR": ledgerYear,
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.expenseAPI);
     final Response _result = await _dio.post(GlobalVariables.expenseAPI,
@@ -3617,7 +3625,7 @@ class RestAPI implements RestClient,
   }
 
   @override
-  Future<DataResponse> getPendingRequest(String societyId) async {
+  Future<DataResponse> getPendingMemberRequest(String societyId) async {
     // TODO: implement getPendingRequest
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
@@ -3788,29 +3796,53 @@ class RestAPI implements RestClient,
   }
 
   @override
-  Future<StatusMsgResponse> addAgreement(String societyId, List<String> userID,
-      String agreementFrom, String agreementTo, String agreement, String rentedTo) async {
+  Future<StatusMsgResponse> addAgreement(String societyId,String block,String flat, List<Map<String,String>> userID,
+      String agreementFrom, String agreementTo, String agreement, String rentedTo,String nocIssue,bool isAdmin) async {
     // TODO: implement addAgreement
-    FormData formData = FormData.fromMap({
+    FormData formData = FormData.fromMap(isAdmin ? {
       GlobalVariables.societyId: societyId,
-      "USER_ID": userID,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      "user_details": jsonEncode(userID),
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.RENTED_TO: rentedTo,
+      GlobalVariables.Noc_Issue: nocIssue,
+    } : {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      "user_details": jsonEncode(userID),
       GlobalVariables.AGREEMENT_FROM: agreementFrom,
       GlobalVariables.AGREEMENT_TO: agreementTo,
       GlobalVariables.AGREEMENT: agreement,
       GlobalVariables.RENTED_TO: rentedTo,
     });
 
-    print({
+    print(isAdmin ? {
       GlobalVariables.societyId: societyId,
-      "USER_ID": userID.toString(),
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      "user_details": jsonEncode(userID),
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.RENTED_TO: rentedTo,
+      GlobalVariables.Noc_Issue: nocIssue,
+    }.toString() : {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      "user_details": jsonEncode(userID),
       GlobalVariables.AGREEMENT_FROM: agreementFrom,
       GlobalVariables.AGREEMENT_TO: agreementTo,
       GlobalVariables.AGREEMENT: agreement,
       GlobalVariables.RENTED_TO: rentedTo,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addAgreementAPI);
-    final Response _result = await _dio.post(GlobalVariables.addAgreementAPI,
+    print('baseurl : ' + baseUrl + (isAdmin ? GlobalVariables.adminAddAgreementAPI : GlobalVariables.addAgreementAPI));
+    final Response _result = await _dio.post(isAdmin ? GlobalVariables.adminAddAgreementAPI : GlobalVariables.addAgreementAPI,
         options: RequestOptions(
           //method: GlobalVariables.Post,
             headers: <String, dynamic>{
@@ -3921,5 +3953,306 @@ class RestAPI implements RestClient,
     //print('value of getBillPDFData : ' + value.toString());
     return DataResponse.fromJsonDataAsString(value);
   }
+
+  @override
+  Future<StatusMsgResponse> renewAgreement(String societyId,String id, String agreementFrom,
+      String agreementTo, String agreement,bool isAdmin) async {
+    // TODO: implement renewAgreement
+    FormData formData = FormData.fromMap( {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.Type: isAdmin?'Admin':'',
+    });
+
+    print({
+      GlobalVariables.ID: id,
+      GlobalVariables.AGREEMENT_FROM: agreementFrom,
+      GlobalVariables.AGREEMENT_TO: agreementTo,
+      GlobalVariables.AGREEMENT: agreement,
+      GlobalVariables.Type: isAdmin?'Admin':''
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.renewAgreementAPI);
+    final Response _result = await _dio.post(GlobalVariables.renewAgreementAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addAgreementAPI : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> closeAgreement(String societyId, String id) async {
+    // TODO: implement closeAgreement
+    FormData formData = FormData.fromMap( {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.closeAgreementAPI);
+    final Response _result = await _dio.post(GlobalVariables.closeAgreementAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addAgreementAPI : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getExpenseIncomeLedger(String societyId) async {
+    // TODO: implement getExpenseIncomeLedger
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.incomeLedgerAPI);
+    final Response _result = await _dio.post(GlobalVariables.incomeLedgerAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getExpenseIncomeLedger : ' + value.toString());
+    return DataResponse.fromJsonExpense(value);
+  }
+
+  @override
+  Future<MonthExpensePendingRequestResponse> getMonthExpensePendingRequest(String societyId) async {
+    // TODO: implement getMonthExpensePendingRequest
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.monthExpensePendingRequestAPI);
+    final Response _result = await _dio.post(GlobalVariables.monthExpensePendingRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getMonthExpensePendingRequest : ' + value.toString());
+    return MonthExpensePendingRequestResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> addInvoice(String societyId, String amount, String dueDate,
+      String flatNo, String ledgerId, String date, String narration) async {
+    // TODO: implement addInvoice
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(amount, "amount");
+    ArgumentError.checkNotNull(ledgerId, "ledger_id");
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      "amount": amount,
+      "ledger": ledgerId,
+      "date": date,
+      "due_date": dueDate,
+      "flat_no": flatNo,
+      "narration": narration,
+    });
+    print({
+      GlobalVariables.societyId: societyId,
+      "amount": amount,
+      "ledger_id": ledgerId,
+      "date": date,
+      "due_date": dueDate,
+      "flat_no": flatNo,
+      "narration": narration,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.addInvoiceAPI);
+
+    // print("Pic String: " + attachment.toString());
+    // print('attachment lengtth : ' + attachment.length.toString());
+    final Response _result = await _dio.post(GlobalVariables.addInvoiceAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addInvoice : ' + value.runtimeType.toString());
+    print('value of addInvoice : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> cancelReceiptRequest(String societyId, String id) async {
+    // TODO: implement cancelReceiptRequest
+    FormData formData = FormData.fromMap( {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.cancelReceiptRequestAPI);
+    final Response _result = await _dio.post(GlobalVariables.cancelReceiptRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of cancelReceiptRequest : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> approveReceiptRequest(String societyId, String id) async {
+    // TODO: implement approveReceiptRequest
+    FormData formData = FormData.fromMap( {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ID: id,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.approveReceiptRequestAPI);
+    final Response _result = await _dio.post(GlobalVariables.approveReceiptRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of approveReceiptRequest : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> getHeadWiseExpenseData(String societyId) async {
+    // TODO: implement getHeadWiseExpenseData
+    ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+    });
+    print(GlobalVariables.societyId + ": " + societyId);
+
+    print('baseurl : ' + baseUrl + GlobalVariables.headWiseExpenseAPI);
+    final Response _result = await _dio.post(GlobalVariables.headWiseExpenseAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of getHeadWiseExpenseData : ' + value.toString());
+    return DataResponse.fromJsonExpense(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> addApproveReceiptRequest(String socId, String flatNo,
+      String paymentDate, String amount, String penaltyAmount,
+      String referenceNo, String transactionMode, String bankAccountNo,
+      String id, String narration) async {
+    // TODO: implement addApproveReceiptRequest
+    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+    ArgumentError.checkNotNull(id, GlobalVariables.ID);
+    /*ArgumentError.checkNotNull(flat, GlobalVariables.flat);
+    ArgumentError.checkNotNull(invoiceNo, GlobalVariables.INVOICE_NO);
+    ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
+    ArgumentError.checkNotNull(referenceNo, GlobalVariables.REFERENCE_NO);
+    ArgumentError.checkNotNull(
+        transactionMode, GlobalVariables.TRANSACTION_MODE);
+    ArgumentError.checkNotNull(bankAccountNo, GlobalVariables.BANK_ACCOUNTNO);
+    ArgumentError.checkNotNull(paymentDate, GlobalVariables.PAYMENT_DATE);
+    ArgumentError.checkNotNull(orderID, GlobalVariables.orderID);*/
+
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.AMOUNT: amount,
+      GlobalVariables.REFERENCE_NO: referenceNo,
+      GlobalVariables.TRANSACTION_MODE: transactionMode,
+      GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
+      GlobalVariables.PAYMENT_DATE: paymentDate,
+      "FLAT_NO": flatNo,
+      "PENALTY_AMOUNT": penaltyAmount,
+      GlobalVariables.NARRATION: narration,
+      GlobalVariables.ID: id
+    });
+    print({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.AMOUNT: amount,
+      GlobalVariables.REFERENCE_NO: referenceNo,
+      GlobalVariables.TRANSACTION_MODE: transactionMode,
+      GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
+      GlobalVariables.PAYMENT_DATE: paymentDate,
+      "FLAT_NO": flatNo,
+      "PENALTY_AMOUNT": penaltyAmount,
+      GlobalVariables.NARRATION: narration,
+      GlobalVariables.ID: id
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.approveReceiptRequestAPI);
+
+    // print("Pic String: " + attachment.toString());
+    // print('attachment lengtth : ' + attachment.length.toString());
+    final Response _result = await _dio.post(GlobalVariables.approveReceiptRequestAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addApproveReceiptRequest : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+
+  @override
+  Future<PaymentChargesResponse> getPaymentCharges() async {
+    // TODO: implement getPaymentCharges
+    print('baseurl : ' + baseUrl + GlobalVariables.paymentChargesAPI);
+    final Response _result = await _dio.post(GlobalVariables.paymentChargesAPI,
+      options:  RequestOptions(
+        headers: <String,dynamic>{
+          "Authorization":GlobalVariables.AUTH,
+        },baseUrl: baseUrl),
+    );
+    final value = _result.data;
+    print('value of getPaymentCharges : ' + value.toString());
+    return PaymentChargesResponse.fromJson(value);
+  }
+
 
 }

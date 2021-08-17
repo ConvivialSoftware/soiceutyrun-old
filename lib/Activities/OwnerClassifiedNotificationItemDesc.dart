@@ -422,7 +422,7 @@ class CreateClassifiedListingState
                       color: Colors.transparent,
                       borderRadius:
                       BorderRadius.all(Radius.circular(8))),*/
-                  child: text('Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price)),
+                  child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price))*/GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[0].Price),
                       textColor: GlobalVariables.black,
                       fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.w500),

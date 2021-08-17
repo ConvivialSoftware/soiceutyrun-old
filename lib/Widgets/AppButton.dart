@@ -9,12 +9,13 @@ class AppButton extends StatefulWidget {
   Color bgColor;
   Color textColor;
   var radius,fontWeight;
+  EdgeInsets padding;
 
   AppButton({@required this.textContent,
     @required this.onPressed,
     this.bgColor = GlobalVariables.green,
     this.textColor = GlobalVariables.white,
-    this.radius = 10.0,this.fontWeight=FontWeight.w600});
+    this.radius = 10.0,this.fontWeight=FontWeight.w600,this.padding=const EdgeInsets.all(0.0)});
 
   @override
   State<StatefulWidget> createState() {
@@ -25,6 +26,7 @@ class AppButton extends StatefulWidget {
 class AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return RaisedButton(
+      padding: widget.padding,
       color: widget.bgColor,
       onPressed: widget.onPressed,
       shape: RoundedRectangleBorder(

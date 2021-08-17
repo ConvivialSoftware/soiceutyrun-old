@@ -30,20 +30,21 @@ class BaseMyGate extends StatefulWidget {
   String pageName;
   String _VID;
 
-  BaseMyGate(this.pageName,this._VID);
+  BaseMyGate(this.pageName, this._VID);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyGateState(pageName,this._VID);
+    return MyGateState(pageName, this._VID);
   }
 }
 
 class MyGateState extends BaseStatefulState<BaseMyGate>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
- // List<Visitor> value.visitorList = new List<Visitor>();
- // List<ScheduleVisitor> value.scheduleVisitorList = new List<ScheduleVisitor>();
+
+  // List<Visitor> value.visitorList = new List<Visitor>();
+  // List<ScheduleVisitor> value.scheduleVisitorList = new List<ScheduleVisitor>();
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
@@ -56,10 +57,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   var username, password;
   ProgressDialog _progressDialog;
 
- // bool isActivitiesAPICall = false;
+  // bool isActivitiesAPICall = false;
   bool isHelperAPICall = false;
 
- // List<Staff> _staffList = new List<Staff>();
+  // List<Staff> _staffList = new List<Staff>();
   List<String> _scheduleList = new List<String>();
   List<DropdownMenuItem<String>> _scheduleListItems =
       new List<DropdownMenuItem<String>>();
@@ -70,11 +71,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   String pageName;
   String _VID;
-  MyGateState(this.pageName,this._VID);
+
+  MyGateState(this.pageName, this._VID);
 
   final ContactPicker _contactPicker = ContactPicker();
   Contact _contact;
- // List<StaffCount> value.staffListCount = List<StaffCount>();
+
+  // List<StaffCount> value.staffListCount = List<StaffCount>();
 
   @override
   void initState() {
@@ -87,22 +90,23 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     //getDocumentDescriptionList();
     getScheduleTimeData();
   }
+
   void afterBuild(visitorList) {
     // executes after build is done
     print('After Build');
-    if(_VID!=null && visitorList.length>0){
-      print('VID : '+_VID.toString());
-      for(int i=0;i<visitorList.length;i++){
-        if(visitorList[i].ID==_VID){
-          print('value.visitorList[i].ID : '+visitorList[i].ID.toString());
+    if (_VID != null && visitorList.length > 0) {
+      print('VID : ' + _VID.toString());
+      for (int i = 0; i < visitorList.length; i++) {
+        if (visitorList[i].ID == _VID) {
+          print('value.visitorList[i].ID : ' + visitorList[i].ID.toString());
           showDialog(
               context: context,
               builder: (BuildContext context) => StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
+                      builder: (BuildContext context, StateSetter setState) {
                     return Dialog(
                       backgroundColor: Colors.transparent,
                       elevation: 0.0,
-                      child: displayVisitorInfo(i,visitorList),
+                      child: displayVisitorInfo(i, visitorList),
                     );
                   }));
           break;
@@ -110,6 +114,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
@@ -119,9 +124,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     print('after build');
     // TODO: implement build
     return ChangeNotifierProvider<GatePass>.value(
-        value: Provider.of(context),
+      value: Provider.of(context),
       child: Consumer<GatePass>(
-        builder: (context,value,child){
+        builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
@@ -145,7 +150,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
-               getMyActivitiesLayout(value),
+                getMyActivitiesLayout(value),
                 getStaffCategoryLayout(value),
                 //getHelperLayout(),
               ]),
@@ -188,78 +193,90 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     // print('MyTicketLayout Tab Call');
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 150.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
         // getSocietyDataLayout(),
         //   activitiesFilterDateLayout(),
-        value.isLoading? GlobalFunctions.loadingWidget(context):getActivitiesListDataLayout(value),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getActivitiesListDataLayout(value),
         addActivitiesFabLayout(),
       ],
     );
   }
-  
+
   getStaffCategoryLayout(GatePass value) {
     print(value.staffListCount.toString());
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 180.0),
-        value.isLoading ? GlobalFunctions.loadingWidget(context): getStaffCategoryListDataLayout(value),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
+        (AppSocietyPermission.isSocHideHelperPermission)
+            ? GlobalFunctions.showAdminPermissionDialogToAccessFeature(
+                context, false)
+            : (value.isLoading)
+                ? GlobalFunctions.loadingWidget(context)
+                : getStaffCategoryListDataLayout(value)
       ],
     );
   }
 
   getStaffCategoryListDataLayout(GatePass value) {
-    return value.staffListCount.length>0 ? Container(
-      margin: EdgeInsets.fromLTRB(0,16, 0, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
-            itemCount: value.staffListCount.length,
-            itemBuilder: (context, position) {
-              return getStaffCategoryListItemLayout(position,value);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
-    ):Container();
+    return value.staffListCount.length > 0
+        ? Container(
+            margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: value.staffListCount.length,
+                      itemBuilder: (context, position) {
+                        return getStaffCategoryListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : Container();
   }
 
   getStaffCategoryListItemLayout(int position, GatePass value) {
     return InkWell(
-      onTap: () async {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    BaseStaffListPerCategory(value.staffListCount[position].ROLE)));
-      },
-      child: AppContainer(
-        isListItem: true,
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: text(value.staffListCount[position].ROLE,fontSize: GlobalVariables.textSizeMedium),
+        onTap: () async {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseStaffListPerCategory(
+                      value.staffListCount[position].ROLE)));
+        },
+        child: AppContainer(
+          isListItem: true,
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: text(value.staffListCount[position].ROLE,
+                          fontSize: GlobalVariables.textSizeMedium),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: text(value.staffListCount[position].Role_count,fontSize: GlobalVariables.textSizeSMedium),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: AppIcon(Icons.arrow_forward_ios,iconColor: GlobalVariables.lightGray,),
-                ),
-              ],
-            ),
-          ],
-        ),
-      )
-    );
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: text(value.staffListCount[position].Role_count,
+                        fontSize: GlobalVariables.textSizeSMedium),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: AppIcon(
+                      Icons.arrow_forward_ios,
+                      iconColor: GlobalVariables.lightGray,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
   }
+
 /*
   Future<void> getStaffCountData() async {
     isHelperAPICall=true;
@@ -277,8 +294,6 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   }
 */
-
-
 
   /*getSocietyDataLayout() {
     return Align(
@@ -471,15 +486,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 _mobileController.text = '';
                 showDialog(
                     context: context,
-                    builder: (BuildContext context) =>
-                        StatefulBuilder(builder:
-                            (BuildContext context,
-                            StateSetter setState) {
+                    builder: (BuildContext context) => StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
                           return Dialog(
                             shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    10.0)),
+                                borderRadius: BorderRadius.circular(10.0)),
                             child: scheduleVisitorLayout(),
                           );
                         }));
@@ -508,7 +519,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: value.scheduleVisitorList.length,
                       itemBuilder: (context, position) {
-                        return getScheduleVisitorListItemLayout(position,value);
+                        return getScheduleVisitorListItemLayout(
+                            position, value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -521,7 +533,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: value.visitorList.length,
                       itemBuilder: (context, position) {
-                        return getVisitorsListItemLayout(position,value);
+                        return getVisitorsListItemLayout(position, value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -558,104 +570,116 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       Date = value.visitorList[position].IN_DATE;
     }
 
-    var visitorStatus =
-        getVisitorAllowStatus(value.visitorList[position].VISITOR_STATUS,value.visitorList[position].VISITOR_USER_STATUS);
+    var visitorStatus = getVisitorAllowStatus(
+        value.visitorList[position].VISITOR_STATUS,
+        value.visitorList[position].VISITOR_USER_STATUS);
     var visitorUserStatus = value.visitorList[position].VISITOR_USER_STATUS;
-  //  print('value.visitorList[position].VISITOR_STATUS : ' + visitorStatus);
-   // print('value.visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
+    //  print('value.visitorList[position].VISITOR_STATUS : ' + visitorStatus);
+    // print('value.visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
 
     return InkWell(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) => StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                  return Dialog(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0.0,
-                    child: displayVisitorInfo(position,value.visitorList),
-                  );
-                }));
-      },
-      child: AppContainer(
-        isListItem: true,
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Row(
-                children: <Widget>[
-                  value.visitorList[position].IMAGE.isEmpty
-                      ? AppAssetsImage(
-                    GlobalVariables
-                        .componentUserProfilePath,
-                    imageWidth:40.0,
-                    imageHeight:40.0,
-                    borderColor: GlobalVariables.grey,
-                    borderWidth: 1.0,
-                    fit: BoxFit.cover,
-                   // radius: 10.0,
-                  )
-                      : AppNetworkImage(
-                    value.visitorList[position].IMAGE,
-                    imageWidth:40.0,
-                    imageHeight:40.0,
-                    borderColor: GlobalVariables.grey,
-                    borderWidth: 1.0,
-                    fit: BoxFit.cover,
-                    //radius: 10.0,
-                  ),
-                  SizedBox(width: 8,),
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(
-                              value.visitorList[position].VISITOR_NAME,
-                            ),
-                          ),
-                          Container(
-                            //margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  child: text(
-                                    Date + '  ' + Time,
-                                    textColor: GlobalVariables.grey,
-                                    fontSize: GlobalVariables.textSizeSmall,
-                                  ),
-                                ),
-                              ],
-                            ),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                    return Dialog(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0,
+                      child: displayVisitorInfo(position, value.visitorList),
+                    );
+                  }));
+        },
+        child: AppContainer(
+          isListItem: true,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    value.visitorList[position].IMAGE.isEmpty
+                        ? AppAssetsImage(
+                            GlobalVariables.componentUserProfilePath,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            // radius: 10.0,
                           )
-                        ],
-                      ),
+                        : AppNetworkImage(
+                            value.visitorList[position].IMAGE,
+                            imageWidth: 40.0,
+                            imageHeight: 40.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            //radius: 10.0,
+                          ),
+                    SizedBox(
+                      width: 8,
                     ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        decoration: BoxDecoration(
-                            color:value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
-                            value.visitorList[position].STATUS.toLowerCase() ==
-                                'in'
-                                ? GlobalVariables.green
-                                : GlobalVariables.red,
-                            borderRadius: BorderRadius.circular(5)),
-                        child: text(value.visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
-                        value.visitorList[position].STATUS.toLowerCase() == 'in'
-                            ? 'Arrived'
-                            : 'Left',
-                          textColor: GlobalVariables.white,
-                          fontSize: GlobalVariables.textSizeSmall,
+                    Expanded(
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              child: primaryText(
+                                value.visitorList[position].VISITOR_NAME,
+                              ),
+                            ),
+                            Container(
+                              //margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    child: text(
+                                      Date + '  ' + Time,
+                                      textColor: GlobalVariables.grey,
+                                      fontSize: GlobalVariables.textSizeSmall,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      /* InkWell(
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          decoration: BoxDecoration(
+                              color: value.visitorList[position].VISITOR_STATUS
+                                          .toLowerCase() ==
+                                      'no-answer'
+                                  ? GlobalVariables.grey
+                                  : value.visitorList[position].STATUS
+                                              .toLowerCase() ==
+                                          'in'
+                                      ? GlobalVariables.green
+                                      : GlobalVariables.red,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: text(
+                            value.visitorList[position].VISITOR_STATUS
+                                        .toLowerCase() ==
+                                    'no-answer'
+                                ? 'No-Answer'
+                                : value.visitorList[position].STATUS
+                                            .toLowerCase() ==
+                                        'in'
+                                    ? 'Arrived'
+                                    : 'Left',
+                            textColor: GlobalVariables.white,
+                            fontSize: GlobalVariables.textSizeSmall,
+                          ),
+                        ),
+                        /* InkWell(
                         onTap: (){
                           launch('tel://' + value.visitorList[position].CONTACT);
                         },
@@ -664,132 +688,153 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                             child: Icon(Icons.call,color: GlobalVariables.mediumGreen,)
                         ),
                       ),*/
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 8,),
-            value.visitorList[position].FROM_VISITOR.length>0 && value.visitorList[position].FROM_VISITOR!=null? Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      alignment: Alignment.topLeft,
-                      //margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                      child: AppIconButton(
-                        Icons.location_on,
-                        iconColor: GlobalVariables.mediumGreen,
-                        iconSize: 20.0,
-                      )),
-                  SizedBox(width: 18,),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    //margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: secondaryText(
-                      value.visitorList[position].FROM_VISITOR,
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ): Container(),
-            SizedBox(height: 8,),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      alignment: Alignment.topLeft,
-                     // margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                      child: AppIconButton(
-                        Icons.person,
-                        iconColor: GlobalVariables.mediumGreen,
-                        iconSize: 20.0,
-                      )),
-                  SizedBox(width: 18,),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    //margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: secondaryText(
-                      visitorStatus,
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: 8,
               ),
-            ),
-           Divider(),
-            Container(
-              child: IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment:  MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
-                            if (visitorUserStatus.toLowerCase() != 'wrong entry') {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      StatefulBuilder(
-                                          builder: (BuildContext context,
-                                              StateSetter setState) {
-                                            return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius
-                                                        .circular(10.0)),
-                                                child: displayWrongEntryLayout(
-                                                    position,value)
-                                            );
-                                          }));
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                  child: AppIconButton(
-                                    /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/ Icons.block /*: null*/,
-                                    iconColor: visitorUserStatus.toLowerCase() != 'wrong entry' ?  GlobalVariables.mediumGreen : GlobalVariables.lightGreen,
-                                    iconSize: 20.0,
-                                  )
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: text(
-                                  visitorUserStatus.toLowerCase() != 'wrong entry' ? 'Wrong Entry' : 'Marked incorrect',
-                                  textColor: visitorUserStatus.toLowerCase() != 'wrong entry' ? GlobalVariables.grey :GlobalVariables.lightGray ,
-                                  fontSize: GlobalVariables.textSizeSmall,
-                                ),
-                              ),
-                            ],
+              value.visitorList[position].FROM_VISITOR.length > 0 &&
+                      value.visitorList[position].FROM_VISITOR != null
+                  ? Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              alignment: Alignment.topLeft,
+                              //margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                              child: AppIconButton(
+                                Icons.location_on,
+                                iconColor: GlobalVariables.mediumGreen,
+                                iconSize: 20.0,
+                              )),
+                          SizedBox(
+                            width: 18,
                           ),
-                        ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            //margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                            child: secondaryText(
+                              value.visitorList[position].FROM_VISITOR,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    VerticalDivider(),
-                    Flexible(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.center,
+                    )
+                  : Container(),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        alignment: Alignment.topLeft,
+                        // margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
                         child: AppIconButton(
-                              Icons.call,
-                              iconColor: GlobalVariables.green,
-                            onPressed: () {
-                              launch('tel://' + value.visitorList[position].CONTACT);
-                            }),
+                          Icons.person,
+                          iconColor: GlobalVariables.mediumGreen,
+                          iconSize: 20.0,
+                        )),
+                    SizedBox(
+                      width: 18,
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      //margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                      child: secondaryText(
+                        visitorStatus,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-         /*   Visibility(
+              Divider(),
+              Container(
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: InkWell(
+                            onTap: () {
+                              if (visitorUserStatus.toLowerCase() !=
+                                  'wrong entry') {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(builder:
+                                            (BuildContext context,
+                                                StateSetter setState) {
+                                          return Dialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              child: displayWrongEntryLayout(
+                                                  position, value));
+                                        }));
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                    // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    child: AppIconButton(
+                                  /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/
+                                  Icons.block /*: null*/,
+                                  iconColor: visitorUserStatus.toLowerCase() !=
+                                          'wrong entry'
+                                      ? GlobalVariables.mediumGreen
+                                      : GlobalVariables.lightGreen,
+                                  iconSize: 20.0,
+                                )),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: text(
+                                    visitorUserStatus.toLowerCase() !=
+                                            'wrong entry'
+                                        ? 'Wrong Entry'
+                                        : 'Marked incorrect',
+                                    textColor:
+                                        visitorUserStatus.toLowerCase() !=
+                                                'wrong entry'
+                                            ? GlobalVariables.grey
+                                            : GlobalVariables.lightGray,
+                                    fontSize: GlobalVariables.textSizeSmall,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(),
+                      Flexible(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: AppIconButton(Icons.call,
+                              iconColor: GlobalVariables.green, onPressed: () {
+                            launch(
+                                'tel://' + value.visitorList[position].CONTACT);
+                          }),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              /*   Visibility(
               visible: false,
               child: Container(
                 margin: EdgeInsets.fromLTRB(50, 5, 0, 0),
@@ -876,10 +921,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 ),
               ),
             )*/
-          ],
-        ),
-      )
-    );
+            ],
+          ),
+        ));
   }
 
   getScheduleVisitorListItemLayout(int position, GatePass value) {
@@ -901,7 +945,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     ),
                   ),
                 ),
-                SizedBox(width: 8,),
+                SizedBox(
+                  width: 8,
+                ),
                 Expanded(
                   child: Container(
                     //padding: EdgeInsets.only(left: 8.0),
@@ -954,7 +1000,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               ],
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -971,7 +1019,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 margin: EdgeInsets.only(left: 12),
                 child: secondaryText(
                   value.scheduleVisitorList[position].PASS_CODE,
-                /*  textColor: GlobalVariables.grey,
+                  /*  textColor: GlobalVariables.grey,
                   fontSize: GlobalVariables.textSizeMedium,*/
                 ),
               ),
@@ -986,50 +1034,50 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   Flexible(
                     flex: 1,
                     child: Align(
-                      alignment : Alignment.center,
-                      child: AppIconButton(
-                          Icons.share,
+                      alignment: Alignment.center,
+                      child: AppIconButton(Icons.share,
                           iconColor: GlobalVariables.green,
-                          iconSize: 20,
-                          onPressed: () async {
-                            String googleParameter =
+                          iconSize: 20, onPressed: () async {
+                        String googleParameter =
                             await GlobalFunctions.getGoogleCoordinate();
-                            String userName = await GlobalFunctions.getDisplayName();
-                            DateTime earlier = DateTime.parse(
-                                value.scheduleVisitorList[position].DATE);
+                        String userName =
+                            await GlobalFunctions.getDisplayName();
+                        DateTime earlier = DateTime.parse(
+                            value.scheduleVisitorList[position].DATE);
 
-                            DateTime date = DateTime.now();
-                            String todayDate = GlobalFunctions.convertDateFormat(
-                                earlier.toIso8601String(), 'dd MMM');
-                            String currentTime =
+                        DateTime date = DateTime.now();
+                        String todayDate = GlobalFunctions.convertDateFormat(
+                            earlier.toIso8601String(), 'dd MMM');
+                        String currentTime = GlobalFunctions.convertDateFormat(
+                            date.toIso8601String(), 'hh:mm aa');
+                        String mapUrl = "http://www.google.com/maps/place/" +
+                            googleParameter;
+
+                        String sharedMsg = userName +
+                            ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
                             GlobalFunctions.convertDateFormat(
-                                date.toIso8601String(), 'hh:mm aa');
-                            String mapUrl = "http://www.google.com/maps/place/" +
-                                googleParameter;
+                                value.scheduleVisitorList[position].DATE,
+                                "dd MMM yyyy") +
+                            ' till' +
+                            ' 11: 59 PM. ' +
+                            'Please use ' +
+                            value.scheduleVisitorList[position].PASS_CODE +
+                            ' as entry code at gate. ' +
+                            'Google coordinates : <a href=' +
+                            mapUrl +
+                            '>' +
+                            mapUrl +
+                            '</a>' +
+                            '';
+                        var sharedDocument = parse(sharedMsg);
+                        String sharedParsedString =
+                            parse(sharedDocument.body.text)
+                                .documentElement
+                                .text;
 
-                            String sharedMsg = userName +
-                                ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
-                                GlobalFunctions.convertDateFormat(value.scheduleVisitorList[position].DATE, "dd MMM yyyy")  +
-                                ' till' +
-                                ' 11: 59 PM. ' +
-                                'Please use ' +
-                                value.scheduleVisitorList[position].PASS_CODE +
-                                ' as entry code at gate. ' +
-                                'Google coordinates : <a href=' +
-                                mapUrl +
-                                '>' +
-                                mapUrl +
-                                '</a>' +
-                                '';
-                            var sharedDocument = parse(sharedMsg);
-                            String sharedParsedString =
-                                parse(sharedDocument.body.text)
-                                    .documentElement
-                                    .text;
-
-                            GlobalFunctions.shareData(
-                                'PassCode', sharedParsedString);
-                          }),
+                        GlobalFunctions.shareData(
+                            'PassCode', sharedParsedString);
+                      }),
                     ),
                   ),
                   VerticalDivider(),
@@ -1037,14 +1085,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     flex: 1,
                     child: Align(
                       alignment: Alignment.center,
-                      child: AppIconButton(
-                          Icons.call,
+                      child: AppIconButton(Icons.call,
                           iconColor: GlobalVariables.green,
-                          iconSize: 20,
-                          onPressed: () {
-                            launch('tel://' +
-                                value.scheduleVisitorList[position].MOBILE_NO);
-                          }),
+                          iconSize: 20, onPressed: () {
+                        launch('tel://' +
+                            value.scheduleVisitorList[position].MOBILE_NO);
+                      }),
                     ),
                   ),
                   VerticalDivider(),
@@ -1052,24 +1098,22 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     flex: 1,
                     child: Align(
                       alignment: Alignment.center,
-                      child: AppIconButton(
-                          Icons.delete,
+                      child: AppIconButton(Icons.delete,
                           iconColor: GlobalVariables.green,
-                          iconSize: 20,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    StatefulBuilder(
-                                        builder: (BuildContext context, StateSetter setState) {
-                                          return Dialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10.0)),
-                                              child: displayDeleteExpectedVisitorLayout(position,value)
-                                          );
-                                        }));
-
-                          }),
+                          iconSize: 20, onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => StatefulBuilder(
+                                    builder: (BuildContext context,
+                                        StateSetter setState) {
+                                  return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      child: displayDeleteExpectedVisitorLayout(
+                                          position, value));
+                                }));
+                      }),
                     ),
                   ),
                 ],
@@ -1082,9 +1126,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   scheduleVisitorLayout() {
-
     return AppContainer(
-     /* width: MediaQuery.of(context).size.width / 1.1,
+      /* width: MediaQuery.of(context).size.width / 1.1,
       padding: EdgeInsets.all(25),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       decoration: BoxDecoration(
@@ -1097,11 +1140,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           Container(
             alignment: Alignment.topLeft,
             child: primaryText(
-              AppLocalizations.of(context)
-                  .translate('visitor_arriving_on'),
+              AppLocalizations.of(context).translate('visitor_arriving_on'),
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Align(
             alignment: Alignment.topLeft,
             child: Container(
@@ -1110,18 +1154,17 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
               decoration: BoxDecoration(
                   color: GlobalVariables.white,
-                  borderRadius:
-                  BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: GlobalVariables.mediumGreen,
                     width: 2.0,
                   )),
               child: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState){
+                builder: (BuildContext context, StateSetter setState) {
                   return DropdownButton(
                     items: _scheduleListItems,
                     value: _selectedSchedule,
-                    onChanged: (String value){
+                    onChanged: (String value) {
                       print('clickable value : ' + value.toString());
                       setState(() {
                         _selectedSchedule = value;
@@ -1135,14 +1178,12 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     ),
                     underline: SizedBox(),
                     hint: Container(
-                      padding:
-                      EdgeInsets.fromLTRB(0, 0, 15, 0),
+                      padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                       child: text(
                         "",
-                        textColor:
-                            GlobalVariables.mediumGreen,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.w500,
+                        textColor: GlobalVariables.mediumGreen,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   );
@@ -1151,38 +1192,44 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             ),
           ),
           StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState){
+            builder: (BuildContext context, StateSetter setState) {
               return Column(
                 children: [
-                  AppTextField(textHintContent: AppLocalizations.of(context)
-                      .translate('name_of_person'),
+                  AppTextField(
+                    textHintContent: AppLocalizations.of(context)
+                        .translate('name_of_person'),
                     controllerCallback: _nameController,
                     contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    suffixIcon: AppIconButton(Icons.contacts,
+                    suffixIcon: AppIconButton(
+                      Icons.contacts,
                       iconColor: GlobalVariables.mediumGreen,
                       onPressed: () async {
-                      Contact contact = await _contactPicker
-                          .selectContact();
-                      print('contact Name : ' +
-                          contact.fullName);
-                      print('contact Number : ' +
-                          contact.phoneNumber.toString());
-                      _contact = contact;
-                      setState(() {
-                        if (_contact != null) {
-                          _nameController.text = _contact.fullName;
-                          String phoneNumber = _contact.phoneNumber
-                              .toString()
-                              .substring(0, _contact.phoneNumber.toString().indexOf('(') - 1);
-                          _mobileController.text = phoneNumber.toString();
-                          // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
-                        }
-                      });
-                    },),
-
+                        Contact contact = await _contactPicker.selectContact();
+                        print('contact Name : ' + contact.fullName);
+                        print('contact Number : ' +
+                            contact.phoneNumber.toString());
+                        _contact = contact;
+                        setState(() {
+                          if (_contact != null) {
+                            _nameController.text = _contact.fullName;
+                            String phoneNumber = _contact.phoneNumber
+                                .toString()
+                                .substring(
+                                    0,
+                                    _contact.phoneNumber
+                                            .toString()
+                                            .indexOf('(') -
+                                        1);
+                            _mobileController.text = phoneNumber.toString();
+                            // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                          }
+                        });
+                      },
+                    ),
                   ),
                   AppTextField(
-                    textHintContent: AppLocalizations.of(context).translate('contact_number'),
+                    textHintContent: AppLocalizations.of(context)
+                        .translate('contact_number'),
                     controllerCallback: _mobileController,
                     keyboardType: TextInputType.number,
                     maxLength: 10,
@@ -1246,10 +1293,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   Future<void> addScheduleVisitorGatePass() async {
-
     _progressDialog.show();
-    Provider.of<GatePass>(context,listen: false).addScheduleVisitorGatePass(_nameController.text,_mobileController.text,_selectedSchedule).then((value) async {
-
+    Provider.of<GatePass>(context, listen: false)
+        .addScheduleVisitorGatePass(
+            _nameController.text, _mobileController.text, _selectedSchedule)
+        .then((value) async {
       print('add Schedule Visitor value : ' + value.toString());
       _progressDialog.hide();
       if (value.status) {
@@ -1265,7 +1313,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           now = now.add(Duration(days: 2));
           date = formatter.format(now);
         }
-      /*  ScheduleVisitor scheduleVisitor = ScheduleVisitor();
+        /*  ScheduleVisitor scheduleVisitor = ScheduleVisitor();
         scheduleVisitor.MOBILE_NO = _mobileController.text;
         scheduleVisitor.NAME = _nameController.text;
         scheduleVisitor.PASS_CODE = value.pass_code;
@@ -1283,7 +1331,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         showDialog(
             context: context,
             builder: (BuildContext context) => StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
+                    builder: (BuildContext context, StateSetter setState) {
                   return Dialog(
                     backgroundColor: Colors.transparent,
                     elevation: 0.0,
@@ -1292,15 +1340,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         userName,
                         googleParameter,
                         _nameController.text,
-                        _mobileController.text,date),
+                        _mobileController.text,
+                        date),
                   );
                 }));
         setState(() {});
         print('passCode : ' + value.pass_code);
       }
       GlobalFunctions.showToast(value.message);
-
-
     });
   }
 
@@ -1350,15 +1397,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     } else {
       _tabController.animateTo(0);
     }
-    if(pageName!=null) {
-      pageName=null;
-      if(_tabController.index==0){
+    if (pageName != null) {
+      pageName = null;
+      if (_tabController.index == 0) {
         _handleTabSelection();
       }
     }
   }
 
-  displayPassCode(String pass_code, String userName, String googleParameter, String visitorName, String visitorContact, String visitorDate) {
+  displayPassCode(String pass_code, String userName, String googleParameter,
+      String visitorName, String visitorContact, String visitorDate) {
     DateTime date = DateTime.now();
     String todayDate =
         GlobalFunctions.convertDateFormat(date.toIso8601String(), 'dd MMM');
@@ -1433,9 +1481,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       child: AppIconButton(
                         Icons.close,
                         iconColor: GlobalVariables.green,
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.pop(context);
-                        },),
+                        },
+                      ),
                     ),
                     SizedBox(
                       height: 80,
@@ -1443,7 +1492,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     text(
                       line1,
                       textColor: GlobalVariables.black,
-                        fontSize: GlobalVariables.textSizeMedium,
+                      fontSize: GlobalVariables.textSizeMedium,
                     ),
                     SizedBox(
                       height: 10,
@@ -1451,8 +1500,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     text(
                       line2,
                       textColor: GlobalVariables.black,
-                          fontSize: GlobalVariables.textSizeLargeMedium,
-                          fontWeight: FontWeight.bold,
+                      fontSize: GlobalVariables.textSizeLargeMedium,
+                      fontWeight: FontWeight.bold,
                     ),
                     SizedBox(
                       height: 10,
@@ -1460,8 +1509,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     text(
                       line3,
                       textColor: GlobalVariables.green,
-                          fontSize: GlobalVariables.textSizeNormal,
-                          fontWeight: FontWeight.bold,
+                      fontSize: GlobalVariables.textSizeNormal,
+                      fontWeight: FontWeight.bold,
                     ),
                     SizedBox(
                       height: 20,
@@ -1469,8 +1518,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     text(
                       line4,
                       textColor: GlobalVariables.grey,
-                          fontSize: GlobalVariables.textSizeMedium,
-                          fontWeight: FontWeight.normal,
+                      fontSize: GlobalVariables.textSizeMedium,
+                      fontWeight: FontWeight.normal,
                     ),
                     SizedBox(
                       height: 20,
@@ -1566,7 +1615,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
     if (visitorList[position].OUT_DATE.length > 0) {
       if (visitorList[position].STATUS.toLowerCase() == 'out') {
-        Date =/* value.visitorList[position].IN_DATE +
+        Date = /* value.visitorList[position].IN_DATE +
             " - " +*/
             visitorList[position].OUT_DATE;
       } else {
@@ -1576,8 +1625,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
       Date = visitorList[position].IN_DATE;
     }
 
-    var visitorStatus =
-        getVisitorAllowStatus(visitorList[position].VISITOR_STATUS,visitorList[position].VISITOR_USER_STATUS);
+    var visitorStatus = getVisitorAllowStatus(
+        visitorList[position].VISITOR_STATUS,
+        visitorList[position].VISITOR_USER_STATUS);
     return Stack(
       children: <Widget>[
         Align(
@@ -1615,9 +1665,10 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         child: AppIconButton(
                           Icons.close,
                           iconColor: GlobalVariables.green,
-                          onPressed: (){
-                          Navigator.pop(context);
-                        },),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -1626,16 +1677,26 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                       decoration: BoxDecoration(
-                          color: visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? GlobalVariables.grey:
-                          visitorList[position].STATUS.toLowerCase() == 'in' ? GlobalVariables.skyBlue : GlobalVariables.grey,
+                          color: visitorList[position]
+                                      .VISITOR_STATUS
+                                      .toLowerCase() ==
+                                  'no-answer'
+                              ? GlobalVariables.grey
+                              : visitorList[position].STATUS.toLowerCase() ==
+                                      'in'
+                                  ? GlobalVariables.skyBlue
+                                  : GlobalVariables.grey,
                           borderRadius: BorderRadius.circular(5)),
-                      child: text(visitorList[position].VISITOR_STATUS.toLowerCase()=='no-answer'? 'No-Answer':
-                        visitorList[position].STATUS.toLowerCase() == 'in'
-                            ? 'Arrived'
-                            : 'Left',
-                       textColor: GlobalVariables.white,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                            fontWeight: FontWeight.bold,
+                      child: text(
+                        visitorList[position].VISITOR_STATUS.toLowerCase() ==
+                                'no-answer'
+                            ? 'No-Answer'
+                            : visitorList[position].STATUS.toLowerCase() == 'in'
+                                ? 'Arrived'
+                                : 'Left',
+                        textColor: GlobalVariables.white,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
@@ -1705,7 +1766,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           width: 10.0,
                         ),
                         AppIconButton(
-                         Icons.call,
+                          Icons.call,
                           iconSize: 20.0,
                           iconColor: GlobalVariables.green,
                           onPressed: () {
@@ -1717,12 +1778,15 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     SizedBox(
                       height: 10,
                     ),
-                   Padding(
-                     padding: const EdgeInsets.only(left: 16.0,right: 16.0,),
-                     child: Divider(),
-                   ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                      ),
+                      child: Divider(),
+                    ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(16,10,16,16),
+                      margin: EdgeInsets.fromLTRB(16, 10, 16, 16),
                       child: Column(
                         children: [
                           Container(
@@ -1735,7 +1799,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       iconColor: GlobalVariables.mediumGreen,
                                       iconSize: 20.0,
                                     )),
-                                SizedBox(width: 8,),
+                                SizedBox(
+                                  width: 8,
+                                ),
                                 Flexible(
                                   child: Container(
                                     alignment: Alignment.topLeft,
@@ -1759,7 +1825,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       iconColor: GlobalVariables.mediumGreen,
                                       iconSize: 20.0,
                                     )),
-                                SizedBox(width: 8,),
+                                SizedBox(
+                                  width: 8,
+                                ),
                                 Container(
                                   alignment: Alignment.topLeft,
                                   child: text(
@@ -1781,13 +1849,15 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                       iconColor: GlobalVariables.mediumGreen,
                                       iconSize: 20.0,
                                     )),
-                                SizedBox(width: 8,),
+                                SizedBox(
+                                  width: 8,
+                                ),
                                 Container(
                                   alignment: Alignment.topLeft,
                                   child: text(
                                     visitorList[position].FROM_VISITOR,
-                                   textColor: GlobalVariables.grey,
-                                      fontSize: GlobalVariables.textSizeSmall,
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSmall,
                                   ),
                                 ),
                               ],
@@ -1861,16 +1931,22 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         switch (index) {
           case 0:
             {
-                Provider.of<GatePass>(context,listen: false).getGatePassData().then((value) {
-                  afterBuild(value);
-                });
+              Provider.of<GatePass>(context, listen: false)
+                  .getGatePassData()
+                  .then((value) {
+                afterBuild(value);
+              });
             }
             break;
           case 1:
             {
-              if (!isHelperAPICall) {
-                //getStaffRoleDetailsData();
-               Provider.of<GatePass>(context,listen: false).getStaffCountData().then((value) {});
+              if (!AppSocietyPermission.isSocHideHelperPermission) {
+                if (!isHelperAPICall) {
+                  //getStaffRoleDetailsData();
+                  Provider.of<GatePass>(context, listen: false)
+                      .getStaffCountData()
+                      .then((value) {});
+                }
               }
             }
             break;
@@ -1882,12 +1958,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     });
   }
 
-  String getVisitorAllowStatus(String visitorStatus,String visitorUserStatus) {
+  String getVisitorAllowStatus(String visitorStatus, String visitorUserStatus) {
     String status = "";
 
-    if(visitorStatus.toLowerCase()=='rejected' && visitorUserStatus.toLowerCase()=='no-answer'){
+    if (visitorStatus.toLowerCase() == 'rejected' &&
+        visitorUserStatus.toLowerCase() == 'no-answer') {
       status = "Disallowed by security";
-    }else if (visitorStatus.toLowerCase() == 'accepted') {
+    } else if (visitorStatus.toLowerCase() == 'accepted') {
       status = "Allowed by you";
     } else if (visitorStatus.toLowerCase() == 'scheduled') {
       status = "Pre-approved by you";
@@ -1917,15 +1994,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   }
 
   Future<void> addGatePassWrongEntry(int position, GatePass value) async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
-    restClient.addGatePassWrongEntry(societyId, value.visitorList[position].ID, 'Wrong Entry').then((value1) {
+    restClient
+        .addGatePassWrongEntry(
+            societyId, value.visitorList[position].ID, 'Wrong Entry')
+        .then((value1) {
       if (value1.status) {
-
-        value.visitorList[position].VISITOR_USER_STATUS='Wrong Entry';
+        value.visitorList[position].VISITOR_USER_STATUS = 'Wrong Entry';
         setState(() {});
       }
       GlobalFunctions.showToast(value1.message);
@@ -1939,7 +2017,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     societyId = await GlobalFunctions.getSocietyId();
     String srNo = value.scheduleVisitorList[position].SR_NO;
     _progressDialog.show();
-    restClient.deleteExpectedVisitor(societyId,srNo).then((value1) {
+    restClient.deleteExpectedVisitor(societyId, srNo).then((value1) {
       _progressDialog.hide();
       if (value1.status) {
         value.scheduleVisitorList.removeAt(position);
@@ -1952,19 +2030,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   displayWrongEntryLayout(int position, GatePass value) {
     return Container(
       padding: EdgeInsets.all(15),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.3,
+      width: MediaQuery.of(context).size.width / 1.3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
             child: text(
               AppLocalizations.of(context).translate('wrong_entry_str'),
-                  fontSize:GlobalVariables.textSizeLargeMedium,
-                  textColor: GlobalVariables.black,
-                  fontWeight: FontWeight.bold,
+              fontSize: GlobalVariables.textSizeLargeMedium,
+              textColor: GlobalVariables.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -1976,13 +2051,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        addGatePassWrongEntry(position,value);
+                        addGatePassWrongEntry(position, value);
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
                         textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
                 Container(
@@ -1993,8 +2068,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       child: text(
                         AppLocalizations.of(context).translate('no'),
                         textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
               ],
@@ -2008,19 +2083,16 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
   displayDeleteExpectedVisitorLayout(int position, GatePass value) {
     return Container(
       padding: EdgeInsets.all(15),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.3,
+      width: MediaQuery.of(context).size.width / 1.3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
             child: text(
               AppLocalizations.of(context).translate('expected_delete'),
-                  fontSize: GlobalVariables.textSizeLargeMedium,
-                  textColor: GlobalVariables.black,
-                  fontWeight: FontWeight.bold,
+              fontSize: GlobalVariables.textSizeLargeMedium,
+              textColor: GlobalVariables.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -2032,13 +2104,13 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        deleteExpectedVisitor(position,value);
+                        deleteExpectedVisitor(position, value);
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                            textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
                 Container(
@@ -2048,9 +2120,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                            textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold,
+                        textColor: GlobalVariables.green,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold,
                       )),
                 ),
               ],
@@ -2083,7 +2155,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     ):Container();
   }*/
 
-  /*getHelperListItemLayout(int position) {
+/*getHelperListItemLayout(int position) {
     List<String> _workHouseList = _staffList[position].ASSIGN_FLATS.split(',');
 
     var staffImage = _staffList[position].IMAGE;
@@ -2135,8 +2207,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Container(
                     padding: EdgeInsets.all(10),
                     // alignment: Alignment.center,
-                    *//* decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25)),*//*
+                    */ /* decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),*/ /*
                     child: staffImage.length == 0
                         ? Image.asset(
                       GlobalVariables.componentUserProfilePath,
@@ -2238,7 +2310,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
     );
   }*/
 
- /* Future<void> getStaffRoleDetailsData() async {
+/* Future<void> getStaffRoleDetailsData() async {
     isHelperAPICall=true;
     final dio = Dio();
     final RestClient restClient = RestClient(dio);

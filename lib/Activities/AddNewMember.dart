@@ -86,6 +86,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
+    _selectedMembershipType='Owner Family';
   }
 
   @override
@@ -557,7 +558,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                 ),
               ],
             ),
-            Row(
+            _selectedMembershipType =="Tenant" ? Row(
               children: <Widget>[
                 Flexible(
                   flex: 1,
@@ -617,7 +618,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 ),
                                 label: text(
                                   AppLocalizations.of(context)
-                                      .translate('attach_identity_proof'),
+                                      .translate('attach_identity_proof')+'*',
                                   textColor: GlobalVariables.green,
                                   fontSize: GlobalVariables.textSizeSMedium
                                 ),
@@ -659,7 +660,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                   ),
                                   label: text(
                                       AppLocalizations.of(context)
-                                          .translate('take_identity_proof_picture'),
+                                          .translate('take_identity_proof_picture')+'*',
                                       textColor: GlobalVariables.green,
                                       fontSize: GlobalVariables.textSizeSMedium
                                   )),
@@ -671,7 +672,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                   ),
                 ),
               ],
-            ),
+            ) : SizedBox(),
             _selectedMembershipType =="Tenant" ? Row(
               children: <Widget>[
                 Flexible(
@@ -823,7 +824,12 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
       _progressDialog.hide();
       if (value.status) {
         if (attachmentFileName != null && attachmentFilePath != null) {
-          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          GlobalFunctions.getTemporaryDirectoryPath()
+              .then((value) {
+            GlobalFunctions.removeAllFilesFromDirectory(
+                value);
+          });
         }
         Navigator.of(context).pop();
         Navigator.push(
@@ -948,12 +954,24 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
   }
 
   getMembershipTypeData() {
-    GlobalFunctions.getUserType().then((value) {
+    //_membershipTypeList = ["Owner", "Owner Family", "Tenant"];
+    _membershipTypeList = ["Owner Family"];
+    for (int i = 0; i < _membershipTypeList.length; i++) {
+      __membershipTypeListItems.add(DropdownMenuItem(
+        value: _membershipTypeList[i],
+        child: text(
+          _membershipTypeList[i],
+          textColor: GlobalVariables.black,
+        ),
+      ));
+    }
+    setState(() {});
+   /* GlobalFunctions.getUserType().then((value) {
       if (value.toLowerCase() != 'tenant') {
         if(memberType.toLowerCase()=='tenant'){
           _membershipTypeList = ["Tenant"];
-        }else {
-          _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
+        }else *//*if(value.toLowerCase()=='owner')*//*{
+          _membershipTypeList = ["Owner Family"];
         }
       } else {
         _membershipTypeList = ["Tenant"];
@@ -967,8 +985,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
           ),
         ));
       }
-      setState(() {});
-    });
+      setState(() {});*/
   }
 
   void gteLivesHereData() {

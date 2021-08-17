@@ -75,5 +75,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>FUMaximumConnectionsPerHost</key>
+    <integer>3</integer>
+    <key>FUMaximumUploadOperation</key>
+    <integer>3</integer>
+    <key>FUTimeoutInSeconds</key>
+    <integer>3600</integer>
+    <key>FUAllFilesUploadedMessage</key>
+    <string>File have been uploaded</string>
 </dict>
 </plist>

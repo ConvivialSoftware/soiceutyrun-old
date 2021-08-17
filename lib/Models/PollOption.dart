@@ -1,5 +1,3 @@
-
-
 class PollOption {
   String ANS_ID;
   String ANS;

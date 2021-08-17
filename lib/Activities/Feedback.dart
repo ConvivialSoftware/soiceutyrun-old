@@ -307,7 +307,12 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
       _progressDialog.hide();
       if (value.status) {
         if (attachmentFileName != null && attachmentFilePath != null) {
-          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          GlobalFunctions.getTemporaryDirectoryPath()
+              .then((value) {
+            GlobalFunctions.removeAllFilesFromDirectory(
+                value);
+          });
         }
         Navigator.of(context).pop();
       }

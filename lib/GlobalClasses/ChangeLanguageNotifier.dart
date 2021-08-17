@@ -209,12 +209,12 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.LedgerPage:
       {
-        return BaseLedger();
+        return BaseLedger(null,null);
       }
       break;
     case GlobalVariables.ViewBillPage:
       {
-        return BaseViewBill(null,null);
+        return BaseViewBill(null,null,null,null);
       }
       break;
     /*default:

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/Expense.dart';
@@ -9,8 +11,10 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LedgerAccount.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -36,13 +40,55 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
   List<LedgerYear> _listYear = List<LedgerYear>();
   String _yearSelectedItem;
 
-
+  Map<String, double> dataMap={};
+  var _totalSumUp=0;
   var startDate,endDate;
   ProgressDialog _progressDialog;
 
+  List<Color> defaultColorList = [
+    Color(0xFFff7675),
+    Color(0xFFa29bfe),
+    Color(0xFFfd79a8),
+    Color(0xFF55efc4),
+    Color(0xFFffeaa7),
+    Color(0xFFa29bfe),
+    Color(0xFFe17055),
+    Color(0xFFB3E3BD),
+    Color(0xFF8998FE),
+    Color(0xFFB3E3BD),
+    Color(0xFFff7675),
+    Color(0xFFB3E3BD),
+    Color(0xFFfd79a8),
+    Color(0xFF55efc4),
+    Color(0xFFffeaa7),
+    Color(0xFFa29bfe),
+    Color(0xFFe17055),
+    Color(0xFFB3E3BD),
+    Color(0xFF8998FE),
+    Color(0xFFB3E3BD),
+    Color(0xFFff7675),
+    Color(0xFFB3E3BD),
+    Color(0xFFfd79a8),
+    Color(0xFF55efc4),
+    Color(0xFFffeaa7),
+    Color(0xFFa29bfe),
+    Color(0xFFe17055),
+    Color(0xFFB3E3BD),
+    Color(0xFF8998FE),
+    Color(0xFFB3E3BD),
+  ];
+
   @override
   void initState() {
-    DateTime selectedDate = DateTime.now();
+    //DateTime selectedDate = DateTime.now();
+    Provider.of<UserManagementResponse>(context,listen: false).getHeadWiseExpenseData().then((value) {
+
+      for(int j=0;j<value.length;j++){
+        dataMap[value[j].heads] = double.parse(value[j].amount==null ? '0' : value[j].amount);
+        _totalSumUp += int.parse(value[j].amount==null ? '0' : value[j].amount);
+      }
+
+    });
     //endDate = GlobalFunctions.convertDateFormat(selectedDate.toIso8601String(), 'dd-MM-yyyy');
     //startDate = GlobalFunctions.convertDateFormat(DateTime(selectedDate.year,selectedDate.month-2,selectedDate.day).toIso8601String(), 'dd-MM-yyyy');
 
@@ -57,32 +103,37 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
   @override
   Widget build(BuildContext context) {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
+    return ChangeNotifierProvider<UserManagementResponse>.value(
+        value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context,value,child){
+        return Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              elevation: 0,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: AppIcon(
+                  Icons.arrow_back,
+                  iconColor: GlobalVariables.white,
+                ),
+              ),
+              title: text(
+                  AppLocalizations.of(context).translate('expense'),
+                  textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
+              ),
             ),
+            body: getBaseLayout(context,value),
           ),
-          title: text(
-            AppLocalizations.of(context).translate('expense'),
-            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-          ),
-        ),
-        body: getBaseLayout(context),
-      ),
+        );
+      }),
     );
   }
 
-  getBaseLayout(BuildContext context) {
+  getBaseLayout(BuildContext context, UserManagementResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -96,7 +147,8 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
               children: <Widget>[
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
-                searchFilterLayout(context),
+               value.isLoading ? GlobalFunctions.loadingWidget(context) :  headWiseExpenseLayout(context,value),
+                addExpensesFabLayout(),
               ],
             ),
           ),
@@ -104,103 +156,200 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
       ),
     );
   }
-
-  searchFilterLayout(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => BaseAddExpense()))
-                  .then((value) {
-                GlobalFunctions.setBaseContext(context);
-              });
-            },
-            child:   AppPermission.isAddExpensePermission ? Container(
-              margin: EdgeInsets.fromLTRB(20, 60, 20, 40),
-              padding: EdgeInsets.all(20),
-              // height: MediaQuery.of(context).size.height / 0.5,
-              decoration: BoxDecoration(
-                  color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: AppAssetsImage(
-                            GlobalVariables.expenseIconPath,
-                            imageWidth: 80.0,
-                            imageHeight: 80.0,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 32,
-                        ),
-                        Container(
-                          child: text(
-                              AppLocalizations.of(context)
-                                  .translate('add_expense'),
-                              fontSize: GlobalVariables.textSizeMedium,
-                              textColor: GlobalVariables.green,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+  addExpensesFabLayout() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(15),
+            child: FloatingActionButton(
+              onPressed: () async {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BaseAddExpense()))
+                    .then((value) {
+                  GlobalFunctions.setBaseContext(context);
+                });
+              },
+              child: AppIcon(
+                Icons.add,
+                iconColor: GlobalVariables.white,
               ),
-            ):SizedBox(),
-          ),
-          InkWell(
-            onTap: () {
-              getExpenseAccountLedger();
-            },
-            child: Container(
-              margin: EdgeInsets.fromLTRB(20, AppPermission.isAddExpensePermission ? 20:80, 20, 40),
-              padding: EdgeInsets.all(20),
-              // height: MediaQuery.of(context).size.height / 0.5,
-              decoration: BoxDecoration(
-                  color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: AppAssetsImage(
-                            GlobalVariables.expenseIconPath,
-                            imageWidth: 80.0,
-                            imageHeight: 80.0,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 32,
-                        ),
-                        Container(
-                          child: text(
-                              AppLocalizations.of(context)
-                                  .translate('search_expense'),
-                              fontSize: GlobalVariables.textSizeMedium,
-                              textColor: GlobalVariables.green,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              backgroundColor: GlobalVariables.green,
             ),
-          ),
+          )
         ],
       ),
+    );
+  }
+
+  headWiseExpenseLayout(BuildContext context, UserManagementResponse value) {
+    return Column(
+      children: [
+        AppContainer(
+         // margin: EdgeInsets.only(left: 40.0,right: 16,top: 16,bottom: 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+             Flexible(
+                flex: 1,
+                child:  dataMap.length > 0 ? Column(
+                  children: [
+                    Container(
+                      alignment:Alignment.topLeft,
+                      child: text('Total Expenses',textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8,),
+                    Container(
+                      child: PieChart(
+                        dataMap: dataMap,
+                        animationDuration: Duration(milliseconds: 800),
+                        chartLegendSpacing: 20,
+                        chartRadius: 80,
+                        initialAngleInDegree: 0,
+                        chartType: ChartType.disc,
+                        colorList: defaultColorList,
+                        ringStrokeWidth: 10,
+                        legendOptions: LegendOptions(
+                          showLegendsInRow: true,
+                          legendPosition: LegendPosition.top,
+                          showLegends: false,
+                          legendTextStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: GlobalVariables.black
+                          ),
+                        ),
+                        chartValuesOptions: ChartValuesOptions(
+                          showChartValueBackground: false,
+                          showChartValues: true,
+                          showChartValuesInPercentage: true,
+                          showChartValuesOutside: true,
+                          chartValueStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: GlobalVariables.black,
+                            fontSize: GlobalVariables.textSizeSmall
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ) : SizedBox(),
+              )  ,
+              Flexible(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
+                      textColor: GlobalVariables.green,fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          child: Builder(
+              builder: (context) => ListView.builder(
+                // scrollDirection: Axis.vertical,
+                itemCount: value.headWiseExpenseList.length,
+                itemBuilder: (context, position) {
+                  return getHeadWiseExpenseListItemLayout(position,value);
+                }, //  scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              )),
+        )
+
+
+       /* InkWell(
+          onTap: () {
+            Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BaseAddExpense()))
+                .then((value) {
+              GlobalFunctions.setBaseContext(context);
+            });
+          },
+          child:   (AppUserPermission.isAccountingPermission || AppUserPermission.isAddExpensePermission)? Container(
+            margin: EdgeInsets.fromLTRB(20, 60, 20, 40),
+            padding: EdgeInsets.all(20),
+            // height: MediaQuery.of(context).size.height / 0.5,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white,
+                borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        child: AppAssetsImage(
+                          GlobalVariables.expenseIconPath,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 32,
+                      ),
+                      Container(
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('add_expense'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.green,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ):SizedBox(),
+        ),*/
+      /*  InkWell(
+          onTap: () {
+            getExpenseAccountLedger();
+          },
+          child: Container(
+            margin: EdgeInsets.fromLTRB(20, (AppUserPermission.isAccountingPermission  || AppUserPermission.isAddExpensePermission) ? 20:80, 20, 40),
+            padding: EdgeInsets.all(20),
+            // height: MediaQuery.of(context).size.height / 0.5,
+            decoration: BoxDecoration(
+                color: GlobalVariables.white,
+                borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        child: AppAssetsImage(
+                          GlobalVariables.expenseIconPath,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 32,
+                      ),
+                      Container(
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('search_expense'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.green,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),*/
+      ],
     );
   }
 
@@ -582,5 +731,54 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
       }
     })*/
     ;
+  }
+
+  getHeadWiseExpenseListItemLayout(int position, UserManagementResponse value) {
+
+    return InkWell(
+        onTap: () async {
+          /*BaseExpense(
+            startDate: _startDateController
+                .text,
+            endDate: _endDateController
+                .text.isEmpty ? GlobalFunctions.convertDateFormat(DateTime.now().toIso8601String(), 'dd-MM-yyyy') : _endDateController.text,
+            ledgerHeads: _selectedLedgerAccount ==
+                null
+                ? null
+                : _selectedLedgerAccount
+                .name,ledgerYear: _yearSelectedItem,)*/
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseExpense(startDate : null,endDate:null,ledgerHeads:value.headWiseExpenseList[position].id,ledgerYear:null)));
+        },
+        child: AppContainer(
+          isListItem: true,
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: text(value.headWiseExpenseList[position].heads,
+                          fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold,textColor: GlobalVariables.black),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                    child: text(GlobalFunctions.getCurrencyFormat(value.headWiseExpenseList[position].amount,),
+                        fontSize: GlobalVariables.textSizeSMedium,textColor: defaultColorList.length > position ? defaultColorList[position] : GlobalVariables.green,fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: AppIcon(
+                      Icons.arrow_forward_ios,
+                      iconColor: GlobalVariables.lightGray,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
+
   }
 }

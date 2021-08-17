@@ -231,8 +231,7 @@ class ComplaintInfoAndCommentsState
                             fontSize: GlobalVariables.textSizeSmall,
                           ),
                           decoration: BoxDecoration(
-                              color: MyUnitState
-                                  .getTicketCategoryColor(
+                              color: getTicketCategoryColor(
                                       complaints.STATUS),
                               borderRadius:
                                   BorderRadius.circular(5)),
@@ -757,6 +756,26 @@ class ComplaintInfoAndCommentsState
                 shrinkWrap: true,
               )),
     );
+  }
+
+  static getTicketCategoryColor(String category) {
+    switch (category.toLowerCase()) {
+      case "new":
+        return GlobalVariables.skyBlue;
+        break;
+      case "in progress":
+        return GlobalVariables.orangeYellow;
+        break;
+      case "reopen":
+        return GlobalVariables.red;
+        break;
+      case "on hold":
+        return GlobalVariables.orangeYellow;
+        break;
+      default:
+        return GlobalVariables.skyBlue;
+        break;
+    }
   }
 
   getCommentsListDataListItemLayout(int position) {

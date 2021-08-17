@@ -169,14 +169,14 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                             fontWeight: FontWeight.bold),
                       ),
                       Container(
-                        child: text('Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price)),
+                        child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat(value.servicesList[position].Price),
                             textColor: GlobalVariables.black,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
                       ),
                       Row(
                         children: [
-                          text('Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price)),
+                          text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat(value.servicesList[position].Price),
                               textColor: GlobalVariables.black,
                               fontSize: GlobalVariables.textSizeSmall,
                               textDecoration: TextDecoration.lineThrough,

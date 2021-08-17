@@ -7,12 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:societyrun/Activities/AlreadyPaid.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -20,9 +24,12 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseViewReceipt extends StatefulWidget {
+  String invoiceNo, yearSelectedItem;
+  Receipt receipt;
+  String mBlock,mFLat;
 
-  String invoiceNo,yearSelectedItem;
-  BaseViewReceipt(this.invoiceNo, this.yearSelectedItem);
+  BaseViewReceipt(this.invoiceNo, this.yearSelectedItem,this.mBlock,this.mFLat,
+      {this.receipt});
 
   @override
   State<StatefulWidget> createState() {
@@ -35,8 +42,9 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   ReceiptViewResponse _receiptViewList = ReceiptViewResponse();
   List<Receipt> _receiptList = new List<Receipt>();
 
-  String name="",consumerId="",email="";
+  String name = "", email = "";
   String invoiceNo;
+
   ViewReceiptState(this.invoiceNo);
 
   ProgressDialog _progressDialog;
@@ -45,20 +53,22 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   String _taskId;
   ReceivePort _port = ReceivePort();
   bool isStoragePermission = false;
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-
     getSharedPrefData();
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        getReceiptData();
-
-      } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
-      }
-    });
+    if(invoiceNo!=null) {
+      GlobalFunctions.checkInternetConnection().then((internet) {
+        if (internet) {
+          getReceiptData();
+        } else {
+          GlobalFunctions.showToast(AppLocalizations.of(context)
+              .translate('pls_check_internet_connectivity'));
+        }
+      });
+    }else{
+      _receiptList.add(widget.receipt);
+    }
 
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
@@ -83,9 +93,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
 
     FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
-
   }
-
 
   @override
   void dispose() {
@@ -96,7 +104,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     final SendPort send =
-    IsolateNameServer.lookupPortByName('downloader_send_port');
+        IsolateNameServer.lookupPortByName('downloader_send_port');
     print(
         'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
 
@@ -119,7 +127,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
       showNotification: true,
       // show download progress in status bar (for Android)
       openFileFromNotification:
-      true, // click on notification to open downloaded file (for Android)
+          true, // click on notification to open downloaded file (for Android)
     );
   }
 
@@ -128,50 +136,49 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
     return FlutterDownloader.open(taskId: id);
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
+        key: _scaffoldKey,
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
           elevation: 0,
-          actions: widget.yearSelectedItem!=null  ? [
-            AppIconButton(
-                Icons.mail,
-                iconColor: GlobalVariables.white,
-                onPressed: (){
-              emailReceiptDialog(context);
-            }),
-            SizedBox(width: 8,),
-            AppIconButton(
-                Icons.download_sharp,
-                iconColor: GlobalVariables.white,
-                onPressed: (){
-
-                  if (isStoragePermission) {
-                    print('true');
-                    getPDF();
-                  } else {
-                    GlobalFunctions.askPermission(Permission.storage)
-                        .then((value) {
-                      if (value) {
-                        getPDF();
-                      } else {
-                        GlobalFunctions.showToast(AppLocalizations.of(context)
-                            .translate('download_permission'));
-                      }
-                    });
-                  }
-
-                }),
-            SizedBox(width: 8,),
-          ] : [],
+          actions: widget.yearSelectedItem != null
+              ? [
+                  AppIconButton(Icons.mail, iconColor: GlobalVariables.white,
+                      onPressed: () {
+                    emailReceiptDialog(context);
+                  }),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  AppIconButton(Icons.download_sharp,
+                      iconColor: GlobalVariables.white, onPressed: () {
+                    if (isStoragePermission) {
+                      print('true');
+                      getPDF();
+                    } else {
+                      GlobalFunctions.askPermission(Permission.storage)
+                          .then((value) {
+                        if (value) {
+                          getPDF();
+                        } else {
+                          GlobalFunctions.showToast(AppLocalizations.of(context)
+                              .translate('download_permission'));
+                        }
+                      });
+                    }
+                  }),
+                  SizedBox(
+                    width: 8,
+                  ),
+                ]
+              : [],
           leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
@@ -182,8 +189,12 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             ),
           ),
           title: text(
-              widget.yearSelectedItem!=null ? AppLocalizations.of(context).translate('receipt')+ ' #'+invoiceNo : '',
-              textColor: GlobalVariables.white,
+            widget.yearSelectedItem != null
+                ? AppLocalizations.of(context).translate('receipt') +
+                    ' #' +
+                    invoiceNo
+                : '',
+            textColor: GlobalVariables.white,
           ),
         ),
         body: getBaseLayout(),
@@ -192,155 +203,273 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   }
 
   getBaseLayout() {
-    return _receiptList.length>0 ? SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-              context, 150.0),
-          _receiptList.length>0 ?   Column(
-            children: [
-              AppContainer(
-                child: Column(
-                  //mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: text(GlobalFunctions.convertDateFormat(_receiptList[0].PAYMENT_DATE,"dd-MM-yyyy") ,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                    ),
-                    SizedBox(height: 4,),
-                    Container(
-                      alignment: Alignment.center,
-                      child: text('Rs. '+double.parse((_receiptList[0].AMOUNT+double.parse(_receiptList[0].PENALTY_AMOUNT)).toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 4,),
-                    Container(
-                      alignment: Alignment.center,
-                      child: text(widget.yearSelectedItem!=null  ? '' : '*UnApproved Receipt',textColor: GlobalVariables.red,fontSize: GlobalVariables.textSizeMedium,maxLine: 3),
-                    )
-                  ],
-                ),
-              ),
-              AppContainer(
-                isListItem: true,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    primaryText("Details",),
-                    Divider(),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(AppLocalizations.of(context).translate('name')+ " : ",
-                                textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
+    return _receiptList.length > 0
+        ? SingleChildScrollView(
+            child: Stack(
+              children: <Widget>[
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0),
+                _receiptList.length > 0
+                    ? Column(
+                        children: [
+                          AppContainer(
+                            child: Column(
+                              //mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  child: text(
+                                      GlobalFunctions.convertDateFormat(
+                                          _receiptList[0].PAYMENT_DATE,
+                                          "dd-MM-yyyy"),
+                                      textColor: GlobalVariables.grey,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: text(
+                                      GlobalFunctions.getCurrencyFormat((_receiptList[0].AMOUNT +
+                                          double.parse(
+                                              _receiptList[0]
+                                                  .PENALTY_AMOUNT??'0'))
+                                          .toString())
+                                        /*  double.parse((_receiptList[0].AMOUNT +
+                                                      double.parse(
+                                                          _receiptList[0]
+                                                              .PENALTY_AMOUNT??'0'))
+                                                  .toString())
+                                              .toStringAsFixed(2)*/,
+                                      textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeXXLarge,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: text(
+                                      widget.yearSelectedItem != null
+                                          ? ''
+                                          : '*UnApproved Receipt',
+                                      textColor: GlobalVariables.red,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      maxLine: 3),
+                                )
+                              ],
                             ),
                           ),
-                          Container(
-                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: secondaryText(_receiptList[0].NAME,
-                                textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8,),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(AppLocalizations.of(context).translate('transaction_mode')+ " : ",
-                                textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
+                          AppContainer(
+                            isListItem: true,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                primaryText(
+                                  "Details",
+                                ),
+                                Divider(),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        child: primaryText(
+                                            AppLocalizations.of(context)
+                                                    .translate('name') +
+                                                " : ",
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      Container(
+                                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                        child: secondaryText(
+                                            _receiptList[0].NAME??'',
+                                            textColor: GlobalVariables.grey,
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        child: primaryText(
+                                            AppLocalizations.of(context)
+                                                    .translate(
+                                                        'transaction_mode') +
+                                                " : ",
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      Container(
+                                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                        child: secondaryText(
+                                            _receiptList[0].TRANSACTION_MODE !=
+                                                    null
+                                                ? _receiptList[0]
+                                                    .TRANSACTION_MODE
+                                                : '-',
+                                            textColor: GlobalVariables.grey,
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        child: primaryText(
+                                            AppLocalizations.of(context)
+                                                    .translate('reference_no') +
+                                                " : ",
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      Container(
+                                        //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                        child: secondaryText(
+                                            _receiptList[0].REFERENCE_NO != null
+                                                ? _receiptList[0].REFERENCE_NO
+                                                : '-',
+                                            textColor: GlobalVariables.grey,
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  child: Row(
+                                    //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        child: primaryText(
+                                            AppLocalizations.of(context)
+                                                    .translate('narration') +
+                                                " : ",
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      Flexible(
+                                        child: Container(
+                                          child: secondaryText(
+                                            _receiptList[0].NARRATION != null
+                                                ? _receiptList[0].NARRATION
+                                                : '-',
+                                            textColor: GlobalVariables.grey,
+                                            fontSize:
+                                                GlobalVariables.textSizeSMedium,
+                                            maxLine: 99,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Container(
-                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: secondaryText(_receiptList[0].TRANSACTION_MODE!=null ? _receiptList[0].TRANSACTION_MODE: '-',
-                                textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8,),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(AppLocalizations.of(context).translate('reference_no')+ " : ",
-                                textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
-                            ),
-                          ),
-                          Container(
-                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: secondaryText(_receiptList[0].REFERENCE_NO !=null ? _receiptList[0].REFERENCE_NO: '-',
-                                textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8,),
-                    Container(
-                      child: Row(
-                      //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(AppLocalizations.of(context).translate('narration')+ " : ",
-                                textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
-                            ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              child: secondaryText(_receiptList[0].NARRATION!=null ? _receiptList[0].NARRATION : '-',
-                                textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium,maxLine: 99,)
-                              ,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ) : SizedBox(),
+                          AppUserPermission.isUserAdminPermission
+                              ? Container(
+                            margin: EdgeInsets.all(16.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width: 120,
+                                        child: AppButton(
+                                            textContent:
+                                            AppLocalizations.of(context)
+                                                .translate('cancel').toString().toUpperCase(),
+                                            onPressed: () {
+                                              cancelReceiptRequest(_receiptList[0].ID);
+                                            }),
+                                      ),
+                                      Container(
+                                        width: 120,
+                                        child: AppButton(
+                                            textContent:
+                                                AppLocalizations.of(context)
+                                                    .translate('approve'),
+                                            onPressed: () {
 
-        ],
-      ),
-    ) : Container();
+                                              List<String> arr = _receiptList[0].FLAT_NO.split(" ");
+
+                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseAlreadyPaid(_receiptList[0].INVOICE_NO, _receiptList[0].AMOUNT.toDouble(), arr[0].trim(), arr[1].trim(),0,receiptId: _receiptList[0].ID,isAdmin: true,)));
+
+
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox()
+                        ],
+                      )
+                    : SizedBox(),
+              ],
+            ),
+          )
+        : Container();
   }
 
   Future<void> getSharedPrefData() async {
     email = await GlobalFunctions.getUserName();
     name = await GlobalFunctions.getDisplayName();
-    consumerId = await GlobalFunctions.getConsumerID();
     setState(() {});
   }
 
   getDivider() {
-
     return Container(
       child: Divider(
         color: GlobalVariables.mediumGreen,
         height: 3,
       ),
     );
-
   }
 
   getReceiptData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    String flat = await GlobalFunctions.getFlat();
-    String block = await GlobalFunctions.getBlock();
+   // String flat = await GlobalFunctions.getFlat();
+   // String block = await GlobalFunctions.getBlock();
     _progressDialog.show();
-    restClientERP.getReceiptData(societyId, flat, block, invoiceNo,widget.yearSelectedItem).then((value) {
+    restClientERP
+            .getReceiptData(
+                societyId, widget.mFLat, widget.mBlock, invoiceNo, widget.yearSelectedItem)
+            .then((value) {
       _progressDialog.hide();
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
@@ -350,7 +479,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
       setState(() {});
 
       //getAllBillData();
-    })/*.catchError((Object obj) {
+    }) /*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){
       //    _progressDialog.hide();
       //  }
@@ -364,15 +493,15 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
           break;
         default:
       }
-    })*/;
+    })*/
+        ;
   }
-
 
   void emailReceiptDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter _stateState) {
+                builder: (BuildContext context, StateSetter _stateState) {
               isEditEmail
                   ? _emailTextController.text = ''
                   : _emailTextController.text = email;
@@ -397,10 +526,11 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 'dd-MM-yyyy') /*+
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
-                                    _receiptList[0].END_DATE, 'dd-MM-yyyy')*/,
-                              textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeLargeMedium,
-                                fontWeight: FontWeight.bold,
+                                    _receiptList[0].END_DATE, 'dd-MM-yyyy')*/
+                            ,
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeLargeMedium,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
@@ -436,8 +566,8 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                       decoration: InputDecoration(
                                         border: isEditEmail
                                             ? new UnderlineInputBorder(
-                                            borderSide: new BorderSide(
-                                                color: Colors.green))
+                                                borderSide: new BorderSide(
+                                                    color: Colors.green))
                                             : InputBorder.none,
                                         contentPadding: EdgeInsets.all(5),
                                       ),
@@ -449,25 +579,21 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
-                                        ? AppIconButton(
-                                          Icons.edit,
-                                          iconColor: GlobalVariables.green,
-                                          iconSize: 24,
-                                        onPressed: () {
-                                          _emailTextController.clear();
-                                          isEditEmail = true;
-                                          _stateState(() {});
-                                        })
-                                        : AppIconButton(
-                                          Icons.cancel,
-                                          iconColor: GlobalVariables.grey,
-                                          iconSize: 24,
-                                        onPressed: () {
-                                          _emailTextController.clear();
-                                          _emailTextController.text = email;
-                                          isEditEmail = false;
-                                          _stateState(() {});
-                                        }),
+                                        ? AppIconButton(Icons.edit,
+                                            iconColor: GlobalVariables.green,
+                                            iconSize: 24, onPressed: () {
+                                            _emailTextController.clear();
+                                            isEditEmail = true;
+                                            _stateState(() {});
+                                          })
+                                        : AppIconButton(Icons.cancel,
+                                            iconColor: GlobalVariables.grey,
+                                            iconSize: 24, onPressed: () {
+                                            _emailTextController.clear();
+                                            _emailTextController.text = email;
+                                            isEditEmail = false;
+                                            _stateState(() {});
+                                          }),
                                   ),
                                 )
                               ],
@@ -487,7 +613,10 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                   if (internet) {
                                     if (_emailTextController.text.length > 0) {
                                       Navigator.of(context).pop();
-                                      getReceiptMail(_receiptList[0].RECEIPT_NO, _emailTextController.text,widget.yearSelectedItem);
+                                      getReceiptMail(
+                                          _receiptList[0].RECEIPT_NO,
+                                          _emailTextController.text,
+                                          widget.yearSelectedItem);
                                     } else {
                                       GlobalFunctions.showToast(
                                           'Please Enter Email ID');
@@ -504,12 +633,12 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side:
-                                  BorderSide(color: GlobalVariables.green)),
+                                      BorderSide(color: GlobalVariables.green)),
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('email_now'),
                                 textColor: GlobalVariables.white,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ),
@@ -520,15 +649,16 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
             }));
   }
 
-  Future<void> getReceiptMail(String invoice_no, String emailId,String year) async {
+  Future<void> getReceiptMail(
+      String invoice_no, String emailId, String year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog.show();
     restClientERP
-        .getReceiptMail(societyId, invoice_no, _emailTextController.text,year)
+        .getReceiptMail(societyId, invoice_no, _emailTextController.text, year)
         .then((value) {
       print('Response : ' + value.toString());
 
@@ -551,26 +681,23 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   }
 
   Future<void> getPDF() async {
-
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog.show();
-    restClientERP
-        .getReceiptPDFData(societyId, widget.invoiceNo)
-        .then((value) {
+    restClientERP.getReceiptPDFData(societyId, widget.invoiceNo).then((value) {
       print('Response : ' + value.dataString.toString());
 
-      GlobalFunctions.convertBase64StringToFile(value.dataString,'Receipt'+widget.invoiceNo+'.pdf').then((value) {
-
-        if(value){
+      GlobalFunctions.convertBase64StringToFile(
+              value.dataString, 'Receipt' + widget.invoiceNo + '.pdf')
+          .then((value) {
+        if (value) {
           GlobalFunctions.showToast('check Download folder');
-        }else{
+        } else {
           GlobalFunctions.showToast('Download failed');
         }
-
       });
       _progressDialog.hide();
     }).catchError((Object obj) {
@@ -588,9 +715,141 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
         default:
       }
     });
+  }
+
+  void cancelReceiptRequest(String id) {
+
+    showDialog(
+        context: _scaffoldKey.currentContext,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  width: MediaQuery.of(context).size.width / 1.3,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: text(
+                            AppLocalizations.of(context).translate('sure_cancel_receipt'),
+                            fontSize: GlobalVariables.textSizeLargeMedium,
+                            textColor: GlobalVariables.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              child: FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  _progressDialog.show();
+                                  Provider.of<UserManagementResponse>(context,listen: false).cancelReceiptRequest(id).then((value) {
+                                    _progressDialog.hide();
+                                    GlobalFunctions.showToast(value.message);
+                                    if(value.status){
+                                      Navigator.of(_scaffoldKey.currentContext).pop();
+                                   //  Navigator.of(context).pop();
+                                    }
+                                  });
+                                },
+                                child: text(
+                                    AppLocalizations.of(context).translate('yes'),
+                                    textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Container(
+                              child: FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: text(
+                                    AppLocalizations.of(context).translate('no'),
+                                    textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              );
+            }));
 
   }
 
+ /* void approveReceiptRequest(String id) {
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: text(
+                              AppLocalizations.of(context).translate('sure_cancel_receipt'),
+                              fontSize: GlobalVariables.textSizeLargeMedium,
+                              textColor: GlobalVariables.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                child: FlatButton(
+                                  onPressed: () {
+                                   // Navigator.of(context).pop();
+                                //    logout(context);
+                                  },
+                                  child: text(
+                                      AppLocalizations.of(context).translate('yes'),
+                                      textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                child: FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: text(
+                                      AppLocalizations.of(context).translate('no'),
+                                      textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+              );
+            }));
+
+  }*/
 }
 
 class RecentTransaction {
@@ -599,5 +858,3 @@ class RecentTransaction {
 
   RecentTransaction({this.transactionTitle, this.transactionRs});
 }
-
-

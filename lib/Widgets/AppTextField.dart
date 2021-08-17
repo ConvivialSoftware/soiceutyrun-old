@@ -26,7 +26,7 @@ class AppTextField extends StatefulWidget {
     this.borderWidth = 2.0,
     this.borderRadius = 10.0,
     this.maxLines=1,
-    this.borderColor=GlobalVariables.mediumGreen,
+    this.borderColor=GlobalVariables.lightGray,
     this.readOnly=false,
     this.suffixIcon,this.keyboardType=TextInputType.text,
     this.maxLength,this.counterText='',

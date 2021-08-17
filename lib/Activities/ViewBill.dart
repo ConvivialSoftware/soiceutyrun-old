@@ -9,13 +9,16 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BillDetails.dart';
 import 'package:societyrun/Models/BillHeads.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -25,7 +28,8 @@ import 'base_stateful.dart';
 class BaseViewBill extends StatefulWidget {
 
   String invoiceNo,yearSelectedItem;
-  BaseViewBill(this.invoiceNo,this.yearSelectedItem);
+  String mBlock,mFLat;
+  BaseViewBill(this.invoiceNo,this.yearSelectedItem,this.mBlock,this.mFLat);
 
   @override
   State<StatefulWidget> createState() {
@@ -143,183 +147,202 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
-    return Builder(
-      builder: (context) => Scaffold(
-        backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          actions: [
-            AppIconButton(
-                Icons.mail,
-                iconColor: GlobalVariables.white,
-                onPressed: (){
-              emailBillDialog(context);
-            }),
-            SizedBox(width: 8,),
-            AppIconButton(
-                Icons.download_sharp,
-                iconColor: GlobalVariables.white,
-                onPressed: (){
-                  if (isStoragePermission) {
-                    print('true');
-                    getPDF();
-                  } else {
-                    GlobalFunctions.askPermission(Permission.storage)
-                        .then((value) {
-                      if (value) {
+    return ChangeNotifierProvider<UserManagementResponse>.value(
+        value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context,value,child){
+        return Builder(
+          builder: (context) => Scaffold(
+            backgroundColor: GlobalVariables.veryLightGray,
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              elevation: 0,
+              actions: [
+                AppIconButton(
+                    Icons.mail,
+                    iconColor: GlobalVariables.white,
+                    onPressed: (){
+                      emailBillDialog(context);
+                    }),
+                SizedBox(width: 8,),
+                AppIconButton(
+                    Icons.download_sharp,
+                    iconColor: GlobalVariables.white,
+                    onPressed: (){
+                      if (isStoragePermission) {
+                        print('true');
                         getPDF();
                       } else {
-                        GlobalFunctions.showToast(AppLocalizations.of(context)
-                            .translate('download_permission'));
+                        GlobalFunctions.askPermission(Permission.storage)
+                            .then((value) {
+                          if (value) {
+                            getPDF();
+                          } else {
+                            GlobalFunctions.showToast(AppLocalizations.of(context)
+                                .translate('download_permission'));
+                          }
+                        });
                       }
-                    });
-                  }
 
-                }),
-            SizedBox(width: 8,),
-          ],
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
+                    }),
+                SizedBox(width: 8,),
+              ],
+              leading: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: AppIcon(
+                  Icons.arrow_back,
+                  iconColor: GlobalVariables.white,
+                ),
+              ),
+              title: text(
+                AppLocalizations.of(context).translate('bill')+ ' #'+invoiceNo,
+                textColor: GlobalVariables.white,
+              ),
             ),
+            body: getBaseLayout(value),
           ),
-          title: text(
-            AppLocalizations.of(context).translate('bill')+ ' #'+invoiceNo,
-            textColor: GlobalVariables.white,
-          ),
-        ),
-        body: getBaseLayout(),
-      ),
+        );
+      }),
     );
   }
 
-  getBaseLayout() {
+  getBaseLayout(UserManagementResponse value) {
     return Stack(
       children: <Widget>[
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
             context, 150.0),
-        _billDetailsList.length>0  ?
-        SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top: 8),
-            child: Column(
-              children: <Widget>[
-                AppContainer(
-                  isListItem: true,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: secondaryText(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                      ),
-                      SizedBox(height: 4,),
-                      Container(
-                        alignment: Alignment.center,
-                        child: primaryText('Rs. '+double.parse(totalAmount.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 4,),
-                      Container(
-                        alignment: Alignment.center,
-                        child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
-                      )
-                    ],
+        SizedBox(
+          child: _billDetailsList.length>0  ?
+          SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(top: 8),
+              child: Column(
+                children: <Widget>[
+                  AppContainer(
+                    isListItem: true,
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topRight,
+                          child: secondaryText(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
+                        ),
+                        SizedBox(height: 4,),
+                        Container(
+                          alignment: Alignment.center,
+                          child: primaryText(GlobalFunctions.getCurrencyFormat(totalAmount.toString())/*double.parse(totalAmount.toString()).toStringAsFixed(2)*/,textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 4,),
+                        Container(
+                          alignment: Alignment.center,
+                          child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                AppContainer(
-                  isListItem: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      primaryText("Details",),
-                      Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(AppLocalizations.of(context).translate('name')+ " : ",
-                              textColor: GlobalVariables.black,fontWeight: FontWeight.normal
-                            ),
-                          ),
-                          Container(
-                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: secondaryText(_billDetailsList[0].NAME,),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: primaryText(AppLocalizations.of(context).translate('bill_period')+ " : ",
+                  AppContainer(
+                    isListItem: true,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        primaryText("Details",),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: primaryText(AppLocalizations.of(context).translate('name')+ " : ",
                                 textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                              ),
                             ),
-                          ),
-                          Container(
-                            //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: text(_billDetailsList[0]
-                                .TYPE
-                                .toLowerCase()
-                                .toString() ==
-                                'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
-                                textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                            Container(
+                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: secondaryText(_billDetailsList[0].NAME??'',),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: primaryText(AppLocalizations.of(context).translate('bill_period')+ " : ",
+                                  textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
+                            Container(
+                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: text(_billDetailsList[0]
+                                  .TYPE
+                                  .toLowerCase()
+                                  .toString() ==
+                                  'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
+                                  textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                AppContainer(
-                 isListItem: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      primaryText("Charges",textColor : GlobalVariables.green),
-                      Divider(),
-                      _billHeadsList.length>0 ? Builder(
-                          builder: (context) => ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            // scrollDirection: Axis.vertical,
-                            itemCount: _billHeadsList.length,
-                            itemBuilder: (context, position) {
-                              return Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Container(
-                                              child: primaryText(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                  AppContainer(
+                   isListItem: true,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        primaryText("Charges",textColor : GlobalVariables.green),
+                        Divider(),
+                        _billHeadsList.length>0 ? Builder(
+                            builder: (context) => ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              // scrollDirection: Axis.vertical,
+                              itemCount: _billHeadsList.length,
+                              itemBuilder: (context, position) {
+                                return Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: Container(
+                                                child: primaryText(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            child: secondaryText('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),textColor:  GlobalVariables.red,fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      ),
-                                     SizedBox(height: 4,)
-                                    ],
-                                  )
-                              );
-                            }, //  scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                          )):Container(),
-                    ],
+                                            Container(
+                                              child: secondaryText(/*'Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2)*/GlobalFunctions.getCurrencyFormat(_billHeadsList[position].AMOUNT.toString()),textColor:  GlobalVariables.red,fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        ),
+                                       SizedBox(height: 4,)
+                                      ],
+                                    )
+                                );
+                              }, //  scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                            )):Container(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+          ) : SizedBox(),
+        ),
+        /*Padding(
+          padding: EdgeInsets.only(left: 16.0,bottom: 8.0,right: 16.0,),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: AppButton(textContent: AppLocalizations.of(context).translate('pay_now'), onPressed: (){
+                openBottomSheetPaymentLayout(value);
+              }),
             ),
           ),
-        ) : SizedBox(),
+        )*/
       ],
     );
   }
@@ -358,7 +381,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
-                  child: text('Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2),
+                  child: text(GlobalFunctions.getCurrencyFormat(_billHeadsList[position].AMOUNT.toString()),
                       textColor:  GlobalVariables.red,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold),
                 )
               ],
@@ -381,10 +404,10 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    String flat = await GlobalFunctions.getFlat();
-    String block = await GlobalFunctions.getBlock();
+   // String flat = await GlobalFunctions.getFlat();
+   // String block = await GlobalFunctions.getBlock();
     _progressDialog.show();
-    restClientERP.getBillData(societyId,flat,block,invoiceNo,widget.yearSelectedItem).then((value) {
+    restClientERP.getBillData(societyId,widget.mFLat,widget.mBlock,invoiceNo,widget.yearSelectedItem).then((value) {
       print('Response : ' + value.toString());
       _billViewList = value;
       List<dynamic> _listBillDetails = value.BillDetails;
@@ -657,6 +680,484 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
     });
 
   }
+/*
+
+  String _selectedPaymentGateway = "RazorPay";
+  openBottomSheetPaymentLayout(UserManagementResponse value) {
+
+    if (totalAmount > 0) {
+      if (value.hasPayTMGateway && value.hasRazorPayGateway) {
+        getListOfPaymentGateway(
+            context,
+            setState,
+            0,
+            value);
+      } else {
+        if (value.payOptionList[0].Status) {
+          if (value.hasRazorPayGateway) {
+            _selectedPaymentGateway = 'RazorPay';
+            getListOfPaymentGateway(
+                context,
+                setState,
+                0,
+                value);
+          } else if (value.hasPayTMGateway) {
+            //Paytm Payment method execute
+
+            _selectedPaymentGateway = 'PayTM';
+            print('_selectedPaymentGateway' +
+                _selectedPaymentGateway);
+
+            //redirectToPaymentGateway(position);
+            showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    StatefulBuilder(builder:
+                        (BuildContext context,
+                        StateSetter setState) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0)),
+                        backgroundColor:
+                        Colors.transparent,
+                        elevation: 0.0,
+                        child: getListOfPaymentGateway(
+                            context,
+                            setState,
+                            0,
+                            value),
+                      );
+                    }));
+          } else {
+            GlobalFunctions.showToast(
+                "Online Payment Option is not available.");
+          }
+        } else {
+          GlobalFunctions.showToast(
+              "Online Payment Option is not available.");
+        }
+      }
+    } else {
+      alreadyPaidDialog(0, value);
+    }
+
+
+   return showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              Container(
+                width: 50,
+                height: 10,
+                decoration: boxDecoration(
+                    color: GlobalVariables.transparent,
+                    radius: GlobalVariables.textSizeMedium,
+                    bgColor: GlobalVariables.lightGray),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 30),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30)),
+                    color: GlobalVariables.white),
+                // height: MediaQuery.of(context).size.width * 1.0,
+                //child:
+              )
+            ],
+          );
+        });
+
+  }
+  getListOfPaymentGateway(BuildContext context, StateSetter setState,
+      int position, UserManagementResponse value) {
+    // GlobalFunctions.showToast(_selectedPaymentGateway.toString());
+
+    print('NoLessPermission : ' +
+        AppSocietyPermission.isSocPayAmountNoLessPermission.toString());
+
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.only(top: 70.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10.0,
+                      offset: const Offset(0.0, 10.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: AppIconButton(
+                        Icons.close,
+                        iconColor: GlobalVariables.green,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Container(
+                      // margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      child: primaryText(
+                        AppLocalizations.of(context).translate('change_amount'),
+                        textColor: GlobalVariables.black,
+                        //fontSize: GlobalVariables.textSizeLargeMedium,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          child: text(
+                            'Rs. ',
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeNormal,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          width: 150,
+                          child: TextFormField(
+                            controller: _amountTextController,
+                            readOnly: isEditAmount ? false : true,
+                            cursorColor: GlobalVariables.green,
+                            showCursor: isEditAmount ? true : false,
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                                color: GlobalVariables.green,
+                                fontSize: GlobalVariables.textSizeNormal,
+                                fontWeight: FontWeight.bold),
+                            decoration: InputDecoration(
+                              counterText: "",
+                              border: isEditAmount
+                                  ? new UnderlineInputBorder(
+                                  borderSide:
+                                  new BorderSide(color: Colors.green))
+                                  : InputBorder.none,
+                              // disabledBorder: InputBorder.none,
+                              // enabledBorder: InputBorder.none,
+                              // errorBorder: InputBorder.none,
+                              // focusedBorder: InputBorder.none,
+                              // focusedErrorBorder: InputBorder.none,
+                              // contentPadding: EdgeInsets.all(5),
+                            ),
+                          ),
+                        ),
+                        (AppSocietyPermission.isSocPayAmountEditPermission ||
+                            AppSocietyPermission.isSocPayAmountNoLessPermission)
+                            ? Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          child: !isEditAmount
+                              ? IconButton(
+                              icon: AppIcon(
+                                Icons.edit,
+                                iconColor: GlobalVariables.green,
+                                iconSize:
+                                GlobalVariables.textSizeLarge,
+                              ),
+                              onPressed: () {
+                                _amountTextController.clear();
+                                isEditAmount = true;
+                                setState(() {});
+                              })
+                              : IconButton(
+                              icon: AppIcon(
+                                Icons.cancel,
+                                iconColor: GlobalVariables.grey,
+                                iconSize: 24,
+                              ),
+                              onPressed: () {
+                                _amountTextController.clear();
+                                _amountTextController.text = amount;
+                                isEditAmount = false;
+                                setState(() {});
+                              }),
+                        )
+                            : SizedBox(),
+                      ],
+                    ),
+                    (hasPayTMGateway || hasRazorPayGateway)
+                        ? Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      alignment: Alignment.topLeft,
+                      child: primaryText(
+                        AppLocalizations.of(context)
+                            .translate('select_payment_option'),
+                        textColor: GlobalVariables.black,
+                        //fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    )
+                        : Container(),
+                    hasRazorPayGateway
+                        ? Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: InkWell(
+                        //  splashColor: GlobalVariables.mediumGreen,
+                        onTap: () {
+                          _selectedPaymentGateway = "RazorPay";
+                          setState(() {});
+                          // getListOfPaymentGateway();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color:
+                                    _selectedPaymentGateway != "PayTM"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
+                                    borderRadius:
+                                    BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: _selectedPaymentGateway !=
+                                          "PayTM"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
+                                      width: 2.0,
+                                    )),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Image.asset(
+                                  GlobalVariables.razorPayIconPath,
+                                  height: 40,
+                                  width: 100,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                        : Container(),
+                    hasPayTMGateway
+                        ? Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: InkWell(
+                        //  splashColor: GlobalVariables.mediumGreen,
+                        onTap: () {
+                          _selectedPaymentGateway = "PayTM";
+                          //   getListOfPaymentGateway();
+                          setState(() {});
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color:
+                                    _selectedPaymentGateway == "PayTM"
+                                        ? GlobalVariables.green
+                                        : GlobalVariables.white,
+                                    borderRadius:
+                                    BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: _selectedPaymentGateway ==
+                                          "PayTM"
+                                          ? GlobalVariables.green
+                                          : GlobalVariables.mediumGreen,
+                                      width: 2.0,
+                                    )),
+                                child: AppIcon(Icons.check,
+                                    iconColor: GlobalVariables.white),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Image.asset(
+                                  GlobalVariables.payTMIconPath,
+                                  height: 20,
+                                  width: 80,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                        : Container(),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(10, 15, 0, 5),
+                      child: text(
+                        AppLocalizations.of(context).translate('trans_charges'),
+                        textColor: GlobalVariables.grey,
+                        fontSize: GlobalVariables.textSizeSmall,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                decoration: BoxDecoration(
+                  color: GlobalVariables.green,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    print('amount : ' + amount);
+                    print('_amountTextController : ' +
+                        _amountTextController.text.toString());
+                    if (double.parse(_amountTextController.text) <= 0) {
+                      GlobalFunctions.showToast(
+                          'Amount must be grater than zero');
+                    } else if (AppSocietyPermission.isSocPayAmountNoLessPermission) {
+                      if (double.parse(amount) <=
+                          double.parse(_amountTextController.text)) {
+                        Navigator.of(context).pop();
+                        redirectToPaymentGateway(
+                            position, _amountTextController.text, value);
+                      } else {
+                        GlobalFunctions.showToast(
+                            'Amount must be Grater or equal to Actual Amount');
+                      }
+                    } else {
+                      Navigator.of(context).pop();
+                      redirectToPaymentGateway(
+                          position, _amountTextController.text, value);
+                    }
+                  },
+                  child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(10),
+                      child: text(
+                        AppLocalizations.of(context).translate('proceed'),
+                        textColor: GlobalVariables.white,
+                        fontSize: GlobalVariables.textSizeNormal,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void alreadyPaidDialog(int position, UserManagementResponse value) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                  // height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                          child: AppAssetsImage(
+                            GlobalVariables.paidIconPath,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                          )),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: text(AppLocalizations.of(context)
+                              .translate('already_paid_advance_payment'))),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                  alignment: Alignment.topRight,
+                                  child: text('Close',
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      textColor: GlobalVariables.grey,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Container(
+                              child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            StatefulBuilder(builder:
+                                                (BuildContext context,
+                                                StateSetter setState) {
+                                              return Dialog(
+                                                */
+/*shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                25.0)),*//*
+
+                                                backgroundColor:
+                                                Colors.transparent,
+                                                elevation: 0.0,
+                                                child: getListOfPaymentGateway(
+                                                    context,
+                                                    setState,
+                                                    position,
+                                                    value),
+                                              );
+                                            }));
+                                  },
+                                  child: text('Pay advance',
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      textColor: GlobalVariables.green,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }));
+  }
+*/
 
 }
 

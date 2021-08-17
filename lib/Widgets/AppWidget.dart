@@ -224,3 +224,16 @@ Widget smallTextContainerOutlineLayout(textString){
   );
 
 }
+
+Widget indicator({bool isActive,Color activeColor=GlobalVariables.white , Color inactiveColor=GlobalVariables.grey}) {
+  return AnimatedContainer(
+    duration: Duration(milliseconds: 150),
+    margin: EdgeInsets.symmetric(horizontal: 4.0),
+    height: isActive ? 6.0 : 4.0,
+    width: isActive ? 6.0 : 4.0,
+    decoration: BoxDecoration(
+      color: isActive ? activeColor : inactiveColor,
+      borderRadius: BorderRadius.all(Radius.circular(50)),
+    ),
+  );
+}

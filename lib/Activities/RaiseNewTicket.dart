@@ -658,7 +658,12 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
       _progressDialog.hide();
       if (value.status) {
         if (attachmentFileName != null && attachmentFilePath != null) {
-          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          GlobalFunctions.getTemporaryDirectoryPath()
+              .then((value) {
+            GlobalFunctions.removeAllFilesFromDirectory(
+                value);
+          });
         }
         Navigator.of(context).pop('back');
         /*Navigator.push(

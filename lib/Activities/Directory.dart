@@ -182,17 +182,20 @@ class DirectoryState extends State<BaseDirectory> {
               ' ' +
               value.committeeList[position].FLAT;
 
-      value.committeeList[position].EMAIL.length != 0
-          ? email = true
-          : email = false;
+      if(AppSocietyPermission.isSocHideCommitteeContactPaidPermission) {
+        value.committeeList[position].EMAIL.length != 0
+            ? email = true
+            : email = false;
 
-      value.committeeList[position].PHONE.length != 0
-          ? phone = true
-          : phone = false;
+        value.committeeList[position].PHONE.length != 0
+            ? phone = true
+            : phone = false;
 
-      if (phone) callNumber = value.committeeList[position].PHONE;
+        if (phone) callNumber = value.committeeList[position].PHONE;
 
-      if (email) emailId = value.committeeList[position].EMAIL;
+        if (email) emailId = value.committeeList[position].EMAIL;
+      }
+
     }
 
     if (directory.directoryType == 'Neighbours') {

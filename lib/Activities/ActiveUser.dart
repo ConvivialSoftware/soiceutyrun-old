@@ -72,6 +72,7 @@ var photo = "";
         builder: (context,value,child){
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -133,25 +134,12 @@ var photo = "";
 
   getActiveUserLayout(UserManagementResponse value) {
     // print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-               value.activeUserList.length==0? GlobalFunctions.loadingWidget(context):getActiveUserListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+       value.activeUserList.length==0? GlobalFunctions.loadingWidget(context):getActiveUserListDataLayout(value),
+      ],
     );
   }
 
@@ -162,7 +150,7 @@ var photo = "";
         children: [
           Container(
             //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(10, MediaQuery.of(context).size.height / 15, 10, 0),
+            margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
@@ -191,6 +179,7 @@ var photo = "";
     }
 
     return AppContainer(
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -323,45 +312,32 @@ var photo = "";
 
   getUnActiveUserLayout(UserManagementResponse userManagementResponse) {
    
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                userManagementResponse.inactiveUserList.length==0? GlobalFunctions.loadingWidget(context):getUnActiveUserListDataLayout(userManagementResponse),
-                Container(
-                  padding: EdgeInsets.all(16),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: AppButton(textContent: 'Invite', onPressed: (){
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 180.0),
+        userManagementResponse.inactiveUserList.length==0? GlobalFunctions.loadingWidget(context):getUnActiveUserListDataLayout(userManagementResponse),
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: AppButton(textContent: 'Invite', onPressed: (){
 
-                      _progressDialog.show();
-                      Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
+              _progressDialog.show();
+              Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
 
-                        _progressDialog.hide();
-                        if(value.status){
-                          Navigator.of(context).pop();
-                        }
+                _progressDialog.hide();
+                if(value.status){
+                  Navigator.of(context).pop();
+                }
 
-                      });
+              });
 
 
-                    }),
-                  ),
-                )
-              ],
-            ),
+            }),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 
@@ -369,7 +345,7 @@ var photo = "";
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 15, 10, 0),
+          0,8, 0, 0),
       //padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
           color: GlobalVariables.transparent,
@@ -390,6 +366,7 @@ var photo = "";
   getUnActiveUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
 
     return AppContainer(
+      isListItem: true,
       child: Column(
         children: [
           Row(

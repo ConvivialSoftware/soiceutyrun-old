@@ -13,6 +13,7 @@ class Member {
   String EMAIL;
   String Phone;
   String PROFILE_PHOTO;
+  String AGREEMENT_ID;
 
   Member(
       {this.TYPE,
@@ -25,6 +26,7 @@ class Member {
       this.FLAT,
       this.EMAIL,
       this.Phone,
+      this.AGREEMENT_ID,
       this.PROFILE_PHOTO});
 
   factory Member.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,8 @@ class Member {
         FLAT: json['FLAT'],
         EMAIL: json['EMAIL']??'',
         Phone: json['Phone']?? '',
-        PROFILE_PHOTO: json['PROFILE_PHOTO']);
+        PROFILE_PHOTO: json['PROFILE_PHOTO'],
+        AGREEMENT_ID:json['AGREEMENT_ID'],
+    );
   }
 }

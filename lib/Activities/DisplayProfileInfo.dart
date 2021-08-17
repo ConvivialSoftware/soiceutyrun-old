@@ -11,6 +11,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
@@ -34,11 +35,18 @@ class DisplayProfileInfoState
 
   List<ProfileInfo> _profileList = List<ProfileInfo>();
 
-  String userId, societyId,societyName, userType, loggedUserType = '', loggedUserId;
+  String userId,
+      societyId,
+      societyName,
+      userType,
+      loggedUserType = '',
+      loggedUserId;
   bool isEdit = false;
   TextEditingController _reasonController = TextEditingController();
 
   DisplayProfileInfoState(this.userId, this.userType);
+  bool isEditOptionDisplay = false;
+  bool isDeleteOptionDisplay = false;
 
   @override
   void initState() {
@@ -51,6 +59,48 @@ class DisplayProfileInfoState
             .translate('pls_check_internet_connectivity'));
       }
     });
+
+    if (loggedUserType.toLowerCase() == 'tenant' &&
+        userType.toLowerCase() == 'tenant') {
+      isEditOptionDisplay = true;
+    } else if (loggedUserType.toLowerCase() != 'tenant' &&
+        userType.toLowerCase() == 'tenant') {
+      isEditOptionDisplay = true;
+    } else if (loggedUserType.toLowerCase() != 'tenant' &&
+        userType.toLowerCase() != 'tenant') {
+      isEditOptionDisplay = true;
+    } else if (loggedUserType.toLowerCase() == 'tenant' &&
+        userType.toLowerCase() != 'tenant') {
+      isEditOptionDisplay = false;
+    }
+    print('loggedUserType : ' + loggedUserType.toLowerCase());
+    print('userType : ' + userType.toLowerCase());
+
+
+
+    if (loggedUserType.toLowerCase() == 'owner') {
+      isDeleteOptionDisplay = true;
+    } else if (loggedUserType.toLowerCase() == 'owner family' &&
+        userType == 'owner') {
+      isDeleteOptionDisplay = false;
+    } else if (loggedUserType.toLowerCase() == 'owner' &&
+        userType == 'owner family') {
+      isDeleteOptionDisplay = true;
+    } else if (loggedUserType.toLowerCase() == 'owner' &&
+        userType == 'tenant') {
+      isDeleteOptionDisplay = true;
+    } else if (loggedUserType.toLowerCase() == 'owner' && userType == 'owner') {
+      isDeleteOptionDisplay = false;
+    } else if (loggedUserType.toLowerCase() == 'tenant' &&
+        userType == 'tenant') {
+      isDeleteOptionDisplay = true;
+    }
+
+    if (_profileList.length > 0) {
+      if (loggedUserId == userId) {
+        isDeleteOptionDisplay = false;
+      }
+    }
   }
 
   @override
@@ -78,6 +128,74 @@ class DisplayProfileInfoState
               iconColor: GlobalVariables.white,
             ),
           ),
+          actions: [
+            PopupMenuButton(
+                icon: AppIcon(Icons.more_vert,
+                    iconColor:
+                        // isMenuEnable ?
+                        GlobalVariables.white
+                    // : GlobalVariables.transparent
+                    ),
+                // add this line
+                itemBuilder: (_) => <PopupMenuItem<String>>[
+                  if(isEditOptionDisplay)
+                      new PopupMenuItem<String>(
+                          child: Container(
+                              width: 100,
+                              height: 30,
+                              child: text("Move Out",
+                                  textColor: GlobalVariables.black,
+                                  fontSize: GlobalVariables.textSizeSMedium)),
+                          value: 'move_out'),
+                      new PopupMenuItem<String>(
+                          child: Container(
+                              width: 100,
+                              height: 30,
+                              child: text("Edit",
+                                  textColor: GlobalVariables.black,
+                                  fontSize: GlobalVariables.textSizeSMedium)),
+                          value: 'edit'),
+                    ],
+                onSelected: (index) async {
+                  switch (index) {
+                    case 'move_out':
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext
+                          context) =>
+                              StatefulBuilder(builder:
+                                  (BuildContext context,
+                                  StateSetter
+                                  setState) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          10.0)),
+                                  child:
+                                  deleteFamilyMemberLayout(),
+                                );
+                              }));
+                      break;
+                    case 'edit':
+
+                      var result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  BaseEditProfileInfo(userId, societyId)));
+
+                      print('Back Result : ' + result.toString());
+                      if (result == 'profile') {
+                        isEdit = true;
+                        geProfileData();
+                      }
+
+                      break;
+                  }
+                }),
+          ],
           title: AutoSizeText(
             AppLocalizations.of(context).translate('my_profile'),
             style: TextStyle(color: GlobalVariables.white),
@@ -121,261 +239,277 @@ class DisplayProfileInfoState
   }
 
   getBaseLayout() {
-    bool isEditOptionDisplay = false;
 
-    if (loggedUserType.toLowerCase() == 'tenant' &&
-        userType.toLowerCase() == 'tenant') {
-      isEditOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() != 'tenant' &&
-        userType.toLowerCase() == 'tenant') {
-      isEditOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() != 'tenant' &&
-        userType.toLowerCase() != 'tenant') {
-      isEditOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'tenant' &&
-        userType.toLowerCase() != 'tenant') {
-      isEditOptionDisplay = false;
-    }
-    print('loggedUserType : ' + loggedUserType.toLowerCase());
-    print('userType : ' + userType.toLowerCase());
+    return _profileList.length > 0
+        ? Stack(
+            children: <Widget>[
+              GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
+              getProfileInfoLayout(),
+              //isEditOptionDisplay ? editProfileFabLayout() : Container(),
+              /*AppPermission.isUserAdminPermission ?
+              userType == 'tenant' ? Container(
+                margin: EdgeInsets.only(left: 16,bottom: 8),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Row(
+                    children: [
+                      AppButton(
+                          textContent: AppLocalizations.of(context).translate('renew'),
+                          onPressed: () {
 
-    return _profileList.length > 0 ?
-    Stack(
-      children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
-        getProfileInfoLayout(),
-        isEditOptionDisplay ? editProfileFabLayout(): Container(),
-       // deleteProfileFabLayout(),
-      ],
-    ) : SizedBox();
+                          }),
+                      SizedBox(width: 8,),
+                      AppButton(
+                          textContent: AppLocalizations.of(context).translate('close'),
+                          onPressed: () {
+
+                          }),
+                    ],
+                  ),
+                ),
+              ):SizedBox() : SizedBox()*/
+              // deleteProfileFabLayout(),
+            ],
+          )
+        : SizedBox();
   }
 
   getProfileInfoLayout() {
-    bool isDeleteOptionDisplay = false;
 
-    if (loggedUserType.toLowerCase() == 'owner') {
-      isDeleteOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'owner family' &&
-        userType == 'owner') {
-      isDeleteOptionDisplay = false;
-    } else if (loggedUserType.toLowerCase() == 'owner' &&
-        userType == 'owner family') {
-      isDeleteOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'owner' &&
-        userType == 'tenant') {
-      isDeleteOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'owner' && userType == 'owner') {
-      isDeleteOptionDisplay = false;
-    } else if (loggedUserType.toLowerCase() == 'tenant' &&
-        userType == 'tenant') {
-      isDeleteOptionDisplay = true;
-    }
-
-    if (_profileList.length > 0) {
-      if (loggedUserId == userId) {
-        isDeleteOptionDisplay = false;
-      }
-    }
     return _profileList.length > 0
         ? SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              //SizedBox(height: 16),
-              AppContainer(
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            child: _profileList[0].PROFILE_PHOTO.length == 0
-                                ? AppAssetsImage(
-                              GlobalVariables.componentUserProfilePath,
-                              imageWidth: 60.0,
-                              imageHeight: 60.0,
-                              borderColor: GlobalVariables.grey,
-                              borderWidth: 1.0,
-                              fit: BoxFit.cover,
-                              radius: 30.0,
-                            )
-                                : AppNetworkImage(
-                              _profileList[0].PROFILE_PHOTO,
-                              imageWidth: 60.0,
-                              imageHeight: 60.0,
-                              borderColor: GlobalVariables.grey,
-                              borderWidth: 1.0,
-                              fit: BoxFit.cover,
-                              radius: 30.0,
-                            )),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(child: primaryText(_profileList[0].NAME,maxLine: 2)),
-                                  SizedBox(width: 4,),
-                                  isDeleteOptionDisplay
-                                      ? AppIconButton(
-                                        Icons.delete,
-                                        iconColor: GlobalVariables.green,
-                                    onPressed: (){
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              StatefulBuilder(builder:
-                                                  (BuildContext context,
-                                                  StateSetter setState) {
-                                                return Dialog(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0)),
-                                                  child:
-                                                  deleteFamilyMemberLayout(),
-                                                );
-                                              }));
-                                    },
-                                      )
-                                      : Container(),
-                                ],
-                              ),
-                              secondaryText(societyName),
-                              secondaryText(_profileList[0].BLOCK + _profileList[0].FLAT),
-                              // secondaryText(_profileList[0].Phone),
-                            ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                //SizedBox(height: 16),
+                AppContainer(
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              child: _profileList[0].PROFILE_PHOTO.length == 0
+                                  ? AppAssetsImage(
+                                      GlobalVariables.componentUserProfilePath,
+                                      imageWidth: 60.0,
+                                      imageHeight: 60.0,
+                                      borderColor: GlobalVariables.grey,
+                                      borderWidth: 1.0,
+                                      fit: BoxFit.cover,
+                                      radius: 30.0,
+                                    )
+                                  : AppNetworkImage(
+                                      _profileList[0].PROFILE_PHOTO,
+                                      imageWidth: 60.0,
+                                      imageHeight: 60.0,
+                                      borderColor: GlobalVariables.grey,
+                                      borderWidth: 1.0,
+                                      fit: BoxFit.cover,
+                                      radius: 30.0,
+                                    )),
+                          SizedBox(
+                            width: 16,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                        child: primaryText(_profileList[0].NAME,
+                                            maxLine: 2)),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    /*isDeleteOptionDisplay
+                                        ? AppIconButton(
+                                            Icons.delete,
+                                            iconColor: GlobalVariables.green,
+                                            onPressed: () {
+
+                                            },
+                                          )
+                                        : Container(),*/
+                                  ],
+                                ),
+                                secondaryText(societyName),
+                                secondaryText(_profileList[0].BLOCK +
+                                    _profileList[0].FLAT),
+                                // secondaryText(_profileList[0].Phone),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              AppContainer(
-                isListItem: true,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 8),
-                    primaryText('Personal Info'),
-                    SizedBox(height: 16),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.person,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].NAME,textStyleHeight: 1.0)
-                      ],
-                    ),
-                    Divider(),
-                    SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.transgender_sharp,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].GENDER),
-                      ],
-                    ),
-                    Divider(),
-                    SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.bloodtype_sharp,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].BLOOD_GROUP),
-                      ],
-                    ),
-                    Divider(),
-                    SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.date_range,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].DOB == '0000-00-00'
-                            ? ''
-                            : GlobalFunctions.convertDateFormat(_profileList[0].DOB,"dd-MM-yyyy")),
-                      ],
-                    ),
-                    Divider(),
-                    SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.location_city_sharp,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].ADDRESS, maxLine: 3),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                  ],
+                AppContainer(
+                  isListItem: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 8),
+                      primaryText('Personal Info'),
+                      SizedBox(height: 16),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.person,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].NAME,
+                              textStyleHeight: 1.0)
+                        ],
+                      ),
+                      Divider(),
+                      SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.transgender_sharp,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].GENDER),
+                        ],
+                      ),
+                      Divider(),
+                      SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.bloodtype_sharp,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].BLOOD_GROUP),
+                        ],
+                      ),
+                      Divider(),
+                      SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.date_range,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].DOB == '0000-00-00'
+                              ? ''
+                              : GlobalFunctions.convertDateFormat(
+                                  _profileList[0].DOB, "dd-MM-yyyy")),
+                        ],
+                      ),
+                      Divider(),
+                      SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.location_city_sharp,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].ADDRESS, maxLine: 3),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                    ],
+                  ),
                 ),
-              ),
-              AppContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 8),
-                    primaryText('Contacts'),
-                    SizedBox(height: 16),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.call,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].ALTERNATE_CONTACT1),
-                      ],
-                    ),
-                    Divider(),
-                    SizedBox(height: 16),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.call,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].ALTERNATE_CONTACT2),
-                      ],
-                    ),
-                    Divider(),
-                    SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        AppIcon(Icons.email_sharp,iconColor: GlobalVariables.mediumGreen,),
-                        SizedBox(width: 8,),
-                        secondaryText(_profileList[0].Email),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                  ],
+                AppContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 8),
+                      primaryText('Contacts'),
+                      SizedBox(height: 16),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.call,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].ALTERNATE_CONTACT1.isEmpty? _profileList[0].Phone:_profileList[0].ALTERNATE_CONTACT1),
+                        ],
+                      ),
+                      Divider(),
+                      SizedBox(height: 16),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.call,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].ALTERNATE_CONTACT2),
+                        ],
+                      ),
+                      Divider(),
+                      SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AppIcon(
+                            Icons.email_sharp,
+                            iconColor: GlobalVariables.mediumGreen,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          secondaryText(_profileList[0].Email),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        )
+                SizedBox(height: 50),
+              ],
+            ),
+          )
         : Container();
   }
 
-  editProfileFabLayout() {
+ /* editProfileFabLayout() {
     return Align(
       alignment: Alignment.bottomRight,
       child: Stack(
@@ -387,17 +521,7 @@ class DisplayProfileInfoState
                 //GlobalFunctions.showToast('Fab CLick');
 
                 // Navigator.of(context).pop('profile');
-                var result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            BaseEditProfileInfo(userId, societyId)));
 
-                print('Back Result : ' + result.toString());
-                if (result == 'profile') {
-                  isEdit = true;
-                  geProfileData();
-                }
               },
               child: AppIcon(
                 Icons.edit,
@@ -409,7 +533,7 @@ class DisplayProfileInfoState
         ],
       ),
     );
-  }
+  }*/
 
   deleteFamilyMemberLayout() {
     return Container(

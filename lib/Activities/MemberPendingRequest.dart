@@ -56,7 +56,7 @@ class MemberPendingRequestState
     //  getSharedPreferenceData();
     //  _handleTabSelection();
     Provider.of<UserManagementResponse>(context, listen: false)
-        .getPendingRequest();
+        .getPendingMemberRequest();
   }
 
   @override
@@ -70,6 +70,7 @@ class MemberPendingRequestState
         builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -97,27 +98,14 @@ class MemberPendingRequestState
 
   getMemberPendingRequestLayout(UserManagementResponse value) {
     // print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                value.pendingRequestList.length > 0
-                    ? getMemberPendingRequestListDataLayout(value)
-                    : GlobalFunctions.loadingWidget(context),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        value.pendingRequestList.length > 0
+            ? getMemberPendingRequestListDataLayout(value)
+            : GlobalFunctions.loadingWidget(context),
+      ],
     );
   }
 
@@ -128,7 +116,7 @@ class MemberPendingRequestState
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 15, 10, 0),
+                0, 8, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -149,6 +137,7 @@ class MemberPendingRequestState
   getMemberPendingRequestListItemLayout(
       int position, UserManagementResponse value) {
     return AppContainer(
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(

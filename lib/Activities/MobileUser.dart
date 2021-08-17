@@ -70,6 +70,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
         builder: (context,value,child){
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -131,25 +132,12 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
 
   getMobileUserLayout(UserManagementResponse value) {
     // print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-               value.mobileUserList.length==0 ? GlobalFunctions.loadingWidget(context) :getMobileUserListDataLayout(value),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+       value.mobileUserList.length==0 ? GlobalFunctions.loadingWidget(context) :getMobileUserListDataLayout(value),
+      ],
     );
   }
 
@@ -160,7 +148,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height / 15, 10, 0),
+                0, 8, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
@@ -190,6 +178,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     }
 
     return AppContainer(
+      isListItem: true,
       child: Column(
         children: <Widget>[
           Container(
@@ -315,43 +304,30 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
 
   getUnMobileUserLayout(UserManagementResponse value) {
    
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-                value.notMobileUserList.length==0 ? GlobalFunctions.loadingWidget(context) : getUnMobileUserListDataLayout(value),
-                Container(
-                  padding: EdgeInsets.all(16),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: AppButton(textContent: 'Invite', onPressed: (){
-                      _progressDialog.show();
-                      Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 180.0),
+        value.notMobileUserList.length==0 ? GlobalFunctions.loadingWidget(context) : getUnMobileUserListDataLayout(value),
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: AppButton(textContent: 'Invite', onPressed: (){
+              _progressDialog.show();
+              Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
 
-                        _progressDialog.hide();
-                        if(value.status){
-                          Navigator.of(context).pop();
-                        }
+                _progressDialog.hide();
+                if(value.status){
+                  Navigator.of(context).pop();
+                }
 
-                      });
+              });
 
-                    }),
-                  ),
-                )
-              ],
-            ),
+            }),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 
@@ -359,7 +335,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.height / 15, 10, 0),
+          0, 8, 0, 0),
       //padding: EdgeInsets.all(20), // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
           color: GlobalVariables.transparent,
@@ -393,6 +369,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
         });
       },
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: [
             Row(

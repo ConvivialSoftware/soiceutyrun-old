@@ -166,7 +166,7 @@ class AboutSocietyRunInfoState
               child: CarouselSlider.builder(
                 options: CarouselOptions(
                   height: 150.0,
-                  autoPlay: true,
+                  autoPlay: false,
                   autoPlayInterval: Duration(seconds: 3),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   viewportFraction: 1.0,

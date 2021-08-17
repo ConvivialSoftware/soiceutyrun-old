@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
@@ -19,14 +21,18 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseAlreadyPaid extends StatefulWidget {
+  bool isAdmin;
+  String receiptId;
   String invoiceNo;
   double amount;
-  BaseAlreadyPaid(this.invoiceNo,this.amount);
+  int penaltyAmount;
+  String mBlock,mFlat;
+  BaseAlreadyPaid(this.invoiceNo,this.amount,this.mBlock,this.mFlat,this.penaltyAmount,{this.receiptId=null,this.isAdmin=false});
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return AlreadyPaidState(invoiceNo,amount);
+    return AlreadyPaidState();
   }
 }
 
@@ -39,6 +45,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
 
   TextEditingController _chequeBankNameController  =  TextEditingController();
   TextEditingController _amountController  =  TextEditingController();
+  TextEditingController _penaltyAmountController  =  TextEditingController();
   TextEditingController _noteController  =  TextEditingController();
   TextEditingController _referenceController  = TextEditingController();
   TextEditingController _dateController = TextEditingController();
@@ -66,9 +73,9 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
   ProgressDialog _progressDialog;
   bool isStoragePermission=false;
 
-  String invoiceNo;
-  double amount;
-  AlreadyPaidState(this.invoiceNo,this.amount);
+ /* String invoiceNo;
+  double amount;*/
+ // AlreadyPaidState(this.invoiceNo,this.amount);
 
   @override
   void initState() {
@@ -86,7 +93,8 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     });
     _dateController.text = DateTime.now().toLocal().day.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().year.toString();
     insertedDate = DateTime.now().toLocal().year.toString()+"-"+DateTime.now().toLocal().month.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().day.toString().padLeft(2,'0');
-    _amountController.text=double.parse(amount.toString()).toStringAsFixed(2);
+    _amountController.text=(double.parse(widget.amount.toString())-double.parse(widget.penaltyAmount.toString())).toStringAsFixed(2);
+    _penaltyAmountController.text=double.parse(widget.penaltyAmount.toString()).toStringAsFixed(2);
   }
 
   @override
@@ -303,6 +311,12 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                 controllerCallback: _amountController,
                 keyboardType: TextInputType.number,
               ),
+              widget.isAdmin ? AppTextField(
+                textHintContent:
+                AppLocalizations.of(context).translate('penalty_amount') ,
+                controllerCallback: _penaltyAmountController,
+                keyboardType: TextInputType.number,
+              ):SizedBox(),
               AppTextField(
                 textHintContent:
                 AppLocalizations.of(context).translate('reference_no')+'*',
@@ -318,7 +332,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                   contentPadding: EdgeInsets.only(top: 14),
                 ),
               ),
-              Container(
+              widget.isAdmin ? SizedBox():Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
                   children: <Widget>[
@@ -453,7 +467,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
    String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog.show();
-    restClientERP.getBankData(societyId,invoiceNo).then((value) {
+    restClientERP.getBankData(societyId,widget.invoiceNo).then((value) {
       print('Response : ' + value.toString());
       List<dynamic> _list = value.bank;
 
@@ -484,8 +498,8 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
+  //  String block = await GlobalFunctions.getBlock();
+   // String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
     String attachmentName;
     String attachment;
@@ -502,15 +516,22 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     String date= GlobalFunctions.convertDateFormat(_dateController.text,"yyyy-MM-dd");
     print('Date :'+date);*/
     _progressDialog.show();
-    restClientERP.addAlreadyPaidPaymentRequest(societyId, flat, block,invoiceNo,_amountController.text,
+    restClientERP.addAlreadyPaidPaymentRequest(societyId, widget.mFlat, widget.mBlock,widget.invoiceNo,_amountController.text,
         _referenceController.text,paymentType,_bankAccountNoSelectedItem,insertedDate,userId,_noteController.text,_chequeBankNameController.text.toString(),attachment,"P").then((value) {
       print("add paymentRequest response : "+ value.toString());
       _progressDialog.hide();
       if(value.status){
      //   Navigator.of(context).pop();
         if(attachmentFileName!=null && attachmentFilePath!=null){
-          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+         // GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          GlobalFunctions.getTemporaryDirectoryPath()
+              .then((value) {
+            GlobalFunctions.removeAllFilesFromDirectory(
+                value);
+          });
         }
+        Provider.of<UserManagementResponse>(context, listen: false)
+            .getLedgerData(null,widget.mBlock,widget.mFlat);
         getMessageInfo();
       }
       GlobalFunctions.showToast(value.message);
@@ -564,8 +585,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
 
       if(_referenceController.text.length>0){
 
-        addPaymentRequest();
-
+        if(widget.isAdmin){
+          addApproveReceiptPaymentRequest();
+        }else {
+          addPaymentRequest();
+        }
       }else{
         GlobalFunctions.showToast("Please Enter Reference Number");
       }
@@ -660,6 +684,56 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                 )
               );
             }));
+  }
+
+  Future<void> addApproveReceiptPaymentRequest() async {
+
+    final dio = Dio();
+    final RestClientERP restClientERP =
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+    //  String block = await GlobalFunctions.getBlock();
+    // String flat = await GlobalFunctions.getFlat();
+    String userId = await GlobalFunctions.getUserId();
+   /* String attachmentName;
+    String attachment;
+
+    if(attachmentFileName!=null && attachmentFilePath!=null){
+      attachmentName = attachmentFileName;
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+    }else{
+      attachmentName="";
+      attachment="";
+    }*/
+/*
+    print('Before : Date :'+_dateController.text);
+    String date= GlobalFunctions.convertDateFormat(_dateController.text,"yyyy-MM-dd");
+    print('Date :'+date);*/
+    _progressDialog.show();
+    restClientERP.addApproveReceiptRequest(societyId, widget.mBlock+' '+widget.mFlat,insertedDate,_amountController.text,_penaltyAmountController.text,
+        _referenceController.text,paymentType,_bankAccountNoSelectedItem,widget.receiptId,_noteController.text,).then((value) {
+      print("addApproveReceiptRequest : "+ value.toString());
+      _progressDialog.hide();
+      if(value.status){
+           Navigator.of(context).pop();
+           Navigator.of(context).pop();
+        /*if(attachmentFileName!=null && attachmentFilePath!=null){
+          // GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+          GlobalFunctions.getTemporaryDirectoryPath()
+              .then((value) {
+            GlobalFunctions.removeAllFilesFromDirectory(
+                value);
+          });
+        }*/
+        Provider.of<UserManagementResponse>(context, listen: false)
+            .getLedgerData(null,widget.mBlock,widget.mFlat);
+        //getMessageInfo();
+      }
+      GlobalFunctions.showToast(value.message);
+
+    });
+
+
   }
 
 }

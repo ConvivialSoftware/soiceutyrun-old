@@ -606,8 +606,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             (Route<dynamic> route) => false);
       }
     } else if (temp.tYPE == NotificationTypes.TYPE_RECEIPT) {
+      String block = await GlobalFunctions.getBlock();
+      String flat = await GlobalFunctions.getFlat();
       final result = await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseLedger()));
+          context, MaterialPageRoute(builder: (context) => BaseLedger(block,flat)));
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

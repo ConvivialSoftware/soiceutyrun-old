@@ -149,6 +149,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
         builder: (context,value,child){
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -176,25 +177,12 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
 
   getMoveOutRequestLayout(UserManagementResponse value) {
     // print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-               value.moveOutRequestList.length>0 ? getMoveOutRequestListDataLayout(value): GlobalFunctions.loadingWidget(context),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+       value.moveOutRequestList.length>0 ? getMoveOutRequestListDataLayout(value): GlobalFunctions.loadingWidget(context),
+      ],
     );
   }
 
@@ -205,7 +193,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                18, MediaQuery.of(context).size.height / 15, 18, 0),
+                0, 8, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                   // scrollDirection: Axis.vertical,
@@ -236,6 +224,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
         Navigator.push(context, MaterialPageRoute(builder: (context)=> BaseMoveOutRequestUserDetails(value.moveOutRequestList[position])));
       },
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: <Widget>[
             Container(

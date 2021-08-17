@@ -132,6 +132,11 @@ class GlobalVariables {
   static var apartmentIconPath = "assets/other_assets/apartment.png";
   static var smileIconPath = "assets/other_assets/smile.png";
   static var sadIconPath = "assets/other_assets/sad.png";
+  static var bannerIconPath = "assets/other_assets/banner.png";
+  static var emailIconPath = "assets/other_assets/email.png";
+  static var receiptIconPath = "assets/other_assets/receipt.png";
+  static var userIconPath = "assets/other_assets/user.png";
+  static var notAllowedImagePath = "assets/other_assets/notAllowed.svg";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -254,6 +259,9 @@ class GlobalVariables {
   static const nocApproveAPI = "Members/noc_approve";
   static const addAgreementAPI = "Members/add_agreement";
   static const adminAddAgreementAPI = "Members/admin_add_agreement";
+  static const renewAgreementAPI = "Members/renew_agreement";
+  static const closeAgreementAPI = "Members/close_agreement";
+  static const paymentChargesAPI = "Api/paymentCharges";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -319,6 +327,12 @@ class GlobalVariables {
   static const expenseAPI = "Androidexpense/all_expense";
   static const expenseBankAPI = "Androidexpense/bank";
   static const addExpenseAPI = "Androidexpense/Add";
+  static const incomeLedgerAPI = "AndroidApi/income_ledger";
+  static const addInvoiceAPI = "AndroidApi/add_invoice";
+  static const monthExpensePendingRequestAPI = "AndroidApi/monthwiseexpense_pendingreq";
+  static const cancelReceiptRequestAPI = "AndroidApi/cancel_request";
+  static const approveReceiptRequestAPI = "AndroidApi/approve_request";
+  static const headWiseExpenseAPI = "Androidexpense/headwise_expense";
 
   /*Routs Variables*/
   static const LoginPage = "Login";
@@ -566,15 +580,16 @@ class AppPackageInfo {
   static var appName, packageName, version, buildNumber;
 }
 
-class AppPermission {
-  static bool isSocHelpDeskPermission = false;
+class AppSocietyPermission {
+
+  /*static bool isSocHelpDeskPermission = false;
   static var socHelpDeskPermission = 'HELPDESK';
   
   static bool isSocGatePassPermission = false;
   static var socGatePassPermission = 'GATEPASS';
   
   static bool isSocExpensePermission = false;
-  static var socExpensePermission = 'EXPENCE';
+  static var socExpensePermission = 'EXPENCE';*/
   
   static bool isSocAddVehiclePermission = false;
   static var socAddVehiclePermission = 'AddVehicle';
@@ -585,81 +600,142 @@ class AppPermission {
   static bool isSocPayAmountNoLessPermission = false;
   static var socPayAmountNoLessPermission = 'PayAmountNoLess';
 
-  static bool isUserMyUnitPermission = false;
-  static var userMyUnitPermission = '';
-  
-  static bool isUserDirectoryPermission = false;
-  static var userDirectoryPermission = '';
-  
-  static bool isUserGatePassPermission = false;
-  static var userGatePassPermission = '';
-  
-  static bool isUserAddMemberPermission = false;
-  static var userAddMemberPermission = 'addMember';
-  
-  static bool isUserHelpDeskPermission = false;
-  static var userHelpDeskPermission = 'helpDesk';
-  
-  static bool isUserDocumentPermission = false;
-  static var userDocumentPermission = '';
-  
-  static bool isUserClassifiedPermission = false;
-  static var userClassifiedPermission = '';
-  
-  static bool isUserViewFacilityPermission = false;
-  static var userViewFacilityPermission = '';
-  
-  static bool isUserAddFacilityPermission = false;
-  static var userAddFacilityPermission = '';
-  
-  static bool isUserViewDocumentsPermission = false;
-  static var userViewDocumentsPermission = '';
-  
-  static bool isUserAdminPermission = false;
-  static var userAdminPermission = 'admin';
-  
-  static bool isUserAdminGatePassPermission = false;
-  static var userAdminGatePassPermission = '';
-  
-  static bool isUserAdminHelpDeskPermission = false;
-  static var userAdminHelpDeskPermission = 'adminHelpdesk';
-  
-  static bool isUserManagementPermission = false;
-  static var userManagementPermission = '';
-  
-  static bool isUserAddCommitteePermission = false;
-  static var userAddCommitteePermission = '';
-  
-  static bool isUserAddPollPermission = false;
-  static var userAddPollPermission = '';
-  
-  static bool isUserUploadDocumentsPermission=false;
-  static var userUploadDocumentsPermission = '';
-  
-  static bool isUserAddBroadCastPermission=false;
-  static var userAddBroadCastPermission = '';
-  
-  static bool isUserViewReportsPermission=false;
-  static var userViewReportsPermission = '';
-  
-  static bool isUserVehiclePhonePermission=false;
-  static var uerVehiclePhonePermission = '';
-  
-  static bool isUserMemberPhonePermission=false;
-  static var userMemberPhonePermission = '';
-  
-  static bool isUserCommitteeEmailPermission=false;
-  static var userCommitteeEmailPermission = '';
-  
-  static bool isUserCommitteePhonePermission=false;
-  static var userCommitteePhonePermission = '';
+  static bool isSocHideTenantPermission=false;
+  static var socHideTenantPermission="HIDE_TENANT";
 
-  static bool isAddExpensePermission=false;
-  static var addExpensePermission = 'Accounting';
+  static bool isSocHideHelperPermission=false;
+  static var socHideHelperPermission="HIDE_HELPER";
+
+  static bool isSocHideVehiclePermission=false;
+  static var socHideVehiclePermission="HIDE_VEHICLE";
+
+  static bool isSocHideGatePassPermission=false;
+  static var socHideGatePassPermission="HIDE_GATEPASS";
+
+  static bool isSocHideHelpDeskPermission=false;
+  static var socHideHelpDeskPermission="HIDE_HELPDESK";
+
+  static bool isSocHideClassifiedPermission=false;
+  static var socHideClassifiedPermission="HIDE_CLASSIFIED";
+
+  static bool isSocHideOffersPermission=false;
+  static var socHideOffersPermission="HIDE_OFFERS";
+
+  static bool isSocHideServicesPermission=false;
+  static var socHideServicesPermission="HIDE_SERVICES";
+
+  static bool isSocHideAlreadyPaidPermission=false;
+  static var socHideAlreadyPaidPermission="HIDE_ALREADYPAID";
+
+  static bool isSocHideContactPermission=false;
+  static var socHideContactPermission="HIDE_CONTACT";
+
+  static bool isSocHideCommitteeContactPaidPermission=false;
+  static var socHideCommitteeContactPaidPermission="HIDE_COMMITTEECONTACT";
+
+  static bool isSocHideExpensePermission=false;
+  static var socHideExpensePermission="HIDE_EXPENSES";
+
 
 
 //addMember,gatepass,classifieds,myUnit,directory,viewFacility,helpDesk,viewDocuments,admin,adminGatepass,
 // adminHelpdesk,userManagement,addCommitee,addPoll,uploadDocuments,AddFacility,addBroadcast,viewReports,vehiclePhone,
 // memberPhone,commiteeEmail,commiteePhone,rentalTenantManagement,editSociety,Accounting,editVoucher,deleteVoucher,
 // generateBill,generateInvoice,createReceipts,createVoucher,bulkPayment,deletebulkPayment,editBill,deletebulkBill,editPayment
+}
+
+class AppUserPermission{
+
+  static bool isUserAddMemberPermission = false;
+  static var userAddMemberPermission = 'addMember';
+
+  static bool isUserHelpDeskPermission = false;
+  static var userHelpDeskPermission = 'helpDesk';
+
+  static bool isUserAdminPermission = false;
+  static var userAdminPermission = 'admin';
+
+  static bool isAccountingPermission=false;
+  static var addAccountingPermission = 'Accounting';
+
+  static bool isAddExpensePermission=false;
+  static var addExpensePermission = 'AddExpense';
+
+  static bool isUserHideMyDuesPermission=false;
+  static var userHideMyDuesPermission = 'Hide_MyDues';
+
+  static bool isUserBroadcastPermission=false;
+  static var userBroadcastPermission = 'Broadcast';
+
+  static bool isUserUserManagementPermission=false;
+  static var userUserManagementPermission = 'UserManagement';
+
+
+
+/*  static bool isUserAssignHelpdeskPermission=false;
+  static var userAssignHelpdeskPermission = 'AssignedHelpdesk';
+
+  static bool isUserAdminHelpDeskPermission = false;
+  static var userAdminHelpDeskPermission = 'adminHelpdesk';*/
+
+/*
+
+
+  static bool isUserAdminGatePassPermission = false;
+  static var userAdminGatePassPermission = '';
+
+  static bool isUserMyUnitPermission = false;
+  static var userMyUnitPermission = '';
+
+  static bool isUserDirectoryPermission = false;
+  static var userDirectoryPermission = '';
+
+  static bool isUserGatePassPermission = false;
+  static var userGatePassPermission = '';
+
+  static bool isUserDocumentPermission = false;
+  static var userDocumentPermission = '';
+
+  static bool isUserClassifiedPermission = false;
+  static var userClassifiedPermission = '';
+
+  static bool isUserViewFacilityPermission = false;
+  static var userViewFacilityPermission = '';
+
+  static bool isUserAddFacilityPermission = false;
+  static var userAddFacilityPermission = '';
+
+  static bool isUserViewDocumentsPermission = false;
+  static var userViewDocumentsPermission = '';
+
+  static bool isUserManagementPermission = false;
+  static var userManagementPermission = '';
+
+  static bool isUserAddCommitteePermission = false;
+  static var userAddCommitteePermission = '';
+
+  static bool isUserAddPollPermission = false;
+  static var userAddPollPermission = '';
+
+  static bool isUserUploadDocumentsPermission=false;
+  static var userUploadDocumentsPermission = '';
+
+  static bool isUserAddBroadCastPermission=false;
+  static var userAddBroadCastPermission = '';
+
+  static bool isUserViewReportsPermission=false;
+  static var userViewReportsPermission = '';
+
+  static bool isUserVehiclePhonePermission=false;
+  static var uerVehiclePhonePermission = '';
+
+  static bool isUserMemberPhonePermission=false;
+  static var userMemberPhonePermission = '';
+
+  static bool isUserCommitteeEmailPermission=false;
+  static var userCommitteeEmailPermission = '';
+
+  static bool isUserCommitteePhonePermission=false;
+  static var userCommitteePhonePermission = '';*/
+
 }

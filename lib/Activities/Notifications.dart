@@ -279,7 +279,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
 
   }
 
-  navigateToPage(DBNotificationPayload _dbNotificationPayload)  {
+  navigateToPage(DBNotificationPayload _dbNotificationPayload)  async {
     print('context : ' + context.toString());
     print('_dbNotificationPayload.ID : ' + _dbNotificationPayload.ID.toString());
     print('_dbNotificationPayload.VID : ' + _dbNotificationPayload.VID.toString());
@@ -340,8 +340,10 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                   AppLocalizations.of(context).translate('my_dues'))));
 
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_RECEIPT) {
+      String block = await GlobalFunctions.getBlock();
+      String flat = await GlobalFunctions.getFlat();
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseLedger()));
+          context, MaterialPageRoute(builder: (context) => BaseLedger(block,flat)));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_FVISITOR) {
       Navigator.push(
           context,

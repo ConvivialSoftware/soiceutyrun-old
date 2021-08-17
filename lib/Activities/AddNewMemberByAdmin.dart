@@ -46,13 +46,13 @@ class AddNewMemberByAdminState
   TextEditingController _notModeratorController = TextEditingController();
 
 
-  List<DropdownMenuItem<String>> _blockListItems =
+  /*List<DropdownMenuItem<String>> _blockListItems =
   new List<DropdownMenuItem<String>>();
   String _selectedBlock;
 
   List<DropdownMenuItem<String>> _flatListItems =
   new List<DropdownMenuItem<String>>();
-  String _selectedFlat;
+  String _selectedFlat;*/
 
   List<String> _membershipTypeList = new List<String>();
   List<DropdownMenuItem<String>> __membershipTypeListItems =
@@ -70,16 +70,16 @@ class AddNewMemberByAdminState
   @override
   void initState() {
     super.initState();
-    Provider.of<UserManagementResponse>(context,listen: false).getBlock().then((value) {
-      setBlockData(value);
-      _selectedBlock=widget.block;
+    /*Provider.of<UserManagementResponse>(context,listen: false).getBlock().then((value) {
+      //setBlockData(value);
+      //_selectedBlock=widget.block;
       print('widget.block : '+widget.block.toString());
       print('widget.flat : '+widget.flat.toString());
       Provider.of<UserManagementResponse>(context,listen: false).getFlat(widget.block).then((value) {
         setFlatData(value);
       });
     });
-
+*/
     getMembershipTypeData();
     gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
@@ -167,7 +167,7 @@ class AddNewMemberByAdminState
         child: Container(
           child: Column(
             children: <Widget>[
-              Row(
+             /* Row(
                 children: <Widget>[
                   Flexible(
                     flex: 1,
@@ -250,7 +250,7 @@ class AddNewMemberByAdminState
                     ),
                   ),
                 ],
-              ),
+              ),*/
               AppTextField(
                 textHintContent:
                 AppLocalizations.of(context).translate('name') + '*',
@@ -637,27 +637,28 @@ class AddNewMemberByAdminState
   }
 
   void verifyInfo() {
-    if (_selectedBlock != null) {
+    /*if (_selectedBlock != null) {
       if (_selectedFlat != null) {
-        if (_nameController.text.length > 0) {
-          //if (_mobileController.text.length > 0) {
-          if (_selectedMembershipType != null) {
-            if (_selectedLivesHere != null) {
-               addMember();
-            } else {
-              GlobalFunctions.showToast('Please Select Lives Here');
-            }
-          } else {
-            GlobalFunctions.showToast('Please Select MemberShip Type');
-          }
-        } else {
-          GlobalFunctions.showToast('Please Enter Name');
-        }
+
       } else {
         GlobalFunctions.showToast("Please Select Flat");
       }
     } else {
       GlobalFunctions.showToast("Please Select Block");
+    }*/
+    if (_nameController.text.length > 0) {
+      //if (_mobileController.text.length > 0) {
+      if (_selectedMembershipType != null) {
+        if (_selectedLivesHere != null) {
+          addMember();
+        } else {
+          GlobalFunctions.showToast('Please Select Lives Here');
+        }
+      } else {
+        GlobalFunctions.showToast('Please Select MemberShip Type');
+      }
+    } else {
+      GlobalFunctions.showToast('Please Enter Name');
     }
   }
 
@@ -674,8 +675,8 @@ class AddNewMemberByAdminState
     _progressDialog.show();
 
     Provider.of<UserManagementResponse>(context,listen: false).addMemberByAdmin(
-        _selectedBlock,
-        _selectedFlat,
+        widget.block,
+        widget.flat,
         _nameController.text,
         _mobileController.text,
         _emailController.text,
@@ -724,23 +725,17 @@ class AddNewMemberByAdminState
 
   getMembershipTypeData() {
 //Tenantype
-    GlobalFunctions.getUserType().then((value) {
-      if (value.toLowerCase() != 'tenant') {
-        _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
-      } else {
-        _membershipTypeList = ["Tenant"];
-      }
-      for (int i = 0; i < _membershipTypeList.length; i++) {
-        __membershipTypeListItems.add(DropdownMenuItem(
-          value: _membershipTypeList[i],
-          child: text(
-            _membershipTypeList[i],
-            textColor: GlobalVariables.black,
-          ),
-        ));
-      }
-      setState(() {});
-    });
+    _membershipTypeList = ["Owner", "Co-Owner", "Associate Member", "Owner Family"];
+    for (int i = 0; i < _membershipTypeList.length; i++) {
+      __membershipTypeListItems.add(DropdownMenuItem(
+        value: _membershipTypeList[i],
+        child: text(
+          _membershipTypeList[i],
+          textColor: GlobalVariables.black,
+        ),
+      ));
+    }
+    setState(() {});
     // _selectedMembershipType = __membershipTypeListItems[0].value;
   }
 
@@ -775,6 +770,7 @@ class AddNewMemberByAdminState
     });
   }
 
+/*
   void setBlockData(List<Block> _blockList) {
     for (int i = 0; i < _blockList.length; i++) {
       _blockListItems.add(DropdownMenuItem(
@@ -809,6 +805,7 @@ class AddNewMemberByAdminState
     setState(() {});
 
   }
+*/
 
 
 }

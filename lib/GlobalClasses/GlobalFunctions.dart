@@ -28,6 +28,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:intl/intl.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -487,12 +488,10 @@ class GlobalFunctions {
                 /*child: SvgPicture.asset(
                               GlobalVariables.overviewTxtPath,
                             )*/
-                child: text(
-                  title,
-                      textColor: GlobalVariables.green,
-                      fontSize: GlobalVariables.textSizeLargeMedium,
-                      fontWeight: FontWeight.bold
-                ),
+                child: text(title,
+                    textColor: GlobalVariables.green,
+                    fontSize: GlobalVariables.textSizeLargeMedium,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -608,9 +607,9 @@ class GlobalFunctions {
                   width: 32.0,
                 ),
                 text("Please Wait",
-                        textColor: GlobalVariables.white,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        fontWeight: FontWeight.bold),
+                    textColor: GlobalVariables.white,
+                    fontSize: GlobalVariables.textSizeSMedium,
+                    fontWeight: FontWeight.bold),
               ],
             ),
           ),
@@ -803,15 +802,16 @@ class GlobalFunctions {
   }
 
   static Future<String> localPath() async {
-   /* final directory = Platform.isAndroid
+    /* final directory = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
     return directory.path;*/
     String path;
 
-    if(Platform.isAndroid){
-      path =  await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
-    }else{
+    if (Platform.isAndroid) {
+      path = await ExtStorage.getExternalStoragePublicDirectory(
+          ExtStorage.DIRECTORY_DOWNLOADS);
+    } else {
       final directory = await getApplicationDocumentsDirectory();
       path = directory.path;
     }
@@ -932,7 +932,8 @@ class GlobalFunctions {
                         child: text(
                           AppLocalizations.of(context)
                               .translate('coming_soon_text'),
-                              textColor: GlobalVariables.black, fontSize: GlobalVariables.textSizeLargeMedium,
+                          textColor: GlobalVariables.black,
+                          fontSize: GlobalVariables.textSizeLargeMedium,
                         ),
                       )
                     ],
@@ -979,8 +980,8 @@ class GlobalFunctions {
                             child: text(
                               AppLocalizations.of(context)
                                   .translate('account_deactivate'),
-                                fontSize: GlobalVariables.textSizeMedium,
-                                textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeMedium,
+                              textColor: GlobalVariables.black,
                             )),
                         Container(
                           height: 50,
@@ -1002,7 +1003,7 @@ class GlobalFunctions {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ),
@@ -1050,14 +1051,14 @@ class GlobalFunctions {
                           ),
                         ),
                         Container(
-                            margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
-                            child: text(
-                              AppLocalizations.of(context)
-                                  .translate('app_update'),
-                                fontSize: GlobalVariables.textSizeMedium,
-                                textColor: GlobalVariables.black,
-                              ),
-                            ),
+                          margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
+                          child: text(
+                            AppLocalizations.of(context)
+                                .translate('app_update'),
+                            fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.black,
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -1080,12 +1081,11 @@ class GlobalFunctions {
                                         side: BorderSide(
                                             color: GlobalVariables.green)),
                                     child: text(
-                                      AppLocalizations.of(context)
-                                          .translate('later'),
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium,
-                                      textColor: GlobalVariables.white
-                                    ),
+                                        AppLocalizations.of(context)
+                                            .translate('later'),
+                                        fontSize:
+                                            GlobalVariables.textSizeMedium,
+                                        textColor: GlobalVariables.white),
                                   ),
                                 ),
                               ),
@@ -1114,12 +1114,10 @@ class GlobalFunctions {
                                       side: BorderSide(
                                           color: GlobalVariables.green)),
                                   child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('update'),
-                                        fontSize:
-                                            GlobalVariables.textSizeMedium,
-                                    textColor: GlobalVariables.white
-                                  ),
+                                      AppLocalizations.of(context)
+                                          .translate('update'),
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      textColor: GlobalVariables.white),
                                 ),
                               ),
                             ),
@@ -1256,9 +1254,9 @@ class GlobalFunctions {
                             margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
                             child: text(
                               AppLocalizations.of(context).translate('oops'),
-                                  fontSize: GlobalVariables.textSizeLargeMedium,
-                                  textColor: GlobalVariables.green,
-                                  fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeLargeMedium,
+                              textColor: GlobalVariables.green,
+                              fontWeight: FontWeight.bold,
                             )),
                         Container(
                             alignment: Alignment.topLeft,
@@ -1266,8 +1264,8 @@ class GlobalFunctions {
                             child: text(
                               AppLocalizations.of(context)
                                   .translate('not_allow_run_app'),
-                                fontSize: GlobalVariables.textSizeMedium,
-                                textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeMedium,
+                              textColor: GlobalVariables.black,
                             )),
                         Container(
                           alignment: Alignment.topRight,
@@ -1293,10 +1291,9 @@ class GlobalFunctions {
                                   side:
                                       BorderSide(color: GlobalVariables.green)),
                               child: text(
-                                AppLocalizations.of(context)
-                                    .translate('logout'),
-                                    fontSize: GlobalVariables.textSizeMedium
-                              ),
+                                  AppLocalizations.of(context)
+                                      .translate('logout'),
+                                  fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ),
                         ),
@@ -1313,7 +1310,8 @@ class GlobalFunctions {
     BaseStatefulState.setCtx(context);
   }
 
-  static contactChairPersonForPermissionDialog(BuildContext context) {
+  /*static contactChairPersonForPermissionDialog(BuildContext context,
+      {imageWidth = 200, imageHeight = 200}) {
     return showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
@@ -1321,34 +1319,32 @@ class GlobalFunctions {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          //margin: EdgeInsets.all(20),
-                          child: SvgPicture.asset(
-                        GlobalVariables.verifiedContactIconPath,
-                        color: GlobalVariables.green,
-                        width: 80,
-                        height: 80,
-                      )),
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        child: text(
-                          AppLocalizations.of(context)
-                              .translate('contact_for_permission_text'),
-                              textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium
-                        ),
-                      )
-                    ],
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    showAdminPermissionDialogToAccessFeature(context,
+                        imageWidth: imageWidth, imageHeight: imageHeight)
+                    *//*   Container(
+                        //margin: EdgeInsets.all(20),
+                        child: SvgPicture.asset(
+                      GlobalVariables.verifiedContactIconPath,
+                      color: GlobalVariables.green,
+                      width: 80,
+                      height: 80,
+                    )),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: text(
+                        AppLocalizations.of(context)
+                            .translate('contact_for_permission_text'),
+                            textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium
+                      ),
+                    )*//*
+                  ],
                 ),
               );
             }));
-  }
+  }*/
 
   static changeStatusColor(Color color) async {
     try {
@@ -1385,8 +1381,8 @@ class GlobalFunctions {
     );
   }
 
-  static Future<bool> convertBase64StringToFile(String base64String,String fileName) async {
-
+  static Future<bool> convertBase64StringToFile(
+      String base64String, String fileName) async {
     try {
       base64String = base64String.replaceAll('\n', '');
       base64String = base64String.replaceAll('\r', '');
@@ -1403,11 +1399,113 @@ class GlobalFunctions {
       // await file.writeAsBytes(decodedBytes.buffer.asUint8List());
       print('complete');
       return true;
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return false;
     }
+  }
 
+  static showAdminPermissionDialogToAccessFeature(BuildContext context,
+      bool isCloseDisplay,{var imageWidth = 200,var imageHeight = 200}) {
+    return isCloseDisplay
+        ? showDialog(
+            context: context,
+            builder: (BuildContext context) => StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(top: 16.0, right: 16.0),
+                          alignment: Alignment.topRight,
+                          child: AppIconButton(
+                            Icons.close,
+                            iconColor: GlobalVariables.black,
+                            iconSize: 25,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        AppContainer(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                child: AppAssetsImage(
+                                  GlobalVariables.notAllowedImagePath,
+                                  imageWidth: imageWidth,
+                                  imageHeight: imageHeight,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                child: text(
+                                    AppLocalizations.of(context)
+                                        .translate('not_allowed_screen'),
+                                    fontSize: GlobalVariables.textSizeMedium,
+                                    textColor: GlobalVariables.black),
+                              )
+                            ],
+                          ),
+                        ),
+                        /*   Container(
+                        //margin: EdgeInsets.all(20),
+                        child: SvgPicture.asset(
+                      GlobalVariables.verifiedContactIconPath,
+                      color: GlobalVariables.green,
+                      width: 80,
+                      height: 80,
+                    )),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: text(
+                        AppLocalizations.of(context)
+                            .translate('contact_for_permission_text'),
+                            textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium
+                      ),
+                    )*/
+                      ],
+                    ),
+                  );
+                }))
+        : Column(
+            children: [
+              AppContainer(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: AppAssetsImage(
+                        GlobalVariables.notAllowedImagePath,
+                        imageWidth: imageWidth,
+                        imageHeight: imageHeight,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: text(
+                          AppLocalizations.of(context)
+                              .translate('not_allowed_screen'),
+                          fontSize: GlobalVariables.textSizeMedium,
+                          textColor: GlobalVariables.black),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          );
   }
 
 /*static void checkRedirectFromBackgroundNotification(BuildContext context) {
@@ -1418,5 +1516,11 @@ class GlobalFunctions {
       Navigator.of(context).pop();
     }
   }*/
+
+  static String getCurrencyFormat(String amount){
+
+    return NumberFormat.currency(locale: 'HI',symbol: 'Rs. ',decimalDigits: 2).format(double.parse(amount));
+
+  }
 
 }

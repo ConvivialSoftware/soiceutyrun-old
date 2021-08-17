@@ -694,10 +694,20 @@ class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
          _progressDialog.hide();
          if(value.status){
            if(attachmentFileName!=null && attachmentFilePath!=null){
-             GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+             //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
+             GlobalFunctions.getTemporaryDirectoryPath()
+                 .then((value) {
+               GlobalFunctions.removeAllFilesFromDirectory(
+                   value);
+             });
            }
            if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
-             GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
+             //GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
+             GlobalFunctions.getTemporaryDirectoryPath()
+                 .then((value) {
+               GlobalFunctions.removeAllFilesFromDirectory(
+                   value);
+             });
            }
            Navigator.of(context).pop();
          }

@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  amazon_cognito_identity_dart:
-    dependency: "direct main"
-    description:
-      name: amazon_cognito_identity_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.22"
   analyzer:
     dependency: transitive
     description:
@@ -148,6 +141,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  charts_common:
+    dependency: transitive
+    description:
+      name: charts_common
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0"
+  charts_flutter:
+    dependency: "direct main"
+    description:
+      name: charts_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0"
   checked_yaml:
     dependency: transitive
     description:

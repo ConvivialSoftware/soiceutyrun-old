@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:amazon_cognito_identity_dart/cognito.dart';
+//import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'package:path/path.dart' as path;
 import 'dart:typed_data';
 
-import 'package:amazon_cognito_identity_dart/sig_v4.dart';
+//import 'package:amazon_cognito_identity_dart/sig_v4.dart';
 import 'package:http/http.dart' as http;
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 
+/*
 class AWSClient {
   String accessKeyId = 'AKIAX7HUJXO2LSCDTFL5'; // replace with your own access key
   String secretKeyId = 'Gk7VCniwnzmKwGPQAdILOlUf1Gu5qFDKNqxiybVX'; // replace with your own secret key
@@ -27,6 +28,7 @@ class AWSClient {
 
   String _identityPoolId = 'ap-south-1:7dbe6b7e-b49e-448e-b9a1-5130dbd3558f';
 
+*/
 /*
   final host = 's3.ap-southeast-1.amazonaws.com';
   final region = 'ap-southeast-1';
@@ -36,7 +38,8 @@ class AWSClient {
   final payload = SigV4.hashCanonicalRequest('');
   final datetime = SigV4.generateDatetime();
 
-*/
+*//*
+
 
 //s3://upload-download-image/uploads/
   Future<dynamic> uploadData(String folderName, String fileName, Uint8List data) async {
@@ -156,7 +159,8 @@ $payload''';
 
     print('complete!');
 
-  /*
+  */
+/*
    // final key = https://upload-download-image.s3.ap-south-1.amazonaws.com/uploads/NOC.pdf;
     //final key = bucketname+'/'+host+'/'+folderName+'/'+fileName;
 
@@ -206,7 +210,8 @@ $payload''';
     } catch (e) {
       print(e);
       return;
-    }*/
+    }*//*
+
 
   }
 
@@ -219,8 +224,10 @@ $payload''';
 }
 
 
+*/
 
 
+/*
 
 class Policy {
   String expiration;
@@ -293,4 +300,4 @@ class Policy {
 }
 ''';
   }
-}
+}*/

@@ -15,6 +15,7 @@ import 'package:societyrun/Models/LedgerAccount.dart';
 import 'package:societyrun/Models/VoucherAmount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -39,6 +40,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
 
 
   var societyId, flat, block;
+  var _totalSumUp=0.0;
 
   ProgressDialog _progressDialog;
 
@@ -144,19 +146,27 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
   }
 
   getExpenseListDataLayout() {
-    return _expenseList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          10, MediaQuery.of(context).size.width/8, 10, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
-            itemCount: _expenseList.length,
-            itemBuilder: (context, position) {
-              return getExpenseDescListItemLayout(position);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
+    return _expenseList.length>0 ? Column(
+      children: [
+        Container(
+          alignment: Alignment.topRight,
+          margin: EdgeInsets.fromLTRB(
+              16, 16, 16, 16),
+          child: text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
+              textColor: GlobalVariables.white,fontWeight: FontWeight.bold),
+        ),
+        Container(
+          child: Builder(
+              builder: (context) => ListView.builder(
+                // scrollDirection: Axis.vertical,
+                itemCount: _expenseList.length,
+                itemBuilder: (context, position) {
+                  return getExpenseDescListItemLayout(position);
+                }, //  scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              )),
+        ),
+      ],
     ):Container();
   }
 
@@ -178,13 +188,8 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 builder: (context) => BaseExpenseVoucher(_expenseList[position])));
 
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.1,
-        padding: EdgeInsets.all(20),
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: GlobalVariables.white),
+      child: AppContainer(
+        isListItem: true,
         child: Column(
           children: [
             Container(
@@ -303,11 +308,14 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog.show();
     restClientERP.getExpenseData(societyId,startDate,endDate,heads,ledgerYear).then((value) {
+      _progressDialog.hide();
       print('Response : ' + value.toString());
       List<dynamic> _list = value.data;
      _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
       //getExpenseAccountLedger();
-      _progressDialog.hide();
+      for(int j=0;j<_expenseList.length;j++){
+        _totalSumUp += double.parse(_expenseList[j].AMOUNT==null ? '0' : _expenseList[j].AMOUNT);
+      }
       setState(() {});
     })/*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){

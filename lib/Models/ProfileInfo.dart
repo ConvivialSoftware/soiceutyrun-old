@@ -85,7 +85,7 @@ class ProfileInfo {
         TYPE: json["TYPE"],
         LIVES_HERE: json["LIVES_HERE"],
         NAME: json["NAME"],
-        ALTERNATE_CONTACT1: json["ALTERNATE_CONTACT1"],
+        ALTERNATE_CONTACT1: json["ALTERNATE_CONTACT1"]??'',
         ALTERNATE_CONTACT2: json["ALTERNATE_CONTACT2"],
         PROFILE_PHOTO: json["PROFILE_PHOTO"]??"",
         ADDRESS: json["ADDRESS"],
@@ -106,7 +106,7 @@ class ProfileInfo {
         PERMISSIONS: json["PERMISSIONS"],
         STATUS: json["STATUS"],
         Staff_QR_Image: json["Staff_QR_Image"],*/
-        Phone: json["Phone"],
+        Phone: json["Phone"]??'',
         Email: json["Email"]);
   }
 }

@@ -16,6 +16,7 @@ import 'package:societyrun/Models/Expense.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Models/VoucherAmount.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseExpenseVoucher extends StatefulWidget {
@@ -210,13 +211,13 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
       child: Column(
         children: [
 
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
+          AppContainer(
+            /*margin: EdgeInsets.fromLTRB(10, 80, 10, 10),
             padding: EdgeInsets.all(
                 16), // height: MediaQuery.of(context).size.height / 0.5,
             decoration: BoxDecoration(
                 color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(15)),
+                borderRadius: BorderRadius.circular(15)),*/
             child: Column(
               children: [
                 Container(
@@ -268,13 +269,14 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
               ],
             ),
           ),*/
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          AppContainer(
+            isListItem: true,
+            /*margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
             padding: EdgeInsets.all(
                 10), // height: MediaQuery.of(context).size.height / 0.5,
             decoration: BoxDecoration(
                 color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(15)),
+                borderRadius: BorderRadius.circular(15)),*/
             child: Column(
               children: <Widget>[
                 Container(
@@ -292,6 +294,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                       10, 10, 10, 10),
                   child: Builder(
                       builder: (context) => ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         // scrollDirection: Axis.vertical,
                         itemCount: _voucherAmountList.length,
                         itemBuilder: (context, position) {

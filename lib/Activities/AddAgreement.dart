@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/AWS/AWSClient.dart';
+import 'package:societyrun/Activities/AddTenant.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -42,8 +43,9 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   String attachmentFileName;
   String attachmentCompressFilePath;
 
-  TextEditingController _agreementStartDateController = TextEditingController();
-  TextEditingController _agreementEndDateController = TextEditingController();
+  TextEditingController _agreementFromController = TextEditingController();
+  TextEditingController _agreementToController = TextEditingController();
+  TextEditingController _noOfBachelorController = TextEditingController();
 
   /*List<DropdownMenuItem<String>> _blockListItems =
       new List<DropdownMenuItem<String>>();
@@ -53,13 +55,17 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       new List<DropdownMenuItem<String>>();
   String _selectedFlat;*/
 
+  List<String> _rentedList = new List<String>();
+  List<DropdownMenuItem<String>> _rentedToListItems =
+  new List<DropdownMenuItem<String>>();
   String _selectedRentedTo;
+
   String _selectedIssueNOC;
 
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
 
-  List<String> selectedUserList = List<String>();
+ // List<String> selectedUserList = List<String>();
 
   FlutterUploader uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
@@ -69,6 +75,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   @override
   void initState() {
     super.initState();
+    getRentedToData();
     Provider.of<UserManagementResponse>(context, listen: false)
         .getBlock()
         .then((value) {
@@ -177,264 +184,47 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       child: AppContainer(
         child: Column(
           children: <Widget>[
-            Builder(
-                builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: widget.isAdmin
-                          ? userManagementResponse.tenantListForAdmin.length
-                          : userManagementResponse.tenantList.length,
-                      itemBuilder: (context, position) {
-                        return Container(
-                          // width: MediaQuery.of(context).size.width / 1.1,
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: GlobalVariables.white),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      if (selectedUserList.contains(widget
-                                              .isAdmin
-                                          ? userManagementResponse
-                                              .tenantListForAdmin[position]
-                                              .ID
-                                          : userManagementResponse
-                                              .tenantList[position].ID)) {
-                                        selectedUserList.remove(
-                                            widget.isAdmin
-                                                ? userManagementResponse
-                                                    .tenantListForAdmin[
-                                                        position]
-                                                    .ID
-                                                : userManagementResponse
-                                                    .tenantList[position]
-                                                    .ID);
-                                      } else {
-                                        selectedUserList.add(widget.isAdmin
-                                            ? userManagementResponse
-                                                .tenantListForAdmin[
-                                                    position]
-                                                .ID
-                                            : userManagementResponse
-                                                .tenantList[position].ID);
-                                      }
-
-                                      print('inviteUserList : ' +
-                                          selectedUserList.toString());
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: selectedUserList.contains(widget
-                                                      .isAdmin
-                                                  ? userManagementResponse
-                                                      .tenantListForAdmin[
-                                                          position]
-                                                      .ID
-                                                  : userManagementResponse
-                                                      .tenantList[position]
-                                                      .ID)
-                                              ? GlobalVariables.green
-                                              : GlobalVariables.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                            color: selectedUserList.contains(widget
-                                                        .isAdmin
-                                                    ? userManagementResponse
-                                                        .tenantListForAdmin[
-                                                            position]
-                                                        .ID
-                                                    : userManagementResponse
-                                                        .tenantList[
-                                                            position]
-                                                        .ID)
-                                                ? GlobalVariables.green
-                                                : GlobalVariables
-                                                    .mediumGreen,
-                                            width: 2.0,
-                                          )),
-                                      child: AppIcon(
-                                        Icons.check,
-                                        iconColor: selectedUserList
-                                                .contains(widget.isAdmin
-                                                    ? userManagementResponse
-                                                        .tenantListForAdmin[
-                                                            position]
-                                                        .ID
-                                                    : userManagementResponse
-                                                        .tenantList[
-                                                            position]
-                                                        .ID)
-                                            ? GlobalVariables.white
-                                            : GlobalVariables.transparent,
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.topLeft,
-                                            //  color:GlobalVariables.grey,
-                                            child: text(
-                                                widget.isAdmin
-                                                    ? userManagementResponse
-                                                        .tenantListForAdmin[
-                                                            position]
-                                                        .NAME
-                                                    : userManagementResponse
-                                                        .tenantList[
-                                                            position]
-                                                        .NAME,
-                                                textColor:
-                                                    GlobalVariables.green,
-                                                fontSize: GlobalVariables
-                                                    .textSizeMedium,
-                                             //   fontWeight: FontWeight.bold,
-                                                textStyleHeight: 1.0),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-            Divider(),
             Container(
-              child: Column(
-                children: [
-                  Container(
-                    // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: InkWell(
-                            //  splashColor: GlobalVariables.mediumGreen,
-                            onTap: () {
-                              _selectedRentedTo = AppLocalizations.of(context)
-                                  .translate('family');
-                              setState(() {});
-                            },
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color: _selectedRentedTo ==
-                                                AppLocalizations.of(context)
-                                                    .translate('family')
-                                            ? GlobalVariables.green
-                                            : GlobalVariables.white,
-                                        borderRadius:
-                                            BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color: _selectedRentedTo ==
-                                                  AppLocalizations.of(context)
-                                                      .translate('family')
-                                              ? GlobalVariables.green
-                                              : GlobalVariables.mediumGreen,
-                                          width: 2.0,
-                                        )),
-                                    child: AppIcon(Icons.check,
-                                        iconColor: GlobalVariables.white),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    child: text(
-                                      AppLocalizations.of(context)
-                                          .translate('family'),
-                                      textColor: GlobalVariables.green,
-                                      fontSize:
-                                          GlobalVariables.textSizeMedium,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: InkWell(
-                            //  splashColor: GlobalVariables.mediumGreen,
-                            onTap: () {
-                              _selectedRentedTo = AppLocalizations.of(context)
-                                  .translate('group_bachelor');
-                              setState(() {});
-                            },
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color: _selectedRentedTo ==
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'group_bachelor')
-                                            ? GlobalVariables.green
-                                            : GlobalVariables.white,
-                                        borderRadius:
-                                            BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color: _selectedRentedTo ==
-                                                  AppLocalizations.of(context)
-                                                      .translate(
-                                                          'group_bachelor')
-                                              ? GlobalVariables.green
-                                              : GlobalVariables.mediumGreen,
-                                          width: 2.0,
-                                        )),
-                                    child: AppIcon(Icons.check,
-                                        iconColor: GlobalVariables.white),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    child: text(
-                                        AppLocalizations.of(context)
-                                            .translate('group_bachelor'),
-                                        textColor: GlobalVariables.green,
-                                        fontSize:
-                                            GlobalVariables.textSizeMedium),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+              decoration: BoxDecoration(
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: GlobalVariables.mediumGreen,
+                    width: 2.0,
+                  )),
+              child: ButtonTheme(
+                child: DropdownButtonFormField(
+                  items: _rentedToListItems,
+                  value: _selectedRentedTo,
+                  onChanged: (value){
+                    _selectedRentedTo=value;
+                    setState(() {});
+                  },
+                  isExpanded: true,
+                  icon: AppIcon(
+                    Icons.keyboard_arrow_down,
+                    iconColor: GlobalVariables.mediumGreen,
                   ),
-                ],
+                  decoration: InputDecoration(
+                    //filled: true,
+                    //fillColor: Hexcolor('#ecedec'),
+                      labelText: AppLocalizations.of(context)
+                          .translate('rented_to'),
+                      labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent))
+                    // border: new CustomBorderTextFieldSkin().getSkin(),
+                  ),
+                ),
               ),
             ),
             AppTextField(
               textHintContent:
                   AppLocalizations.of(context).translate('start_date')+'*',
-              controllerCallback: _agreementStartDateController,
+              controllerCallback: _agreementFromController,
               readOnly: true,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               suffixIcon: AppIconButton(
@@ -442,7 +232,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                 iconColor: GlobalVariables.mediumGreen,
                 onPressed: () {
                   GlobalFunctions.getSelectedDate(context).then((value) {
-                    _agreementStartDateController.text =
+                    _agreementFromController.text =
                         value.day.toString().padLeft(2, '0') +
                             "-" +
                             value.month.toString().padLeft(2, '0') +
@@ -455,7 +245,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
             AppTextField(
               textHintContent:
                   AppLocalizations.of(context).translate('end_date')+'*',
-              controllerCallback: _agreementEndDateController,
+              controllerCallback: _agreementToController,
               readOnly: true,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               suffixIcon: AppIconButton(
@@ -463,7 +253,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                 iconColor: GlobalVariables.mediumGreen,
                 onPressed: () {
                   GlobalFunctions.getSelectedDate(context).then((value) {
-                    _agreementEndDateController.text =
+                    _agreementToController.text =
                         value.day.toString().padLeft(2, '0') +
                             "-" +
                             value.month.toString().padLeft(2, '0') +
@@ -473,6 +263,12 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                 },
               ),
             ),
+            _selectedRentedTo== AppLocalizations.of(context)
+                .translate('group_bachelor') ? AppTextField(
+                textHintContent: AppLocalizations.of(context).translate('no_of_bachelor'),
+                controllerCallback: _noOfBachelorController,
+              keyboardType: TextInputType.number,
+            ):SizedBox(),
             widget.isAdmin
                 ? Container(
                     child: Column(
@@ -701,13 +497,32 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               ],
             ),
             Container(
-              alignment: Alignment.topLeft,
+              alignment: Alignment.topRight,
               height: 45,
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: AppButton(
-                textContent: AppLocalizations.of(context).translate('submit'),
+                textContent: AppLocalizations.of(context).translate('next'),
                 onPressed: () {
-                  verifyInfo();
+
+                  if(verifyInfo()) {
+                    AddAgreementInfo agreementInfo = AddAgreementInfo(
+                      rentedTo: _selectedRentedTo,
+                      startDate: _agreementFromController.text,
+                      endDate: _agreementToController.text,
+                      noOfBachelor: _noOfBachelorController.text.isEmpty
+                          ? '1'
+                          : _noOfBachelorController.text,
+                      isNocEmail: _selectedIssueNOC,
+                      agreementAttachmentPath: attachmentFilePath,
+                      block: widget.block,
+                      flat: widget.flat,
+                      agreementAttachmentName: attachmentFileName
+                    );
+
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => BaseAddTenant(agreementInfo,widget.isAdmin)));
+                  }
+                  //verifyInfo();
                   //AWSClient().downloadData('uploads', 'file-sample_150kB.pdf');
                 },
               ),
@@ -718,28 +533,45 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
     );
   }
 
-  void verifyInfo() {
-    if(selectedUserList.isNotEmpty) {
-      if (_selectedRentedTo != null) {
-        if (_agreementStartDateController.text.length > 0) {
-          if (_agreementEndDateController.text.length > 0) {
-            if (attachmentFilePath != null) {
-              addAgreement();
-            } else {
-              GlobalFunctions.showToast('Please Select Agreement File');
-            }
-          } else {
-            GlobalFunctions.showToast('Please Enter End Date');
-          }
-        } else {
-          GlobalFunctions.showToast('Please Enter Start Date');
-        }
-      } else {
-        GlobalFunctions.showToast('Please Select Rented To');
-      }
+  void getRentedToData() {
+    _rentedList = ["Family","Group(Bachelor)","Other"];
+    for (int i = 0; i < _rentedList.length; i++) {
+      _rentedToListItems.add(DropdownMenuItem(
+        value: _rentedList[i],
+        child: text(
+          _rentedList[i],
+          textColor: GlobalVariables.black,
+        ),
+      ));
+    }
+    //  _selectedBloodGroup = __bloodGroupListItems[0].value;
+  }
+
+  bool verifyInfo() {
+    /*if(selectedUserList.isNotEmpty) {
+
     }else{
       GlobalFunctions.showToast('Please Select User');
+    }*/
+    if (_selectedRentedTo != null) {
+      if (_agreementFromController.text.length > 0) {
+        if (_agreementToController.text.length > 0) {
+          if (attachmentFilePath != null) {
+            return true;
+           // addAgreement();
+          } else {
+            GlobalFunctions.showToast('Please Select Agreement File');
+          }
+        } else {
+          GlobalFunctions.showToast('Please Enter End Date');
+        }
+      } else {
+        GlobalFunctions.showToast('Please Enter Start Date');
+      }
+    } else {
+      GlobalFunctions.showToast('Please Select Rented To');
     }
+    return false;
   }
 
   Future<void> addAgreement() async {
@@ -799,7 +631,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
             });
 
     }
-    if (!widget.isAdmin) {
+    /*if (!widget.isAdmin) {
       _progressDialog.show();
       Provider.of<UserManagementResponse>(context, listen: false)
           .addAgreement(
@@ -817,7 +649,8 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
         }
       });
-    } else {
+    }
+    else {
       _progressDialog.show();
       Provider.of<UserManagementResponse>(context, listen: false)
           .adminAddAgreement(
@@ -838,7 +671,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
         }
       });
-    }
+    }*/
   }
 
   void openFile(BuildContext context) {
@@ -851,36 +684,12 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
     });
   }
 
-  /*void setBlockData(List<Block> _blockList) {
-    for (int i = 0; i < _blockList.length; i++) {
-      _blockListItems.add(DropdownMenuItem(
-        value: _blockList[i].BLOCK,
-        child: text(
-          _blockList[i].BLOCK,
-          textColor: GlobalVariables.black,
-        ),
-      ));
-    }
+}
 
-    setState(() {});
-  }
+class AddAgreementInfo{
 
-  void setFlatData(List<Flat> _flatList) {
-    for (int i = 0; i < _flatList.length; i++) {
-      //print(_flatList[i].FLAT.toString());
-      _flatListItems.add(DropdownMenuItem(
-        value: _flatList[i].FLAT,
-        child: text(
-          _flatList[i].FLAT,
-          textColor: GlobalVariables.black,
-        ),
-      ));
-    }
-    print('widget.flat :' + widget.flat.toString());
+  String rentedTo,startDate,endDate,noOfBachelor,isNocEmail,agreementAttachmentPath,agreementAttachmentName,block,flat;
 
-    if (_selectedFlat == null) {
-      _selectedFlat = widget.flat;
-    }
-    setState(() {});
-  }*/
+  AddAgreementInfo({this.rentedTo, this.startDate, this.endDate,
+      this.noOfBachelor, this.isNocEmail, this.agreementAttachmentPath,this.block,this.flat,this.agreementAttachmentName});
 }

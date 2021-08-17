@@ -23,6 +23,10 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseLedger extends StatefulWidget {
+
+  String mBlock,mFlat;
+  BaseLedger(this.mBlock, this.mFlat);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -319,14 +323,14 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                               MaterialPageRoute(
                                   builder: (context) => BaseViewBill(
                                       value.ledgerList[position].RECEIPT_NO,
-                                      _yearSelectedItem)));
+                                      _yearSelectedItem,widget.mBlock,widget.mFlat)));
                         } else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewReceipt(
                                       value.ledgerList[position].RECEIPT_NO,
-                                      _yearSelectedItem)));
+                                      _yearSelectedItem,widget.mBlock,widget.mFlat)));
                         }
                       },
                       child: Container(
@@ -412,7 +416,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
 
   getLedgerData(var year) async {
     Provider.of<UserManagementResponse>(context, listen: false)
-        .getLedgerData(year)
+        .getLedgerData(year,widget.mBlock,widget.mFlat)
         .then((value) {
       _yearListItems = new List<DropdownMenuItem<String>>();
       if (UserManagementResponse.listYear.length > 0) {

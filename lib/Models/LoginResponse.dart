@@ -13,7 +13,7 @@ import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 class LoginDashBoardResponse extends ChangeNotifier {
   List<Banners> bannerList = List<Banners>();
-  List<LoginResponse> societyList = new List<LoginResponse>();
+  static List<LoginResponse> societyList = new List<LoginResponse>();
   String duesRs;
   String duesDate;
   bool isLoading = true;
@@ -22,12 +22,12 @@ class LoginDashBoardResponse extends ChangeNotifier {
   Future<dynamic> getDuesData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     String flat = await GlobalFunctions.getFlat();
     String block = await GlobalFunctions.getBlock();
 
-   await restClientERP.getDuesData(societyId, flat, block).then((value) {
+    await restClientERP.getDuesData(societyId, flat, block).then((value) {
       print('Response : ' + value.toString());
 
       if (value.status) {
@@ -38,21 +38,19 @@ class LoginDashBoardResponse extends ChangeNotifier {
 
       duesRs = value.DUES.toString();
       duesDate = value.DUE_DATE.toString();
-      if(duesRs==null){
-        duesRs='0.0';
+      if (duesRs == null) {
+        duesRs = '0.0';
       }
       if (duesRs.length == 0) {
         duesRs = "0.0";
       }
       if (duesDate == 'null') duesDate = '-';
       GlobalFunctions.saveDuesDataToSharedPreferences(duesRs, duesDate);
-
     });
 
-    isLoading=false;
+    isLoading = false;
     notifyListeners();
   }
-
 
   getBannerData() async {
     final dio = Dio();
@@ -65,11 +63,12 @@ class LoginDashBoardResponse extends ChangeNotifier {
       }
     });
 
-    isLoading=false;
+    isLoading = false;
     notifyListeners();
   }
 
-  Future<dynamic> getAllSocietyData(String loggedUsername,BuildContext context) async {
+  Future<dynamic> getAllSocietyData(
+      String loggedUsername, BuildContext context) async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
 
@@ -99,7 +98,7 @@ class LoginDashBoardResponse extends ChangeNotifier {
       }
     });
 
-    isLoading=false;
+    isLoading = false;
     notifyListeners();
     return societyList;
   }
@@ -113,20 +112,22 @@ class LoginDashBoardResponse extends ChangeNotifier {
       if (value.status) {
         List<dynamic> _list = value.data;
         List<ProfileInfo> _profileList =
-        List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
+            List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
         GlobalVariables.userNameValueNotifer.value = _profileList[0].NAME;
-        GlobalVariables.userImageURLValueNotifer.value = _profileList[0].PROFILE_PHOTO;
+        GlobalVariables.userImageURLValueNotifer.value =
+            _profileList[0].PROFILE_PHOTO;
         GlobalVariables.userImageURLValueNotifer.notifyListeners();
         GlobalVariables.userNameValueNotifer.notifyListeners();
-        GlobalFunctions.saveUserProfileToSharedPreferences(_profileList[0].PROFILE_PHOTO);
-        GlobalFunctions.saveDisplayUserNameToSharedPreferences(_profileList[0].NAME);
+        GlobalFunctions.saveUserProfileToSharedPreferences(
+            _profileList[0].PROFILE_PHOTO);
+        GlobalFunctions.saveDisplayUserNameToSharedPreferences(
+            _profileList[0].NAME);
 
-        isLoading=false;
+        isLoading = false;
         notifyListeners();
       }
     });
   }
-
 }
 
 @JsonSerializable()
@@ -162,40 +163,42 @@ class LoginResponse {
   String User_Status;
   String LoggedUsername;
   String SMS_CREDIT;
+  bool isSelected;
 
-  LoginResponse(
-      {this.ID,
-      this.USER_ID,
-      this.SOCIETY_ID,
-      this.BLOCK,
-      this.FLAT,
-      this.USER_NAME,
-      this.MOBILE,
-      this.PASSWORD,
-      this.USER_TYPE,
-      this.gcm_id,
-      this.token_id,
-      this.C_DATE,
-      this.message,
-      this.Society_Name,
-      this.Address,
-      this.Reg_no,
-      this.Contact,
-      this.Email,
-      this.society_Permissions,
-      this.Name,
-      this.Role,
-      this.TYPE,
-      this.Photo,
-      this.Permissions,
-      this.Consumer_no,
-      this.status,
-      this.Staff_QR_Image,
-      this.google_parameter,
-      this.User_Status,
-      this.LoggedUsername,
-      this.SMS_CREDIT,
-      });
+  LoginResponse({
+    this.ID,
+    this.USER_ID,
+    this.SOCIETY_ID,
+    this.BLOCK,
+    this.FLAT,
+    this.USER_NAME,
+    this.MOBILE,
+    this.PASSWORD,
+    this.USER_TYPE,
+    this.gcm_id,
+    this.token_id,
+    this.C_DATE,
+    this.message,
+    this.Society_Name,
+    this.Address,
+    this.Reg_no,
+    this.Contact,
+    this.Email,
+    this.society_Permissions,
+    this.Name,
+    this.Role,
+    this.TYPE,
+    this.Photo,
+    this.Permissions,
+    this.Consumer_no,
+    this.status,
+    this.Staff_QR_Image,
+    this.google_parameter,
+    this.User_Status,
+    this.LoggedUsername,
+    this.SMS_CREDIT,
+    this.isSelected=false,
+  });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
@@ -229,7 +232,6 @@ class LoginResponse {
         google_parameter: json["google_parameter"],
         User_Status: json["User_Status"],
         LoggedUsername: json["LoggedUsername"] ?? "",
-        SMS_CREDIT: json["SMS_CREDIT"] ?? "0"
-    );
+        SMS_CREDIT: json["SMS_CREDIT"] ?? "0");
   }
 }

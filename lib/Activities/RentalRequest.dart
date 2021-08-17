@@ -68,6 +68,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
         builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
+              backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
                 backgroundColor: GlobalVariables.green,
                 centerTitle: true,
@@ -131,26 +132,13 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
 */
   getRentalRequestLayout(UserManagementResponse value) {
     // print('MyTicketLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                !value.isLoading
-                    ? getRentalRequestListDataLayout(value) : GlobalFunctions.loadingWidget(context),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        !value.isLoading
+            ? getRentalRequestListDataLayout(value) : GlobalFunctions.loadingWidget(context),
+      ],
     );
   }
 
@@ -161,7 +149,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
           Container(
             //padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(
-                0, MediaQuery.of(context).size.height / 15, 0, 0),
+                0, 8, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -192,6 +180,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
         Navigator.push(context, MaterialPageRoute(builder: (context)=> BaseRentalRequestUserDetails(value.rentalRequestList[position])));
       },
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: <Widget>[
             Container(

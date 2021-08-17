@@ -496,7 +496,7 @@ class DescriptionOfHomeServiceState
                   ),
                 ),
                 text(
-                  'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price)),
+                  /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*/GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price),
                   textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
                 )
               ],

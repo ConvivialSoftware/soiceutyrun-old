@@ -14,17 +14,18 @@ class Bills {
   String INVOICE_NO;
   double AMOUNT;
   int RECEIVED;
+  int PENALTY_REM;
   String DISCOUNT;
   String FLAT;
 
-  Bills({this.BLOCK, this.NAME, this.TYPE, this.REMARK, this.START_DATE, this.C_DATE, this.END_DATE, this.DUE_DATE, this.HEAD, this.INVOICE_NO, this.AMOUNT, this.RECEIVED, this.DISCOUNT, this.FLAT});
+  Bills({this.BLOCK, this.NAME, this.TYPE, this.REMARK, this.START_DATE, this.C_DATE, this.END_DATE, this.DUE_DATE, this.HEAD, this.INVOICE_NO, this.AMOUNT, this.RECEIVED, this.DISCOUNT, this.FLAT,this.PENALTY_REM});
 
 
   factory Bills.fromJson(Map<String, dynamic> json){
     return Bills(
         BLOCK: json['BLOCK'],
         NAME: json['NAME'],
-        TYPE: json['TYPE'],
+        TYPE: json['TYPE']??'',
         REMARK: json['REMARK'],
         START_DATE: json['START_DATE'],
         C_DATE: json['C_DATE'],
@@ -34,8 +35,9 @@ class Bills {
         INVOICE_NO: json['INVOICE_NO'],
         AMOUNT: double.parse(json['AMOUNT'].toString()),
         RECEIVED: json['RECEIVED'],
+        PENALTY_REM: json['PENALTY_REM']??0,
         DISCOUNT: json['DISCOUNT'],
-        FLAT: json['INVOIFLATCE_NO']
+        FLAT: json['FLAT']
     );
   }
 

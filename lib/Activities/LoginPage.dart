@@ -362,7 +362,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               BorderRadius.all(Radius.circular(10))),
                           margin: EdgeInsets.fromLTRB(0, 30, 0, 15),
                           child: CarouselSlider.builder(
-                            options: CarouselOptions(height: 200.0, autoPlay: true,
+                            options: CarouselOptions(height: 200.0, autoPlay: false,
                               autoPlayInterval: Duration(seconds: 3),
                               viewportFraction: 1.0,
                               autoPlayAnimationDuration: Duration(

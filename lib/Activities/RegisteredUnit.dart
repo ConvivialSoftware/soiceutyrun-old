@@ -9,6 +9,7 @@ import 'package:societyrun/Activities/AddNewMemberByAdmin.dart';
 import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
+import 'package:societyrun/Activities/Unit.dart';
 import 'package:societyrun/Activities/UnitDetails.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -91,7 +92,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
                 elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
-                BaseUnitDetails(false),
+                BaseUnit(isRegisteredUnit: true,),
                 getUnRegisteredUnitLayout(value),
                 //getHelperLayout(),
               ]),

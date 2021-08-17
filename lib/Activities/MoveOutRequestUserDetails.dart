@@ -27,7 +27,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class BaseMoveOutRequestUserDetails extends StatefulWidget {
 
-  RentalRequest moveOutRequest;
+  TenantRentalRequest moveOutRequest;
 
   BaseMoveOutRequestUserDetails(this.moveOutRequest);
 
@@ -129,6 +129,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -153,27 +154,12 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      //height: double.maxFinite,
-      //height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                getMoveOutRequestUserDetailsLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        getMoveOutRequestUserDetailsLayout(),
+      ],
     );
   }
 
@@ -185,8 +171,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
           children: [
             Container(
               //padding: EdgeInsets.all(10),
-              margin: EdgeInsets.fromLTRB(
-                  18, MediaQuery.of(context).size.height / 15, 18, 0),
+              margin: EdgeInsets.all(16),
               child: Builder(
                   builder: (context) => ListView.builder(
                     // scrollDirection: Axis.vertical,
@@ -203,7 +188,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                   borderRadius: BorderRadius.circular(10.0))),
               elevation: 2.0,
               //  shadowColor: GlobalVariables.green.withOpacity(0.3),
-              margin: EdgeInsets.all(20),
+              margin: EdgeInsets.all(16),
               color: GlobalVariables.white,
               child: Container(
                 padding: EdgeInsets.all(16),
@@ -382,7 +367,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
             Container(
               alignment: Alignment.topRight,
               height: 45,
-              margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: AppButton(
                 textContent: AppLocalizations.of(context).translate('move_out'),
                 onPressed: () {
