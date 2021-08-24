@@ -44,6 +44,7 @@ class _BaseAppNotificationSettingsState
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
           centerTitle: true,
@@ -68,27 +69,12 @@ class _BaseAppNotificationSettingsState
   }
 
   getBaseLayout() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      //height: double.maxFinite,
-      //height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
-                getAppNotificationSettingsLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 150.0),
+        getAppNotificationSettingsLayout(),
+      ],
     );
   }
 
@@ -137,7 +123,7 @@ class _BaseAppNotificationSettingsState
   inAppCall() {
     return Container(
       margin:
-          EdgeInsets.fromLTRB(18, MediaQuery.of(context).size.height / 30, 18, 0),
+          EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Card(
         shape:
             (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
@@ -206,7 +192,8 @@ class _BaseAppNotificationSettingsState
   dailyHelps() {
     print('isDailyEntryNotification1 : ' + isDailyEntryNotification.toString());
     return Container(
-      margin: EdgeInsets.fromLTRB(18,15, 18, 0),
+      margin:
+      EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Card(
         shape:
             (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
@@ -343,7 +330,8 @@ class _BaseAppNotificationSettingsState
   yourGuest() {
     print('isGuestEntryNotification1 : ' + isGuestEntryNotification.toString());
     return Container(
-      margin: EdgeInsets.fromLTRB(18, 15, 18, 0),
+      margin:
+      EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Card(
         shape:
             (RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),

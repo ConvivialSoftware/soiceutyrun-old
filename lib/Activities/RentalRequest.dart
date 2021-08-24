@@ -188,9 +188,26 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(top: 5),
+                      // padding: EdgeInsets.all(20),
+                      // alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25)),
+                      child: AppAssetsImage(
+                        value.rentalRequestList[position].RENTED_TO.toLowerCase()=='family' ? GlobalVariables.familyImagePath
+                        : value.rentalRequestList[position].RENTED_TO.toLowerCase()=='group'? GlobalVariables.bachelorsImagePath
+                        : GlobalVariables.commercialImagePath,
+                        imageWidth: 40.0,
+                        imageHeight: 40.0,
+                        borderColor: GlobalVariables.transparent,
+                        borderWidth: 0.0,
+                        fit: BoxFit.cover,
+                        //radius: 15.0,
+                      )),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       alignment: Alignment.topLeft,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,18 +215,15 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    //  color:GlobalVariables.grey,
-                                    child: text(tenantName.replaceFirst(",", ""),
-                                        textColor: GlobalVariables.green,
-                                        fontSize:
-                                        GlobalVariables.textSizeSMedium,
-                                        fontWeight: FontWeight.bold,
-                                        textStyleHeight: 1.0),
-                                  ),
-                                ],
+                              Container(
+                                //  color:GlobalVariables.grey,
+                                child: Flexible(
+                                  child: text(tenantName.replaceFirst(",", ""),
+                                      textColor: GlobalVariables.green,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold,
+                                      textStyleHeight: 1.0),
+                                ),
                               ),
                               Container(
                                 padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -228,12 +242,32 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              /*Container(
+                                child: AppIcon(
+                                  Icons.phone_android,
+                                  iconColor: GlobalVariables.grey,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),*/
+                              Container(
+                                child: text(
+                                    tenantDetailsList[0].MOBILE,
+                                    fontSize: GlobalVariables.textSizeSMedium,
+                                    textColor: GlobalVariables.black,
+                                    textStyleHeight: 1.0),
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 4,
                           ),
                           Row(
                             children: [
-                              Container(
+                              /*Container(
                                 child: AppIcon(
                                   Icons.date_range,
                                   iconColor: GlobalVariables.grey,
@@ -241,12 +275,12 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                               ),
                               SizedBox(
                                 width: 4,
-                              ),
+                              ),*/
                               Container(
                                 child: text(
-                                    GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
+                                    'Expire on '+GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
                                     fontSize: GlobalVariables.textSizeSMedium,
-                                    textColor: GlobalVariables.black,
+                                    textColor: GlobalVariables.grey,
                                     textStyleHeight: 1.0),
                               ),
                             ],

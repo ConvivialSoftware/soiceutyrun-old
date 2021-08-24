@@ -27,8 +27,8 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
   @override
   void initState() {
     super.initState();
-  /*  Provider.of<UserManagementResponse>(context, listen: false)
-        .getUserManagementDashboard();*/
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getUserManagementDashboard();
   }
 
   @override
@@ -123,12 +123,12 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                             fontSize: GlobalVariables.textSizeNormal,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(width: 4,),
+                      /*SizedBox(width: 4,),
                       Container(
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 4),
                         child: AppAssetsImage(GlobalVariables.apartmentIconPath,imageColor: GlobalVariables.grey),
-                      ),
+                      ),*/
                     ],
                   ),
                 ],
@@ -227,11 +227,11 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                             GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 4,),
+                                     /* SizedBox(width: 4,),
                                       Container(
                                         margin: EdgeInsets.only(left: 4),
                                         child: AppAssetsImage(GlobalVariables.registeredUserIconPath,imageColor: GlobalVariables.grey),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                   Container(
@@ -285,11 +285,11 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                             GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 4,),
+                                   /*   SizedBox(width: 4,),
                                       Container(
                                         margin: EdgeInsets.only(left: 4),
                                         child: AppAssetsImage(GlobalVariables.activeUserIconPath,imageColor: GlobalVariables.grey),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                   Container(
@@ -343,11 +343,11 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                             GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 4,),
+                                    /*  SizedBox(width: 4,),
                                       Container(
                                         margin: EdgeInsets.only(left: 4),
                                         child: AppAssetsImage(GlobalVariables.mobileUserIconPath,imageColor: GlobalVariables.grey),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                   Container(
@@ -421,11 +421,11 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                             GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 4,),
+                                     /* SizedBox(width: 4,),
                                       Container(
                                         margin: EdgeInsets.only(left: 4),
                                         child: AppAssetsImage(GlobalVariables.pendingRequestIconPath,imageColor: GlobalVariables.grey),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                   Container(
@@ -480,11 +480,11 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                             GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 4,),
+                                      /*SizedBox(width: 4,),
                                       Container(
                                         margin: EdgeInsets.only(left: 4),
                                         child: AppAssetsImage(GlobalVariables.rentalRequestIconPath,imageColor: GlobalVariables.grey),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                   Container(
@@ -540,11 +540,11 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                             GlobalVariables.textSizeXXLarge,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 4,),
+                                    /*  SizedBox(width: 4,),
                                       Container(
                                         margin: EdgeInsets.only(left: 4),
                                         child: AppAssetsImage(GlobalVariables.moveOutRequestIconPath,imageColor: GlobalVariables.grey),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                   Container(

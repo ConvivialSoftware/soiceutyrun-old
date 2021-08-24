@@ -226,98 +226,39 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                 ],
               ),
             ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: AppTextField(
-                    textHintContent:
-                    AppLocalizations.of(context).translate('date_of_birth'),
-                    controllerCallback: _dobController,
-                    borderWidth: 2.0,
-                    contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    readOnly: true,
-                    suffixIcon: AppIconButton(
-                      Icons.date_range,
-                      iconColor: GlobalVariables.mediumGreen,
-                      onPressed: () {
-                        GlobalFunctions.getSelectedDateForDOB(context).then((value) {
-                          _dobController.text =
-                              value.day.toString().padLeft(2, '0') +
-                                  "-" +
-                                  value.month.toString().padLeft(2, '0') +
-                                  "-" +
-                                  value.year.toString();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(width: 5,),
-                Flexible(
-                  flex: 1,
-                  child: AppTextField(
-                    textHintContent:
-                    AppLocalizations.of(context).translate('contact1') + '*',
-                    controllerCallback: _mobileController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    contentPadding: EdgeInsets.only(top: 14),
-                    suffixIcon: AppIconButton(
-                      Icons.phone_android,
-                      iconColor: GlobalVariables.mediumGreen,
-                    ),
-                  ),
-                  /*Container(
-                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: GlobalVariables.mediumGreen,
-                          width: 3.0,
-                        )
-                    ),
-                    child: TextField(
-                      controller: _mobileController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
-                      style: TextStyle(color: GlobalVariables.black),
-                      decoration: InputDecoration(
-                        counterText: '',
-                        hintText: AppLocalizations.of(context)
-                            .translate('contact1')+'*',
-                        hintStyle: TextStyle(
-                          color: GlobalVariables.lightGray,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.phone_android,
-                          color: GlobalVariables.lightGreen,
-                        ),
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        //contentPadding: EdgeInsets.only(left: 0, bottom: 0, top:0 , right: 0),
-                       *//* enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: GlobalVariables.mediumGreen,
-                              width: 3.0,
-                            ),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: GlobalVariables.mediumGreen, width: 3.0),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),*//*
-                      ),
-                    ),
-                  ),*/
-                ),
-              ],
+            AppTextField(
+              textHintContent:
+              AppLocalizations.of(context).translate('date_of_birth'),
+              controllerCallback: _dobController,
+              borderWidth: 2.0,
+              contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              readOnly: true,
+              suffixIcon: AppIconButton(
+                Icons.date_range,
+                iconColor: GlobalVariables.mediumGreen,
+                onPressed: () {
+                  GlobalFunctions.getSelectedDateForDOB(context).then((value) {
+                    _dobController.text =
+                        value.day.toString().padLeft(2, '0') +
+                            "-" +
+                            value.month.toString().padLeft(2, '0') +
+                            "-" +
+                            value.year.toString();
+                  });
+                },
+              ),
+            ),
+            AppTextField(
+              textHintContent:
+              AppLocalizations.of(context).translate('contact1') + '*',
+              controllerCallback: _mobileController,
+              keyboardType: TextInputType.number,
+              maxLength: 10,
+              contentPadding: EdgeInsets.only(top: 14),
+              suffixIcon: AppIconButton(
+                Icons.phone_android,
+                iconColor: GlobalVariables.mediumGreen,
+              ),
             ),
             AppTextField(
               textHintContent:
@@ -427,7 +368,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(
@@ -470,7 +411,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(
@@ -541,7 +482,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(

@@ -193,7 +193,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                 ? AppLocalizations.of(context).translate('receipt') +
                     ' #' +
                     invoiceNo
-                : '',
+                : widget.receipt!=null ? widget.receipt.FLAT_NO:'',
             textColor: GlobalVariables.white,
           ),
         ),
@@ -255,7 +255,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                   child: text(
                                       widget.yearSelectedItem != null
                                           ? ''
-                                          : '*UnApproved Receipt',
+                                          : '*Unapproved Receipt',
                                       textColor: GlobalVariables.red,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       maxLine: 3),
@@ -399,7 +399,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                               ],
                             ),
                           ),
-                          AppUserPermission.isUserAdminPermission
+                          AppUserPermission.isUserAccountingPermission
                               ? Container(
                             margin: EdgeInsets.all(16.0),
                                   child: Row(
@@ -694,7 +694,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
               value.dataString, 'Receipt' + widget.invoiceNo + '.pdf')
           .then((value) {
         if (value) {
-          GlobalFunctions.showToast('check Download folder');
+          GlobalFunctions.showToast('Check Download folder');
         } else {
           GlobalFunctions.showToast('Download failed');
         }
@@ -754,6 +754,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                     GlobalFunctions.showToast(value.message);
                                     if(value.status){
                                       Navigator.of(_scaffoldKey.currentContext).pop();
+                                      Provider.of<UserManagementResponse>(context,listen: false).getMonthExpensePendingRequestData();
                                    //  Navigator.of(context).pop();
                                     }
                                   });

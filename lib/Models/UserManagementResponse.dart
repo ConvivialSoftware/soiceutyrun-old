@@ -337,8 +337,9 @@ class UserManagementResponse extends ChangeNotifier {
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
 
-    var result = await restClient.getUserManagementDashboard(societyId);
+    var result = await restClient.getUserManagementDashboard(societyId,userId);
 
     List<UserManagementDashBoard> _list = List<UserManagementDashBoard>.from(
         result.data.map((i) => UserManagementDashBoard.fromJson(i)));
@@ -657,12 +658,13 @@ class UserManagementResponse extends ChangeNotifier {
       String agreement,
       String rentedTo,
       String nocIssue,
+      String fileType,
       bool isAdmin
       ) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
-    var result = await restClient.addAgreement(societyId,block,flat, userId, agreementFrom, agreementTo, agreement, rentedTo, nocIssue,isAdmin);
+    var result = await restClient.addAgreement(societyId,block,flat, userId, agreementFrom, agreementTo, agreement, rentedTo, nocIssue,fileType,isAdmin);
 
     return result;
   }
@@ -693,12 +695,14 @@ class UserManagementResponse extends ChangeNotifier {
       String id,
       String agreementFrom,
       String agreementTo,
-      String agreement,bool isAdmin) async {
+      String agreement,
+      String fileType,
+      bool isAdmin) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
-    var result = await restClient.renewAgreement(societyId,id, agreementFrom, agreementTo, agreement,isAdmin);
+    var result = await restClient.renewAgreement(societyId,id, agreementFrom, agreementTo, agreement,fileType,isAdmin);
 
     getUnitMemberData();
     return result;

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -1111,6 +1112,7 @@ class ComplaintInfoAndCommentsState
         if (isComment) {
           GlobalFunctions.showToast(
               "Your comment has been updated to the complaint log.");
+          Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(isAssignComplaint).then((value) {});
         } else {
           GlobalFunctions.showToast(value.message);
           Navigator.pop(context,'back');

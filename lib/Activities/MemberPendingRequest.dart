@@ -138,248 +138,262 @@ class MemberPendingRequestState
       int position, UserManagementResponse value) {
     return AppContainer(
       isListItem: true,
-      child: Column(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  //  color:GlobalVariables.grey,
-                                  child: text(
-                                      value.pendingRequestList[position].NAME,
-                                      textColor: GlobalVariables.green,
-                                      fontSize:
-                                      GlobalVariables.textSizeMedium,
-                                      fontWeight: FontWeight.bold,
-                                      textStyleHeight: 1.0),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                              decoration: boxDecoration(
-                                bgColor: GlobalVariables.skyBlue,
-                                color: GlobalVariables.white,
-                                radius: GlobalVariables.textSizeSmall,
-                              ),
-                              child: text(
-                                value.pendingRequestList[position].BLOCK +
-                                    ' ' +
-                                    value.pendingRequestList[position].FLAT,
-                                fontSize: GlobalVariables.textSizeSmall,
-                                textColor: GlobalVariables.white,
-                                textStyleHeight: 1.5,
+            margin: EdgeInsets.only(top: 5),
+             //padding: EdgeInsets.all(20),
+             alignment: Alignment.center,
+            /* decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25)),*/
+              child: value.pendingRequestList[position].PROFILE_PHOTO.isEmpty
+                  ? AppAssetsImage(
+                GlobalVariables.componentUserProfilePath,
+                imageWidth: 30.0,
+                imageHeight: 30.0,
+                borderColor: GlobalVariables.grey,
+                borderWidth: 1.0,
+                fit: BoxFit.cover,
+                radius: 15.0,
+              )
+                  : AppNetworkImage(
+                value.pendingRequestList[position].PROFILE_PHOTO,
+                imageWidth: 30.0,
+                imageHeight: 30.0,
+                borderColor: GlobalVariables.grey,
+                borderWidth: 1.0,
+                fit: BoxFit.cover,
+                radius: 15.0,
+              )),
+          SizedBox(width: 8,),
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            //  color:GlobalVariables.grey,
+                            child: text(
+                                value.pendingRequestList[position].NAME,
+                                textColor: GlobalVariables.green,
+                                fontSize:
+                                GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Visibility(
-                          visible: !value.pendingRequestList[position].EMAIL.isEmpty,
-                          child: Container(
-                            child: text(
-                                value.pendingRequestList[position].EMAIL,
-                                fontSize: GlobalVariables.textSizeSMedium,
-                                textColor: GlobalVariables.black,
-                                textStyleHeight: 1.5),
+                                textStyleHeight: 1.0),
                           ),
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        decoration: boxDecoration(
+                          bgColor: GlobalVariables.skyBlue,
+                          color: GlobalVariables.white,
+                          radius: GlobalVariables.textSizeSmall,
                         ),
-                        Visibility(
-                          visible: !value.pendingRequestList[position].Phone.isEmpty,
-                          child: Container(
-                            child: text(
-                                value.pendingRequestList[position].Phone,
-                                fontSize: GlobalVariables.textSizeSMedium,
-                                textColor: GlobalVariables.black,
-                                textStyleHeight: 1.5),
-                          ),
+                        child: text(
+                          value.pendingRequestList[position].BLOCK +
+                              ' ' +
+                              value.pendingRequestList[position].FLAT,
+                          fontSize: GlobalVariables.textSizeSmall,
+                          textColor: GlobalVariables.white,
+                          textStyleHeight: 1.5,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Container(
-                          child: text(
-                              value.pendingRequestList[position].TYPE,
-                              fontSize: GlobalVariables.textSizeSmall,
-                              textColor: GlobalVariables.grey,
-                              textStyleHeight: 1.5),
-                        ),
-                        divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => StatefulBuilder(
-                                        builder: (BuildContext context, StateSetter setState) {
-                                          return Dialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10.0)),
-                                              child: Container(
-                                                padding: EdgeInsets.all(20),
-                                                width: MediaQuery.of(context).size.width / 1.3,
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    Container(
-                                                      child: text(
-                                                          AppLocalizations.of(context).translate('sure_cancel'),
-                                                          fontSize: GlobalVariables.textSizeLargeMedium,
-                                                          textColor: GlobalVariables.black,
-                                                          fontWeight: FontWeight.bold),
-                                                    ),
-                                                    Container(
-                                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            child: FlatButton(
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                                _progressDialog.show();
-                                                                Provider.of<UserManagementResponse>(context,listen: false).deleteFamilyMember(value.pendingRequestList[position].ID).then((value) {
-
-                                                                  _progressDialog.hide();
-                                                                  GlobalFunctions.showToast(value.message);
-                                                                  print('value : '+value.toString());
-
-                                                                });
-                                                              },
-                                                              child: text(
-                                                                  AppLocalizations.of(context).translate('yes'),
-                                                                  textColor: GlobalVariables.green,
-                                                                  fontSize: GlobalVariables.textSizeMedium,
-                                                                  fontWeight: FontWeight.bold),
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            child: FlatButton(
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                              },
-                                                              child: text(
-                                                                  AppLocalizations.of(context).translate('no'),
-                                                                  textColor: GlobalVariables.green,
-                                                                  fontSize: GlobalVariables.textSizeMedium,
-                                                                  fontWeight: FontWeight.bold),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                          );
-                                        }));
-                              },
-                              child: Container(
-                                child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('cancel'),
-                                    fontSize: GlobalVariables.textSizeSMedium,
-                                    fontWeight: FontWeight.bold,
-                                    textColor: GlobalVariables.green),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: (){
-
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => StatefulBuilder(
-                                        builder: (BuildContext context, StateSetter setState) {
-                                          return Dialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10.0)),
-                                              child: Container(
-                                                padding: EdgeInsets.all(20),
-                                                width: MediaQuery.of(context).size.width / 1.3,
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    Container(
-                                                      child: text(
-                                                          AppLocalizations.of(context).translate('sure_approve'),
-                                                          fontSize: GlobalVariables.textSizeLargeMedium,
-                                                          textColor: GlobalVariables.black,
-                                                          fontWeight: FontWeight.bold),
-                                                    ),
-                                                    Container(
-                                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            child: FlatButton(
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                                _progressDialog.show();
-                                                                Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID).then((value) {
-
-                                                                  _progressDialog.hide();
-                                                                  GlobalFunctions.showToast(value.message);
-                                                                  print('value : '+value.toString());
-
-                                                                });
-                                                              },
-                                                              child: text(
-                                                                  AppLocalizations.of(context).translate('yes'),
-                                                                  textColor: GlobalVariables.green,
-                                                                  fontSize: GlobalVariables.textSizeMedium,
-                                                                  fontWeight: FontWeight.bold),
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            child: FlatButton(
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                              },
-                                                              child: text(
-                                                                  AppLocalizations.of(context).translate('no'),
-                                                                  textColor: GlobalVariables.green,
-                                                                  fontSize: GlobalVariables.textSizeMedium,
-                                                                  fontWeight: FontWeight.bold),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                          );
-                                        }));
-
-                              },
-                              child: Container(
-                                child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('Approve'),
-                                    fontSize: GlobalVariables.textSizeSMedium,
-                                    fontWeight: FontWeight.bold,
-                                    textColor: GlobalVariables.green),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  value.pendingRequestList[position].EMAIL.isNotEmpty? Container(
+                    child: text(
+                        value.pendingRequestList[position].EMAIL,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                        textColor: GlobalVariables.black,
+                        textStyleHeight: 1.5),
+                  ) : SizedBox(),
+                  value.pendingRequestList[position].MOBILE.isNotEmpty ? Container(
+                    child: text(
+                        value.pendingRequestList[position].MOBILE,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                        textColor: GlobalVariables.black,
+                        textStyleHeight: 1.5),
+                  ):SizedBox(),
+                  Container(
+                    child: text(
+                        value.pendingRequestList[position].TYPE,
+                        fontSize: GlobalVariables.textSizeSmall,
+                        textColor: GlobalVariables.grey,
+                        textStyleHeight: 1.5),
+                  ),
+                  divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => StatefulBuilder(
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0)),
+                                        child: Container(
+                                          padding: EdgeInsets.all(20),
+                                          width: MediaQuery.of(context).size.width / 1.3,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Container(
+                                                child: text(
+                                                    AppLocalizations.of(context).translate('sure_cancel'),
+                                                    fontSize: GlobalVariables.textSizeLargeMedium,
+                                                    textColor: GlobalVariables.black,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child: FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          _progressDialog.show();
+                                                          Provider.of<UserManagementResponse>(context,listen: false).deleteFamilyMember(value.pendingRequestList[position].ID).then((value) {
+
+                                                            _progressDialog.hide();
+                                                            GlobalFunctions.showToast(value.message);
+                                                            print('value : '+value.toString());
+
+                                                          });
+                                                        },
+                                                        child: text(
+                                                            AppLocalizations.of(context).translate('yes'),
+                                                            textColor: GlobalVariables.green,
+                                                            fontSize: GlobalVariables.textSizeMedium,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: text(
+                                                            AppLocalizations.of(context).translate('no'),
+                                                            textColor: GlobalVariables.green,
+                                                            fontSize: GlobalVariables.textSizeMedium,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                    );
+                                  }));
+                        },
+                        child: Container(
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('cancel'),
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              fontWeight: FontWeight.bold,
+                              textColor: GlobalVariables.green),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => StatefulBuilder(
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0)),
+                                        child: Container(
+                                          padding: EdgeInsets.all(20),
+                                          width: MediaQuery.of(context).size.width / 1.3,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Container(
+                                                child: text(
+                                                    AppLocalizations.of(context).translate('sure_approve'),
+                                                    fontSize: GlobalVariables.textSizeLargeMedium,
+                                                    textColor: GlobalVariables.black,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child: FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          _progressDialog.show();
+                                                          Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID).then((value) {
+
+                                                            _progressDialog.hide();
+                                                            GlobalFunctions.showToast(value.message);
+                                                            print('value : '+value.toString());
+
+                                                          });
+                                                        },
+                                                        child: text(
+                                                            AppLocalizations.of(context).translate('yes'),
+                                                            textColor: GlobalVariables.green,
+                                                            fontSize: GlobalVariables.textSizeMedium,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: text(
+                                                            AppLocalizations.of(context).translate('no'),
+                                                            textColor: GlobalVariables.green,
+                                                            fontSize: GlobalVariables.textSizeMedium,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                    );
+                                  }));
+
+                        },
+                        child: Container(
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('Approve'),
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              fontWeight: FontWeight.bold,
+                              textColor: GlobalVariables.green),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ],

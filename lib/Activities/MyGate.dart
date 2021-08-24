@@ -233,7 +233,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       shrinkWrap: true,
                     )),
           )
-        : Container();
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getStaffCategoryListItemLayout(int position, GatePass value) {
@@ -509,7 +509,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
 
   getActivitiesListDataLayout(GatePass value) {
     return SingleChildScrollView(
-      child: Column(
+      child: value.scheduleVisitorList.length>0 || value.visitorList.length>0 ? Column(
         children: [
           Container(
             margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
@@ -539,7 +539,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     )),
           ),
         ],
-      ),
+      ) : GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
     );
   }
 

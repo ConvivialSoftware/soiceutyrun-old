@@ -268,7 +268,7 @@
   "support_contact": "Support",
   "office_address": "Office Address",
   "version_code": "Version Code",
-  "feedback": "Feedback",
+  "feedback": "Feedback & Suggestion",
   "bug_suggestion": "Click here to report bug/add suggestion",
   "_email": "Email",
   "sales_email": "Sales",
@@ -467,5 +467,15 @@
   "view_expenses": "View Expenses",
   "sure_cancel_receipt": "Are you sure you want to cancel receipt?",
   "sure_approve_receipt": "Are you sure you want to approve receipt?",
-  "penalty_amount": "Penalty Amount"
+  "penalty_amount": "Penalty Amount",
+  "support": "Support",
+  "attachment": "Attachment",
+  "society_issue": "Society Related issues?",
+  "app_issue": "App Related issues?",
+  "app_rate": "Rate SocietyRun",
+  "society_issue_txt": "Get real-time updates from your society office.",
+  "app_issue_txt": "Visit our support center and give your feedback & suggestions.",
+  "app_rate_txt": "Your reviews keep our small team motivated to make SocietyRun even better.",
+  "refer_earn": "Refer & Earn",
+  "refer_earn_txt": "Refer to other society and earn up-to 1000 Rupees."
 }

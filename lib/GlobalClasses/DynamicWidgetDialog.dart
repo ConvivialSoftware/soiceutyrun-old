@@ -106,7 +106,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         text(
-                            _popupTitle,
+                            _popupTitle??'',
                             textColor : GlobalVariables.green,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold
@@ -117,7 +117,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: text(
-                            _body,
+                            _body??'',
                             textColor: GlobalVariables.black,
                             fontSize: GlobalVariables.textSizeSMedium,
                           ),

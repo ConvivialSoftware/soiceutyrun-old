@@ -142,7 +142,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
   }
 
   getMobileUserListDataLayout(UserManagementResponse value) {
-    return SingleChildScrollView(
+    return value.mobileUserList.length>0 ? SingleChildScrollView(
       child: Column(
         children: [
           Container(
@@ -162,7 +162,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
           ),
         ],
       ),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getMobileUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
@@ -221,13 +221,16 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              //  color:GlobalVariables.grey,
-                              child: text(userManagementResponse.mobileUserList[position].NAME,
-                                  textColor: GlobalVariables.green,
-                                  fontSize: GlobalVariables.textSizeLargeMedium,
-                                  fontWeight: FontWeight.bold,
-                                  textStyleHeight: 1.0
+                            Flexible(
+
+                              child: Container(
+                                //  color:GlobalVariables.grey,
+                                child: text(userManagementResponse.mobileUserList[position].NAME,
+                                    textColor:GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
+                                    fontWeight: FontWeight.bold,
+                                    textStyleHeight: 1.0
+                                ),
                               ),
                             ),
                             Container(
@@ -332,7 +335,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
   }
 
   getUnMobileUserListDataLayout(UserManagementResponse value) {
-    return Container(
+    return value.notMobileUserList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           0, 8, 0, 0),
@@ -350,7 +353,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ): GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getUnMobileUserListItemLayout(int position, UserManagementResponse userManagementResponse) {

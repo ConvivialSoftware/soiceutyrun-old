@@ -139,14 +139,7 @@ class DisplayProfileInfoState
                 // add this line
                 itemBuilder: (_) => <PopupMenuItem<String>>[
                   if(isEditOptionDisplay)
-                      new PopupMenuItem<String>(
-                          child: Container(
-                              width: 100,
-                              height: 30,
-                              child: text("Move Out",
-                                  textColor: GlobalVariables.black,
-                                  fontSize: GlobalVariables.textSizeSMedium)),
-                          value: 'move_out'),
+
                       new PopupMenuItem<String>(
                           child: Container(
                               width: 100,
@@ -155,6 +148,14 @@ class DisplayProfileInfoState
                                   textColor: GlobalVariables.black,
                                   fontSize: GlobalVariables.textSizeSMedium)),
                           value: 'edit'),
+                  new PopupMenuItem<String>(
+                      child: Container(
+                          width: 100,
+                          height: 30,
+                          child: text("Move Out",
+                              textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeSMedium)),
+                      value: 'move_out'),
                     ],
                 onSelected: (index) async {
                   switch (index) {
@@ -479,7 +480,7 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          secondaryText(_profileList[0].ALTERNATE_CONTACT2),
+                          secondaryText(_profileList[0].ALTERNATE_CONTACT2??''),
                         ],
                       ),
                       Divider(),
@@ -495,7 +496,7 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          secondaryText(_profileList[0].Email),
+                          secondaryText(_profileList[0].Email??''),
                         ],
                       ),
                       SizedBox(height: 8),

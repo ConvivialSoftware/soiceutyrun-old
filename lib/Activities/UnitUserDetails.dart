@@ -1400,140 +1400,143 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                   // height: MediaQuery.of(context).size.width * 1.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: text(
-                            AppLocalizations.of(context)
-                                .translate('update_unit_details'),
-                            textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeLargeMedium,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        AppTextField(
-                            textHintContent: 'Enter BillerName',
-                            controllerCallback: billerNameTextController),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        AppTextField(
-                          textHintContent: 'Enter Area',
-                          controllerCallback: areaTextController,
-                          keyboardType: TextInputType.number,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        AppTextField(
-                          textHintContent: 'Enter Intercom',
-                          controllerCallback: intercomTextController,
-                          keyboardType: TextInputType.number,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        AppTextField(
-                            textHintContent: 'Enter GSTIN No',
-                            controllerCallback: gstinNoTextController),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        AppTextField(
-                            textHintContent: 'Enter Parking Slot',
-                            controllerCallback: parkingSlotTextController),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          decoration: BoxDecoration(
-                              color: GlobalVariables.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: GlobalVariables.mediumGreen,
-                                width: 2.0,
-                              )),
-                          child: ButtonTheme(
-                            //alignedDropdown: true,
-                            child: DropdownButton(
-                              items: _unitRoleListItems,
-                              onChanged: (value) {
-                                _unitRoleSelectedItem = value;
-                                print('_selctedItem:' +
-                                    _unitRoleSelectedItem.toString());
-                                setState(() {
-                                  _progressDialog.show();
-                                });
-                              },
-                              value: _unitRoleSelectedItem,
-                              underline: SizedBox(),
-                              isExpanded: true,
-                              icon: AppIcon(
-                                Icons.keyboard_arrow_down,
-                                iconColor: GlobalVariables.green,
-                              ),
-                              iconSize: GlobalVariables.textSizeNormal,
-                              selectedItemBuilder: (BuildContext context) {
-                                // String txt =  _societyListItems.elementAt(position).value;
-                                return _unitRoleListItems.map((e) {
-                                  return Container(
-                                      alignment: Alignment.topLeft,
-                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                      child: text(
-                                        _unitRoleSelectedItem,
-                                        textColor: GlobalVariables.green,
-                                      ));
-                                }).toList();
-                              },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: text(
+                              AppLocalizations.of(context)
+                                  .translate('update_unit_details'),
+                              textColor: GlobalVariables.green,
+                              fontSize: GlobalVariables.textSizeLargeMedium,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: AppButton(
-                              textContent: AppLocalizations.of(context)
-                                  .translate('submit'),
-                              onPressed: () async {
-                                String consumerNo =
-                                    await GlobalFunctions.getConsumerID();
+                          SizedBox(
+                            height: 16,
+                          ),
+                          AppTextField(
+                              textHintContent: 'Enter BillerName',
+                              controllerCallback: billerNameTextController),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          AppTextField(
+                            textHintContent: 'Enter Area',
+                            controllerCallback: areaTextController,
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          AppTextField(
+                            textHintContent: 'Enter Intercom/HomePhone',
+                            controllerCallback: intercomTextController,
+                            keyboardType: TextInputType.number,
+                            maxLength: 10,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          AppTextField(
+                              textHintContent: 'Enter GSTIN No',
+                              controllerCallback: gstinNoTextController),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          AppTextField(
+                              textHintContent: 'Enter Parking Slot',
+                              controllerCallback: parkingSlotTextController),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            decoration: BoxDecoration(
+                                color: GlobalVariables.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: GlobalVariables.mediumGreen,
+                                  width: 2.0,
+                                )),
+                            child: ButtonTheme(
+                              //alignedDropdown: true,
+                              child: DropdownButton(
+                                items: _unitRoleListItems,
+                                onChanged: (value) {
+                                  _unitRoleSelectedItem = value;
+                                  print('_selctedItem:' +
+                                      _unitRoleSelectedItem.toString());
+                                  setState(() {
+                                    _progressDialog.show();
+                                  });
+                                },
+                                value: _unitRoleSelectedItem,
+                                underline: SizedBox(),
+                                isExpanded: true,
+                                icon: AppIcon(
+                                  Icons.keyboard_arrow_down,
+                                  iconColor: GlobalVariables.green,
+                                ),
+                                iconSize: GlobalVariables.textSizeNormal,
+                                selectedItemBuilder: (BuildContext context) {
+                                  // String txt =  _societyListItems.elementAt(position).value;
+                                  return _unitRoleListItems.map((e) {
+                                    return Container(
+                                        alignment: Alignment.topLeft,
+                                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        child: text(
+                                          _unitRoleSelectedItem,
+                                          textColor: GlobalVariables.green,
+                                        ));
+                                  }).toList();
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: AppButton(
+                                textContent: AppLocalizations.of(context)
+                                    .translate('submit'),
+                                onPressed: () async {
+                                  String consumerNo =
+                                      await GlobalFunctions.getConsumerID();
 
-                                _progressDialog.show();
+                                  _progressDialog.show();
 
-                                Provider.of<UserManagementResponse>(context,
-                                        listen: false)
-                                    .editUnitDetails(
-                                        widget.block,
-                                        userManagementResponse
-                                            .unitDetailsList[0].ID,
-                                        consumerNo,
-                                        parkingSlotTextController.text,
-                                        areaTextController.text,
-                                        gstinNoTextController.text,
-                                        billerNameTextController.text,
-                                        intercomTextController.text)
-                                    .then((value) {
-                                  _progressDialog.hide();
+                                  Provider.of<UserManagementResponse>(context,
+                                          listen: false)
+                                      .editUnitDetails(
+                                          widget.block,
+                                          userManagementResponse
+                                              .unitDetailsList[0].ID,
+                                          consumerNo,
+                                          parkingSlotTextController.text,
+                                          areaTextController.text,
+                                          gstinNoTextController.text,
+                                          billerNameTextController.text,
+                                          intercomTextController.text)
+                                      .then((value) {
+                                    _progressDialog.hide();
 
-                                  GlobalFunctions.showToast(value.message);
-                                  if (value.status) {
-                                    Navigator.of(context).pop();
-                                  }
-                                });
-                              }),
-                        )
-                      ],
+                                    GlobalFunctions.showToast(value.message);
+                                    if (value.status) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  });
+                                }),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

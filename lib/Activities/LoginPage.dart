@@ -87,7 +87,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                     children: <Widget>[
                       Container(
                         alignment: Alignment.topLeft,
-                        margin: EdgeInsets.fromLTRB(20, 25, 15, 15),
+                        margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: RichText(
                             text: TextSpan(children: [
                           WidgetSpan(
@@ -109,7 +109,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width / 1.1,
-                        margin: EdgeInsets.fromLTRB(25, 25, 25, 10),
+                        margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: TextField(
                           controller: username,
                           keyboardType: TextInputType.text,
@@ -141,7 +141,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width / 1.1,
-                        margin: EdgeInsets.fromLTRB(25, 25, 25, 10),
+                        margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: TextField(
                           controller: password,
                           obscureText: _obscurePassword,
@@ -183,7 +183,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(
-                            30, 10, 30, 0), // color: GlobalVariables.grey,
+                            16, 16, 16, 16), // color: GlobalVariables.grey,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -253,7 +253,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     AppLocalizations.of(context)
                                         .translate('login_with_otp'),
                                    textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeLargeMedium,
+                                        fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
                               ),
@@ -348,6 +348,64 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                     ],
                   ),
                   Container(
+                    //color: GlobalVariables.grey,
+                    decoration: boxDecoration(
+                      radius: GlobalVariables.textSizeVerySmall,
+                    ),
+                    margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: CarouselSlider.builder(
+                      options: CarouselOptions(
+                        height: 200.0,
+                        autoPlay: false,
+                        autoPlayInterval: Duration(seconds: 3),
+                        viewportFraction: 1.0,
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      ),
+                      itemCount:_bannerList.length,
+                      itemBuilder: (BuildContext context, int itemIndex,
+                          int item) =>
+                      _bannerList.length > 0
+                          ? InkWell(
+                        onTap: () {
+                          /*Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BaseWebViewScreen(
+                                      _bannerList[itemIndex].Url +
+                                          '?' +
+                                          'SID=' +
+                                          societyId.toString() +
+                                          '&MOBILE=' +
+                                          phone.toString() +
+                                          '&NAME=' +
+                                          name.toString() +
+                                          '&UNIT=' +
+                                          block.toString() +
+                                          ' ' +
+                                          flat.toString()))).then(
+                                  (value) {
+                                GlobalFunctions.setBaseContext(
+                                    _dashboardSacfoldKey.currentContext);
+                              });*/
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          //color: GlobalVariables.black,
+                          //alignment: Alignment.center,
+                          child: AppNetworkImage(
+                            _bannerList[itemIndex].IMAGE,
+                            fit: BoxFit.fitWidth,
+                            shape: BoxShape.rectangle,
+                            borderColor: GlobalVariables.transparent,
+                            radius: GlobalVariables.textSizeVerySmall,
+                          ),
+                        ),
+                      )
+                          : Container(),
+                    ),
+                  ),
+                  /*Container(
                     alignment: Alignment.bottomCenter,
                     margin: EdgeInsets.fromLTRB(
                         20, MediaQuery.of(context).size.height / 8, 20, 10),
@@ -385,7 +443,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             ): Container(),
                           ),
                         ),
-                        /*Container(
+                        *//*Container(
 
                           //   color: GlobalVariables.lightGreen,
                           decoration: BoxDecoration(
@@ -430,7 +488,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               )
                             ],
                           ),
-                        ),*/
+                        ),*//*
                         Container(
                           child: RichText(
                               text: TextSpan(children: [
@@ -472,7 +530,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                         )
                       ],
                     ),
-                  )
+                  )*/
                 ],
               ),
             )),

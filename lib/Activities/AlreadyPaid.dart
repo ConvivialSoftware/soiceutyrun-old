@@ -119,7 +119,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
             ),
           ),
           title: text(
-            AppLocalizations.of(context).translate('already_paid'),
+            widget.isAdmin?AppLocalizations.of(context).translate('add_receipt')+' '+widget.mBlock+' '+widget.mFlat :AppLocalizations.of(context).translate('already_paid'),
             textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
@@ -152,7 +152,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
             children: <Widget>[
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('date'),
+                widget.isAdmin? 'Receipt Date' : AppLocalizations.of(context).translate('date'),
                 controllerCallback: _dateController,
                 readOnly: true,
                 contentPadding: EdgeInsets.only(top: 14),
@@ -273,7 +273,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.lightGray,
                       width: 2.0,
                     )),
                 child: ButtonTheme(
@@ -725,8 +725,8 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
                 value);
           });
         }*/
-        Provider.of<UserManagementResponse>(context, listen: false)
-            .getLedgerData(null,widget.mBlock,widget.mFlat);
+        //Provider.of<UserManagementResponse>(context, listen: false).getLedgerData(null,widget.mBlock,widget.mFlat);
+        Provider.of<UserManagementResponse>(context,listen: false).getMonthExpensePendingRequestData();
         //getMessageInfo();
       }
       GlobalFunctions.showToast(value.message);

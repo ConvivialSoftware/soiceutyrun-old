@@ -29,13 +29,16 @@ class BaseAdmin extends StatefulWidget {
 
 class _BaseAdminState extends State<BaseAdmin> {
   List<SliderCardName> _listSliderCardName = <SliderCardName>[];
+
   //List<BarChartModel> _listBarChart = <BarChartModel>[];
   int pageCount = 0;
 
   @override
   void initState() {
-    Provider.of<UserManagementResponse>(context, listen: false).getUserManagementDashboard();
-    Provider.of<UserManagementResponse>(context, listen: false).getMonthExpensePendingRequestData();
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getUserManagementDashboard();
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getMonthExpensePendingRequestData();
     getSliderCardData();
     super.initState();
   }
@@ -68,7 +71,9 @@ class _BaseAdminState extends State<BaseAdmin> {
       child: Stack(
         children: <Widget>[
           GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
-          value.isLoading? GlobalFunctions.loadingWidget(context): getAdminLayout(value),
+          value.isLoading
+              ? Center(child: GlobalFunctions.loadingWidget(context))
+              : getAdminLayout(value),
         ],
       ),
     );
@@ -139,14 +144,14 @@ class _BaseAdminState extends State<BaseAdmin> {
                       flex: 1,
                       child: InkWell(
                         onTap: () {
-                         // if (AppUserPermission.isUserBroadcastPermission) {
-                            Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => BaseBroadcast()))
-                                .then((value) {
-                              GlobalFunctions.setBaseContext(context);
-                            });
+                          // if (AppUserPermission.isUserBroadcastPermission) {
+                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseBroadcast()))
+                              .then((value) {
+                            GlobalFunctions.setBaseContext(context);
+                          });
                           /*} else {
                             GlobalFunctions
                                 .showAdminPermissionDialogToAccessFeature(
@@ -185,7 +190,8 @@ class _BaseAdminState extends State<BaseAdmin> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => BaseUnitDetails(isDuesUnit : true)));
+                                  builder: (context) =>
+                                      BaseUnitDetails(isDuesUnit: true)));
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
@@ -194,6 +200,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                               color: GlobalVariables.lightGreen,
                               borderRadius: BorderRadius.circular(10)),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               AppAssetsImage(
@@ -217,14 +224,14 @@ class _BaseAdminState extends State<BaseAdmin> {
             ),
             InkWell(
               onTap: () {
-               // if (!AppUserPermission.isUserUserManagementPermission) {
-                  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BaseUserManagement()))
-                      .then((value) {
-                    GlobalFunctions.setBaseContext(context);
-                  });
+                // if (!AppUserPermission.isUserUserManagementPermission) {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseUserManagement()))
+                    .then((value) {
+                  GlobalFunctions.setBaseContext(context);
+                });
                 /*} else {
                   GlobalFunctions.showAdminPermissionDialogToAccessFeature(
                       context, true);
@@ -426,10 +433,11 @@ class _BaseAdminState extends State<BaseAdmin> {
                         InkWell(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        BaseRaiseNewTicket())).then((value) {
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BaseRaiseNewTicket(isAdmin: true)))
+                                .then((value) {
                               GlobalFunctions.setBaseContext(context);
                             });
                           },
@@ -463,170 +471,185 @@ class _BaseAdminState extends State<BaseAdmin> {
     );
   }
 
-  /**/
   getUserLayout(UserManagementResponse value) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        child: Card(
-          shape: (RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0))),
-          elevation: 10.0,
-          shadowColor: GlobalVariables.green.withOpacity(0.2),
-          margin: EdgeInsets.all(16),
-          color: GlobalVariables.white,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: AppAssetsImage(
-                    GlobalVariables.whileBGPath,
-                    imageHeight: 100,
+      child: InkWell(
+        onTap: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BaseUserManagement())).then((value) {
+            GlobalFunctions.setBaseContext(context);
+          });
+        },
+        child: Container(
+          child: Card(
+            shape: (RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0))),
+            elevation: 10.0,
+            shadowColor: GlobalVariables.green.withOpacity(0.2),
+            margin: EdgeInsets.all(16),
+            color: GlobalVariables.white,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: AppAssetsImage(
+                      GlobalVariables.whileBGPath,
+                      imageHeight: 100,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    text('Users',
-                        isCentered: true,
-                        fontSize: GlobalVariables.textSizeNormal,
-                        textColor: GlobalVariables.green,
-                        fontWeight: FontWeight.bold),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  text(value.noOfUnits,
-                                      textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeNormal,
-                                      fontWeight: FontWeight.bold),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  text('Units',
-                                      textColor: GlobalVariables.black,
-                                      fontSize: GlobalVariables.textSizeMedium)
-                                ],
-                              ),
-                            ),
-                          ),
-                          VerticalDivider(),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      text('Register User',
-                                          textColor: GlobalVariables.black,
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      text(value.registerUser,
-                                          textColor: GlobalVariables.green,
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium,
-                                          fontWeight: FontWeight.bold),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      text('Active Users',
-                                          textColor: GlobalVariables.black,
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      text(value.activeUser,
-                                          textColor: GlobalVariables.green,
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium,
-                                          fontWeight: FontWeight.bold),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      text('Mobile Users',
-                                          textColor: GlobalVariables.black,
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      text(value.mobileUser,
-                                          textColor: GlobalVariables.green,
-                                          fontSize:
-                                              GlobalVariables.textSizeMedium,
-                                          fontWeight: FontWeight.bold),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                Container(
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      text('Users',
+                          isCentered: true,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          textColor: GlobalVariables.green,
+                          fontWeight: FontWeight.bold),
+                      SizedBox(
+                        height: 16,
                       ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: (){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BaseUserManagement()))
-                                .then((value) {
-                              GlobalFunctions.setBaseContext(context);
-                            });
-                          } ,
-                          child: text( (int.parse(value.rentalRequest)+int.parse(value.pendingRequest)+int.parse(value.moveOutRequest)).toString()+' Pending Request*',
-                              textColor: GlobalVariables.red,
-                              fontSize: GlobalVariables.textSizeSMedium),
+                      IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    text(value.noOfUnits,
+                                        textColor: GlobalVariables.green,
+                                        fontSize: GlobalVariables.textSizeNormal,
+                                        fontWeight: FontWeight.bold),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    text('Units',
+                                        textColor: GlobalVariables.black,
+                                        fontSize: GlobalVariables.textSizeMedium)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            VerticalDivider(),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        text('Register User',
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        text(value.registerUser,
+                                            textColor: GlobalVariables.green,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.bold),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        text('Active Users',
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        text(value.activeUser,
+                                            textColor: GlobalVariables.green,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.bold),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        text('Mobile Users',
+                                            textColor: GlobalVariables.black,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        text(value.mobileUser,
+                                            textColor: GlobalVariables.green,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.bold),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        // text('View Complaint',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BaseUserManagement())).then((value) {
+                                GlobalFunctions.setBaseContext(context);
+                              });
+                            },
+                            child: text(
+                                (int.parse(value.rentalRequest) +
+                                            int.parse(value.pendingRequest) +
+                                            int.parse(value.moveOutRequest))
+                                        .toString() +
+                                    ' Pending Request*',
+                                textColor: GlobalVariables.red,
+                                fontSize: GlobalVariables.textSizeSMedium),
+                          ),
+                          // text('View Complaint',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -677,14 +700,19 @@ class _BaseAdminState extends State<BaseAdmin> {
                               alignment: Alignment.center,
                               child: Column(
                                 children: [
-                                  text(GlobalFunctions.getCurrencyFormat(value.receiptAmount),
-                                      textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeNormal,
-                                      fontWeight: FontWeight.bold),
+                                  FittedBox(
+                                    child: text(
+                                        GlobalFunctions.getCurrencyFormat(
+                                            value.receiptAmount),
+                                        textColor: GlobalVariables.green,
+                                        fontSize:
+                                            GlobalVariables.textSizeNormal,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   SizedBox(
                                     height: 4,
                                   ),
-                                  text(value.receiptCount+' Receipt',
+                                  text(value.receiptCount + ' Receipt',
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeMedium)
                                 ],
@@ -698,14 +726,19 @@ class _BaseAdminState extends State<BaseAdmin> {
                               alignment: Alignment.center,
                               child: Column(
                                 children: [
-                                  text(GlobalFunctions.getCurrencyFormat(value.expenseAmount),
-                                      textColor: GlobalVariables.green,
-                                      fontSize: GlobalVariables.textSizeNormal,
-                                      fontWeight: FontWeight.bold),
+                                  FittedBox(
+                                    child: text(
+                                        GlobalFunctions.getCurrencyFormat(
+                                            value.expenseAmount),
+                                        textColor: GlobalVariables.green,
+                                        fontSize:
+                                            GlobalVariables.textSizeNormal,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   SizedBox(
                                     height: 4,
                                   ),
-                                  text(value.expenseCount+' Voucher',
+                                  text(value.expenseCount + ' Voucher',
                                       textColor: GlobalVariables.black,
                                       fontSize: GlobalVariables.textSizeMedium)
                                 ],
@@ -723,24 +756,28 @@ class _BaseAdminState extends State<BaseAdmin> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BaseUnitDetails(isDuesUnit : true)));
+                                    builder: (context) =>
+                                        BaseUnitDetails(isDuesUnit: true)));
                           },
                           child: text('Add Receipt',
                               textColor: GlobalVariables.green,
                               fontSize: GlobalVariables.textSizeSMedium),
                         ),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BaseUnitDetails(isAddExpense : true)));
+                                    builder: (context) =>
+                                        BaseUnitDetails(isAddExpense: true)));
                           },
-                          child: text(AppLocalizations.of(context).translate('add_invoice'),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('add_invoice'),
                               textColor: GlobalVariables.green,
                               fontSize: GlobalVariables.textSizeSMedium),
                         ),
@@ -756,7 +793,7 @@ class _BaseAdminState extends State<BaseAdmin> {
     );
   }
 
- /* getBarChartData(List<MonthExpenses> value) {
+  /* getBarChartData(List<MonthExpenses> value) {
     _listBarChart = [
       BarChartModel(
         year: "Jan",
@@ -834,7 +871,8 @@ class _BaseAdminState extends State<BaseAdmin> {
             child: text(
               value.adminPendingList[position].PAYMENT_DATE.length > 0
                   ? GlobalFunctions.convertDateFormat(
-                      value.adminPendingList[position].PAYMENT_DATE, 'dd-MM-yyyy')
+                      value.adminPendingList[position].PAYMENT_DATE,
+                      'dd-MM-yyyy')
                   : "",
               textColor: GlobalVariables.grey,
               fontSize: GlobalVariables.textSizeSMedium,
@@ -852,9 +890,10 @@ class _BaseAdminState extends State<BaseAdmin> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: text(
-                          value.adminPendingList[position].REFERENCE_NO,
+                          value.adminPendingList[position].FLAT_NO,
                           textColor: GlobalVariables.grey,
                           fontSize: GlobalVariables.textSizeSMedium,
+                         // fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
@@ -864,9 +903,12 @@ class _BaseAdminState extends State<BaseAdmin> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => BaseViewReceipt(
-                                  null,
-                                   null,
-                                  null,null,receipt: value.adminPendingList[position],)));
+                                      null,
+                                      null,
+                                      null,
+                                      null,
+                                      receipt: value.adminPendingList[position],
+                                    )));
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
@@ -874,7 +916,10 @@ class _BaseAdminState extends State<BaseAdmin> {
                           /*"Rs. " +
                               double.parse(value.adminPendingList[position].AMOUNT
                                       .toString())
-                                  .toStringAsFixed(2)*/GlobalFunctions.getCurrencyFormat(value.adminPendingList[position].AMOUNT.toString()),
+                                  .toStringAsFixed(2)*/
+                          GlobalFunctions.getCurrencyFormat(value
+                              .adminPendingList[position].AMOUNT
+                              .toString()),
                           textColor: GlobalVariables.green,
                           fontSize: GlobalVariables.textSizeSMedium,
                           fontWeight: FontWeight.bold,
@@ -918,7 +963,7 @@ class BarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('data : '+data.toString());
+    //print('data : ' + data.toString());
     List<charts.Series<MonthExpenses, String>> series = [
       charts.Series(
         id: "Subscribers",
@@ -926,10 +971,11 @@ class BarChart extends StatelessWidget {
         // seriesColor : charts.ColorUtil.fromDartColor(GlobalVariables.black  ),
         domainFn: (MonthExpenses series, _) => series.month,
         measureFn: (MonthExpenses series, _) {
-          print('series.exp_amount : '+series.exp_amount);
-         return double.parse(series.exp_amount);
+          //print('series.exp_amount : ' + series.exp_amount);
+          return double.parse(series.exp_amount);
         },
-        colorFn: (MonthExpenses series, _) => charts.ColorUtil.fromDartColor(GlobalVariables.green),
+        colorFn: (MonthExpenses series, _) =>
+            charts.ColorUtil.fromDartColor(GlobalVariables.green),
         //areaColorFn: (BarChartModel series, _) =>  charts.ColorUtil.fromDartColor(GlobalVariables.black)
       )
     ];
@@ -941,7 +987,7 @@ class BarChart extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 16.0,right: 16.0,top: 16.0),
+            padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -950,23 +996,37 @@ class BarChart extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: GlobalVariables.textSizeMedium),
                 InkWell(
-                  onTap: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => BaseExpenseSearchAdd()))
+                  onTap: () {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BaseExpenseSearchAdd()))
                         .then((value) {
                       GlobalFunctions.setBaseContext(context);
                     });
                   },
                   child: smallTextContainerOutlineLayout(
-                      AppLocalizations.of(context)
-                          .translate('view_expenses')),
+                      AppLocalizations.of(context).translate('view_expenses')),
                 )
-
               ],
             ),
           ),
           Expanded(
-            child: charts.BarChart(series, animate: true),
+            child: charts.BarChart(series,
+                animate: true,
+                domainAxis: new charts.OrdinalAxisSpec(
+                    renderSpec: new charts.SmallTickRendererSpec(
+                        minimumPaddingBetweenLabelsPx: 1,
+                        // Tick and Label styling here.
+                        labelStyle: new charts.TextStyleSpec(
+                            fontSize: 8, // size in Pts.
+                            color: charts.MaterialPalette.black),
+
+                        // Change the line colors to match text color.
+                        lineStyle: new charts.LineStyleSpec(
+                            color: charts.MaterialPalette.black))),
+
+            ),
           )
         ],
       ),

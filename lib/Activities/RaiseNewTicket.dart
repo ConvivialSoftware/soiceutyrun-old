@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/Complaints.dart';
+import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
@@ -21,6 +22,11 @@ import 'HelpDesk.dart';
 import 'base_stateful.dart';
 
 class BaseRaiseNewTicket extends StatefulWidget {
+
+  bool isAdmin;
+
+  BaseRaiseNewTicket({this.isAdmin=false});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -54,9 +60,19 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
 
   bool isStoragePermission = false;
 
+  List<DropdownMenuItem<String>> _blockListItems =
+      new List<DropdownMenuItem<String>>();
+  String _selectedBlock;
+
+  List<DropdownMenuItem<String>> _flatListItems =
+      new List<DropdownMenuItem<String>>();
+  String _selectedFlat;
+
   @override
   void initState() {
     super.initState();
+    if(widget.isAdmin)
+      getBlockFlatData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
@@ -160,6 +176,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(10)),*/
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
               alignment: Alignment.topLeft,
@@ -170,6 +187,92 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     fontWeight: FontWeight.bold,
               ),
             ),
+            widget.isAdmin ? Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.lightGray,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButtonFormField(
+                        items: _blockListItems,
+                        value: _selectedBlock,
+                        onChanged: (value){
+                          _selectedBlock=value;
+                          _selectedFlat=null;
+                          getBlockFlatData();
+                        },
+                        isExpanded: true,
+                        icon: AppIcon(
+                          Icons.keyboard_arrow_down,
+                          iconColor: GlobalVariables.mediumGreen,
+                        ),
+                        decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                            labelText: AppLocalizations.of(context)
+                                .translate('block'),
+                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent))
+                          // border: new CustomBorderTextFieldSkin().getSkin(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.lightGray,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButtonFormField(
+                        items: _flatListItems,
+                        value: _selectedFlat,
+                        onChanged: (value){
+                          _selectedFlat=value;
+                          setState(() {
+                          });
+                        },
+                        isExpanded: true,
+                        icon: AppIcon(
+                          Icons.keyboard_arrow_down,
+                          iconColor: GlobalVariables.mediumGreen,
+                        ),
+                        decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                            labelText: AppLocalizations.of(context)
+                                .translate('flat'),
+                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent))
+                          // border: new CustomBorderTextFieldSkin().getSkin(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ):SizedBox(),
             AppTextField(
               textHintContent:
                   AppLocalizations.of(context).translate('subject') + '*',
@@ -258,7 +361,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('community'),
-    textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.green,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -278,7 +381,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.lightGray,
                     width: 2.0,
                   )),
               child: ButtonTheme(
@@ -638,8 +741,8 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     restClient
         .addComplaint(
             societyId,
-            block,
-            flat,
+            widget.isAdmin ? _selectedBlock : block,
+            widget.isAdmin ? _selectedFlat : flat,
             userId,
             complaintSubject.text,
             complaintType,
@@ -724,5 +827,53 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
     } else {
       GlobalFunctions.showToast("Please Enter Complaint Subject");
     }
+  }
+
+void setBlockData(List<Block> _blockList) {
+    _blockListItems = new List<DropdownMenuItem<String>>();
+    for (int i = 0; i < _blockList.length; i++) {
+      _blockListItems.add(DropdownMenuItem(
+        value: _blockList[i].BLOCK,
+        child: text(
+          _blockList[i].BLOCK,
+          textColor: GlobalVariables.black,
+        ),
+      ));
+    }
+
+    if(_selectedBlock==null) {
+      _selectedBlock = _blockListItems[0].value;
+    }
+    //setState(() {});
+  }
+
+  void setFlatData(List<Flat> _flatList) {
+    _flatListItems = new List<DropdownMenuItem<String>>();
+    for (int i = 0; i < _flatList.length; i++) {
+      //print(_flatList[i].FLAT.toString());
+      _flatListItems.add(DropdownMenuItem(
+        value: _flatList[i].FLAT,
+        child: text(
+          _flatList[i].FLAT,
+          textColor: GlobalVariables.black,
+        ),
+      ));
+    }
+    _selectedFlat = _flatListItems[0].value;
+    setState(() {});
+  }
+
+  void getBlockFlatData() {
+    print('_selectedBlock : '+_selectedBlock.toString());
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getBlock()
+        .then((value) {
+      setBlockData(value);
+      Provider.of<UserManagementResponse>(context, listen: false)
+          .getFlat(_selectedBlock)
+          .then((value) {
+        setFlatData(value);
+      });
+    });
   }
 }

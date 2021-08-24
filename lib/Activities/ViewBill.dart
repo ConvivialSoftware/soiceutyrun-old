@@ -656,7 +656,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
       GlobalFunctions.convertBase64StringToFile(value.dataString,'Bill'+widget.invoiceNo+'.pdf').then((value) {
 
         if(value){
-          GlobalFunctions.showToast('check Download folder');
+          GlobalFunctions.showToast('Check Download folder');
         }else{
           GlobalFunctions.showToast('Download failed');
         }

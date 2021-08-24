@@ -13,6 +13,7 @@ import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 class LoginDashBoardResponse extends ChangeNotifier {
   List<Banners> bannerList = List<Banners>();
+  List<Banners> referBannerList = List<Banners>();
   static List<LoginResponse> societyList = new List<LoginResponse>();
   String duesRs;
   String duesDate;
@@ -58,8 +59,8 @@ class LoginDashBoardResponse extends ChangeNotifier {
     await restClient.getBannerData().then((value) {
       print('Response : ' + value.toString());
       if (value.status) {
-        List<dynamic> _list = value.data;
-        bannerList = List<Banners>.from(_list.map((i) => Banners.fromJson(i)));
+        bannerList = List<Banners>.from(value.data.map((i) => Banners.fromJson(i)));
+        referBannerList = List<Banners>.from(value.refer.map((i) => Banners.fromJson(i)));
       }
     });
 

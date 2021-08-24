@@ -182,7 +182,7 @@ class DirectoryState extends State<BaseDirectory> {
               ' ' +
               value.committeeList[position].FLAT;
 
-      if(AppSocietyPermission.isSocHideCommitteeContactPaidPermission) {
+      if(!AppSocietyPermission.isSocHideCommitteeContactPaidPermission) {
         value.committeeList[position].EMAIL.length != 0
             ? email = true
             : email = false;
@@ -214,15 +214,17 @@ class DirectoryState extends State<BaseDirectory> {
               ' ' +
               value.neighbourList[position].FLAT;
 
-      permission = value.neighbourList[position].PERMISSIONS;
-      if (value.neighbourList[position].Phone != null) {
-        if (permission.contains('memberPhone')) {
-          phone = true;
-        } else {
-          phone = false;
-        }
+      if(!AppSocietyPermission.isSocHideContactPermission) {
+        permission = value.neighbourList[position].PERMISSIONS;
+        if (value.neighbourList[position].Phone != null) {
+          if (permission.contains('memberPhone')) {
+            phone = true;
+          } else {
+            phone = false;
+          }
 
-        if (phone) callNumber = value.neighbourList[position].Phone;
+          if (phone) callNumber = value.neighbourList[position].Phone;
+        }
       }
     }
 
@@ -235,9 +237,9 @@ class DirectoryState extends State<BaseDirectory> {
           ? ''
           : value.emergencyList[position].Address;
 
-      field = value.emergencyList[position].Name == null
+      field = value.emergencyList[position].Category == null
           ? ''
-          : value.emergencyList[position].Name;
+          : value.emergencyList[position].Category;
 
       value.emergencyList[position].Contact_No.length != 0
           ? phone = true

@@ -14,6 +14,9 @@ class GlobalVariables {
   static const appURL = "https://societyrun.com/";
   static const termsConditionURL = "https://societyrun.com/Terms%20&%20conditions.html";
   static const privacyPolicyURL = "https://societyrun.com/Privacy_Policy.html";
+  static const FAQURL = "http://faq.societyrun.com";
+  static const androidAppRedirectUrl = "https://play.google.com/store/apps/details?id=";
+  static const iosAppRedirectUrl = "https://apps.apple.com/us/app/societyrun/id1206830924";
   static bool isERPAccount = false;
 
   /*Variables for the SharedPreferences*/
@@ -48,6 +51,7 @@ class GlobalVariables {
   static var keyInAppCallNotification = "in_app_call_notification";
   static var keyIsNewlyArrivedNotification = "isNewlyArrivedNotification";
   static var keySMSCredit = "SMS_CREDIT";
+  static var keySocietyContact = "Contact";
 
   static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
@@ -90,6 +94,7 @@ class GlobalVariables {
       "assets/other_assets/component_user_profile.png";
   static var userProfileIconPath = "assets/other_assets/profile_icon.svg";
   static var waterIconPath = "assets/other_assets/water_icon.svg";
+  static var imageIconPath = "assets/other_assets/Icon awesome-file-image.svg";
   static var pdfIconPath = "assets/other_assets/Icon awesome-file-pdf.svg";
   static var downloadIconPath = "assets/other_assets/Icon awesome-download.svg";
   static var pdfBackIconPath = "assets/other_assets/icon-pdf.svg";
@@ -137,6 +142,11 @@ class GlobalVariables {
   static var receiptIconPath = "assets/other_assets/receipt.png";
   static var userIconPath = "assets/other_assets/user.png";
   static var notAllowedImagePath = "assets/other_assets/notAllowed.svg";
+  static var bachelorsImagePath = "assets/other_assets/bachelors.png";
+  static var familyImagePath = "assets/other_assets/family.png";
+  static var commercialImagePath = "assets/other_assets/commercial.png";
+  static var referAndEarnImagePath = "assets/other_assets/refer_earn.png";
+  static var rateImagePath = "assets/other_assets/rate.png";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -262,6 +272,7 @@ class GlobalVariables {
   static const renewAgreementAPI = "Members/renew_agreement";
   static const closeAgreementAPI = "Members/close_agreement";
   static const paymentChargesAPI = "Api/paymentCharges";
+  static const referAPI = "Api/refer";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -333,6 +344,7 @@ class GlobalVariables {
   static const cancelReceiptRequestAPI = "AndroidApi/cancel_request";
   static const approveReceiptRequestAPI = "AndroidApi/approve_request";
   static const headWiseExpenseAPI = "Androidexpense/headwise_expense";
+  static const updateExpenseAttachmentAPI = "Androidexpense/update_attachment";
 
   /*Routs Variables*/
   static const LoginPage = "Login";
@@ -505,6 +517,7 @@ class GlobalVariables {
   static const MESSAGE = "message";
   static const DATA = "data";
   static const Front = "front";
+  static const refer = "refer";
   static const bank = "bank";
   static const category = "category";
   static const Year = "Year";
@@ -559,6 +572,9 @@ class NotificationTypes{
   static const String TYPE_BROADCAST = "Broadcast";
   static const String TYPE_NEW_OFFER = "New_Offer";
   static const String TYPE_INTERESTED_CUSTOMER = "Interested_Customer";
+  static const String TYPE_UserManagement = "UserManagement";
+  static const String TYPE_PaymentRequest = "PaymentRequest";
+  static const String TYPE_Expense = "Expense";
 
 }
 
@@ -655,11 +671,11 @@ class AppUserPermission{
   static bool isUserAdminPermission = false;
   static var userAdminPermission = 'admin';
 
-  static bool isAccountingPermission=false;
-  static var addAccountingPermission = 'Accounting';
+  static bool isUserAccountingPermission=false;
+  static var addUserAccountingPermission = 'Accounting';
 
-  static bool isAddExpensePermission=false;
-  static var addExpensePermission = 'AddExpense';
+  static bool isUserAddExpensePermission=false;
+  static var userAddExpensePermission = 'AddExpense';
 
   static bool isUserHideMyDuesPermission=false;
   static var userHideMyDuesPermission = 'Hide_MyDues';

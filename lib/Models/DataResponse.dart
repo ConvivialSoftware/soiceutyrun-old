@@ -2,6 +2,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 
 class DataResponse {
+  List<dynamic> refer;
   List<dynamic> data;
   List<dynamic> front;
   List<dynamic> bank;
@@ -18,7 +19,7 @@ class DataResponse {
 
   DataResponse({this.data, this.message, this.status,
     this.android_version,this.android_type,this.ios_version,
-    this.ios_type,this.front,this.bank,this.category,this.Year,
+    this.ios_type,this.front,this.refer,this.bank,this.category,this.Year,
     this.unit,this.dataString});
 
 
@@ -51,6 +52,7 @@ class DataResponse {
     return DataResponse(
         data: map[GlobalVariables.DATA],
         front: map[GlobalVariables.Front],
+        refer: map[GlobalVariables.refer],
         status: map[GlobalVariables.STATUS],
         message: map[GlobalVariables.MESSAGE]
     );

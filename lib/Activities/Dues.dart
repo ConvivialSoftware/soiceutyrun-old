@@ -266,12 +266,13 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
               child: Column(
                 children: <Widget>[
                   Row(
+                    crossAxisAlignment:CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                           color:
                           getBillTypeColor(value.billList[position].TYPE),
                         ),
@@ -291,14 +292,14 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                           ? text(
                         'Paid',
                         textColor: GlobalVariables.green,
-                        fontSize: GlobalVariables.textSizeLargeMedium,
+                        fontSize: GlobalVariables.textSizeSMedium,
                         fontWeight: FontWeight.bold,
                       )
                           : text(
                         getBillPaymentStatus(position, value),
                         textColor:
                         getBillPaymentStatusColor(position, value),
-                        fontSize: GlobalVariables.textSizeLargeMedium,
+                        fontSize: GlobalVariables.textSizeSMedium,
                         fontWeight: FontWeight.bold,
                       ),
                     ],
@@ -387,7 +388,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                     AppLocalizations.of(context)
                                         .translate('view'),
                                     fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.grey,
                                   ),
                                 )
                               ],
@@ -535,7 +536,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                     AppLocalizations.of(context)
                                         .translate('pay_now'),
                                     fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.grey,
                                   ),
                                 )
                               ],
@@ -563,7 +564,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                     !widget.isAdmin ? AppLocalizations.of(context)
                                         .translate('get_bill') : AppLocalizations.of(context).translate('send_bill'),
                                     fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.grey,
                                   ),
                                 )
                               ],
@@ -608,7 +609,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                     !widget.isAdmin ? AppLocalizations.of(context)
                                         .translate('already_paid') : AppLocalizations.of(context).translate('payment'),
                                     fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.grey,
                                   ),
                                 )
                               ],
@@ -629,14 +630,14 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
 
   getBillTypeColor(String billType) {
     switch (billType) {
-      case "Maintainance Bills":
+      case "Bill":
         {
-          return GlobalVariables.skyBlue;
+          return GlobalVariables.orangeYellow;
         }
         break;
       case "Electricity Bills":
         {
-          return GlobalVariables.orangeYellow;
+          return GlobalVariables.lightOrange;
         }
         break;
       case "Miscellaneous Bills":

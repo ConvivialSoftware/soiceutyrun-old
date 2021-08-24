@@ -12,6 +12,7 @@ class Member {
   String FLAT;
   String EMAIL;
   String Phone;
+  String MOBILE;
   String PROFILE_PHOTO;
   String AGREEMENT_ID;
 
@@ -26,6 +27,7 @@ class Member {
       this.FLAT,
       this.EMAIL,
       this.Phone,
+      this.MOBILE,
       this.AGREEMENT_ID,
       this.PROFILE_PHOTO});
 
@@ -41,6 +43,7 @@ class Member {
         FLAT: json['FLAT'],
         EMAIL: json['EMAIL']??'',
         Phone: json['Phone']?? '',
+      MOBILE: json['MOBILE']?? '',
         PROFILE_PHOTO: json['PROFILE_PHOTO'],
         AGREEMENT_ID:json['AGREEMENT_ID'],
     );

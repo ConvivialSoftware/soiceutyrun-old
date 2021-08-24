@@ -9,6 +9,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
@@ -110,7 +111,8 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
+              AppTextField(textHintContent: AppLocalizations.of(context).translate('title'), controllerCallback: complaintSubject),
+              /*Container(
                 //  height: 150,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -131,8 +133,13 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                           color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                       border: InputBorder.none),
                 ),
-              ),
+              ),*/
               Container(
+                height: 150,
+                child: AppTextField(textHintContent: AppLocalizations.of(context)
+                    .translate('complaint_desc'), controllerCallback: complaintDesc,maxLines: 99,),
+              ),
+            /*  Container(
                 height: 150,
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -153,7 +160,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                           color: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium),
                       border: InputBorder.none),
                 ),
-              ),
+              ),*/
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(

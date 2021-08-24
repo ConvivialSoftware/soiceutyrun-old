@@ -30,7 +30,7 @@ class AppTextField extends StatefulWidget {
     this.readOnly=false,
     this.suffixIcon,this.keyboardType=TextInputType.text,
     this.maxLength,this.counterText='',
-    this.textCapitalization=TextCapitalization.none,
+    this.textCapitalization=TextCapitalization.sentences,
     this.inputFormatters,this.contentPadding,
     this.obscureText=false,
   });

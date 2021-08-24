@@ -291,7 +291,7 @@ class AddNewMemberByAdminState
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.lightGray,
                             width: 2.0,
                           )),
                       child: ButtonTheme(
@@ -337,7 +337,7 @@ class AddNewMemberByAdminState
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.lightGray,
                             width: 2.0,
                           )),
                       child: ButtonTheme(

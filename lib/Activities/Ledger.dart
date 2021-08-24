@@ -165,8 +165,8 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     borderRadius: BorderRadius.circular(10)),
                 child: getRecentTransactionLayout(value),
               )
-            : Container(),
-        value.isLoading ? SizedBox(): Align(
+            : GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+        value.isLoading ? SizedBox(): value.ledgerList.length > 0 ? Align(
                 alignment: Alignment.bottomCenter,
                 child: AppContainer(
                   child: Row(
@@ -190,7 +190,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     ],
                   ),
                 ),
-              )
+              ) : SizedBox()
 
       ],
     );

@@ -396,7 +396,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
               children: <Widget>[
                 Container(
                   child: text(
-                      'Rs. ' + NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[position].Price)),
+                      GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[position].Price),
                       textColor: GlobalVariables.black,
                       fontSize: GlobalVariables.textSizeMedium,
                       fontWeight: FontWeight.bold),
@@ -404,7 +404,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: BoxDecoration(
-                      color: GlobalVariables.orangeYellow,
+                      color: getClassifiedTypeColor(value.ownerClassifiedList[position].Type),
                       borderRadius: BorderRadius.circular(5)),
                   child: text(value.ownerClassifiedList[position].Type,
                     fontSize: GlobalVariables.textSizeSmall,
@@ -418,7 +418,22 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
       ),
     );
   }
-
+  getClassifiedTypeColor(String type) {
+    switch (type.toLowerCase().trim()) {
+      case "buy":
+        return GlobalVariables.skyBlue;
+        break;
+      case "rent":
+        return GlobalVariables.orangeYellow;
+        break;
+      case "sell":
+        return GlobalVariables.green;
+        break;
+      default:
+        return GlobalVariables.skyBlue;
+        break;
+    }
+  }
  /* getTabBarView(OwnerClassifiedResponse value) {
     return TabBarView(
         controller: _tabController,

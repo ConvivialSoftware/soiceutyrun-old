@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -87,11 +86,11 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
   int pageCount = 0;
   List<AddTenantInfo> _addTenantInfoList;
 
-
+/*
   FlutterUploader uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
   StreamSubscription _resultSubscription;
-  Map<String, UploadItem> _tasks = {};
+  Map<String, UploadItem> _tasks = {};*/
 
   @override
   void initState() {
@@ -106,7 +105,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
     _selectedMembershipType = 'Tenant';
     _addTenantInfoList = List(int.parse(widget.agreementInfo.noOfBachelor));
 
-    _progressSubscription = uploader.progress.listen((progress) {
+   /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       print("progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
@@ -136,7 +135,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
       setState(() {
         _tasks[exp.tag] = task.copyWith(status: exp.status);
       });
-    });
+    });*/
 
 
   }
@@ -144,8 +143,8 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
   @override
   void dispose() {
     super.dispose();
-    _progressSubscription?.cancel();
-    _resultSubscription?.cancel();
+    //_progressSubscription?.cancel();
+    //_resultSubscription?.cancel();
   }
 
   @override
@@ -438,7 +437,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(
@@ -481,7 +480,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(
@@ -538,7 +537,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(
@@ -938,6 +937,8 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
 
   Future<void> addAgreementWithTenantDetails() async{
 
+    print('file path : '+ GlobalFunctions.convertFileToString(widget.agreementInfo.agreementAttachmentPath));
+    print('file type : '+ widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length));
 
     if (widget.agreementInfo.rentedTo ==
         AppLocalizations.of(context).translate('group_bachelor')) {
@@ -958,9 +959,10 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
         tlist,
         widget.agreementInfo.startDate,
         widget.agreementInfo.endDate,
-        widget.agreementInfo.agreementAttachmentName,
+        GlobalFunctions.convertFileToString(widget.agreementInfo.agreementAttachmentPath),
         widget.agreementInfo.rentedTo,
         widget.agreementInfo.isNocEmail,
+        widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length),
         widget.isAdmin)
         .then((value) async {
       _progressDialog.hide();
@@ -970,23 +972,23 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
 
-        if (widget.agreementInfo.agreementAttachmentName != null && widget.agreementInfo.agreementAttachmentPath != null) {
+       /* if (widget.agreementInfo.agreementAttachmentName != null && widget.agreementInfo.agreementAttachmentPath != null) {
           print('attachmentFilePath : ' + widget.agreementInfo.agreementAttachmentPath.toString());
           print('attachmentFileName : ' + widget.agreementInfo.agreementAttachmentName.toString());
           print('attachmentFileName : ' +
               widget.agreementInfo.agreementAttachmentPath.replaceAll(widget.agreementInfo.agreementAttachmentName, "").toString());
 
-         /* File file = File(attachmentFilePath);
+         *//* File file = File(attachmentFilePath);
           Uint8List bytes = file.readAsBytesSync();
           _progressDialog.show();
           AWSClient()
               .uploadData('uploads', attachmentFileName, bytes)
               .then((value) {
             _progressDialog.hide();
-          });*/
+          });*//*
 
 
-
+*//*
           final tag = "File upload ${_tasks.length + 1}";
           final taskId = await uploader.enqueue(
               url: "https://societyrun.com//Uploads/",
@@ -1017,10 +1019,10 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                       type: MediaType.Pdf,
                       status: UploadTaskStatus.enqueued,
                     ));
-          });
+          });*//*
 
         }
-
+*/
       }
     });
   }

@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
+import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
+import 'package:societyrun/Activities/ExpenseSearchAdd.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
@@ -15,6 +17,7 @@ import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
 import 'package:societyrun/Activities/OwnerDiscover.dart';
+import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -662,6 +665,36 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseOwnerClassifiedNotificationItemDesc(temp.iD)));
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == NotificationTypes.TYPE_UserManagement) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseUserManagement()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == NotificationTypes.TYPE_Expense) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseExpenseSearchAdd()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
       if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

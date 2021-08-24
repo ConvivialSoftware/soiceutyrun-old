@@ -66,6 +66,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
+        backgroundColor: GlobalVariables.veryLightGray,
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           backgroundColor: GlobalVariables.green,
@@ -91,26 +92,13 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
 
   getExpenseLayout() {
     print('getExpenseLayout Tab Call');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: GlobalVariables.veryLightGray,
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 180.0),
-            //    getSearchLayout(),
-                getExpenseListDataLayout(),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+            context, 180.0),
+    //    getSearchLayout(),
+        getExpenseListDataLayout(),
+      ],
     );
   }
 
@@ -146,27 +134,32 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
   }
 
   getExpenseListDataLayout() {
-    return _expenseList.length>0 ? Column(
-      children: [
-        Container(
-          alignment: Alignment.topRight,
-          margin: EdgeInsets.fromLTRB(
-              16, 16, 16, 16),
-          child: text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
-              textColor: GlobalVariables.white,fontWeight: FontWeight.bold),
-        ),
-        Container(
-          child: Builder(
-              builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: _expenseList.length,
-                itemBuilder: (context, position) {
-                  return getExpenseDescListItemLayout(position);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-        ),
-      ],
+    return _expenseList.length>0 ?
+    SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            alignment: Alignment.topRight,
+            margin: EdgeInsets.fromLTRB(
+                16, 16, 16, 16),
+            child: text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
+                textColor: GlobalVariables.white,fontWeight: FontWeight.bold),
+          ),
+          Container(
+            child: Builder(
+                builder: (context) => ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  // scrollDirection: Axis.vertical,
+                  itemCount: _expenseList.length,
+                  itemBuilder: (context, position) {
+                    return getExpenseDescListItemLayout(position);
+                  }, //  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                )),
+          ),
+        ],
+      ),
     ):Container();
   }
 
@@ -204,14 +197,16 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: text(_voucherAmountList[0].head_name,textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
+                            Flexible(
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: text(_voucherAmountList[0].head_name,textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
+                                ),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: text('Rs. '+double.parse(_voucherAmount.toString()).toStringAsFixed(2),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
+                              child: text(GlobalFunctions.getCurrencyFormat(_voucherAmount.toString()),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
                               ),
                             ),
 

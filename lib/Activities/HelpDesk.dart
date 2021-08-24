@@ -310,7 +310,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
   getTicketListDataLayout(HelpDeskResponse value) {
     print(' value.openComplaintList.length :'+ value.openComplaintList.length.toString());
     print(' value.closeComplaintList.length :'+ value.closeComplaintList.length.toString());
-    return Container(
+    return value.complaintList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 80, 0, 0),
       child: Builder(
@@ -322,7 +322,7 @@ class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getTicketDescListItemLayout(int position, HelpDeskResponse value) {

@@ -139,6 +139,11 @@ abstract class RestClientERP {
       @Field("BANK_ACCOUNTNO") String bankAccountNo,
       @Field("ID") String id,@Field("NARRATION") String narration);
 
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.updateExpenseAttachmentAPI)
+  Future<StatusMsgResponse> updateExpenseAttachment(@Field("SOCIETY_ID") String socId,@Field("VOUCHER_NO") String voucherNo,@Field("ATTACHMENT") String attachment,@Field("FILE_TYPE") String fileType);
+
 }
 
 

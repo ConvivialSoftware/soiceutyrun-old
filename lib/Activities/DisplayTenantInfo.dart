@@ -7,7 +7,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
+//import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -54,10 +54,10 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
   String attachmentFilePath;
   String attachmentFileName;
   String attachmentCompressFilePath;
-  FlutterUploader uploader = FlutterUploader();
+  /*FlutterUploader uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
   StreamSubscription _resultSubscription;
-  Map<String, UploadItem> _tasks = {};
+  Map<String, UploadItem> _tasks = {};*/
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
 
@@ -91,7 +91,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
 
     FlutterDownloader.registerCallback(downloadCallback);
 
-    _progressSubscription = uploader.progress.listen((progress) {
+   /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       print("progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
@@ -122,7 +122,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
         _tasks[exp.tag] = task.copyWith(status: exp.status);
       });
     });
-
+*/
 
   }
 
@@ -137,8 +137,8 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
   @override
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
-    _progressSubscription?.cancel();
-    _resultSubscription?.cancel();
+    //_progressSubscription?.cancel();
+    //_resultSubscription?.cancel();
     super.dispose();
   }
 
@@ -773,7 +773,9 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                             widget._tenantRentalRequest.ID,
                                             _agreementFromController.text,
                                             _agreementToController.text,
-                                            attachmentFileName,widget.isAdmin)
+                                            GlobalFunctions.convertFileToString(attachmentFilePath),
+                                            attachmentFileName.substring(attachmentFileName.indexOf(".")+1,attachmentFileName.length),
+                                            widget.isAdmin)
                                             .then((value) async {
                                           _progressDialog.hide();
 
@@ -781,7 +783,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                           if (value.status) {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
-
+/*
                                             final tag = "File upload ${_tasks.length +
                                                 1}";
                                             final taskId = await uploader.enqueue(
@@ -815,7 +817,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                                         status: UploadTaskStatus
                                                             .enqueued,
                                                       ));
-                                            });
+                                            });*/
                                           }
                                         });
                                       } else {

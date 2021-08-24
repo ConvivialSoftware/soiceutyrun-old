@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +40,6 @@ class BaseAddAgreement extends StatefulWidget {
 class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   String attachmentFilePath;
   String attachmentFileName;
-  String attachmentCompressFilePath;
 
   TextEditingController _agreementFromController = TextEditingController();
   TextEditingController _agreementToController = TextEditingController();
@@ -67,33 +65,20 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
  // List<String> selectedUserList = List<String>();
 
-  FlutterUploader uploader = FlutterUploader();
+  /*FlutterUploader uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
   StreamSubscription _resultSubscription;
-  Map<String, UploadItem> _tasks = {};
+  Map<String, UploadItem> _tasks = {};*/
 
   @override
   void initState() {
     super.initState();
     getRentedToData();
-    Provider.of<UserManagementResponse>(context, listen: false)
-        .getBlock()
-        .then((value) {
-      //setBlockData(value);
-      //_selectedBlock = widget.block;
-      print('widget.block : ' + widget.block.toString());
-      print('widget.flat : ' + widget.flat.toString());
-      Provider.of<UserManagementResponse>(context, listen: false)
-          .getFlat(widget.block)
-          .then((value) {
-        //setFlatData(value);
-      });
-    });
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
 
-    _progressSubscription = uploader.progress.listen((progress) {
+   /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       print("progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
@@ -123,14 +108,14 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       setState(() {
         _tasks[exp.tag] = task.copyWith(status: exp.status);
       });
-    });
+    });*/
   }
 
   @override
   void dispose() {
     super.dispose();
-    _progressSubscription?.cancel();
-    _resultSubscription?.cancel();
+   // _progressSubscription?.cancel();
+    //_resultSubscription?.cancel();
   }
 
   @override
@@ -192,7 +177,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.lightGray,
                     width: 2.0,
                   )),
               child: ButtonTheme(
@@ -574,7 +559,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
     return false;
   }
 
-  Future<void> addAgreement() async {
+  /*Future<void> addAgreement() async {
     if (_selectedRentedTo ==
         AppLocalizations.of(context).translate('group_bachelor')) {
       _selectedRentedTo = "Group";
@@ -587,7 +572,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       print('attachmentFileName : ' +
           attachmentFilePath.replaceAll(attachmentFileName, "").toString());
 
-    /*  File file = File(attachmentFilePath);
+    *//*  File file = File(attachmentFilePath);
       Uint8List bytes = file.readAsBytesSync();
       _progressDialog.show();
       AWSClient()
@@ -595,10 +580,10 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
           .then((value) {
         _progressDialog.hide();
       });
-*/
+*//*
 
 
-       final tag = "File upload ${_tasks.length + 1}";
+       *//*final tag = "File upload ${_tasks.length + 1}";
             final taskId = await uploader.enqueue(
                 url: "https://societyrun.com//Uploads/",
                 //required: url to upload to
@@ -628,10 +613,10 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                         type: MediaType.Pdf,
                         status: UploadTaskStatus.enqueued,
                       ));
-            });
+            });*//*
 
     }
-    /*if (!widget.isAdmin) {
+    *//*if (!widget.isAdmin) {
       _progressDialog.show();
       Provider.of<UserManagementResponse>(context, listen: false)
           .addAgreement(
@@ -671,8 +656,8 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
         }
       });
-    }*/
-  }
+    }*//*
+  }*/
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {

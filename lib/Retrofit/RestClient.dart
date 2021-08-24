@@ -426,7 +426,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.userManagementDashboardAPI)
-  Future<DataResponse> getUserManagementDashboard(@Field(GlobalVariables.societyId) String societyId);
+  Future<DataResponse> getUserManagementDashboard(@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.userID) String userId);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.userTypeListAPI)
@@ -542,6 +542,8 @@ abstract class RestClient {
       @Field(GlobalVariables.AGREEMENT) String agreement,
       @Field(GlobalVariables.RENTED_TO) String rentedTo,
       @Field(GlobalVariables.Noc_Issue) String nocIssue,
+      //@Field(GlobalVariables.ATTACHMENT) String attchment,
+      @Field("FILE_TYPE") String fileType,
       @Field("isAdmin") bool isAdmin,
       );
 
@@ -569,6 +571,7 @@ abstract class RestClient {
       @Field(GlobalVariables.AGREEMENT_FROM) String agreementFrom,
       @Field(GlobalVariables.AGREEMENT_TO) String agreementTo,
       @Field(GlobalVariables.AGREEMENT) String agreement,
+      @Field("FILE_TYPE") String fileType,
       @Field(GlobalVariables.Type) bool isAdmin,
       );
 
@@ -582,6 +585,20 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.paymentChargesAPI)
   Future<PaymentChargesResponse> getPaymentCharges();
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.referAPI)
+  Future<StatusMsgResponse> referAndEarn(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field("society_name") String societyName,
+      @Field("flat") String flat,
+      @Field("address") String address,
+      @Field("name") String name,
+      @Field("phone") String phone,
+      @Field("email") String email,
+      @Field("message")String message,
+      );
+
 
 }
 

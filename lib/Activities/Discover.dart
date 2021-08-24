@@ -411,8 +411,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                     Container(
                       //NumberFormat.currency(locale: 'IN').format(
                       child: text(
-                          'Rs. ' + NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.classifiedList[position].Price)),
-
+                          GlobalFunctions.getCurrencyFormat(value.classifiedList[position].Price),
                           textColor: GlobalVariables.black,
                           fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold),
@@ -420,7 +419,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         decoration: BoxDecoration(
-                            color: GlobalVariables.orangeYellow,
+                            color: getClassifiedTypeColor(value.classifiedList[position].Type),
                             borderRadius: BorderRadius.circular(5)),
                       child: text(value.classifiedList[position].Type,
                           fontSize: GlobalVariables.textSizeSmall,
@@ -770,5 +769,22 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         children: value.classifiedCategoryList.map<Widget>((dynamicContent) {
           return getClassifiedLayout(value);
         }).toList());
+  }
+
+  getClassifiedTypeColor(String type) {
+    switch (type.toLowerCase().trim()) {
+      case "buy":
+        return GlobalVariables.skyBlue;
+        break;
+      case "rent":
+        return GlobalVariables.orangeYellow;
+        break;
+      case "sell":
+        return GlobalVariables.green;
+        break;
+      default:
+        return GlobalVariables.skyBlue;
+        break;
+    }
   }
 }

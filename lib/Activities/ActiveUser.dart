@@ -145,7 +145,7 @@ var photo = "";
 
   getActiveUserListDataLayout(UserManagementResponse userManagementResponse) {
     print('value.activeUserList : '+userManagementResponse.activeUserList.length.toString());
-    return SingleChildScrollView(
+    return userManagementResponse.activeUserList.length>0 ? SingleChildScrollView(
       child: Column(
         children: [
           Container(
@@ -164,7 +164,7 @@ var photo = "";
           ),
         ],
       ),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getActiveUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
@@ -342,7 +342,7 @@ var photo = "";
   }
 
   getUnActiveUserListDataLayout(UserManagementResponse userManagementResponse) {
-    return Container(
+    return userManagementResponse.inactiveUserList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
           0,8, 0, 0),
@@ -360,7 +360,7 @@ var photo = "";
             }, //  scrollDirection: Axis.vertical,
             shrinkWrap: true,
           )),
-    );
+    ) :GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getUnActiveUserListItemLayout(int position, UserManagementResponse userManagementResponse) {

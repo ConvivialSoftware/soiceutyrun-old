@@ -184,6 +184,16 @@ class GlobalFunctions {
     return "";
   }
 
+  static getSocietyContact() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getKeys().contains(GlobalVariables.keySocietyContact)) {
+      print('keySocietyContact : ' +
+          sharedPreferences.getString(GlobalVariables.keySocietyContact));
+      return sharedPreferences.getString(GlobalVariables.keySocietyContact);
+    }
+    return "";
+  }
+
   static getFlat() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getKeys().contains(GlobalVariables.keyFlat)) {
@@ -412,6 +422,7 @@ class GlobalFunctions {
     sharedPreferences.setString(
         GlobalVariables.keySocietyAddress, value.Address);
     sharedPreferences.setString(GlobalVariables.keyEmail, value.Email);
+    sharedPreferences.setString(GlobalVariables.keySocietyContact, value.Contact);
     sharedPreferences.setString(
         GlobalVariables.keySocietyPermission, value.society_Permissions);
     sharedPreferences.setString(GlobalVariables.keyName, value.Name);
@@ -1003,7 +1014,7 @@ class GlobalFunctions {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
-                                fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,textColor: GlobalVariables.white
                               ),
                             ),
                           ),
@@ -1293,7 +1304,7 @@ class GlobalFunctions {
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('logout'),
-                                  fontSize: GlobalVariables.textSizeMedium),
+                                  fontSize: GlobalVariables.textSizeMedium,textColor: GlobalVariables.white),
                             ),
                           ),
                         ),
@@ -1519,7 +1530,7 @@ class GlobalFunctions {
 
   static String getCurrencyFormat(String amount){
 
-    return NumberFormat.currency(locale: 'HI',symbol: 'Rs. ',decimalDigits: 2).format(double.parse(amount));
+    return NumberFormat.currency(locale: 'HI',symbol: '₹ ',decimalDigits: 2).format(double.parse(amount));
 
   }
 

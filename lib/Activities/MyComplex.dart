@@ -265,7 +265,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       shrinkWrap: true,
                     )),
           )
-        : /*GlobalFunctions.noDataFoundLayout(context, "No Data Found")*/ Container();
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getNewsBoardListItemLayout(var position, MyComplexResponse value) {
@@ -525,7 +525,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       shrinkWrap: true,
                     )),
           )
-        : Container();
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getMeetingsListItemLayout(var position, MyComplexResponse value) {
@@ -780,7 +780,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getPollSurveyListDataLayout(MyComplexResponse value) {
     print('getPollSurveyListDataLayout Tab Call');
-    return Container(
+    return value.pollList.length>0 ? Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(top: 8),
       child: Builder(
@@ -792,7 +792,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getPollSurveyListItemLayout(var position, MyComplexResponse value) {
@@ -1085,12 +1085,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
   getDirectoryLayout(MyComplexResponse value) {
     print('getDirectoryLayout Tab Call');
     return SingleChildScrollView(
+      
       child: Stack(
         children: <Widget>[
           GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
               context, 150.0),
           value.isLoading
-              ? GlobalFunctions.loadingWidget(context)
+              ? Center(child: GlobalFunctions.loadingWidget(context))
               : getDirectoryListDataLayout(value),
         ],
       ),
@@ -1211,7 +1212,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     shrinkWrap: true,
                   )),
         )
-        : Container();
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getDirectoryListItemLayout(int position, MyComplexResponse value) {
@@ -1354,7 +1355,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     child: primaryText(
                       name,
                       // textColor: GlobalVariables.green,
-                      // fontSize: GlobalVariables.textSizeMedium,
+                       fontSize: GlobalVariables.textSizeSMedium,
                       // maxLine: 1,
                     ),
                   ),
@@ -1675,7 +1676,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           shrinkWrap: true,
                         )),
               )
-            : Container();
+            : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getEventsListItemLayout(var position, MyComplexResponse value) {
@@ -2042,7 +2043,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
 
   getDocumentListDataLayout(MyComplexResponse value) {
     print('getDocumentListDataLayout Tab Call');
-    return Container(
+    return value.documentList.length>0 ? Container(
       margin : EdgeInsets.only(top: 8),
       child: Builder(
           builder: (context) => ListView.builder(
@@ -2053,7 +2054,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                 }, //  scrollDirection: Axis.vertical,
                 shrinkWrap: true,
               )),
-    );
+    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   /* Container(
@@ -2094,7 +2095,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         value.documentList[position]
                             .DOCUMENT_CATEGORY,
                         textColor: GlobalVariables.white,
-                        fontSize: GlobalVariables.textSizeSmall),
+                        fontSize: GlobalVariables.textSizeVerySmall),
                     decoration: BoxDecoration(
                         color: getDocumentTypeColor(value
                             .documentList[position]

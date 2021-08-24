@@ -32,6 +32,7 @@ import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/Notifications.dart';
 import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/OwnerServices.dart';
+import 'package:societyrun/Activities/Support.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -397,7 +398,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       ],
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     getHomePage(value)
                   ],
@@ -588,9 +589,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               context);
                         },
                         child: Container(
-                          // color: GlobalVariables.black,
+                          //    color: GlobalVariables.black,
                           width: 100,
-                          height: 100,
+                          height: 80,
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -620,9 +621,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               context);
                         },
                         child: Container(
-                          //    color: GlobalVariables.green,
+                          //  color: GlobalVariables.green,
                           width: 100,
-                          height: 100,
+                          height: 80,
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -656,9 +657,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     context, true);
                         },
                         child: Container(
-                          //   color: GlobalVariables.black,
+                          //    color: GlobalVariables.black,
                           width: 100,
-                          height: 100,
+                          height: 80,
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -705,7 +706,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                         child: Container(
                           //    color: GlobalVariables.black,
                           width: 100,
-                          height: 100,
+                          height: 80,
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -740,9 +741,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     context, true);
                         },
                         child: Container(
-                          //   color: GlobalVariables.green,
+                          //    color: GlobalVariables.green,
                           width: 100,
-                          height: 100,
+                          height: 80,
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -771,9 +772,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               context);
                         },
                         child: Container(
-                          //     color: GlobalVariables.black,
+                          //color: GlobalVariables.black,
                           width: 100,
-                          height: 100,
+                          height: 80,
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -1414,6 +1415,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Provider.of<LoginDashBoardResponse>(context, listen: false)
           .getAllSocietyData(loggedUsername, context)
           .then((_societyList) async {
+        getSocietyData();
         _rateMyApp.init().then((_) {
           //if(_rateMyApp.shouldOpenDialog){ //conditions check if user already rated the app
           if (mounted && _rateMyApp.shouldOpenDialog) {
@@ -1557,7 +1559,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             rootIconData: GlobalVariables.expenseIconPath,
             // innerIconData: GlobalVariables.myFlatIconPath,
             items: [])
-      else if (AppUserPermission.isAccountingPermission)
+      else if (AppUserPermission.isUserAccountingPermission)
         new RootTitle(
             title: AppLocalizations.of(context).translate('expense'),
             rootIconData: GlobalVariables.expenseIconPath,
@@ -1743,8 +1745,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             children: <Widget>[
                               text(
                                 !AppUserPermission.isUserHideMyDuesPermission
-                                    ? GlobalFunctions.getCurrencyFormat(loginDashBoardResponse.duesRs)
-                                        /*double.parse(
+                                    ? GlobalFunctions.getCurrencyFormat(
+                                        loginDashBoardResponse.duesRs)
+                                    /*double.parse(
                                                 loginDashBoardResponse.duesRs)
                                             .toStringAsFixed(2)*/
                                     : GlobalFunctions.getCurrencyFormat("0"),
@@ -2228,13 +2231,31 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       showSocietyDialog(context);
     } else if (item == AppLocalizations.of(context).translate('more')) {
       //Redirect to  Admin«
-      GlobalFunctions.comingSoonDialog(context);
-      /* Navigator.push(
+      //GlobalFunctions.comingSoonDialog(context);
+
+      /*showDialog(
+          context: context,
+          builder: (BuildContext context) => StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return Dialog(
+                  //backgroundColor: GlobalVariables.transparent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  //child: supportLayout(),
+                );
+              }));*/
+     /*  Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseCreateClassifiedListing())).then((value) {
+              builder: (context) => BaseSupport())).then((value) {
         GlobalFunctions.setBaseContext(_dashboardSacfoldKey.currentContext);
       });*/
+
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) =>
+              BaseSupport()));
+
 
       /*Navigator.push(
           context, MaterialPageRoute(builder: (context) => BaseMore())).then((value) {
@@ -2510,11 +2531,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       if (_userPermissionList[i] == AppUserPermission.userAdminPermission) {
         AppUserPermission.isUserAdminPermission = true;
       }
-      if (_userPermissionList[i] == AppUserPermission.addAccountingPermission) {
-        AppUserPermission.isAccountingPermission = true;
+      if (_userPermissionList[i] ==
+          AppUserPermission.addUserAccountingPermission) {
+        AppUserPermission.isUserAccountingPermission = true;
       }
-      if (_userPermissionList[i] == AppUserPermission.addExpensePermission) {
-        AppUserPermission.isAddExpensePermission = true;
+      if (_userPermissionList[i] ==
+          AppUserPermission.userAddExpensePermission) {
+        AppUserPermission.isUserAddExpensePermission = true;
       }
       if (_userPermissionList[i] == AppUserPermission.userAddMemberPermission) {
         AppUserPermission.isUserAddMemberPermission = true;
@@ -2542,8 +2565,196 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
 
   Future<void> showSocietyDialog(BuildContext context) async {
+    getSocietyData();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: AppContainer(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('switch_society'),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      ListView.builder(
+                          itemCount: mSocietyList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, position) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  print('mSocietyList : ' +
+                                      mSocietyList.toString());
+                                  //print('mSocietyList : '+mSocietyList.toString());
+                                  mSocietyList.forEach((element) {
+                                    print('societyName : ' +
+                                        element.Society_Name);
+                                    print('society selected : ' +
+                                        element.isSelected.toString());
+                                    if (element.isSelected) {
+                                      element.isSelected = false;
+                                    } else {
+                                      //print('societyName : '+element.Society_Name);
+                                      element.isSelected = true;
+                                      _selectedSocietyLogin = element;
+                                    }
+                                  });
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      flex: 2,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        //mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                color: mSocietyList[position]
+                                                            .isSelected ==
+                                                        true
+                                                    ? GlobalVariables.green
+                                                    : GlobalVariables
+                                                        .transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                border: Border.all(
+                                                  color: mSocietyList[position]
+                                                              .isSelected ==
+                                                          true
+                                                      ? GlobalVariables.green
+                                                      : GlobalVariables
+                                                          .mediumGreen,
+                                                  width: 2.0,
+                                                )),
+                                            child: AppIcon(
+                                              Icons.check,
+                                              iconColor: mSocietyList[position]
+                                                          .isSelected ==
+                                                      true
+                                                  ? GlobalVariables.white
+                                                  : GlobalVariables.transparent,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  10, 0, 0, 0),
+                                              child: text(
+                                                mSocietyList[position]
+                                                            .Society_Name ==
+                                                        null
+                                                    ? ''
+                                                    : mSocietyList[position]
+                                                        .Society_Name,
+                                                textColor:
+                                                    GlobalVariables.green,
+                                                fontSize: GlobalVariables
+                                                    .textSizeSMedium,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: AppButton(
+                            textContent:
+                                AppLocalizations.of(context).translate('done'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              // setState(() {
+                              GlobalFunctions.saveDataToSharedPreferences(
+                                  _selectedSocietyLogin);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          BaseDashBoard()),
+                                  (Route<dynamic> route) => false);
+                              // print('for _selctedItem:' + _selectedItem);
+                              /* getDuesData();
+                            getSharedPreferenceData();*/
+
+                              //});
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+
+                /*  child: DropdownButton(
+                    items: _societyListItems,
+                    onChanged: (value) {
+                      GlobalFunctions.checkInternetConnection().then((internet) {
+                        if (internet) {
+                          setState(() {
+                            _selectedItem = value;
+                            print('_selctedItem:' + _selectedItem.toString());
+                            for (int i = 0; i < LoginDashBoardResponse.societyList.length;
+                            i++) {
+                              if (_selectedItem ==
+                                  LoginDashBoardResponse.societyList[i].ID) {
+                                _selectedSocietyLogin =
+                                LoginDashBoardResponse.societyList[i];
+                                _selectedSocietyLogin.PASSWORD = password;
+                                GlobalFunctions.saveDataToSharedPreferences(
+                                    _selectedSocietyLogin);
+                                print('for _selctedItem:' + _selectedItem);
+                                getDuesData();
+                                getSharedPreferenceData();
+                                break;
+                              }
+                            }
+                          });
+                        } else {
+                          GlobalFunctions.showToast(AppLocalizations.of(context)
+                              .translate('pls_check_internet_connectivity'));
+                        }
+                      });
+                    },
+                    value: _selectedItem,
+                    underline: SizedBox(),
+                    isExpanded: false,
+                    icon: AppIcon(
+                      Icons.keyboard_arrow_down,
+                      iconColor: GlobalVariables.black,
+                    ),
+                    //iconSize: 20,
+                  ),*/
+              );
+            }));
+  }
+
+  Future<void> getSocietyData() async {
     mSocietyList = new List<LoginResponse>();
-    Navigator.pop(context);
     password = await GlobalFunctions.getPassword();
     societyId = await GlobalFunctions.getSocietyId();
     String loginId = await GlobalFunctions.getLoginId();
@@ -2556,7 +2767,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     for (int i = 0; i < LoginDashBoardResponse.societyList.length; i++) {
       LoginDashBoardResponse.societyList[i].LoggedUsername = loggedUsername;
       LoginResponse loginResponse = LoginDashBoardResponse.societyList[i];
-      loginResponse.isSelected=false;
+      loginResponse.isSelected = false;
 
       print('"loginResponse.ID : ' + loginResponse.ID);
       print('ShardPref societyId : ' + societyId);
@@ -2657,179 +2868,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //show logout Dialog
       GlobalFunctions.forceLogoutDialog(context);
     }
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: AppContainer(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: text(AppLocalizations.of(context)
-                            .translate('switch_society'),fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 16,),
-                      ListView.builder(
-                          itemCount: mSocietyList.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, position) {
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  print('mSocietyList : '+mSocietyList.toString());
-                                  //print('mSocietyList : '+mSocietyList.toString());
-                                  mSocietyList.forEach((element) {
-                                    print('societyName : '+element.Society_Name);
-                                    print('society selected : '+element.isSelected.toString());
-                                    if (element.isSelected) {
-                                      element.isSelected = false;
-                                    } else {
-                                      //print('societyName : '+element.Society_Name);
-                                      element.isSelected = true;
-                                      _selectedSocietyLogin = element;
-                                    }
-                                  });
-                                });
-                              },
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Flexible(
-                                      flex: 2,
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        //mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                                color: mSocietyList[position]
-                                                            .isSelected ==
-                                                        true
-                                                    ? GlobalVariables.green
-                                                    : GlobalVariables
-                                                        .transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                border: Border.all(
-                                                  color: mSocietyList[position]
-                                                              .isSelected ==
-                                                          true
-                                                      ? GlobalVariables.green
-                                                      : GlobalVariables
-                                                          .mediumGreen,
-                                                  width: 2.0,
-                                                )),
-                                            child: AppIcon(
-                                              Icons.check,
-                                              iconColor: mSocietyList[position]
-                                                          .isSelected ==
-                                                      true
-                                                  ? GlobalVariables.white
-                                                  : GlobalVariables.transparent,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  10, 0, 0, 0),
-                                              child: text(
-                                                mSocietyList[position]
-                                                            .Society_Name ==
-                                                        null
-                                                    ? ''
-                                                    : mSocietyList[position]
-                                                    .Society_Name,
-                                                textColor:
-                                                    GlobalVariables.green,
-                                                fontSize: GlobalVariables
-                                                    .textSizeSMedium,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                      SizedBox(height: 16,),
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: AppButton(textContent: AppLocalizations.of(context).translate('done'), onPressed: (){
-                          Navigator.of(context).pop();
-                         // setState(() {
-                            GlobalFunctions.saveDataToSharedPreferences(
-                                _selectedSocietyLogin);
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      BaseDashBoard()),
-                                  (Route<dynamic> route) => false);
-                            // print('for _selctedItem:' + _selectedItem);
-                           /* getDuesData();
-                            getSharedPreferenceData();*/
-
-                          //});
-                        }),
-                      ),
-                    ],
-                  ),
-                ),
-
-                /*  child: DropdownButton(
-                    items: _societyListItems,
-                    onChanged: (value) {
-                      GlobalFunctions.checkInternetConnection().then((internet) {
-                        if (internet) {
-                          setState(() {
-                            _selectedItem = value;
-                            print('_selctedItem:' + _selectedItem.toString());
-                            for (int i = 0; i < LoginDashBoardResponse.societyList.length;
-                            i++) {
-                              if (_selectedItem ==
-                                  LoginDashBoardResponse.societyList[i].ID) {
-                                _selectedSocietyLogin =
-                                LoginDashBoardResponse.societyList[i];
-                                _selectedSocietyLogin.PASSWORD = password;
-                                GlobalFunctions.saveDataToSharedPreferences(
-                                    _selectedSocietyLogin);
-                                print('for _selctedItem:' + _selectedItem);
-                                getDuesData();
-                                getSharedPreferenceData();
-                                break;
-                              }
-                            }
-                          });
-                        } else {
-                          GlobalFunctions.showToast(AppLocalizations.of(context)
-                              .translate('pls_check_internet_connectivity'));
-                        }
-                      });
-                    },
-                    value: _selectedItem,
-                    underline: SizedBox(),
-                    isExpanded: false,
-                    icon: AppIcon(
-                      Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.black,
-                    ),
-                    //iconSize: 20,
-                  ),*/
-              );
-            }));
+    print('mSocietyList : '+mSocietyList.toString());
+    print('mSocietyList : '+mSocietyList.length.toString());
   }
 }
 

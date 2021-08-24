@@ -157,6 +157,7 @@ flutter:
     - assets/other_assets/store_icon.svg
     - assets/other_assets/while_bg.svg
     - assets/other_assets/water_icon.svg
+    - assets/other_assets/Icon awesome-file-image.svg
     - assets/other_assets/Icon awesome-file-pdf.svg
     - assets/other_assets/Icon awesome-download.svg
     - assets/other_assets/icon-pdf.svg
@@ -221,6 +222,11 @@ flutter:
     - assets/other_assets/receipt.png
     - assets/other_assets/user.png
     - assets/other_assets/notAllowed.svg
+    - assets/other_assets/bachelors.png
+    - assets/other_assets/family.png
+    - assets/other_assets/commercial.png
+    - assets/other_assets/refer_earn.png
+    - assets/other_assets/rate.png
   fonts:
     - family: sans-serif
       fonts:

@@ -787,11 +787,11 @@ class _BaseDuesBillPaymentState extends BaseStatefulState<BaseDuesBillPayment> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              child: text(value.preferredMethod[position].variable+" : ",textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
+                              child: text(value.preferredMethod[position].variable+" : ",fontSize: GlobalVariables.textSizeSMedium),
                             ),
                             SizedBox(width: 8,),
                             Container(
-                              child: text(value.preferredMethod[position].value,textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
+                              child: text(value.preferredMethod[position].value,fontSize: GlobalVariables.textSizeSMedium,),
                             ),
                           ],
                         ),
@@ -820,11 +820,11 @@ class _BaseDuesBillPaymentState extends BaseStatefulState<BaseDuesBillPayment> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  child: text(value.otherMethod[position].variable + " : ",textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
+                                  child: text(value.otherMethod[position].variable + " : ",fontSize: GlobalVariables.textSizeSMedium),
                                 ),
                                 SizedBox(width: 8,),
                                 Container(
-                                  child: text(value.otherMethod[position].value,textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
+                                  child: text(value.otherMethod[position].value,fontSize: GlobalVariables.textSizeSMedium,),
                                 ),
                               ],
                             ),
@@ -937,17 +937,30 @@ class _BaseDuesBillPaymentState extends BaseStatefulState<BaseDuesBillPayment> {
                               child: InkWell(
                                   onTap: () {
                                     Navigator.of(context).pop();
-                                    showDialog(
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      backgroundColor: GlobalVariables.transparent,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return StatefulBuilder(
+                                            builder: (BuildContext context, setState) => getListOfPaymentGateway(
+                                                context,
+                                                setState,
+                                                value)
+                                        );
+                                      },
+                                    );
+                                   /* showDialog(
                                         context: context,
                                         builder: (BuildContext context) =>
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
                                                 StateSetter setState) {
                                               return Dialog(
-                                                /*shape: RoundedRectangleBorder(
+                                                *//*shape: RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                                25.0)),*/
+                                                                25.0)),*//*
                                                 backgroundColor:
                                                 Colors.transparent,
                                                 elevation: 0.0,
@@ -956,7 +969,7 @@ class _BaseDuesBillPaymentState extends BaseStatefulState<BaseDuesBillPayment> {
                                                     setState,
                                                     value),
                                               );
-                                            }));
+                                            }));*/
                                   },
                                   child: text('Pay advance',
                                       fontSize: GlobalVariables.textSizeMedium,

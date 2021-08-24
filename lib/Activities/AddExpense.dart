@@ -108,7 +108,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
             ),
           ),
           title: text(
-            widget.isAdmin ? AppLocalizations.of(context).translate('add_invoice'):AppLocalizations.of(context).translate('add_expense'),
+            widget.isAdmin ? AppLocalizations.of(context).translate('add_invoice')+' '+widget.mBlock+' '+widget.mFlat:AppLocalizations.of(context).translate('add_expense'),
             textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
           ),
         ),
@@ -174,7 +174,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                   },
                 ),
               ),
-              AppTextField(
+              widget.isAdmin ? AppTextField(
                 textHintContent:
                 AppLocalizations.of(context).translate('due_date'),
                 controllerCallback: _dueDateController,
@@ -195,7 +195,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     });
                   },
                 ),
-              ),
+              ):SizedBox(),
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -204,7 +204,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.lightGray,
                       width: 2.0,
                     )),
                 child: SearchableDropdown(
@@ -247,7 +247,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.lightGray,
                             width: 2.0,
                           )),
                       child: ButtonTheme(
@@ -304,7 +304,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.lightGray,
                       width: 2.0,
                     )),
                 child: ButtonTheme(
@@ -339,6 +339,16 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                 ),
               ),
               Container(
+                height: 150,
+                child: AppTextField(
+                  textHintContent:
+                  AppLocalizations.of(context).translate('enter_note'),
+                  controllerCallback: _noteController,
+                  maxLines: 99,
+                  contentPadding: EdgeInsets.only(top: 14),
+                ),
+              ),
+              /*Container(
                 height: 100,
                 child: AppTextField(
                   textHintContent:
@@ -346,7 +356,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                           '*',
                   controllerCallback: _noteController,
                 ),
-              ),
+              ),*/
               widget.isAdmin ? SizedBox() : Row(
                 children: <Widget>[
                   Flexible(
