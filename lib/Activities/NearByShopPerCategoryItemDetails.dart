@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -26,7 +27,7 @@ class NearByShopPerCategoryItemDetails extends StatefulWidget {
 }
 
 class NearByShopPerCategoryItemDetailsState
-    extends State<NearByShopPerCategoryItemDetails> {
+    extends BaseStatefulState<NearByShopPerCategoryItemDetails> {
 
   var width, height;
 

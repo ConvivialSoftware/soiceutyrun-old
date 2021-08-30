@@ -10,6 +10,7 @@ import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/UnitDetails.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -27,7 +28,7 @@ class BaseAdmin extends StatefulWidget {
   _BaseAdminState createState() => _BaseAdminState();
 }
 
-class _BaseAdminState extends State<BaseAdmin> {
+class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
   List<SliderCardName> _listSliderCardName = <SliderCardName>[];
 
   //List<BarChartModel> _listBarChart = <BarChartModel>[];
@@ -72,7 +73,9 @@ class _BaseAdminState extends State<BaseAdmin> {
         children: <Widget>[
           GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
           value.isLoading
-              ? Center(child: GlobalFunctions.loadingWidget(context))
+              ? Container(
+              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
+              child: GlobalFunctions.loadingWidget(context))
               : getAdminLayout(value),
         ],
       ),
@@ -187,11 +190,17 @@ class _BaseAdminState extends State<BaseAdmin> {
                       flex: 1,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BaseUnitDetails(isDuesUnit: true)));
+                          if(AppUserPermission.isUserAccountingPermission) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BaseUnitDetails(isDuesUnit: true)));
+                          }else{
+                            GlobalFunctions
+                                .showAdminPermissionDialogToAccessFeature(
+                                context, true);
+                          }
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
@@ -703,7 +712,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                                   FittedBox(
                                     child: text(
                                         GlobalFunctions.getCurrencyFormat(
-                                            value.receiptAmount),
+                                            value.receiptAmount??'0'),
                                         textColor: GlobalVariables.green,
                                         fontSize:
                                             GlobalVariables.textSizeNormal,
@@ -729,7 +738,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                                   FittedBox(
                                     child: text(
                                         GlobalFunctions.getCurrencyFormat(
-                                            value.expenseAmount),
+                                            value.expenseAmount??'0'),
                                         textColor: GlobalVariables.green,
                                         fontSize:
                                             GlobalVariables.textSizeNormal,
@@ -757,11 +766,17 @@ class _BaseAdminState extends State<BaseAdmin> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        BaseUnitDetails(isDuesUnit: true)));
+                            if(AppUserPermission.isUserAccountingPermission) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BaseUnitDetails(isDuesUnit: true)));
+                            }else{
+                              GlobalFunctions
+                                  .showAdminPermissionDialogToAccessFeature(
+                                  context, true);
+                            }
                           },
                           child: text('Add Receipt',
                               textColor: GlobalVariables.green,
@@ -769,11 +784,17 @@ class _BaseAdminState extends State<BaseAdmin> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        BaseUnitDetails(isAddExpense: true)));
+                            if(AppUserPermission.isUserAccountingPermission) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BaseUnitDetails(isAddExpense: true)));
+                            }else{
+                              GlobalFunctions
+                                  .showAdminPermissionDialogToAccessFeature(
+                                  context, true);
+                            }
                           },
                           child: text(
                               AppLocalizations.of(context)

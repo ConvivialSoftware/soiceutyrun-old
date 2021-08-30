@@ -31,42 +31,60 @@ class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
 
   bool _obscureNewPassword = true;
   bool _obscureConfirmPassword = true;
+  String lastLogin;
 
-ProgressDialog _progressDialog;
+  ProgressDialog _progressDialog;
+
+  @override
+  void initState() {
+    getLastLogin();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
+      builder: (context) =>
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: GlobalVariables.green,
+              centerTitle: true,
+              elevation: 0,
+              leading: InkWell(
+                onTap: () {
+                  getNavigatePage();
+                },
+                child: AppIcon(
+                  Icons.arrow_back,
+                  iconColor: GlobalVariables.white,
+                ),
+              ),
+              title: text(
+                  AppLocalizations.of(context).translate('create_new_password'),
+                  textColor: GlobalVariables.white,
+                  fontSize: GlobalVariables.textSizeMedium
+              ),
             ),
+            body: WillPopScope(child: getBaseLayout(), onWillPop: () async{
+              getNavigatePage();
+              return false;
+            }),
           ),
-          title: text(
-            AppLocalizations.of(context).translate('create_new_password'),
-           textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
-        ),
-        body: getBaseLayout(),
-      ),
     );
   }
 
   getBaseLayout() {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
       decoration: BoxDecoration(
         color: GlobalVariables.veryLightGray,
       ),
@@ -91,7 +109,7 @@ ProgressDialog _progressDialog;
       child: Container(
         margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(20),
-       // height: MediaQuery.of(context).size.height / 0.5,
+        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(10)),
@@ -106,7 +124,7 @@ ProgressDialog _progressDialog;
                 suffixIcon: AppIconButton(
                   Icons.remove_red_eye,
                   iconColor: GlobalVariables.mediumGreen,
-                  onPressed: (){
+                  onPressed: () {
                     if (_obscureNewPassword) {
                       _obscureNewPassword = false;
                     } else {
@@ -116,7 +134,7 @@ ProgressDialog _progressDialog;
                   },
                 ),
               ),
-             /* Container(
+              /* Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
@@ -155,7 +173,7 @@ ProgressDialog _progressDialog;
                 suffixIcon: AppIconButton(
                   Icons.remove_red_eye,
                   iconColor: GlobalVariables.mediumGreen,
-                  onPressed: (){
+                  onPressed: () {
                     if (_obscureConfirmPassword) {
                       _obscureConfirmPassword = false;
                     } else {
@@ -184,25 +202,23 @@ ProgressDialog _progressDialog;
   }
 
   Future<void> changePassword() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
 
     _progressDialog.show();
-    restClient.changeNewPassword(societyId,userId,_confirmPasswordController.text).then((value) {
-
-      print('changeNewPassword value : '+value.toString());
+    restClient.changeNewPassword(
+        societyId, userId, _confirmPasswordController.text).then((value) {
+      print('changeNewPassword value : ' + value.toString());
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
-      if(value.status)
-      {
-
-        GlobalFunctions.savePasswordToSharedPreferences(_confirmPasswordController.text);
+      if (value.status) {
+        GlobalFunctions.savePasswordToSharedPreferences(
+            _confirmPasswordController.text);
         //TODO: send FirebaseToken To Server
 
-      //TODO: Navigate To DashBoardPage
+        //TODO: Navigate To DashBoardPage
 
         Navigator.pushAndRemoveUntil(
             context,
@@ -210,9 +226,6 @@ ProgressDialog _progressDialog;
                 builder: (BuildContext context) => new BaseDashBoard()),
                 (Route<dynamic> route) => false);
       }
-
-
-
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -225,25 +238,38 @@ ProgressDialog _progressDialog;
         default:
       }
     });
-
   }
 
   void verifyPassword() {
-
-    if(_newPasswordController.text.length>0){
-      if(_confirmPasswordController.text.length>0){
-        if(_newPasswordController.text==_confirmPasswordController.text){
+    if (_newPasswordController.text.length > 0) {
+      if (_confirmPasswordController.text.length > 0) {
+        if (_newPasswordController.text == _confirmPasswordController.text) {
           changePassword();
-        }else{
-          GlobalFunctions.showToast("Confirm Password doesn't match with New Password..!!");
+        } else {
+          GlobalFunctions.showToast(
+              "Confirm Password doesn't match with New Password..!!");
         }
-      }else{
+      } else {
         GlobalFunctions.showToast("Invalid Confirm Password");
       }
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Enter New Password");
     }
+  }
 
+  Future<void> getLastLogin() async {
+    lastLogin = await GlobalFunctions.getLastLogin();
+  }
 
+  void getNavigatePage() {
+    if (lastLogin == GlobalVariables.ZeroTimeLine) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(
+              builder: (BuildContext context) => BaseDashBoard()),
+              (Route<dynamic> route) => false);
+    }else {
+      Navigator.of(context).pop();
+    }
   }
 }

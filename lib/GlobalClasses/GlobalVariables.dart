@@ -51,11 +51,13 @@ class GlobalVariables {
   static var keyInAppCallNotification = "in_app_call_notification";
   static var keyIsNewlyArrivedNotification = "isNewlyArrivedNotification";
   static var keySMSCredit = "SMS_CREDIT";
+  static var keyLastLogin = "LAST_LOGIN";
   static var keySocietyContact = "Contact";
+  static var keyNotificationBackGroundData = "NotificationBackGroundData";
 
-  static var appImagePath = "assets/images/ic_societyrun.png";
+  //static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
-  static var userProfilePath = "assets/images/user_profile.jpeg";
+  //static var userProfilePath = "assets/images/user_profile.jpeg";
   static var drawerImagePath =
       "assets/other_assets/societyrun-logo_colored.svg";
   static var appIconPath = "assets/other_assets/societyrun-logo.svg";
@@ -72,13 +74,13 @@ class GlobalVariables {
   static var switchIconPath = "assets/menu_assets/switch.svg";
   static var headerIconPath = "assets/other_assets/Header_bg.svg";
   static var loginIconPath = "assets/other_assets/login_icon.svg";
-  static var mailIconPath = "assets/other_assets/mail_icon.svg";
-  static var lockIconPath = "assets/other_assets/lock_icon.svg";
+  //static var mailIconPath = "assets/other_assets/mail_icon.svg";
+  //static var lockIconPath = "assets/other_assets/lock_icon.svg";
   static var classifiedBigIconPath =
       "assets/other_assets/Classified_big_icon.svg";
-  static var classifiedPath = "assets/other_assets/Classified_icon.svg";
+  //static var classifiedPath = "assets/other_assets/Classified_icon.svg";
   static var topBreadCrumPath = "assets/other_assets/Top_breadcrum.svg";
-  static var overviewTxtPath = "assets/other_assets/overview_txt.svg";
+ // static var overviewTxtPath = "assets/other_assets/overview_txt.svg";
   static var notificationBellIconPath =
       "assets/other_assets/notification_icon.svg";
   static var whileBGPath = "assets/other_assets/while_bg.svg";
@@ -93,11 +95,11 @@ class GlobalVariables {
   static var componentUserProfilePath =
       "assets/other_assets/component_user_profile.png";
   static var userProfileIconPath = "assets/other_assets/profile_icon.svg";
-  static var waterIconPath = "assets/other_assets/water_icon.svg";
+  //static var waterIconPath = "assets/other_assets/water_icon.svg";
   static var imageIconPath = "assets/other_assets/Icon awesome-file-image.svg";
   static var pdfIconPath = "assets/other_assets/Icon awesome-file-pdf.svg";
-  static var downloadIconPath = "assets/other_assets/Icon awesome-download.svg";
-  static var pdfBackIconPath = "assets/other_assets/icon-pdf.svg";
+  //static var downloadIconPath = "assets/other_assets/Icon awesome-download.svg";
+ // static var pdfBackIconPath = "assets/other_assets/icon-pdf.svg";
   static var creditCardPath = "assets/other_assets/credit_card.png";
   static var aboutUsPath = "assets/other_assets/about_us.svg";
   static var comingSoonPath = "assets/other_assets/coming_soon.png";
@@ -147,6 +149,7 @@ class GlobalVariables {
   static var commercialImagePath = "assets/other_assets/commercial.png";
   static var referAndEarnImagePath = "assets/other_assets/refer_earn.png";
   static var rateImagePath = "assets/other_assets/rate.png";
+  static var alreadyPaidImagePath = "assets/other_assets/already_paid.png";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
   static var bottomBuildingIconPath =
@@ -345,6 +348,7 @@ class GlobalVariables {
   static const approveReceiptRequestAPI = "AndroidApi/approve_request";
   static const headWiseExpenseAPI = "Androidexpense/headwise_expense";
   static const updateExpenseAttachmentAPI = "Androidexpense/update_attachment";
+  static const amountCalculationAPI = "AndroidApi/amount_calculation";
 
   /*Routs Variables*/
   static const LoginPage = "Login";
@@ -510,6 +514,7 @@ class GlobalVariables {
   static const AGREEMENT = 'AGREEMENT';
   static const RENTED_TO = 'RENTED_TO';
   static const Noc_Issue = 'Noc_Issue';
+  static const ZeroTimeLine = "0000-00-00 00:00:00";
 
   /*Server Response Key*/
 
@@ -573,6 +578,7 @@ class NotificationTypes{
   static const String TYPE_NEW_OFFER = "New_Offer";
   static const String TYPE_INTERESTED_CUSTOMER = "Interested_Customer";
   static const String TYPE_UserManagement = "UserManagement";
+  static const String TYPE_MyHousehold = "MyHousehold";
   static const String TYPE_PaymentRequest = "PaymentRequest";
   static const String TYPE_Expense = "Expense";
 

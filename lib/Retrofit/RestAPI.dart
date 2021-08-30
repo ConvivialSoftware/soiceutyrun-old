@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/AllMemberResponse.dart';
 import 'package:societyrun/Models/BankResponse.dart';
@@ -822,7 +823,23 @@ class RestAPI
       GlobalVariables.ADDRESS: address,
       GlobalVariables.PROFILE_PHOTO: profilePic,
     });
-    print(GlobalVariables.ALTERNATE_CONTACT1 + ": " + alternateMobile);
+    print({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.NAME: name,
+      GlobalVariables.GENDER: gender,
+      GlobalVariables.DOB: dob,
+      GlobalVariables.USER_NAME: userName,
+      GlobalVariables.MOBILE: mobile,
+      GlobalVariables.ALTERNATE_CONTACT1: alternateMobile,
+      GlobalVariables.BLOOD_GROUP: bloodGroup ?? '',
+      GlobalVariables.OCCUPATION: occupation,
+      GlobalVariables.LIVES_HERE: livesHere,
+      GlobalVariables.TYPE: membershipType,
+      GlobalVariables.ADDRESS: address,
+      GlobalVariables.PROFILE_PHOTO: profilePic,
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.unitAddMemberAPI);
 
@@ -2316,7 +2333,7 @@ class RestAPI
       String address,
       String pinCode,
       String societyName,
-      String societyId) async {
+      String societyId,String visibilityPriority) async {
     // TODO: implement insertClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(name, "Name");
@@ -2356,6 +2373,7 @@ class RestAPI
       "Pincode": pinCode,
       "Society_Name": societyName,
       "SOCIETY_ID": societyId,
+      "add_visibility": visibilityPriority,
     });
     //print(GlobalVariables.societyId+": "+socId);
 
@@ -2390,7 +2408,7 @@ class RestAPI
       images,
       String address,
       String pinCode,
-      String societyName) async {
+      String societyName,String visibilityPriority) async {
     // TODO: implement insertClassifiedData
     ArgumentError.checkNotNull(classifiedId, "C_Id");
     ArgumentError.checkNotNull(userId, "User_Id");
@@ -2430,6 +2448,7 @@ class RestAPI
       "Address": address,
       "Pincode": pinCode,
       "Society_Name": societyName,
+      "add_visibility": visibilityPriority,
     });
     print("C_Id: " + classifiedId);
 
@@ -2634,8 +2653,13 @@ class RestAPI
   Future<DataResponse> getServicePerCategory(String category) async {
     // TODO: implement getServicePerCategory
     ArgumentError.checkNotNull(category, "category");
+
+    String societyId = await GlobalFunctions.getSocietyId();
+
     FormData formData = FormData.fromMap({
       "category": category,
+      "flag": GlobalVariables.appFlag,
+      "Type": societyId,
     });
 
     print('baseurl : ' + baseUrl + GlobalVariables.servicePerCategory);
@@ -2846,6 +2870,7 @@ class RestAPI
 
   @override
   Future<DataResponse> broadcastMail(String societyId,
+      String userId,
       List<String> flats,
       String attachment,
       String sendTo,
@@ -2860,6 +2885,7 @@ class RestAPI
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.ATTACHMENT: attachment,
       GlobalVariables.SEND_TO: sendTo,
@@ -2872,6 +2898,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.ATTACHMENT: attachment,
           GlobalVariables.SEND_TO: sendTo,
@@ -2897,6 +2924,7 @@ class RestAPI
 
   @override
   Future<DataResponse> broadcastNotification(String societyId,
+      String userId,
       List<String> flats,
       /*String attachment,*/ String sendTo,
       String subject,
@@ -2910,6 +2938,7 @@ class RestAPI
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       //GlobalVariables.ATTACHMENT: attachment,
       GlobalVariables.SEND_TO: sendTo,
@@ -2920,6 +2949,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           //GlobalVariables.ATTACHMENT: attachment,
           GlobalVariables.SEND_TO: sendTo,
@@ -2966,6 +2996,7 @@ class RestAPI
 
   @override
   Future<DataResponse> importantCommunicationSMS(String societyId,
+      String userId,
       List<String> flats,
       String sendTo,
       String smsType,
@@ -2974,6 +3005,7 @@ class RestAPI
     // TODO: implement importantCommunicationSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
@@ -2984,6 +3016,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
@@ -3007,6 +3040,7 @@ class RestAPI
 
   @override
   Future<DataResponse> meetingSMS(String societyId,
+      String userId,
       List<String> flats,
       String sendTo,
       String smsType,
@@ -3020,14 +3054,15 @@ class RestAPI
     // TODO: implement meetingSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       GlobalVariables.meeting_name: meeting_name,
       GlobalVariables.meeting_date: meeting_date,
-      GlobalVariables.time: time,
-      GlobalVariables.minute: minute,
-      GlobalVariables.time_type: time_type,
+      "meeting_time": time,
+      "meeting_minute": minute,
+      "meeting_time_type": time_type,
       GlobalVariables.venue: venue,
       GlobalVariables.societyName: societyName,
     });
@@ -3035,14 +3070,15 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           GlobalVariables.meeting_name: meeting_name,
           GlobalVariables.meeting_date: meeting_date,
-          GlobalVariables.time: time,
-          GlobalVariables.minute: minute,
-          GlobalVariables.time_type: time_type,
+          "meeting_time": time,
+          "meeting_minute": minute,
+          "meeting_time_type": time_type,
           GlobalVariables.venue: venue,
           GlobalVariables.societyName: societyName,
         }.toString());
@@ -3063,6 +3099,7 @@ class RestAPI
 
   @override
   Future<DataResponse> waterSupplySMS(String societyId,
+      String userId,
       List<String> flats,
       String sendTo,
       String smsType,
@@ -3077,6 +3114,7 @@ class RestAPI
     // TODO: implement waterSupplySMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
@@ -3093,6 +3131,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
@@ -3122,6 +3161,7 @@ class RestAPI
 
   @override
   Future<DataResponse> waterDisruptionSMS(String societyId,
+      String userId,
       List<String> flats,
       String sendTo,
       String smsType,
@@ -3136,6 +3176,7 @@ class RestAPI
     // TODO: implement waterDisruptionSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
@@ -3152,6 +3193,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
@@ -3180,13 +3222,16 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> fireDrillSMS(String societyId, List<String> flats,
+  Future<DataResponse> fireDrillSMS(String societyId,
+      String userId,
+      List<String> flats,
       String sendTo, String smsType,
       String date2, String start_time2, String start_minute2,
       String start_time_type2, String societyName) async {
     // TODO: implement fireDrillSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
@@ -3200,6 +3245,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
@@ -3225,7 +3271,9 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> serviceDownSMS(String societyId, List<String> flats,
+  Future<DataResponse> serviceDownSMS(String societyId,
+      String userId,
+      List<String> flats,
       String sendTo,
       String smsType, String reason, String reason1, String date1,
       String start_time1,
@@ -3235,6 +3283,7 @@ class RestAPI
     // TODO: implement serviceDownSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
@@ -3253,6 +3302,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
@@ -3283,7 +3333,9 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> powerOutageSMS(String societyId, List<String> flats,
+  Future<DataResponse> powerOutageSMS(String societyId,
+      String userId,
+      List<String> flats,
       String sendTo,
       String smsType, String date, String start_time, String start_minute,
       String start_time_type,
@@ -3291,6 +3343,7 @@ class RestAPI
     // TODO: implement powerOutageSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       GlobalVariables.FLATS: flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
@@ -3307,6 +3360,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           GlobalVariables.FLATS: flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
@@ -3695,10 +3749,12 @@ class RestAPI
 
   @override
   Future<StatusMsgResponse> approvePendingRequest(String societyId,
+      String userId,
       String societyName, String id) async {
     // TODO: implement approvePendingRequest
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       "id": id,
       GlobalVariables.societyName: societyName,
     });
@@ -3706,6 +3762,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           "id": id,
           GlobalVariables.societyName: societyName,
         }.toString());
@@ -4318,7 +4375,8 @@ class RestAPI
   @override
   Future<StatusMsgResponse> referAndEarn(String societyId,String societyName, String flat,
       String address,
-      String name, String phone, String email, String message) async {
+      String name, String phone, String email, String message,
+      String loggedSocietyName,String loggedFlat,String loggedName,String loggedPhone) async {
     // TODO: implement referAndEarn
     FormData formData = FormData.fromMap({
     GlobalVariables.societyId:societyId,
@@ -4329,9 +4387,26 @@ class RestAPI
     "phone":phone,
     "email":email,
     "message":message,
+    "SocietyName":loggedSocietyName,
+    "FlatNo":loggedFlat,
+    "Name":loggedName,
+    "Phone":loggedPhone,
     });
 
-    print(formData.toString());
+    print({
+      GlobalVariables.societyId:societyId,
+      "society_name":societyName,
+      "flat":flat,
+      "address":address,
+      "name":name,
+      "phone":phone,
+      "email":email,
+      "message":message,
+      "SocietyName":loggedSocietyName,
+      "FlatNo":loggedFlat,
+      "Name":loggedName,
+      "Phone":loggedPhone,
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.referAPI);
 
@@ -4346,6 +4421,35 @@ class RestAPI
     final value = _result.data;
     print('value of referAndEarn : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> amountCalculation(String societyId,String invoiceNo, String amount) async {
+    // TODO: implement amountCalculation
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      "INVOICE_NO": invoiceNo,
+      "AMOUNT": amount,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      "INVOICE_NO": invoiceNo,
+      "AMOUNT": amount,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.amountCalculationAPI);
+    final Response _result = await _dio.post(
+        GlobalVariables.amountCalculationAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of updateExpenseAttachment : ' + value.toString());
+    return DataResponse.fromAmountCalculationJson(value);
   }
 
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OtpWithMobile.dart';
 import 'package:societyrun/Activities/Register.dart';
@@ -21,8 +22,6 @@ import 'package:dio/dio.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-
 
 class BaseLoginPage extends StatelessWidget {
   @override
@@ -52,7 +51,6 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   TextEditingController password = new TextEditingController();
   List<Banners> _bannerList = List<Banners>();
 
-
   @override
   void initState() {
     super.initState();
@@ -65,6 +63,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -98,12 +97,13 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                   AppLocalizations.of(context)
                                       .translate('login'),
                               style: TextStyle(
-                                  fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.green)),
+                                  fontSize: GlobalVariables.textSizeLargeMedium,
+                                  color: GlobalVariables.green)),
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate('to_your_account'),
                               style: TextStyle(
-                                  fontSize:  GlobalVariables.textSizeLargeMedium,
+                                  fontSize: GlobalVariables.textSizeLargeMedium,
                                   color: GlobalVariables.lightGray))
                         ])),
                       ),
@@ -194,7 +194,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 margin: EdgeInsets.fromLTRB(0, 0, 50, 0),
                                 child: ButtonTheme(
                                   minWidth:
-                                  MediaQuery.of(context).size.width / 2,
+                                      MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
                                     color: GlobalVariables.green,
                                     onPressed: () {
@@ -203,7 +203,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                       if (GlobalFunctions.verifyLoginData(
                                           username.text, password.text)) {
                                         GlobalFunctions
-                                            .checkInternetConnection()
+                                                .checkInternetConnection()
                                             .then((internet) {
                                           if (internet) {
                                             userLogin(username.text,
@@ -212,14 +212,14 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                             GlobalFunctions.showToast(
                                                 AppLocalizations.of(context)
                                                     .translate(
-                                                    'pls_check_internet_connectivity'));
+                                                        'pls_check_internet_connectivity'));
                                           }
                                         });
                                       } else {
                                         GlobalFunctions.showToast(AppLocalizations
-                                            .of(context)
+                                                .of(context)
                                             .translate(
-                                            'pls_enter_valid_username_password'));
+                                                'pls_enter_valid_username_password'));
                                       }
                                     },
                                     textColor: GlobalVariables.white,
@@ -231,7 +231,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     child: text(
                                       AppLocalizations.of(context)
                                           .translate('login'),
-                                          fontSize: GlobalVariables.textSizeMedium,
+                                      fontSize: GlobalVariables.textSizeMedium,
                                       textColor: GlobalVariables.white,
                                     ),
                                   ),
@@ -249,16 +249,15 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                             builder: (context) =>
                                                 BaseOtpWithMobile()));
                                   },
-                                  child:text(
+                                  child: text(
                                     AppLocalizations.of(context)
                                         .translate('login_with_otp'),
-                                   textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeMedium,
+                                    textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -277,7 +276,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     AppLocalizations.of(context)
                                         .translate('forget_password'),
                                     textColor: GlobalVariables.green,
-                                        fontSize: GlobalVariables.textSizeLargeMedium,
+                                    fontSize:
+                                        GlobalVariables.textSizeLargeMedium,
                                   ),
                                 ),
                               ),
@@ -296,8 +296,9 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                             AppLocalizations.of(context)
                                                 .translate("don't_hv_acc"),
                                             textColor: GlobalVariables.black,
-                                                fontSize: GlobalVariables.textSizeMedium,
-                                                fontWeight: FontWeight.w300),
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
+                                            fontWeight: FontWeight.w300),
                                       ),
                                       Container(
                                         alignment: Alignment.topRight,
@@ -313,8 +314,9 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                               AppLocalizations.of(context)
                                                   .translate('register'),
                                               textColor: GlobalVariables.green,
-                                                  fontSize: GlobalVariables.textSizeLargeMedium,
-                                                  fontWeight: FontWeight.bold),
+                                              fontSize: GlobalVariables
+                                                  .textSizeLargeMedium,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       )
                                     ],
@@ -361,13 +363,13 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                         viewportFraction: 1.0,
                         autoPlayAnimationDuration: Duration(milliseconds: 800),
                       ),
-                      itemCount:_bannerList.length,
+                      itemCount: _bannerList.length,
                       itemBuilder: (BuildContext context, int itemIndex,
-                          int item) =>
-                      _bannerList.length > 0
-                          ? InkWell(
-                        onTap: () {
-                          /*Navigator.push(
+                              int item) =>
+                          _bannerList.length > 0
+                              ? InkWell(
+                                  onTap: () {
+                                    /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseWebViewScreen(
@@ -387,22 +389,22 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 GlobalFunctions.setBaseContext(
                                     _dashboardSacfoldKey.currentContext);
                               });*/
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          //color: GlobalVariables.black,
-                          //alignment: Alignment.center,
-                          child: AppNetworkImage(
-                            _bannerList[itemIndex].IMAGE,
-                            fit: BoxFit.fitWidth,
-                            shape: BoxShape.rectangle,
-                            borderColor: GlobalVariables.transparent,
-                            radius: GlobalVariables.textSizeVerySmall,
-                          ),
-                        ),
-                      )
-                          : Container(),
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    //color: GlobalVariables.black,
+                                    //alignment: Alignment.center,
+                                    child: AppNetworkImage(
+                                      _bannerList[itemIndex].IMAGE,
+                                      fit: BoxFit.fitWidth,
+                                      shape: BoxShape.rectangle,
+                                      borderColor: GlobalVariables.transparent,
+                                      radius: GlobalVariables.textSizeVerySmall,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                     ),
                   ),
                   /*Container(
@@ -443,7 +445,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             ): Container(),
                           ),
                         ),
-                        *//*Container(
+                        */ /*Container(
 
                           //   color: GlobalVariables.lightGreen,
                           decoration: BoxDecoration(
@@ -488,7 +490,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               )
                             ],
                           ),
-                        ),*//*
+                        ),*/ /*
                         Container(
                           child: RichText(
                               text: TextSpan(children: [
@@ -538,34 +540,37 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
     );
   }
 
-  void userLogin(String username, String password, BuildContext context) async{
-
+  void userLogin(String username, String password, BuildContext context) async {
     fcmToken = await GlobalFunctions.getFCMToken();
     final dio = Dio();
     final restClient = RestClient(dio);
     //  var date = GlobalFunctions.getAppLanguage();
 
     _progressDialog.show();
-    restClient.getLogin(username, password,fcmToken).then((value) {
+    restClient.getLogin(username, password, fcmToken).then((value) {
       print('status : ' + value.status.toString());
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
       if (value.status) {
         value.PASSWORD = password;
-        value.LoggedUsername=username;
+        value.LoggedUsername = username;
         GlobalFunctions.saveDataToSharedPreferences(value);
 
-        //TODO: send FirebaseToken To Server
-
-        //TODO: Navigate To DashBoardPage
-        Navigator.pushAndRemoveUntil(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    BaseDashBoard()),
-                (Route<dynamic> route) => false);
+        if (value.LAST_LOGIN == GlobalVariables.ZeroTimeLine) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => BaseChangePassword()),
+                  (Route<dynamic> route) => false);
+        } else {
+          //TODO: Navigate To DashBoardPage
+          Navigator.pushAndRemoveUntil(
+              context,
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => BaseDashBoard()),
+              (Route<dynamic> route) => false);
+        }
       }
-
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:

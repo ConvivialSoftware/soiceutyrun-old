@@ -11,6 +11,7 @@ class ClassifiedResponse extends ChangeNotifier {
   List<City> cityList = List<City>();
   bool isLoading = true;
   String errMsg;
+  List<DiscoverFilter> filterOptionList = List<DiscoverFilter>();
 
   Future<String> getClassifiedData() async {
     try {
@@ -48,6 +49,7 @@ class ClassifiedResponse extends ChangeNotifier {
       await restClient.getCityData().then((value) {
         cityList = List<City>.from(
             value.data.map((i) => City.fromJson(i)));
+        filterOptionList = getFilterOptions();
         isLoading = false;
         notifyListeners();
       });
@@ -59,7 +61,38 @@ class ClassifiedResponse extends ChangeNotifier {
     return classifiedCategoryList.length.toString();
   }
 
-  Future<StatusMsgResponse> insertClassifiedData(
+  List<DiscoverFilter> getFilterOptions() {
+
+    filterOptionList = List<DiscoverFilter>();
+   print('getFilterOptions');
+    DiscoverFilter discoverFilter = DiscoverFilter(
+      filterName: "All Location",
+      isSelected: true,
+    );
+    filterOptionList.add(discoverFilter);
+    /*   DiscoverFilter discoverFilter1 = DiscoverFilter(
+      filterName: "My Society",
+      isSelected: false,
+    );
+    filterOptionList.add(discoverFilter1);
+*/
+    for(int i=0;i<cityList.length;i++){
+      filterOptionList.add(
+          DiscoverFilter(
+            filterName: cityList[i].city,
+            isSelected: false,
+          )
+      );
+    }
+    print('getFilterOptions notifyListeners');
+    print(filterOptionList.toString());
+    print(filterOptionList.length.toString());
+    //isLoading=false;
+    //notifyListeners();
+    return filterOptionList;
+  }
+
+ /* Future<StatusMsgResponse> insertClassifiedData(
       String name,
       String email,
       String phone,
@@ -82,14 +115,14 @@ class ClassifiedResponse extends ChangeNotifier {
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
           .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description, /*propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId);
+              description, *//*propertyDetails,*//* price, locality, city, images,address,pinCode,societyName,societyId);
       isLoading = false;
       notifyListeners();
       print('insertClassifiedData : '+result.toString());
       getClassifiedData();
      return result;
   }
-
+*/
   Future<StatusMsgResponse> interestedClassified(String C_Id) async {
 
     String userId = await GlobalFunctions.getUserId();
@@ -116,6 +149,7 @@ class ClassifiedResponse extends ChangeNotifier {
 
 class Classified {
   String id,
+      SOCIETY_ID,
       Name,
       Email,
       Phone,
@@ -137,6 +171,7 @@ class Classified {
 
   Classified(
       {this.id,
+      this.SOCIETY_ID,
       this.Name,
       this.Email,
       this.Phone,
@@ -156,6 +191,7 @@ class Classified {
   factory Classified.fromJson(Map<String, dynamic> map) {
     return Classified(
       id: map["Id"],
+      SOCIETY_ID: map["SOCIETY_ID"],
       Name: map["Name"],
       Email: map["Email"],
       Phone: map["Phone"],
@@ -226,4 +262,19 @@ class City {
   Map<String, dynamic> toJson() {
     return {"City": city};
   }
+}
+
+class DiscoverFilter{
+
+  String filterName;
+  bool isSelected;
+  DiscoverFilter({this.filterName, this.isSelected});
+
+  factory DiscoverFilter.fromJson(Map<String,dynamic> map){
+    return DiscoverFilter(
+        filterName: map["filterName"],
+        isSelected: map["isSelected"]
+    );
+  }
+
 }

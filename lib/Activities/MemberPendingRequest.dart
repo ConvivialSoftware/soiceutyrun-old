@@ -102,7 +102,7 @@ class MemberPendingRequestState
       children: <Widget>[
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
             context, 150.0),
-        value.pendingRequestList.length > 0
+        !value.isLoading
             ? getMemberPendingRequestListDataLayout(value)
             : GlobalFunctions.loadingWidget(context),
       ],

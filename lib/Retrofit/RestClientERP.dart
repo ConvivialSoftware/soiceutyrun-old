@@ -144,6 +144,10 @@ abstract class RestClientERP {
   @POST(GlobalVariables.updateExpenseAttachmentAPI)
   Future<StatusMsgResponse> updateExpenseAttachment(@Field("SOCIETY_ID") String socId,@Field("VOUCHER_NO") String voucherNo,@Field("ATTACHMENT") String attachment,@Field("FILE_TYPE") String fileType);
 
+  @FormUrlEncoded()
+  @POST(GlobalVariables.amountCalculationAPI)
+  Future<DataResponse> amountCalculation(@Field("SOCIETY_ID") String socId,@Field("INVOICE_NO") String invoiceNo,@Field("AMOUNT") String amount);
+
 }
 
 

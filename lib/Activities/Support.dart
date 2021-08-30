@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/ReferAndEarn.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -19,7 +20,7 @@ class BaseSupport extends StatefulWidget {
   _BaseSupportState createState() => _BaseSupportState();
 }
 
-class _BaseSupportState extends State<BaseSupport> {
+class _BaseSupportState extends BaseStatefulState<BaseSupport> {
 
   @override
   void initState() {
@@ -89,7 +90,7 @@ class _BaseSupportState extends State<BaseSupport> {
                                             queryParameters: {'subject': ''});
                                         launch(_emailUri.toString());
                                       },
-                                      child: text('Society Email',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium))
+                                      child: text('Email Society',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium))
                                 ],
                               ),
                               SizedBox(height: 8,),

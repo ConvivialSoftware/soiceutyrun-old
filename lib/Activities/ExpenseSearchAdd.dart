@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/Expense.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -24,7 +25,7 @@ class BaseExpenseSearchAdd extends StatefulWidget {
   _BaseExpenseSearchAddState createState() => _BaseExpenseSearchAddState();
 }
 
-class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
+class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd> {
 
 
   TextEditingController _startDateController = TextEditingController();
@@ -128,7 +129,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
             context, 200.0),
        value.isLoading ? GlobalFunctions.loadingWidget(context) :  headWiseExpenseLayout(context,value),
-        addExpensesFabLayout(),
+        AppUserPermission.isUserAccountingPermission ?   addExpensesFabLayout():SizedBox(),
       ],
     );
   }
@@ -214,8 +215,14 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                   flex: 1,
                   child: Container(
                     alignment: Alignment.center,
-                    child: text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
-                        textColor: GlobalVariables.green,fontWeight: FontWeight.bold),
+                    child: Column(
+                      children: [
+                        text('Total Spent',fontSize: GlobalVariables.textSizeSmall,
+                            textColor: GlobalVariables.grey),
+                        text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
+                            textColor: GlobalVariables.green,fontWeight: FontWeight.bold),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -326,7 +333,11 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
             ),
           ),*/
         ],
-      ) : GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+      ) : Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
+        child: GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+      ),
     );
   }
 
@@ -761,12 +772,12 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
 
   void getHeadWiseData() {
     Provider.of<UserManagementResponse>(context,listen: false).getHeadWiseExpenseData().then((value) {
-
+      _totalSumUp=0;
       for(int j=0;j<value.length;j++){
         dataMap[value[j].heads] = double.parse(value[j].amount==null ? '0' : value[j].amount);
         _totalSumUp += int.parse(value[j].amount==null ? '0' : value[j].amount);
       }
-
+      setState(() {});
     });
   }
 }

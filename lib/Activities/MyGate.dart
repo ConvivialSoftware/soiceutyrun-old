@@ -233,7 +233,9 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       shrinkWrap: true,
                     )),
           )
-        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
+        : Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/5),
+      child: GlobalFunctions.noDataFoundLayout(context, "No Data Found"),);
   }
 
   getStaffCategoryListItemLayout(int position, GatePass value) {
@@ -539,7 +541,11 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     )),
           ),
         ],
-      ) : GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+      ) :
+      Container(
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
+        child: GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+      )
     );
   }
 
@@ -1135,7 +1141,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           color: GlobalVariables.white),*/
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
+        //mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
@@ -1149,14 +1155,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
           Align(
             alignment: Alignment.topLeft,
             child: Container(
-              height: 50,
+              //height: 50,
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
               decoration: BoxDecoration(
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.lightGray,
                     width: 2.0,
                   )),
               child: StatefulBuilder(
@@ -1273,7 +1279,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
         value: _scheduleList[i],
         child: text(
           _scheduleList[i],
-          textColor: GlobalVariables.green,
+          textColor: GlobalVariables.black,
         ),
       ));
     }

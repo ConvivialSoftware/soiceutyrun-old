@@ -468,8 +468,8 @@ class DisplayProfileInfoState
                         ],
                       ),
                       Divider(),
-                      SizedBox(height: 16),
-                      Row(
+                      _profileList[0].ALTERNATE_CONTACT2.isNotEmpty? SizedBox(height: 16):SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT2.isNotEmpty?Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -482,8 +482,8 @@ class DisplayProfileInfoState
                           ),
                           secondaryText(_profileList[0].ALTERNATE_CONTACT2??''),
                         ],
-                      ),
-                      Divider(),
+                      ):SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT2.isNotEmpty?Divider():SizedBox(),
                       SizedBox(height: 8),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

@@ -154,9 +154,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                       onPressed: () {
                     emailReceiptDialog(context);
                   }),
-                  SizedBox(
-                    width: 8,
-                  ),
+            SizedBox(width: 16,),
                   AppIconButton(Icons.download_sharp,
                       iconColor: GlobalVariables.white, onPressed: () {
                     if (isStoragePermission) {
@@ -174,9 +172,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                       });
                     }
                   }),
-                  SizedBox(
-                    width: 8,
-                  ),
+            SizedBox(width: 16,),
                 ]
               : [],
           leading: InkWell(
@@ -399,7 +395,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                               ],
                             ),
                           ),
-                          AppUserPermission.isUserAccountingPermission
+                          AppUserPermission.isUserAccountingPermission && widget.yearSelectedItem == null
                               ? Container(
                             margin: EdgeInsets.all(16.0),
                                   child: Row(
@@ -425,7 +421,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
 
                                               List<String> arr = _receiptList[0].FLAT_NO.split(" ");
 
-                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseAlreadyPaid(_receiptList[0].INVOICE_NO, _receiptList[0].AMOUNT.toDouble(), arr[0].trim(), arr[1].trim(),0,receiptId: _receiptList[0].ID,isAdmin: true,)));
+                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseAlreadyPaid(_receiptList[0].INVOICE_NO, _receiptList[0].AMOUNT.toDouble(), arr[0].trim(), arr[1].trim(),0,receiptData: _receiptList[0],isAdmin: true,)));
 
 
                                             }),
@@ -510,36 +506,39 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(16),
                     //  width: MediaQuery.of(context).size.width/2,
                     //  height: MediaQuery.of(context).size.height/3,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: AppIconButton(
+                            Icons.close,
+                            iconColor: GlobalVariables.grey,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
                         Container(
-                          alignment: Alignment.center,
+                          alignment: Alignment.topLeft,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: text(
-                            GlobalFunctions.convertDateFormat(
+                          child: primaryText(
+                            'Send #'+_receiptList[0].RECEIPT_NO+' on below email id',
+                           /* GlobalFunctions.convertDateFormat(
                                 _receiptList[0].PAYMENT_DATE,
-                                'dd-MM-yyyy') /*+
+                                'dd-MM-yyyy') *//*+
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
-                                    _receiptList[0].END_DATE, 'dd-MM-yyyy')*/
-                            ,
+                                    _receiptList[0].END_DATE, 'dd-MM-yyyy')*//*
+                            */
                             textColor: GlobalVariables.green,
-                            fontSize: GlobalVariables.textSizeLargeMedium,
-                            fontWeight: FontWeight.bold,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Divider(
-                            thickness: 1.5,
-                            color: GlobalVariables.grey,
-                          ),
-                        ),
+                        Divider(),
                         Flexible(
                           child: Container(
                             alignment: Alignment.center,
@@ -555,7 +554,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 ),),
                               ),*/
                                 Flexible(
-                                  flex: 3,
+                                  flex: 6,
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
@@ -602,31 +601,42 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                         ),
                         Container(
                           alignment: Alignment.topRight,
+                          height: 45,
+                          child: AppButton(
+                            textContent: AppLocalizations.of(context).translate('email_now'),
+                            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                            onPressed: () {
+                              GlobalFunctions.checkInternetConnection()
+                                  .then((internet) {
+                                if (internet) {
+                                  if (_emailTextController.text.length > 0) {
+                                    Navigator.of(context).pop();
+                                    getReceiptMail(
+                                        _receiptList[0].RECEIPT_NO,
+                                        _emailTextController.text,
+                                        widget.yearSelectedItem);
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        'Please Enter Email ID');
+                                  }
+                                } else {
+                                  GlobalFunctions.showToast(
+                                      AppLocalizations.of(context).translate(
+                                          'pls_check_internet_connectivity'));
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      /*  Container(
+                          alignment: Alignment.topRight,
                           //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
                             child: RaisedButton(
                               color: GlobalVariables.green,
                               onPressed: () {
-                                GlobalFunctions.checkInternetConnection()
-                                    .then((internet) {
-                                  if (internet) {
-                                    if (_emailTextController.text.length > 0) {
-                                      Navigator.of(context).pop();
-                                      getReceiptMail(
-                                          _receiptList[0].RECEIPT_NO,
-                                          _emailTextController.text,
-                                          widget.yearSelectedItem);
-                                    } else {
-                                      GlobalFunctions.showToast(
-                                          'Please Enter Email ID');
-                                    }
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        AppLocalizations.of(context).translate(
-                                            'pls_check_internet_connectivity'));
-                                  }
-                                });
+
                               },
                               textColor: GlobalVariables.white,
                               //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
@@ -642,7 +652,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ));
@@ -693,10 +703,10 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
       GlobalFunctions.convertBase64StringToFile(
               value.dataString, 'Receipt' + widget.invoiceNo + '.pdf')
           .then((value) {
-        if (value) {
-          GlobalFunctions.showToast('Check Download folder');
-        } else {
-          GlobalFunctions.showToast('Download failed');
+        if(value){
+          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_folder'));
+        }else{
+          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_failed'));
         }
       });
       _progressDialog.hide();

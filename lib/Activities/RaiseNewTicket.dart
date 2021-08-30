@@ -610,7 +610,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                     child: text(
                       AppLocalizations.of(context)
                           .translate('mark_as_urgent'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeSMedium
                     ),
                   ),

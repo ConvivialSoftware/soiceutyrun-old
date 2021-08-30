@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -67,7 +68,8 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
   String _selectedGender="Male";
   ProgressDialog _progressDialog;
   bool isStoragePermission=false;
-
+  final ContactPicker _contactPicker = ContactPicker();
+  Contact _contact;
 
   @override
   void initState() {
@@ -258,6 +260,28 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               suffixIcon: AppIconButton(
                 Icons.phone_android,
                 iconColor: GlobalVariables.mediumGreen,
+                onPressed: () async {
+                  Contact contact = await _contactPicker.selectContact();
+                  print('contact Name : ' + contact.fullName);
+                  print('contact Number : ' +
+                      contact.phoneNumber.toString());
+                  _contact = contact;
+                  setState(() {
+                    if (_contact != null) {
+                      //  _nameController.text = _contact.fullName;
+                      String phoneNumber = _contact.phoneNumber
+                          .toString()
+                          .substring(
+                          0,
+                          _contact.phoneNumber
+                              .toString()
+                              .indexOf('(') -
+                              1);
+                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                    }
+                  });
+                },
               ),
             ),
             AppTextField(
@@ -270,6 +294,28 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               suffixIcon: AppIconButton(
                 Icons.phone_android,
                 iconColor: GlobalVariables.mediumGreen,
+                onPressed: () async {
+                  Contact contact = await _contactPicker.selectContact();
+                  print('contact Name : ' + contact.fullName);
+                  print('contact Number : ' +
+                      contact.phoneNumber.toString());
+                  _contact = contact;
+                  setState(() {
+                    if (_contact != null) {
+                      //  _nameController.text = _contact.fullName;
+                      String phoneNumber = _contact.phoneNumber
+                          .toString()
+                          .substring(
+                          0,
+                          _contact.phoneNumber
+                              .toString()
+                              .indexOf('(') -
+                              1);
+                      _alterMobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                    }
+                  });
+                },
               ),
             ),
             /*Container(
@@ -450,7 +496,12 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               children: <Widget>[
                 Flexible(
                   flex: 3,
-                  child: Container(
+                  child: AppTextField(
+                    textHintContent:
+                    AppLocalizations.of(context).translate('occupation') +
+                        '*',
+                    controllerCallback: _occupationController,
+                  ),/*Container(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     decoration: BoxDecoration(
@@ -470,7 +521,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                           border: InputBorder.none
                       ),
                     ),
-                  ),
+                  ),*/
                 ),
                 Flexible(
                   flex: 2,
@@ -604,6 +655,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                 label: text(
                                   AppLocalizations.of(context).translate('attach_photo'),
                                   textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
                             ),
@@ -612,6 +664,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               child: text(
                                 'OR',
                                 textColor: GlobalVariables.lightGray,
+                                  fontSize: GlobalVariables.textSizeSMedium
                               ),
                             ),
                             Container(
@@ -639,6 +692,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                     AppLocalizations.of(context)
                                         .translate('take_picture'),
                                     textColor: GlobalVariables.green,
+                                    fontSize: GlobalVariables.textSizeSMedium
                                   )),
                             ),
                           ],
@@ -754,7 +808,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: text(
           _bloodGroupList[i],
           textColor: GlobalVariables.black,
-            fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w600
+            fontSize: GlobalVariables.textSizeSMedium,
         ),
       ));
     }
@@ -770,7 +824,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: text(
           _membershipTypeList[i],
           textColor: GlobalVariables.black,
-          fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w600
+          fontSize: GlobalVariables.textSizeSMedium
         ),
       ));
     }
@@ -786,7 +840,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
         child: text(
           _livesHereList[i],
          textColor: GlobalVariables.black,
-            fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w600
+            fontSize: GlobalVariables.textSizeSMedium
         ),
       ));
     }

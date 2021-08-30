@@ -2,6 +2,7 @@ package com.societyrun12;
 
 import com.societyrun12.FirebaseCloudMessagingPluginRegistrant;
 
+import androidx.annotation.NonNull;
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;

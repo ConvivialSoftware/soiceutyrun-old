@@ -234,7 +234,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                 GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
                     context, 200.0),
                 getExpenseVoucherLayout(),
-                _expense.ATTACHMENT.isNotEmpty
+                _expense.ATTACHMENT.isEmpty
                     ? attachExpenseFabLayout()
                     : SizedBox(),
               ],
@@ -253,20 +253,135 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
           Container(
             padding: EdgeInsets.all(15),
             child: FloatingActionButton(
-              onPressed: () async {
-                if (isStoragePermission) {
-                  downloadAttachment(_expense.ATTACHMENT, _localPath);
-                } else {
-                  GlobalFunctions.askPermission(Permission.storage)
-                      .then((value) {
-                    if (value) {
-                      downloadAttachment(_expense.ATTACHMENT, _localPath);
-                    } else {
-                      GlobalFunctions.showToast(AppLocalizations.of(context)
-                          .translate('download_permission'));
-                    }
-                  });
-                }
+              onPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  backgroundColor: GlobalVariables.transparent,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(
+                      builder: (BuildContext context, setState) =>
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                                color: GlobalVariables.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    topRight: Radius.circular(10.0))),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        right: 16.0, top: 16.0),
+                                    alignment: Alignment.topRight,
+                                    child: AppIconButton(
+                                      Icons.close,
+                                      iconSize: 24.0,
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    openFile(context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    color: GlobalVariables.transparent,
+                                    child: Column(
+                                      children: [
+                                        AppAssetsImage(
+                                          GlobalVariables.pdfIconPath,
+                                          imageColor:
+                                          GlobalVariables.mediumGreen,
+                                          imageWidth: 40,
+                                          imageHeight: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        text(
+                                            AppLocalizations.of(context)
+                                                .translate('attach_file'),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium,
+                                            textColor:
+                                            GlobalVariables.skyBlue)
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Divider(),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    openFileImage(context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    color: GlobalVariables.transparent,
+                                    child: Column(
+                                      children: [
+                                        AppAssetsImage(
+                                          GlobalVariables.imageIconPath,
+                                          imageColor:
+                                          GlobalVariables.mediumGreen,
+                                          imageWidth: 40,
+                                          imageHeight: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        text(
+                                            AppLocalizations.of(context)
+                                                .translate('attach_photo'),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium,
+                                            textColor:
+                                            GlobalVariables.skyBlue)
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Divider(),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    openCamera(context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    color: GlobalVariables.transparent,
+                                    child: Column(
+                                      children: [
+                                        AppIcon(
+                                          Icons.camera_alt_rounded,
+                                          iconColor:
+                                          GlobalVariables.mediumGreen,
+                                          iconSize: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        text(
+                                            AppLocalizations.of(context)
+                                                .translate('take_picture'),
+                                            fontSize: GlobalVariables
+                                                .textSizeSMedium,
+                                            textColor:
+                                            GlobalVariables.skyBlue)
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    );
+                  },
+                );
               },
               child: Icon(
                 Icons.attach_file,
@@ -569,139 +684,24 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                 ],
               ),
             ),
-            _expense.ATTACHMENT.isEmpty
+            _expense.ATTACHMENT.isNotEmpty
                 ? AppContainer(
                     isListItem: true,
                     child: InkWell(
                       onTap: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: GlobalVariables.transparent,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return StatefulBuilder(
-                              builder: (BuildContext context, setState) =>
-                                  Container(
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10.0),
-                                        topRight: Radius.circular(10.0))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                        margin: EdgeInsets.only(
-                                            right: 16.0, top: 16.0),
-                                        alignment: Alignment.topRight,
-                                        child: AppIconButton(
-                                          Icons.close,
-                                          iconSize: 24.0,
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        )),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        openFile(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(16),
-                                        color: GlobalVariables.transparent,
-                                        child: Column(
-                                          children: [
-                                            AppAssetsImage(
-                                              GlobalVariables.pdfIconPath,
-                                              imageColor:
-                                                  GlobalVariables.mediumGreen,
-                                              imageWidth: 40,
-                                              imageHeight: 40,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            text(
-                                                AppLocalizations.of(context)
-                                                    .translate('attach_file'),
-                                                fontSize: GlobalVariables
-                                                    .textSizeSMedium,
-                                                textColor:
-                                                    GlobalVariables.skyBlue)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Divider(),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        openFileImage(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(16),
-                                        color: GlobalVariables.transparent,
-                                        child: Column(
-                                          children: [
-                                            AppAssetsImage(
-                                              GlobalVariables.imageIconPath,
-                                              imageColor:
-                                                  GlobalVariables.mediumGreen,
-                                              imageWidth: 40,
-                                              imageHeight: 40,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            text(
-                                                AppLocalizations.of(context)
-                                                    .translate('attach_photo'),
-                                                fontSize: GlobalVariables
-                                                    .textSizeSMedium,
-                                                textColor:
-                                                    GlobalVariables.skyBlue)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Divider(),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        openCamera(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(16),
-                                        color: GlobalVariables.transparent,
-                                        child: Column(
-                                          children: [
-                                            AppIcon(
-                                              Icons.camera_alt_rounded,
-                                              iconColor:
-                                                  GlobalVariables.mediumGreen,
-                                              iconSize: 40,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            text(
-                                                AppLocalizations.of(context)
-                                                    .translate('take_picture'),
-                                                fontSize: GlobalVariables
-                                                    .textSizeSMedium,
-                                                textColor:
-                                                    GlobalVariables.skyBlue)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                        if (isStoragePermission) {
+                          downloadAttachment(_expense.ATTACHMENT, _localPath);
+                        } else {
+                          GlobalFunctions.askPermission(Permission.storage)
+                              .then((value) {
+                            if (value) {
+                              downloadAttachment(_expense.ATTACHMENT, _localPath);
+                            } else {
+                              GlobalFunctions.showToast(AppLocalizations.of(context)
+                                  .translate('download_permission'));
+                            }
+                          });
+                        }
                         /* showModalBottomSheet(context: context, builder: (context){
                     return StatefulBuilder(builder: (context,setState){
                       return
@@ -732,22 +732,22 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                               )
                             ],
                           ),
-                          attachmentFileName != null ||
-                                  attachmentFileImageName != null
-                              ? Container(
-                                  margin: EdgeInsets.only(top: 16),
-                                  alignment: Alignment.topRight,
-                                  child: AppButton(
-                                      textContent: 'Update',
-                                      onPressed: () {
-                                        updateExpenseAttachment();
-                                      }),
-                                )
-                              : SizedBox(),
                         ],
                       ),
                     ),
                   )
+                : SizedBox(),
+            attachmentFileName != null ||
+                attachmentFileImageName != null
+                ? Container(
+              margin: EdgeInsets.only(top: 16,left: 16),
+              alignment: Alignment.topLeft,
+              child: AppButton(
+                  textContent: 'Update',
+                  onPressed: () {
+                    updateExpenseAttachment();
+                  }),
+            )
                 : SizedBox(),
           ],
         ),

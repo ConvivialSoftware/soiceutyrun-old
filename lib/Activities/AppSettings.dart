@@ -8,6 +8,7 @@ import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -21,7 +22,7 @@ class BaseAppSettings extends StatefulWidget {
   _BaseAppSettingsState createState() => _BaseAppSettingsState();
 }
 
-class _BaseAppSettingsState extends State<BaseAppSettings> {
+class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
 

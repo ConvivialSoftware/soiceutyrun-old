@@ -299,6 +299,7 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.broadcastEmailAPI)
   Future<DataResponse> broadcastMail(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.ATTACHMENT) String attachment,@Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.DESCRIPTION) String description
@@ -307,6 +308,7 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.broadcastNotificationAPI)
   Future<DataResponse> broadcastNotification(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,/*
       @Field(GlobalVariables.ATTACHMENT) String attachment*/@Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.DESCRIPTION) String description
@@ -320,6 +322,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> importantCommunicationSMS(
   @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,@Field(GlobalVariables.SMS_TYPE) String smsType,
       @Field(GlobalVariables.name) String name,
@@ -329,6 +332,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> meetingSMS(
   @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SMS_TYPE) String smsType,
@@ -344,6 +348,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> waterSupplySMS(
       @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SMS_TYPE) String smsType,
@@ -361,6 +366,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> waterDisruptionSMS(
       @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SMS_TYPE) String smsType,
@@ -378,6 +384,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> fireDrillSMS(
       @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SMS_TYPE) String smsType,
@@ -392,6 +399,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> serviceDownSMS(
       @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SMS_TYPE) String smsType,
@@ -411,6 +419,7 @@ abstract class RestClient {
   @POST(GlobalVariables.broadcastSMSAPI)
   Future<DataResponse> powerOutageSMS(
       @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
       @Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SMS_TYPE) String smsType,
@@ -508,6 +517,7 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.approvePendingRequestAPI)
   Future<StatusMsgResponse> approvePendingRequest(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field(GlobalVariables.societyName) String societyName,
       @Field("id") String id,);
 
@@ -597,6 +607,10 @@ abstract class RestClient {
       @Field("phone") String phone,
       @Field("email") String email,
       @Field("message")String message,
+      @Field("SocietyName")String loggedSocietyName,
+      @Field("FlatNo")String loggedFlatNo,
+      @Field("Name")String loggedUser,
+      @Field("Phone")String loggedPone,
       );
 
 

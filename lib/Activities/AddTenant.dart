@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -66,15 +67,16 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
   new List<DropdownMenuItem<String>>();
   String _selectedBloodGroup;
 
-  List<String> _membershipTypeList = new List<String>();
+  ///private/var/mobile/Containers/Data/Application/9C028A34-9A90-4CFF-89DA-6F17D34AE672/tmp/com.convivial.SocietyRunApp-Inbox/Sample.pdf
+ /* List<String> _membershipTypeList = new List<String>();
   List<DropdownMenuItem<String>> __membershipTypeListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedMembershipType;
+  new List<DropdownMenuItem<String>>();*/
+  String _selectedMembershipType='Tenant';
 
-  List<String> _livesHereList = new List<String>();
+/*  List<String> _livesHereList = new List<String>();
   List<DropdownMenuItem<String>> __livesHereListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedLivesHere;
+  new List<DropdownMenuItem<String>>();*/
+  String _selectedLivesHere='Yes';
 
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
@@ -85,6 +87,8 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
   int currentPageIndex = 0;
   int pageCount = 0;
   List<AddTenantInfo> _addTenantInfoList;
+  final ContactPicker _contactPicker = ContactPicker();
+  Contact _contact;
 
 /*
   FlutterUploader uploader = FlutterUploader();
@@ -96,8 +100,8 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
   void initState() {
     super.initState();
     getBloodGroupData();
-    getMembershipTypeData();
-    gteLivesHereData();
+  //  getMembershipTypeData();
+    // gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
@@ -252,6 +256,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                    //Navigator.push(context, MaterialPageRoute(builder: (context) => OPBottomNavigationScreen()));
                    if(verifyInfo()){
                      addTenantInfo();
+                     //print('Path : '+widget.agreementInfo.agreementAttachmentPath);
                      addAgreementWithTenantDetails();
                    }
                  },
@@ -400,6 +405,28 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
               suffixIcon: AppIconButton(
                 Icons.phone_android,
                 iconColor: GlobalVariables.mediumGreen,
+                onPressed: () async {
+                  Contact contact = await _contactPicker.selectContact();
+                  print('contact Name : ' + contact.fullName);
+                  print('contact Number : ' +
+                      contact.phoneNumber.toString());
+                  _contact = contact;
+                  setState(() {
+                    if (_contact != null) {
+                      //  _nameController.text = _contact.fullName;
+                      String phoneNumber = _contact.phoneNumber
+                          .toString()
+                          .substring(
+                          0,
+                          _contact.phoneNumber
+                              .toString()
+                              .indexOf('(') -
+                              1);
+                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                    }
+                  });
+                },
               ),
             ),
             AppTextField(
@@ -412,6 +439,28 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
               suffixIcon: AppIconButton(
                 Icons.phone_android,
                 iconColor: GlobalVariables.mediumGreen,
+                onPressed: () async {
+                  Contact contact = await _contactPicker.selectContact();
+                  print('contact Name : ' + contact.fullName);
+                  print('contact Number : ' +
+                      contact.phoneNumber.toString());
+                  _contact = contact;
+                  setState(() {
+                    if (_contact != null) {
+                      //  _nameController.text = _contact.fullName;
+                      String phoneNumber = _contact.phoneNumber
+                          .toString()
+                          .substring(
+                          0,
+                          _contact.phoneNumber
+                              .toString()
+                              .indexOf('(') -
+                              1);
+                      _alterMobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                    }
+                  });
+                },
               ),
             ),
             AppTextField(
@@ -425,7 +474,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                 iconColor: GlobalVariables.mediumGreen,
               ),
             ),
-            Row(
+           /* Row(
               children: <Widget>[
                 Flexible(
                   flex: 3,
@@ -451,10 +500,10 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                           iconColor: GlobalVariables.mediumGreen,
                         ),
                         //underline: SizedBox(),
-                        /* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
+                        *//* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
                           textColor: GlobalVariables.lightGray,
                           fontSize: GlobalVariables.textSizeSMedium,
-                        ),*/
+                        ),*//*
                         decoration: InputDecoration(
                           //filled: true,
                           //fillColor: Hexcolor('#ecedec'),
@@ -494,12 +543,12 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                           iconColor: GlobalVariables.mediumGreen,
                         ),
                         // underline: SizedBox(),
-                        /*hint: text(
+                        *//*hint: text(
                             AppLocalizations.of(context)
                                     .translate('lives_here') +
                                 '*',
                             textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium),*/
+                            fontSize: GlobalVariables.textSizeSMedium),*//*
                         decoration: InputDecoration(
                           //filled: true,
                           //fillColor: Hexcolor('#ecedec'),
@@ -516,7 +565,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                   ),
                 ),
               ],
-            ),
+            ),*/
             Row(
               children: <Widget>[
                 Flexible(
@@ -904,7 +953,11 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
 
         if (_selectedMembershipType != null) {
           if (_selectedLivesHere != null) {
-            return true;
+            if(attachmentIdentityProofFilePath!=null) {
+              return true;
+            }else{
+              GlobalFunctions.showToast('Please Select Identity Proof Image');
+            }
             //addMember();
           } else {
             GlobalFunctions.showToast('Please Select Lives Here');
@@ -937,8 +990,8 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
 
   Future<void> addAgreementWithTenantDetails() async{
 
-    print('file path : '+ GlobalFunctions.convertFileToString(widget.agreementInfo.agreementAttachmentPath));
     print('file type : '+ widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length));
+   // print('file path : '+ );
 
     if (widget.agreementInfo.rentedTo ==
         AppLocalizations.of(context).translate('group_bachelor')) {
@@ -959,7 +1012,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
         tlist,
         widget.agreementInfo.startDate,
         widget.agreementInfo.endDate,
-        GlobalFunctions.convertFileToString(widget.agreementInfo.agreementAttachmentPath),
+        widget.agreementInfo.agreementAttachmentPath,
         widget.agreementInfo.rentedTo,
         widget.agreementInfo.isNocEmail,
         widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length),
@@ -1192,7 +1245,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
     //  _selectedBloodGroup = __bloodGroupListItems[0].value;
   }
 
-  getMembershipTypeData() {
+ /* getMembershipTypeData() {
     _membershipTypeList = ["Tenant"];
     for (int i = 0; i < _membershipTypeList.length; i++) {
       __membershipTypeListItems.add(DropdownMenuItem(
@@ -1200,23 +1253,24 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
         child: text(
           _membershipTypeList[i],
           textColor: GlobalVariables.black,
+          fontSize: GlobalVariables.textSizeSMedium
         ),
       ));
     }
     setState(() {});
-    /*GlobalFunctions.getUserType().then((value) {
-      *//*if (value.toLowerCase() != 'tenant') {
+    *//*GlobalFunctions.getUserType().then((value) {
+      *//**//*if (value.toLowerCase() != 'tenant') {
         if(memberType.toLowerCase()=='tenant'){
           _membershipTypeList = ["Tenant"];
-        }else *//**//*if(value.toLowerCase()=='owner')*//**//*{
+        }else *//**//**//**//*if(value.toLowerCase()=='owner')*//**//**//**//*{
           _membershipTypeList = ["Owner Family"];
         }
       } else {
         _membershipTypeList = ["Tenant"];
-      }*//*
+      }*//**//*
 
       setState(() {});
-    });*/
+    });*//*
   }
 
   void gteLivesHereData() {
@@ -1233,7 +1287,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
     //   x
     setState(() {});
   }
-
+*/
   void changeBloodGroupDropDownItem(String value) {
     print('clickable value : ' + value.toString());
     setState(() {
@@ -1273,7 +1327,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
         membershipType: _selectedMembershipType,
         livesHere: _selectedLivesHere,
         occupations: _occupationController.text,
-        bloodGroup: _selectedBloodGroup,
+        bloodGroup: _selectedBloodGroup??'',
         permanentAddress: _addressController.text,
         attachmentPhoto: attachmentCompressFilePath==null ?  '' : GlobalFunctions.convertFileToString(attachmentCompressFilePath),
         attachmentIdentity: attachmentIdentityProofCompressFilePath==null ?  '' :GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath)
@@ -1290,7 +1344,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
     _mobileController.text='';
     _alterMobileController.text='';
     _emailController.text='';
-    _selectedLivesHere=null;
+    //_selectedLivesHere=null;
     _occupationController.text='';
     _selectedBloodGroup=null;
     _addressController.text='';

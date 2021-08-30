@@ -17,6 +17,7 @@ import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -38,7 +39,7 @@ class BaseUnitUserDetails extends StatefulWidget {
   _BaseUnitUserDetailsState createState() => _BaseUnitUserDetailsState();
 }
 
-class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
+class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
   TextEditingController billerNameTextController = TextEditingController();
   TextEditingController areaTextController = TextEditingController();
   TextEditingController intercomTextController = TextEditingController();

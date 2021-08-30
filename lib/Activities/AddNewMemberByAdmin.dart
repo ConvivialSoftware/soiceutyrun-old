@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -66,7 +67,8 @@ class AddNewMemberByAdminState
 
   ProgressDialog _progressDialog;
   bool isStoragePermission = false;
-
+  final ContactPicker _contactPicker = ContactPicker();
+  Contact _contact;
   @override
   void initState() {
     super.initState();
@@ -266,6 +268,28 @@ class AddNewMemberByAdminState
                 suffixIcon: AppIconButton(
                   Icons.phone_android,
                   iconColor: GlobalVariables.mediumGreen,
+                  onPressed: () async {
+                    Contact contact = await _contactPicker.selectContact();
+                    print('contact Name : ' + contact.fullName);
+                    print('contact Number : ' +
+                        contact.phoneNumber.toString());
+                    _contact = contact;
+                    setState(() {
+                      if (_contact != null) {
+                        //  _nameController.text = _contact.fullName;
+                        String phoneNumber = _contact.phoneNumber
+                            .toString()
+                            .substring(
+                            0,
+                            _contact.phoneNumber
+                                .toString()
+                                .indexOf('(') -
+                                1);
+                        _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                        // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                      }
+                    });
+                  },
                 ),
               ),
               AppTextField(

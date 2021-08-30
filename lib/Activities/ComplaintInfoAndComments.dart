@@ -675,6 +675,7 @@ class ComplaintInfoAndCommentsState
                   keyboardType: TextInputType.multiline,
                    minLines: 1,
                   maxLines: 999999,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)
                           .translate('add_ur_comments'),

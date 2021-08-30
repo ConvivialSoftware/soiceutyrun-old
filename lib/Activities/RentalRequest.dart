@@ -170,10 +170,10 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
     List<Tenant> tenantDetailsList = List<Tenant>.from(value
         .rentalRequestList[position].tenant_name
         .map((i) => Tenant.fromJson(i)));
-    var tenantName = '';
-    for (int i = 0; i < tenantDetailsList.length; i++) {
-      tenantName += ',' + tenantDetailsList[i].NAME;
-    }
+    var tenantName = tenantDetailsList[0].NAME;
+    /*for (int i = 0; i < tenantDetailsList.length; i++) {
+      tenantName += ', ' + tenantDetailsList[i].NAME;
+    }*/
 
     return InkWell(
       onTap: (){
@@ -218,7 +218,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                               Container(
                                 //  color:GlobalVariables.grey,
                                 child: Flexible(
-                                  child: text(tenantName.replaceFirst(",", ""),
+                                  child: text(tenantName.replaceFirst(",", "")+' + '+(tenantDetailsList.length-1).toString(),
                                       textColor: GlobalVariables.green,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       fontWeight: FontWeight.bold,
@@ -278,7 +278,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                               ),*/
                               Container(
                                 child: text(
-                                    'Expire on '+GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
+                                    'Expires on '+GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
                                     fontSize: GlobalVariables.textSizeSMedium,
                                     textColor: GlobalVariables.grey,
                                     textStyleHeight: 1.0),

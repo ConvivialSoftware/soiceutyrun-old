@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -31,7 +32,7 @@ class BaseDirectory extends StatefulWidget {
   }
 }
 
-class DirectoryState extends State<BaseDirectory> {
+class DirectoryState extends BaseStatefulState<BaseDirectory> {
   var societyId, flat, block;
 
   ProgressDialog _progressDialog;

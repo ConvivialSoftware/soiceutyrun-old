@@ -282,7 +282,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               ),
               AppSocietyPermission.isSocHideTenantPermission
                   ? SizedBox()
-                  : Row(
+                  : userType != 'Tenant' ? Row(
                       children: [
                         InkWell(
                           onTap: () {
@@ -318,7 +318,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                     ),
                   ),*/
                       ],
-                    ),
+                    ):SizedBox(),
             ],
           ),
         ),
@@ -607,7 +607,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
       {UserManagementResponse userManagementInstance}) {
     var call = '', email = '', userId, userType;
     if (memberType == 'family' || memberType == 'tenant') {
-      call = _list[position].Phone.toString();
+      if(memberType == 'tenant')
+        call = _list[position].MOBILE.toString();
+        else
+        call = _list[position].Phone.toString();
+
       userId = _list[position].ID.toString();
       userType = _list[position].TYPE.toString();
       //    email = _list[position].EMAIL.toString();

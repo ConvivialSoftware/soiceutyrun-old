@@ -86,7 +86,7 @@ class ProfileInfo {
         LIVES_HERE: json["LIVES_HERE"],
         NAME: json["NAME"],
         ALTERNATE_CONTACT1: json["ALTERNATE_CONTACT1"]??'',
-        ALTERNATE_CONTACT2: json["ALTERNATE_CONTACT2"],
+        ALTERNATE_CONTACT2: json["ALTERNATE_CONTACT2"]??'',
         PROFILE_PHOTO: json["PROFILE_PHOTO"]??"",
         ADDRESS: json["ADDRESS"],
         GENDER: json["GENDER"],

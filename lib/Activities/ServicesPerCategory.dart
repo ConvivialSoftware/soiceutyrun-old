@@ -41,6 +41,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
             print('Consumer Value : ' + value.servicesList.toString());
             return Builder(
               builder: (context) => Scaffold(
+                backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
                   backgroundColor: GlobalVariables.green,
                   centerTitle: true,
@@ -99,6 +100,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                 BaseDescriptionOfHomeService(value.servicesList[position],)));
       },
       child: AppContainer(
+        isListItem: true,
         child: Stack(
           children: <Widget>[
             IntrinsicHeight(
@@ -169,14 +171,14 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                             fontWeight: FontWeight.bold),
                       ),
                       Container(
-                        child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat(value.servicesList[position].Price),
+                        child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat((int.parse(value.servicesList[position].Price)-(int.parse(value.servicesList[position].Price)*int.parse(value.servicesList[position].Discount)/100)).toString()),
                             textColor: GlobalVariables.black,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
                       ),
                       Row(
                         children: [
-                          text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat(value.servicesList[position].Price),
+                          text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat(value.servicesList[position].Price.toString()),
                               textColor: GlobalVariables.black,
                               fontSize: GlobalVariables.textSizeSmall,
                               textDecoration: TextDecoration.lineThrough,

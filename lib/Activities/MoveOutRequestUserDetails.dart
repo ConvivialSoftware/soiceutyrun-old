@@ -14,6 +14,7 @@ import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -35,7 +36,7 @@ class BaseMoveOutRequestUserDetails extends StatefulWidget {
   _BaseMoveOutRequestUserDetailsState createState() => _BaseMoveOutRequestUserDetailsState();
 }
 
-class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDetails> {
+class _BaseMoveOutRequestUserDetailsState extends BaseStatefulState<BaseMoveOutRequestUserDetails> {
 
   List<Tenant> tenantDetailsList =  List<Tenant>();
   String _taskId,_localPath;

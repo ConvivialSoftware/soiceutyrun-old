@@ -90,8 +90,15 @@ class UserManagementResponse extends ChangeNotifier {
     final RestClient restClient = await RestClient(dio);
     await restClient.getPaymentCharges().then((value) {
       if(value.status){
-        preferredMethod = List<PaymentMethod>.from(value.Preferred_Method.map((i) => PaymentMethod.fromJson(i)));
-        otherMethod = List<PaymentMethod>.from(value.Other_Method.map((i) => PaymentMethod.fromJson(i)));
+
+        List<PaymentPerGateway> razorPay = List<PaymentPerGateway>();
+        List<PaymentPerGateway> paytm = List<PaymentPerGateway>();
+
+        razorPay = List<PaymentPerGateway>.from(value.Razorpay.map((i) => PaymentPerGateway.fromJson(i)));
+        paytm = List<PaymentPerGateway>.from(value.Paytm.map((i) => PaymentPerGateway.fromJson(i)));
+
+        preferredMethod = List<PaymentMethod>.from(razorPay[0].Preferred_Method.map((i) => PaymentMethod.fromJson(i)));
+        otherMethod = List<PaymentMethod>.from(paytm[0].Other_Method.map((i) => PaymentMethod.fromJson(i)));
       }
     });
     isLoading=false;
@@ -597,12 +604,14 @@ class UserManagementResponse extends ChangeNotifier {
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
 
     var result =
-        await restClient.approvePendingRequest(societyId, societyName, id);
+        await restClient.approvePendingRequest(societyId,userId, societyName, id);
 
     getPendingMemberRequest();
+    getUserManagementDashboard();
     return result;
   }
 
@@ -614,6 +623,7 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.deleteFamilyMember(id, societyId);
 
     getPendingMemberRequest();
+    getUserManagementDashboard();
     return result;
   }
 
@@ -626,6 +636,7 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.deactivateUser(societyId,Reason,id);
 
     getUnitDetailsMemberForAdminData(block,flat,false);
+    getUserManagementDashboard();
     return result;
   }
 

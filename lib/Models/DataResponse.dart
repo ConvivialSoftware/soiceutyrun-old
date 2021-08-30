@@ -16,11 +16,13 @@ class DataResponse {
   String ios_type;
   bool status;
   String dataString;
+  int AMOUNT;
+  int PENALTY;
 
   DataResponse({this.data, this.message, this.status,
     this.android_version,this.android_type,this.ios_version,
     this.ios_type,this.front,this.refer,this.bank,this.category,this.Year,
-    this.unit,this.dataString});
+    this.unit,this.dataString,this.PENALTY,this.AMOUNT});
 
 
   factory DataResponse.fromJson(Map<String, dynamic> map){
@@ -102,5 +104,15 @@ class DataResponse {
         message: map[GlobalVariables.MESSAGE]
     );
 
+  }
+
+  factory DataResponse.fromAmountCalculationJson(Map<String, dynamic> map) {
+    return DataResponse(
+        //dataString: map[GlobalVariables.DATA],
+        PENALTY: map["PENALTY"],
+        AMOUNT: map["AMOUNT"],
+        status: map[GlobalVariables.STATUS],
+        message: map[GlobalVariables.MESSAGE]
+    );
   }
 }

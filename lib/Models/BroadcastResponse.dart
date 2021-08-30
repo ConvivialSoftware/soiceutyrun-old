@@ -32,6 +32,7 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
     String societyEmail = await GlobalFunctions.getSocietyEmail();
 
@@ -40,7 +41,7 @@ class BroadcastResponse extends ChangeNotifier {
       ar.add(flats[i].ID);
     }
     var result = await restClient.broadcastNotification(
-        societyId, ar, sendTo, subject, description, societyName, societyEmail);
+        societyId,userId, ar, sendTo, subject, description, societyName, societyEmail);
 
     return result;
   }
@@ -51,6 +52,7 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
     String societyEmail = await GlobalFunctions.getSocietyEmail();
 
@@ -59,7 +61,7 @@ class BroadcastResponse extends ChangeNotifier {
       ar.add(flats[i].ID);
     }
 
-    var result = await restClient.broadcastMail(societyId, ar, attachment,
+    var result = await restClient.broadcastMail(societyId,userId, ar, attachment,
         sendTo, subject, description, societyName, societyEmail);
 
     return result;
@@ -70,13 +72,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
 
     var result = await restClient.importantCommunicationSMS(
-        societyId, ar, sendTo, smsType, name, societyName);
+        societyId,userId, ar, sendTo, smsType, name, societyName);
 
     return result;
   }
@@ -95,12 +98,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
     var result = await restClient.meetingSMS(
         societyId,
+        userId,
         ar,
         sendTo,
         smsType,
@@ -130,12 +135,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
     var result = await restClient.waterSupplySMS(
         societyId,
+        userId,
         ar,
         sendTo,
         smsType,
@@ -167,12 +174,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
     var result = await restClient.waterDisruptionSMS(
         societyId,
+        userId,
         ar,
         sendTo,
         smsType,
@@ -198,12 +207,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
     var result = await restClient.fireDrillSMS(
         societyId,
+        userId,
         ar,
         sendTo,
         smsType,
@@ -222,12 +233,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
     var result = await restClient.serviceDownSMS(
         societyId,
+        userId,
         ar,
         sendTo,
         smsType,
@@ -247,12 +260,14 @@ class BroadcastResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     List<String> ar = List<String>();
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
     var result = await restClient.powerOutageSMS(
         societyId,
+        userId,
         ar,
         sendTo,
         smsType,

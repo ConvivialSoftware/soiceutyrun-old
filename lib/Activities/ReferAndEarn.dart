@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -37,7 +38,8 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _messageController = TextEditingController();
   ProgressDialog _progressDialog;
-
+  final ContactPicker _contactPicker = ContactPicker();
+  Contact _contact;
   @override
   void initState() {
     super.initState();
@@ -165,6 +167,28 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
               suffixIcon: AppIconButton(
                 Icons.phone_android,
                 iconColor: GlobalVariables.mediumGreen,
+                onPressed: () async {
+                  Contact contact = await _contactPicker.selectContact();
+                  print('contact Name : ' + contact.fullName);
+                  print('contact Number : ' +
+                      contact.phoneNumber.toString());
+                  _contact = contact;
+                  setState(() {
+                    if (_contact != null) {
+                      //  _nameController.text = _contact.fullName;
+                      String phoneNumber = _contact.phoneNumber
+                          .toString()
+                          .substring(
+                          0,
+                          _contact.phoneNumber
+                              .toString()
+                              .indexOf('(') -
+                              1);
+                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                    }
+                  });
+                },
               ),
             ),
             AppTextField(
@@ -240,8 +264,15 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String loggedSocietyName = await GlobalFunctions.getSocietyName();
+    String loggedFlat = await GlobalFunctions.getFlat();
+    String loggedUser = await GlobalFunctions.getDisplayName();
+    String loggedPhone = await GlobalFunctions.getMobile();
     _progressDialog.show();
-    restClient.referAndEarn(societyId, _societyNameController.text, _noOfFlatsController.text, _addressController.text, _nameController.text, _mobileController.text, _emailController.text, _messageController.text).then((value) {
+    restClient.referAndEarn(societyId, _societyNameController.text, _noOfFlatsController.text,
+        _addressController.text, _nameController.text, _mobileController.text,
+        _emailController.text, _messageController.text,
+    loggedSocietyName,loggedFlat,loggedUser,loggedPhone).then((value) {
       GlobalFunctions.showToast(value.message);
       _progressDialog.hide();
       //GlobalFunctions.showToast(value.status.runtimeType.toString());

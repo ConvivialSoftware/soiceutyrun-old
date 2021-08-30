@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -19,7 +20,7 @@ class BaseViewPollGraph extends StatefulWidget {
   ViewPollGraphState createState() => ViewPollGraphState(_poll,optionList);
 }
 
-class ViewPollGraphState extends State<BaseViewPollGraph> {
+class ViewPollGraphState extends BaseStatefulState<BaseViewPollGraph> {
 
   Poll _poll;
   List<PollOption> _optionList;

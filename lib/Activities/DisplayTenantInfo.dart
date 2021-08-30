@@ -212,17 +212,17 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                 itemBuilder: (_) => <PopupMenuItem<String>>[
                   new PopupMenuItem<String>(
                       child: Container(
-                          width: 100,
-                          height: 30,
-                          child: text("Re-New",
+                          //width: 200,
+                         // height: 30,
+                          child: text(AppLocalizations.of(context).translate('renew_agreement'),
                               textColor: GlobalVariables.black,
                               fontSize: GlobalVariables.textSizeSMedium)),
                       value: 'renew'),
                   new PopupMenuItem<String>(
                       child: Container(
-                          width: 100,
-                          height: 30,
-                          child: text("Close",
+                         // width: 100,
+                         // height: 30,
+                          child: text(AppLocalizations.of(context).translate('terminate'),
                               textColor: GlobalVariables.black,
                               fontSize: GlobalVariables.textSizeSMedium)),
                       value: 'close'),
@@ -340,16 +340,16 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                               tenantInfo[position].NAME,
                                               maxLine: 2,
                                             ),
-                                            tenantInfo[position].Phone
+                                            tenantInfo[position].MOBILE
                                                         .length >
                                                     0
                                                 ? InkWell(
                                                     onTap: () {
                                                       launch("tel://" +
-                                                          tenantInfo[position].Phone);
+                                                          tenantInfo[position].MOBILE);
                                                     },
                                                     child: secondaryText(
-                                                        tenantInfo[position].Phone,
+                                                        tenantInfo[position].MOBILE,
                                                         maxLine: 2,
                                                         textColor: GlobalVariables
                                                             .skyBlue),
@@ -401,7 +401,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                             String text = 'Name : ' +
                                                 name +
                                                 '\nContact : ' +
-                                                tenantInfo[position].Phone;
+                                                tenantInfo[position].MOBILE;
                                             title = tenantInfo[position].NAME;
                                             print('titlee : ' + title);
                                             GlobalFunctions.shareData(

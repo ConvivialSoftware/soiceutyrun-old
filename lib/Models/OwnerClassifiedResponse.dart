@@ -74,7 +74,7 @@ class OwnerClassifiedResponse extends ChangeNotifier {
       String price,
       String locality,
       String city,
-      images,String address,String pinCode) async {
+      images,String address,String pinCode,String addVisibility) async {
 
     String userId = await GlobalFunctions.getUserId();
     String societyId = await GlobalFunctions.getSocietyId();
@@ -84,7 +84,7 @@ class OwnerClassifiedResponse extends ChangeNotifier {
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
           .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId);
+              description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId,addVisibility);
       isLoading = false;
       notifyListeners();
       print('insertClassifiedData : '+result.toString());
@@ -105,7 +105,7 @@ class OwnerClassifiedResponse extends ChangeNotifier {
       String price,
       String locality,
       String city,
-      images,String address,String pinCode) async {
+      images,String address,String pinCode,String add_visibility) async {
 
     String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
@@ -114,7 +114,7 @@ class OwnerClassifiedResponse extends ChangeNotifier {
     RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
     var result =  await restClient
         .editClassifiedData(classifiedId,userId,name, email, phone, category, type, title,
-        description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName);
+        description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,add_visibility);
     isLoading = false;
     notifyListeners();
     print('insertClassifiedData : '+result.toString());

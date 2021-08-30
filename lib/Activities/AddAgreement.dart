@@ -237,7 +237,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                 Icons.date_range,
                 iconColor: GlobalVariables.mediumGreen,
                 onPressed: () {
-                  GlobalFunctions.getSelectedDate(context).then((value) {
+                  GlobalFunctions.getSelectedDateFromStartDate(context,_agreementFromController.text).then((value) {
                     _agreementToController.text =
                         value.day.toString().padLeft(2, '0') +
                             "-" +
@@ -498,7 +498,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                           ? '1'
                           : _noOfBachelorController.text,
                       isNocEmail: _selectedIssueNOC,
-                      agreementAttachmentPath: attachmentFilePath,
+                      agreementAttachmentPath: GlobalFunctions.convertFileToString(attachmentFilePath),
                       block: widget.block,
                       flat: widget.flat,
                       agreementAttachmentName: attachmentFileName

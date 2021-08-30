@@ -164,6 +164,7 @@ class LoginResponse {
   String User_Status;
   String LoggedUsername;
   String SMS_CREDIT;
+  String LAST_LOGIN;
   bool isSelected;
 
   LoginResponse({
@@ -198,41 +199,43 @@ class LoginResponse {
     this.User_Status,
     this.LoggedUsername,
     this.SMS_CREDIT,
+    this.LAST_LOGIN,
     this.isSelected=false,
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
-        ID: json["ID"],
-        USER_ID: json["USER_ID"],
-        SOCIETY_ID: json["SOCIETY_ID"],
-        BLOCK: json["BLOCK"],
-        FLAT: json["FLAT"],
-        USER_NAME: json["USER_NAME"],
-        MOBILE: json["MOBILE"],
-        PASSWORD: json["PASSWORD"],
-        USER_TYPE: json["USER_TYPE"],
-        gcm_id: json["gcm_id"],
-        token_id: json["token_id"],
-        C_DATE: json["C_DATE"],
-        message: json["message"],
-        Society_Name: json["Society_Name"],
-        Address: json["Address"],
-        Reg_no: json["Reg_no"],
-        Contact: json["Contact"],
-        Email: json["Email"],
-        society_Permissions: json["society_Permissions"],
-        Name: json["Name"],
-        Role: json["Role"],
-        TYPE: json["TYPE"],
-        Photo: json["Photo"],
-        Permissions: json["Permissions"],
-        Consumer_no: json["Consumer_no"],
-        status: json["status"],
-        Staff_QR_Image: json["Staff_QR_Image"],
-        google_parameter: json["google_parameter"],
-        User_Status: json["User_Status"],
+        ID: json["ID"]??'',
+        USER_ID: json["USER_ID"]??'',
+        SOCIETY_ID: json["SOCIETY_ID"]??'',
+        BLOCK: json["BLOCK"]??'',
+        FLAT: json["FLAT"]??'',
+        USER_NAME: json["USER_NAME"]??'',
+        MOBILE: json["MOBILE"]??'',
+        PASSWORD: json["PASSWORD"]??'',
+        USER_TYPE: json["USER_TYPE"]??'',
+        gcm_id: json["gcm_id"]??'',
+        token_id: json["token_id"]??'',
+        C_DATE: json["C_DATE"]??'',
+        message: json["message"]??'',
+        Society_Name: json["Society_Name"]??'',
+        Address: json["Address"]??'',
+        Reg_no: json["Reg_no"]??'',
+        Contact: json["Contact"]??'',
+        Email: json["Email"]??'',
+        society_Permissions: json["society_Permissions"]??'',
+        Name: json["Name"]??'',
+        Role: json["Role"]??'',
+        TYPE: json["TYPE"]??'',
+        Photo: json["Photo"]??'',
+        Permissions: json["Permissions"]??'',
+        Consumer_no: json["Consumer_no"]??'',
+        status: json["status"]??false,
+        Staff_QR_Image: json["Staff_QR_Image"]??'',
+        google_parameter: json["google_parameter"]??'',
+        User_Status: json["User_Status"]??'',
         LoggedUsername: json["LoggedUsername"] ?? "",
+        LAST_LOGIN: json["LAST_LOGIN"],
         SMS_CREDIT: json["SMS_CREDIT"] ?? "0");
   }
 }

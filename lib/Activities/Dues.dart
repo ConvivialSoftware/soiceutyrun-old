@@ -59,6 +59,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
   void initState() {
     print('_BaseDuesState init');
     getSharedPreferenceDuesData();
+    getSharedPreferenceData();
     //if(widget.isAdmin)
       getDuesData();
     super.initState();
@@ -598,10 +599,10 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                               children: <Widget>[
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: AppIcon(
-                                    Icons.payment,
+                                  child: /*true ? */AppIcon(
+                                    Icons.check_circle,
                                     iconColor: GlobalVariables.mediumGreen,
-                                  ),
+                                  ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
                                 ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -1497,7 +1498,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                           alignment: Alignment.topRight,
                           child: AppIconButton(
                             Icons.close,
-                            iconColor: GlobalVariables.green,
+                            iconColor: GlobalVariables.grey,
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -1506,13 +1507,16 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: primaryText(
-                            GlobalFunctions.convertDateFormat(
+                            'Send #'+value.billList[position].INVOICE_NO+' on below email id',
+                            textColor: GlobalVariables.green,
+                            fontSize: GlobalVariables.textSizeSMedium
+                            /*GlobalFunctions.convertDateFormat(
                                 value.billList[position].START_DATE,
                                 'dd-MMM-yy') +
                                 ' To ' +
                                 GlobalFunctions.convertDateFormat(
                                     value.billList[position].END_DATE,
-                                    'dd-MMM-yy'),
+                                    'dd-MMM-yy'),*/
                           ),
                         ),
                         Divider(),
@@ -1531,7 +1535,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                 ),),
                               ),*/
                                 Flexible(
-                                  flex: 3,
+                                  flex: 6,
                                   child: Container(
                                     //margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
@@ -1585,36 +1589,37 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                           ),
                         ),
                         Container(
-                          //margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                            alignment: Alignment.topRight,
-                            //height: 45,
-                            child: AppButton(
-                                textContent: AppLocalizations.of(context)
-                                    .translate('email_now'),
-                                onPressed: () {
-                                  GlobalFunctions.checkInternetConnection()
-                                      .then((internet) {
-                                    if (internet) {
-                                      if (_emailTextController.text.length >
-                                          0) {
-                                        Navigator.of(context).pop();
-                                        getBillMail(
-                                            value.billList[position].INVOICE_NO,
-                                            value.billList[position].TYPE,
-                                            _emailTextController.text,
-                                            null);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            'Please Enter Email ID');
-                                      }
-                                    } else {
-                                      GlobalFunctions.showToast(AppLocalizations
-                                          .of(context)
-                                          .translate(
-                                          'pls_check_internet_connectivity'));
-                                    }
-                                  });
-                                })),
+                          alignment: Alignment.topRight,
+                          height: 45,
+                          child: AppButton(
+                            textContent: AppLocalizations.of(context).translate('email_now'),
+                            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                            onPressed: () {
+                              GlobalFunctions.checkInternetConnection()
+                                  .then((internet) {
+                                if (internet) {
+                                  if (_emailTextController.text.length >
+                                      0) {
+                                    Navigator.of(context).pop();
+                                    getBillMail(
+                                        value.billList[position].INVOICE_NO,
+                                        value.billList[position].TYPE,
+                                        _emailTextController.text,
+                                        null);
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        'Please Enter Email ID');
+                                  }
+                                } else {
+                                  GlobalFunctions.showToast(AppLocalizations
+                                      .of(context)
+                                      .translate(
+                                      'pls_check_internet_connectivity'));
+                                }
+                              });
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ));

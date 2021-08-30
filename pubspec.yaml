@@ -128,10 +128,7 @@ flutter:
     - assets/images/ic_societyrun.png
     - assets/images/society_run_green.png
     - assets/images/society_run_green.svg
-    - assets/images/society_run_white.png
-    - assets/images/society_run_white.svg
     - assets/images/societyrun_icon.png
-    - assets/images/user_profile.jpeg
     - i18n/en.json
     - i18n/hi.json
     - assets/other_assets/component_user_profile.png
@@ -140,12 +137,8 @@ flutter:
     - assets/other_assets/societyrun-logo.svg
     - assets/other_assets/Header_bg.svg
     - assets/other_assets/login_icon.svg
-    - assets/other_assets/mail_icon.svg
-    - assets/other_assets/lock_icon.svg
     - assets/other_assets/Classified_big_icon.svg
-    - assets/other_assets/Classified_icon.svg
     - assets/other_assets/Top_breadcrum.svg
-    - assets/other_assets/overview_txt.svg
     - assets/other_assets/notification_icon.svg
     - assets/other_assets/building_icon.svg
     - assets/other_assets/gatePass_icon.svg
@@ -156,11 +149,8 @@ flutter:
     - assets/other_assets/Support_icon.svg
     - assets/other_assets/store_icon.svg
     - assets/other_assets/while_bg.svg
-    - assets/other_assets/water_icon.svg
     - assets/other_assets/Icon awesome-file-image.svg
     - assets/other_assets/Icon awesome-file-pdf.svg
-    - assets/other_assets/Icon awesome-download.svg
-    - assets/other_assets/icon-pdf.svg
     - assets/menu_assets/myhome_icon.svg
     - assets/menu_assets/building_icon_menu.svg
     - assets/menu_assets/service_icon_menu.svg
@@ -227,6 +217,7 @@ flutter:
     - assets/other_assets/commercial.png
     - assets/other_assets/refer_earn.png
     - assets/other_assets/rate.png
+    - assets/other_assets/already_paid.png
   fonts:
     - family: sans-serif
       fonts:

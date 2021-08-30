@@ -11,13 +11,14 @@ import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:societyrun/Activities/base_stateful.dart';
 
 class BaseBroadcast extends StatefulWidget {
   @override
   _BaseBroadcastState createState() => _BaseBroadcastState();
 }
 
-class _BaseBroadcastState extends State<BaseBroadcast>
+class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   String pageName;
@@ -517,7 +518,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.lightGray,
                       width: 2.0,
                     )),
                 child: ButtonTheme(
@@ -553,9 +554,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                       child: ButtonTheme(
                         child: DropdownButton(
                           items: _notificationFlatNoListItems,
@@ -817,7 +818,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.lightGray,
                       width: 2.0,
                     )),
                 child: ButtonTheme(
@@ -853,9 +854,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: GlobalVariables.mediumGreen,
-                            width: 2.0,
-                          )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                       child: ButtonTheme(
                         child: DropdownButton(
                           items: _mailFlatNoListItems,
@@ -1407,9 +1408,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
-                          width: 2.0,
-                        )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                     child: ButtonTheme(
                       child: DropdownButton(
                         items: _smsSendToListItems,
@@ -1443,9 +1444,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               color: GlobalVariables.white,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: GlobalVariables.mediumGreen,
-                                width: 2.0,
-                              )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                           child: ButtonTheme(
                             child: DropdownButton(
                               items: _smsFlatNoListItems,
@@ -1551,9 +1552,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
-                          width: 2.0,
-                        )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                     child: ButtonTheme(
                       child: DropdownButton(
                         items: _smsTypesListItems,
@@ -1710,9 +1711,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -1750,9 +1751,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -1790,9 +1791,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -1877,9 +1878,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -1917,9 +1918,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -1957,9 +1958,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2001,9 +2002,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -2041,9 +2042,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -2081,9 +2082,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -2161,9 +2162,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2201,9 +2202,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2241,9 +2242,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2285,9 +2286,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -2325,9 +2326,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -2365,9 +2366,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -2446,9 +2447,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2486,9 +2487,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2526,9 +2527,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2633,9 +2634,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2673,9 +2674,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2713,9 +2714,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2757,9 +2758,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -2797,9 +2798,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -2837,9 +2838,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -2915,9 +2916,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2955,9 +2956,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2995,9 +2996,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -3039,9 +3040,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -3079,9 +3080,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -3119,9 +3120,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
-                              width: 2.0,
-                            )),
+                      color: GlobalVariables.lightGray,
+                      width: 2.0,
+                    )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,

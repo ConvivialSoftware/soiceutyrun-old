@@ -151,6 +151,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                             AppLocalizations.of(context)
                                 .translate('enter_otp'),
                             fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.white
                           ),
                         ),
                       ),

@@ -78,6 +78,7 @@ class CreateClassifiedListingState
   List<String> uploadingImgBinaryList =  List<String>();
 
   ProgressDialog _progressDialog;
+  String visibilityPriority = "No";
   //String _classifiedType;
 
   @override
@@ -183,7 +184,7 @@ class CreateClassifiedListingState
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.lightGray,
                     width: 2.0,
                   )),
               child: ButtonTheme(
@@ -220,7 +221,7 @@ class CreateClassifiedListingState
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.lightGray,
                     width: 2.0,
                   )),
               child: ButtonTheme(
@@ -323,7 +324,7 @@ class CreateClassifiedListingState
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.lightGray,
                           width: 2.0,
                         )),
                     child: ButtonTheme(
@@ -353,6 +354,48 @@ class CreateClassifiedListingState
                   ),
                 ),
               ],
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      visibilityPriority == "No"
+                          ? visibilityPriority = "Yes"
+                          : visibilityPriority = "No";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: visibilityPriority == "No"
+                              ? GlobalVariables.white
+                              : GlobalVariables.green,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: visibilityPriority == "No"
+                                ? GlobalVariables.mediumGreen
+                                : GlobalVariables.transparent,
+                            width: 2.0,
+                          )),
+                      child: AppIcon(Icons.check, iconColor: GlobalVariables.white),
+                    ),
+                  ),
+                  Flexible(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: text(
+                          AppLocalizations.of(context)
+                              .translate('add_visibility'),
+                          textColor: GlobalVariables.black,
+                          fontSize: GlobalVariables.textSizeSMedium
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -776,7 +819,7 @@ class CreateClassifiedListingState
                                 _cityItemSelectedItem,
                                 uploadingImgBinaryList,
                                 _addressController.text,
-                                _pinCodeController.text)
+                                _pinCodeController.text,visibilityPriority)
                                 .then((value) {
                               // print('insert value : '+ value.toString());
                               // print('insert value : '+ value.status.toString());
@@ -810,7 +853,7 @@ class CreateClassifiedListingState
                                 _cityItemSelectedItem,
                                 uploadingImgBinaryList,
                                 _addressController.text,
-                                _pinCodeController.text)
+                                _pinCodeController.text,visibilityPriority)
                                 .then((value) {
                               // print('insert value : '+ value.toString());
                               // print('insert value : '+ value.status.toString());

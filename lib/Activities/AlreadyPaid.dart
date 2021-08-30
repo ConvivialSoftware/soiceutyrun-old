@@ -10,6 +10,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
+import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
@@ -22,12 +23,12 @@ import 'base_stateful.dart';
 
 class BaseAlreadyPaid extends StatefulWidget {
   bool isAdmin;
-  String receiptId;
+  Receipt receiptData;
   String invoiceNo;
   double amount;
   int penaltyAmount;
   String mBlock,mFlat;
-  BaseAlreadyPaid(this.invoiceNo,this.amount,this.mBlock,this.mFlat,this.penaltyAmount,{this.receiptId=null,this.isAdmin=false});
+  BaseAlreadyPaid(this.invoiceNo,this.amount,this.mBlock,this.mFlat,this.penaltyAmount,{this.receiptData,this.isAdmin=false});
 
   @override
   State<StatefulWidget> createState() {
@@ -91,9 +92,52 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
             .translate('pls_check_internet_connectivity'));
       }
     });
-    _dateController.text = DateTime.now().toLocal().day.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().year.toString();
-    insertedDate = DateTime.now().toLocal().year.toString()+"-"+DateTime.now().toLocal().month.toString().padLeft(2,'0')+"-"+DateTime.now().toLocal().day.toString().padLeft(2,'0');
-    _amountController.text=(double.parse(widget.amount.toString())-double.parse(widget.penaltyAmount.toString())).toStringAsFixed(2);
+    if(widget.isAdmin){
+      if(widget.receiptData!=null) {
+        getAmountCalculationData();
+        print('PAYMENT_DATE : ' + widget.receiptData.PAYMENT_DATE);
+        _dateController.text = GlobalFunctions.convertDateFormat(
+            widget.receiptData.PAYMENT_DATE, "dd-MM-yyyy");
+        insertedDate = widget.receiptData.PAYMENT_DATE;
+        _chequeBankNameController.text = widget.receiptData.CHEQUE_BANKNAME;
+        _noteController.text = widget.receiptData.NARRATION;
+        _referenceController.text = widget.receiptData.REFERENCE_NO;
+        paymentType = widget.receiptData.TRANSACTION_MODE;
+      }
+      _amountController.text=(double.parse(widget.amount.toString())-double.parse(widget.penaltyAmount.toString())).toStringAsFixed(2);
+    }else {
+      _amountController.text=(double.parse(widget.amount.toString())).toStringAsFixed(2);
+      _dateController.text = DateTime
+          .now()
+          .toLocal()
+          .day
+          .toString()
+          .padLeft(2, '0') + "-" + DateTime
+          .now()
+          .toLocal()
+          .month
+          .toString()
+          .padLeft(2, '0') + "-" + DateTime
+          .now()
+          .toLocal()
+          .year
+          .toString();
+      insertedDate = DateTime
+          .now()
+          .toLocal()
+          .year
+          .toString() + "-" + DateTime
+          .now()
+          .toLocal()
+          .month
+          .toString()
+          .padLeft(2, '0') + "-" + DateTime
+          .now()
+          .toLocal()
+          .day
+          .toString()
+          .padLeft(2, '0');
+    }
     _penaltyAmountController.text=double.parse(widget.penaltyAmount.toString()).toStringAsFixed(2);
   }
 
@@ -473,6 +517,8 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
 
       _bankList = List<Bank>.from(_list.map((i)=>Bank.fromJson(i)));
 
+      //_categorySelectedItem = __categoryListItems[0].value;
+      _progressDialog.hide();
       for(int i=0;i<_bankList.length;i++){
         __bankListItems.add(DropdownMenuItem(
           value: _bankList[i].BANK_NAME,
@@ -481,10 +527,34 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
             textColor: GlobalVariables.green,
           ),
         ));
+        if(widget.isAdmin){
+          if(widget.receiptData!=null) {
+            if (widget.receiptData.BANK_ACCOUNTNO == _bankList[i].ACCOUNT_NO) {
+              _bankSelectedItem = _bankList[i].BANK_NAME;
+              _bankAccountNoSelectedItem = _bankList[i].ACCOUNT_NO;
+            }
+          }
+        }
       }
       print('bsnk list lenght : '+_bankList.length.toString());
-      //_categorySelectedItem = __categoryListItems[0].value;
-      _progressDialog.hide();
+      setState(() {
+      });
+
+    });
+  }
+  getAmountCalculationData() async {
+    final dio = Dio();
+    final RestClientERP restClientERP =
+    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    _progressDialog.show();
+    restClientERP.amountCalculation(societyId,widget.invoiceNo,widget.amount.toString()).then((value) {
+      //print('Response : ' + value.toString());
+
+      //print('bsnk list lenght : '+_bankList.length.toString());
+      _amountController.text = (value.AMOUNT-value.PENALTY).toString();
+      _penaltyAmountController.text = value.PENALTY.toString();
       setState(() {
       });
 
@@ -711,7 +781,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     print('Date :'+date);*/
     _progressDialog.show();
     restClientERP.addApproveReceiptRequest(societyId, widget.mBlock+' '+widget.mFlat,insertedDate,_amountController.text,_penaltyAmountController.text,
-        _referenceController.text,paymentType,_bankAccountNoSelectedItem,widget.receiptId,_noteController.text,).then((value) {
+        _referenceController.text,paymentType,_bankAccountNoSelectedItem,widget.receiptData==null? null : widget.receiptData.ID,_noteController.text,).then((value) {
       print("addApproveReceiptRequest : "+ value.toString());
       _progressDialog.hide();
       if(value.status){

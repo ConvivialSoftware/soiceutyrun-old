@@ -164,7 +164,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                     onPressed: (){
                       emailBillDialog(context);
                     }),
-                SizedBox(width: 8,),
+                SizedBox(width: 16,),
                 AppIconButton(
                     Icons.download_sharp,
                     iconColor: GlobalVariables.white,
@@ -185,7 +185,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                       }
 
                     }),
-                SizedBox(width: 8,),
+                SizedBox(width: 16,),
               ],
               leading: InkWell(
                 onTap: () {
@@ -468,35 +468,38 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(16),
                     //  width: MediaQuery.of(context).size.width/2,
                     //  height: MediaQuery.of(context).size.height/3,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: AppIconButton(
+                            Icons.close,
+                            iconColor: GlobalVariables.grey,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
                         Container(
-                          alignment: Alignment.center,
+                          alignment: Alignment.topLeft,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: text(
-                            GlobalFunctions.convertDateFormat(
+                          child: primaryText(
+                            'Send #'+_billDetailsList[0].INVOICE_NO+' on below email id',
+                           /* GlobalFunctions.convertDateFormat(
                                 _billDetailsList[0].START_DATE,
                                 'dd-MM-yyyy') +
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
-                                    _billDetailsList[0].END_DATE, 'dd-MM-yyyy'),
+                                    _billDetailsList[0].END_DATE, 'dd-MM-yyyy')*/
                               textColor: GlobalVariables.green,
-                                fontSize: GlobalVariables.textSizeLargeMedium,
-                                fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Divider(
-                            thickness: 1.5,
-                            color: GlobalVariables.grey,
-                          ),
-                        ),
+                        Divider(),
                         Flexible(
                           child: Container(
                             alignment: Alignment.center,
@@ -512,7 +515,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                 ),),
                               ),*/
                                 Flexible(
-                                  flex: 3,
+                                  flex: 6,
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
@@ -563,31 +566,42 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                         ),
                         Container(
                           alignment: Alignment.topRight,
+                          height: 45,
+                          child: AppButton(
+                            textContent: AppLocalizations.of(context).translate('email_now'),
+                            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                            onPressed: () {
+                              GlobalFunctions.checkInternetConnection()
+                                  .then((internet) {
+                                if (internet) {
+                                  if (_emailTextController.text.length > 0) {
+                                    Navigator.of(context).pop();
+                                    getBillMail(
+                                        _billDetailsList[0].INVOICE_NO,
+                                        _billDetailsList[0].TYPE,
+                                        _emailTextController.text,widget.yearSelectedItem);
+                                  } else {
+                                    GlobalFunctions.showToast(
+                                        'Please Enter Email ID');
+                                  }
+                                } else {
+                                  GlobalFunctions.showToast(
+                                      AppLocalizations.of(context).translate(
+                                          'pls_check_internet_connectivity'));
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                     /*   Container(
+                          alignment: Alignment.topRight,
                           //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
                             child: RaisedButton(
                               color: GlobalVariables.green,
                               onPressed: () {
-                                GlobalFunctions.checkInternetConnection()
-                                    .then((internet) {
-                                  if (internet) {
-                                    if (_emailTextController.text.length > 0) {
-                                      Navigator.of(context).pop();
-                                      getBillMail(
-                                          _billDetailsList[0].INVOICE_NO,
-                                          _billDetailsList[0].TYPE,
-                                          _emailTextController.text,widget.yearSelectedItem);
-                                    } else {
-                                      GlobalFunctions.showToast(
-                                          'Please Enter Email ID');
-                                    }
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        AppLocalizations.of(context).translate(
-                                            'pls_check_internet_connectivity'));
-                                  }
-                                });
+
                               },
                               textColor: GlobalVariables.white,
                               //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
@@ -603,7 +617,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ));
@@ -656,9 +670,9 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
       GlobalFunctions.convertBase64StringToFile(value.dataString,'Bill'+widget.invoiceNo+'.pdf').then((value) {
 
         if(value){
-          GlobalFunctions.showToast('Check Download folder');
+          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_success'));
         }else{
-          GlobalFunctions.showToast('Download failed');
+          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_failed'));
         }
 
       });

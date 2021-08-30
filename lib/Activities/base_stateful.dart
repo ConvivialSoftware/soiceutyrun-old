@@ -49,6 +49,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
       GlobalVariables.isNewlyArrivedNotification.toString());*/
   print("myBackgroundMessageHandler onMessage >>>> $message");
+  GlobalFunctions.setNotificationBackGroundData(message.toString());
   Map data;
   if (Platform.isIOS) {
     data = message;
@@ -677,6 +678,36 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           context,
           MaterialPageRoute(
               builder: (context) => BaseUserManagement()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == NotificationTypes.TYPE_MyHousehold) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyUnit(AppLocalizations.of(context).translate('my_household'))))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (temp.tYPE == NotificationTypes.TYPE_PaymentRequest) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseAdmin()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });

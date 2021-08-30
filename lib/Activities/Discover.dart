@@ -39,7 +39,7 @@ class BaseDiscover extends StatefulWidget {
 class DiscoverState extends BaseStatefulState<BaseDiscover>
     with SingleTickerProviderStateMixin ,AfterLayoutMixin<BaseDiscover> {
   TabController _tabController;
-  String pageName;
+  String pageName,societyId;
   var width, height;
 
   DiscoverState(this.pageName);
@@ -70,7 +70,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
   void initState() {
     super.initState();
     print('initState Call');
-
+    getSharedPreferenceData();
   }
 
   @override
@@ -191,6 +191,24 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         //print('runtime : '+_classifiedValue.runtimeType.toString());
       }
     }
+
+    for(int j=0;j<_classifiedResponse.classifiedList.length;j++){
+      for(int k=0;k<value.filterOptionList.length;k++){
+        if(value.filterOptionList[k].isSelected){
+
+          if(value.filterOptionList[k].filterName=='All Location'){
+            //Nothing to Do
+          }/*else if(value.filterOptionList[k].filterName=='My Society'){
+            _classifiedResponse.classifiedList.removeWhere((item) =>
+            item.SOCIETY_ID != societyId);
+          }*/else {
+            _classifiedResponse.classifiedList.removeWhere((item) =>
+            item.City != value.filterOptionList[k].filterName);
+          }
+        }
+      }
+    }
+
     var tabName = 'No Data Found For ' +
         value
             .classifiedCategoryList[
@@ -201,9 +219,8 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
       children: <Widget>[
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
             context, 150.0),
-        _classifiedResponse.classifiedList.isNotEmpty
-            ? getClassifiedListDataLayout(_classifiedResponse)
-            : GlobalFunctions.noDataFoundLayout(context, tabName),
+        getClassifiedListDataLayout(_classifiedResponse,value,tabName)
+           //
         //addClassifiedDiscoverFabLayout(GlobalVariables.CreateClassifiedListingPage),
       ],
     );
@@ -240,18 +257,70 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
     );
   }
 
-  getClassifiedListDataLayout(ClassifiedResponse value) {
-    return Container(
-      margin: EdgeInsets.only(top: 8.0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: value.classifiedList.length,
-                itemBuilder: (context, position) {
-                  return getClassifiedListItemLayout(position, value);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
+  getClassifiedListDataLayout(ClassifiedResponse value, ClassifiedResponse providerValue, String tabName) {
+    print('value.filterOptionList : '+providerValue.filterOptionList.toString());
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          height: 60,
+          margin: EdgeInsets.only(top: 16.0),
+          child: ListView.builder(
+            itemCount: providerValue.filterOptionList.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context,position){
+            return InkWell(
+              onTap: (){
+                for(int i=0;i<providerValue.filterOptionList.length;i++){
+                  if(i==position){
+                    providerValue.filterOptionList[i].isSelected =true;
+                  }else{
+                    providerValue.filterOptionList[i].isSelected =false;
+                  }
+                 // print(providerValue.filterOptionList[i].filterName);
+                  //print(providerValue.filterOptionList[i].isSelected.toString());
+                }
+                setState(() {
+                });
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
+                decoration: boxDecoration(
+                  radius: 5,
+                  color: GlobalVariables.white,
+                ),
+                child: text(
+                    providerValue.filterOptionList[position].filterName,
+                    textColor: providerValue.filterOptionList[position].isSelected ? GlobalVariables.green : GlobalVariables.black,
+                    isCentered: true
+                ),
+
+              ),
+            );
+          })
+        ),
+        value.classifiedList.isNotEmpty
+            ?   Expanded(
+          child: Container(
+            margin: EdgeInsets.only(top: 8.0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      //scrollDirection: Axis.vertical,
+                      itemCount: value.classifiedList.length,
+                      itemBuilder: (context, position) {
+                        return getClassifiedListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          ),
+        ) : Container(
+          margin: EdgeInsets.only(top: height/4),
+          child: GlobalFunctions.noDataFoundLayout(context, tabName),
+        ),
+      ],
     );
   }
 
@@ -786,5 +855,9 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         return GlobalVariables.skyBlue;
         break;
     }
+  }
+
+  Future<void> getSharedPreferenceData() async {
+    societyId = await GlobalFunctions.getSocietyId();
   }
 }

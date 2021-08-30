@@ -26,7 +26,11 @@ abstract class RestClientDiscover {
       @Field("Title") String title, @Field("Description") String description,
      /* @Field("Property_Details") String propertyDetails,*/ @Field("Price") String price,
       @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,
-      @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String Society_Name,@Field("SOCIETY_ID") String societyId,);
+      @Field("Address") String address, @Field("Pincode") String pincode,
+      @Field("Society_Name") String Society_Name,
+      @Field("SOCIETY_ID") String societyId,
+      @Field("add_visibility") String add_visibility,
+      );
 
   @FormUrlEncoded()
   @POST(GlobalVariables.editClassifiedData)
@@ -36,7 +40,7 @@ abstract class RestClientDiscover {
       @Field("Title") String title, @Field("Description") String description,
       /* @Field("Property_Details") String propertyDetails,*/ @Field("Price") String price,
       @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,
-      @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String Society_Name,);
+      @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String Society_Name,@Field("add_visibility") String add_visibility,);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.exclusiveOfferAPI)

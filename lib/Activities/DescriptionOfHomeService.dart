@@ -246,7 +246,7 @@ class DescriptionOfHomeServiceState
                   margin: EdgeInsets.only(right: 8, top: 8),
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 5),
-                  child: FittedBox(child: text(widget._services.Discount, fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
+                  child: FittedBox(child: text(widget._services.Discount+'% Discount', fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -496,8 +496,10 @@ class DescriptionOfHomeServiceState
                   ),
                 ),
                 text(
-                  /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*/GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price),
-                  textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
+                    GlobalFunctions.getCurrencyFormat((int.parse(_serviceChargesList[position].Service_Price)-(int.parse(_serviceChargesList[position].Service_Price)*int.parse(widget._services.Discount)/100)).toString())
+                  /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*//*GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price)*/,
+
+                textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
                 )
               ],
             ),

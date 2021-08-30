@@ -280,6 +280,16 @@ class GlobalFunctions {
     return "";
   }
 
+  static getLastLogin() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getKeys().contains(GlobalVariables.keyLastLogin)) {
+      print('keyLastLogin : ' +
+          sharedPreferences.getString(GlobalVariables.keyLastLogin));
+      return sharedPreferences.getString(GlobalVariables.keyLastLogin);
+    }
+    return "00-00-00 00:00:00";
+  }
+
   static getDailyEntryNotification() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences
@@ -380,6 +390,23 @@ class GlobalFunctions {
     return "";
   }
 
+  static Future<void> setNotificationBackGroundData(
+      String notificationBackGroundData) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(
+        GlobalVariables.keyNotificationBackGroundData, notificationBackGroundData);
+  }
+
+  static getNotificationBackGroundData() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getKeys().contains(GlobalVariables.keyNotificationBackGroundData)) {
+      print('display keyNotificationBackGroundData : ' +
+          sharedPreferences.getString(GlobalVariables.keyNotificationBackGroundData));
+      return sharedPreferences.getString(GlobalVariables.keyNotificationBackGroundData);
+    }
+    return "";
+  }
+
   static getAppLanguage() async {
     AppLanguage appLanguage = AppLanguage();
     Locale _appLocale = await appLanguage.fetchLocale();
@@ -438,10 +465,12 @@ class GlobalFunctions {
     sharedPreferences.setString(
         GlobalVariables.keyGoogleCoordinate, value.google_parameter);
     sharedPreferences.setString(GlobalVariables.keySMSCredit, value.SMS_CREDIT);
+    sharedPreferences.setString(GlobalVariables.keyLastLogin, value.LAST_LOGIN);
     GlobalVariables.userNameValueNotifer.value = value.Name;
     GlobalVariables.userImageURLValueNotifer.value = value.Photo;
     GlobalVariables.userImageURLValueNotifer.notifyListeners();
     GlobalVariables.userNameValueNotifer.notifyListeners();
+    print('LAST_LOGIN : '+value.LAST_LOGIN.toString());
   }
 
   static Future<void> savePasswordToSharedPreferences(String password) async {
@@ -681,6 +710,25 @@ class GlobalFunctions {
       selectedDate = picked;
     }
     return selectedDate;
+  }
+
+  static getSelectedDateFromStartDate(BuildContext context,String startDate) async {
+    //DateTime selectedDate = DateTime.now();
+
+   DateTime startSelectedDate =  DateFormat("dd-MM-yyyy").parse(startDate);
+    print('selected year : ' + startSelectedDate.year.toString());
+    print('selected month : ' + startSelectedDate.month.toString().padLeft(2,'0'));
+    print('selected day : ' + startSelectedDate.day.toString().padLeft(2,'0'));
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: startSelectedDate,
+        firstDate:  DateTime(startSelectedDate.year, startSelectedDate.month, startSelectedDate.day),
+        lastDate: DateTime(3021));
+    if (picked != null && picked != startSelectedDate) {
+      startSelectedDate = picked;
+    }
+    return startSelectedDate;
   }
 
   static selectFutureDate(BuildContext context) async {
@@ -1533,5 +1581,18 @@ class GlobalFunctions {
     return NumberFormat.currency(locale: 'HI',symbol: '₹ ',decimalDigits: 2).format(double.parse(amount));
 
   }
+
+  static String getMobileFormatNumber(String mobileNumber){
+    var number='';
+
+    print('Before MobileNumber : '+mobileNumber);
+    number = mobileNumber.trim().toString().replaceAll(" ", "");
+    print('After MobileNumber : '+number);
+    number = number.substring(number.length-10);
+    print('After number : '+number);
+    return number;
+  }
+
+  //static String getAmount
 
 }
