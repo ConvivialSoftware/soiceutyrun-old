@@ -26,7 +26,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -95,7 +95,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
               alignment: Alignment.topLeft,
               child: text(
                 AppLocalizations.of(context).translate('delivery_arriving_on'),
-                textColor: GlobalVariables.green,
+                textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.textSizeLargeMedium,
                     fontWeight: FontWeight.bold,
               ),
@@ -121,14 +121,14 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                     isExpanded: false,
                     icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                     ),
                     underline: SizedBox(),
                     hint: Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                       child:  text(
                         "Today",
-                        textColor: GlobalVariables.mediumGreen,
+                        textColor: GlobalVariables.secondaryColor,
                           fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -143,7 +143,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )
               ),
@@ -163,7 +163,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )),
               child: ButtonTheme(
@@ -173,7 +173,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                   isExpanded: true,
                   icon: AppIcon(
                     Icons.keyboard_arrow_down,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                   ),
                   underline: SizedBox(),
                   hint: text(
@@ -202,7 +202,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -213,7 +213,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('leave_package_at_gate'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -232,14 +232,14 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
               child: ButtonTheme(
                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   onPressed: () {
 
                   },
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.primaryColor)
                   ),
                   child: text(
                     AppLocalizations.of(context)
@@ -379,7 +379,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightGreen,
+        color: GlobalVariables.AccentColor,
         borderRadius: BorderRadius.circular(10)
       ),
       child: Column(
@@ -395,7 +395,7 @@ class DeliveryState extends BaseStatefulState<BaseDelivery> {
             child: text(
                 AppLocalizations.of(context)
                     .translate('search_property'),
-                textColor: GlobalVariables.green,
+                textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.varyLargeText,),
           )
         ],

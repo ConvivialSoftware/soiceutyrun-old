@@ -78,7 +78,7 @@ class _BaseSupportState extends BaseStatefulState<BaseSupport> {
                                             MaterialPageRoute(
                                                 builder: (context) => BaseRaiseNewTicket()));
                                       },
-                                      child: text('Raise Complaint',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium)),
+                                      child: text('Raise Complaint',textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium)),
                                   InkWell(
                                       onTap: () async {
 
@@ -90,7 +90,7 @@ class _BaseSupportState extends BaseStatefulState<BaseSupport> {
                                             queryParameters: {'subject': ''});
                                         launch(_emailUri.toString());
                                       },
-                                      child: text('Email Society',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium))
+                                      child: text('Email Society',textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium))
                                 ],
                               ),
                               SizedBox(height: 8,),
@@ -102,7 +102,7 @@ class _BaseSupportState extends BaseStatefulState<BaseSupport> {
                                   },
                                   child: Container(
                                       alignment: Alignment.topLeft,
-                                      child: text('Call Society Office',fontSize: GlobalVariables.textSizeSMedium,textColor: GlobalVariables.green))),
+                                      child: text('Call Society Office',fontSize: GlobalVariables.textSizeSMedium,textColor: GlobalVariables.primaryColor))),
                             ],
                           ),
                         ),
@@ -137,14 +137,14 @@ class _BaseSupportState extends BaseStatefulState<BaseSupport> {
                                       onTap: (){
                                         launch(GlobalVariables.FAQURL);
                                       },
-                                      child: text('FAQ',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium)
+                                      child: text('FAQ',textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium)
                                   ),
                                   InkWell(
                                       onTap: (){
                                         Navigator.push(
                                             context, MaterialPageRoute(builder: (context) => BaseFeedback()));
                                       },
-                                      child: text(AppLocalizations.of(context).translate('feedback'),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium)
+                                      child: text(AppLocalizations.of(context).translate('feedback'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium)
                                   ),
                                 ],
                               ),
@@ -229,7 +229,7 @@ class _BaseSupportState extends BaseStatefulState<BaseSupport> {
                                         Navigator.push(
                                             context, MaterialPageRoute(builder: (context) => BaseReferAndEarn()));
                                       },
-                                      child: text('Refer',textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium)
+                                      child: text('Refer',textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium)
                                   ),
                                   /*InkWell(
                                       onTap: (){

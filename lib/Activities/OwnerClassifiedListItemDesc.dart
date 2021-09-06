@@ -83,7 +83,7 @@ class CreateClassifiedListingState
           builder: (context, value, child) {
             return Scaffold(
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 elevation: 0,
                 leading: InkWell(
@@ -225,7 +225,7 @@ class CreateClassifiedListingState
                                                                     'yes'),
                                                                 textColor:
                                                                     GlobalVariables
-                                                                        .green,
+                                                                        .primaryColor,
                                                                 fontSize: GlobalVariables.textSizeMedium,
                                                                 fontWeight:
                                                                     FontWeight
@@ -246,7 +246,7 @@ class CreateClassifiedListingState
                                                                     'no'),
                                           textColor:
                                                                     GlobalVariables
-                                                                        .green,
+                                                                        .primaryColor,
                                                                 fontSize: GlobalVariables.textSizeMedium,
                                                                 fontWeight:
                                                                     FontWeight
@@ -428,7 +428,7 @@ class CreateClassifiedListingState
               text(widget.classifiedList.Title,
                   fontSize: GlobalVariables.textSizeMedium,
                   maxLine: 2,
-                  textColor: GlobalVariables.green,
+                  textColor: GlobalVariables.primaryColor,
                   fontWeight: FontWeight.w500),
               text(widget.classifiedList.Society_Name,
                   fontSize: GlobalVariables.textSizeSmall,
@@ -493,7 +493,7 @@ class CreateClassifiedListingState
               ),
               SizedBox(height: 4),
               text('Description',
-                  textColor: GlobalVariables.green,
+                  textColor: GlobalVariables.primaryColor,
                   fontSize: GlobalVariables.textSizeMedium,
                   fontWeight: FontWeight.w500),
               SizedBox(height: 8),
@@ -516,7 +516,7 @@ class CreateClassifiedListingState
               ),
               SizedBox(height: 4),
               text('Details',
-                  textColor: GlobalVariables.green,
+                  textColor: GlobalVariables.primaryColor,
                   fontSize: GlobalVariables.textSizeMedium,
                   fontWeight: FontWeight.w500),
               SizedBox(height: 4),
@@ -616,7 +616,7 @@ class CreateClassifiedListingState
                                       : CircleAvatar(
                                           radius: 30,
                                           backgroundColor:
-                                              GlobalVariables.mediumGreen,
+                                              GlobalVariables.secondaryColor,
                                           backgroundImage: NetworkImage(
                                               interestedList[position]
                                                   .Profile_Image),
@@ -634,7 +634,7 @@ class CreateClassifiedListingState
                                           text(
                                               interestedList[position]
                                                   .User_Name,
-                                              textColor: GlobalVariables.green,
+                                              textColor: GlobalVariables.primaryColor,
                                               fontWeight: FontWeight.bold,
                                               fontSize: GlobalVariables
                                                   .textSizeMedium,
@@ -801,7 +801,7 @@ class CreateClassifiedListingState
                                   : 'Are you sure you want to remove this add?',
                               maxLine: 3,
                               fontSize: GlobalVariables.textSizeMedium,
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
@@ -840,7 +840,7 @@ class CreateClassifiedListingState
                                                               _selectOptionList[
                                                                   position]
                                                           ? GlobalVariables
-                                                              .green
+                                                              .primaryColor
                                                           : GlobalVariables
                                                               .white,
                                                       borderRadius:
@@ -851,9 +851,9 @@ class CreateClassifiedListingState
                                                                 _selectOptionList[
                                                                     position]
                                                             ? GlobalVariables
-                                                                .green
+                                                                .primaryColor
                                                             : GlobalVariables
-                                                                .mediumGreen,
+                                                                .secondaryColor,
                                                         width: 2.0,
                                                       )),
                                                   child: AppIcon(Icons.check,
@@ -926,7 +926,7 @@ class CreateClassifiedListingState
                                             ? 'Submit'
                                             : 'Yes',
                                         fontSize: GlobalVariables.textSizeMedium,
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontWeight: FontWeight.w500)),
                               )
                             ],

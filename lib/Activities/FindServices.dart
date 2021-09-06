@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -50,7 +52,7 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
               builder: (context) => Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   leading: InkWell(
                     onTap: () {
@@ -115,120 +117,168 @@ class DiscoverState extends BaseStatefulState<BaseFindServices> {
 
   getServiceTypeDataLayout(ServicesResponse value) {
 
-    return Container(
-      margin: EdgeInsets.all(16), //color: GlobalVariables.black,
-      child: Container(
-          child: Builder(
-              builder: (context) =>
+    var loginDashBoardResponse = Provider.of<LoginDashBoardResponse>(context,listen: false);
 
-                  /*GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                    ),
-                    itemCount: value.servicesCategoryList.length,
-                    itemBuilder: (context, position) {
-                      print('image : '+value.servicesCategoryList[position].image);
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BaseServicesPerCategory(value.servicesCategoryList[position].Category_Name)));
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          //width: width / 4,
-                         // height: width / 4,
-                          margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: GlobalVariables.white,
-                          ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(16),
+            child: Builder(
+                builder: (context) =>
+
+                    /*GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                      ),
+                      itemCount: value.servicesCategoryList.length,
+                      itemBuilder: (context, position) {
+                        print('image : '+value.servicesCategoryList[position].image);
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BaseServicesPerCategory(value.servicesCategoryList[position].Category_Name)));
+                          },
                           child: Container(
-                            padding: EdgeInsets.all(5),
-                           // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment.center,
-                                  //color: GlobalVariables.lightGray,
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: AppNetworkImage(
-                                    value.servicesCategoryList[position].image,
-                                    imageWidth:35.0,
-                                    imageHeight:35.0,
-                                    borderColor: GlobalVariables.grey,
-                                    borderWidth: 1.0,
-                                    radius: 0.0,
+                            alignment: Alignment.center,
+                            //width: width / 4,
+                           // height: width / 4,
+                            margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: GlobalVariables.white,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                             // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.center,
+                                    //color: GlobalVariables.lightGray,
+                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    child: AppNetworkImage(
+                                      value.servicesCategoryList[position].image,
+                                      imageWidth:35.0,
+                                      imageHeight:35.0,
+                                      borderColor: GlobalVariables.grey,
+                                      borderWidth: 1.0,
+                                      radius: 0.0,
+                                    ),
                                   ),
-                                ),
-                                Flexible(
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      margin: EdgeInsets.fromLTRB(2, 5, 2, 4),
-                                      child: text(value.servicesCategoryList[position].Category_Name,fontSize: GlobalVariables.textSizeSMedium,maxLine: 2)),
-                                ),
-                              ],
+                                  Flexible(
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.fromLTRB(2, 5, 2, 4),
+                                        child: text(value.servicesCategoryList[position].Category_Name,fontSize: GlobalVariables.textSizeSMedium,maxLine: 2)),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }, //  scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                  )*/
-            GridView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: value.servicesCategoryList.length,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                //setStatusBarColor(Banking_app_Background);
-                return InkWell(
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                BaseServicesPerCategory(value.servicesCategoryList[index].Category_Name)));
-                  },
-                  child: Container(
-                   // margin: EdgeInsets.only(left: 6, right: 6, top: 6, bottom: 6),
-                    //padding: EdgeInsets.all(6),
-                    decoration: boxDecoration(
-                       // backgroundColor: Banking_whitePureColor,
-                        //boxShadow: defaultBoxShadow(),
-                        radius: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        AppNetworkImage(
-                          value.servicesCategoryList[index].image,
-                          imageWidth:30.0,
-                          imageHeight:30.0,
-                          borderColor: GlobalVariables.grey,
-                          borderWidth: 1.0,
-                          radius: 0.0,
-                        ),
-                        SizedBox(height: 8,),
-                        text(value.servicesCategoryList[index].Category_Name,
-                            fontSize: GlobalVariables.textSizeSmall,
-                            isCentered: true,
-                            //textAlign: TextAlign.center,
-                            maxLine: 2),
-                      ],
+                        );
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )*/
+              GridView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: value.servicesCategoryList.length,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  //setStatusBarColor(Banking_app_Background);
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  BaseServicesPerCategory(value.servicesCategoryList[index].Category_Name)));
+                    },
+                    child: Container(
+                     // margin: EdgeInsets.only(left: 6, right: 6, top: 6, bottom: 6),
+                      //padding: EdgeInsets.all(6),
+                      decoration: boxDecoration(
+                         // backgroundColor: Banking_whitePureColor,
+                          //boxShadow: defaultBoxShadow(),
+                          radius: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          AppNetworkImage(
+                            value.servicesCategoryList[index].image,
+                            imageWidth:30.0,
+                            imageHeight:30.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            radius: 0.0,
+                          ),
+                          SizedBox(height: 8,),
+                          text(value.servicesCategoryList[index].Category_Name,
+                              fontSize: GlobalVariables.textSizeSmall,
+                              isCentered: true,
+                              //textAlign: TextAlign.center,
+                              maxLine: 2),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 0.9,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12),
+                  );
+                },
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.9,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12),
+              ),
             ),
-          )
           ),
+          Container(
+            //color: GlobalVariables.grey,
+            decoration: boxDecoration(
+              radius: GlobalVariables.textSizeVerySmall,
+              bgColor: GlobalVariables.transparent
+            ),
+            child: CarouselSlider.builder(
+              options: CarouselOptions(
+                height: 150.0,
+                autoPlay: false,
+                autoPlayInterval: Duration(seconds: 3),
+                viewportFraction: 0.8,
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+              ),
+              itemCount: loginDashBoardResponse.serviceBannerList.length,
+              itemBuilder: (BuildContext context, int itemIndex,
+                  int item) =>
+              loginDashBoardResponse.serviceBannerList.length > 0
+                  ? InkWell(
+                onTap: () {
+                  GlobalFunctions.redirectBannerClick(context,loginDashBoardResponse
+                      .serviceBannerList[itemIndex].Url);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  margin: EdgeInsets.symmetric(horizontal: 8.0),
+                  //color: GlobalVariables.black,
+                  //alignment: Alignment.center,
+                  child: AppNetworkImage(
+                    loginDashBoardResponse
+                        .serviceBannerList[itemIndex].IMAGE,
+                    fit: BoxFit.fitWidth,
+                    shape: BoxShape.rectangle,
+                    borderColor: GlobalVariables.transparent,
+                    radius: GlobalVariables.textSizeVerySmall,
+                  ),
+                ),
+              )
+                  : Container(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

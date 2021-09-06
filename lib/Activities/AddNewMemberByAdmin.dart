@@ -102,7 +102,7 @@ class AddNewMemberByAdminState
           builder: (context) =>
               Scaffold(
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   elevation: 0,
                   leading: InkWell(
@@ -267,7 +267,7 @@ class AddNewMemberByAdminState
                 contentPadding: EdgeInsets.only(top: 14),
                 suffixIcon: AppIconButton(
                   Icons.phone_android,
-                  iconColor: GlobalVariables.mediumGreen,
+                  iconColor: GlobalVariables.secondaryColor,
                   onPressed: () async {
                     Contact contact = await _contactPicker.selectContact();
                     print('contact Name : ' + contact.fullName);
@@ -300,7 +300,7 @@ class AddNewMemberByAdminState
                 contentPadding: EdgeInsets.only(top: 14),
                 suffixIcon: AppIconButton(
                   Icons.email,
-                  iconColor: GlobalVariables.mediumGreen,
+                  iconColor: GlobalVariables.secondaryColor,
                 ),
               ),
               Row(
@@ -326,7 +326,7 @@ class AddNewMemberByAdminState
                           isExpanded: true,
                           icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           /*underline: SizedBox(),
                           hint: text(
@@ -372,7 +372,7 @@ class AddNewMemberByAdminState
                           isExpanded: true,
                           icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                          /* underline: SizedBox(),
                           hint: text(
@@ -550,7 +550,7 @@ class AddNewMemberByAdminState
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentFilePath == null
                                 ? BoxDecoration(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                               borderRadius: BorderRadius.circular(25),
                               //   border: Border.all(color: GlobalVariables.green,width: 2.0)
                             )
@@ -561,7 +561,7 @@ class AddNewMemberByAdminState
                                     FileImage(File(attachmentFilePath)),
                                     fit: BoxFit.cover),
                                 border: Border.all(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.primaryColor,
                                     width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
@@ -589,12 +589,12 @@ class AddNewMemberByAdminState
                                   },
                                   icon: AppIcon(
                                     Icons.attach_file,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ),
                                   label: text(
                                     AppLocalizations.of(context)
                                         .translate('attach_photo'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                   ),
                                 ),
                               ),
@@ -627,12 +627,12 @@ class AddNewMemberByAdminState
                                     },
                                     icon: AppIcon(
                                       Icons.camera_alt,
-                                      iconColor: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.secondaryColor,
                                     ),
                                     label: text(
                                         AppLocalizations.of(context)
                                             .translate('take_picture'),
-                                        textColor: GlobalVariables.green)),
+                                        textColor: GlobalVariables.primaryColor)),
                               ),
                             ],
                           ),

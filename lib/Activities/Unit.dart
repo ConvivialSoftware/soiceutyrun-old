@@ -63,7 +63,7 @@ class _BaseUnitState extends BaseStatefulState<BaseUnit> {
                           margin: EdgeInsets.fromLTRB(
                               10, MediaQuery.of(context).size.height / 30, 16, 0),
                           padding: EdgeInsets.only(right: 20),
-                          decoration: boxDecoration(radius: 10.0,color: GlobalVariables.green,bgColor: GlobalVariables.green),
+                          decoration: boxDecoration(radius: 10.0,color: GlobalVariables.primaryColor,bgColor: GlobalVariables.primaryColor),
                           // color: GlobalVariables.black,
                           child: ButtonTheme(
                             //alignedDropdown: true,
@@ -187,7 +187,7 @@ class _BaseUnitState extends BaseStatefulState<BaseUnit> {
         value: _unitList[i].BLOCK,
         child: text(
           _unitList[i].BLOCK,
-          textColor: GlobalVariables.green,
+          textColor: GlobalVariables.primaryColor,
         ),
       ));
     }

@@ -116,7 +116,7 @@ class NearByShopPerCategoryState
               child: Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   leading: InkWell(
                     onTap: () {
@@ -388,7 +388,7 @@ class NearByShopPerCategoryState
                       child: IconButton(
                         icon: AppIcon(
                           Icons.arrow_forward,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                         ),
                         iconSize: 28,
                       ),

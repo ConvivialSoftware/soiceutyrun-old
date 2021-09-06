@@ -44,7 +44,7 @@ class ViewPollGraphState extends BaseStatefulState<BaseViewPollGraph> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(

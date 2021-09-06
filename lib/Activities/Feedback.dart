@@ -48,7 +48,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
       builder: (context) =>
           Scaffold(
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -170,7 +170,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                       height: 50,
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       decoration: attachmentFilePath == null ? BoxDecoration(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.secondaryColor,
                         borderRadius: BorderRadius.circular(25),
 
                       ) : BoxDecoration(
@@ -180,7 +180,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                               fit: BoxFit.cover
                           ),
                           border: Border.all(
-                              color: GlobalVariables.green, width: 2.0)
+                              color: GlobalVariables.primaryColor, width: 2.0)
                       ),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                     ),
@@ -206,12 +206,12 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                             },
                             icon: AppIcon(
                               Icons.attach_file,
-                              iconColor: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.secondaryColor,
                             ),
                             label: text(
                               AppLocalizations.of(context).translate(
                                   'attach_photo'),
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                             ),
                           ),
                         ),
@@ -243,12 +243,12 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                               },
                               icon: AppIcon(
                                 Icons.camera_alt,
-                                iconColor: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.secondaryColor,
                               ),
                               label: text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                               textColor: GlobalVariables.green,
+                               textColor: GlobalVariables.primaryColor,
                               )),
                         ),
                       ],
@@ -264,7 +264,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
                   child: RaisedButton(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.primaryColor,
                     onPressed: () {
                       verifyData();
                     },
@@ -272,7 +272,7 @@ class FeedbackState extends BaseStatefulState<BaseFeedback> {
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.green)),
+                        side: BorderSide(color: GlobalVariables.primaryColor)),
                     child: text(
                       AppLocalizations.of(context).translate('submit'),
                       fontSize: GlobalVariables.textSizeMedium,

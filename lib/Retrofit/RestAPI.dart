@@ -777,7 +777,9 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addMember(String socId,
+  Future<StatusMsgResponse> addMember(
+      String userId,
+      String socId,
       String block,
       String flat,
       String name,
@@ -807,6 +809,7 @@ class RestAPI
     ArgumentError.checkNotNull(membershipType, GlobalVariables.TYPE);
 
     FormData formData = FormData.fromMap({
+      GlobalVariables.userID: userId,
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -824,6 +827,7 @@ class RestAPI
       GlobalVariables.PROFILE_PHOTO: profilePic,
     });
     print({
+    GlobalVariables.userID: userId,
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -1489,53 +1493,51 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addStaffMember(String socId,
-      String block,
-      String flat,
+  Future<StatusMsgResponse> addStaffMember(
+      String userId,
+      String socId,
       String name,
+      String mobile,
+      String vehicleNo,
+      String assignFlat,
       String gender,
       String dob,
-      String mobile,
+      String role,
       String qualification,
       String address,
-      String notes,
-      String userId,
-      String role,
       String picture,
-      String identityProof,
-      String vehicleNo) async {
+      String identityProof,) async {
     // TODO: implement addStaffMember
-    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
-    ArgumentError.checkNotNull(block, GlobalVariables.block);
-    ArgumentError.checkNotNull(flat, GlobalVariables.flat);
-    ArgumentError.checkNotNull(name, GlobalVariables.STAFF_NAME);
-    ArgumentError.checkNotNull(gender, GlobalVariables.GENDER);
-    ArgumentError.checkNotNull(dob, GlobalVariables.DOB);
-    ArgumentError.checkNotNull(userId, GlobalVariables.userID);
-    ArgumentError.checkNotNull(mobile, GlobalVariables.Contact);
-    ArgumentError.checkNotNull(qualification, GlobalVariables.QUALIFICATION);
-    ArgumentError.checkNotNull(address, GlobalVariables.ADDRESS);
-    ArgumentError.checkNotNull(notes, GlobalVariables.NOTES);
-    ArgumentError.checkNotNull(role, GlobalVariables.ROLE);
-    // ArgumentError.checkNotNull(vehicleNo, GlobalVariables.VEHICLE_NO);
-
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
+      "ASSIGN_FLATS": assignFlat,
       GlobalVariables.STAFF_NAME: name,
       GlobalVariables.GENDER: gender,
+      GlobalVariables.ROLE: role,
       GlobalVariables.DOB: dob,
       GlobalVariables.userID: userId,
       GlobalVariables.Contact: mobile,
       GlobalVariables.QUALIFICATION: qualification,
       GlobalVariables.ADDRESS: address,
-      GlobalVariables.NOTES: notes,
       GlobalVariables.VEHICLE_NO: vehicleNo,
-      GlobalVariables.IDENTITY_PROOF: identityProof,
-      GlobalVariables.PHOTO: picture,
+      "Attachment": identityProof,
+      "IMAGE": picture,
     });
-    //print(GlobalVariables.societyId+": "+socId);
+    print({
+      GlobalVariables.societyId: socId,
+      "ASSIGN_FLATS": assignFlat,
+      GlobalVariables.STAFF_NAME: name,
+      GlobalVariables.GENDER: gender,
+      GlobalVariables.ROLE: role,
+      GlobalVariables.DOB: dob,
+      GlobalVariables.userID: userId,
+      GlobalVariables.Contact: mobile,
+      GlobalVariables.QUALIFICATION: qualification,
+      GlobalVariables.ADDRESS: address,
+      GlobalVariables.VEHICLE_NO: vehicleNo,
+      "Attachment": identityProof,
+      "IMAGE": picture,
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.addStaffMemberAPI);
     final Response _result = await _dio.post(GlobalVariables.addStaffMemberAPI,
@@ -1547,6 +1549,82 @@ class RestAPI
         data: formData);
     final value = _result.data;
     print('value of addStaffMember : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
+
+
+  @override
+  Future<StatusMsgResponse> addMaintenanceStaffMember(
+      String userId,
+      String socId,
+      String name,
+      String mobile,
+      String email,
+      String vehicleNo,
+      String gender,
+      String dob,
+      String role,
+      String qualification,
+      String address,
+      String picture,
+      String identityProof,) async {
+
+    /*@Field("USER_ID") String userId,
+      @Field("SOCIETY_ID") String societyId,
+      @Field("NAME") String visitorName,
+      @Field("MOBILE") String MOBILE,
+      @Field("EMAIL") String EMAIL,
+      @Field("VEHICLE_NO") String visitorVehicleNo,
+      @Field("GENDER") String gender,
+      @Field("DOB") String dob,
+      @Field("ROLE") String role,
+      @Field("QUALIFICATION") String qualification,
+      @Field("ADDRESS") String address,
+      @Field("PROFILE_PHOTO")String staffImage,
+      @Field("IDENTITY_PROOF") String identityProof*/
+
+    // TODO: implement addMaintenanceStaffMemberAPI
+    FormData formData = FormData.fromMap({
+      GlobalVariables.userID: userId,
+      GlobalVariables.societyId: socId,
+      GlobalVariables.STAFF_NAME: name,
+      GlobalVariables.Contact: mobile,
+      GlobalVariables.Email: email,
+      GlobalVariables.VEHICLE_NO: vehicleNo,
+      GlobalVariables.GENDER: gender,
+      GlobalVariables.DOB: dob,
+      GlobalVariables.ROLE: role,
+      GlobalVariables.QUALIFICATION: qualification,
+      GlobalVariables.ADDRESS: address,
+      "IDENTITY_PROOF": identityProof,
+      "PROFILE_PHOTO": picture,
+    });
+    print({
+      GlobalVariables.userID: userId,
+      GlobalVariables.societyId: socId,
+      GlobalVariables.STAFF_NAME: name,
+      GlobalVariables.Contact: mobile,
+      GlobalVariables.Email: email,
+      GlobalVariables.VEHICLE_NO: vehicleNo,
+      GlobalVariables.GENDER: gender,
+      GlobalVariables.DOB: dob,
+      GlobalVariables.ROLE: role,
+      GlobalVariables.QUALIFICATION: qualification,
+      GlobalVariables.ADDRESS: address,
+      "IDENTITY_PROOF": identityProof,
+      "PROFILE_PHOTO": picture,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.addMaintenanceStaffMemberAPI);
+    final Response _result = await _dio.post(GlobalVariables.addMaintenanceStaffMemberAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of addMaintenanceStaffMemberAPI : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
@@ -2091,14 +2169,18 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> staffCount(String societyId) async {
+  Future<DataResponse> staffCount(String societyId,String staffType) async {
     // TODO: implement staffCount
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.Type: staffType,
     });
-    print(GlobalVariables.societyId + ": " + societyId);
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.Type: staffType,
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.staffCountAPI);
     final Response _result = await _dio.post(GlobalVariables.staffCountAPI,
@@ -2266,15 +2348,22 @@ class RestAPI
 
   @override
   Future<StatusMsgResponse> deleteFamilyMember(String id,
-      String societyId) async {
+      String societyId,String userId,) async {
     // TODO: implement deleteFamilyMember
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(id, GlobalVariables.id);
 
     FormData formData = FormData.fromMap(
-        {GlobalVariables.societyId: societyId, GlobalVariables.id: id});
-    print(GlobalVariables.societyId + ": " + societyId);
-    print(GlobalVariables.id + ": " + id);
+        {
+          GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
+          GlobalVariables.id: id
+        });
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.id: id
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.deleteFamilyMemberAPI);
     final Response _result =
@@ -3517,7 +3606,7 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addMemberByAdmin(String socId, String block,
+  Future<StatusMsgResponse> addMemberByAdmin(String userId,String socId, String block,
       String flat, String name,
       String mobile, String Email, String livesHere, String membershipType,
       String address,
@@ -3531,6 +3620,7 @@ class RestAPI
     ArgumentError.checkNotNull(livesHere, GlobalVariables.LIVES_HERE);
 
     FormData formData = FormData.fromMap({
+      GlobalVariables.userID: userId,
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -3548,6 +3638,7 @@ class RestAPI
     print('baseurl : ' + baseUrl + GlobalVariables.addMemberByAdminAPI);
 
     print("from data" + {
+      GlobalVariables.userID: userId,
       GlobalVariables.societyName: societyName,
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
@@ -3782,11 +3873,12 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> deactivateUser(String societyId, String Reason,
+  Future<StatusMsgResponse> deactivateUser(String societyId, String userId,String Reason,
       String id) async {
     // TODO: implement deactivateUser
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
       "id": id,
       "Reason": Reason,
     });
@@ -3794,6 +3886,7 @@ class RestAPI
     print("data: " +
         {
           GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
           "id": id,
           "Reason": Reason,
         }.toString());
@@ -4065,16 +4158,18 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> closeAgreement(String societyId, String id) async {
+  Future<StatusMsgResponse> closeAgreement(String societyId, String id,String userId) async {
     // TODO: implement closeAgreement
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.ID: id,
+      GlobalVariables.userID: userId,
     });
 
     print({
       GlobalVariables.societyId: societyId,
       GlobalVariables.ID: id,
+      GlobalVariables.userID: userId,
     }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.closeAgreementAPI);
@@ -4241,14 +4336,20 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getHeadWiseExpenseData(String societyId) async {
+  Future<DataResponse> getHeadWiseExpenseData(String societyId,String startDate,String endDate) async {
     // TODO: implement getHeadWiseExpenseData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
+      "START_DATE": startDate,
+      "END_DATE": endDate,
     });
-    print(GlobalVariables.societyId + ": " + societyId);
+    print({
+      GlobalVariables.societyId: societyId,
+      "START_DATE": startDate,
+      "END_DATE": endDate,
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.headWiseExpenseAPI);
     final Response _result = await _dio.post(GlobalVariables.headWiseExpenseAPI,

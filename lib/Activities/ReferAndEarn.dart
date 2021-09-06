@@ -57,7 +57,7 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -166,7 +166,7 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -199,7 +199,7 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.email,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
               ),
             ),
             Container(

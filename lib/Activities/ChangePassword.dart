@@ -49,7 +49,7 @@ class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
       builder: (context) =>
           Scaffold(
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -123,7 +123,7 @@ class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
                 obscureText: _obscureNewPassword,
                 suffixIcon: AppIconButton(
                   Icons.remove_red_eye,
-                  iconColor: GlobalVariables.mediumGreen,
+                  iconColor: GlobalVariables.secondaryColor,
                   onPressed: () {
                     if (_obscureNewPassword) {
                       _obscureNewPassword = false;
@@ -172,7 +172,7 @@ class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
                 obscureText: _obscureConfirmPassword,
                 suffixIcon: AppIconButton(
                   Icons.remove_red_eye,
-                  iconColor: GlobalVariables.mediumGreen,
+                  iconColor: GlobalVariables.secondaryColor,
                   onPressed: () {
                     if (_obscureConfirmPassword) {
                       _obscureConfirmPassword = false;

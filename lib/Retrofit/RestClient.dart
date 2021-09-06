@@ -157,7 +157,10 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.unitAddMemberAPI)
-  Future<StatusMsgResponse> addMember(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
+  Future<StatusMsgResponse> addMember(
+      @Field(GlobalVariables.userID) String userId,
+      @Field(GlobalVariables.societyId) String socId,
+      @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.NAME) String name,
       @Field(GlobalVariables.GENDER) String gender,@Field(GlobalVariables.DOB) String dob,
       @Field(GlobalVariables.USER_NAME) String userName,@Field(GlobalVariables.MOBILE) String mobile,@Field(GlobalVariables.ALTERNATE_CONTACT1) String alternateNumber,
@@ -206,14 +209,29 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addStaffMemberAPI)
-  Future<StatusMsgResponse> addStaffMember(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
-      @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.STAFF_NAME) String name,
-      @Field(GlobalVariables.GENDER) String gender,@Field(GlobalVariables.DOB) String dob,
-      @Field(GlobalVariables.Contact) String mobile, @Field(GlobalVariables.QUALIFICATION) String qualification,
-      @Field(GlobalVariables.ADDRESS) String address, @Field(GlobalVariables.NOTES) String notes,
-      @Field(GlobalVariables.userID) String userId,@Field(GlobalVariables.ROLE) String role,
-      @Field(GlobalVariables.PHOTO) String picture,@Field(GlobalVariables.IDENTITY_PROOF) String identityProof,
-      @Field(GlobalVariables.VEHICLE_NO) String vehicleNo);
+  Future<StatusMsgResponse> addStaffMember(@Field("USER_ID") String userId,@Field("SOCIETY_ID") String societyId, @Field("STAFF_NAME") String visitorName,
+      @Field("CONTACT") String visitorPhNo, @Field("VEHICLE_NO") String visitorVehicleNo,
+      @Field("ASSIGN_FLATS") String flatNo, @Field("GENDER") String gender,
+      @Field("DOB") String dob, @Field("ROLE") String role,
+      @Field("QUALIFICATION") String qualification, @Field("ADDRESS") String address,
+      @Field("IMAGE")String staffImage, @Field("Attachment") String identityProof);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.addMaintenanceStaffMemberAPI)
+  Future<StatusMsgResponse> addMaintenanceStaffMember(
+      @Field("USER_ID") String userId,
+      @Field("SOCIETY_ID") String societyId,
+      @Field("NAME") String visitorName,
+      @Field("MOBILE") String MOBILE,
+      @Field("EMAIL") String EMAIL,
+      @Field("VEHICLE_NO") String visitorVehicleNo,
+      @Field("GENDER") String gender,
+      @Field("DOB") String dob,
+      @Field("ROLE") String role,
+      @Field("QUALIFICATION") String qualification,
+      @Field("ADDRESS") String address,
+      @Field("PROFILE_PHOTO")String staffImage,
+      @Field("IDENTITY_PROOF") String identityProof);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.approveGatePassAPI)
@@ -263,7 +281,8 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.staffCountAPI)
-  Future<DataResponse> staffCount(@Field(GlobalVariables.societyId) String societyId);
+  Future<DataResponse> staffCount(@Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.Type) String staffType);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.staffRoleDetailsAPI)
@@ -294,7 +313,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.deleteFamilyMemberAPI)
-  Future<StatusMsgResponse> deleteFamilyMember(@Field(GlobalVariables.id) String id,@Field(GlobalVariables.societyId) String societyId);
+  Future<StatusMsgResponse> deleteFamilyMember(@Field(GlobalVariables.id) String id,@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.userID) String userId,);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.broadcastEmailAPI)
@@ -468,7 +487,9 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addMemberByAdminAPI)
-  Future<StatusMsgResponse> addMemberByAdmin(@Field(GlobalVariables.societyId) String socId,
+  Future<StatusMsgResponse> addMemberByAdmin(
+      @Field(GlobalVariables.userID) String userId,
+      @Field(GlobalVariables.societyId) String socId,
       @Field(GlobalVariables.block) String block, @Field(GlobalVariables.flat) String flat ,
       @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.PHONE) String mobile,
       @Field(GlobalVariables.Email) String Email, @Field(GlobalVariables.LIVES_HERE) String livesHere,
@@ -523,7 +544,9 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.deactivateUserAPI)
-  Future<StatusMsgResponse> deactivateUser(@Field(GlobalVariables.societyId) String societyId,
+  Future<StatusMsgResponse> deactivateUser(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
       @Field("Reason") String Reason,
       @Field("id") String id,);
 
@@ -590,6 +613,7 @@ abstract class RestClient {
   Future<StatusMsgResponse> closeAgreement(
       @Field(GlobalVariables.societyId) String societyId,
       @Field(GlobalVariables.ID) String id,
+      @Field(GlobalVariables.userID) String userId,
       );
 
   @FormUrlEncoded()

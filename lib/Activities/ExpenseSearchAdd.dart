@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -30,6 +32,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
 
   TextEditingController _startDateController = TextEditingController();
   TextEditingController _endDateController = TextEditingController();
+  bool isFiltered=false;
 
 
   List<LedgerAccount> _ledgerAccountList = new List<LedgerAccount>();
@@ -77,7 +80,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
   @override
   void initState() {
     //DateTime selectedDate = DateTime.now();
-    getHeadWiseData();
+    getHeadWiseData(null,null);
     //endDate = GlobalFunctions.convertDateFormat(selectedDate.toIso8601String(), 'dd-MM-yyyy');
     //startDate = GlobalFunctions.convertDateFormat(DateTime(selectedDate.year,selectedDate.month-2,selectedDate.day).toIso8601String(), 'dd-MM-yyyy');
 
@@ -99,7 +102,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -111,6 +114,25 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                   iconColor: GlobalVariables.white,
                 ),
               ),
+              actions: [
+                AppIconButton(
+                  Icons.filter_alt_sharp,
+                  iconColor: isFiltered ? GlobalVariables.skyBlue : GlobalVariables.white,
+                  onPressed: (){
+                    showSearchWiseBottomSheet();
+                  },
+                ),
+                SizedBox(width: 8,),
+                isFiltered ? InkWell(
+                    onTap: (){
+                      isFiltered=false;
+                      getHeadWiseData(null, null);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                        child: text('Clear',textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSmall))):SizedBox(),
+                SizedBox(width: 20,),
+              ],
               title: text(
                   AppLocalizations.of(context).translate('expense'),
                   textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
@@ -128,7 +150,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
       children: <Widget>[
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
             context, 200.0),
-       value.isLoading ? GlobalFunctions.loadingWidget(context) :  headWiseExpenseLayout(context,value),
+       /*value.isLoading ? GlobalFunctions.loadingWidget(context) :*/  headWiseExpenseLayout(context,value),
         AppUserPermission.isUserAccountingPermission ?   addExpensesFabLayout():SizedBox(),
       ],
     );
@@ -146,7 +168,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                     MaterialPageRoute(builder: (context) => BaseAddExpense()));
              print('result back : '+result.toString());
              if(result=='back'){
-               getHeadWiseData();
+               getHeadWiseData(null,null);
                GlobalFunctions.setBaseContext(context);
              }
               },
@@ -154,7 +176,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                 Icons.add,
                 iconColor: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
             ),
           )
         ],
@@ -220,7 +242,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                         text('Total Spent',fontSize: GlobalVariables.textSizeSmall,
                             textColor: GlobalVariables.grey),
                         text(GlobalFunctions.getCurrencyFormat(_totalSumUp.toString()),fontSize: GlobalVariables.textSizeNormal,
-                            textColor: GlobalVariables.green,fontWeight: FontWeight.bold),
+                            textColor: GlobalVariables.primaryColor,fontWeight: FontWeight.bold),
                       ],
                     ),
                   ),
@@ -386,13 +408,13 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                   child: text('Search By',
                                       maxLine: 3,
                                       fontSize: GlobalVariables.textSizeMedium,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
                                   height: 8,
                                 ),
-                                Row(
+                             /*   Row(
                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
@@ -453,7 +475,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                       ),
                                     ),
                                   ],
-                                ),
+                                ),*/
                              Container(
 
                                //   margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
@@ -475,7 +497,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                         readOnly: true,
                                         suffixIcon: AppIconButton(
                                           Icons.date_range,
-                                          iconColor: GlobalVariables.mediumGreen,
+                                          iconColor: GlobalVariables.secondaryColor,
                                           onPressed: () {
                                             GlobalFunctions.getSelectedDate(context).then((value) {
                                               _startDateController.text =
@@ -498,7 +520,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                         readOnly: true,
                                         suffixIcon: AppIconButton(
                                           Icons.date_range,
-                                          iconColor: GlobalVariables.mediumGreen,
+                                          iconColor: GlobalVariables.secondaryColor,
                                           onPressed: () {
                                             GlobalFunctions.getSelectedDate(context).then((value) {
                                               _endDateController.text =
@@ -512,7 +534,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                           },
                                         ),
                                       ),
-                                      Container(
+                                     /* Container(
                                         width: double.infinity,
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -537,7 +559,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                                 isExpanded: true,
                                                 isCaseSensitiveSearch: true,
                                                 icon: AppIcon(null
-                                                  /*Icons.keyboard_arrow_down, color: GlobalVariables.grey,*/
+                                                  *//*Icons.keyboard_arrow_down, color: GlobalVariables.grey,*//*
                                                 ),
                                                 underline: SizedBox(),
                                               clearIcon: Icon(Icons.clear),
@@ -555,7 +577,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                               ),
                                             ),
                                             SizedBox(width: 8,),
-                                           /* Flexible(
+                                           *//* Flexible(
                                               flex:1,
                                               child: AppIconButton(
                                                 Icons.close,
@@ -568,10 +590,10 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                                   });
                                                 },
                                               ),
-                                            ),*/
+                                            ),*//*
                                           ],
                                         ),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                 ),
@@ -583,8 +605,8 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                         /*if(_startDateController.text.isEmpty && _endDateController.text.isEmpty && _selectedLedgerAccount==null) {
                                           GlobalFunctions.showToast('Please Enter Start-End Date or Ledger Account');
                                         }else{*/
-                                          Navigator.of(context).pop();
-                                          Navigator.push(
+                                         // Navigator.of(context).pop();
+                                         /* Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
@@ -601,7 +623,20 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                                               .then((value) {
                                             GlobalFunctions.setBaseContext(
                                                 context);
-                                          });
+                                          });*/
+                                        if(_startDateController.text.isNotEmpty) {
+                                          if(_endDateController.text.isNotEmpty) {
+                                            Navigator.of(context).pop();
+                                            isFiltered=true;
+                                            getHeadWiseData(
+                                                _startDateController.text,
+                                                _endDateController.text);
+                                          }else{
+                                            GlobalFunctions.showToast('Please Select End Date');
+                                          }
+                                        }else{
+                                          GlobalFunctions.showToast('Please Select Start Date');
+                                        }
                                         //}
                                       },
                                       //fontSize: 16.0,
@@ -664,7 +699,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
               value: _listYear[i].years,
               child: text(
                 _listYear[i].years,
-                textColor: GlobalVariables.green
+                textColor: GlobalVariables.primaryColor
               ),
             ));
           } else {
@@ -675,7 +710,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                   value: _listYear[i].years,
                   child: text(
                     _listYear[i].years,
-                   textColor: GlobalVariables.green,
+                   textColor: GlobalVariables.primaryColor,
                   ),
                 ));
             if (_yearSelectedItem == null) {
@@ -688,7 +723,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
             value: _listYear[i].years,
             child: text(
               _listYear[i].years,
-              textColor: GlobalVariables.green,
+              textColor: GlobalVariables.primaryColor,
             ),
           ));
         }
@@ -753,7 +788,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                     child: text(GlobalFunctions.getCurrencyFormat(value.headWiseExpenseList[position].amount,),
-                        fontSize: GlobalVariables.textSizeSMedium,textColor: defaultColorList.length > position ? defaultColorList[position] : GlobalVariables.green,fontWeight: FontWeight.bold),
+                        fontSize: GlobalVariables.textSizeSMedium,textColor: defaultColorList.length > position ? defaultColorList[position] : GlobalVariables.primaryColor,fontWeight: FontWeight.bold),
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -770,12 +805,22 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
 
   }
 
-  void getHeadWiseData() {
-    Provider.of<UserManagementResponse>(context,listen: false).getHeadWiseExpenseData().then((value) {
+  void getHeadWiseData(String startDate,String endDate) {
+   // if(isFiltered){
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+      _progressDialog.show();
+    //}
+    Provider.of<UserManagementResponse>(context,listen: false).getHeadWiseExpenseData(startDate,endDate).then((value) {
+
+        _progressDialog.hide();
       _totalSumUp=0;
       for(int j=0;j<value.length;j++){
         dataMap[value[j].heads] = double.parse(value[j].amount==null ? '0' : value[j].amount);
         _totalSumUp += int.parse(value[j].amount==null ? '0' : value[j].amount);
+      }
+      if(isFiltered) {
+        _startDateController.text = '';
+        _endDateController.text = '';
       }
       setState(() {});
     });

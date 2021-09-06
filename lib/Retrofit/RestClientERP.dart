@@ -113,7 +113,8 @@ abstract class RestClientERP {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.headWiseExpenseAPI)
-  Future<DataResponse> getHeadWiseExpenseData(@Field("SOCIETY_ID") String socId);
+  Future<DataResponse> getHeadWiseExpenseData(@Field("SOCIETY_ID") String socId,@Field("START_DATE") String startDate,@
+  Field("END_DATE") String endDate);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.cancelReceiptRequestAPI)

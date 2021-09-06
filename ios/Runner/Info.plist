@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>workmanager.background.task</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -20,6 +24,14 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FUAllFilesUploadedMessage</key>
+	<string>File have been uploaded</string>
+	<key>FUMaximumConnectionsPerHost</key>
+	<integer>3</integer>
+	<key>FUMaximumUploadOperation</key>
+	<integer>3</integer>
+	<key>FUTimeoutInSeconds</key>
+	<integer>3600</integer>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
@@ -52,7 +64,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>remote-notification</string>
+		<string>processing</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
@@ -75,13 +87,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FUMaximumConnectionsPerHost</key>
-    <integer>3</integer>
-    <key>FUMaximumUploadOperation</key>
-    <integer>3</integer>
-    <key>FUTimeoutInSeconds</key>
-    <integer>3600</integer>
-    <key>FUAllFilesUploadedMessage</key>
-    <string>File have been uploaded</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+    	<string>workmanager.background.task</string>
+    </array>
 </dict>
 </plist>

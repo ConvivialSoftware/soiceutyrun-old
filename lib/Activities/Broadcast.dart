@@ -143,7 +143,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                 value[i].NAME +
                 '-' +
                 value[i].TYPE,
-            style: TextStyle(color: GlobalVariables.green),
+            style: TextStyle(color: GlobalVariables.primaryColor),
           ),
         ));
         _mailFlatNoListItems.add(DropdownMenuItem(
@@ -156,7 +156,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                 value[i].NAME +
                 '-' +
                 value[i].TYPE,
-            style: TextStyle(color: GlobalVariables.green),
+            style: TextStyle(color: GlobalVariables.primaryColor),
           ),
         ));
 
@@ -170,7 +170,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                 value[i].NAME +
                 '-' +
                 value[i].TYPE,
-            style: TextStyle(color: GlobalVariables.green),
+            style: TextStyle(color: GlobalVariables.primaryColor),
           ),
         ));
 
@@ -198,7 +198,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: broadcastSendToList[i].sendToValue,
         child: Text(
           broadcastSendToList[i].sendToName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -211,7 +211,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: broadcastSendToList[i].sendToValue,
         child: Text(
           broadcastSendToList[i].sendToName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -224,7 +224,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: broadcastSendToList[i].sendToValue,
         child: Text(
           broadcastSendToList[i].sendToName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -248,7 +248,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: smsTypesList[i].smsTypeValue,
         child: Text(
           smsTypesList[i].smsTypeName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -272,7 +272,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: hoursList[i].hoursValue,
         child: Text(
           hoursList[i].hoursName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -280,7 +280,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: hoursList[i].hoursValue,
         child: Text(
           hoursList[i].hoursName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -299,7 +299,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: minList[i].minValue,
         child: Text(
           minList[i].minName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -307,7 +307,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: minList[i].minValue,
         child: Text(
           minList[i].minName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -324,7 +324,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: ampmList[i].ampmValue,
         child: Text(
           ampmList[i].ampmName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -332,7 +332,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
         value: ampmList[i].ampmValue,
         child: Text(
           ampmList[i].ampmName,
-          style: TextStyle(color: GlobalVariables.green),
+          style: TextStyle(color: GlobalVariables.primaryColor),
         ),
       ));
 
@@ -354,7 +354,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
           return Builder(
             builder: (context) => Scaffold(
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -534,7 +534,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -582,7 +582,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                           isExpanded: true,
                           icon: Icon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.secondaryColor,
                           ),
                           underline: SizedBox(),
                           hint: Text(
@@ -834,7 +834,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                     isExpanded: true,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                     ),
                     underline: SizedBox(),
                     hint: Text(
@@ -883,7 +883,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                           isExpanded: true,
                           icon: Icon(
                             Icons.keyboard_arrow_down,
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.secondaryColor,
                           ),
                           underline: SizedBox(),
                           hint: Text(
@@ -1016,12 +1016,12 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             },
                             icon: Icon(
                               Icons.attach_file,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             label: Text(
                               AppLocalizations.of(context)
                                   .translate('attach_photo'),
-                              style: TextStyle(color: GlobalVariables.green),
+                              style: TextStyle(color: GlobalVariables.primaryColor),
                             ),
                           ),
                         ),
@@ -1054,12 +1054,12 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                               },
                               icon: Icon(
                                 Icons.camera_alt,
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.secondaryColor,
                               ),
                               label: Text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.green),
+                                style: TextStyle(color: GlobalVariables.primaryColor),
                               )),
                         ),
                       ],
@@ -1424,7 +1424,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                         isExpanded: true,
                         icon: Icon(
                           Icons.keyboard_arrow_down,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.secondaryColor,
                         ),
                         underline: SizedBox(),
                         hint: Text(
@@ -1473,7 +1473,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                               isExpanded: true,
                               icon: Icon(
                                 Icons.keyboard_arrow_down,
-                                color: GlobalVariables.mediumGreen,
+                                color: GlobalVariables.secondaryColor,
                               ),
                               underline: SizedBox(),
                               hint: Text(
@@ -1568,7 +1568,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                         isExpanded: true,
                         icon: Icon(
                           Icons.keyboard_arrow_down,
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.secondaryColor,
                         ),
                         underline: SizedBox(),
                         hint: Text(
@@ -1587,7 +1587,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                     child: text(
                         AppLocalizations.of(context).translate('template_message') +
                             '*',
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),
@@ -1685,7 +1685,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                   contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                   suffixIcon: AppIconButton(
                     Icons.date_range,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                     onPressed: () {
                       GlobalFunctions.getSelectedDate(context).then((value) {
                         meetingDateController.text =
@@ -1727,7 +1727,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -1767,7 +1767,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -1807,7 +1807,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -1853,7 +1853,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                   readOnly: true,
                   suffixIcon: AppIconButton(
                     Icons.date_range,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                     onPressed: () {
                       GlobalFunctions.getSelectedDate(context).then((value) {
                         waterSupplyDateController.text =
@@ -1894,7 +1894,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -1934,7 +1934,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -1974,7 +1974,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2018,7 +2018,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2058,7 +2058,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2098,7 +2098,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2138,7 +2138,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                     readOnly: true,
                     suffixIcon: AppIconButton(
                       Icons.date_range,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                       onPressed: () {
                         GlobalFunctions.getSelectedDate(context).then((value) {
                           waterDisruptionDateController.text =
@@ -2178,7 +2178,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2218,7 +2218,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2258,7 +2258,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2302,7 +2302,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2342,7 +2342,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2382,7 +2382,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2422,7 +2422,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                   readOnly: true,
                   suffixIcon: AppIconButton(
                     Icons.date_range,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                     onPressed: () {
                       GlobalFunctions.getSelectedDate(context).then((value) {
                         fillDrillDateController.text =
@@ -2463,7 +2463,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2503,7 +2503,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2543,7 +2543,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2609,7 +2609,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                   readOnly: true,
                   suffixIcon: AppIconButton(
                     Icons.date_range,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                     onPressed: () {
                       GlobalFunctions.getSelectedDate(context).then((value) {
                         serviceDownDateController.text =
@@ -2650,7 +2650,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2690,7 +2690,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2730,7 +2730,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2774,7 +2774,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2814,7 +2814,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2854,7 +2854,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2891,7 +2891,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                   readOnly: true,
                   suffixIcon: AppIconButton(
                     Icons.date_range,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                     onPressed: () {
                       GlobalFunctions.getSelectedDate(context).then((value) {
                         powerOutageDateController.text =
@@ -2932,7 +2932,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -2972,7 +2972,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -3012,7 +3012,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -3056,7 +3056,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -3096,7 +3096,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -3136,7 +3136,7 @@ class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(

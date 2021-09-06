@@ -69,7 +69,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
         backgroundColor: GlobalVariables.veryLightGray,
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -125,7 +125,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                 Icons.add,
                 iconColor: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
             ),
           )
         ],
@@ -206,7 +206,7 @@ class ExpenseState extends BaseStatefulState<BaseExpense> {
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: text(GlobalFunctions.getCurrencyFormat(_voucherAmount.toString()),textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
+                              child: text(GlobalFunctions.getCurrencyFormat(_voucherAmount.toString()),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold
                               ),
                             ),
 

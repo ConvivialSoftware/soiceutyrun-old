@@ -107,7 +107,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
               child: Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   leading: InkWell(
                     onTap: () {
@@ -207,7 +207,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
                 Icons.add,
                 iconColor: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
             ),
           )
         ],
@@ -427,7 +427,7 @@ class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
         return GlobalVariables.orangeYellow;
         break;
       case "sell":
-        return GlobalVariables.green;
+        return GlobalVariables.primaryColor;
         break;
       default:
         return GlobalVariables.skyBlue;

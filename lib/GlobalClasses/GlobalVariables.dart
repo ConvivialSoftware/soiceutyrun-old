@@ -53,7 +53,7 @@ class GlobalVariables {
   static var keySMSCredit = "SMS_CREDIT";
   static var keyLastLogin = "LAST_LOGIN";
   static var keySocietyContact = "Contact";
-  static var keyNotificationBackGroundData = "NotificationBackGroundData";
+  //static var keyNotificationBackGroundData = "NotificationBackGroundData";
 
   //static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
@@ -235,7 +235,8 @@ class GlobalVariables {
   static const editProfileAPI = "profile/insert";
   static const payOptionAPI = "Api/payoption";
   static const staffMobileVerifyAPI = "Staff/mobileverifystaff";
-  static const addStaffMemberAPI = "Staff/insertstaff";
+  static const addStaffMemberAPI = "Gatepassapp/staffinsert";
+  static const addMaintenanceStaffMemberAPI = "Gatepassapp/maintenancestaff_insert";
   static const bannerAPI = "Api/banner";
   static const feedbackAPI = "Feedback";
   static const allMemberAPI = "View_directory/all_member";
@@ -252,7 +253,7 @@ class GlobalVariables {
   static const deleteVehicleAPI = "Vehicle/delete";
   static const deleteFamilyMemberAPI = "Members/delete";
   static const broadcastEmailAPI = "Broadcast/send_email";
-  static const broadcastNotificationAPI = "Broadcast/send_notification";
+  static const broadcastNotificationAPI = "Broadcast/send_notification_demo";
   static const flatNoAPI = "Broadcast/Flatno";
   static const broadcastSMSAPI = "Broadcast/send_sms";
   static const userManagementDashboardAPI = "Dashboard";
@@ -276,6 +277,7 @@ class GlobalVariables {
   static const closeAgreementAPI = "Members/close_agreement";
   static const paymentChargesAPI = "Api/paymentCharges";
   static const referAPI = "Api/refer";
+  static const maintenanceStaffRoleAPI = "Gatepassapp/role";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -389,9 +391,9 @@ class GlobalVariables {
   static const Color lightGray = const Color(0xFFD3D3D3);
   static const Color veryLightGray = const Color(0xFFE0E0E0);
   static const Color grey = const Color(0xFF66766F);
-  static const Color green = const Color(0xFF2CA01C);
-  static const Color lightGreen = const Color(0xFFDAF7D5);
-  static const Color mediumGreen = const Color(0xFFB3E3BD);
+  static const Color primaryColor = const Color(0xFF2CA01C);
+  static const Color AccentColor = const Color(0xFFDAF7D5);
+  static const Color secondaryColor = const Color(0xFFB3E3BD);
   static const Color transparent = const Color(0xFF00000000);
   static const Color skyBlue = const Color(0xFF64B5F6);
   static const Color orangeYellow = const Color(0xFFFFA726);
@@ -515,6 +517,7 @@ class GlobalVariables {
   static const RENTED_TO = 'RENTED_TO';
   static const Noc_Issue = 'Noc_Issue';
   static const ZeroTimeLine = "0000-00-00 00:00:00";
+  static const fetchNotificationBackground = "fetchNotificationBackground";
 
   /*Server Response Key*/
 
@@ -523,6 +526,7 @@ class GlobalVariables {
   static const DATA = "data";
   static const Front = "front";
   static const refer = "refer";
+  static const service = "service";
   static const bank = "bank";
   static const category = "category";
   static const Year = "Year";
@@ -533,6 +537,14 @@ class GlobalVariables {
   static const commitee_member = "commitee_member";
   static const society_member = "society_member";
   static const emergency = "emergency";
+}
+
+class BannerType{
+  static const CLASSIFIED = "Classified";
+  static const OFFER = "Offer";
+  static const SERVICES = "Services";
+  static const REFEREARN = "ReferEarn";
+  static const GATEPASS = "GatePass";
 }
 
 class GatePassStatus {

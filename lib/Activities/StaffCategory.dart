@@ -60,7 +60,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
         backgroundColor: GlobalVariables.veryLightGray,
         //resizeToAvoidBottomPadding: false,
         appBar: !isHideAppBar ? AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           leading: InkWell(
             onTap: () {
@@ -127,7 +127,8 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    child: primaryText(_staffListCount[position].ROLE),
+                    child: text(_staffListCount[position].ROLE,
+                        fontSize: GlobalVariables.textSizeMedium),
                   ),
                 ),
                 Container(
@@ -152,7 +153,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
     String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog.show();
-    restClient.staffCount(societyId).then((value) {
+    restClient.staffCount(societyId,'Staff').then((value) {
       _progressDialog.hide();
       List<dynamic> _list = value.data;
       _staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));

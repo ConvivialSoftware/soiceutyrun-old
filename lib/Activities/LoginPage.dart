@@ -98,7 +98,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                       .translate('login'),
                               style: TextStyle(
                                   fontSize: GlobalVariables.textSizeLargeMedium,
-                                  color: GlobalVariables.green)),
+                                  color: GlobalVariables.primaryColor)),
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate('to_your_account'),
@@ -122,18 +122,18 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             ),
                             suffixIcon: AppIcon(
                               Icons.mail,
-                              iconColor: GlobalVariables.lightGreen,
+                              iconColor: GlobalVariables.AccentColor,
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.primaryColor,
                                   width: 2.0,
                                 ),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.green, width: 2.0),
+                                    color: GlobalVariables.primaryColor, width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
@@ -165,17 +165,17 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                               },
                               icon: AppIcon(
                                 Icons.remove_red_eye,
-                                iconColor: GlobalVariables.lightGreen,
+                                iconColor: GlobalVariables.AccentColor,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.green, width: 2.0),
+                                    color: GlobalVariables.primaryColor, width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.green, width: 2.0),
+                                    color: GlobalVariables.primaryColor, width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
@@ -196,7 +196,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                   minWidth:
                                       MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.primaryColor,
                                     onPressed: () {
                                       //  username.text = 'pallaviunde@gmail.com';
                                       //   password.text = 'admin123';
@@ -227,7 +227,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.green)),
+                                            color: GlobalVariables.primaryColor)),
                                     child: text(
                                       AppLocalizations.of(context)
                                           .translate('login'),
@@ -252,7 +252,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                   child: text(
                                     AppLocalizations.of(context)
                                         .translate('login_with_otp'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
@@ -275,7 +275,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                   child: text(
                                     AppLocalizations.of(context)
                                         .translate('forget_password'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize:
                                         GlobalVariables.textSizeLargeMedium,
                                   ),
@@ -313,7 +313,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                           child: text(
                                               AppLocalizations.of(context)
                                                   .translate('register'),
-                                              textColor: GlobalVariables.green,
+                                              textColor: GlobalVariables.primaryColor,
                                               fontSize: GlobalVariables
                                                   .textSizeLargeMedium,
                                               fontWeight: FontWeight.bold),
@@ -618,9 +618,9 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
 
   getThemeData() {
     return ThemeData(
-        primaryColor: GlobalVariables.green,
+        primaryColor: GlobalVariables.primaryColor,
         accentColor: GlobalVariables.white,
-        primaryColorDark: GlobalVariables.green,
-        cursorColor: GlobalVariables.mediumGreen);
+        primaryColorDark: GlobalVariables.primaryColor,
+        cursorColor: GlobalVariables.secondaryColor);
   }
 }

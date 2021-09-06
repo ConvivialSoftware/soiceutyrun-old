@@ -95,7 +95,7 @@ class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -279,7 +279,7 @@ class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
                         alignment: Alignment.center,
                         child: AppIconButton(
                           Icons.call,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
                             launch("tel:" + _staff.CONTACT);
                           },
@@ -402,7 +402,7 @@ class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
                         child: Container(
                           child: AppIcon(
                             Icons.delete,
-                            iconColor: GlobalVariables.green,
+                            iconColor: GlobalVariables.primaryColor,
                           ),
                         ),
                       )
@@ -468,7 +468,7 @@ class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                           decoration: BoxDecoration(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: GlobalVariables.transparent,
@@ -502,7 +502,7 @@ class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
                   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   decoration: BoxDecoration(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.primaryColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: GlobalVariables.transparent,
@@ -659,7 +659,7 @@ class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
               margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
               padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
               decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     color: GlobalVariables.transparent,

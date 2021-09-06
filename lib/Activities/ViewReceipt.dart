@@ -145,7 +145,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
         key: _scaffoldKey,
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           actions: widget.yearSelectedItem != null
@@ -239,7 +239,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                                               .PENALTY_AMOUNT??'0'))
                                                   .toString())
                                               .toStringAsFixed(2)*/,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeXXLarge,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -448,7 +448,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
   getDivider() {
     return Container(
       child: Divider(
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.secondaryColor,
         height: 3,
       ),
     );
@@ -534,7 +534,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 GlobalFunctions.convertDateFormat(
                                     _receiptList[0].END_DATE, 'dd-MM-yyyy')*//*
                             */
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
@@ -559,7 +559,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
                                       controller: _emailTextController,
-                                      cursorColor: GlobalVariables.green,
+                                      cursorColor: GlobalVariables.primaryColor,
                                       keyboardType: TextInputType.emailAddress,
                                       showCursor: isEditEmail ? true : false,
                                       decoration: InputDecoration(
@@ -579,7 +579,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
                                         ? AppIconButton(Icons.edit,
-                                            iconColor: GlobalVariables.green,
+                                            iconColor: GlobalVariables.primaryColor,
                                             iconSize: 24, onPressed: () {
                                             _emailTextController.clear();
                                             isEditEmail = true;
@@ -771,7 +771,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 },
                                 child: text(
                                     AppLocalizations.of(context).translate('yes'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -783,7 +783,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
                                 },
                                 child: text(
                                     AppLocalizations.of(context).translate('no'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
                               ),

@@ -116,7 +116,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 elevation: 0,
                 leading: InkWell(
@@ -182,7 +182,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
               alignment: Alignment.topLeft,
               child: text(
                 AppLocalizations.of(context).translate('raise_new_ticket'),
-                  textColor: GlobalVariables.green,
+                  textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.textSizeLargeMedium,
                     fontWeight: FontWeight.bold,
               ),
@@ -214,7 +214,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         decoration: InputDecoration(
                           //filled: true,
@@ -255,7 +255,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         decoration: InputDecoration(
                           //filled: true,
@@ -301,13 +301,13 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: complaintType == "Personal"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: complaintType == "Personal"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -318,7 +318,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('personal'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -344,13 +344,13 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: complaintType != "Personal"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: complaintType != "Personal"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -361,7 +361,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('community'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -392,7 +392,7 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                   isExpanded: true,
                   icon: AppIcon(
                     Icons.keyboard_arrow_down,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                   ),
                   /*underline: SizedBox(),
                   hint: text(
@@ -509,13 +509,13 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                           },
                           icon: AppIcon(
                             Icons.attach_file,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                             iconSize: 20.0,
                           ),
                           label: text(
                             AppLocalizations.of(context)
                                 .translate('attach_photo'),
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSMedium
                           ),
                         ),
@@ -551,13 +551,13 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                             },
                             icon: AppIcon(
                               Icons.camera_alt,
-                              iconColor: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.secondaryColor,
                               iconSize: 20.0,
                             ),
                             label: text(
                               AppLocalizations.of(context)
                                   .translate('take_picture'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeSMedium
                             )),
                       ),
@@ -594,11 +594,11 @@ class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
                       decoration: BoxDecoration(
                           color: complaintPriority == "No"
                               ? GlobalVariables.white
-                              : GlobalVariables.green,
+                              : GlobalVariables.primaryColor,
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: complaintPriority == "No"
-                                ? GlobalVariables.mediumGreen
+                                ? GlobalVariables.secondaryColor
                                 : GlobalVariables.transparent,
                             width: 2.0,
                           )),

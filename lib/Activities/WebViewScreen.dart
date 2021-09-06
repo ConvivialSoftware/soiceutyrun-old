@@ -40,7 +40,7 @@ class WebViewScreenState extends BaseStatefulState<BaseWebViewScreen> {
       builder: (context) => Scaffold(
         appBar: AppBar(
           title: text(AppLocalizations.of(context).translate('app_name'),textColor: GlobalVariables.white),
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           //centerTitle: true,
           leading: getIconButton(),
         ),

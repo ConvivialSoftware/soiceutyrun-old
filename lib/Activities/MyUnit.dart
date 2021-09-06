@@ -40,11 +40,11 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
-  var firstTicketContainerColor = GlobalVariables.mediumGreen;
+  var firstTicketContainerColor = GlobalVariables.secondaryColor;
   var secondTicketContainerColor = GlobalVariables.white;
 
   var firstTicketTextColor = GlobalVariables.white;
-  var secondTicketTextColor = GlobalVariables.green;
+  var secondTicketTextColor = GlobalVariables.primaryColor;
   bool isOpenTicket = true;
   bool isClosedTicket = false;
 
@@ -83,7 +83,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
               backgroundColor: GlobalVariables.veryLightGray,
               //resizeToAvoidBottomPadding: false,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -552,7 +552,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         alignment: Alignment.center,
                         child: AppIconButton(
                           Icons.call,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
                             launch("tel:" + phone);
                           },
@@ -931,7 +931,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                         child: AppIcon(
                           Icons.delete,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         )),
                   )
                   // : Container(),
@@ -971,7 +971,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -983,7 +983,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -1002,19 +1002,19 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
         vehicleType == 'four') {
       return AppIcon(
         Icons.directions_car,
-        iconColor: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.secondaryColor,
       );
     } else if (vehicleType == '2 Wheeler' ||
         vehicleType == '2' ||
         vehicleType == 'two') {
       return AppIcon(
         Icons.motorcycle,
-        iconColor: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.secondaryColor,
       );
     } else {
       return AppIcon(
         Icons.motorcycle,
-        iconColor: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.secondaryColor,
       );
     }
   }

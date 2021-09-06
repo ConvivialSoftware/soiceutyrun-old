@@ -483,5 +483,8 @@
   "rental_request_approve": "After approval system generated NOC will be sent to Owner and Tenant.\nWould you like to approve the request?",
   "special_notes": "Special Notes",
   "terminate": "Terminate",
-  "add_visibility": "Show this ad to my society members only"
+  "add_visibility": "Show this ad to my society members only",
+  "staff_statistics": "Staff Statistics",
+  "staff": "Staff",
+  "maintenance_staff": "Maintenance Staff"
 }

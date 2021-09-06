@@ -67,7 +67,7 @@ class DescriptionOfHomeServiceState
               builder: (context) => Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   elevation: 0,
                   leading: InkWell(
@@ -312,7 +312,7 @@ class DescriptionOfHomeServiceState
               readOnly: true,
               suffixIcon: AppIconButton(
                 Icons.date_range,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.selectFutureDate(context).then((value) {
                     _bookingDateController.text =
@@ -354,7 +354,7 @@ class DescriptionOfHomeServiceState
                           height: 40,
                         ): CircleAvatar(
                           radius: 20,
-                          backgroundColor: GlobalVariables.mediumGreen,
+                          backgroundColor: GlobalVariables.secondaryColor,
                           backgroundImage: NetworkImage(photo),
                         ),
                         Expanded(
@@ -397,7 +397,7 @@ class DescriptionOfHomeServiceState
                               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                               decoration: BoxDecoration(
-                                  color:GlobalVariables.green,
+                                  color:GlobalVariables.primaryColor,
                                   borderRadius: BorderRadius.circular(30)),
                               child:AppIcon(Icons.edit,iconColor: GlobalVariables.white,iconSize: GlobalVariables.textSizeNormal  ,)
                           ),
@@ -484,7 +484,7 @@ class DescriptionOfHomeServiceState
                         width: 8,
                         height: 8,
                         decoration: BoxDecoration(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.primaryColor,
                             borderRadius: BorderRadius.circular(50)),
                       ),
                       SizedBox(width: 8,),
@@ -499,7 +499,7 @@ class DescriptionOfHomeServiceState
                     GlobalFunctions.getCurrencyFormat((int.parse(_serviceChargesList[position].Service_Price)-(int.parse(_serviceChargesList[position].Service_Price)*int.parse(widget._services.Discount)/100)).toString())
                   /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*//*GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price)*/,
 
-                textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
+                textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
                 )
               ],
             ),

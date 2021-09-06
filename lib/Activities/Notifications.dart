@@ -58,7 +58,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -197,7 +197,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                             color: GlobalVariables.transparent,
                             shape: BoxShape.circle
                         ),
-                        child: image.toLowerCase().contains(".svg") ? AppAssetsImage(image,imageColor: GlobalVariables.green,):AppAssetsImage(image,imageColor: GlobalVariables.green,),
+                        child: image.toLowerCase().contains(".svg") ? AppAssetsImage(image,imageColor: GlobalVariables.primaryColor,):AppAssetsImage(image,imageColor: GlobalVariables.primaryColor,),
                       ),
                     ),
                   ),
@@ -230,7 +230,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                                   child: text(
                                       _dbNotificationList[position].title??'',
                                       maxLine: 3,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                           fontSize: GlobalVariables.textSizeMedium,
                                           fontWeight: FontWeight.bold),
                                 ),

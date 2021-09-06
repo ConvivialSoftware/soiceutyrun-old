@@ -43,7 +43,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
               builder: (context) => Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   elevation: 0,
                   leading: InkWell(
@@ -185,7 +185,7 @@ class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory
                               fontWeight: FontWeight.bold),
                           SizedBox(width: 4,),
                           text('('+value.servicesList[position].Discount+'%)',
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSmall,
                               fontWeight: FontWeight.bold)
                         ],

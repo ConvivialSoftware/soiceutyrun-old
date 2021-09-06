@@ -41,7 +41,7 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -107,13 +107,13 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: _selectedVehicleType == "2 Wheeler"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: _selectedVehicleType == "2 Wheeler"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -124,7 +124,7 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('2_wheeler'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ],
@@ -149,13 +149,13 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: _selectedVehicleType == "4 Wheeler"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: _selectedVehicleType == "4 Wheeler"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -166,7 +166,7 @@ class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('4_wheeler'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),

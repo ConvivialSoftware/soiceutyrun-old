@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
@@ -21,11 +22,13 @@ import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/GlobalClasses/SystemAlertWindow.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
+//import 'package:system_alert_window/system_alert_window.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -49,7 +52,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
       GlobalVariables.isNewlyArrivedNotification.toString());*/
   print("myBackgroundMessageHandler onMessage >>>> $message");
-  GlobalFunctions.setNotificationBackGroundData(message.toString());
+  //GlobalFunctions.setNotificationBackGroundData(message.toString());
   Map data;
   if (Platform.isIOS) {
     data = message;
@@ -119,6 +122,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   } catch (e) {
     print(e);
   }
+//  SystemAlertOverlayWindow.showOverLayWindow(false,SystemWindowPrefMode.OVERLAY);
   return Future<void>.value();
 }
 
@@ -128,6 +132,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   bool isDailyEntryNotification = false;
   bool isGuestEntryNotification = false;
   bool isInAppCallNotification = false;
+
+/*
+  String _platformVersion = 'Unknown';
+  bool _isShowingWindow = false;
+  bool _isUpdatedWindow = false;
+  SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
+
+*/
 
   static BuildContext get getCtx => _ctx;
 
@@ -145,6 +157,9 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       _ctx = this.context;
     });
     firebaseCloudMessagingListeners();
+   /* _initPlatformState();
+    _requestPermissions();
+    SystemAlertWindow.registerOnClickListener(SystemAlertOverlayWindow.callBackFunction);*/
   }
 
   @override
@@ -160,6 +175,29 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       print('Mounted context : ' + context.toString());
     }
   }
+/*
+  Future<void> _initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await SystemAlertWindow.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    await SystemAlertWindow.requestPermissions(prefMode: prefMode);
+  }*/
 
   Future<void> firebaseCloudMessagingListeners() async {
     var initializationSettingsAndroid =
@@ -276,7 +314,9 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
+    //SystemAlertOverlayWindow.showOverLayWindow(_isShowingWindow,prefMode);
     print('_showNotification context : ' + _ctx.toString());
+    //GlobalFunctions.setNotificationBackGroundData(message.toString());
     // bool isNewlyArrivedNotification =
     //await GlobalFunctions.getIsNewlyArrivedNotification();
     //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());

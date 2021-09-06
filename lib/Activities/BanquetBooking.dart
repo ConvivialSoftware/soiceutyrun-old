@@ -20,7 +20,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -82,7 +82,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                 child: Text(
                   AppLocalizations.of(context).translate('banquet_booking'),
                   style: TextStyle(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.primaryColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -102,7 +102,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           AppLocalizations.of(context).translate('booking_for'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 16),
+                              color: GlobalVariables.secondaryColor, fontSize: 16),
                         ),
                       ),
                     ),
@@ -115,7 +115,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                               width: 3.0,
                             )),
                         child: ButtonTheme(
@@ -125,7 +125,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -153,7 +153,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           AppLocalizations.of(context).translate('date'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 16),
+                              color: GlobalVariables.secondaryColor, fontSize: 16),
                         ),
                       ),
                     ),
@@ -167,7 +167,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                               width: 3.0,
                             )),
                         child: ButtonTheme(
@@ -177,7 +177,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -205,7 +205,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           AppLocalizations.of(context).translate('slot'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 16),
+                              color: GlobalVariables.secondaryColor, fontSize: 16),
                         ),
                       ),
                     ),
@@ -219,7 +219,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                               width: 3.0,
                             )),
                         child: ButtonTheme(
@@ -229,7 +229,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             isExpanded: true,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                             ),
                             underline: SizedBox(),
                             hint: Text(
@@ -257,7 +257,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           AppLocalizations.of(context).translate('rate'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 16),
+                              color: GlobalVariables.secondaryColor, fontSize: 16),
                         ),
                       ),
                     ),
@@ -268,7 +268,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           'Rs. 2500.00',
                           style: TextStyle(
-                              color: GlobalVariables.green, fontSize: 18,fontWeight: FontWeight.bold),
+                              color: GlobalVariables.primaryColor, fontSize: 18,fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -287,7 +287,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           AppLocalizations.of(context).translate('special_request'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 16),
+                              color: GlobalVariables.secondaryColor, fontSize: 16),
                         ),
                       ),
                     ),
@@ -301,7 +301,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                               width: 3.0,
                             )),
                         child: Text(
@@ -327,7 +327,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: Text(
                           AppLocalizations.of(context).translate('remark'),
                           style: TextStyle(
-                              color: GlobalVariables.mediumGreen, fontSize: 16),
+                              color: GlobalVariables.secondaryColor, fontSize: 16),
                         ),
                       ),
                     ),
@@ -340,7 +340,7 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: GlobalVariables.mediumGreen,
+                              color: GlobalVariables.secondaryColor,
                               width: 3.0,
                             )),
                         child: TextField(
@@ -376,13 +376,13 @@ class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
                         child: ButtonTheme(
                           // minWidth: MediaQuery.of(context).size.width/2,
                           child: RaisedButton(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.primaryColor,
                             onPressed: () {},
                             textColor: GlobalVariables.white,
                             //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: GlobalVariables.green)),
+                                side: BorderSide(color: GlobalVariables.primaryColor)),
                             child: Text(
                               AppLocalizations.of(context).translate('submit'),
                               style: TextStyle(

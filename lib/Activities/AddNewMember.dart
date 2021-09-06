@@ -100,7 +100,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -162,13 +162,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: _selectedGender == "Male"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: _selectedGender == "Male"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -179,7 +179,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('male'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -205,13 +205,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: _selectedGender == "Female"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: _selectedGender == "Female"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -222,7 +222,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('female'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ],
@@ -241,7 +241,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               suffixIcon: AppIconButton(
                 Icons.date_range,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.getSelectedDateForDOB(context)
                       .then((value) {
@@ -264,7 +264,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -298,7 +298,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -331,7 +331,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.email,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
               ),
             ),
             Row(
@@ -357,7 +357,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         //underline: SizedBox(),
                        /* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
@@ -400,7 +400,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                        // underline: SizedBox(),
                         /*hint: text(
@@ -457,7 +457,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         decoration: InputDecoration(
                           //filled: true,
@@ -506,7 +506,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                           decoration: attachmentFilePath == null
                               ? BoxDecoration(
-                                  color: GlobalVariables.mediumGreen,
+                                  color: GlobalVariables.secondaryColor,
                                   borderRadius: BorderRadius.circular(25),
                                   //   border: Border.all(color: GlobalVariables.green,width: 2.0)
                                 )
@@ -517,7 +517,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                           FileImage(File(attachmentFilePath)),
                                       fit: BoxFit.cover),
                                   border: Border.all(
-                                      color: GlobalVariables.green,
+                                      color: GlobalVariables.primaryColor,
                                       width: 2.0)),
                           //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                         ),
@@ -545,13 +545,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                   iconSize: 20.0,
                                 ),
                                 label: text(
                                   AppLocalizations.of(context)
                                       .translate('attach_photo'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
@@ -586,13 +586,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                     iconSize: 20.0,
                                   ),
                                   label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_picture'),
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeSMedium
                                   )),
                             ),
@@ -618,7 +618,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                           margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                           decoration: attachmentIdentityProofFilePath == null
                               ? BoxDecoration(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.secondaryColor,
                             borderRadius: BorderRadius.circular(25),
                             //   border: Border.all(color: GlobalVariables.green,width: 2.0)
                           )
@@ -629,7 +629,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                   FileImage(File(attachmentIdentityProofFilePath)),
                                   fit: BoxFit.cover),
                               border: Border.all(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.primaryColor,
                                   width: 2.0)),
                           //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                         ),
@@ -659,13 +659,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                   iconSize: 20.0,
                                 ),
                                 label: text(
                                   AppLocalizations.of(context)
                                       .translate('attach_identity_proof')+'*',
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
@@ -701,13 +701,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                     iconSize: 20.0,
                                   ),
                                   label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_identity_proof_picture')+'*',
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeSMedium
                                   )),
                             ),
@@ -751,13 +751,13 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                   iconSize: 20.0,
                                 ),
                                 label: text(
                                   attachmentPoliceVerificationFileName!=null ? attachmentPoliceVerificationFileName : AppLocalizations.of(context)
                                       .translate('attach_police_verification'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
@@ -833,6 +833,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
@@ -850,6 +851,7 @@ class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
     _progressDialog.show();
     restClient
             .addMember(
+                userId,
                 societyId,
                 block,
                 flat,

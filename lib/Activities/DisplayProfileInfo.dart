@@ -112,7 +112,7 @@ class DisplayProfileInfoState
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -366,7 +366,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.person,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -383,7 +383,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.transgender_sharp,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -399,7 +399,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.bloodtype_sharp,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -415,7 +415,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.date_range,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -434,7 +434,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.location_city_sharp,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -459,7 +459,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.call,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -475,7 +475,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.call,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -491,7 +491,7 @@ class DisplayProfileInfoState
                         children: [
                           AppIcon(
                             Icons.email_sharp,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -576,7 +576,7 @@ class DisplayProfileInfoState
                       }
                     },
                     child: text(AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),
@@ -588,7 +588,7 @@ class DisplayProfileInfoState
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),

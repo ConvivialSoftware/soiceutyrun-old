@@ -160,7 +160,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -221,7 +221,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
            padding: EdgeInsets.only(left: 16),
            width: MediaQuery.of(context).size.width,
            height: 50,
-           decoration: BoxDecoration(color: GlobalVariables.green, borderRadius: BorderRadius.circular(10.0)),
+           decoration: BoxDecoration(color: GlobalVariables.primaryColor, borderRadius: BorderRadius.circular(10.0)),
            child: Row(
              mainAxisSize: MainAxisSize.min,
              crossAxisAlignment: CrossAxisAlignment.center,
@@ -230,7 +230,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                CircleAvatar(
                  backgroundColor: Colors.white,
                  radius: 15,
-                 child: text('${pageCount + 1}', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.green),
+                 child: text('${pageCount + 1}', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.primaryColor),
                ),
                Row(
                  mainAxisSize: MainAxisSize.min,
@@ -302,13 +302,13 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: _selectedGender == "Male"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: _selectedGender == "Male"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -319,7 +319,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('male'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -345,13 +345,13 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                               height: 30,
                               decoration: BoxDecoration(
                                   color: _selectedGender == "Female"
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: _selectedGender == "Female"
-                                        ? GlobalVariables.green
-                                        : GlobalVariables.mediumGreen,
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -362,7 +362,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('female'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ],
@@ -381,7 +381,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               suffixIcon: AppIconButton(
                 Icons.date_range,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.getSelectedDateForDOB(context)
                       .then((value) {
@@ -404,7 +404,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -438,7 +438,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -471,7 +471,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.email,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
               ),
             ),
            /* Row(
@@ -597,7 +597,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         decoration: InputDecoration(
                           //filled: true,
@@ -646,7 +646,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                           margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                           decoration: attachmentFilePath == null
                               ? BoxDecoration(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.secondaryColor,
                             borderRadius: BorderRadius.circular(25),
                             //   border: Border.all(color: GlobalVariables.green,width: 2.0)
                           )
@@ -657,7 +657,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                                   FileImage(File(attachmentFilePath)),
                                   fit: BoxFit.cover),
                               border: Border.all(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.primaryColor,
                                   width: 2.0)),
                           //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                         ),
@@ -685,13 +685,13 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                   iconSize: 20.0,
                                 ),
                                 label: text(
                                     AppLocalizations.of(context)
                                         .translate('attach_photo'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
@@ -726,13 +726,13 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                     iconSize: 20.0,
                                   ),
                                   label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_picture'),
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeSMedium
                                   )),
                             ),
@@ -758,7 +758,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                           margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                           decoration: attachmentIdentityProofFilePath == null
                               ? BoxDecoration(
-                            color: GlobalVariables.mediumGreen,
+                            color: GlobalVariables.secondaryColor,
                             borderRadius: BorderRadius.circular(25),
                             //   border: Border.all(color: GlobalVariables.green,width: 2.0)
                           )
@@ -769,7 +769,7 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                                   FileImage(File(attachmentIdentityProofFilePath)),
                                   fit: BoxFit.cover),
                               border: Border.all(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.primaryColor,
                                   width: 2.0)),
                           //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                         ),
@@ -799,13 +799,13 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                   iconSize: 20.0,
                                 ),
                                 label: text(
                                     AppLocalizations.of(context)
                                         .translate('attach_identity_proof')+'*',
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
@@ -841,13 +841,13 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                     iconSize: 20.0,
                                   ),
                                   label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_identity_proof_picture')+'*',
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeSMedium
                                   )),
                             ),

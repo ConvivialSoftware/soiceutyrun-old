@@ -54,7 +54,7 @@ class CreateClassifiedListingState
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -266,7 +266,7 @@ class CreateClassifiedListingState
             Divider(),
             //SizedBox(height: 4),
             primaryText('Description',
-                textColor: GlobalVariables.green,),
+                textColor: GlobalVariables.primaryColor,),
             SizedBox(height: 8),
             Container(
                 //margin: EdgeInsets.only(left: 8),

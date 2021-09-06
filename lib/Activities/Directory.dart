@@ -99,7 +99,7 @@ class DirectoryState extends BaseStatefulState<BaseDirectory> {
               backgroundColor: GlobalVariables.veryLightGray,
               //resizeToAvoidBottomPadding: false,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -276,7 +276,7 @@ class DirectoryState extends BaseStatefulState<BaseDirectory> {
                                 alignment: Alignment.topRight,
                                 child: AppIcon(
                                   Icons.call,
-                                  iconColor: GlobalVariables.green,
+                                  iconColor: GlobalVariables.primaryColor,
                                 ),
                               ),
                             ),
@@ -312,7 +312,7 @@ class DirectoryState extends BaseStatefulState<BaseDirectory> {
                               alignment: Alignment.topRight,
                               child: AppIcon(
                                 Icons.email,
-                                iconColor: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.secondaryColor,
                               ),
                             ),
                           )
@@ -359,7 +359,7 @@ class DirectoryState extends BaseStatefulState<BaseDirectory> {
                                 alignment: Alignment.topRight,
                                 child: AppIcon(
                                   Icons.call,
-                                  iconColor: GlobalVariables.green,
+                                  iconColor: GlobalVariables.primaryColor,
                                 ),
                               ),
                             ),

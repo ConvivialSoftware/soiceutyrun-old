@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +20,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
+import 'package:societyrun/Activities/Discover.dart';
+import 'package:societyrun/Activities/FindServices.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
+import 'package:societyrun/Activities/MyGate.dart';
+import 'package:societyrun/Activities/NearByShopPerCategory.dart';
+import 'package:societyrun/Activities/ReferAndEarn.dart';
+import 'package:societyrun/Activities/WebViewScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 
 //import 'package:simple_permissions/simple_permissions.dart';
@@ -390,7 +397,7 @@ class GlobalFunctions {
     return "";
   }
 
-  static Future<void> setNotificationBackGroundData(
+  /*static Future<void> setNotificationBackGroundData(
       String notificationBackGroundData) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(
@@ -405,7 +412,7 @@ class GlobalFunctions {
       return sharedPreferences.getString(GlobalVariables.keyNotificationBackGroundData);
     }
     return "";
-  }
+  }*/
 
   static getAppLanguage() async {
     AppLanguage appLanguage = AppLanguage();
@@ -515,7 +522,7 @@ class GlobalFunctions {
                     },
                     child: Icon(
                       Icons.arrow_back,
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.primaryColor,
                     ))),
           ),
           Expanded(
@@ -529,7 +536,7 @@ class GlobalFunctions {
                               GlobalVariables.overviewTxtPath,
                             )*/
                 child: text(title,
-                    textColor: GlobalVariables.green,
+                    textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.textSizeLargeMedium,
                     fontWeight: FontWeight.bold),
               ),
@@ -610,7 +617,7 @@ class GlobalFunctions {
     _progressDialog.style(
         message: "      Please Wait",
         borderRadius: 10.0,
-        backgroundColor: GlobalVariables.mediumGreen,
+        backgroundColor: GlobalVariables.secondaryColor,
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(
@@ -621,8 +628,7 @@ class GlobalFunctions {
         messageTextStyle: TextStyle(
             color: GlobalVariables.white,
             fontSize: 14,
-            fontFamily: 'sans-serif',
-            fontWeight: FontWeight.bold));
+            fontFamily: 'sans-serif',/*fontWeight: FontWeight.bold*/));
 
     return _progressDialog;
   }
@@ -632,7 +638,7 @@ class GlobalFunctions {
           height: 80,
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
-              color: GlobalVariables.mediumGreen,
+              color: GlobalVariables.secondaryColor,
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           child: Container(
             padding: EdgeInsets.all(10),
@@ -648,8 +654,7 @@ class GlobalFunctions {
                 ),
                 text("Please Wait",
                     textColor: GlobalVariables.white,
-                    fontSize: GlobalVariables.textSizeSMedium,
-                    fontWeight: FontWeight.bold),
+                    fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
               ],
             ),
           ),
@@ -662,7 +667,7 @@ class GlobalFunctions {
     _progressDialog.style(
         message: "      Please Wait",
         borderRadius: 10.0,
-        backgroundColor: GlobalVariables.mediumGreen,
+        backgroundColor: GlobalVariables.secondaryColor,
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progressWidget: Center(
@@ -671,8 +676,8 @@ class GlobalFunctions {
         messageTextStyle: TextStyle(
             color: GlobalVariables.white,
             fontSize: 14,
-            fontFamily: 'sans-serif',
-            fontWeight: FontWeight.bold));
+            fontFamily: 'sans-serif',/*
+            fontWeight: FontWeight.bold*/));
 
     return _progressDialog;
   }
@@ -1049,7 +1054,7 @@ class GlobalFunctions {
                           child: ButtonTheme(
                             //minWidth: MediaQuery.of(context).size.width / 2,
                             child: RaisedButton(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               onPressed: () {
                                 DashBoardState.logout(context);
                               },
@@ -1058,7 +1063,7 @@ class GlobalFunctions {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side:
-                                      BorderSide(color: GlobalVariables.green)),
+                                      BorderSide(color: GlobalVariables.primaryColor)),
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
@@ -1129,7 +1134,7 @@ class GlobalFunctions {
                                 child: ButtonTheme(
                                   //minWidth: MediaQuery.of(context).size.width / 2,
                                   child: RaisedButton(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.primaryColor,
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -1138,7 +1143,7 @@ class GlobalFunctions {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.green)),
+                                            color: GlobalVariables.primaryColor)),
                                     child: text(
                                         AppLocalizations.of(context)
                                             .translate('later'),
@@ -1155,7 +1160,7 @@ class GlobalFunctions {
                               child: ButtonTheme(
                                 //minWidth: MediaQuery.of(context).size.width / 2,
                                 child: RaisedButton(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.primaryColor,
                                   onPressed: () {
                                     if (!isCompulsory) {
                                       Navigator.of(context).pop();
@@ -1171,7 +1176,7 @@ class GlobalFunctions {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
-                                          color: GlobalVariables.green)),
+                                          color: GlobalVariables.primaryColor)),
                                   child: text(
                                       AppLocalizations.of(context)
                                           .translate('update'),
@@ -1314,7 +1319,7 @@ class GlobalFunctions {
                             child: text(
                               AppLocalizations.of(context).translate('oops'),
                               fontSize: GlobalVariables.textSizeLargeMedium,
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontWeight: FontWeight.bold,
                             )),
                         Container(
@@ -1333,7 +1338,7 @@ class GlobalFunctions {
                           child: ButtonTheme(
                             //minWidth: MediaQuery.of(context).size.width / 2,
                             child: RaisedButton(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               onPressed: () {
                                 clearSharedPreferenceData();
                                 Navigator.pushAndRemoveUntil(
@@ -1348,7 +1353,7 @@ class GlobalFunctions {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side:
-                                      BorderSide(color: GlobalVariables.green)),
+                                      BorderSide(color: GlobalVariables.primaryColor)),
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('logout'),
@@ -1431,8 +1436,8 @@ class GlobalFunctions {
             height: 20,
           ),
           text(textMessage,
-              textColor: GlobalVariables.green,
-              fontWeight: FontWeight.w500,
+              textColor: GlobalVariables.primaryColor,
+              fontWeight: FontWeight.bold,
               fontSize: GlobalVariables.textSizeMedium,
               maxLine: 2)
         ],
@@ -1593,6 +1598,94 @@ class GlobalFunctions {
     return number;
   }
 
-  //static String getAmount
+ /* static Future<void> startBackGroundNotificationService() async {
+    await Workmanager.initialize(
+      GlobalFunctions.callbackNotificationDispatcher,
+      isInDebugMode: true,
+    ).then((value) {
+      print('WorkManager initialize Done');
+      print('WorkManager registerOneOffTask Start');
+      *//*Workmanager().registerOneOffTask(
+        "1",
+        GlobalVariables.fetchLocationBackground,
+        initialDelay: Duration(minutes: 5),
+        *//**//*constraints :Constraints(
+        networkType: NetworkType.not_required,
+      ),*//**//*
+        //frequency: Duration(minutes: 15),
+      );*//*
+      Workmanager.registerPeriodicTask(
+        "1",
+        GlobalVariables.fetchNotificationBackground,
+        initialDelay: Duration(seconds: 5),
+        constraints :Constraints(
+        networkType: NetworkType.not_required,
+      ),
+        frequency: Duration(minutes: 5),
+      );
+    });
+  }
+*/
+
+static Future<void> redirectBannerClick(BuildContext context,String url) async {
+
+  if(url.contains("http")){
+
+    String societyId = await getSocietyId();
+    String block = await getBlock();
+    String flat = await getFlat();
+    String phone = await getMobile();
+    String name = await getDisplayName();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BaseWebViewScreen(
+                url +
+                    '?' +
+                    'SID=' +
+                    societyId.toString() +
+                    '&MOBILE=' +
+                    phone.toString() +
+                    '&NAME=' +
+                    name.toString() +
+                    '&UNIT=' +
+                    block.toString() +
+                    ' ' +
+                    flat.toString()))).then(
+            (value) {
+          GlobalFunctions.setBaseContext(
+              context);
+        });
+  }else if(url==BannerType.CLASSIFIED){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BaseDiscover(
+                AppLocalizations.of(context).translate('classified'))))
+        .then((value) {
+      GlobalFunctions.setBaseContext(context);
+    });
+  }else if(url==BannerType.OFFER){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BaseNearByShopPerCategory())).then((value) {
+      GlobalFunctions.setBaseContext(context);
+    });
+  }else if(url==BannerType.REFEREARN){
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => BaseReferAndEarn()))
+        .then((value) {
+      GlobalFunctions.setBaseContext(context);
+    });
+  }else if(url==BannerType.GATEPASS){
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => BaseMyGate(
+            AppLocalizations.of(context).translate('my_gate'), null)))
+        .then((value) {
+      GlobalFunctions.setBaseContext(context);
+    });
+  }
+  }
 
 }

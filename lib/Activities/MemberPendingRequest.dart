@@ -72,7 +72,7 @@ class MemberPendingRequestState
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -182,7 +182,7 @@ class MemberPendingRequestState
                             //  color:GlobalVariables.grey,
                             child: text(
                                 value.pendingRequestList[position].NAME,
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize:
                                 GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold,
@@ -276,7 +276,7 @@ class MemberPendingRequestState
                                                         },
                                                         child: text(
                                                             AppLocalizations.of(context).translate('yes'),
-                                                            textColor: GlobalVariables.green,
+                                                            textColor: GlobalVariables.primaryColor,
                                                             fontSize: GlobalVariables.textSizeMedium,
                                                             fontWeight: FontWeight.bold),
                                                       ),
@@ -288,7 +288,7 @@ class MemberPendingRequestState
                                                         },
                                                         child: text(
                                                             AppLocalizations.of(context).translate('no'),
-                                                            textColor: GlobalVariables.green,
+                                                            textColor: GlobalVariables.primaryColor,
                                                             fontSize: GlobalVariables.textSizeMedium,
                                                             fontWeight: FontWeight.bold),
                                                       ),
@@ -308,7 +308,7 @@ class MemberPendingRequestState
                                   .translate('cancel'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
-                              textColor: GlobalVariables.green),
+                              textColor: GlobalVariables.primaryColor),
                         ),
                       ),
                       InkWell(
@@ -354,7 +354,7 @@ class MemberPendingRequestState
                                                         },
                                                         child: text(
                                                             AppLocalizations.of(context).translate('yes'),
-                                                            textColor: GlobalVariables.green,
+                                                            textColor: GlobalVariables.primaryColor,
                                                             fontSize: GlobalVariables.textSizeMedium,
                                                             fontWeight: FontWeight.bold),
                                                       ),
@@ -366,7 +366,7 @@ class MemberPendingRequestState
                                                         },
                                                         child: text(
                                                             AppLocalizations.of(context).translate('no'),
-                                                            textColor: GlobalVariables.green,
+                                                            textColor: GlobalVariables.primaryColor,
                                                             fontSize: GlobalVariables.textSizeMedium,
                                                             fontWeight: FontWeight.bold),
                                                       ),
@@ -387,7 +387,7 @@ class MemberPendingRequestState
                                   .translate('Approve'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
-                              textColor: GlobalVariables.green),
+                              textColor: GlobalVariables.primaryColor),
                         ),
                       ),
                     ],

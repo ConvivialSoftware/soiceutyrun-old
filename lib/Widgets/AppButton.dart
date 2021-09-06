@@ -13,7 +13,7 @@ class AppButton extends StatefulWidget {
 
   AppButton({@required this.textContent,
     @required this.onPressed,
-    this.bgColor = GlobalVariables.green,
+    this.bgColor = GlobalVariables.primaryColor,
     this.textColor = GlobalVariables.white,
     this.radius = 10.0,this.fontWeight=FontWeight.w600,this.padding=const EdgeInsets.all(0.0)});
 

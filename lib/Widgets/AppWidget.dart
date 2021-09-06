@@ -26,7 +26,7 @@ BoxDecoration boxDecoration({double radius = 2,
 
 Widget primaryText(var text,
     {var fontSize = GlobalVariables.textSizeMedium,
-      textColor = GlobalVariables.green,
+      textColor = GlobalVariables.primaryColor,
       var isCentered = false,
       var maxLine = 99999,
       var latterSpacing = 0.5,
@@ -141,7 +141,7 @@ Wrap customListItem(dom.Element node) {
         children: [
           CircleAvatar(
             radius: 4,
-            backgroundColor: GlobalVariables.green,
+            backgroundColor: GlobalVariables.primaryColor,
           ),
           SizedBox(width: 8,),
           Flexible(
@@ -203,7 +203,7 @@ Widget smallTextContainerOutlineLayout(textString){
   return Container(
     padding: EdgeInsets.fromLTRB(15, 3, 15, 3),
     decoration: BoxDecoration(
-        color: GlobalVariables.green,
+        color: GlobalVariables.primaryColor,
         borderRadius: BorderRadius.circular(5),
         border: Border.all(
           color: GlobalVariables.transparent,

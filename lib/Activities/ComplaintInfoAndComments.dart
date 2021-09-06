@@ -169,7 +169,7 @@ class ComplaintInfoAndCommentsState
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -284,7 +284,7 @@ class ComplaintInfoAndCommentsState
                                     child: text(
                                       'Name: ',
                                       textColor: GlobalVariables
-                                              .green,
+                                              .primaryColor,
                                           fontSize: GlobalVariables.textSizeSmall,
                                     ),
                                   ),
@@ -302,7 +302,7 @@ class ComplaintInfoAndCommentsState
                                     child: text(
                                       'Unit No: ',
                                       textColor: GlobalVariables
-                                              .green,
+                                              .primaryColor,
                                           fontSize: GlobalVariables.textSizeSmall,
                                     ),
                                   ),
@@ -330,7 +330,7 @@ class ComplaintInfoAndCommentsState
                             Container(
                               child: text(
                                 'Category: ',
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSmall,
                               ),
                             ),
@@ -376,14 +376,14 @@ class ComplaintInfoAndCommentsState
                                   //margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
                                   child: AppIcon(
                                     Icons.attach_file,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                     iconSize: 20.0,
                                   )),
                               Container(
                                 //margin: EdgeInsets.fromLTRB(5, 15, 5, 0),
                                 child: text(
                                   "Attachment",
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeVerySmall,
                                 ),
                               )
@@ -421,7 +421,7 @@ class ComplaintInfoAndCommentsState
                                     borderRadius:
                                         BorderRadius.circular(10),
                                     border: Border.all(
-                                      color: GlobalVariables.mediumGreen,
+                                      color: GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: ButtonTheme(
@@ -432,7 +432,7 @@ class ComplaintInfoAndCommentsState
                                     value: _selectedItem,
                                     icon: AppIcon(
                                       Icons.keyboard_arrow_down,
-                                      iconColor: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.secondaryColor,
                                     ),
                                     underline: SizedBox(),
                                     /* hint: Text(
@@ -488,7 +488,7 @@ class ComplaintInfoAndCommentsState
                                                       .toLowerCase() ==
                                                       'on hold'
                                                   ? GlobalVariables.white
-                                                  : GlobalVariables.green,
+                                                  : GlobalVariables.primaryColor,
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       5),
@@ -506,7 +506,7 @@ class ComplaintInfoAndCommentsState
                                                         .toLowerCase() ==
                                                         'on hold'
                                                     ? GlobalVariables
-                                                        .mediumGreen
+                                                        .secondaryColor
                                                     : GlobalVariables
                                                         .transparent,
                                                 width: 2.0,
@@ -523,7 +523,7 @@ class ComplaintInfoAndCommentsState
                                           AppLocalizations.of(context)
                                               .translate('close'),
                                          textColor:
-                                                  GlobalVariables.green,
+                                                  GlobalVariables.primaryColor,
                                               fontSize: GlobalVariables.textSizeMedium,
                                         ),
                                       ),
@@ -549,7 +549,7 @@ class ComplaintInfoAndCommentsState
                                                           .toLowerCase() ==
                                                       "close"
                                                   ? GlobalVariables.white
-                                                  : GlobalVariables.green,
+                                                  : GlobalVariables.primaryColor,
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       5),
@@ -558,7 +558,7 @@ class ComplaintInfoAndCommentsState
                                                             .toLowerCase() ==
                                                         "close"
                                                     ? GlobalVariables
-                                                        .mediumGreen
+                                                        .secondaryColor
                                                     : GlobalVariables
                                                         .transparent,
                                                 width: 2.0,
@@ -575,7 +575,7 @@ class ComplaintInfoAndCommentsState
                                           AppLocalizations.of(context)
                                               .translate('reopen'),
                                           textColor:
-                                                  GlobalVariables.green,
+                                                  GlobalVariables.primaryColor,
                                               fontSize: GlobalVariables.textSizeMedium,
                                         ),
                                       ),
@@ -661,7 +661,7 @@ class ComplaintInfoAndCommentsState
                 height: 20,
               ): CircleAvatar(
                 radius: 10,
-                backgroundColor: GlobalVariables.mediumGreen,
+                backgroundColor: GlobalVariables.secondaryColor,
                 backgroundImage: NetworkImage(photo),
               ),
             ),
@@ -693,7 +693,7 @@ class ComplaintInfoAndCommentsState
                     angle: 108 * 3.14 / 600,
                     child: AppIcon(
                       Icons.attach_file,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                     )),
               ),
             ),
@@ -707,7 +707,7 @@ class ComplaintInfoAndCommentsState
                 padding: EdgeInsets.all(5),
                 margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: AppIcon(
@@ -793,7 +793,7 @@ class ComplaintInfoAndCommentsState
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: GlobalVariables.lightGreen,
+                backgroundColor: GlobalVariables.AccentColor,
                 backgroundImage: userId != _commentsList[position].USER_ID
                     ? _commentsList[position].PROFILE_PHOTO.isNotEmpty ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : AssetImage(GlobalVariables.componentUserProfilePath)
                     : NetworkImage(photo),
@@ -944,7 +944,7 @@ class ComplaintInfoAndCommentsState
         value: _complaintStatusList[i].complaintStatus,
         child: text(
           _complaintStatusList[i].complaintStatus,
-          textColor: GlobalVariables.green,
+          textColor: GlobalVariables.primaryColor,
           fontSize: GlobalVariables.textSizeSmall
         ),
       ));

@@ -101,7 +101,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -163,10 +163,10 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color:   _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.white,
+                                  color:   _selectedGender== "Male" ? GlobalVariables.primaryColor : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: _selectedGender== "Male" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                    color: _selectedGender== "Male" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -177,7 +177,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('male'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -202,10 +202,10 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.white,
+                                  color: _selectedGender== "Female" ? GlobalVariables.primaryColor : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: _selectedGender== "Female" ? GlobalVariables.green : GlobalVariables.mediumGreen,
+                                    color: _selectedGender== "Female" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -216,7 +216,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('female'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -237,7 +237,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               readOnly: true,
               suffixIcon: AppIconButton(
                 Icons.date_range,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.getSelectedDateForDOB(context).then((value) {
                     _dobController.text =
@@ -259,7 +259,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -293,7 +293,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.phone_android,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
                   print('contact Name : ' + contact.fullName);
@@ -374,7 +374,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
               contentPadding: EdgeInsets.only(top: 14),
               suffixIcon: AppIconButton(
                 Icons.email,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
               ),
             ),
             /*Container(
@@ -425,7 +425,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         /*underline: SizedBox(),
                         hint: text(
@@ -468,7 +468,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         /*underline: SizedBox(),
                         hint: text(
@@ -544,7 +544,7 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                        /* underline: SizedBox(),
                         hint: text(
@@ -650,11 +650,11 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                 ),
                                 label: text(
                                   AppLocalizations.of(context).translate('attach_photo'),
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSMedium
                                 ),
                               ),
@@ -686,12 +686,12 @@ class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ),
                                   label: text(
                                     AppLocalizations.of(context)
                                         .translate('take_picture'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSMedium
                                   )),
                             ),

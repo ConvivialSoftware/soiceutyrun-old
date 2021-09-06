@@ -43,7 +43,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
             return Builder(
               builder: (context) => Scaffold(
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   elevation: 0,
                   leading: InkWell(
@@ -135,7 +135,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
                                   text(servicesList[position].Name,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                       maxLine: 2,
-                                      textColor: GlobalVariables.green,fontWeight: FontWeight.w500),
+                                      textColor: GlobalVariables.primaryColor,fontWeight: FontWeight.w500),
                                   SizedBox(height: 4),
                                   text(servicesList[position].Title==null?'':servicesList[position].Title,
                                       textColor:
@@ -338,7 +338,7 @@ class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
               margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
               padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
               decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     color: GlobalVariables.transparent,

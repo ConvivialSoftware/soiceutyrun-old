@@ -68,7 +68,7 @@ class StaffListPerCategoryState
             backgroundColor: GlobalVariables.veryLightGray,
             //resizeToAvoidBottomPadding: false,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               leading: InkWell(
                 onTap: () {
@@ -251,7 +251,7 @@ class StaffListPerCategoryState
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 child: text(
                                   _workHouseList.length.toString() + ' House',
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSmall,
                                 ),
                               ),

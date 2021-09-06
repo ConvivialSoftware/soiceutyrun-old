@@ -172,7 +172,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               leading: InkWell(
                 onTap: () {
@@ -393,11 +393,11 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     children: <Widget>[
                       AppIcon(
                         Icons.attach_file,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                       ),
                       text(
                         "Attachment",
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSmall,
                       )
                     ],
@@ -635,7 +635,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     Container(
                       child: AppIcon(
                         Icons.location_on,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
@@ -650,7 +650,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     Container(
                       child: text(
                         value.meetingList[position].VENUE,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0
                       ),
@@ -665,7 +665,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     Container(
                       child: AppIcon(
                         Icons.date_range,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
@@ -681,7 +681,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       child: text(
                         value.meetingList[position]
                             .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0
                       ),
@@ -696,7 +696,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     Container(
                       child: AppIcon(
                         Icons.access_time,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
@@ -705,7 +705,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       child: text(
                         value.meetingList[position]
                             .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0
                       ),
@@ -745,13 +745,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         Container(
                             child: AppIcon(
                           Icons.attach_file,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         )),
                         SizedBox(width: 4,),
                         Container(
                           child: text(
                             "Attachment",
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSmall,
                           ),
                         )
@@ -885,7 +885,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                               decoration: BoxDecoration(
                                   color: !GlobalFunctions.isDateSameOrGrater(
                                       value.pollList[position].EXPIRY_DATE)
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.red,
                                   shape: BoxShape.circle),
                             ),
@@ -976,7 +976,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                                 .pollList[position].EXPIRY_DATE,
                                             "dd MMM yy") +
                                         ")",
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSmall,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -1011,7 +1011,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                                         0)
                                 ? text(
                                     "See Poll Result",
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeSmall,
                                     fontWeight: FontWeight.bold,
                                   )
@@ -1023,7 +1023,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             padding: EdgeInsets.all(8),
                             //margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             decoration: BoxDecoration(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               borderRadius: BorderRadius.circular(35),
                             ),
                             child: AppIcon(
@@ -1065,7 +1065,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         padding: EdgeInsets.all(8),
                         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                         decoration: BoxDecoration(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.primaryColor,
                           borderRadius: BorderRadius.circular(35),
                         ),
                         child: AppIcon(
@@ -1117,7 +1117,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.secondaryColor,
                         width: 3.0,
                       )),
                   child: Container(
@@ -1131,7 +1131,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                           border: InputBorder.none,
                           suffixIcon: AppIcon(
                             Icons.search,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           )),
                     ),
                   )),
@@ -1147,7 +1147,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.secondaryColor,
                         width: 3.0,
                       )),
                   child: Container(
@@ -1162,7 +1162,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         underline: SizedBox(),
                         icon: AppIcon(
                           Icons.arrow_drop_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         isExpanded: true,
                         hint: text(
@@ -1782,7 +1782,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   Container(
                     child: AppIcon(
                       Icons.location_on,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                       iconSize: GlobalVariables.textSizeNormal,
                     ),
                   ),
@@ -1790,7 +1790,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                   Container(
                     child: text(
                       value.eventList[position].VENUE,
-                      textColor: GlobalVariables.green,
+                      textColor: GlobalVariables.primaryColor,
                       fontSize: GlobalVariables.textSizeSMedium,
                       textStyleHeight: 1.0
                     ),
@@ -1804,7 +1804,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     Container(
                       child: AppIcon(
                         Icons.date_range,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
@@ -1815,7 +1815,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         value.eventList[position].START_DATE +
                             ' to ' +
                             value.eventList[position].END_DATE,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0
                       ),
@@ -1830,7 +1830,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     Container(
                       child: AppIcon(
                         Icons.access_time,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
@@ -1841,7 +1841,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         value.eventList[position].START_TIME +
                             ' to ' +
                             value.eventList[position].END_TIME,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0
                       ),
@@ -1854,7 +1854,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           value.eventList[position].ATTACHMENT.length > 0
               ? Container(
                   height: 2,
-                  color: GlobalVariables.mediumGreen,
+                  color: GlobalVariables.secondaryColor,
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Divider(
                     height: 2,
@@ -1889,13 +1889,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                         Container(
                             child: AppIcon(
                           Icons.attach_file,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         )),
                         Container(
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: text(
                             "Attachment",
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeVerySmall,
                           ),
                         )
@@ -2169,13 +2169,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                             Container(
                                 child: AppIcon(
                               Icons.attach_file,
-                              iconColor: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.secondaryColor,
                             )),
                             SizedBox(width: 4,),
                             Container(
                               child: text(
                                 "Attachment",
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeSmall,
                               ),
                             )
@@ -2208,7 +2208,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
         return GlobalVariables.orangeYellow;
         break;
       case "agm-em":
-        return GlobalVariables.green;
+        return GlobalVariables.primaryColor;
         break;
       default:
         return GlobalVariables.skyBlue;
@@ -2286,13 +2286,13 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                     height: 30,
                     decoration: BoxDecoration(
                         color: pollOption.isSelected == true
-                            ? GlobalVariables.green
+                            ? GlobalVariables.primaryColor
                             : GlobalVariables.transparent,
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(
                           color: pollOption.isSelected == true
-                              ? GlobalVariables.green
-                              : GlobalVariables.mediumGreen,
+                              ? GlobalVariables.primaryColor
+                              : GlobalVariables.secondaryColor,
                           width: 2.0,
                         )),
                     child: AppIcon(
@@ -2307,7 +2307,7 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: text(
                         pollOption.ANS == null ? '' : pollOption.ANS,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                       ),
                     ),

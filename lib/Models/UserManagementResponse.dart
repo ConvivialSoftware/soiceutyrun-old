@@ -30,7 +30,9 @@ class UserManagementResponse extends ChangeNotifier {
       moveOutRequest = '0',
       smsData = '0',
       closeComplaint = '0',
-      openComplaint = '0';
+      openComplaint = '0',
+      maintenanceStaff = '0',
+      normalStaff = '0';
   List<User> registerList = List<User>();
   List<User> unRegisterList = List<User>();
   List<User> activeUserList = List<User>();
@@ -362,6 +364,8 @@ class UserManagementResponse extends ChangeNotifier {
       smsData = _list[0].sms_data;
       closeComplaint = _list[0].close_complaint;
       openComplaint = _list[0].open_complaint;
+      maintenanceStaff = _list[0].maintenanceStaff;
+      normalStaff = _list[0].normalStaff;
     }
 
     isLoading = false;
@@ -465,9 +469,11 @@ class UserManagementResponse extends ChangeNotifier {
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
 
     var result = await restClient.addMemberByAdmin(
+        userId,
         societyId,
         block,
         flat,
@@ -620,7 +626,8 @@ class UserManagementResponse extends ChangeNotifier {
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
-    var result = await restClient.deleteFamilyMember(id, societyId);
+    String userId = await GlobalFunctions.getUserId();
+    var result = await restClient.deleteFamilyMember(id, societyId,userId);
 
     getPendingMemberRequest();
     getUserManagementDashboard();
@@ -632,8 +639,9 @@ class UserManagementResponse extends ChangeNotifier {
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
 
-    var result = await restClient.deactivateUser(societyId,Reason,id);
+    var result = await restClient.deactivateUser(societyId,userId,Reason,id);
 
     getUnitDetailsMemberForAdminData(block,flat,false);
     getUserManagementDashboard();
@@ -644,13 +652,13 @@ class UserManagementResponse extends ChangeNotifier {
       String ID,
       String block,
       String flat,
-      String userId,
       String note,
      ) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
     String societyName = await GlobalFunctions.getSocietyName();
 
     var result = await restClient.nocApprove(societyId, ID, block, flat, userId, note, societyName);
@@ -726,7 +734,8 @@ class UserManagementResponse extends ChangeNotifier {
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
-    var result = await restClient.closeAgreement(societyId,id,);
+    String userId = await GlobalFunctions.getSocietyId();
+    var result = await restClient.closeAgreement(societyId,id,userId);
 
     getUnitMemberData();
     return result;
@@ -779,7 +788,7 @@ class UserManagementResponse extends ChangeNotifier {
     return result;
   }
 
-  Future<dynamic> getHeadWiseExpenseData() async {
+  Future<dynamic> getHeadWiseExpenseData(String startDate,String endDate) async {
     if(headWiseExpenseList.length<0) {
       isLoading = true;
     }
@@ -789,7 +798,7 @@ class UserManagementResponse extends ChangeNotifier {
     String societyId = await GlobalFunctions.getSocietyId();
 
     await restClientERP
-        .getHeadWiseExpenseData(societyId)
+        .getHeadWiseExpenseData(societyId,startDate,endDate)
         .then((value) {
 
       headWiseExpenseList = List<HeadWiseExpense>.from(value.data.map((i) => HeadWiseExpense.fromJson(i)));
@@ -811,7 +820,9 @@ class UserManagementDashBoard {
       moveout_request,
       pending_request,
       close_complaint,
-      open_complaint;
+      open_complaint,
+      maintenanceStaff,
+      normalStaff;
 
   UserManagementDashBoard(
       {this.units,
@@ -821,7 +832,7 @@ class UserManagementDashBoard {
       this.active_user,
       this.moveout_request,
       this.pending_request,
-      this.rental_request, this.close_complaint,this.open_complaint
+      this.rental_request, this.close_complaint,this.open_complaint,this.maintenanceStaff,this.normalStaff
       });
 
   factory UserManagementDashBoard.fromJson(Map<String, dynamic> map) {
@@ -836,6 +847,8 @@ class UserManagementDashBoard {
       rental_request: map["rental_request"],
       close_complaint: map["close_complaint"],
       open_complaint: map["open_complaint"],
+      maintenanceStaff: map["maintenance_staff"],
+      normalStaff: map["staff"],
     );
   }
 }

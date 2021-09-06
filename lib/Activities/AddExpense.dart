@@ -95,7 +95,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -161,7 +161,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                 readOnly: true,
                 suffixIcon: AppIconButton(
                   Icons.date_range,
-                  iconColor: GlobalVariables.mediumGreen,
+                  iconColor: GlobalVariables.secondaryColor,
                   onPressed: () {
                     GlobalFunctions.getSelectedDate(context).then((value) {
                       _paymentDateController.text =
@@ -183,7 +183,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                 readOnly: true,
                 suffixIcon: AppIconButton(
                   Icons.date_range,
-                  iconColor: GlobalVariables.mediumGreen,
+                  iconColor: GlobalVariables.secondaryColor,
                   onPressed: () {
                     GlobalFunctions.getSelectedDate(context).then((value) {
                       _dueDateController.text =
@@ -258,7 +258,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                           isExpanded: true,
                           icon: AppIcon(
                             Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                           /*underline: SizedBox(),
                           hint: text(
@@ -315,7 +315,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                     isExpanded: true,
                     icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                     ),
                     /*underline: SizedBox(),
                     hint: text(
@@ -371,7 +371,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentFilePath == null
                                 ? BoxDecoration(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.secondaryColor,
                                     borderRadius: BorderRadius.circular(25),
                                     //   border: Border.all(color: GlobalVariables.green,width: 2.0)
                                   )
@@ -382,7 +382,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                             FileImage(File(attachmentFilePath)),
                                         fit: BoxFit.cover),
                                     border: Border.all(
-                                        color: GlobalVariables.green,
+                                        color: GlobalVariables.primaryColor,
                                         width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
@@ -410,12 +410,12 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                   },
                                   icon: AppIcon(
                                     Icons.attach_file,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ),
                                   label: text(
                                     AppLocalizations.of(context)
                                         .translate('attach_photo'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                   ),
                                 ),
                               ),
@@ -448,12 +448,12 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
                                     },
                                     icon: AppIcon(
                                       Icons.camera_alt,
-                                      iconColor: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.secondaryColor,
                                     ),
                                     label: text(
                                       AppLocalizations.of(context)
                                           .translate('take_picture'),
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                     )),
                               ),
                             ],
@@ -658,7 +658,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
         value: _paidByList[i],
         child: text(
           _paidByList[i],
-          textColor: GlobalVariables.green,
+          textColor: GlobalVariables.primaryColor,
         ),
       ));
     }
@@ -759,7 +759,7 @@ class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
             value: _bankList[i].ID,
             child: text(
               _bankList[i].BANK_NAME,
-              textColor: GlobalVariables.green,
+              textColor: GlobalVariables.primaryColor,
             ),
           ));
         }

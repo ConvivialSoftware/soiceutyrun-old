@@ -86,7 +86,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
     List<Widget> list = [];
     for (int i = 0; i < _listSliderCardName.length; i++) {
       list.add(i == pageCount
-          ? indicator(isActive: true, activeColor: GlobalVariables.green)
+          ? indicator(isActive: true, activeColor: GlobalVariables.primaryColor)
           : indicator(isActive: false));
     }
     return list;
@@ -165,7 +165,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                           padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
                           margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                           decoration: BoxDecoration(
-                              color: GlobalVariables.lightGreen,
+                              color: GlobalVariables.AccentColor,
                               borderRadius: BorderRadius.circular(10)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -206,7 +206,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                           padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
                           margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                           decoration: BoxDecoration(
-                              color: GlobalVariables.lightGreen,
+                              color: GlobalVariables.AccentColor,
                               borderRadius: BorderRadius.circular(10)),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +250,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                 padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
                 decoration: BoxDecoration(
-                    color: GlobalVariables.lightGreen,
+                    color: GlobalVariables.AccentColor,
                     borderRadius: BorderRadius.circular(10)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -279,7 +279,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                   shape: (RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0))),
                   elevation: 10.0,
-                  shadowColor: GlobalVariables.green.withOpacity(0.2),
+                  shadowColor: GlobalVariables.primaryColor.withOpacity(0.2),
                   margin: EdgeInsets.all(16),
                   color: GlobalVariables.white,
                   child: Stack(
@@ -358,7 +358,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
           shape: (RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0))),
           elevation: 10.0,
-          shadowColor: GlobalVariables.green.withOpacity(0.2),
+          shadowColor: GlobalVariables.primaryColor.withOpacity(0.2),
           margin: EdgeInsets.all(16),
           color: GlobalVariables.white,
           child: Stack(
@@ -380,7 +380,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                     text('Complaints',
                         isCentered: true,
                         fontSize: GlobalVariables.textSizeNormal,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontWeight: FontWeight.bold),
                     SizedBox(
                       height: 16,
@@ -395,7 +395,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                               child: Column(
                                 children: [
                                   text(value.openComplaint,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeNormal,
                                       fontWeight: FontWeight.bold),
                                   SizedBox(
@@ -416,7 +416,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                               child: Column(
                                 children: [
                                   text(value.closeComplaint,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeNormal,
                                       fontWeight: FontWeight.bold),
                                   SizedBox(
@@ -451,7 +451,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                             });
                           },
                           child: text('Add Complaint',
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSMedium),
                         ),
                         InkWell(
@@ -465,7 +465,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                             });
                           },
                           child: text('View Complaint',
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSMedium),
                         ),
                       ],
@@ -498,7 +498,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
             shape: (RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0))),
             elevation: 10.0,
-            shadowColor: GlobalVariables.green.withOpacity(0.2),
+            shadowColor: GlobalVariables.primaryColor.withOpacity(0.2),
             margin: EdgeInsets.all(16),
             color: GlobalVariables.white,
             child: Stack(
@@ -520,7 +520,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                       text('Users',
                           isCentered: true,
                           fontSize: GlobalVariables.textSizeNormal,
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontWeight: FontWeight.bold),
                       SizedBox(
                         height: 16,
@@ -535,7 +535,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                                 child: Column(
                                   children: [
                                     text(value.noOfUnits,
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize: GlobalVariables.textSizeNormal,
                                         fontWeight: FontWeight.bold),
                                     SizedBox(
@@ -570,7 +570,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                                           width: 8,
                                         ),
                                         text(value.registerUser,
-                                            textColor: GlobalVariables.green,
+                                            textColor: GlobalVariables.primaryColor,
                                             fontSize:
                                                 GlobalVariables.textSizeMedium,
                                             fontWeight: FontWeight.bold),
@@ -591,7 +591,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                                           width: 8,
                                         ),
                                         text(value.activeUser,
-                                            textColor: GlobalVariables.green,
+                                            textColor: GlobalVariables.primaryColor,
                                             fontSize:
                                                 GlobalVariables.textSizeMedium,
                                             fontWeight: FontWeight.bold),
@@ -612,7 +612,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                                           width: 8,
                                         ),
                                         text(value.mobileUser,
-                                            textColor: GlobalVariables.green,
+                                            textColor: GlobalVariables.primaryColor,
                                             fontSize:
                                                 GlobalVariables.textSizeMedium,
                                             fontWeight: FontWeight.bold),
@@ -673,7 +673,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
           shape: (RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0))),
           elevation: 10.0,
-          shadowColor: GlobalVariables.green.withOpacity(0.2),
+          shadowColor: GlobalVariables.primaryColor.withOpacity(0.2),
           margin: EdgeInsets.all(16),
           color: GlobalVariables.white,
           child: Stack(
@@ -695,7 +695,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                     text('ERP',
                         isCentered: true,
                         fontSize: GlobalVariables.textSizeNormal,
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontWeight: FontWeight.bold),
                     SizedBox(
                       height: 16,
@@ -713,7 +713,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                                     child: text(
                                         GlobalFunctions.getCurrencyFormat(
                                             value.receiptAmount??'0'),
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeNormal,
                                         fontWeight: FontWeight.bold),
@@ -739,7 +739,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                                     child: text(
                                         GlobalFunctions.getCurrencyFormat(
                                             value.expenseAmount??'0'),
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeNormal,
                                         fontWeight: FontWeight.bold),
@@ -779,7 +779,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                             }
                           },
                           child: text('Add Receipt',
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSMedium),
                         ),
                         InkWell(
@@ -799,7 +799,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                           child: text(
                               AppLocalizations.of(context)
                                   .translate('add_invoice'),
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSMedium),
                         ),
                       ],
@@ -886,7 +886,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
         // SizedBox(height: 30,),
         Container(
           padding: EdgeInsets.all(5),
-          color: GlobalVariables.lightGreen,
+          color: GlobalVariables.AccentColor,
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
@@ -941,7 +941,7 @@ class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
                           GlobalFunctions.getCurrencyFormat(value
                               .adminPendingList[position].AMOUNT
                               .toString()),
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeSMedium,
                           fontWeight: FontWeight.bold,
                         ),
@@ -996,7 +996,7 @@ class BarChart extends StatelessWidget {
           return double.parse(series.exp_amount);
         },
         colorFn: (MonthExpenses series, _) =>
-            charts.ColorUtil.fromDartColor(GlobalVariables.green),
+            charts.ColorUtil.fromDartColor(GlobalVariables.primaryColor),
         //areaColorFn: (BarChartModel series, _) =>  charts.ColorUtil.fromDartColor(GlobalVariables.black)
       )
     ];
@@ -1013,7 +1013,7 @@ class BarChart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 text("Expenses",
-                    textColor: GlobalVariables.green,
+                    textColor: GlobalVariables.primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: GlobalVariables.textSizeMedium),
                 InkWell(

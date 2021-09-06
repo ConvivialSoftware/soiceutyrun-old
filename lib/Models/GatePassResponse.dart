@@ -72,7 +72,7 @@ class GatePass extends ChangeNotifier{
   }
 
 
-  Future<dynamic> getStaffCountData() async {
+  Future<dynamic> getStaffCountData(String staffType) async {
 
 
     if(staffListCount.length==0){
@@ -83,7 +83,7 @@ class GatePass extends ChangeNotifier{
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
 
-   await restClient.staffCount(societyId).then((value) {
+   await restClient.staffCount(societyId,staffType).then((value) {
       List<dynamic> _list = value.data;
       staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
       print('staffList : '+staffListCount.toString());

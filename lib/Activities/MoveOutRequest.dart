@@ -151,7 +151,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -245,7 +245,7 @@ class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
                                   Container(
                                     //  color:GlobalVariables.grey,
                                     child: text(tenantName.replaceFirst(",", ""),
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                         GlobalVariables.textSizeMedium,
                                         fontWeight: FontWeight.bold,

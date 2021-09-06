@@ -32,7 +32,7 @@ class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
         return Builder(
             builder: (context) => Scaffold(
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {

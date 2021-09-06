@@ -131,7 +131,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -398,7 +398,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       color: GlobalVariables.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.secondaryColor,
                         width: 3.0,
                       )),
                   child: Container(
@@ -412,7 +412,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           border: InputBorder.none,
                           suffixIcon: AppIcon(
                             Icons.search,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           )),
                     ),
                   )),
@@ -428,7 +428,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                       width: 3.0,
                     )),
                 child: Container(
@@ -437,7 +437,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   child: TextField(
                     controller: _dateController,
                     readOnly: true,
-                    style: TextStyle(color: GlobalVariables.green),
+                    style: TextStyle(color: GlobalVariables.primaryColor),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         hintText: "Date",
@@ -458,7 +458,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           },
                           icon: AppIcon(
                             Icons.date_range,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           ),
                         )),
                   ),
@@ -501,7 +501,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 Icons.add,
                 iconColor: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
             ),
           )
         ],
@@ -668,7 +668,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   : value.visitorList[position].STATUS
                                               .toLowerCase() ==
                                           'in'
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.red,
                               borderRadius: BorderRadius.circular(5)),
                           child: text(
@@ -714,7 +714,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                               //margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
                               child: AppIconButton(
                                 Icons.location_on,
-                                iconColor: GlobalVariables.mediumGreen,
+                                iconColor: GlobalVariables.secondaryColor,
                                 iconSize: 20.0,
                               )),
                           SizedBox(
@@ -744,7 +744,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         // margin: EdgeInsets.fromLTRB(5, 5, 0, 0),
                         child: AppIconButton(
                           Icons.person,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                           iconSize: 20.0,
                         )),
                     SizedBox(
@@ -800,8 +800,8 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                   Icons.block /*: null*/,
                                   iconColor: visitorUserStatus.toLowerCase() !=
                                           'wrong entry'
-                                      ? GlobalVariables.mediumGreen
-                                      : GlobalVariables.lightGreen,
+                                      ? GlobalVariables.secondaryColor
+                                      : GlobalVariables.AccentColor,
                                   iconSize: 20.0,
                                 )),
                                 Container(
@@ -830,7 +830,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         child: Align(
                           alignment: Alignment.center,
                           child: AppIconButton(Icons.call,
-                              iconColor: GlobalVariables.green, onPressed: () {
+                              iconColor: GlobalVariables.primaryColor, onPressed: () {
                             launch(
                                 'tel://' + value.visitorList[position].CONTACT);
                           }),
@@ -1017,7 +1017,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: AppIcon(
                     Icons.vpn_key,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                     iconSize: 25,
                   )),
               Container(
@@ -1042,7 +1042,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     child: Align(
                       alignment: Alignment.center,
                       child: AppIconButton(Icons.share,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           iconSize: 20, onPressed: () async {
                         String googleParameter =
                             await GlobalFunctions.getGoogleCoordinate();
@@ -1092,7 +1092,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     child: Align(
                       alignment: Alignment.center,
                       child: AppIconButton(Icons.call,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           iconSize: 20, onPressed: () {
                         launch('tel://' +
                             value.scheduleVisitorList[position].MOBILE_NO);
@@ -1105,7 +1105,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     child: Align(
                       alignment: Alignment.center,
                       child: AppIconButton(Icons.delete,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           iconSize: 20, onPressed: () {
                         showDialog(
                             context: context,
@@ -1180,14 +1180,14 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     isExpanded: false,
                     icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                     ),
                     underline: SizedBox(),
                     hint: Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                       child: text(
                         "",
-                        textColor: GlobalVariables.mediumGreen,
+                        textColor: GlobalVariables.secondaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.w500,
                       ),
@@ -1208,7 +1208,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                     suffixIcon: AppIconButton(
                       Icons.contacts,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                       onPressed: () async {
                         Contact contact = await _contactPicker.selectContact();
                         print('contact Name : ' + contact.fullName);
@@ -1242,7 +1242,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     contentPadding: EdgeInsets.only(top: 14),
                     suffixIcon: AppIconButton(
                       Icons.phone_android,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                     ),
                   ),
                 ],
@@ -1486,7 +1486,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       alignment: Alignment.topRight,
                       child: AppIconButton(
                         Icons.close,
-                        iconColor: GlobalVariables.green,
+                        iconColor: GlobalVariables.primaryColor,
                         onPressed: () {
                           Navigator.pop(context);
                         },
@@ -1514,7 +1514,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                     ),
                     text(
                       line3,
-                      textColor: GlobalVariables.green,
+                      textColor: GlobalVariables.primaryColor,
                       fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.bold,
                     ),
@@ -1537,7 +1537,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 width: MediaQuery.of(context).size.width / 1.5,
                 padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10.0),
                       bottomRight: Radius.circular(10.0)),
@@ -1670,7 +1670,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         padding: const EdgeInsets.all(16.0),
                         child: AppIconButton(
                           Icons.close,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -1757,7 +1757,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                           },
                           child: CircleAvatar(
                             radius: 20,
-                            backgroundColor: GlobalVariables.mediumGreen,
+                            backgroundColor: GlobalVariables.secondaryColor,
                             backgroundImage:
                                 NetworkImage(visitorList[position].IMAGE),
                           ),
@@ -1774,7 +1774,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                         AppIconButton(
                           Icons.call,
                           iconSize: 20.0,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
                             launch('tel://' + visitorList[position].CONTACT);
                           },
@@ -1802,7 +1802,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     alignment: Alignment.topLeft,
                                     child: AppIconButton(
                                       Icons.access_time,
-                                      iconColor: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.secondaryColor,
                                       iconSize: 20.0,
                                     )),
                                 SizedBox(
@@ -1828,7 +1828,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     alignment: Alignment.topLeft,
                                     child: AppIconButton(
                                       Icons.person,
-                                      iconColor: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.secondaryColor,
                                       iconSize: 20.0,
                                     )),
                                 SizedBox(
@@ -1852,7 +1852,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                                     alignment: Alignment.topLeft,
                                     child: AppIconButton(
                                       Icons.location_on,
-                                      iconColor: GlobalVariables.mediumGreen,
+                                      iconColor: GlobalVariables.secondaryColor,
                                       iconSize: 20.0,
                                     )),
                                 SizedBox(
@@ -1950,7 +1950,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 if (!isHelperAPICall) {
                   //getStaffRoleDetailsData();
                   Provider.of<GatePass>(context, listen: false)
-                      .getStaffCountData()
+                      .getStaffCountData('Helper')
                       .then((value) {});
                 }
               }
@@ -2061,7 +2061,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -2073,7 +2073,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -2114,7 +2114,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -2126,7 +2126,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),

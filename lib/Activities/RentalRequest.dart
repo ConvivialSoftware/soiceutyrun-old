@@ -70,7 +70,7 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -218,8 +218,8 @@ class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
                               Container(
                                 //  color:GlobalVariables.grey,
                                 child: Flexible(
-                                  child: text(tenantName.replaceFirst(",", "")+' + '+(tenantDetailsList.length-1).toString(),
-                                      textColor: GlobalVariables.green,
+                                  child: text(tenantDetailsList.length>1 ? tenantName.replaceFirst(",", "")+' + '+(tenantDetailsList.length-1).toString():tenantName.replaceFirst(",", ""),
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       fontWeight: FontWeight.bold,
                                       textStyleHeight: 1.0),

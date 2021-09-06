@@ -191,7 +191,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
         key: _dashboardSacfoldKey,
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -295,7 +295,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                                         AppAssetsImage(
                                           GlobalVariables.pdfIconPath,
                                           imageColor:
-                                          GlobalVariables.mediumGreen,
+                                          GlobalVariables.secondaryColor,
                                           imageWidth: 40,
                                           imageHeight: 40,
                                         ),
@@ -327,7 +327,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                                         AppAssetsImage(
                                           GlobalVariables.imageIconPath,
                                           imageColor:
-                                          GlobalVariables.mediumGreen,
+                                          GlobalVariables.secondaryColor,
                                           imageWidth: 40,
                                           imageHeight: 40,
                                         ),
@@ -359,7 +359,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                                         AppIcon(
                                           Icons.camera_alt_rounded,
                                           iconColor:
-                                          GlobalVariables.mediumGreen,
+                                          GlobalVariables.secondaryColor,
                                           iconSize: 40,
                                         ),
                                         SizedBox(
@@ -387,7 +387,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                 Icons.attach_file,
                 color: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
             ),
           )
         ],
@@ -429,7 +429,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                     child: text(
                         GlobalFunctions.getCurrencyFormat(
                             _expense.AMOUNT.toString()),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeXXLarge,
                         fontWeight: FontWeight.bold),
                   ),
@@ -494,7 +494,7 @@ class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
                     child: AutoSizeText(
                       "Details",
                       style: TextStyle(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeNormal,
                           fontWeight: FontWeight.bold),
                     ),

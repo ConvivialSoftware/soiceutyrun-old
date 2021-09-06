@@ -93,7 +93,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                       margin: EdgeInsets.only(top: 5,right: 5),
                       child: AppIconButton(
                         Icons.close,
-                        iconColor: GlobalVariables.green,
+                        iconColor: GlobalVariables.primaryColor,
                         iconSize: 24.0,
                         onPressed: (){
                           Navigator.pop(context);
@@ -107,7 +107,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                       children: [
                         text(
                             _popupTitle??'',
-                            textColor : GlobalVariables.green,
+                            textColor : GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold
                         ),
@@ -135,7 +135,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
               width: MediaQuery.of(context).size.width / 1.2,
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
               decoration: BoxDecoration(
-                color: GlobalVariables.green,
+                color: GlobalVariables.primaryColor,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(10.0),
                     bottomRight: Radius.circular(10.0)),
@@ -231,7 +231,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
           width: 42.0,
           height: 42.0,
           decoration: BoxDecoration(
-              color: GlobalVariables.green, shape: BoxShape.circle),
+              color: GlobalVariables.primaryColor, shape: BoxShape.circle),
           child: InkWell(
             child: Icon(
               Icons.close,

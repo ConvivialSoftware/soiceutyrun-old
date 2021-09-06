@@ -74,7 +74,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
         builder: (context, value, child) {
           return Scaffold(
             appBar: widget.isAdmin ? AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               leading: InkWell(
                 onTap: () {
@@ -292,7 +292,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                           0
                           ? text(
                         'Paid',
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                         fontWeight: FontWeight.bold,
                       )
@@ -318,7 +318,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                   value.billList[position].RECEIVED)
                                   .toString())
                                   .toStringAsFixed(2)*/
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeLarge,
                           fontWeight: FontWeight.bold,
                         ),
@@ -328,7 +328,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                               value.billList[position].DUE_DATE,
                               "dd-MM-yyyy")
                               : '',
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                         ),
@@ -336,11 +336,11 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                     ),
                   ),
                   Container(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Divider(
                       height: 1,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                     ),
                   ),
                   Container(
@@ -380,7 +380,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: AppIcon(
                                     Icons.visibility,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ),
                                 ),
                                 Container(
@@ -528,7 +528,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: AppIcon(
                                     Icons.payment,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ),
                                 ),
                                 Container(
@@ -556,7 +556,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: AppIcon(
                                     Icons.mail,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ),
                                 ),
                                 Container(
@@ -601,7 +601,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: /*true ? */AppIcon(
                                     Icons.check_circle,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                   ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
                                 ),
                                 Container(
@@ -643,7 +643,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
         break;
       case "Miscellaneous Bills":
         {
-          return GlobalVariables.green;
+          return GlobalVariables.primaryColor;
         }
         break;
       default:
@@ -661,7 +661,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
         // SizedBox(height: 30,),
         Container(
           padding: EdgeInsets.all(5),
-          color: GlobalVariables.lightGreen,
+          color: GlobalVariables.AccentColor,
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
@@ -708,7 +708,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                               /*double.parse(value.pendingList[position].AMOUNT
                                   .toString())
                                   .toStringAsFixed(2)*/,
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeSMedium,
                           fontWeight: FontWeight.bold,
                         ),
@@ -755,12 +755,12 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                       children: <Widget>[
                         text(
                           AppLocalizations.of(context).translate('total_due'),
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeSMedium,
                         ),
                         text(
                           AppLocalizations.of(context).translate('due_date'),
-                          textColor: GlobalVariables.mediumGreen,
+                          textColor: GlobalVariables.secondaryColor,
                           fontSize: GlobalVariables.textSizeMedium,
                         ),
                       ],
@@ -770,24 +770,24 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                       children: <Widget>[
                         text(
                           GlobalFunctions.getCurrencyFormat(duesRs),
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                         text(
                           duesDate,
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
                         ),
                       ],
                     ),
                     Container(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                       margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: Divider(
                         height: 1,
-                        color: GlobalVariables.mediumGreen,
+                        color: GlobalVariables.secondaryColor,
                       ),
                     ),
                     Container(
@@ -796,7 +796,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                         alignment: Alignment.center,
                         child: text(
                           AppLocalizations.of(context).translate('pay_now'),
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeMedium,
                         ),
                       ),
@@ -852,7 +852,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
     } else if (days >= -2 && days < 0) {
       return Color(0xFFf39c12);
     } else {
-      return GlobalVariables.mediumGreen;
+      return GlobalVariables.secondaryColor;
     }
   }
 
@@ -895,7 +895,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                       alignment: Alignment.topRight,
                       child: AppIconButton(
                         Icons.close,
-                        iconColor: GlobalVariables.green,
+                        iconColor: GlobalVariables.primaryColor,
                         onPressed: () {
                           Navigator.pop(context);
                         },
@@ -917,7 +917,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                         Container(
                           child: text(
                             'Rs. ',
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeNormal,
                             fontWeight: FontWeight.bold,
                           ),
@@ -927,11 +927,11 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                           child: TextFormField(
                             controller: _amountTextController,
                             readOnly: isEditAmount ? false : true,
-                            cursorColor: GlobalVariables.green,
+                            cursorColor: GlobalVariables.primaryColor,
                             showCursor: isEditAmount ? true : false,
                             keyboardType: TextInputType.number,
                             style: TextStyle(
-                                color: GlobalVariables.green,
+                                color: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeNormal,
                                 fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
@@ -958,7 +958,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                               ? IconButton(
                               icon: AppIcon(
                                 Icons.edit,
-                                iconColor: GlobalVariables.green,
+                                iconColor: GlobalVariables.primaryColor,
                                 iconSize:
                                 GlobalVariables.textSizeLarge,
                               ),
@@ -1016,15 +1016,15 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                 decoration: BoxDecoration(
                                     color:
                                     _selectedPaymentGateway != "PayTM"
-                                        ? GlobalVariables.green
+                                        ? GlobalVariables.primaryColor
                                         : GlobalVariables.white,
                                     borderRadius:
                                     BorderRadius.circular(5),
                                     border: Border.all(
                                       color: _selectedPaymentGateway !=
                                           "PayTM"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: AppIcon(Icons.check,
@@ -1064,15 +1064,15 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                 decoration: BoxDecoration(
                                     color:
                                     _selectedPaymentGateway == "PayTM"
-                                        ? GlobalVariables.green
+                                        ? GlobalVariables.primaryColor
                                         : GlobalVariables.white,
                                     borderRadius:
                                     BorderRadius.circular(5),
                                     border: Border.all(
                                       color: _selectedPaymentGateway ==
                                           "PayTM"
-                                          ? GlobalVariables.green
-                                          : GlobalVariables.mediumGreen,
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: AppIcon(Icons.check,
@@ -1108,7 +1108,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10.0),
                       bottomRight: Radius.circular(10.0)),
@@ -1229,7 +1229,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                       },
                       child: text(
                         AppLocalizations.of(context).translate('proceed'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -1241,7 +1241,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                       },
                       child: text(
                         AppLocalizations.of(context).translate('cancel'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -1276,7 +1276,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                 IconButton(
                     icon: AppIcon(
                       Icons.content_copy,
-                      iconColor: GlobalVariables.green,
+                      iconColor: GlobalVariables.primaryColor,
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -1293,7 +1293,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                     AppLocalizations.of(context).translate('copy'),
                     fontSize: GlobalVariables.textSizeSmall,
                     fontWeight: FontWeight.bold,
-                    textColor: GlobalVariables.green,
+                    textColor: GlobalVariables.primaryColor,
                   ),
                 )
               ],
@@ -1310,7 +1310,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(5),
-          color: GlobalVariables.lightGreen,
+          color: GlobalVariables.AccentColor,
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
@@ -1378,7 +1378,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                               .toString() ==
                               'bill'
                               ? GlobalVariables.red
-                              : GlobalVariables.green,
+                              : GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeSMedium,
                           fontWeight: FontWeight.bold,
                         ),
@@ -1462,7 +1462,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                   },
                                   child: text('Pay advance',
                                       fontSize: GlobalVariables.textSizeMedium,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontWeight: FontWeight.bold)),
                             ),
                           ],
@@ -1508,7 +1508,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                           alignment: Alignment.topLeft,
                           child: primaryText(
                             'Send #'+value.billList[position].INVOICE_NO+' on below email id',
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSMedium
                             /*GlobalFunctions.convertDateFormat(
                                 value.billList[position].START_DATE,
@@ -1540,7 +1540,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                     //margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
                                       controller: _emailTextController,
-                                      cursorColor: GlobalVariables.green,
+                                      cursorColor: GlobalVariables.primaryColor,
                                       keyboardType: TextInputType.emailAddress,
                                       showCursor: isEditEmail ? true : false,
                                       decoration: InputDecoration(
@@ -1562,7 +1562,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                         ? IconButton(
                                         icon: AppIcon(
                                           Icons.edit,
-                                          iconColor: GlobalVariables.green,
+                                          iconColor: GlobalVariables.primaryColor,
                                           iconSize: 24,
                                         ),
                                         onPressed: () {
@@ -1662,7 +1662,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
               child: RaisedButton(
-                color: GlobalVariables.green,
+                color: GlobalVariables.primaryColor,
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -1673,7 +1673,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                 //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: GlobalVariables.green)),
+                    side: BorderSide(color: GlobalVariables.primaryColor)),
                 child: text(
                   AppLocalizations.of(context).translate('i_am_interested'),
                   fontSize: GlobalVariables.textSizeMedium,
@@ -1708,7 +1708,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                         alignment: Alignment.topRight,
                         child: AppIconButton(
                           Icons.close,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -1743,7 +1743,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                                 .translate('transaction_id') +
                                 ' : ' +
                                 paymentId.toString(),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
                       ),
@@ -1783,7 +1783,7 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                         alignment: Alignment.topRight,
                         child: AppIconButton(
                           Icons.close,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
                             Navigator.pop(context);
                           },

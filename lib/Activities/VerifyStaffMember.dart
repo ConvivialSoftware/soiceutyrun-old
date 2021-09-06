@@ -43,7 +43,7 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -112,18 +112,18 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                       ),
                       suffixIcon: AppIcon(
                         Icons.phone_android,
-                        iconColor: GlobalVariables.lightGreen,
+                        iconColor: GlobalVariables.AccentColor,
                       ),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.primaryColor,
                             width: 2.0,
                           ),
                           borderRadius:
                           BorderRadius.all(Radius.circular(10.0))),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: GlobalVariables.green, width: 2.0),
+                              color: GlobalVariables.primaryColor, width: 2.0),
                           borderRadius:
                           BorderRadius.all(Radius.circular(10.0))),
                     ),
@@ -149,12 +149,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('one_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -177,12 +177,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('two_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -205,12 +205,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('three_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -238,12 +238,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                             AppLocalizations.of(context).translate('four_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -266,12 +266,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('five_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -294,12 +294,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('six_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -327,12 +327,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('seven_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -355,12 +355,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('eight_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -383,12 +383,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('nine_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -413,10 +413,10 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.primaryColor,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child:Icon(Icons.check,color: GlobalVariables.white,),
@@ -439,12 +439,12 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('zero_num'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold,
                         ),
@@ -469,10 +469,10 @@ class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
                             color: GlobalVariables.transparent,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
-                        child:Icon(Icons.backspace,color: GlobalVariables.green,),
+                        child:Icon(Icons.backspace,color: GlobalVariables.primaryColor,),
                       ),
                     ),
                   ),
@@ -543,7 +543,7 @@ _progressDialog.show();
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseAddStaffMember(_mobileNumber)));
+                    BaseAddStaffMember()));
       }
       GlobalFunctions.showToast(value.message);
     });
@@ -582,7 +582,7 @@ _progressDialog.show();
                   //  alignment: Alignment.topRight,
                     child: FlatButton(onPressed: (){
                       Navigator.of(context).pop();
-                      addMember();
+                      //addMember();
                     }, child: text(AppLocalizations.of(context).translate('yes'))),
                   ),
                 ],
@@ -594,7 +594,7 @@ _progressDialog.show();
     );
   }
 
-  Future<void> addMember() async {
+ /* Future<void> addMember() async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -614,6 +614,6 @@ _progressDialog.show();
       GlobalFunctions.showToast(value.message);
     });
 
-  }
+  }*/
 
 }

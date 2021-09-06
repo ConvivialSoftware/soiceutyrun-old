@@ -68,7 +68,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -282,7 +282,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(5),
-          color: GlobalVariables.lightGreen,
+          color: GlobalVariables.AccentColor,
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
@@ -345,7 +345,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                                           .toString() ==
                                       'bill'
                                   ? GlobalVariables.red
-                                  : GlobalVariables.green,
+                                  : GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
                         ),
@@ -433,7 +433,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                 value: UserManagementResponse.listYear[i].years,
                 child: text(
                   UserManagementResponse.listYear[i].years,
-                  textColor: GlobalVariables.green,
+                  textColor: GlobalVariables.primaryColor,
                   fontSize: GlobalVariables.textSizeSmall
                 ),
               ));
@@ -445,7 +445,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
                     value: UserManagementResponse.listYear[i].years,
                     child: text(
                       UserManagementResponse.listYear[i].years,
-                      textColor: GlobalVariables.green,
+                      textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSmall
                     ),
                   ));
@@ -459,7 +459,7 @@ class LedgerState extends BaseStatefulState<BaseLedger> {
               value: UserManagementResponse.listYear[i].years,
               child: text(
                 UserManagementResponse.listYear[i].years,
-                textColor: GlobalVariables.green,
+                textColor: GlobalVariables.primaryColor,
                   fontSize: GlobalVariables.textSizeSmall
               ),
             ));

@@ -85,6 +85,10 @@ dependencies:
   after_layout: ^1.1.0
   flutter_full_pdf_viewer: ^1.0.6
   charts_flutter: ^0.10.0
+  workmanager: 0.1.1
+  #system_alert_window: 0.4.4
+  #timezone: ^0.8.0
+  #flutter_native_timezone: ^2.0.0
   #social_share: 2.0.6
   #dynamic_widget: ^2.0.1
   #overlay_dialog: ^0.0.3

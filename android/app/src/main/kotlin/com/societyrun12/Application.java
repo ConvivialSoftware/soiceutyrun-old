@@ -7,6 +7,8 @@ import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;
 import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService;
+import be.tramckrijte.workmanager.WorkmanagerPlugin;
+//import in.jvapps.system_alert_window.SystemAlertWindowPlugin;
 
 public class Application extends FlutterApplication implements PluginRegistrantCallback {
 
@@ -14,6 +16,8 @@ public class Application extends FlutterApplication implements PluginRegistrantC
     public void onCreate() {
         super.onCreate();
         FlutterFirebaseMessagingService.setPluginRegistrant(this);
+        WorkmanagerPlugin.setPluginRegistrantCallback(this);
+       // SystemAlertWindowPlugin.setPluginRegistrant(this);
     }
 
     @Override

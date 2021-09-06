@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: GlobalVariables.green,
+      backgroundColor: GlobalVariables.primaryColor,
       body: Center(
         child: Container(
           child: Image.asset(GlobalVariables.splashIconPath,width: MediaQuery.of(context).size.width/2,),

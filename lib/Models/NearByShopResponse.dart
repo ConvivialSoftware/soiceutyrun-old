@@ -96,7 +96,7 @@ class NearByShop {
       Category: map["Category"],
       Title: map["Title"],
       short_description: map["short_description"],
-      Offer_Code: map["Offer_Code"],
+      Offer_Code: map["Offer_Code"]??'',
       Location: map["Location"],
       offer_details: map["offer_details"],
       terms_condition: map["terms_condition"],

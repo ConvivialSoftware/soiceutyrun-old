@@ -73,7 +73,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
           return Builder(
             builder: (context) => Scaffold(
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -238,7 +238,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
                                   child: text(
                                       userManagementResponse
                                           .registerList[position].NAME,
-                                      textColor: GlobalVariables.green,
+                                      textColor: GlobalVariables.primaryColor,
                                       fontSize:
                                           GlobalVariables.textSizeLargeMedium,
                                       fontWeight: FontWeight.bold,
@@ -255,7 +255,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
                                             .isNotEmpty
                                         ? Icons.phone_android
                                         : Icons.language,
-                                    iconColor: GlobalVariables.mediumGreen,
+                                    iconColor: GlobalVariables.secondaryColor,
                                     iconSize: GlobalVariables.textSizeNormal,
                                   ),
                                 ),
@@ -438,7 +438,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
                         child: AppIcon(
                           Icons.add,
                           iconSize: GlobalVariables.textSizeLargeMedium,
-                          iconColor: GlobalVariables.green,
+                          iconColor: GlobalVariables.primaryColor,
                         ),
                       ),
                       Container(
@@ -446,7 +446,7 @@ class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
                         child: text('Register',
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
-                            textColor: GlobalVariables.green),
+                            textColor: GlobalVariables.primaryColor),
                       ),
                     ],
                   ),

@@ -91,7 +91,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
               child: Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
                 appBar: AppBar(
-                  backgroundColor: GlobalVariables.green,
+                  backgroundColor: GlobalVariables.primaryColor,
                   centerTitle: true,
                   leading: InkWell(
                     onTap: () {
@@ -249,7 +249,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 Icons.add,
                 iconColor: GlobalVariables.white,
               ),
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
             ),
           )
         ],
@@ -294,7 +294,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
                 ),
                 child: text(
                     providerValue.filterOptionList[position].filterName,
-                    textColor: providerValue.filterOptionList[position].isSelected ? GlobalVariables.green : GlobalVariables.black,
+                    textColor: providerValue.filterOptionList[position].isSelected ? GlobalVariables.primaryColor : GlobalVariables.black,
                     isCentered: true
                 ),
 
@@ -849,7 +849,7 @@ class DiscoverState extends BaseStatefulState<BaseDiscover>
         return GlobalVariables.orangeYellow;
         break;
       case "sell":
-        return GlobalVariables.green;
+        return GlobalVariables.primaryColor;
         break;
       default:
         return GlobalVariables.skyBlue;

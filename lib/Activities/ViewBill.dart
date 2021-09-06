@@ -154,7 +154,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               actions: [
@@ -231,7 +231,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                         SizedBox(height: 4,),
                         Container(
                           alignment: Alignment.center,
-                          child: primaryText(GlobalFunctions.getCurrencyFormat(totalAmount.toString())/*double.parse(totalAmount.toString()).toStringAsFixed(2)*/,textColor: GlobalVariables.green,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
+                          child: primaryText(GlobalFunctions.getCurrencyFormat(totalAmount.toString())/*double.parse(totalAmount.toString()).toStringAsFixed(2)*/,textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 4,),
                         Container(
@@ -291,7 +291,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        primaryText("Charges",textColor : GlobalVariables.green),
+                        primaryText("Charges",textColor : GlobalVariables.primaryColor),
                         Divider(),
                         _billHeadsList.length>0 ? Builder(
                             builder: (context) => ListView.builder(
@@ -358,7 +358,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
 
     return Container(
       child: Divider(
-        color: GlobalVariables.mediumGreen,
+        color: GlobalVariables.secondaryColor,
         height: 3,
       ),
     );
@@ -389,7 +389,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
             position!=_recentTransactionList.length-1 ? Container(
               margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
               child: Divider(
-                color: GlobalVariables.lightGreen,
+                color: GlobalVariables.AccentColor,
                 height: 3,
               ),
             ):Container(),
@@ -495,7 +495,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
                                     _billDetailsList[0].END_DATE, 'dd-MM-yyyy')*/
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
@@ -520,7 +520,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: TextFormField(
                                       controller: _emailTextController,
-                                      cursorColor: GlobalVariables.green,
+                                      cursorColor: GlobalVariables.primaryColor,
                                       keyboardType: TextInputType.emailAddress,
                                       showCursor: isEditEmail ? true : false,
                                       decoration: InputDecoration(
@@ -541,7 +541,7 @@ class ViewBillState extends BaseStatefulState<BaseViewBill> {
                                     child: !isEditEmail
                                         ? AppIconButton(
                                           Icons.edit,
-                                          iconColor: GlobalVariables.green,
+                                          iconColor: GlobalVariables.primaryColor,
                                           iconSize: 24,
                                         onPressed: () {
                                           _emailTextController.clear();

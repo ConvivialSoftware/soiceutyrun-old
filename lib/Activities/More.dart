@@ -39,7 +39,7 @@ class MoreState extends BaseStatefulState<BaseMore> {
       builder: (context) =>
           Scaffold(
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(

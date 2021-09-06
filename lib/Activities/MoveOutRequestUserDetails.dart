@@ -132,7 +132,7 @@ class _BaseMoveOutRequestUserDetailsState extends BaseStatefulState<BaseMoveOutR
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -565,7 +565,7 @@ class _BaseMoveOutRequestUserDetailsState extends BaseStatefulState<BaseMoveOutR
                     },
                     child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),
@@ -577,7 +577,7 @@ class _BaseMoveOutRequestUserDetailsState extends BaseStatefulState<BaseMoveOutR
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),

@@ -138,7 +138,7 @@ class CreateClassifiedListingState
             return Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 elevation: 0,
                 leading: InkWell(
@@ -201,7 +201,7 @@ class CreateClassifiedListingState
                   isExpanded: true,
                   icon: AppIcon(
                     Icons.keyboard_arrow_down,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                   ),
                   underline: SizedBox(),
                   hint: text(
@@ -243,7 +243,7 @@ class CreateClassifiedListingState
                   isExpanded: true,
                   icon: AppIcon(
                     Icons.keyboard_arrow_down,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                   ),
                   underline: SizedBox(),
                   hint: text(
@@ -341,7 +341,7 @@ class CreateClassifiedListingState
                         isExpanded: true,
                         icon: AppIcon(
                           Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         ),
                         underline: SizedBox(),
                         hint: text(
@@ -372,11 +372,11 @@ class CreateClassifiedListingState
                       decoration: BoxDecoration(
                           color: visibilityPriority == "No"
                               ? GlobalVariables.white
-                              : GlobalVariables.green,
+                              : GlobalVariables.primaryColor,
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: visibilityPriority == "No"
-                                ? GlobalVariables.mediumGreen
+                                ? GlobalVariables.secondaryColor
                                 : GlobalVariables.transparent,
                             width: 2.0,
                           )),
@@ -405,7 +405,7 @@ class CreateClassifiedListingState
                   alignment: Alignment.center,
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   decoration: BoxDecoration(
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: GlobalVariables.transparent,
@@ -672,7 +672,7 @@ class CreateClassifiedListingState
               decoration: boxDecoration(
                   bgColor: GlobalVariables.white,
                   radius: 10,
-                  color: GlobalVariables.mediumGreen,
+                  color: GlobalVariables.secondaryColor,
                   width: 2.0),
               child: Container(
                 padding: EdgeInsets.all(5),
@@ -687,7 +687,7 @@ class CreateClassifiedListingState
                           )
                         : CircleAvatar(
                             radius: 13,
-                            backgroundColor: GlobalVariables.mediumGreen,
+                            backgroundColor: GlobalVariables.secondaryColor,
                             backgroundImage: NetworkImage(photo),
                           ),
                     Expanded(
@@ -699,7 +699,7 @@ class CreateClassifiedListingState
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             text(name,
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: GlobalVariables.textSizeMedium,
                                 textStyleHeight: 1.5),

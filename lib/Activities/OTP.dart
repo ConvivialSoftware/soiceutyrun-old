@@ -133,7 +133,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                             .size
                             .width / 2,
                         child: RaisedButton(
-                          color: GlobalVariables.green,
+                          color: GlobalVariables.primaryColor,
                           onPressed: () {
                             if (_timer != null) {
                               _timer.cancel();
@@ -145,7 +145,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                           //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: GlobalVariables.green)
+                              side: BorderSide(color: GlobalVariables.primaryColor)
                           ),
                           child: text(
                             AppLocalizations.of(context)
@@ -181,7 +181,7 @@ class OtpState extends BaseStatefulState<BaseOtp> {
                               child: text(
                                   AppLocalizations.of(context).translate(
                                       "resend"), textColor: isResendEnable
-                                      ? GlobalVariables.green
+                                      ? GlobalVariables.primaryColor
                                       : GlobalVariables.grey,
                                   fontSize: GlobalVariables.textSizeNormal,
                                   fontWeight: FontWeight.bold,

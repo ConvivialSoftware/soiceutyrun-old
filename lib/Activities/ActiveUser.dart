@@ -74,7 +74,7 @@ var photo = "";
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -226,7 +226,7 @@ var photo = "";
                                 Container(
                                   //  color:GlobalVariables.grey,
                                   child: text(userManagementResponse.activeUserList[position].NAME,
-                                      textColor:GlobalVariables.green,
+                                      textColor:GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       fontWeight: FontWeight.bold,
                                       textStyleHeight: 1.0
@@ -234,7 +234,7 @@ var photo = "";
                                 ),
                                 SizedBox(width: 4,),
                                 Container(
-                                  child: AppIcon(userManagementResponse.activeUserList[position].gcm_id.isNotEmpty ?  Icons.phone_android : Icons.language ,iconColor: GlobalVariables.mediumGreen,iconSize: GlobalVariables.textSizeNormal,),
+                                  child: AppIcon(userManagementResponse.activeUserList[position].gcm_id.isNotEmpty ?  Icons.phone_android : Icons.language ,iconColor: GlobalVariables.secondaryColor,iconSize: GlobalVariables.textSizeNormal,),
                                 ),
                               ],
                             ),
@@ -391,13 +391,13 @@ var photo = "";
                   height: 30,
                   decoration: BoxDecoration(
                       color: inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)
-                          ? GlobalVariables.green
+                          ? GlobalVariables.primaryColor
                           : GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)
-                            ? GlobalVariables.green
-                            : GlobalVariables.mediumGreen,
+                            ? GlobalVariables.primaryColor
+                            : GlobalVariables.secondaryColor,
                         width: 2.0,
                       )),
                   child: AppIcon(
@@ -418,7 +418,7 @@ var photo = "";
                         alignment: Alignment.topLeft,
                         //  color:GlobalVariables.grey,
                         child: text(userManagementResponse.inactiveUserList[position].NAME,
-                            textColor:GlobalVariables.green,
+                            textColor:GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
                             textStyleHeight: 1.0

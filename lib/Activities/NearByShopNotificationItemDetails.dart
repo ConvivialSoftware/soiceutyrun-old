@@ -102,12 +102,12 @@ class NearByShopNotificationItemDetailsState
                     },
                     child: AppIcon(
                       Icons.arrow_back,
-                      iconColor: GlobalVariables.green,
+                      iconColor: GlobalVariables.primaryColor,
                     ),
                   ),
                   title: text(
                     'Offer Details',
-                    textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
+                    textColor: GlobalVariables.primaryColor, fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
                 body: !value.isLoading ? getBaseLayout(value) : GlobalFunctions.loadingWidget(context),
@@ -220,7 +220,7 @@ class NearByShopNotificationItemDetailsState
                                                             .Title,
                                                         textColor:
                                                         GlobalVariables
-                                                            .green,
+                                                            .primaryColor,
                                                         fontWeight:
                                                         FontWeight.w500,
                                                         fontSize:
@@ -240,7 +240,7 @@ class NearByShopNotificationItemDetailsState
                                                       height: 20,
                                                       width: 20,
                                                       color:
-                                                      GlobalVariables.green,
+                                                      GlobalVariables.primaryColor,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -298,7 +298,7 @@ class NearByShopNotificationItemDetailsState
                                                               Icons.location_on,
                                                               iconSize: 24,
                                                               iconColor: GlobalVariables
-                                                                  .green,
+                                                                  .primaryColor,
                                                             ),
                                                             SizedBox(
                                                               width: 8,
@@ -366,7 +366,7 @@ class NearByShopNotificationItemDetailsState
                                           child: text(
                                             AppLocalizations.of(context)
                                                 .translate('offer_details'),
-                                            textColor: GlobalVariables.green,
+                                            textColor: GlobalVariables.primaryColor,
                                             fontWeight: FontWeight.w500,
                                             fontSize:
                                             GlobalVariables.textSizeMedium,
@@ -422,7 +422,7 @@ class NearByShopNotificationItemDetailsState
                                                             decoration: BoxDecoration(
                                                                 color:
                                                                 GlobalVariables
-                                                                    .green,
+                                                                    .primaryColor,
                                                                 shape: BoxShape
                                                                     .circle),
                                                           ),
@@ -466,7 +466,7 @@ class NearByShopNotificationItemDetailsState
                                           child: htmlText(
                                             AppLocalizations.of(context)
                                                 .translate('terms_conn'),
-                                            textColor: GlobalVariables.green,
+                                            textColor: GlobalVariables.primaryColor,
                                             fontWeight: FontWeight.w500,
                                             fontSize:
                                             GlobalVariables.textSizeMedium,
@@ -504,7 +504,7 @@ class NearByShopNotificationItemDetailsState
                                                             height: 8,
                                                             decoration: BoxDecoration(
                                                                 color: GlobalVariables
-                                                                    .green,
+                                                                    .primaryColor,
                                                                 shape: BoxShape
                                                                     .circle),
                                                           ),
@@ -601,7 +601,7 @@ class NearByShopNotificationItemDetailsState
                         text(
                           value.nearByShopList[0].Title,
                           fontSize: GlobalVariables.textSizeLargeMedium,
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           maxLine: 3,
                           fontWeight: FontWeight.w500,
                         ),
@@ -677,7 +677,7 @@ class NearByShopNotificationItemDetailsState
                               onPressed: () {
                                 launch(value.nearByShopList[0].redeem);
                               },
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               child: text('Redeem',
                                   textColor: GlobalVariables.white,
                                   fontSize: GlobalVariables.textSizeSMedium,

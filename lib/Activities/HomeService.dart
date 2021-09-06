@@ -26,7 +26,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -96,7 +96,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
               child: Text(
                 AppLocalizations.of(context).translate('visitor_arriving_on'),
                 style: TextStyle(
-                    color: GlobalVariables.green,
+                    color: GlobalVariables.primaryColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -122,7 +122,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                     isExpanded: false,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: GlobalVariables.mediumGreen,
+                      color: GlobalVariables.secondaryColor,
                     ),
                     underline: SizedBox(),
                     hint: Container(
@@ -130,7 +130,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                       child: Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.mediumGreen, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.secondaryColor, fontSize: 16,fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -144,7 +144,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )
               ),
@@ -163,7 +163,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )
               ),
@@ -183,7 +183,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )),
               child: ButtonTheme(
@@ -193,7 +193,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                   isExpanded: true,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                   ),
                   underline: SizedBox(),
                   hint: Text(
@@ -211,14 +211,14 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
               child: ButtonTheme(
                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   onPressed: () {
 
                   },
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.primaryColor)
                   ),
                   child: Text(
                     AppLocalizations.of(context)
@@ -357,7 +357,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightGreen,
+        color: GlobalVariables.AccentColor,
         borderRadius: BorderRadius.circular(10)
       ),
       child: Column(
@@ -374,7 +374,7 @@ class HomeServiceState extends BaseStatefulState<BaseHomeService> {
                 AppLocalizations.of(context)
                     .translate('search_property'),
                 style: TextStyle(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.varyLargeText,)),
           )
         ],

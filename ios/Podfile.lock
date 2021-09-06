@@ -91,6 +91,7 @@ PODS:
   - flutter_image_compress (0.0.1):
     - Flutter
     - Mantle
+    - SDWebImage
     - SDWebImageWebPCoder
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -157,7 +158,7 @@ PODS:
     - Flutter
   - PromisesObjC (1.2.12)
   - Protobuf (3.17.0)
-  - rate_my_app (1.1.0):
+  - rate_my_app (1.1.1):
     - Flutter
   - razorpay-pod (1.1.13)
   - razorpay_flutter (1.1.5):
@@ -180,6 +181,8 @@ PODS:
   - SwiftyGif (5.4.0)
   - Toast (4.0.0)
   - url_launcher (0.0.1):
+    - Flutter
+  - workmanager (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -211,6 +214,7 @@ DEPENDENCIES:
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - workmanager (from `.symlinks/plugins/workmanager/ios`)
 
 SPEC REPOS:
   trunk:
@@ -295,6 +299,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+  workmanager:
+    :path: ".symlinks/plugins/workmanager/ios"
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
@@ -316,7 +322,7 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
   flutter_full_pdf_viewer: 1b65139fc3236cde300ba6bea2a72669cb07f2e6
-  flutter_image_compress: 082f8daaf6c1b0c9fe798251c750ef0ecd98d7ae
+  flutter_image_compress: fd2b476345226e1a10ea352fa306af95704642c1
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_share: 4be0208963c60b537e6255ed2ce1faae61cd9ac2
   flutter_statusbarcolor: 8afb1071ed8c58be929f1e32b36c629771fd2259
@@ -336,7 +342,7 @@ SPEC CHECKSUMS:
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  rate_my_app: b2b5847177b024ab7fcfd02ced7a84a9b67eeaf2
+  rate_my_app: 8e49687f3520c56352f974f0cb401afea07cd496
   razorpay-pod: c0e9c4ae3ed168ab0f59be2acfb3ba8fd57eba57
   razorpay_flutter: bf22a7c0e12d9f906b6a493f546ee9afe7f8b508
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
@@ -348,6 +354,7 @@ SPEC CHECKSUMS:
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  workmanager: ffff78bf18495e2bc5b8c955ead94a81db340681
 
 PODFILE CHECKSUM: 3053171d328ee4576d9e013b4ab6c9898579a138
 

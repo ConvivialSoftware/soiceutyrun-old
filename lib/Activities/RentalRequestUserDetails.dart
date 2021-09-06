@@ -136,7 +136,7 @@ class _BaseRentalRequestUserDetailsState
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -468,7 +468,7 @@ class _BaseRentalRequestUserDetailsState
                       children: [
                         Container(
                           child: text(tenantDetailsList[position].NAME,
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeMedium,
                               fontWeight: FontWeight.bold),
                         ),
@@ -639,7 +639,7 @@ class _BaseRentalRequestUserDetailsState
             child: text(
               'Rental Request',
               fontSize: GlobalVariables.textSizeLargeMedium,
-              textColor: GlobalVariables.green,
+              textColor: GlobalVariables.primaryColor,
               fontWeight: FontWeight.bold,
               isCentered: true,
             ),
@@ -681,7 +681,6 @@ class _BaseRentalRequestUserDetailsState
                                 widget.rentalRequest.ID,
                                 tenantDetailsList[0].BLOCK,
                                 tenantDetailsList[0].FLAT,
-                                widget.rentalRequest.U_ID,
                                 _reasonController.text)
                             .then((value) {
                           _progressDialog.hide();
@@ -695,7 +694,7 @@ class _BaseRentalRequestUserDetailsState
                       }
                     },
                     child: text(AppLocalizations.of(context).translate('Approve'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),

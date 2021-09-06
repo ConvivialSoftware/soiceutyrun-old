@@ -47,7 +47,7 @@ class _BaseAppNotificationSettingsState
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -155,12 +155,12 @@ class _BaseAppNotificationSettingsState
                           AppLocalizations.of(context).translate('in_app_call'),
                           fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold,
-                          textColor: GlobalVariables.green),
+                          textColor: GlobalVariables.primaryColor),
                     ),
                   ),
                   Container(
                     child: FlutterCustomSwitch(
-                      activeColor: GlobalVariables.green,
+                      activeColor: GlobalVariables.primaryColor,
                       value: isInAppCallNotification,
                       onChanged: (value) {
                         print("VALUE : $value");
@@ -227,7 +227,7 @@ class _BaseAppNotificationSettingsState
                                 .translate('daily_helps'),
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
-                            textColor: GlobalVariables.green),
+                            textColor: GlobalVariables.primaryColor),
                       ),
                     ),
                     Container(
@@ -274,7 +274,7 @@ class _BaseAppNotificationSettingsState
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: FlutterCustomSwitch(
-                        activeColor: GlobalVariables.green,
+                        activeColor: GlobalVariables.primaryColor,
                         value: isDailyEntryNotification,
                         onChanged: (value) {
                           print("VALUE : $value");
@@ -365,7 +365,7 @@ class _BaseAppNotificationSettingsState
                                 .translate('your_guest'),
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold,
-                            textColor: GlobalVariables.green),
+                            textColor: GlobalVariables.primaryColor),
                       ),
                     ),
                   ],
@@ -401,7 +401,7 @@ class _BaseAppNotificationSettingsState
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: FlutterCustomSwitch(
-                        activeColor: GlobalVariables.green,
+                        activeColor: GlobalVariables.primaryColor,
                         value: isGuestEntryNotification,
                         onChanged: (value) {
                           print("VALUE : $value");

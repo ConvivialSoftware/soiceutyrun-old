@@ -26,7 +26,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -95,7 +95,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               alignment: Alignment.topLeft,
               child: text(
                 AppLocalizations.of(context).translate('guest_other_arriving_on'),
-                textColor: GlobalVariables.green,
+                textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.textSizeLargeMedium,
                     fontWeight: FontWeight.bold,
               ),
@@ -121,14 +121,14 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                     isExpanded: false,
                     icon: AppIcon(
                       Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.mediumGreen,
+                      iconColor: GlobalVariables.secondaryColor,
                     ),
                     underline: SizedBox(),
                     hint: Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                       child:  text(
                         "Today",
-                       textColor: GlobalVariables.mediumGreen, fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.w500),
+                       textColor: GlobalVariables.secondaryColor, fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -145,7 +145,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: GlobalVariables.mediumGreen,
+                          color: GlobalVariables.secondaryColor,
                           width: 3.0,
                         )
                     ),
@@ -158,7 +158,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                           counterText: '',
                           suffixIcon: AppIcon(
                             Icons.contacts,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                           )
 
                       ),
@@ -170,7 +170,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   child: Container(
                     alignment: Alignment.topRight,
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: text('OR',textColor: GlobalVariables.mediumGreen,fontSize: GlobalVariables.textSizeMedium
+                    child: text('OR',textColor: GlobalVariables.secondaryColor,fontSize: GlobalVariables.textSizeMedium
                     ),
                   ),
                 )
@@ -183,7 +183,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )
               ),
@@ -202,7 +202,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: GlobalVariables.mediumGreen,
+                    color: GlobalVariables.secondaryColor,
                     width: 3.0,
                   )
               ),
@@ -219,7 +219,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               alignment: Alignment.topLeft,
               child: text(
                 AppLocalizations.of(context).translate('frequently_guest_other_running'),
-                textColor: GlobalVariables.green,
+                textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.textSizeLargeMedium,
                     fontWeight: FontWeight.w400,
               ),
@@ -240,10 +240,10 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color: GlobalVariables.green,
+                                  color: GlobalVariables.primaryColor,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.green,
+                                    color: GlobalVariables.primaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -254,7 +254,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('once'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ],
@@ -278,7 +278,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                                   color: GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: GlobalVariables.mediumGreen,
+                                    color: GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -289,7 +289,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('frequently'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
@@ -308,14 +308,14 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
               child: ButtonTheme(
                // minWidth: MediaQuery.of(context).size.width/2,
                 child: RaisedButton(
-                  color: GlobalVariables.green,
+                  color: GlobalVariables.primaryColor,
                   onPressed: () {
 
                   },
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.green)
+                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.primaryColor)
                   ),
                   child: text(
                     AppLocalizations.of(context)
@@ -457,7 +457,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.lightGreen,
+        color: GlobalVariables.AccentColor,
         borderRadius: BorderRadius.circular(10)
       ),
       child: Column(
@@ -473,7 +473,7 @@ class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
             child: text(
                 AppLocalizations.of(context)
                     .translate('search_property'),
-                textColor: GlobalVariables.green,
+                textColor: GlobalVariables.primaryColor,
                     fontSize: GlobalVariables.varyLargeText,),
           )
         ],

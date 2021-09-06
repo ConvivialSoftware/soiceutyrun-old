@@ -43,7 +43,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
 
   TextEditingController _agreementFromController = TextEditingController();
   TextEditingController _agreementToController = TextEditingController();
-  TextEditingController _noOfBachelorController = TextEditingController();
+ // TextEditingController _noOfBachelorController = TextEditingController();
 
   /*List<DropdownMenuItem<String>> _blockListItems =
       new List<DropdownMenuItem<String>>();
@@ -57,6 +57,11 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   List<DropdownMenuItem<String>> _rentedToListItems =
   new List<DropdownMenuItem<String>>();
   String _selectedRentedTo;
+
+  List<String> _groupCountList = new List<String>();
+  List<DropdownMenuItem<String>> _groupCountListItems =
+  new List<DropdownMenuItem<String>>();
+  String _selectedGroupCount;
 
   String _selectedIssueNOC;
 
@@ -74,6 +79,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
   void initState() {
     super.initState();
     getRentedToData();
+    getGroupCountData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
@@ -130,7 +136,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -191,7 +197,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                   isExpanded: true,
                   icon: AppIcon(
                     Icons.keyboard_arrow_down,
-                    iconColor: GlobalVariables.mediumGreen,
+                    iconColor: GlobalVariables.secondaryColor,
                   ),
                   decoration: InputDecoration(
                     //filled: true,
@@ -214,7 +220,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               suffixIcon: AppIconButton(
                 Icons.date_range,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.getSelectedDate(context).then((value) {
                     _agreementFromController.text =
@@ -235,7 +241,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
               suffixIcon: AppIconButton(
                 Icons.date_range,
-                iconColor: GlobalVariables.mediumGreen,
+                iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.getSelectedDateFromStartDate(context,_agreementFromController.text).then((value) {
                     _agreementToController.text =
@@ -249,10 +255,46 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
               ),
             ),
             _selectedRentedTo== AppLocalizations.of(context)
-                .translate('group_bachelor') ? AppTextField(
+                .translate('group_bachelor') ? /*AppTextField(
                 textHintContent: AppLocalizations.of(context).translate('no_of_bachelor'),
                 controllerCallback: _noOfBachelorController,
               keyboardType: TextInputType.number,
+            )*/Container(
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+              decoration: BoxDecoration(
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: GlobalVariables.lightGray,
+                    width: 2.0,
+                  )),
+              child: ButtonTheme(
+                child: DropdownButtonFormField(
+                  items: _groupCountListItems,
+                  value: _selectedGroupCount,
+                  onChanged: (value){
+                    _selectedGroupCount=value;
+                    setState(() {});
+                  },
+                  isExpanded: true,
+                  icon: AppIcon(
+                    Icons.keyboard_arrow_down,
+                    iconColor: GlobalVariables.secondaryColor,
+                  ),
+                  decoration: InputDecoration(
+                    //filled: true,
+                    //fillColor: Hexcolor('#ecedec'),
+                      labelText: AppLocalizations.of(context)
+                          .translate('no_of_bachelor'),
+                      labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent))
+                    // border: new CustomBorderTextFieldSkin().getSkin(),
+                  ),
+                ),
+              ),
             ):SizedBox(),
             widget.isAdmin
                 ? Container(
@@ -293,7 +335,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                                       AppLocalizations.of(
                                                               context)
                                                           .translate('yes')
-                                                  ? GlobalVariables.green
+                                                  ? GlobalVariables.primaryColor
                                                   : GlobalVariables.white,
                                               borderRadius:
                                                   BorderRadius.circular(5),
@@ -302,9 +344,9 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                                         AppLocalizations.of(
                                                                 context)
                                                             .translate('yes')
-                                                    ? GlobalVariables.green
+                                                    ? GlobalVariables.primaryColor
                                                     : GlobalVariables
-                                                        .mediumGreen,
+                                                        .secondaryColor,
                                                 width: 2.0,
                                               )),
                                           child: AppIcon(Icons.check,
@@ -317,7 +359,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                           child: text(
                                             AppLocalizations.of(context)
                                                 .translate('yes'),
-                                            textColor: GlobalVariables.green,
+                                            textColor: GlobalVariables.primaryColor,
                                             fontSize: GlobalVariables
                                                 .textSizeMedium,
                                           ),
@@ -349,7 +391,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                                       AppLocalizations.of(
                                                               context)
                                                           .translate('no')
-                                                  ? GlobalVariables.green
+                                                  ? GlobalVariables.primaryColor
                                                   : GlobalVariables.white,
                                               borderRadius:
                                                   BorderRadius.circular(5),
@@ -358,9 +400,9 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                                         AppLocalizations.of(
                                                                 context)
                                                             .translate('no')
-                                                    ? GlobalVariables.green
+                                                    ? GlobalVariables.primaryColor
                                                     : GlobalVariables
-                                                        .mediumGreen,
+                                                        .secondaryColor,
                                                 width: 2.0,
                                               )),
                                           child: AppIcon(Icons.check,
@@ -374,7 +416,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                               AppLocalizations.of(context)
                                                   .translate('no'),
                                               textColor:
-                                                  GlobalVariables.green,
+                                                  GlobalVariables.primaryColor,
                                               fontSize: GlobalVariables
                                                   .textSizeMedium),
                                         ),
@@ -422,7 +464,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
+                                  iconColor: GlobalVariables.secondaryColor,
                                   iconSize: 20.0,
                                 ),
                                 label: Flexible(
@@ -431,7 +473,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                                         ? attachmentFileName
                                         : AppLocalizations.of(context)
                                             .translate('attach_agreement')+'*',
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeSMedium
                                   ),
                                 ),
@@ -494,9 +536,7 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
                       rentedTo: _selectedRentedTo,
                       startDate: _agreementFromController.text,
                       endDate: _agreementToController.text,
-                      noOfBachelor: _noOfBachelorController.text.isEmpty
-                          ? '1'
-                          : _noOfBachelorController.text,
+                      noOfBachelor: _selectedGroupCount,
                       isNocEmail: _selectedIssueNOC,
                       agreementAttachmentPath: GlobalFunctions.convertFileToString(attachmentFilePath),
                       block: widget.block,
@@ -530,6 +570,23 @@ class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
       ));
     }
     //  _selectedBloodGroup = __bloodGroupListItems[0].value;
+  }
+
+  void getGroupCountData() {
+    _groupCountList = ["1","2","3","4"];
+    for (int i = 0; i < _groupCountList.length; i++) {
+      _groupCountListItems.add(DropdownMenuItem(
+        value: _groupCountList[i],
+        child: text(
+          _groupCountList[i],
+          textColor: GlobalVariables.black,
+        ),
+      ));
+    }
+     _selectedGroupCount = _groupCountListItems[0].value;
+    setState(() {
+
+    });
   }
 
   bool verifyInfo() {

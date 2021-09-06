@@ -37,7 +37,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -264,7 +264,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
                         child: IconButton(
                             icon: AppIcon(
                               Icons.edit,
-                              iconColor: GlobalVariables.green,
+                              iconColor: GlobalVariables.primaryColor,
                               iconSize: GlobalVariables.textSizeLarge,
                             ),
                             onPressed: () {
@@ -572,7 +572,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
                                 .translate('terms_conn'),
                             //textAlign: TextAlign.left,
                               fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                           ),
                         )),
                   ),
@@ -585,7 +585,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
                       height: 15,
                       width: 8,
                       child: VerticalDivider(
-                        color: GlobalVariables.green,
+                        color: GlobalVariables.primaryColor,
                       )),
                 ),
                 Visibility(
@@ -601,7 +601,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
                               .translate('privacy_statement'),
                           //textAlign: TextAlign.left,
                             fontSize: GlobalVariables.textSizeSMedium,
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                         ),
                       )),
                 )
@@ -651,7 +651,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
                       ),
@@ -663,7 +663,7 @@ class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
                       ),

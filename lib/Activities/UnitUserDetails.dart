@@ -82,7 +82,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -195,7 +195,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                         AppLocalizations.of(context)
                                                 .translate('biller_name') +
                                             ' : ',
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeSMedium,
                                         fontWeight: FontWeight.bold),
@@ -221,7 +221,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                         AppLocalizations.of(context)
                                                 .translate('area') +
                                             ' : ',
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeSMedium,
                                         fontWeight: FontWeight.bold),
@@ -242,7 +242,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                     child: text(
                                         AppLocalizations.of(context)
                                             .translate('consumer_no')+' : ',
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeSMedium,
                                         fontWeight: FontWeight.bold),
@@ -267,7 +267,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                         AppLocalizations.of(context)
                                                 .translate('gstin') +
                                             ' : ',
-                                        textColor: GlobalVariables.green,
+                                        textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeSMedium,
                                         fontWeight: FontWeight.bold),
@@ -290,7 +290,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                         child: IconButton(
                             icon: AppIcon(
                               Icons.edit,
-                              iconColor: GlobalVariables.green,
+                              iconColor: GlobalVariables.primaryColor,
                               iconSize: GlobalVariables.textSizeLarge,
                             ),
                             onPressed: () {
@@ -1277,7 +1277,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                         child: AppIcon(
                           Icons.delete,
-                          iconColor: GlobalVariables.mediumGreen,
+                          iconColor: GlobalVariables.secondaryColor,
                         )),
                   )
                   // : Container(),
@@ -1317,7 +1317,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -1329,7 +1329,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -1348,7 +1348,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
         vehicleType == 'four') {
       return AppIcon(
         Icons.directions_car,
-        iconColor: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.secondaryColor,
         iconSize: 20.0,
       );
     } else if (vehicleType == '2 Wheeler' ||
@@ -1356,13 +1356,13 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
         vehicleType == 'two') {
       return AppIcon(
         Icons.motorcycle,
-        iconColor: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.secondaryColor,
         iconSize: 20.0,
       );
     } else {
       return AppIcon(
         Icons.motorcycle,
-        iconColor: GlobalVariables.mediumGreen,
+        iconColor: GlobalVariables.secondaryColor,
         iconSize: 20.0,
       );
     }
@@ -1411,7 +1411,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                             child: text(
                               AppLocalizations.of(context)
                                   .translate('update_unit_details'),
-                              textColor: GlobalVariables.green,
+                              textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeLargeMedium,
                               fontWeight: FontWeight.bold,
                             ),
@@ -1462,7 +1462,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                 color: GlobalVariables.white,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: GlobalVariables.mediumGreen,
+                                  color: GlobalVariables.secondaryColor,
                                   width: 2.0,
                                 )),
                             child: ButtonTheme(
@@ -1482,7 +1482,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                 isExpanded: true,
                                 icon: AppIcon(
                                   Icons.keyboard_arrow_down,
-                                  iconColor: GlobalVariables.green,
+                                  iconColor: GlobalVariables.primaryColor,
                                 ),
                                 iconSize: GlobalVariables.textSizeNormal,
                                 selectedItemBuilder: (BuildContext context) {
@@ -1493,7 +1493,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                         child: text(
                                           _unitRoleSelectedItem,
-                                          textColor: GlobalVariables.green,
+                                          textColor: GlobalVariables.primaryColor,
                                         ));
                                   }).toList();
                                 },
@@ -1554,7 +1554,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
         value: _unitRoleList[i],
         child: text(
           _unitRoleList[i],
-          textColor: GlobalVariables.green,
+          textColor: GlobalVariables.primaryColor,
         ),
       ));
     }

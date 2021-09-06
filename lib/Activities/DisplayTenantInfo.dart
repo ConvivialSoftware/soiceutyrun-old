@@ -188,7 +188,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: AppBar(
-          backgroundColor: GlobalVariables.green,
+          backgroundColor: GlobalVariables.primaryColor,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -515,7 +515,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                     children: [
                       AppIcon(
                         Icons.date_range,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                       ),
                       SizedBox(
                         width: 2,
@@ -537,7 +537,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                     children: [
                       AppIcon(
                         Icons.date_range,
-                        iconColor: GlobalVariables.mediumGreen,
+                        iconColor: GlobalVariables.secondaryColor,
                       ),
                       SizedBox(
                         width: 2,
@@ -567,7 +567,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.attach_file,color: GlobalVariables.mediumGreen,),
+                    Icon(Icons.attach_file,color: GlobalVariables.secondaryColor,),
                     SizedBox(width: 8,),
                     text('Agreement Attachment',textColor: GlobalVariables.skyBlue,fontSize: GlobalVariables.textSizeSMedium)
                   ],
@@ -607,7 +607,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                           child: text(
                             AppLocalizations.of(context)
                                 .translate('renew_agreement'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold,
                           ),
@@ -622,7 +622,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                           contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           suffixIcon: AppIconButton(
                             Icons.date_range,
-                            iconColor: GlobalVariables.mediumGreen,
+                            iconColor: GlobalVariables.secondaryColor,
                             onPressed: () {
                               GlobalFunctions.getSelectedDate(context).then((value) {
                                 _agreementFromController.text =
@@ -645,7 +645,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                             contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             suffixIcon: AppIconButton(
                               Icons.date_range,
-                              iconColor: GlobalVariables.mediumGreen,
+                              iconColor: GlobalVariables.secondaryColor,
                               onPressed: () {
                                 GlobalFunctions.getSelectedDate(context).then((value) {
                                   _agreementToController.text =
@@ -693,7 +693,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                             },
                                             icon: AppIcon(
                                               Icons.attach_file,
-                                              iconColor: GlobalVariables.mediumGreen,
+                                              iconColor: GlobalVariables.secondaryColor,
                                               iconSize: 20.0,
                                             ),
                                             label: Flexible(
@@ -702,7 +702,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                                       ? attachmentFileName
                                                       : AppLocalizations.of(context)
                                                       .translate('attach_agreement')+'*',
-                                                  textColor: GlobalVariables.green,
+                                                  textColor: GlobalVariables.primaryColor,
                                                   fontSize: GlobalVariables.textSizeSMedium
                                               ),
                                             ),
@@ -895,7 +895,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                 },
                                 child: text(
                                     AppLocalizations.of(context).translate('yes'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -907,7 +907,7 @@ class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
                                 },
                                 child: text(
                                     AppLocalizations.of(context).translate('no'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
                               ),

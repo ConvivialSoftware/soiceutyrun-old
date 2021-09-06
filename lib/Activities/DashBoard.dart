@@ -52,6 +52,7 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:intl/intl.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'LoginPage.dart';
 import 'WebViewScreen.dart';
@@ -123,7 +124,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       }
     });
   }
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -823,7 +823,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
                             margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                             decoration: BoxDecoration(
-                                color: GlobalVariables.lightGreen,
+                                color: GlobalVariables.AccentColor,
                                 borderRadius: BorderRadius.circular(10)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -869,7 +869,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                             padding: EdgeInsets.fromLTRB(10, 16, 10, 16),
                             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                             decoration: BoxDecoration(
-                                color: GlobalVariables.lightGreen,
+                                color: GlobalVariables.AccentColor,
                                 borderRadius: BorderRadius.circular(10)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1041,7 +1041,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   margin: EdgeInsets.fromLTRB(0, 10, 30, 0),
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                      color: GlobalVariables.green,
+                      color: GlobalVariables.primaryColor,
                       borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(10.0),
                           topRight: Radius.circular(10.0))),
@@ -1274,7 +1274,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       child: Container(
         //color: GlobalVariables.black,
         child: Theme(
-          data: ThemeData(accentColor: GlobalVariables.green),
+          data: ThemeData(accentColor: GlobalVariables.primaryColor),
           child: ListView.builder(
             itemCount: _list.length,
             itemBuilder: (BuildContext context, int index) =>
@@ -1691,7 +1691,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           shape: (RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0))),
           elevation: 20.0,
-          shadowColor: GlobalVariables.green.withOpacity(0.3),
+          shadowColor: GlobalVariables.primaryColor.withOpacity(0.3),
           margin: EdgeInsets.all(16),
           color: GlobalVariables.white,
           child: Stack(
@@ -1717,7 +1717,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               text(
                                 AppLocalizations.of(context)
                                     .translate('total_due'),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeSMedium,
                               ),
                               !AppUserPermission.isUserHideMyDuesPermission
@@ -1735,7 +1735,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         )
                                       : text(
                                           'Paid',
-                                          textColor: GlobalVariables.green,
+                                          textColor: GlobalVariables.primaryColor,
                                           fontSize:
                                               GlobalVariables.textSizeSMedium,
                                           fontWeight: FontWeight.bold,
@@ -1754,7 +1754,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                 loginDashBoardResponse.duesRs)
                                             .toStringAsFixed(2)*/
                                     : GlobalFunctions.getCurrencyFormat("0"),
-                                textColor: GlobalVariables.green,
+                                textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeLarge,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -1776,7 +1776,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                           : '-'
                                       : '',
                                   //textAlign: TextAlign.center,
-                                  textColor: GlobalVariables.green,
+                                  textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeMedium,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -1815,7 +1815,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   child: text(
                                     AppLocalizations.of(context)
                                         .translate('transaction_history'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
@@ -1841,7 +1841,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   child: text(
                                     AppLocalizations.of(context)
                                         .translate('pay_now'),
-                                    textColor: GlobalVariables.green,
+                                    textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                   ),
                                 ),
@@ -1895,7 +1895,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
               child: RaisedButton(
-                color: GlobalVariables.green,
+                color: GlobalVariables.primaryColor,
                 onPressed: () {
                   Navigator.push(
                           context,
@@ -1910,7 +1910,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: GlobalVariables.green)),
+                    side: BorderSide(color: GlobalVariables.primaryColor)),
                 child: text(
                     AppLocalizations.of(context).translate('i_am_interested'),
                     fontSize: GlobalVariables.textSizeMedium,
@@ -2307,7 +2307,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('yes'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -2319,7 +2319,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       },
                       child: text(
                         AppLocalizations.of(context).translate('no'),
-                        textColor: GlobalVariables.green,
+                        textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold,
                       )),
@@ -2404,7 +2404,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     } else if (days >= -2 && days < 0) {
       return Color(0xFFf39c12);
     } else {
-      return GlobalVariables.mediumGreen;
+      return GlobalVariables.secondaryColor;
     }
   }
 
@@ -2634,7 +2634,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                 color: mSocietyList[position]
                                                             .isSelected ==
                                                         true
-                                                    ? GlobalVariables.green
+                                                    ? GlobalVariables.primaryColor
                                                     : GlobalVariables
                                                         .transparent,
                                                 borderRadius:
@@ -2643,9 +2643,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                   color: mSocietyList[position]
                                                               .isSelected ==
                                                           true
-                                                      ? GlobalVariables.green
+                                                      ? GlobalVariables.primaryColor
                                                       : GlobalVariables
-                                                          .mediumGreen,
+                                                          .secondaryColor,
                                                   width: 2.0,
                                                 )),
                                             child: AppIcon(
@@ -2669,7 +2669,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                     : mSocietyList[position]
                                                         .Society_Name,
                                                 textColor:
-                                                    GlobalVariables.green,
+                                                    GlobalVariables.primaryColor,
                                                 fontSize: GlobalVariables
                                                     .textSizeSMedium,
                                               ),
@@ -2979,7 +2979,7 @@ class _EntryItemState extends State<EntryItem> {
               width: 10,
               height: 10,
               decoration: BoxDecoration(
-                  color: GlobalVariables.green, shape: BoxShape.circle),
+                  color: GlobalVariables.primaryColor, shape: BoxShape.circle),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(20, 8, 0, 8),

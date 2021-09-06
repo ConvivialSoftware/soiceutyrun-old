@@ -64,12 +64,12 @@ class NearByShopPerCategoryItemDetailsState
             },
             child: AppIcon(
               Icons.arrow_back,
-              iconColor: GlobalVariables.green,
+              iconColor: GlobalVariables.primaryColor,
             ),
           ),
           title: text(
             'Offer Details',
-              textColor: GlobalVariables.green, fontSize: GlobalVariables.textSizeMedium,
+              textColor: GlobalVariables.primaryColor, fontSize: GlobalVariables.textSizeMedium,
           ),
         ),
         body: getBaseLayout(),
@@ -198,7 +198,7 @@ class NearByShopPerCategoryItemDetailsState
                                                 margin: EdgeInsets.only(top: 8),
                                                 child:AppIcon(Icons.call,
                                                   iconSize: GlobalVariables.textSizeNormal,
-                                                  iconColor: GlobalVariables.green,
+                                                  iconColor: GlobalVariables.primaryColor,
                                                 ),
                                               ),
                                             ),
@@ -361,7 +361,7 @@ class NearByShopPerCategoryItemDetailsState
                                                       decoration: BoxDecoration(
                                                           color:
                                                           GlobalVariables
-                                                              .green,
+                                                              .primaryColor,
                                                           shape: BoxShape
                                                               .circle),
                                                     ),
@@ -439,7 +439,7 @@ class NearByShopPerCategoryItemDetailsState
                                                               height: 8,
                                                               decoration: BoxDecoration(
                                                                   color: GlobalVariables
-                                                                      .green,
+                                                                      .primaryColor,
                                                                   shape: BoxShape
                                                                       .circle),
                                                             ),
@@ -483,7 +483,8 @@ class NearByShopPerCategoryItemDetailsState
               width: width,
               margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
               child: AppButton(
-                textContent: "Get Code",
+                textContent: widget
+                    .nearByShopList.Offer_Code.isNotEmpty ? "Get Code": "Enquiry Now",
                 onPressed: () {
                   showBottomSheet();
                   insertUserInfoOnExclusiveGetCode();
@@ -533,7 +534,7 @@ class NearByShopPerCategoryItemDetailsState
                         text(
                           widget.nearByShopList.Title,
                           fontSize: GlobalVariables.textSizeLargeMedium,
-                          textColor: GlobalVariables.green,
+                          textColor: GlobalVariables.primaryColor,
                           maxLine: 3,
                           fontWeight: FontWeight.w500,
                         ),
@@ -547,7 +548,8 @@ class NearByShopPerCategoryItemDetailsState
                         SizedBox(
                           height: 16,
                         ),
-                        Row(
+                        widget
+                            .nearByShopList.Offer_Code.isNotEmpty ? Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Flexible(
@@ -600,7 +602,7 @@ class NearByShopPerCategoryItemDetailsState
                                 child: text('Copy',textColor: GlobalVariables.skyBlue,fontWeight: FontWeight.w500,fontSize: GlobalVariables.textSizeMedium)
                             )*/
                           ],
-                        ),
+                        ):SizedBox(),
                         SizedBox(
                           height: 16,
                         ),
@@ -610,7 +612,7 @@ class NearByShopPerCategoryItemDetailsState
                               onPressed: () {
                                 launch(widget.nearByShopList.redeem);
                               },
-                              color: GlobalVariables.green,
+                              color: GlobalVariables.primaryColor,
                               child: text('Redeem',
                                   textColor: GlobalVariables.white,
                                   fontSize: GlobalVariables.textSizeSMedium,

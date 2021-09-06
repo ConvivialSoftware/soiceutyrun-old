@@ -72,7 +72,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: AppBar(
-                backgroundColor: GlobalVariables.green,
+                backgroundColor: GlobalVariables.primaryColor,
                 centerTitle: true,
                 leading: InkWell(
                   onTap: () {
@@ -226,7 +226,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                               child: Container(
                                 //  color:GlobalVariables.grey,
                                 child: text(userManagementResponse.mobileUserList[position].NAME,
-                                    textColor:GlobalVariables.green,
+                                    textColor:GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold,
                                     textStyleHeight: 1.0
@@ -382,13 +382,13 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                   height: 30,
                   decoration: BoxDecoration(
                       color: inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)
-                          ? GlobalVariables.green
+                          ? GlobalVariables.primaryColor
                           : GlobalVariables.transparent,
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)
-                            ? GlobalVariables.green
-                            : GlobalVariables.mediumGreen,
+                            ? GlobalVariables.primaryColor
+                            : GlobalVariables.secondaryColor,
                         width: 2.0,
                       )),
                   child: AppIcon(
@@ -408,7 +408,7 @@ class MobileUserState extends BaseStatefulState<BaseMobileUser>
                           alignment: Alignment.topLeft,
                           //  color:GlobalVariables.grey,
                           child: text(userManagementResponse.notMobileUserList[position].NAME,
-                              textColor:GlobalVariables.green,
+                              textColor:GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeMedium,
                               fontWeight: FontWeight.bold,
                               textStyleHeight: 1.0

@@ -65,7 +65,7 @@ class AboutSocietyRunInfoState
         return Builder(
           builder: (context) => Scaffold(
             appBar: AppBar(
-              backgroundColor: GlobalVariables.green,
+              backgroundColor: GlobalVariables.primaryColor,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -160,7 +160,7 @@ class AboutSocietyRunInfoState
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: GlobalVariables.lightGreen,
+                  color: GlobalVariables.AccentColor,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               margin: EdgeInsets.all(20),
               child: CarouselSlider.builder(
@@ -223,7 +223,7 @@ class AboutSocietyRunInfoState
                         child: text(
                             AppLocalizations.of(context)
                                 .translate('develop_by'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold),
                       ),
@@ -252,7 +252,7 @@ class AboutSocietyRunInfoState
                         alignment: Alignment.topLeft,
                         child: text(
                             AppLocalizations.of(context).translate('contact'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold),
                       ),
@@ -335,7 +335,7 @@ class AboutSocietyRunInfoState
                         alignment: Alignment.topLeft,
                         child: text(
                             AppLocalizations.of(context).translate('_email'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold),
                       ),
@@ -411,7 +411,7 @@ class AboutSocietyRunInfoState
                         child: text(
                             AppLocalizations.of(context)
                                 .translate('office_address'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold),
                       ),
@@ -488,7 +488,7 @@ class AboutSocietyRunInfoState
                         child: text(
                             AppLocalizations.of(context)
                                 .translate('version_code'),
-                            textColor: GlobalVariables.green,
+                            textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             fontWeight: FontWeight.bold),
                       ),
