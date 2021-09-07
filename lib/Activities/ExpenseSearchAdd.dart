@@ -770,7 +770,7 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
                 ? null
                 : _selectedLedgerAccount
                 .name,ledgerYear: _yearSelectedItem,)*/
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseExpense(startDate : null,endDate:null,ledgerHeads:value.headWiseExpenseList[position].id,ledgerYear:null)));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseExpense(startDate : isFiltered? _startDateController.text : null,endDate : isFiltered ? _endDateController.text : null,ledgerHeads:value.headWiseExpenseList[position].id,ledgerYear:null)));
         },
         child: AppContainer(
           isListItem: true,
@@ -819,8 +819,8 @@ class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd>
         _totalSumUp += int.parse(value[j].amount==null ? '0' : value[j].amount);
       }
       if(isFiltered) {
-        _startDateController.text = '';
-        _endDateController.text = '';
+       // _startDateController.text = '';
+        //_endDateController.text = '';
       }
       setState(() {});
     });

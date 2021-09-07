@@ -114,7 +114,8 @@ class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
                 loginDashBoardResponse.referBannerList.length > 0
                     ? InkWell(
                   onTap: () {
-
+                    GlobalFunctions.redirectBannerClick(context,loginDashBoardResponse
+                        .referBannerList[itemIndex].Url);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

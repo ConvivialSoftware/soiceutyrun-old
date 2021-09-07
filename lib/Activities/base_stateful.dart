@@ -52,7 +52,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
       GlobalVariables.isNewlyArrivedNotification.toString());*/
   print("myBackgroundMessageHandler onMessage >>>> $message");
-  //GlobalFunctions.setNotificationBackGroundData(message.toString());
+  GlobalFunctions.setNotificationBackGroundData(message.toString());
   Map data;
   if (Platform.isIOS) {
     data = message;
@@ -316,7 +316,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
     //SystemAlertOverlayWindow.showOverLayWindow(_isShowingWindow,prefMode);
     print('_showNotification context : ' + _ctx.toString());
-    //GlobalFunctions.setNotificationBackGroundData(message.toString());
+    GlobalFunctions.setNotificationBackGroundData(message.toString());
     // bool isNewlyArrivedNotification =
     //await GlobalFunctions.getIsNewlyArrivedNotification();
     //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
@@ -340,7 +340,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       String uuid = Uuid().v1();
       String payloadSData = data["society"];
       Map society;
-      society = society = json.decode(payloadSData.toString());
+      society = json.decode(payloadSData.toString());
       society["isBackGround"] = shouldRedirect;
       society["msgID"] = uuid;
       // Map<String, dynamic> temp = jsonDecode(society.toString());

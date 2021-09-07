@@ -94,7 +94,6 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     });
     if(widget.isAdmin){
       if(widget.receiptData!=null) {
-        getAmountCalculationData();
         print('PAYMENT_DATE : ' + widget.receiptData.PAYMENT_DATE);
         _dateController.text = GlobalFunctions.convertDateFormat(
             widget.receiptData.PAYMENT_DATE, "dd-MM-yyyy");
@@ -145,6 +144,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
+    print('call build');
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
@@ -513,12 +513,15 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     _progressDialog.show();
     restClientERP.getBankData(societyId,widget.invoiceNo).then((value) {
       print('Response : ' + value.toString());
+      _progressDialog.hide();
       List<dynamic> _list = value.bank;
 
       _bankList = List<Bank>.from(_list.map((i)=>Bank.fromJson(i)));
 
       //_categorySelectedItem = __categoryListItems[0].value;
-      _progressDialog.hide();
+      if(widget.receiptData!=null) {
+        getAmountCalculationData();
+      }
       for(int i=0;i<_bankList.length;i++){
         __bankListItems.add(DropdownMenuItem(
           value: _bankList[i].BANK_NAME,
@@ -548,11 +551,11 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+   // _progressDialog.show();
     restClientERP.amountCalculation(societyId,widget.invoiceNo,widget.amount.toString()).then((value) {
       //print('Response : ' + value.toString());
-
-      //print('bsnk list lenght : '+_bankList.length.toString());
+     // _progressDialog.hide();
+      print('bsnk list lenght : '+value.toString());
       _amountController.text = (value.AMOUNT-value.PENALTY).toString();
       _penaltyAmountController.text = value.PENALTY.toString();
       setState(() {

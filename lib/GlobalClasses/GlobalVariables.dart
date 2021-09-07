@@ -53,7 +53,7 @@ class GlobalVariables {
   static var keySMSCredit = "SMS_CREDIT";
   static var keyLastLogin = "LAST_LOGIN";
   static var keySocietyContact = "Contact";
-  //static var keyNotificationBackGroundData = "NotificationBackGroundData";
+  static var keyNotificationBackGroundData = "NotificationBackGroundData";
 
   //static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";

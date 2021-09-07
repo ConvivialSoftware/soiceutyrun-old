@@ -397,7 +397,7 @@ class GlobalFunctions {
     return "";
   }
 
-  /*static Future<void> setNotificationBackGroundData(
+  static Future<void> setNotificationBackGroundData(
       String notificationBackGroundData) async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(
@@ -412,7 +412,7 @@ class GlobalFunctions {
       return sharedPreferences.getString(GlobalVariables.keyNotificationBackGroundData);
     }
     return "";
-  }*/
+  }
 
   static getAppLanguage() async {
     AppLanguage appLanguage = AppLanguage();

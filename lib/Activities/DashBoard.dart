@@ -913,7 +913,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       loginDashBoardResponse.bannerList.length > 0
                           ? InkWell(
                               onTap: () {
-                                Navigator.push(
+                               /* Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => BaseWebViewScreen(
@@ -933,7 +933,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     (value) {
                                   GlobalFunctions.setBaseContext(
                                       dashboardScaffoldKey.currentContext);
-                                });
+                                });*/
+
+                                GlobalFunctions.redirectBannerClick(dashboardScaffoldKey.currentContext,loginDashBoardResponse
+                                    .bannerList[itemIndex].Url);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,

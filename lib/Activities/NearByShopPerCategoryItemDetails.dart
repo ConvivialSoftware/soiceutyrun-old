@@ -486,8 +486,13 @@ class NearByShopPerCategoryItemDetailsState
                 textContent: widget
                     .nearByShopList.Offer_Code.isNotEmpty ? "Get Code": "Enquiry Now",
                 onPressed: () {
-                  showBottomSheet();
                   insertUserInfoOnExclusiveGetCode();
+                 if( widget
+                      .nearByShopList.Offer_Code.isNotEmpty){
+                   showBottomSheet() ;
+                 }else{
+                   launch(widget.nearByShopList.redeem);
+                 }
                 },
                 textColor: GlobalVariables.white,
               ),
