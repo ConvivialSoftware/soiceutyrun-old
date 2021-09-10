@@ -253,7 +253,7 @@ class GlobalVariables {
   static const deleteVehicleAPI = "Vehicle/delete";
   static const deleteFamilyMemberAPI = "Members/delete";
   static const broadcastEmailAPI = "Broadcast/send_email";
-  static const broadcastNotificationAPI = "Broadcast/send_notification_demo";
+  static const broadcastNotificationAPI = "Broadcast/send_notification";
   static const flatNoAPI = "Broadcast/Flatno";
   static const broadcastSMSAPI = "Broadcast/send_sms";
   static const userManagementDashboardAPI = "Dashboard";
@@ -278,6 +278,7 @@ class GlobalVariables {
   static const paymentChargesAPI = "Api/paymentCharges";
   static const referAPI = "Api/refer";
   static const maintenanceStaffRoleAPI = "Gatepassapp/role";
+  static const staffDeleteAPI = "staff/staff_delete";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -537,6 +538,7 @@ class GlobalVariables {
   static const commitee_member = "commitee_member";
   static const society_member = "society_member";
   static const emergency = "emergency";
+  static const Role = "Role";
 }
 
 class BannerType{

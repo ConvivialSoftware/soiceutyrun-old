@@ -606,7 +606,7 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                   MaterialPageRoute(
                                       builder: (context) => BaseMyGate(
                                           AppLocalizations.of(context).translate('helpers'),
-                                          null,)));
+                                          null,type: 'Helper',isAdmin: true,)));
                             }
                           },
                           child: Container(
@@ -667,7 +667,7 @@ class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
                                   MaterialPageRoute(
                                       builder: (context) => BaseMyGate(
                                           AppLocalizations.of(context).translate('helpers'),
-                                          null,)));
+                                          null,type: "Maintenance Staff",isAdmin: true,)));
                             }
                           },
                           child: Container(

@@ -1091,7 +1091,10 @@ class MyComplexState extends BaseStatefulState<BaseMyComplex>
           GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
               context, 150.0),
           value.isLoading
-              ? Center(child: GlobalFunctions.loadingWidget(context))
+              ? Container(
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
+              child: GlobalFunctions.loadingWidget(context)
+          )
               : getDirectoryListDataLayout(value),
         ],
       ),

@@ -37,47 +37,12 @@ callbackNotificationDispatcher() {
       case Workmanager.iOSBackgroundTask:
         {
           print('iOSBackgroundTask');
-          GlobalFunctions.getSharedPreferenceDuesData().then((map) {
-            Map<String, String> _duesMap = map;
-            //duesRs = _duesMap[GlobalVariables.keyDuesRs];
-            String duesDate = _duesMap[GlobalVariables.keyDuesDate];
-
-            final DateTime now = DateTime.now();
-            final DateFormat formatter = DateFormat('yyyy-MM-dd');
-            final String fromDate = formatter.format(now);
-            final toDateTine = DateTime.parse(duesDate);
-            final String toDate = formatter.format(toDateTine);
-
-            int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
-            print('days : ' + days.toString());
-
-            if (days == 0 || days == -1 || days == -2) {
-              showLocalNotification();
-            }
-          });
+          showLocalNotification();
         }
         break;
       case GlobalVariables.fetchNotificationBackground:
         print(GlobalVariables.fetchNotificationBackground);
-        GlobalFunctions.getSharedPreferenceDuesData().then((map) {
-          Map<String, String> _duesMap = map;
-          //duesRs = _duesMap[GlobalVariables.keyDuesRs];
-          String duesDate = _duesMap[GlobalVariables.keyDuesDate];
-
-          final DateTime now = DateTime.now();
-          final DateFormat formatter = DateFormat('yyyy-MM-dd');
-          final String fromDate = formatter.format(now);
-          final toDateTine = DateTime.parse(duesDate);
-          final String toDate = formatter.format(toDateTine);
-
-          int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
-          print('days : ' + days.toString());
-
-          if (days == 0 || days == -1 || days == -2) {
-            print('dues condition true');
-            showLocalNotification();
-          }
-        });
+        showLocalNotification();
         break;
     }
     return Future.value(true);
@@ -139,17 +104,50 @@ Future<void> showLocalNotification() async {
   var dateTime = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 00, 0);
 
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Bill Remainder',
-    'Maintenance Bill',
-    tz.TZDateTime.from(dateTime, tz.local),
-    platformChannelSpecifics,
-    androidAllowWhileIdle: true,
-    uiLocalNotificationDateInterpretation:
+  GlobalFunctions.getSharedPreferenceDuesData().then((map) async {
+    Map<String, String> _duesMap = map;
+    //duesRs = _duesMap[GlobalVariables.keyDuesRs];
+    String duesDate = _duesMap[GlobalVariables.keyDuesDate];
+    String dues = _duesMap[GlobalVariables.keyDuesRs];
+    String societyName = await GlobalFunctions.getSocietyName();
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String fromDate = formatter.format(now);
+    final toDateTine = DateTime.parse(duesDate);
+    final String toDate = formatter.format(toDateTine);
+
+    int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
+    print('days : ' + days.toString());
+
+    if (days == 0 || days == -1 || days == -2) {
+
+      String day ;
+      if(days==0){
+        day = 'Today';
+      }else if(days==-1){
+        day = days.abs().toString()+' Day';
+      }else if(days==-2){
+        day = days.abs().toString()+' Days';
+      }
+
+      print('dues condition true');
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        societyName +' '+GlobalFunctions.getCurrencyFormat(dues),
+        'Due in '+day,
+        tz.TZDateTime.from(dateTime, tz.local),
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
-    matchDateTimeComponents: DateTimeComponents.time,
-  );
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }else{
+      flutterLocalNotificationsPlugin.cancel(0);
+    }
+  });
+
 }
 
 class BaseAppStart extends StatelessWidget {

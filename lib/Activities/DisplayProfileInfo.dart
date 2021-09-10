@@ -464,12 +464,12 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          secondaryText(_profileList[0].ALTERNATE_CONTACT1.isEmpty? _profileList[0].Phone:_profileList[0].ALTERNATE_CONTACT1),
+                          secondaryText(_profileList[0].Phone),
                         ],
                       ),
                       Divider(),
-                      _profileList[0].ALTERNATE_CONTACT2.isNotEmpty? SizedBox(height: 16):SizedBox(),
-                      _profileList[0].ALTERNATE_CONTACT2.isNotEmpty?Row(
+                      _profileList[0].ALTERNATE_CONTACT1.isNotEmpty? SizedBox(height: 16):SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1.isNotEmpty?Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -480,10 +480,10 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          secondaryText(_profileList[0].ALTERNATE_CONTACT2??''),
+                          secondaryText(_profileList[0].ALTERNATE_CONTACT1??''),
                         ],
                       ):SizedBox(),
-                      _profileList[0].ALTERNATE_CONTACT2.isNotEmpty?Divider():SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1.isNotEmpty?Divider():SizedBox(),
                       SizedBox(height: 8),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

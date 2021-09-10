@@ -19,9 +19,10 @@ import 'base_stateful.dart';
 class BaseStaffCategory extends StatefulWidget {
 
   bool isHideAppBar=false;
+  String type;
 
 
-  BaseStaffCategory(this.isHideAppBar);
+  BaseStaffCategory(this.isHideAppBar,this.type);
 
   @override
   State<StatefulWidget> createState() {
@@ -115,7 +116,7 @@ class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseStaffListPerCategory(_staffListCount[position].ROLE)));
+                    BaseStaffListPerCategory(_staffListCount[position].ROLE,widget.type,)));
       },
       child: AppContainer(
         isListItem: true,

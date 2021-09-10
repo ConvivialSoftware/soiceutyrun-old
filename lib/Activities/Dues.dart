@@ -396,154 +396,36 @@ class _BaseDuesState extends BaseStatefulState<BaseDues> {
                             ),
                           ),
                         ),
-                        !widget.isAdmin ? InkWell(
-                          onTap: () {
-/*
-
-                            if (value.payOptionList.length > 0) {
-                              print(value.payOptionList[0].KEY_ID.toString());
-
-                              if (value.payOptionList[0].KEY_ID != null &&
-                                  value.payOptionList[0].KEY_ID.length > 0 &&
-                                  value.payOptionList[0].SECRET_KEY != null &&
-                                  value.payOptionList[0].SECRET_KEY.length > 0) {
-                                hasRazorPayGateway = true;
-                              }
-                              if (value.payOptionList[0].PAYTM_URL != null &&
-                                  value.payOptionList[0].PAYTM_URL.length > 0) {
-                                hasPayTMGateway = true;
-                              }
-                              print('hasPayTMGateway' + hasPayTMGateway.toString());
-                              print(
-                                  'hasRazorPayGateway' + hasRazorPayGateway.toString());
-                            }*/
-
-                          /*  print(
-                                'hasPayTMGateway' + hasPayTMGateway.toString());
-                            print('hasRazorPayGateway' +
-                                hasRazorPayGateway.toString());
-                            _amountTextController.text = double.parse(
-                                (value.billList[position].AMOUNT -
-                                    value.billList[position].RECEIVED)
-                                    .toString())
-                                .toStringAsFixed(2);
-                            amount = _amountTextController.text;
-                            if (value.billList[position].AMOUNT -
-                                value.billList[position].RECEIVED >
-                                0) {
-                              if (hasPayTMGateway && hasRazorPayGateway) {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        StatefulBuilder(builder:
-                                            (BuildContext context,
-                                            StateSetter setState) {
-                                          return Dialog(
-                                            *//*shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        25.0)),*//*
-                                            backgroundColor: Colors.transparent,
-                                            elevation: 0.0,
-                                            child: getListOfPaymentGateway(
-                                                context,
-                                                setState,
-                                                position,
-                                                value),
-                                          );
-                                        }));
-                              } else {
-                                if (value.payOptionList[0].Status) {
-                                  if (hasRazorPayGateway) {
-                                    _selectedPaymentGateway = 'RazorPay';
-                                    //redirectToPaymentGateway(position);
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            StatefulBuilder(builder:
-                                                (BuildContext context,
-                                                StateSetter setState) {
-                                              return Dialog(
-                                                *//*shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0)),*//*
-                                                backgroundColor:
-                                                Colors.transparent,
-                                                elevation: 0.0,
-                                                child: getListOfPaymentGateway(
-                                                    context,
-                                                    setState,
-                                                    position,
-                                                    value),
-                                              );
-                                            }));
-                                  } else if (hasPayTMGateway) {
-                                    //Paytm Payment method execute
-
-                                    _selectedPaymentGateway = 'PayTM';
-                                    print('_selectedPaymentGateway' +
-                                        _selectedPaymentGateway);
-
-                                    //redirectToPaymentGateway(position);
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            StatefulBuilder(builder:
-                                                (BuildContext context,
-                                                StateSetter setState) {
-                                              return Dialog(
-                                                *//*shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0)),*//*
-                                                backgroundColor:
-                                                Colors.transparent,
-                                                elevation: 0.0,
-                                                child: getListOfPaymentGateway(
-                                                    context,
-                                                    setState,
-                                                    position,
-                                                    value),
-                                              );
-                                            }));
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        "Online Payment Option is not available.");
-                                  }
-                                } else {
-                                  GlobalFunctions.showToast(
-                                      "Online Payment Option is not available.");
-                                }
-                              }
-                            } else {
-                              alreadyPaidDialog(position, value);
-                            }*/
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseDuesBillPayment(value.billList[position])));
-                          },
-                          child: Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: AppIcon(
-                                    Icons.payment,
-                                    iconColor: GlobalVariables.secondaryColor,
+                        Visibility(
+                          visible: !widget.isAdmin ,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseDuesBillPayment(value.billList[position])));
+                            },
+                            child: Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: AppIcon(
+                                      Icons.payment,
+                                      iconColor: GlobalVariables.secondaryColor,
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('pay_now'),
-                                    fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.grey,
-                                  ),
-                                )
-                              ],
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: text(
+                                      AppLocalizations.of(context)
+                                          .translate('pay_now'),
+                                      fontSize: GlobalVariables.textSizeSmall,
+                                      textColor: GlobalVariables.grey,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ):SizedBox(),
+                        ),
                         InkWell(
                           onTap: () {
                             emailBillDialog(context, position, value);

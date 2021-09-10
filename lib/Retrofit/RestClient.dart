@@ -222,7 +222,7 @@ abstract class RestClient {
       @Field("USER_ID") String userId,
       @Field("SOCIETY_ID") String societyId,
       @Field("NAME") String visitorName,
-      @Field("MOBILE") String MOBILE,
+      @Field("PHONE") String MOBILE,
       @Field("EMAIL") String EMAIL,
       @Field("VEHICLE_NO") String visitorVehicleNo,
       @Field("GENDER") String gender,
@@ -286,7 +286,7 @@ abstract class RestClient {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.staffRoleDetailsAPI)
-  Future<DataResponse> staffRoleDetails(@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.ROLE) String role);
+  Future<DataResponse> staffRoleDetails(@Field(GlobalVariables.societyId) String societyId,@Field(GlobalVariables.ROLE) String role,@Field(GlobalVariables.Type) String type);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addStaffRattingAPI)
@@ -637,7 +637,13 @@ abstract class RestClient {
       @Field("Phone")String loggedPone,
       );
 
-
+  @FormUrlEncoded()
+  @POST(GlobalVariables.staffDeleteAPI)
+  Future<StatusMsgResponse> staffDelete(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.id) String id,
+      @Field(GlobalVariables.Type) String type,
+      );
 }
 
 

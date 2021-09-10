@@ -95,7 +95,7 @@ class GatePass extends ChangeNotifier{
 
   }
 
-  Future<dynamic> getStaffRoleDetailsData(String roleName) async {
+  Future<dynamic> getStaffRoleDetailsData(String roleName, String type) async {
 
     if(staffList.length==0){
       isLoading=true;
@@ -104,13 +104,25 @@ class GatePass extends ChangeNotifier{
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-   await  restClient.staffRoleDetails(societyId, roleName).then((value) {
+   await  restClient.staffRoleDetails(societyId, roleName,type).then((value) {
 
       List<dynamic> _list = value.data;
       staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
       isLoading=false;
       notifyListeners();
     });
+
+  }
+
+  Future<StatusMsgResponse> getStaffDelete(String id,String staffType) async {
+
+    final dio = Dio();
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    var result = await restClient.staffDelete(societyId,id,staffType);
+
+    return result;
 
   }
 

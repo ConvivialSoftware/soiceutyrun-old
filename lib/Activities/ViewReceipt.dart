@@ -421,7 +421,7 @@ class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
 
                                               List<String> arr = _receiptList[0].FLAT_NO.split(" ");
 
-                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseAlreadyPaid(_receiptList[0].INVOICE_NO, _receiptList[0].AMOUNT.toDouble(), arr[0].trim(), arr[1].trim(),0,receiptData: _receiptList[0],isAdmin: true,)));
+                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseAlreadyPaid(_receiptList[0].INVOICE_NO, _receiptList[0].AMOUNT.toDouble(), arr[0].trim(), arr[1].trim(),int.parse(_receiptList[0].PENALTY_AMOUNT),receiptData: _receiptList[0],isAdmin: true,)));
 
 
                                             }),

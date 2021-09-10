@@ -556,7 +556,7 @@ class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
       //print('Response : ' + value.toString());
      // _progressDialog.hide();
       print('bsnk list lenght : '+value.toString());
-      _amountController.text = (value.AMOUNT-value.PENALTY).toString();
+      _amountController.text = (value.AMOUNT).toString();
       _penaltyAmountController.text = value.PENALTY.toString();
       setState(() {
       });

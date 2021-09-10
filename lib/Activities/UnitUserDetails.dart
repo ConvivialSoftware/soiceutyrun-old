@@ -7,6 +7,7 @@ import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AddAgreement.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
 import 'package:societyrun/Activities/AddNewMemberByAdmin.dart';
+import 'package:societyrun/Activities/AddStaffMember.dart';
 import 'package:societyrun/Activities/AddVehicle.dart';
 import 'package:societyrun/Activities/AppNotificationSettings.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
@@ -851,7 +852,7 @@ class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BaseStaffCategory(false)));
+                          builder: (context) => BaseAddStaffMember()));
                 },
                 child: smallTextContainerOutlineLayout(AppLocalizations.of(context).translate('add'),),
               ),

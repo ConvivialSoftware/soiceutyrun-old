@@ -486,5 +486,7 @@
   "add_visibility": "Show this ad to my society members only",
   "staff_statistics": "Staff Statistics",
   "staff": "Staff",
-  "maintenance_staff": "Maintenance Staff"
+  "maintenance_staff": "Maintenance Staff",
+  "tenant_add_status": "Your tenant request has been sent successfully",
+  "tenant_add_status_desc": "You will get a NOC once request is approved."
 }

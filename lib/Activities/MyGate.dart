@@ -29,8 +29,10 @@ import 'package:intl/intl.dart';
 class BaseMyGate extends StatefulWidget {
   String pageName;
   String _VID;
+  String type;
+  bool isAdmin;
 
-  BaseMyGate(this.pageName, this._VID);
+  BaseMyGate(this.pageName, this._VID,{this.type="Helper",this.isAdmin=false});
 
   @override
   State<StatefulWidget> createState() {
@@ -245,7 +247,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
               context,
               MaterialPageRoute(
                   builder: (context) => BaseStaffListPerCategory(
-                      value.staffListCount[position].ROLE)));
+                      value.staffListCount[position].ROLE,widget.type,isAdmin: widget.isAdmin,)));
         },
         child: AppContainer(
           isListItem: true,
@@ -1950,7 +1952,7 @@ class MyGateState extends BaseStatefulState<BaseMyGate>
                 if (!isHelperAPICall) {
                   //getStaffRoleDetailsData();
                   Provider.of<GatePass>(context, listen: false)
-                      .getStaffCountData('Helper')
+                      .getStaffCountData(widget.type)
                       .then((value) {});
                 }
               }

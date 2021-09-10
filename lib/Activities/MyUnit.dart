@@ -376,7 +376,7 @@ class MyUnitState extends BaseStatefulState<BaseMyUnit>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BaseStaffCategory(false)));
+                          builder: (context) => BaseStaffCategory(false,"Staff")));
                 },
                 child: smallTextContainerOutlineLayout(
                   AppLocalizations.of(context).translate('add'),

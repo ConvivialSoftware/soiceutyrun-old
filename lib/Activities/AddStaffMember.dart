@@ -1008,7 +1008,7 @@ class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
     _progressDialog.show();
     restClient.staffCount(societyId,staffType).then((value) {
       _progressDialog.hide();
-      List<dynamic> _list = value.data;
+      List<dynamic> _list = value.Role;
       _roleTypeList = new List<StaffCount>();
       __roleTypeListItems = new List<DropdownMenuItem<String>>();
       _roleTypeList = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));

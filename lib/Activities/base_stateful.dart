@@ -52,8 +52,12 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
       GlobalVariables.isNewlyArrivedNotification.toString());*/
   print("myBackgroundMessageHandler onMessage >>>> $message");
-  GlobalFunctions.setNotificationBackGroundData(message.toString());
   Map data;
+  /*Map notification;
+  notification = message["notification"];
+  notification["click_action"]="FLUTTER_NOTIFICATION_CLICK";*/
+  GlobalFunctions.setNotificationBackGroundData(message.toString());
+  print("After myBackgroundMessageHandler onMessage >>>> $message");
   if (Platform.isIOS) {
     data = message;
   } else {
@@ -234,12 +238,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         print("onLaunch >>>> $message");
         GlobalVariables.isNewlyArrivedNotification = true;
         //GlobalFunctions.setIsNewlyArrivedNotification(true);
+        //GlobalFunctions.showToast("onLaunch");
         _showNotification(message, true);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume >>>> $message");
         GlobalVariables.isNewlyArrivedNotification = true;
         //GlobalFunctions.setIsNewlyArrivedNotification(true);
+        //GlobalFunctions.showToast("OnResume");
         _showNotification(message, true);
       },
     );
@@ -282,6 +288,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         if (gatePassPayload.isBackGround) {
           GlobalVariables.isAlreadyTapped = false;
         }
+      }else{
+        if (gatePassPayload.isBackGround) {
+          GlobalVariables.isAlreadyTapped = false;
+        }
       }
       if (!GlobalVariables.isAlreadyTapped) {
         print('IF selectNotification isAlreadyTapped : ' +
@@ -316,7 +326,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
     //SystemAlertOverlayWindow.showOverLayWindow(_isShowingWindow,prefMode);
     print('_showNotification context : ' + _ctx.toString());
-    GlobalFunctions.setNotificationBackGroundData(message.toString());
     // bool isNewlyArrivedNotification =
     //await GlobalFunctions.getIsNewlyArrivedNotification();
     //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
@@ -329,8 +338,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     print('isDailyEntryNotification : ' + isDailyEntryNotification.toString());
     print('isGuestEntryNotification : ' + isGuestEntryNotification.toString());
     print('isInAppCallyNotification : ' + isInAppCallNotification.toString());
+    print("After _showNotification onMessage >>>> $message");
     GatePassPayload gatePassPayload;
     Map data;
+    /*Map notification;
+    notification = message["notification"];
+    notification["click_action"]="FLUTTER_NOTIFICATION_CLICK";*/
+    GlobalFunctions.setNotificationBackGroundData(message.toString());
+    print("After _showNotification onMessage >>>> $message");
     if (Platform.isIOS) {
       data = message;
     } else {
@@ -352,123 +367,98 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           gatePassPayload.isBackGround.toString());
 
       if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
-        DBNotificationPayload _dbNotificationPayload =
-            DBNotificationPayload.fromJson(society);
-        _dbNotificationPayload.nid = uuid;
-        SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
-      }
-      if (GlobalVariables.isNewlyArrivedNotification) {
-        GlobalVariables.isNewlyArrivedNotification = false;
-        //GlobalFunctions.setIsNewlyArrivedNotification(false);
-        if (gatePassPayload.isBackGround) {
-          GlobalVariables.isAlreadyTapped = false;
+        if(GlobalVariables.isNewlyArrivedNotification) {
+          GlobalVariables.isNewlyArrivedNotification = false;
+          DBNotificationPayload _dbNotificationPayload =
+          DBNotificationPayload.fromJson(society);
+          _dbNotificationPayload.nid = uuid;
+          SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
         }
-        try {
-          if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
-              gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-            if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
-              print('_showNotification isAlreadyTapped : ' +
-                  GlobalVariables.isAlreadyTapped.toString());
-              if ((gatePassPayload.vSITORTYPE ==
-                      GlobalVariables.GatePass_Taxi ||
-                  gatePassPayload.vSITORTYPE ==
-                      GlobalVariables.GatePass_Delivery)) {
-                if(isInAppCallNotification) {
-                  _fcm.showAlert(_ctx, gatePassPayload);
-                }
-              } else {
-                if (isGuestEntryNotification) {
-                  if(isInAppCallNotification) {
+      }
+      if(!gatePassPayload.isBackGround) {
+      //  if (GlobalVariables.isNewlyArrivedNotification) {
+         // GlobalVariables.isNewlyArrivedNotification = false;
+          //GlobalFunctions.setIsNewlyArrivedNotification(false);
+          try {
+            if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
+                gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+              if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+                print('_showNotification isAlreadyTapped : ' +
+                    GlobalVariables.isAlreadyTapped.toString());
+                if ((gatePassPayload.vSITORTYPE ==
+                    GlobalVariables.GatePass_Taxi ||
+                    gatePassPayload.vSITORTYPE ==
+                        GlobalVariables.GatePass_Delivery)) {
+                  if (isInAppCallNotification) {
                     _fcm.showAlert(_ctx, gatePassPayload);
+                  }
+                } else {
+                  if (isGuestEntryNotification) {
+                    if (isInAppCallNotification) {
+                      _fcm.showAlert(_ctx, gatePassPayload);
+                    }
                   }
                 }
               }
-            }
-          } else {
-            if (shouldRedirect) {
-              GlobalVariables.isAlreadyTapped = false;
-              // navigate(gatePassPayload,_ctx);
-            }
-            if (gatePassPayload.tYPE == NotificationTypes.TYPE_SInApp) {
-              print('before : ' +
-                  FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
-              if (FirebaseMessagingHandler.isInAppCallDialogOpen) {
-                Navigator.of(context).pop();
-              }
-              print('after : ' +
-                  FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
-            }
-          }
-        } catch (e) {
-          print(e);
-        }
-        if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
-          var androidPlatformChannelSpecifics;
-          if ((gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR || gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) && !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
-            print('if showGuestNotification');
-            if (!isInAppCallNotification) {
-              print('false isInAppCallNotification');
-              androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                androidChannelIdOther,
-                androidChannelName,
-                androidChannelDesc,
-                importance: Importance.max,
-                priority: Priority.high,
-                ticker: 'ticker',
-                enableLights: true,
-                color: Colors.green,
-                ledColor: const Color.fromARGB(255, 255, 0, 0),
-                ledOnMs: 1000,
-                ledOffMs: 500,
-                playSound: true,
-              );
-              var iOSPlatformChannelSpecifics =
-              IOSNotificationDetails(sound: "alert.caf");
-              var platformChannelSpecifics = NotificationDetails(
-                  android:androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
-
-              try {
-                flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
-                    gatePassPayload.body, platformChannelSpecifics,
-                    payload: /*data["society"]*/ json.encode(society));
-              } catch (e) {
-                print(e);
-              }
-            }
-            else if ((gatePassPayload.vSITORTYPE == GlobalVariables.GatePass_Taxi ||
-                gatePassPayload.vSITORTYPE ==
-                    GlobalVariables.GatePass_Delivery)) {
-              androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                androidChannelIdVisitor,
-                androidChannelName,
-                androidChannelDesc,
-                importance: Importance.max,
-                priority: Priority.high,
-                ticker: 'ticker',
-                enableLights: true,
-                color: Colors.green,
-                ledColor: const Color.fromARGB(255, 255, 0, 0),
-                ledOnMs: 1000,
-                ledOffMs: 500,
-                playSound: true,
-                sound: RawResourceAndroidNotificationSound("alert"),
-              );
-              var iOSPlatformChannelSpecifics =
-                  IOSNotificationDetails(sound: "alert.caf");
-              var platformChannelSpecifics = NotificationDetails(
-                  android:androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
-
-              try {
-                flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
-                    gatePassPayload.body, platformChannelSpecifics,
-                    payload: /*data["society"]*/ json.encode(society));
-              } catch (e) {
-                print(e);
-              }
             } else {
-              print('else showGuestNotification');
-              if (isGuestEntryNotification) {
-                print('else showGuestNotification');
+              if (shouldRedirect) {
+                GlobalVariables.isAlreadyTapped = false;
+                // navigate(gatePassPayload,_ctx);
+              }
+              if (gatePassPayload.tYPE == NotificationTypes.TYPE_SInApp) {
+                print('before : ' +
+                    FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
+                if (FirebaseMessagingHandler.isInAppCallDialogOpen) {
+                  Navigator.of(context).pop();
+                }
+                print('after : ' +
+                    FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
+              }
+            }
+          } catch (e) {
+            print(e);
+          }
+          if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
+            var androidPlatformChannelSpecifics;
+            if ((gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
+                gatePassPayload.tYPE ==
+                    NotificationTypes.TYPE_VISITOR_VERIFY) &&
+                !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+              print('if showGuestNotification');
+              if (!isInAppCallNotification) {
+                print('false isInAppCallNotification');
+                androidPlatformChannelSpecifics = AndroidNotificationDetails(
+                  androidChannelIdOther,
+                  androidChannelName,
+                  androidChannelDesc,
+                  importance: Importance.max,
+                  priority: Priority.high,
+                  ticker: 'ticker',
+                  enableLights: true,
+                  color: Colors.green,
+                  ledColor: const Color.fromARGB(255, 255, 0, 0),
+                  ledOnMs: 1000,
+                  ledOffMs: 500,
+                  playSound: true,
+                );
+                var iOSPlatformChannelSpecifics =
+                IOSNotificationDetails(sound: "alert.caf");
+                var platformChannelSpecifics = NotificationDetails(
+                    android: androidPlatformChannelSpecifics,
+                    iOS: iOSPlatformChannelSpecifics);
+
+                try {
+                  flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                      gatePassPayload.body, platformChannelSpecifics,
+                      payload: /*data["society"]*/ json.encode(society));
+                } catch (e) {
+                  print(e);
+                }
+              }
+              else if ((gatePassPayload.vSITORTYPE ==
+                  GlobalVariables.GatePass_Taxi ||
+                  gatePassPayload.vSITORTYPE ==
+                      GlobalVariables.GatePass_Delivery)) {
                 androidPlatformChannelSpecifics = AndroidNotificationDetails(
                   androidChannelIdVisitor,
                   androidChannelName,
@@ -484,57 +474,97 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                   playSound: true,
                   sound: RawResourceAndroidNotificationSound("alert"),
                 );
-                print('else showGuestNotification Alert');
                 var iOSPlatformChannelSpecifics =
-                    IOSNotificationDetails(sound: "alert.caf");
+                IOSNotificationDetails(sound: "alert.caf");
                 var platformChannelSpecifics = NotificationDetails(
-                    android:androidPlatformChannelSpecifics,
-                    iOS:iOSPlatformChannelSpecifics);
+                    android: androidPlatformChannelSpecifics,
+                    iOS: iOSPlatformChannelSpecifics);
 
                 try {
-                  print('else showGuestNotification TRY');
                   flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
                       gatePassPayload.body, platformChannelSpecifics,
                       payload: /*data["society"]*/ json.encode(society));
                 } catch (e) {
-                  print('else showGuestNotification CATCH');
+                  print(e);
+                }
+              } else {
+                print('else showGuestNotification');
+                if (isGuestEntryNotification) {
+                  print('else showGuestNotification');
+                  androidPlatformChannelSpecifics = AndroidNotificationDetails(
+                    androidChannelIdVisitor,
+                    androidChannelName,
+                    androidChannelDesc,
+                    importance: Importance.max,
+                    priority: Priority.high,
+                    ticker: 'ticker',
+                    enableLights: true,
+                    color: Colors.green,
+                    ledColor: const Color.fromARGB(255, 255, 0, 0),
+                    ledOnMs: 1000,
+                    ledOffMs: 500,
+                    playSound: true,
+                    sound: RawResourceAndroidNotificationSound("alert"),
+                  );
+                  print('else showGuestNotification Alert');
+                  var iOSPlatformChannelSpecifics =
+                  IOSNotificationDetails(sound: "alert.caf");
+                  var platformChannelSpecifics = NotificationDetails(
+                      android: androidPlatformChannelSpecifics,
+                      iOS: iOSPlatformChannelSpecifics);
+
+                  try {
+                    print('else showGuestNotification TRY');
+                    flutterLocalNotificationsPlugin.show(
+                        1, gatePassPayload.title,
+                        gatePassPayload.body, platformChannelSpecifics,
+                        payload: /*data["society"]*/ json.encode(society));
+                  } catch (e) {
+                    print('else showGuestNotification CATCH');
+                    print(e);
+                  }
+                }
+              }
+            }
+            else {
+              if (isDailyEntryNotification) {
+                print('if showDailyNotification');
+                androidPlatformChannelSpecifics = AndroidNotificationDetails(
+                  androidChannelIdOther,
+                  androidChannelName,
+                  androidChannelDesc,
+                  importance: Importance.max,
+                  priority: Priority.high,
+                  ticker: 'ticker',
+                  enableLights: true,
+                  color: Colors.green,
+                  ledColor: const Color.fromARGB(255, 255, 0, 0),
+                  ledOnMs: 1000,
+                  ledOffMs: 500,
+                  playSound: true,
+                );
+                var iOSPlatformChannelSpecifics =
+                IOSNotificationDetails(sound: "alert.caf");
+                var platformChannelSpecifics = NotificationDetails(
+                    android: androidPlatformChannelSpecifics,
+                    iOS: iOSPlatformChannelSpecifics);
+
+                try {
+                  flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                      gatePassPayload.body, platformChannelSpecifics,
+                      payload: /*data["society"]*/ json.encode(society));
+                } catch (e) {
                   print(e);
                 }
               }
             }
           }
-          else {
-            if (isDailyEntryNotification) {
-              print('if showDailyNotification');
-              androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                androidChannelIdOther,
-                androidChannelName,
-                androidChannelDesc,
-                importance: Importance.max,
-                priority: Priority.high,
-                ticker: 'ticker',
-                enableLights: true,
-                color: Colors.green,
-                ledColor: const Color.fromARGB(255, 255, 0, 0),
-                ledOnMs: 1000,
-                ledOffMs: 500,
-                playSound: true,
-              );
-              var iOSPlatformChannelSpecifics =
-                  IOSNotificationDetails(sound: "alert.caf");
-              var platformChannelSpecifics = NotificationDetails(
-                  android:androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
-
-              try {
-                flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
-                    gatePassPayload.body, platformChannelSpecifics,
-                    payload: /*data["society"]*/ json.encode(society));
-              } catch (e) {
-                print(e);
-              }
-            }
-          }
-        }
+        //}
+      }else{
+       // if(GlobalVariables.isNewlyArrivedNotification) {
+         // GlobalVariables.isNewlyArrivedNotification = false;
+          selectNotification(payloadSData);
+       // }
       }
     } catch (e) {
       print(e);
@@ -732,7 +762,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseMyUnit(AppLocalizations.of(context).translate('my_household'))))
+              builder: (context) => BaseAdmin()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });

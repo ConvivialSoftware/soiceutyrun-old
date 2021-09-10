@@ -1022,8 +1022,10 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
 
       GlobalFunctions.showToast(value.message);
       if (value.status) {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
+        getMessageInfo();
+
+      //  Navigator.of(context).pop();
+       // Navigator.of(context).pop();
 
        /* if (widget.agreementInfo.agreementAttachmentName != null && widget.agreementInfo.agreementAttachmentPath != null) {
           print('attachmentFilePath : ' + widget.agreementInfo.agreementAttachmentPath.toString());
@@ -1078,6 +1080,58 @@ class AddTenantState extends BaseStatefulState<BaseAddTenant> {
 */
       }
     });
+  }
+
+  getMessageInfo() {
+    //print('paymentId : ' + paymentId.toString());
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: AppContainer(
+                    child:  Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: AppAssetsImage(
+                            GlobalVariables.successIconPath,
+                            imageWidth: 80,
+                            imageHeight: 80,
+                          ),
+                        ),
+                        /* Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text(AppLocalizations.of(context)
+                              .translate('successful_payment'))),*/
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: text(AppLocalizations.of(context)
+                              .translate('tenant_add_status'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                          ),
+                        ),Container(
+                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: text(AppLocalizations.of(context)
+                                .translate('tenant_add_status_desc'),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
+                            )
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          alignment: Alignment.topRight,
+                          child: FlatButton(onPressed: (){
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          }, child: text(AppLocalizations.of(context).translate('okay'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
+                          ),),
+                        ),
+                      ],
+                    ),
+                  )
+              );
+            }));
   }
 
  /* Future<void> addMember() async {

@@ -1587,9 +1587,9 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.userID: userId,
       GlobalVariables.societyId: socId,
-      GlobalVariables.STAFF_NAME: name,
-      GlobalVariables.Contact: mobile,
-      GlobalVariables.Email: email,
+      GlobalVariables.NAME: name,
+      "PHONE": mobile,
+      "EMAIL": email,
       GlobalVariables.VEHICLE_NO: vehicleNo,
       GlobalVariables.GENDER: gender,
       GlobalVariables.DOB: dob,
@@ -2192,19 +2192,26 @@ class RestAPI
         data: formData);
     final value = _result.data;
     print('value of staffCount : ' + value.toString());
-    return DataResponse.fromJson(value);
+    return DataResponse.fromJsonStaffRole(value);
   }
 
   @override
-  Future<DataResponse> staffRoleDetails(String societyId, String role) async {
+  Future<DataResponse> staffRoleDetails(String societyId, String role,String type) async {
     // TODO: implement staffRoleDetails
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(role, GlobalVariables.ROLE);
 
     FormData formData = FormData.fromMap(
-        {GlobalVariables.societyId: societyId, GlobalVariables.ROLE: role});
-    print(GlobalVariables.societyId + ": " + societyId);
-    print(GlobalVariables.ROLE + ": " + role);
+        {
+          GlobalVariables.societyId: societyId,
+          GlobalVariables.ROLE: role,
+          GlobalVariables.Type: type
+        });
+    print( {
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ROLE: role,
+      GlobalVariables.Type: type
+    }.toString());
 
     print('baseurl : ' + baseUrl + GlobalVariables.staffRoleDetailsAPI);
     final Response _result =
@@ -4551,6 +4558,35 @@ class RestAPI
     final value = _result.data;
     print('value of updateExpenseAttachment : ' + value.toString());
     return DataResponse.fromAmountCalculationJson(value);
+  }
+
+  @override
+  Future<StatusMsgResponse> staffDelete(String societyId, String id, String type) async {
+    // TODO: implement staffDelete
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.id: id,
+      GlobalVariables.Type: type,
+    });
+
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.id: id,
+      GlobalVariables.Type: type,
+    }.toString());
+
+    print('baseurl : ' + baseUrl + GlobalVariables.staffDeleteAPI);
+    final Response _result = await _dio.post(
+        GlobalVariables.staffDeleteAPI,
+        options: RequestOptions(
+          //method: GlobalVariables.Post,
+            headers: <String, dynamic>{
+              "Authorization": GlobalVariables.AUTH,
+            }, baseUrl: baseUrl),
+        data: formData);
+    final value = _result.data;
+    print('value of staffDelete : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
   }
 
 

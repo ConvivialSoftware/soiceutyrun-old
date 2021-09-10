@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
+import 'package:societyrun/Activities/ExpenseSearchAdd.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
@@ -15,6 +18,7 @@ import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
 import 'package:societyrun/Activities/OwnerDiscover.dart';
+import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -25,6 +29,7 @@ import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'HelpDesk.dart';
 import 'base_stateful.dart';
@@ -42,6 +47,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
   ProgressDialog _progressDialog;
 
   List<DBNotificationPayload> _dbNotificationList = List<DBNotificationPayload>();
+  var notificationFormatData='';
 
   @override
   void initState() {
@@ -70,6 +76,45 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
               iconColor: GlobalVariables.white,
             ),
           ),
+          actions: [
+            AppIconButton(Icons.remove_red_eye,iconColor: GlobalVariables.white,onPressed: () async {
+              notificationFormatData = await GlobalFunctions.getNotificationBackGroundData();
+              setState(() {
+
+              });
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: SingleChildScrollView(
+                            child: InkWell(
+                              onTap: (){
+                                ClipboardManager.copyToClipBoard(
+                                    notificationFormatData)
+                                    .then((value) {
+                                  GlobalFunctions.showToast(
+                                      "Copied to Clipboard");
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.all(10),
+                                child: text(
+                                  notificationFormatData,
+                                  textColor: GlobalVariables.black,
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }));
+
+            },)
+          ],
+
           title: text(
             AppLocalizations.of(context).translate('notification')+" ("+GlobalVariables.notificationCounterValueNotifer.value.toString()+")",
             textColor: GlobalVariables.white,
@@ -368,7 +413,69 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
               builder: (context) => BaseOwnerClassifiedNotificationItemDesc(_dbNotificationPayload.ID)));
     }else if(_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BROADCAST){
       FirebaseMessagingHandler().showDynamicAlert(context, _dbNotificationPayload);
-    }  else {
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_UserManagement) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseUserManagement()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_MyHousehold) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseAdmin()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_PaymentRequest) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseAdmin()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_Expense) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseExpenseSearchAdd()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+      if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+                (Route<dynamic> route) => false);
+      }
+    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_WEB) {
+      launch(GlobalVariables.appURL);
+    }   else {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(
