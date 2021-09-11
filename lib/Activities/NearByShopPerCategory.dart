@@ -37,7 +37,7 @@ class BaseNearByShopPerCategory extends StatefulWidget {
 }
 
 class NearByShopPerCategoryState
-    extends BaseStatefulState<BaseNearByShopPerCategory>
+    extends State<BaseNearByShopPerCategory>
     with SingleTickerProviderStateMixin {
   ProgressDialog _progressDialog;
   TabController _tabController;

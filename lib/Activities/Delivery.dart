@@ -19,7 +19,7 @@ class BaseDelivery extends StatefulWidget {
   }
 }
 
-class DeliveryState extends BaseStatefulState<BaseDelivery> {
+class DeliveryState extends State<BaseDelivery> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

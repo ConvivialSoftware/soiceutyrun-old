@@ -29,7 +29,7 @@ class BaseDuesBillPayment extends StatefulWidget {
   _BaseDuesBillPaymentState createState() => _BaseDuesBillPaymentState();
 }
 
-class _BaseDuesBillPaymentState extends BaseStatefulState<BaseDuesBillPayment> {
+class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   var amount=0.0, invoiceNo, referenceNo, billType, orderId;
   ProgressDialog _progressDialog;
   Razorpay _razorpay;

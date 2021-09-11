@@ -37,7 +37,7 @@ class BaseAlreadyPaid extends StatefulWidget {
   }
 }
 
-class AlreadyPaidState extends BaseStatefulState<BaseAlreadyPaid> {
+class AlreadyPaidState extends State<BaseAlreadyPaid> {
 
   List<Bank> _bankList = new List<Bank>();
  // List<BankResponse> _bankResponseList = new List<BankResponse>();

@@ -32,7 +32,7 @@ class BaseAddStaffMember extends StatefulWidget {
   }
 }
 
-class AddStaffMemberState extends BaseStatefulState<BaseAddStaffMember> {
+class AddStaffMemberState extends State<BaseAddStaffMember> {
 
   //String memberType;
 

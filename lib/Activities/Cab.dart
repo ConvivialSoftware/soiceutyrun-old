@@ -18,7 +18,7 @@ class BaseCab extends StatefulWidget {
   }
 }
 
-class CabState extends BaseStatefulState<BaseCab> {
+class CabState extends State<BaseCab> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

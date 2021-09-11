@@ -39,7 +39,7 @@ class BaseRegisteredUnit extends StatefulWidget {
   }
 }
 
-class RegisteredUnitState extends BaseStatefulState<BaseRegisteredUnit>
+class RegisteredUnitState extends State<BaseRegisteredUnit>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 

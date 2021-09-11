@@ -27,7 +27,7 @@ class NearByShopPerCategoryItemDetails extends StatefulWidget {
 }
 
 class NearByShopPerCategoryItemDetailsState
-    extends BaseStatefulState<NearByShopPerCategoryItemDetails> {
+    extends State<NearByShopPerCategoryItemDetails> {
 
   var width, height;
 

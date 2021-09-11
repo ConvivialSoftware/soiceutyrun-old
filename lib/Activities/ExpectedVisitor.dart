@@ -21,7 +21,7 @@ class BaseExpectedVisitor extends StatefulWidget {
   }
 }
 
-class ExpectedVisitorState extends BaseStatefulState<BaseExpectedVisitor>
+class ExpectedVisitorState extends State<BaseExpectedVisitor>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<VisitorInfo> _visitorInfoList = new List<VisitorInfo>();

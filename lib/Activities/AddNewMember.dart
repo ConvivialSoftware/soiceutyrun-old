@@ -30,7 +30,7 @@ class BaseAddNewMember extends StatefulWidget {
   }
 }
 
-class AddNewMemberState extends BaseStatefulState<BaseAddNewMember> {
+class AddNewMemberState extends State<BaseAddNewMember> {
   String memberType;
 
   String attachmentFilePath;

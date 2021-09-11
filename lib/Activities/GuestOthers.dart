@@ -19,7 +19,7 @@ class BaseGuestOthers extends StatefulWidget {
   }
 }
 
-class GuestOthersState extends BaseStatefulState<BaseGuestOthers> {
+class GuestOthersState extends State<BaseGuestOthers> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

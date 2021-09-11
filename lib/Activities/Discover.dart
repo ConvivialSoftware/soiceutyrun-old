@@ -36,7 +36,7 @@ class BaseDiscover extends StatefulWidget {
 }
 
 //TickerProviderStateMixi
-class DiscoverState extends BaseStatefulState<BaseDiscover>
+class DiscoverState extends State<BaseDiscover>
     with SingleTickerProviderStateMixin ,AfterLayoutMixin<BaseDiscover> {
   TabController _tabController;
   String pageName,societyId;

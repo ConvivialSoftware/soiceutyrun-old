@@ -15,7 +15,7 @@ class BaseFacilities extends StatefulWidget {
   }
 }
 
-class FacilitiesState extends BaseStatefulState<BaseFacilities> {
+class FacilitiesState extends State<BaseFacilities> {
 
   List<BookingHistory> _bookingHistoryList = List<BookingHistory>();
 

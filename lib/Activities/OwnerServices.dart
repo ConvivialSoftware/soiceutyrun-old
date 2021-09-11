@@ -19,7 +19,7 @@ class BaseOwnerServices extends StatefulWidget {
   }
 }
 
-class OwnerServicesState extends BaseStatefulState<BaseOwnerServices> {
+class OwnerServicesState extends State<BaseOwnerServices> {
 
 
   var _myRate=0.0;

@@ -34,7 +34,7 @@ class BaseRaiseNewTicket extends StatefulWidget {
   }
 }
 
-class RaiseNewTicketState extends BaseStatefulState<BaseRaiseNewTicket> {
+class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   // List<ComplaintArea> _areaList = new List<ComplaintArea>();
   // List<ComplaintCategory> _categoryList = new List<ComplaintCategory>();
   String complaintType = "Personal";

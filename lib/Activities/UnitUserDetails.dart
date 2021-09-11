@@ -40,7 +40,7 @@ class BaseUnitUserDetails extends StatefulWidget {
   _BaseUnitUserDetailsState createState() => _BaseUnitUserDetailsState();
 }
 
-class _BaseUnitUserDetailsState extends BaseStatefulState<BaseUnitUserDetails> {
+class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
   TextEditingController billerNameTextController = TextEditingController();
   TextEditingController areaTextController = TextEditingController();
   TextEditingController intercomTextController = TextEditingController();

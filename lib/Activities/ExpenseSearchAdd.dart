@@ -27,7 +27,7 @@ class BaseExpenseSearchAdd extends StatefulWidget {
   _BaseExpenseSearchAddState createState() => _BaseExpenseSearchAddState();
 }
 
-class _BaseExpenseSearchAddState extends BaseStatefulState<BaseExpenseSearchAdd> {
+class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
 
 
   TextEditingController _startDateController = TextEditingController();

@@ -38,7 +38,7 @@ class BaseViewReceipt extends StatefulWidget {
   }
 }
 
-class ViewReceiptState extends BaseStatefulState<BaseViewReceipt> {
+class ViewReceiptState extends State<BaseViewReceipt> {
   ReceiptViewResponse _receiptViewList = ReceiptViewResponse();
   List<Receipt> _receiptList = new List<Receipt>();
 

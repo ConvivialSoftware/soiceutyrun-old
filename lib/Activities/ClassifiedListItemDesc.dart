@@ -29,7 +29,7 @@ class BaseClassifiedListItemDesc extends StatefulWidget {
 }
 
 class CreateClassifiedListingState
-    extends BaseStatefulState<BaseClassifiedListItemDesc> {
+    extends State<BaseClassifiedListItemDesc> {
    List<ClassifiedImage> imageList;
 
   int _current = 0;

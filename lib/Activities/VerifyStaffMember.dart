@@ -21,7 +21,7 @@ class BaseVerifyStaffMember extends StatefulWidget {
   }
 }
 
-class VerifyStaffMemberState extends BaseStatefulState<BaseVerifyStaffMember> {
+class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
   ProgressDialog _progressDialog;
 
   TextEditingController _mobileController = TextEditingController();

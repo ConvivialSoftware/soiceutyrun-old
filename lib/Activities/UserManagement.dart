@@ -25,7 +25,7 @@ class BaseUserManagement extends StatefulWidget {
   _BaseUserManagementState createState() => _BaseUserManagementState();
 }
 
-class _BaseUserManagementState extends BaseStatefulState<BaseUserManagement> {
+class _BaseUserManagementState extends State<BaseUserManagement> {
   @override
   void initState() {
     super.initState();

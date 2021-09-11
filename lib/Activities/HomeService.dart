@@ -18,7 +18,7 @@ class BaseHomeService extends StatefulWidget {
   }
 }
 
-class HomeServiceState extends BaseStatefulState<BaseHomeService> {
+class HomeServiceState extends State<BaseHomeService> {
 
   @override
   Widget build(BuildContext context) {

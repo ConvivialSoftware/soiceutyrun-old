@@ -29,7 +29,7 @@ class BaseEditProfileInfo extends StatefulWidget {
   }
 }
 
-class EditProfileInfoState extends BaseStatefulState<BaseEditProfileInfo> {
+class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
   String userId,societyId;
 

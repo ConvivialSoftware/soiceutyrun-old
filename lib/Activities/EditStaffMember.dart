@@ -28,7 +28,7 @@ class BaseEditStaffMember extends StatefulWidget {
   }
 }
 
-class EditStaffMemberState extends BaseStatefulState<BaseEditStaffMember> {
+class EditStaffMemberState extends State<BaseEditStaffMember> {
 
   //String memberType;
 

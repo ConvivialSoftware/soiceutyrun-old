@@ -44,7 +44,7 @@ class BaseMyComplex extends StatefulWidget {
   }
 }
 
-class MyComplexState extends BaseStatefulState<BaseMyComplex>
+class MyComplexState extends State<BaseMyComplex>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 

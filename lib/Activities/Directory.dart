@@ -32,7 +32,7 @@ class BaseDirectory extends StatefulWidget {
   }
 }
 
-class DirectoryState extends BaseStatefulState<BaseDirectory> {
+class DirectoryState extends State<BaseDirectory> {
   var societyId, flat, block;
 
   ProgressDialog _progressDialog;

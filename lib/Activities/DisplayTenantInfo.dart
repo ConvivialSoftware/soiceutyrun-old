@@ -43,7 +43,7 @@ class BaseTenantInfo extends StatefulWidget {
   }
 }
 
-class TenantInfoState extends BaseStatefulState<BaseTenantInfo> {
+class TenantInfoState extends State<BaseTenantInfo> {
 
   String societyId;
   String _taskId,_localPath;

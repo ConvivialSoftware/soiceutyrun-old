@@ -28,11 +28,12 @@ class Staff{
   String PHONE;
   String PHOTO;
   String IDENTITY_PROOF;
+  String ID;
 
  /* Staff({this.STAFF_NAME,  this.CONTACT,this.IMAGE});*/
  Staff({this.SID, this.STAFF_NAME, this.GENDER, this.DOB, this.CONTACT, this.QUALIFICATION, this.ADDRESS, this.VEHICLE_NO, this.NOTES,
     this.ASSIGN_FLATS, this.STATUS, this.IN_OUTSS, this.IMAGE, this.C_DATE,
-   this.Staff_QR_Image, this.QR_Text, this.Attachment, this.ROLE,this.RATINGS,this.NAME,this.EMAIL,this.PHONE,this.PHOTO,this.IDENTITY_PROOF});
+   this.Staff_QR_Image, this.QR_Text, this.Attachment, this.ROLE,this.RATINGS,this.NAME,this.EMAIL,this.PHONE,this.PHOTO,this.IDENTITY_PROOF,this.ID});
 
 
   factory Staff.fromJson(Map<String, dynamic> json){
@@ -62,6 +63,7 @@ class Staff{
       PHONE:json['PHONE']??'',
       PHOTO:json['PHOTO']??'',
       IDENTITY_PROOF:json['IDENTITY_PROOF']??'',
+      ID:json['ID']??'',
     );
   }
 

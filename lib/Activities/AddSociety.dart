@@ -18,7 +18,7 @@ class BaseAddSociety extends StatefulWidget{
 
 }
 
-class AddSocietyState extends BaseStatefulState<BaseAddSociety>{
+class AddSocietyState extends State<BaseAddSociety>{
 
   var name="";
 

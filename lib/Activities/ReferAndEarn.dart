@@ -29,7 +29,7 @@ class BaseReferAndEarn extends StatefulWidget {
   }
 }
 
-class ReferAndEarnState extends BaseStatefulState<BaseReferAndEarn> {
+class ReferAndEarnState extends State<BaseReferAndEarn> {
   TextEditingController _societyNameController = TextEditingController();
   TextEditingController _noOfFlatsController = TextEditingController();
   TextEditingController _nameController = TextEditingController();

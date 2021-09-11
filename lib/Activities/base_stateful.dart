@@ -345,7 +345,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     notification = message["notification"];
     notification["click_action"]="FLUTTER_NOTIFICATION_CLICK";*/
     GlobalFunctions.setNotificationBackGroundData(message.toString());
-    print("After _showNotification onMessage >>>> $message");
     if (Platform.isIOS) {
       data = message;
     } else {
@@ -361,12 +360,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       // Map<String, dynamic> temp = jsonDecode(society.toString());
       gatePassPayload = GatePassPayload.fromJson(society);
 
-      print('_showNotification isAlreadyTapped : ' +
-          GlobalVariables.isAlreadyTapped.toString());
+      print('_showNotification isAlreadyTapped : ' + GlobalVariables.isAlreadyTapped.toString());
       print('_showNotification isBackGround : ' +
           gatePassPayload.isBackGround.toString());
-
       if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
+        print('_showNotification isNewlyArrivedNotification : ' + GlobalVariables.isNewlyArrivedNotification.toString());
+        print('If shouldRedirect: ' + shouldRedirect.toString());
         if(GlobalVariables.isNewlyArrivedNotification) {
           GlobalVariables.isNewlyArrivedNotification = false;
           DBNotificationPayload _dbNotificationPayload =

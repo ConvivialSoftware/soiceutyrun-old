@@ -38,7 +38,7 @@ class BaseViewBill extends StatefulWidget {
   }
 }
 
-class ViewBillState extends BaseStatefulState<BaseViewBill> {
+class ViewBillState extends State<BaseViewBill> {
   List<RecentTransaction> _recentTransactionList = new List<RecentTransaction>();
   BillViewResponse _billViewList = BillViewResponse();
   List<BillDetails> _billDetailsList = new List<BillDetails>();

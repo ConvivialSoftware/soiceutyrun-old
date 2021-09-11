@@ -34,7 +34,7 @@ class BaseLedger extends StatefulWidget {
   }
 }
 
-class LedgerState extends BaseStatefulState<BaseLedger> {
+class LedgerState extends State<BaseLedger> {
   ProgressDialog _progressDialog;
   List<DropdownMenuItem<String>> _yearListItems =
       new List<DropdownMenuItem<String>>();

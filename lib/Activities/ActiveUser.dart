@@ -38,7 +38,7 @@ class BaseActiveUser extends StatefulWidget {
   }
 }
 
-class ActiveUserState extends BaseStatefulState<BaseActiveUser>
+class ActiveUserState extends State<BaseActiveUser>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 /*

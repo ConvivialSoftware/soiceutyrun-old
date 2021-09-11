@@ -22,7 +22,7 @@ class BaseAppSettings extends StatefulWidget {
   _BaseAppSettingsState createState() => _BaseAppSettingsState();
 }
 
-class _BaseAppSettingsState extends BaseStatefulState<BaseAppSettings> {
+class _BaseAppSettingsState extends State<BaseAppSettings> {
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
 

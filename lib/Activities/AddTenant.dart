@@ -36,7 +36,7 @@ class BaseAddTenant extends StatefulWidget {
   }
 }
 
-class AddTenantState extends BaseStatefulState<BaseAddTenant> {
+class AddTenantState extends State<BaseAddTenant> {
 
   String attachmentFilePath;
   String attachmentFileName;

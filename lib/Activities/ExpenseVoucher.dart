@@ -39,7 +39,7 @@ class BaseExpenseVoucher extends StatefulWidget {
   }
 }
 
-class ExpenseVoucherState extends BaseStatefulState<BaseExpenseVoucher> {
+class ExpenseVoucherState extends State<BaseExpenseVoucher> {
   ProgressDialog _progressDialog;
   String attachmentFilePath;
   String attachmentFileName;

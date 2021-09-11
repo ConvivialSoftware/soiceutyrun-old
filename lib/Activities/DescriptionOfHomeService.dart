@@ -30,7 +30,7 @@ class BaseDescriptionOfHomeService extends StatefulWidget {
 }
 
 class DescriptionOfHomeServiceState
-    extends BaseStatefulState<BaseDescriptionOfHomeService> {
+    extends State<BaseDescriptionOfHomeService> {
   //List<HomeCareDescription> _homeCareList = List<HomeCareDescription>();
 
   var name="",mobile="",mail="",photo="";

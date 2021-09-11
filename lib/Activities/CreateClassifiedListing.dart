@@ -42,7 +42,7 @@ class UploadImages {
 }
 
 class CreateClassifiedListingState
-    extends BaseStatefulState<BaseCreateClassifiedListing> {
+    extends State<BaseCreateClassifiedListing> {
   var name = "", mobile = "", mail = "", photo = "";
 
   Map<String, String> imagesMap = Map<String, String>();

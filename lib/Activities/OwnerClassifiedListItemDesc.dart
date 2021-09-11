@@ -29,7 +29,7 @@ class BaseOwnerClassifiedListItemDesc extends StatefulWidget {
 }
 
 class CreateClassifiedListingState
-    extends BaseStatefulState<BaseOwnerClassifiedListItemDesc> {
+    extends State<BaseOwnerClassifiedListItemDesc> {
   List<ClassifiedImage> imageList;
   List<Interested> interestedList;
 

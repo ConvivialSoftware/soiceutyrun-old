@@ -20,7 +20,7 @@ class BaseViewPollGraph extends StatefulWidget {
   ViewPollGraphState createState() => ViewPollGraphState(_poll,optionList);
 }
 
-class ViewPollGraphState extends BaseStatefulState<BaseViewPollGraph> {
+class ViewPollGraphState extends State<BaseViewPollGraph> {
 
   Poll _poll;
   List<PollOption> _optionList;

@@ -39,7 +39,7 @@ class BaseRentalRequestUserDetails extends StatefulWidget {
 }
 
 class _BaseRentalRequestUserDetailsState
-    extends BaseStatefulState<BaseRentalRequestUserDetails> {
+    extends State<BaseRentalRequestUserDetails> {
   List<Tenant> tenantDetailsList = List<Tenant>();
   String _taskId, _localPath;
   ReceivePort _port = ReceivePort();

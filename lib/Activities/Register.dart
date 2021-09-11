@@ -19,7 +19,7 @@ class BaseRegister extends StatefulWidget {
   }
 }
 
-class RegisterState extends BaseStatefulState<BaseRegister> {
+class RegisterState extends State<BaseRegister> {
   TextEditingController name = new TextEditingController();
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();

@@ -20,7 +20,7 @@ class BaseOtpWithMobile extends StatefulWidget {
   }
 }
 
-class OtpWithMobileState extends BaseStatefulState<BaseOtpWithMobile> {
+class OtpWithMobileState extends State<BaseOtpWithMobile> {
 
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _emailController = TextEditingController();

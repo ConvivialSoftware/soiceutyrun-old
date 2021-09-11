@@ -20,7 +20,7 @@ class BaseSupport extends StatefulWidget {
   _BaseSupportState createState() => _BaseSupportState();
 }
 
-class _BaseSupportState extends BaseStatefulState<BaseSupport> {
+class _BaseSupportState extends State<BaseSupport> {
 
   @override
   void initState() {

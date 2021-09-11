@@ -28,7 +28,7 @@ class BaseHelpDesk extends StatefulWidget {
   }
 }
 
-class HelpDeskState extends BaseStatefulState<BaseHelpDesk> {
+class HelpDeskState extends State<BaseHelpDesk> {
 
  /* List<Complaints> _complaintList = new List<Complaints>();
   List<Complaints> value.openComplaintList = new List<Complaints>();

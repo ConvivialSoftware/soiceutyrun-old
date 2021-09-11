@@ -28,7 +28,7 @@ class BaseStaffDetails extends StatefulWidget {
   _BaseStaffDetailsState createState() => _BaseStaffDetailsState(_staff);
 }
 
-class _BaseStaffDetailsState extends BaseStatefulState<BaseStaffDetails> {
+class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   var userId = "",
       name = "",
       photo = "",

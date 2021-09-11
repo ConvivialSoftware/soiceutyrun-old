@@ -27,7 +27,7 @@ class BaseOtp extends StatefulWidget {
 
 }
 
-class OtpState extends BaseStatefulState<BaseOtp> {
+class OtpState extends State<BaseOtp> {
 
   String entered_pin = "";
   String expire_time, otp, username;

@@ -33,7 +33,7 @@ class BaseAboutSocietyRunInfo extends StatefulWidget {
 }
 
 class AboutSocietyRunInfoState
-    extends BaseStatefulState<BaseAboutSocietyRunInfo> {
+    extends State<BaseAboutSocietyRunInfo> {
   ProgressDialog _progressDialog;
   var societyId, name, phone, block, flat;
 

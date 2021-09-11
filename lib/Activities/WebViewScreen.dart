@@ -22,7 +22,7 @@ class BaseWebViewScreen extends StatefulWidget {
   }
 }
 
-class WebViewScreenState extends BaseStatefulState<BaseWebViewScreen> {
+class WebViewScreenState extends State<BaseWebViewScreen> {
 
   var pageURL;
   WebViewScreenState(this.pageURL);

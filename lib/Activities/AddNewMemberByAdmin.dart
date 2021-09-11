@@ -33,7 +33,7 @@ class BaseAddNewMemberByAdmin extends StatefulWidget {
 }
 
 class AddNewMemberByAdminState
-    extends BaseStatefulState<BaseAddNewMemberByAdmin> {
+    extends State<BaseAddNewMemberByAdmin> {
 
 
   String attachmentFilePath;

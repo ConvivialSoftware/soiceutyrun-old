@@ -19,7 +19,7 @@ class BaseAddNearByShop extends StatefulWidget {
   }
 }
 
-class AddNearByShopState extends BaseStatefulState<BaseAddNearByShop> {
+class AddNearByShopState extends State<BaseAddNearByShop> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

@@ -41,7 +41,7 @@ class BaseMyGate extends StatefulWidget {
   }
 }
 
-class MyGateState extends BaseStatefulState<BaseMyGate>
+class MyGateState extends State<BaseMyGate>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 

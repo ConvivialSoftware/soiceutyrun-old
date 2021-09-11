@@ -34,7 +34,7 @@ class BaseOwnerDiscover extends StatefulWidget {
 }
 
 //TickerProviderStateMixi
-class OwnerDiscoverState extends BaseStatefulState<BaseOwnerDiscover> {
+class OwnerDiscoverState extends State<BaseOwnerDiscover> {
   //TabController _tabController;
   String pageName;
   var width, height;

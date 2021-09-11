@@ -27,7 +27,7 @@ class BaseFindServices extends StatefulWidget {
   }
 }
 
-class DiscoverState extends BaseStatefulState<BaseFindServices> {
+class DiscoverState extends State<BaseFindServices> {
   var width, height;
 
   @override

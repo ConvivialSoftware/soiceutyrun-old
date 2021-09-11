@@ -23,7 +23,7 @@ class BaseServicesPerCategory extends StatefulWidget {
   }
 }
 
-class ServicesPerCategoryState extends BaseStatefulState<BaseServicesPerCategory> {
+class ServicesPerCategoryState extends State<BaseServicesPerCategory> {
 
   @override
   void initState() {

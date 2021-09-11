@@ -28,7 +28,7 @@ class BaseAdmin extends StatefulWidget {
   _BaseAdminState createState() => _BaseAdminState();
 }
 
-class _BaseAdminState extends BaseStatefulState<BaseAdmin> {
+class _BaseAdminState extends State<BaseAdmin> {
   List<SliderCardName> _listSliderCardName = <SliderCardName>[];
 
   //List<BarChartModel> _listBarChart = <BarChartModel>[];

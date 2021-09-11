@@ -13,7 +13,7 @@ class BaseBanquetBooking extends StatefulWidget {
   }
 }
 
-class BanquetBookingState extends BaseStatefulState<BaseBanquetBooking> {
+class BanquetBookingState extends State<BaseBanquetBooking> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

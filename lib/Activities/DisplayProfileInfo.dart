@@ -30,7 +30,7 @@ class BaseDisplayProfileInfo extends StatefulWidget {
 }
 
 class DisplayProfileInfoState
-    extends BaseStatefulState<BaseDisplayProfileInfo> {
+    extends State<BaseDisplayProfileInfo> {
   ProgressDialog _progressDialog;
 
   List<ProfileInfo> _profileList = List<ProfileInfo>();

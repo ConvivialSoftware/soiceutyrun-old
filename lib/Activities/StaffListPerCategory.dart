@@ -34,7 +34,7 @@ class BaseStaffListPerCategory extends StatefulWidget {
 }
 
 class StaffListPerCategoryState
-    extends BaseStatefulState<BaseStaffListPerCategory> {
+    extends State<BaseStaffListPerCategory> {
   ProgressDialog _progressDialog;
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
@@ -367,17 +367,16 @@ class StaffListPerCategoryState
                                   Icons.delete,
                                   iconColor: GlobalVariables.primaryColor,
                                   onPressed: (){
-                                    _progressDialog.show();
-                                    Provider.of<GatePass>(context,listen: false).getStaffDelete(value.staffList[position].SID,widget.type).then((value) {
-                                      _progressDialog.hide();
-                                      GlobalFunctions.showToast(value.message);
-                                      if(value.status) {
-                                        Provider.of<GatePass>(
-                                            context, listen: false)
-                                            .getStaffRoleDetailsData(
-                                            widget._roleName, widget.type);
-                                      }
-                                    });
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) => StatefulBuilder(
+                                            builder: (BuildContext context, StateSetter setState) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10.0)),
+                                                child: displayDeleteLayout(value.staffList[position].ID),
+                                              );
+                                            }));
                                   },
                                 )),
                           ],
@@ -458,6 +457,7 @@ class StaffListPerCategoryState
                       Navigator.of(context).pop();
                       _progressDialog.show();
                       Provider.of<GatePass>(context,listen: false).getStaffDelete(id,widget.type).then((value) {
+                        _progressDialog.hide();
                         GlobalFunctions.showToast(value.message);
                         if(value.status) {
                           Provider.of<GatePass>(

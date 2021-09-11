@@ -44,7 +44,7 @@ class BaseMoveOutRequest extends StatefulWidget {
   }
 }
 
-class MoveOutRequestState extends BaseStatefulState<BaseMoveOutRequest>
+class MoveOutRequestState extends State<BaseMoveOutRequest>
     with SingleTickerProviderStateMixin {
   //TabController _tabController;
 

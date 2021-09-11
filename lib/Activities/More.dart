@@ -22,7 +22,7 @@ class BaseMore extends StatefulWidget {
   }
 }
 
-class MoreState extends BaseStatefulState<BaseMore> {
+class MoreState extends State<BaseMore> {
 
   var response="";
 

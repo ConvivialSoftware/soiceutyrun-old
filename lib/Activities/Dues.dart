@@ -37,7 +37,7 @@ class BaseDues extends StatefulWidget {
   _BaseDuesState createState() => _BaseDuesState();
 }
 
-class _BaseDuesState extends BaseStatefulState<BaseDues> {
+class _BaseDuesState extends State<BaseDues> {
 
   Razorpay _razorpay;
   String _selectedPaymentGateway = "RazorPay";

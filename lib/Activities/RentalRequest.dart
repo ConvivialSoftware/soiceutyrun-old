@@ -43,7 +43,7 @@ class BaseRentalRequest extends StatefulWidget {
   }
 }
 
-class RentalRequestState extends BaseStatefulState<BaseRentalRequest>
+class RentalRequestState extends State<BaseRentalRequest>
     with SingleTickerProviderStateMixin {
 
   ProgressDialog _progressDialog;

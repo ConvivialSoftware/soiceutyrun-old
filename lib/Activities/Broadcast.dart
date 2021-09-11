@@ -18,7 +18,7 @@ class BaseBroadcast extends StatefulWidget {
   _BaseBroadcastState createState() => _BaseBroadcastState();
 }
 
-class _BaseBroadcastState extends BaseStatefulState<BaseBroadcast>
+class _BaseBroadcastState extends State<BaseBroadcast>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   String pageName;

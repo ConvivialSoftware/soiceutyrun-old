@@ -23,7 +23,7 @@ class BaseUnit extends StatefulWidget {
   _BaseUnitState createState() => _BaseUnitState();
 }
 
-class _BaseUnitState extends BaseStatefulState<BaseUnit> {
+class _BaseUnitState extends State<BaseUnit> {
 
   List<DropdownMenuItem<String>> _unitListItems =
   new List<DropdownMenuItem<String>>();

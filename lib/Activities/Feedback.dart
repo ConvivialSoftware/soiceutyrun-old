@@ -21,7 +21,7 @@ class BaseFeedback extends StatefulWidget {
   }
 }
 
-class FeedbackState extends BaseStatefulState<BaseFeedback> {
+class FeedbackState extends State<BaseFeedback> {
 
   TextEditingController complaintSubject = TextEditingController();
   TextEditingController complaintDesc = TextEditingController();

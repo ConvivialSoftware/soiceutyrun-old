@@ -24,7 +24,7 @@ class BaseChangePassword extends StatefulWidget {
   }
 }
 
-class ChangePasswordState extends BaseStatefulState<BaseChangePassword> {
+class ChangePasswordState extends State<BaseChangePassword> {
 
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();

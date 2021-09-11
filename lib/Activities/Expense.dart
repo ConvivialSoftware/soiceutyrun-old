@@ -36,7 +36,7 @@ class BaseExpense extends StatefulWidget {
   }
 }
 
-class ExpenseState extends BaseStatefulState<BaseExpense> {
+class ExpenseState extends State<BaseExpense> {
 
 
   var societyId, flat, block;

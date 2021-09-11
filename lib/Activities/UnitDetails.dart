@@ -21,7 +21,7 @@ class BaseUnitDetails extends StatefulWidget {
   _BaseUnitDetailsState createState() => _BaseUnitDetailsState();
 }
 
-class _BaseUnitDetailsState extends BaseStatefulState<BaseUnitDetails> {
+class _BaseUnitDetailsState extends State<BaseUnitDetails> {
 
   @override
   Widget build(BuildContext context) {

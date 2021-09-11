@@ -37,7 +37,7 @@ class BaseNearByShopNotificationItemDetails extends StatefulWidget {
 }
 
 class NearByShopNotificationItemDetailsState
-    extends BaseStatefulState<BaseNearByShopNotificationItemDetails>
+    extends State<BaseNearByShopNotificationItemDetails>
     with SingleTickerProviderStateMixin {
   var width, height;
 

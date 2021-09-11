@@ -23,7 +23,7 @@ class BaseAppNotificationSettings extends StatefulWidget {
 }
 
 class _BaseAppNotificationSettingsState
-    extends BaseStatefulState<BaseAppNotificationSettings> {
+    extends State<BaseAppNotificationSettings> {
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
 

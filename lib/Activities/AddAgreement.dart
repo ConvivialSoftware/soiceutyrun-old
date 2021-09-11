@@ -37,7 +37,7 @@ class BaseAddAgreement extends StatefulWidget {
   }
 }
 
-class AddAgreementState extends BaseStatefulState<BaseAddAgreement> {
+class AddAgreementState extends State<BaseAddAgreement> {
   String attachmentFilePath;
   String attachmentFileName;
 

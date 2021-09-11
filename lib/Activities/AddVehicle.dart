@@ -24,7 +24,7 @@ class BaseAddVehicle extends StatefulWidget {
   }
 }
 
-class AddVehicleState extends BaseStatefulState<BaseAddVehicle> {
+class AddVehicleState extends State<BaseAddVehicle> {
   TextEditingController _vehicleNoController = TextEditingController();
   TextEditingController _vehicleModelController = TextEditingController();
   TextEditingController _vehicleStickerController = TextEditingController();

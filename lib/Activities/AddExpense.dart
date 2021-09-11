@@ -33,7 +33,7 @@ class BaseAddExpense extends StatefulWidget {
   }
 }
 
-class AddExpenseState extends BaseStatefulState<BaseAddExpense> {
+class AddExpenseState extends State<BaseAddExpense> {
   String attachmentFilePath;
   String attachmentFileName;
   String attachmentCompressFilePath;

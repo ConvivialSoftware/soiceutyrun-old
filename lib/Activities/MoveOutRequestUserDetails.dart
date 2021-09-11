@@ -36,7 +36,7 @@ class BaseMoveOutRequestUserDetails extends StatefulWidget {
   _BaseMoveOutRequestUserDetailsState createState() => _BaseMoveOutRequestUserDetailsState();
 }
 
-class _BaseMoveOutRequestUserDetailsState extends BaseStatefulState<BaseMoveOutRequestUserDetails> {
+class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDetails> {
 
   List<Tenant> tenantDetailsList =  List<Tenant>();
   String _taskId,_localPath;

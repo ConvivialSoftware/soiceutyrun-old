@@ -42,12 +42,12 @@ class BaseNotifications extends StatefulWidget {
   }
 }
 
-class NotificationsState extends BaseStatefulState<BaseNotifications> {
+class NotificationsState extends State<BaseNotifications> {
 
   ProgressDialog _progressDialog;
 
   List<DBNotificationPayload> _dbNotificationList = List<DBNotificationPayload>();
-  var notificationFormatData='';
+  //var notificationFormatData='';
 
   @override
   void initState() {
@@ -76,7 +76,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
               iconColor: GlobalVariables.white,
             ),
           ),
-          actions: [
+         /* actions: [
             AppIconButton(Icons.remove_red_eye,iconColor: GlobalVariables.white,onPressed: () async {
               notificationFormatData = await GlobalFunctions.getNotificationBackGroundData();
               setState(() {
@@ -113,8 +113,7 @@ class NotificationsState extends BaseStatefulState<BaseNotifications> {
                       }));
 
             },)
-          ],
-
+          ],*/
           title: text(
             AppLocalizations.of(context).translate('notification')+" ("+GlobalVariables.notificationCounterValueNotifer.value.toString()+")",
             textColor: GlobalVariables.white,

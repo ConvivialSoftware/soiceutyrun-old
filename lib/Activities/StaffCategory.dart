@@ -31,7 +31,7 @@ class BaseStaffCategory extends StatefulWidget {
   }
 }
 
-class StaffCategoryState extends BaseStatefulState<BaseStaffCategory> {
+class StaffCategoryState extends State<BaseStaffCategory> {
 
   ProgressDialog _progressDialog;
   List<StaffCount> _staffListCount = List<StaffCount>();

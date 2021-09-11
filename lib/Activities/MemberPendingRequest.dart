@@ -38,7 +38,7 @@ class BaseMemberPendingRequest extends StatefulWidget {
 }
 
 class MemberPendingRequestState
-    extends BaseStatefulState<BaseMemberPendingRequest>
+    extends State<BaseMemberPendingRequest>
     with SingleTickerProviderStateMixin {
   //TabController _tabController;
 

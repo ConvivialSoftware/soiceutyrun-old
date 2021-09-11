@@ -46,7 +46,7 @@ class BaseComplaintInfoAndComments extends StatefulWidget {
 }
 
 class ComplaintInfoAndCommentsState
-    extends BaseStatefulState<BaseComplaintInfoAndComments> {
+    extends State<BaseComplaintInfoAndComments> {
   var userId, photo = "", _localPath;
   List<Complaints> _complaintsList = new List<Complaints>();
   List<Comments> _commentsList = new List<Comments>();
@@ -700,8 +700,11 @@ class ComplaintInfoAndCommentsState
             InkWell(
               onTap: () {
                 isComment = true;
-
-                updateComplaintStatus(context);
+                if(commentController.text.isNotEmpty) {
+                  updateComplaintStatus(context);
+                }else{
+                  GlobalFunctions.showToast("Please Enter Comment");
+                }
               },
               child: Container(
                 padding: EdgeInsets.all(5),
