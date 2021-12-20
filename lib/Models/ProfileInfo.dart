@@ -16,7 +16,7 @@ class ProfileInfo {
      0s.   tatus: true, message: Profile data}*/
 
 
-  String ID,
+  String? ID,
       BLOCK,
       FLAT,
       TYPE,

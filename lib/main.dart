@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/SplashScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
@@ -27,10 +29,26 @@ import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
+Logger logger = Logger(
+  printer: PrettyPrinter(
+      methodCount: 2,
+      // number of method calls to be displayed
+      errorMethodCount: 8,
+      // number of method calls if stacktrace is provided
+      lineLength: 120,
+      // width of the output
+      colors: true,
+      // Colorful log messages
+      printEmojis: true,
+      // Print an emoji for each log message
+      printTime: false // Should each log print contain a timestamp
+  ),
+);
+
 callbackNotificationDispatcher() {
   print('Call callbackLocationDispatcher Done');
 
-  Workmanager.executeTask((task) async {
+  Workmanager().executeTask((task,data) async {
     // print("Native called background task: $backgroundTask"); //simpleTask will be emitted here.
     //print('Input Data : '+inputData.toString());
     switch (task) {
@@ -49,16 +67,17 @@ callbackNotificationDispatcher() {
   });
 }
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  flutterDownloadInitialize();
-  Workmanager.initialize(
+  //flutterDownloadInitialize();
+  Workmanager().initialize(
     callbackNotificationDispatcher,
     isInDebugMode: false,
   );
-  Workmanager.registerPeriodicTask(
+  Workmanager().registerPeriodicTask(
     "1",
     GlobalVariables.fetchNotificationBackground,
     frequency: Duration(hours: 8),
@@ -67,9 +86,9 @@ void main() {
   runApp(BaseAppStart());
 }
 
-Future<void> flutterDownloadInitialize() async {
+/*Future<void> flutterDownloadInitialize() async {
   await FlutterDownloader.initialize(debug: true);
-}
+}*/
 
 Future<void> showLocalNotification() async {
   print('showLocalNotification');
@@ -107,8 +126,8 @@ Future<void> showLocalNotification() async {
   GlobalFunctions.getSharedPreferenceDuesData().then((map) async {
     Map<String, String> _duesMap = map;
     //duesRs = _duesMap[GlobalVariables.keyDuesRs];
-    String duesDate = _duesMap[GlobalVariables.keyDuesDate];
-    String dues = _duesMap[GlobalVariables.keyDuesRs];
+    String duesDate = _duesMap[GlobalVariables.keyDuesDate]!;
+    String dues = _duesMap[GlobalVariables.keyDuesRs]!;
     String societyName = await GlobalFunctions.getSocietyName();
 
     final DateTime now = DateTime.now();
@@ -122,7 +141,7 @@ Future<void> showLocalNotification() async {
 
     if (days == 0 || days == -1 || days == -2) {
 
-      String day ;
+      String day='' ;
       if(days==0){
         day = 'Today';
       }else if(days==-1){
@@ -200,6 +219,7 @@ class BaseAppStart extends StatelessWidget {
                 value: userManagementResponse),
           ],
           child: MaterialApp(
+            debugShowCheckedModeBanner: false,
             theme: getThemeData(),
             title: "SocietyRun",
             locale: model.appLocal,
@@ -212,6 +232,12 @@ class BaseAppStart extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
+            builder: (context, child) {
+              return MediaQuery(
+                child: child!,
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 0.9),
+              );
+            },
             home: SplashScreen(),
           ),
         );

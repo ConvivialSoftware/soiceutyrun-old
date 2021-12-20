@@ -1,18 +1,18 @@
 class DBNotificationPayload {
-  String nid;
-  String uid;
-  String title;
-  String body;
-  String ID;
-  String TYPE;
-  String VID;
-  String FROM_VISITOR;
-  String IMAGE;
-  String VISITOR_NAME;
-  String CONTACT;
-  String DATE_TIME;
-  String Visitor_type;
-  int read;
+  String? nid;
+  String? uid;
+  String? title;
+  String? body;
+  String? ID;
+  String? TYPE;
+  String? VID;
+  String? FROM_VISITOR;
+  String? IMAGE;
+  String? VISITOR_NAME;
+  String? CONTACT;
+  String? DATE_TIME;
+  String? Visitor_type;
+  int? read;
 
   DBNotificationPayload(
       {this.nid,

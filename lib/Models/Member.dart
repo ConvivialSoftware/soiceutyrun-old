@@ -2,19 +2,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Member {
-  String TYPE;
-  String NAME;
-  String ADDRESS;
-  String LIVES_HERE;
-  String ID;
-  String STATUS;
-  String BLOCK;
-  String FLAT;
-  String EMAIL;
-  String Phone;
-  String MOBILE;
-  String PROFILE_PHOTO;
-  String AGREEMENT_ID;
+  String? TYPE;
+  String? NAME;
+  String? ADDRESS;
+  String? LIVES_HERE;
+  String? ID;
+  String? STATUS;
+  String? BLOCK;
+  String? FLAT;
+  String? EMAIL;
+  String? Phone;
+  String? MOBILE;
+  String? PROFILE_PHOTO;
+  String? AGREEMENT_ID;
 
   Member(
       {this.TYPE,

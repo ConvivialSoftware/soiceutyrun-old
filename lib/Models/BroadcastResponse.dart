@@ -6,9 +6,9 @@ import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
 class BroadcastResponse extends ChangeNotifier {
-  List<FlatMemberDetails> flatMemberList = List<FlatMemberDetails>();
+  List<FlatMemberDetails> flatMemberList = <FlatMemberDetails>[];
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
 
   Future<dynamic> getFlatMemberDetails() async {
     final dio = Dio();
@@ -18,7 +18,7 @@ class BroadcastResponse extends ChangeNotifier {
 
     await restClient.flatNo(societyId).then((value) {
       flatMemberList = List<FlatMemberDetails>.from(
-          value.data.map((i) => FlatMemberDetails.fromJson(i)));
+          value.data!.map((i) => FlatMemberDetails.fromJson(i)));
       isLoading = false;
       notifyListeners();
     });
@@ -36,7 +36,7 @@ class BroadcastResponse extends ChangeNotifier {
     String societyName = await GlobalFunctions.getSocietyName();
     String societyEmail = await GlobalFunctions.getSocietyEmail();
 
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
@@ -47,7 +47,7 @@ class BroadcastResponse extends ChangeNotifier {
   }
 
   Future<DataResponse> postMailBroadcast(
-      flats, attachment, sendTo, subject, description) async {
+      flats, String? attachment, sendTo, subject, description) async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
 
@@ -56,7 +56,7 @@ class BroadcastResponse extends ChangeNotifier {
     String societyName = await GlobalFunctions.getSocietyName();
     String societyEmail = await GlobalFunctions.getSocietyEmail();
 
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
       ar.add(flats[i].ID);
     }
@@ -73,9 +73,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
 
     var result = await restClient.importantCommunicationSMS(
@@ -99,9 +99,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
     var result = await restClient.meetingSMS(
         societyId,
@@ -136,9 +136,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
     var result = await restClient.waterSupplySMS(
         societyId,
@@ -175,9 +175,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
     var result = await restClient.waterDisruptionSMS(
         societyId,
@@ -208,9 +208,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
     var result = await restClient.fireDrillSMS(
         societyId,
@@ -234,9 +234,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
     var result = await restClient.serviceDownSMS(
         societyId,
@@ -261,9 +261,9 @@ class BroadcastResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
-    List<String> ar = List<String>();
+    List<String> ar = <String>[];
     for (int i = 0; i < flats.length; i++) {
-      ar.add(flats[i].ID);
+      ar.add(flats[i].ID!);
     }
     var result = await restClient.powerOutageSMS(
         societyId,
@@ -289,7 +289,7 @@ class BroadcastSendTo {
 }
 
 class FlatMemberDetails {
-  String NAME, BLOCK, FLAT, ID, TYPE;
+  String? NAME, BLOCK, FLAT, ID, TYPE;
 
   FlatMemberDetails({this.NAME, this.BLOCK, this.FLAT, this.ID, this.TYPE});
 

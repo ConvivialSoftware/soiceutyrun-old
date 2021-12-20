@@ -13,7 +13,8 @@ class AppDropDown<T> extends StatefulWidget {
 
 
   AppDropDown(this.items,this.onChanged,{ this.icon, this.iconColor=GlobalVariables.grey,
-      this.iconSize=20.0, this.value,this.isExpanded=false});
+      this.iconSize=20.0,
+    required this.value,this.isExpanded=false});
 
   @override
   _AppDropDownState createState() => _AppDropDownState();

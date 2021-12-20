@@ -2,22 +2,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class BillViewResponse {
-  List<dynamic> BillDetails;
-  List<dynamic> HEADS;
-  int ARREARS;
-  int TOTAL;
-  int PENALTY;
-  String BILL_TITLE;
-  String BILL_FOOTER;
-  String INVOICE_TITLE;
-  String INVOICE_FOOTER;
-  String ISSUE_DATE;
-  String CONSUMER_NO;
-  String AREA;
-  String BILL_PREFIX;
+  List<dynamic>? BillDetails;
+  List<dynamic>? HEADS;
+  int? ARREARS;
+  int? TOTAL;
+  int? PENALTY;
+  String? BILL_TITLE;
+  String? BILL_FOOTER;
+  String? INVOICE_TITLE;
+  String? INVOICE_FOOTER;
+  String? ISSUE_DATE;
+  String? CONSUMER_NO;
+  String? AREA;
+  String? BILL_PREFIX;
+  String? Email;
 
   BillViewResponse({this.BillDetails,this.HEADS,this.ARREARS, this.TOTAL, this.PENALTY, this.BILL_TITLE, this.BILL_FOOTER, this.INVOICE_TITLE,
-    this.INVOICE_FOOTER, this.ISSUE_DATE, this.CONSUMER_NO, this.AREA, this.BILL_PREFIX});
+    this.INVOICE_FOOTER, this.ISSUE_DATE, this.CONSUMER_NO, this.AREA, this.BILL_PREFIX,this.Email});
 
 
   factory BillViewResponse.fromJson(Map<String, dynamic> json){
@@ -34,7 +35,8 @@ class BillViewResponse {
         ISSUE_DATE: json['ISSUE_DATE'],
         CONSUMER_NO: json['CONSUMER_NO'],
         AREA: json['AREA'],
-        BILL_PREFIX: json['BILL_PREFIX']
+        BILL_PREFIX: json['BILL_PREFIX'],
+        Email: json['Email']
     );
   }
 

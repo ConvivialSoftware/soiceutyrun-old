@@ -2,23 +2,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Expense {
-  String ID;
-  String VOUCHER_NO;
-  String VOUCHER_REFENCE_NO;
-  String AMOUNT;
-  String TRANSACTION_TYPE;
-  String REFERENCE_NO;
-  String BANK;
-  String STATUS;
-  String ATTACHMENT;
-  String REMARK;
-  String PAYMENT_DATE;
-  String CHEQUE_CLEARANCE_DATE;
-  String C_DATE;
-  String ADDED_BY;
-  String name;
-  String BANK_NAME;
-  List<dynamic> head_details;
+  String? ID;
+  String? VOUCHER_NO;
+  String? VOUCHER_REFENCE_NO;
+  String? AMOUNT;
+  String? TRANSACTION_TYPE;
+  String? REFERENCE_NO;
+  String? BANK;
+  String? STATUS;
+  String? ATTACHMENT;
+  String? REMARK;
+  String? PAYMENT_DATE;
+  String? CHEQUE_CLEARANCE_DATE;
+  String? C_DATE;
+  String? ADDED_BY;
+  String? name;
+  String? BANK_NAME;
+  List<dynamic>? head_details;
   Expense({this.ID, this.VOUCHER_NO, this.VOUCHER_REFENCE_NO, this.AMOUNT,
     this.TRANSACTION_TYPE, this.REFERENCE_NO, this.BANK, this.STATUS,
     this.ATTACHMENT, this.REMARK, this.PAYMENT_DATE, this.CHEQUE_CLEARANCE_DATE,

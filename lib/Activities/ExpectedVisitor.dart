@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/Cab.dart';
 import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/GuestOthers.dart';

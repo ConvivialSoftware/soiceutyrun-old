@@ -2,24 +2,24 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 
 class DataResponse {
-  List<dynamic> service;
-  List<dynamic> refer;
-  List<dynamic> data;
-  List<dynamic> front;
-  List<dynamic> bank;
-  List<dynamic> category;
-  List<dynamic> Year;
-  List<dynamic> unit;
-  List<dynamic> Role;
-  String message;
-  String android_version;
-  String android_type;
-  String ios_version;
-  String ios_type;
-  bool status;
-  String dataString;
-  int AMOUNT;
-  int PENALTY;
+  List<dynamic>? service;
+  List<dynamic>? refer;
+  List<dynamic>? data;
+  List<dynamic>? front;
+  List<dynamic>? bank;
+  List<dynamic>? category;
+  List<dynamic>? Year;
+  List<dynamic>? unit;
+  List<dynamic>? Role;
+  String? message;
+  String? android_version;
+  String? android_type;
+  String? ios_version;
+  String? ios_type;
+  bool? status;
+  String? dataString;
+  int? AMOUNT;
+  int? PENALTY;
 
   DataResponse({this.data, this.message, this.status,
     this.android_version,this.android_type,this.ios_version,

@@ -2,12 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class LedgerResponse {
 
-  List<dynamic> year;
-  List<dynamic> ledger;
-  List<dynamic> pending_request;
-  List<dynamic> openingBalance;
-  String billPrefix;
-  String receiptPrefix;
+  List<dynamic>? year;
+  List<dynamic>? ledger;
+  List<dynamic>? pending_request;
+  List<dynamic>? openingBalance;
+  String? billPrefix;
+  String? receiptPrefix;
 
   LedgerResponse({this.ledger, this.openingBalance, this.billPrefix, this.receiptPrefix,this.pending_request,this.year});
 

@@ -12,12 +12,12 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 
 class GatePass extends ChangeNotifier{
 
-  List<Visitor> visitorList = List<Visitor>();
-  List<ScheduleVisitor> scheduleVisitorList = List<ScheduleVisitor>();
-  List<StaffCount> staffListCount = List<StaffCount>();
-  List<Staff> staffList = List<Staff>();
+  List<Visitor> visitorList = <Visitor>[];
+  List<ScheduleVisitor> scheduleVisitorList = <ScheduleVisitor>[];
+  List<StaffCount> staffListCount = <StaffCount>[];
+  List<Staff> staffList = <Staff>[];
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
 
 
 
@@ -32,17 +32,17 @@ class GatePass extends ChangeNotifier{
       String flat = await GlobalFunctions.getFlat();
 
       await restClient.getGatePassData(societyId,block,flat).then((value) {
-        visitorList = List<Visitor>.from(value.visitor.map((i) => Visitor.fromJson(i)));
+        visitorList = List<Visitor>.from(value.visitor!.map((i) => Visitor.fromJson(i)));
         print('_visitor length : ' + visitorList.length.toString());
         scheduleVisitorList = List<ScheduleVisitor>.from(
-            value.schedule_visitor.map((i) => ScheduleVisitor.fromJson(i)));
+            value.schedule_visitor!.map((i) => ScheduleVisitor.fromJson(i)));
         isLoading = false;
         notifyListeners();
 
       });
     } catch (e) {
       errMsg = e.toString();
-      print('errMsg : '+errMsg);
+      print('errMsg : '+errMsg!);
       isLoading = false;
       notifyListeners();
     }
@@ -84,7 +84,7 @@ class GatePass extends ChangeNotifier{
     String societyId = await GlobalFunctions.getSocietyId();
 
    await restClient.staffCount(societyId,staffType).then((value) {
-      List<dynamic> _list = value.data;
+      List<dynamic> _list = value.data!;
       staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
       print('staffList : '+staffListCount.toString());
       isLoading=false;
@@ -106,7 +106,7 @@ class GatePass extends ChangeNotifier{
     String societyId = await GlobalFunctions.getSocietyId();
    await  restClient.staffRoleDetails(societyId, roleName,type).then((value) {
 
-      List<dynamic> _list = value.data;
+      List<dynamic> _list = value.data!;
       staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
       isLoading=false;
       notifyListeners();
@@ -130,10 +130,10 @@ class GatePass extends ChangeNotifier{
 }
 
 class GatePassResponse {
-  List<dynamic> visitor;
-  List<dynamic> schedule_visitor;
-  String message;
-  bool status;
+  List<dynamic>? visitor;
+  List<dynamic>? schedule_visitor;
+  String? message;
+  bool? status;
 
   GatePassResponse({this.visitor,this.schedule_visitor, this.message, this.status});
 

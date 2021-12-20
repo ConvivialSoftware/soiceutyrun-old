@@ -2,8 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class BankResponse {
-  List<dynamic> BillDetails;
-  List<dynamic> bank;
+  List<dynamic>? BillDetails;
+  List<dynamic>? bank;
 
   BankResponse({this.BillDetails,this.bank});
 

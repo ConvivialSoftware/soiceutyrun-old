@@ -16,7 +16,7 @@ abstract class RestClientDiscover {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.displayOwnerClassifiedAPI)
-  Future<DataResponse> getOwnerClassifiedData(@Field("User_Id") String userId,@Field("SOCIETY_ID") String societyId,@Field("Id") String id);
+  Future<DataResponse> getOwnerClassifiedData(@Field("User_Id") String userId,@Field("SOCIETY_ID") String societyId,@Field("Id") String? id);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.insertClassifiedAPI)
@@ -25,11 +25,12 @@ abstract class RestClientDiscover {
       @Field("Category") String category, @Field("Type") String type,
       @Field("Title") String title, @Field("Description") String description,
      /* @Field("Property_Details") String propertyDetails,*/ @Field("Price") String price,
-      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,
+      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name[]") var images,
       @Field("Address") String address, @Field("Pincode") String pincode,
       @Field("Society_Name") String Society_Name,
       @Field("SOCIETY_ID") String societyId,
       @Field("add_visibility") String add_visibility,
+      @Field("GCM_ID") String gcmId,
       );
 
   @FormUrlEncoded()
@@ -39,7 +40,7 @@ abstract class RestClientDiscover {
       @Field("Category") String category, @Field("Type") String type,
       @Field("Title") String title, @Field("Description") String description,
       /* @Field("Property_Details") String propertyDetails,*/ @Field("Price") String price,
-      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name") var images,
+      @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name[]") var images,
       @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String Society_Name,@Field("add_visibility") String add_visibility,);
 
   @FormUrlEncoded()

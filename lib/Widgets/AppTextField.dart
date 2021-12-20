@@ -19,10 +19,12 @@ class AppTextField extends StatefulWidget {
       inputFormatters,
       contentPadding,
       obscureText,
+      validator,
       suffixIcon;
 
-  AppTextField({@required this.textHintContent,
-    @required this.controllerCallback,
+  AppTextField({
+    required this.textHintContent,
+    required this.controllerCallback,
     this.borderWidth = 2.0,
     this.borderRadius = 10.0,
     this.maxLines=1,
@@ -33,6 +35,7 @@ class AppTextField extends StatefulWidget {
     this.textCapitalization=TextCapitalization.sentences,
     this.inputFormatters,this.contentPadding,
     this.obscureText=false,
+    this.validator,
   });
 
   @override
@@ -55,7 +58,7 @@ class AppTextFieldState extends State<AppTextField> {
             width: widget.borderWidth,
           )),*/
       child:
-      TextField(
+      TextFormField(
         controller: widget.controllerCallback,
         readOnly: widget.readOnly,
         maxLines: widget.maxLines,
@@ -64,6 +67,7 @@ class AppTextFieldState extends State<AppTextField> {
         textCapitalization:widget.textCapitalization,
         inputFormatters:widget.inputFormatters??<TextInputFormatter>[],
         obscureText: widget.obscureText,
+        validator: widget.validator,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -116,7 +120,7 @@ class AppTextFieldState extends State<AppTextField> {
   }
 
   @override
-  State<StatefulWidget> createState() {
+  State<StatefulWidget>? createState() {
     // TODO: implement createState
     return null;
   }

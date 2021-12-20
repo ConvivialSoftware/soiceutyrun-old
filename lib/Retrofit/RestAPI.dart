@@ -48,29 +48,27 @@ class RestAPI
   }
 
   final Dio _dio;
-  String baseUrl;
+  String? baseUrl;
 
-  RequestOptions newRequestOptions(Options options) {
-    if (options is RequestOptions) {
-      return options;
+  Options restClientOption() {
+    return Options(
+        headers: <String, dynamic>{
+          "Authorization": GlobalVariables.AUTH,
+        }
+    );
     }
-    if (options == null) {
-      return RequestOptions();
+  Options restClientERPOption() {
+    return Options(
+        headers: <String, dynamic>{
+          "Authorization": GlobalVariables.AUTHERP,
+        }
+    );
     }
-    return RequestOptions(
-      method: options.method,
-      sendTimeout: options.sendTimeout,
-      receiveTimeout: options.receiveTimeout,
-      extra: options.extra,
-      headers: options.headers,
-      responseType: options.responseType,
-      contentType: options.contentType,
-      validateStatus: options.validateStatus,
-      receiveDataWhenStatusError: options.receiveDataWhenStatusError,
-      followRedirects: options.followRedirects,
-      maxRedirects: options.maxRedirects,
-      requestEncoder: options.requestEncoder,
-      responseDecoder: options.responseDecoder,
+  Options restClientDiscoverOption() {
+    return Options(
+        headers: <String, dynamic>{
+          "Authorization": GlobalVariables.AUTHDiscover,
+        }
     );
   }
 
@@ -92,14 +90,10 @@ class RestAPI
       Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:
       token
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.LoginAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.LoginAPI);
     print('LOGIN TOKEN >>>> $token');
-    final Response _result = await _dio.post(GlobalVariables.LoginAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.LoginAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of login response : ' + value.toString());
@@ -128,13 +122,9 @@ class RestAPI
       Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:
       token
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.otpLoginAPI);
-    final Response _result = await _dio.post(GlobalVariables.otpLoginAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.otpLoginAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.otpLoginAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of login response : ' + value.toString());
@@ -149,13 +139,9 @@ class RestAPI
 
     FormData formData =
     FormData.fromMap({"mobile_no": mobile, "Email_id": emailId});
-    print('baseurl : ' + baseUrl + GlobalVariables.otpSendAPI);
-    final Response _result = await _dio.post(GlobalVariables.otpSendAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.otpSendAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.otpSendAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getOTP response : ' + value.toString());
@@ -180,13 +166,9 @@ class RestAPI
       GlobalVariables.userID: userId,
       "confirm_pwd": confirmPassword
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.newPasswordAPI);
-    final Response _result = await _dio.post(GlobalVariables.newPasswordAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.newPasswordAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.newPasswordAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of changeNewPassword response : ' + value.toString());
@@ -207,13 +189,9 @@ class RestAPI
     });
     print('username : ' + username);
     // print('password : ' + password);
-    print('baseurl : ' + baseUrl + GlobalVariables.AllSocietyAPI);
-    final Response _result = await _dio.post(GlobalVariables.AllSocietyAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.AllSocietyAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.AllSocietyAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
 
@@ -238,13 +216,9 @@ class RestAPI
     print(GlobalVariables.flat + " " + blockflat);
     print(GlobalVariables.block + " " + block);
 
-    print('baseurlERP : ' + baseUrl + GlobalVariables.duesAPI);
-    final Response _result = await _dio.post(GlobalVariables.duesAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTHERP,
-            }, baseUrl: baseUrl),
+    print('baseurlERP : ' + baseUrl! + GlobalVariables.duesAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.duesAPI,
+        options: restClientERPOption(),
         data: formData);
     final value = _result.data;
     print('value of getDuesData : ' + value.toString());
@@ -268,13 +242,9 @@ class RestAPI
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitMemberAPI);
-    final Response _result = await _dio.post(GlobalVariables.unitMemberAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitMemberAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitMemberAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getMembersData : ' + value.toString());
@@ -298,13 +268,9 @@ class RestAPI
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitStaffAPI);
-    final Response _result = await _dio.post(GlobalVariables.unitStaffAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitStaffAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitStaffAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getStaffData : ' + value.toString());
@@ -319,13 +285,9 @@ class RestAPI
     FormData formData = FormData.fromMap({GlobalVariables.societyId: socId});
     print(GlobalVariables.societyId + ": " + socId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitStaffAPI);
-    final Response _result = await _dio.post(GlobalVariables.unitStaffAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitStaffAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitStaffAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getStaffData : ' + value.toString());
@@ -349,13 +311,9 @@ class RestAPI
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitVehicleAPI);
-    final Response _result = await _dio.post(GlobalVariables.unitVehicleAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitVehicleAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitVehicleAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('runtimeType of getVehicleData : ' + value.runtimeType.toString());
@@ -393,13 +351,9 @@ class RestAPI
     var url = isAssignComplaint
         ? GlobalVariables.assignComplaintsAPI
         : GlobalVariables.ComplaintsAPI;
-    print('baseurl : ' + baseUrl + url);
-    final Response _result = await _dio.post(url,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + url);
+    final Response _result = await _dio.post(baseUrl!+url,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getComplaintData : ' + value.toString());
@@ -419,13 +373,9 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + socId);
     print(GlobalVariables.ticketNo + ": " + ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.CommentAPI);
-    final Response _result = await _dio.post(GlobalVariables.CommentAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.CommentAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.CommentAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getCommentData : ' + value.toString());
@@ -445,13 +395,9 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
     print(GlobalVariables.userID + ": " + userId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.DocumentAPI);
-    final Response _result = await _dio.post(GlobalVariables.DocumentAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.DocumentAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.DocumentAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getDocumentData : ' + value.toString());
@@ -466,7 +412,7 @@ class RestAPI
       String ticketNo,
       String updateStatus,
       String comment,
-      String attachment,
+      String? attachment,
       String type,
       String escalationLevel,
       String socName,
@@ -508,16 +454,26 @@ class RestAPI
       GlobalVariables.userEmail: eMail,
       GlobalVariables.NAME: name,
     });
-    print(GlobalVariables.societyId + ": " + socId);
-    print(GlobalVariables.ticketNo + ": " + ticketNo);
+    print({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.userID: userId,
+      GlobalVariables.parentTicket: ticketNo,
+      GlobalVariables.status: updateStatus,
+      GlobalVariables.COMMENT: comment,
+      GlobalVariables.TYPE: type,
+      GlobalVariables.ATTACHMENT: attachment,
+      GlobalVariables.ESCALATION_LEVEL: escalationLevel,
+      GlobalVariables.societyName: socName,
+      GlobalVariables.societyEmail: socEmail,
+      GlobalVariables.userEmail: eMail,
+      GlobalVariables.NAME: name,
+    }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.UpdateStatusAPI);
-    final Response _result = await _dio.post(GlobalVariables.UpdateStatusAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.UpdateStatusAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.UpdateStatusAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getUpdateComplaintStatus : ' + value.toString());
@@ -534,13 +490,9 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.ComplaintsAreaAPI);
-    final Response _result = await _dio.post(GlobalVariables.ComplaintsAreaAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.ComplaintsAreaAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.ComplaintsAreaAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getComplaintsAreaData : ' + value.toString());
@@ -557,14 +509,10 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.ComplaintsCategoryAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.ComplaintsCategoryAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.ComplaintsCategoryAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.ComplaintsCategoryAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getComplaintsCategoryData : ' + value.toString());
@@ -583,8 +531,8 @@ class RestAPI
       String description,
       String priority,
       String name,
-      String attachment,
-      String attachmentName,
+      String? attachment,
+      String? attachmentName,
       String socName,
       String eMail,
       String socEmail) async {
@@ -627,13 +575,27 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.AddComplaintsAPI);
-    final Response _result = await _dio.post(GlobalVariables.AddComplaintsAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('data : ' +  {
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat,
+      GlobalVariables.userID: userId,
+      GlobalVariables.SUBJECT: subject,
+      GlobalVariables.TYPE: type,
+      // GlobalVariables.COMPLAINT_AREA: area,
+      GlobalVariables.CATEGORY: category,
+      GlobalVariables.PRIORITY: priority,
+      GlobalVariables.DESCRIPTION: description,
+      GlobalVariables.NAME: name,
+      GlobalVariables.ATTACHMENT: attachment,
+      GlobalVariables.ATTACHMENT_NAME: attachmentName,
+      GlobalVariables.societyName: socName,
+      GlobalVariables.societyEmail: socEmail,
+      GlobalVariables.userEmail: eMail,
+    }.toString());
+    print('baseurl : ' + baseUrl! + GlobalVariables.AddComplaintsAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.AddComplaintsAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addComplaint : ' + value.toString());
@@ -656,13 +618,9 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
     print(GlobalVariables.Type + ": " + type);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.AnnouncementAPI);
-    final Response _result = await _dio.post(GlobalVariables.AnnouncementAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.AnnouncementAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.AnnouncementAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getAnnouncementData : ' + value.toString());
@@ -679,14 +637,10 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.CommitteeDirectoryAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.CommitteeDirectoryAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.CommitteeDirectoryAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.CommitteeDirectoryAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getCommitteeDirectoryData : ' + value.toString());
@@ -703,14 +657,10 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.EmergencyDirectoryAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.EmergencyDirectoryAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.EmergencyDirectoryAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.EmergencyDirectoryAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getEmergencyDirectoryData : ' + value.toString());
@@ -726,14 +676,10 @@ class RestAPI
       GlobalVariables.societyId: societyId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.NeighboursDirectoryAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.NeighboursDirectoryAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.NeighboursDirectoryAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.NeighboursDirectoryAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getNeighboursDirectoryData : ' + value.toString());
@@ -760,14 +706,10 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.AnnouncementPollAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.AnnouncementPollAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.AnnouncementPollAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.AnnouncementPollAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getAnnouncementPollData'
@@ -788,12 +730,12 @@ class RestAPI
       String userName,
       String mobile,
       String alternateMobile,
-      String bloodGroup,
+      String? bloodGroup,
       String occupation,
       String livesHere,
       String membershipType,
       String address,
-      String profilePic) async {
+      String? profilePic) async {
     // TODO: implement addMember
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -819,7 +761,7 @@ class RestAPI
       GlobalVariables.USER_NAME: userName,
       GlobalVariables.MOBILE: mobile,
       GlobalVariables.ALTERNATE_CONTACT1: alternateMobile,
-      GlobalVariables.BLOOD_GROUP: bloodGroup ?? '',
+      GlobalVariables.BLOOD_GROUP: bloodGroup,
       GlobalVariables.OCCUPATION: occupation,
       GlobalVariables.LIVES_HERE: livesHere,
       GlobalVariables.TYPE: membershipType,
@@ -837,7 +779,7 @@ class RestAPI
       GlobalVariables.USER_NAME: userName,
       GlobalVariables.MOBILE: mobile,
       GlobalVariables.ALTERNATE_CONTACT1: alternateMobile,
-      GlobalVariables.BLOOD_GROUP: bloodGroup ?? '',
+      GlobalVariables.BLOOD_GROUP: bloodGroup,
       GlobalVariables.OCCUPATION: occupation,
       GlobalVariables.LIVES_HERE: livesHere,
       GlobalVariables.TYPE: membershipType,
@@ -845,16 +787,12 @@ class RestAPI
       GlobalVariables.PROFILE_PHOTO: profilePic,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitAddMemberAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitAddMemberAPI);
 
     // print("Pic String: " + profilePic);
     // print('attachment lengtth : ' + profilePic.length.toString());
-    final Response _result = await _dio.post(GlobalVariables.unitAddMemberAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitAddMemberAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addMember : ' + value.toString());
@@ -893,13 +831,9 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitAddVehicleAPI);
-    final Response _result = await _dio.post(GlobalVariables.unitAddVehicleAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitAddVehicleAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitAddVehicleAPI,
+        options:restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addVehicle : ' + value.toString());
@@ -935,14 +869,10 @@ class RestAPI
     print(GlobalVariables.NAME + ": " + name);
     print(GlobalVariables.MOBILE_NO + ": " + mobile);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.AddGatePassScheduleAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.AddGatePassScheduleAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.AddGatePassScheduleAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.AddGatePassScheduleAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addScheduleVisitorGatePass : ' + value.toString());
@@ -965,13 +895,9 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.GatePassAPI);
-    final Response _result = await _dio.post(GlobalVariables.GatePassAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.GatePassAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.GatePassAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getGatePassData'
@@ -1003,14 +929,10 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.GetGatePassScheduleAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.GetGatePassScheduleAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.GetGatePassScheduleAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.GetGatePassScheduleAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getGatePassScheduleVisitorData'
@@ -1043,18 +965,9 @@ class RestAPI
     print(GlobalVariables.block + " " + block);
     print('YEAR' + " " + year.toString());
 
-    print('baseurlERP : ' + baseUrl + GlobalVariables.ledgerAPI);
-    final Response _result = await _dio.post(GlobalVariables.ledgerAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTHERP,
-          },
-          baseUrl: baseUrl,
-          //   contentType: ContentType.parse("application/x-www-form-urlencoded"),
-          //followRedirects: true,
-          // validateStatus: (status){return status<500;}
-        ),
+    print('baseurlERP : ' + baseUrl! + GlobalVariables.ledgerAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.ledgerAPI,
+        options: restClientERPOption(),
         data: formData);
     final value = _result.data;
     //print('runtimeType of getLedgerData : ' + value.runtimeType.toString());
@@ -1084,18 +997,9 @@ class RestAPI
     print(GlobalVariables.flat + ":" + flat);
     print(GlobalVariables.block + ":" + block);
 
-    print('baseurlERP : ' + baseUrl + GlobalVariables.viewBillsAPI);
-    final Response _result = await _dio.post(GlobalVariables.viewBillsAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTHERP,
-          },
-          baseUrl: baseUrl,
-          //  contentType: ContentType.parse("application/x-www-form-urlencoded"),
-          //  followRedirects: false,
-          // validateStatus: (status){return status<500;}
-        ),
+    print('baseurlERP : ' + baseUrl! + GlobalVariables.viewBillsAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.viewBillsAPI,
+        options: restClientERPOption(),
         data: formData);
     final value = _result.data;
     print('value of getAllBillData : ' + value.toString());
@@ -1118,18 +1022,9 @@ class RestAPI
     // print(GlobalVariables.flat + ":" + flat);
     print(GlobalVariables.INVOICE_NO + ":" + invoiceNo.toString());
 
-    print('baseurlERP : ' + baseUrl + GlobalVariables.bankAPI);
-    final Response _result = await _dio.post(GlobalVariables.bankAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTHERP,
-          },
-          baseUrl: baseUrl,
-          //  contentType: ContentType.parse("application/x-www-form-urlencoded"),
-          //  followRedirects: false,
-          // validateStatus: (status){return status<500;}
-        ),
+    print('baseurlERP : ' + baseUrl! + GlobalVariables.bankAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.bankAPI,
+        options: restClientERPOption(),
         data: formData);
     final value = _result.data;
     print('value of getBankData : ' + value.toString());
@@ -1138,7 +1033,7 @@ class RestAPI
 
   @override
   Future<BillViewResponse> getBillData(String socId, String flat, String block,
-      String invoiceNo, String year) async {
+      String invoiceNo, String? year) async {
     // TODO: implement getBillData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1163,18 +1058,9 @@ class RestAPI
       'YEAR': year
     }.toString());
 
-    print('baseurlERP : ' + baseUrl + GlobalVariables.billAPI);
-    final Response _result = await _dio.post(GlobalVariables.billAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTHERP,
-          },
-          baseUrl: baseUrl,
-          // contentType: ContentType.parse("application/x-www-form-urlencoded"),
-          //  followRedirects: false,
-          // validateStatus: (status){return status<500;}
-        ),
+    print('baseurlERP : ' + baseUrl! + GlobalVariables.billAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.billAPI,
+        options: restClientERPOption(),
         data: formData);
     final value = _result.data;
     print('value of getBillData : ' + value.toString());
@@ -1183,7 +1069,7 @@ class RestAPI
 
   @override
   Future<ReceiptViewResponse> getReceiptData(String socId, String flat,
-      String block, String receiptNo, String year) async {
+      String block, String receiptNo, String? year) async {
     // TODO: implement getReceiptData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1197,24 +1083,18 @@ class RestAPI
       GlobalVariables.RECEIPT_NO: receiptNo,
       'YEAR': year
     });
-    print(GlobalVariables.societyId + ":" + socId);
-    print(GlobalVariables.flat + ":" + flat);
-    print(GlobalVariables.block + ":" + block);
-    print(GlobalVariables.RECEIPT_NO + ":" + receiptNo);
-    print('YEAR' + ":" + year.toString());
 
-    print('baseurlERP : ' + baseUrl + GlobalVariables.receiptAPI);
-    final Response _result = await _dio.post(GlobalVariables.receiptAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTHERP,
-          },
-          baseUrl: baseUrl,
-          //contentType: ContentType.parse("application/x-www-form-urlencoded"),
-          //  followRedirects: false,
-          // validateStatus: (status){return status<500;}
-        ),
+    print({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.flat: flat,
+      GlobalVariables.block: block,
+      GlobalVariables.RECEIPT_NO: receiptNo,
+      'YEAR': year
+    }.toString());
+
+    print('baseurlERP : ' + baseUrl! + GlobalVariables.receiptAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.receiptAPI,
+        options: restClientERPOption(),
         data: formData);
     final value = _result.data;
     print('value of getReceiptData : ' + value.toString());
@@ -1268,16 +1148,12 @@ class RestAPI
     });
     print(GlobalVariables.status + ": " + status);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.paymentRequestAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.paymentRequestAPI);
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(GlobalVariables.paymentRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.paymentRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addAlreadyPaidPaymentRequest : ' + value.toString());
@@ -1331,16 +1207,12 @@ class RestAPI
     print(GlobalVariables.status + ": " + paymentStatus.toString());
     print(GlobalVariables.orderID + ": " + orderID.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.insertPaymentAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.insertPaymentAPI);
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(GlobalVariables.insertPaymentAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.insertPaymentAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addOnlinePaymentRequest : ' + value.toString());
@@ -1356,13 +1228,9 @@ class RestAPI
     FormData formData = FormData.fromMap(
         {GlobalVariables.societyId: societyId, GlobalVariables.userID: userId});
 
-    print('baseurl : ' + baseUrl + GlobalVariables.profileAPI);
-    final Response _result = await _dio.post(GlobalVariables.profileAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.profileAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.profileAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
 
@@ -1377,11 +1245,11 @@ class RestAPI
       String name,
       String phone,
       String altCon1,
-      String profilePhoto,
+      String? profilePhoto,
       String address,
       String gender,
       String dob,
-      String bloodGroup,
+      String? bloodGroup,
       String occupation,
       String email,
       String type,
@@ -1401,7 +1269,7 @@ class RestAPI
       GlobalVariables.ALTERNATE_CONTACT1: altCon1,
       GlobalVariables.GENDER: gender,
       GlobalVariables.DOB: dob,
-      GlobalVariables.BLOOD_GROUP: bloodGroup ?? '',
+      GlobalVariables.BLOOD_GROUP: bloodGroup,
       GlobalVariables.OCCUPATION: occupation,
       GlobalVariables.Email: email,
       GlobalVariables.ADDRESS: address
@@ -1420,19 +1288,15 @@ class RestAPI
       GlobalVariables.ALTERNATE_CONTACT1: altCon1,
       GlobalVariables.GENDER: gender,
       GlobalVariables.DOB: dob,
-      GlobalVariables.BLOOD_GROUP: bloodGroup ?? '',
+      GlobalVariables.BLOOD_GROUP: bloodGroup,
       GlobalVariables.OCCUPATION: occupation,
       GlobalVariables.Email: email,
       GlobalVariables.ADDRESS: address
       //GlobalVariables.
     }.toString());
-    print('baseurl : ' + baseUrl + GlobalVariables.editProfileAPI);
-    final Response _result = await _dio.post(GlobalVariables.editProfileAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.editProfileAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.editProfileAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
 
@@ -1449,13 +1313,9 @@ class RestAPI
     FormData formData =
     FormData.fromMap({GlobalVariables.societyId: societyId});
 
-    print('baseurl : ' + baseUrl + GlobalVariables.payOptionAPI);
-    final Response _result = await _dio.post(GlobalVariables.payOptionAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.payOptionAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.payOptionAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
 
@@ -1476,14 +1336,10 @@ class RestAPI
       GlobalVariables.Contact: contact
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.staffMobileVerifyAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.staffMobileVerifyAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.staffMobileVerifyAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.staffMobileVerifyAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
 
@@ -1505,8 +1361,8 @@ class RestAPI
       String role,
       String qualification,
       String address,
-      String picture,
-      String identityProof,) async {
+      String? picture,
+      String? identityProof,) async {
     // TODO: implement addStaffMember
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
@@ -1539,13 +1395,9 @@ class RestAPI
       "IMAGE": picture,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addStaffMemberAPI);
-    final Response _result = await _dio.post(GlobalVariables.addStaffMemberAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.addStaffMemberAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addStaffMemberAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addStaffMember : ' + value.toString());
@@ -1566,8 +1418,8 @@ class RestAPI
       String role,
       String qualification,
       String address,
-      String picture,
-      String identityProof,) async {
+      String? picture,
+      String? identityProof,) async {
 
     /*@Field("USER_ID") String userId,
       @Field("SOCIETY_ID") String societyId,
@@ -1615,13 +1467,9 @@ class RestAPI
       "PROFILE_PHOTO": picture,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addMaintenanceStaffMemberAPI);
-    final Response _result = await _dio.post(GlobalVariables.addMaintenanceStaffMemberAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.addMaintenanceStaffMemberAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addMaintenanceStaffMemberAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addMaintenanceStaffMemberAPI : ' + value.toString());
@@ -1640,15 +1488,10 @@ class RestAPI
       GatePassFields.GCM_ID: gcmId,
       GatePassFields.SOCIETY_ID: societyId,
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.approveGatePassAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.approveGatePassAPI);
 
-    final Response _result = await _dio.post(GlobalVariables.approveGatePassAPI,
-        options: RequestOptions(
-            method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            },
-            baseUrl: GlobalVariables.BaseURL),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.approveGatePassAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of postApproveGatePass : ' + value.toString());
@@ -1682,7 +1525,7 @@ class RestAPI
 */
   @override
   Future<StatusMsgResponse> getBillMail(String socId, String type,
-      String number, String emailId, String year) async {
+      String number, String emailId, String? year) async {
     // TODO: implement getBillMail
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(type, GlobalVariables.TYPE);
@@ -1696,13 +1539,16 @@ class RestAPI
       GlobalVariables.Email_id: emailId,
       'YEAR': year
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.mailAPI);
-    final Response _result = await _dio.post(GlobalVariables.mailAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.TYPE: type,
+      GlobalVariables.NUMBER: number,
+      GlobalVariables.Email_id: emailId,
+      'YEAR': year
+    }.toString());
+    print('baseurl : ' + baseUrl! + GlobalVariables.mailAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.mailAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getBillMail response : ' + value.toString());
@@ -1721,13 +1567,9 @@ class RestAPI
     FormData formData = FormData.fromMap(
         {"mobile_no": mobile, "Email_id": emailId, "otp": otp});
     print('otp : ' + otp);
-    print('baseurl : ' + baseUrl + GlobalVariables.otpReSendAPI);
-    final Response _result = await _dio.post(GlobalVariables.otpReSendAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.otpReSendAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.otpReSendAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getResendOTP response : ' + value.toString());
@@ -1742,15 +1584,10 @@ class RestAPI
   @override
   Future<DataResponse> getBannerData() async {
     // TODO: implement getBannerData
-    print('baseurl : ' + baseUrl + GlobalVariables.bannerAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.bannerAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.bannerAPI,
-      options: RequestOptions(
-          method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          },
-          baseUrl: GlobalVariables.BaseURL),
+      baseUrl!+GlobalVariables.bannerAPI,
+      options: restClientOption(),
       //    data: formData
     );
     final value = _result.data;
@@ -1772,14 +1609,10 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + socId);
     print(GlobalVariables.parentTicket + ": " + ticketNo);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.TicketNoComplaintAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.TicketNoComplaintAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.TicketNoComplaintAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.TicketNoComplaintAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getComplaintDataAgainstTicketNo : ' + value.toString());
@@ -1796,13 +1629,9 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.allMemberAPI);
-    final Response _result = await _dio.post(GlobalVariables.allMemberAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.allMemberAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.allMemberAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getAllMemberDirectoryData : ' + value.toString());
@@ -1835,13 +1664,9 @@ class RestAPI
       'Attachment': attachment,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.feedbackAPI);
-    final Response _result = await _dio.post(GlobalVariables.feedbackAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.feedbackAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.feedbackAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addFeedback : ' + value.toString());
@@ -1852,15 +1677,15 @@ class RestAPI
   Future<Map<String, dynamic>> getRazorPayOrderID(RazorPayOrderRequest request,
       String razorKey, String secretKey) async {
     var authorizedToken = razorKey + ":" + secretKey;
-    print('baseurl : ' + baseUrl + GlobalVariables.razorPayOrderAPI);
-    final Response _result = await _dio.post(GlobalVariables.razorPayOrderAPI,
-        options: RequestOptions(
+    print('baseurl : ' + baseUrl! + GlobalVariables.razorPayOrderAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.razorPayOrderAPI,
+        options: Options(
           //method: GlobalVariables.Post,
             headers: <String, dynamic>{
               "Authorization":
               "Basic " + base64Url.encode(utf8.encode(authorizedToken)),
               "Content-type": "application/json"
-            }, baseUrl: baseUrl),
+            }),
         data: request);
     final value = _result.data;
     print('value of getRazorPayOrderID : ' + value.toString());
@@ -1882,14 +1707,10 @@ class RestAPI
       "ORDER_ID": orderId,
       "AMOUNT": amount
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.razorPayTransactionAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.razorPayTransactionAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.razorPayTransactionAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.razorPayTransactionAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getBillMail response : ' + value.toString());
@@ -1910,13 +1731,9 @@ class RestAPI
       GlobalVariables.userID: userId,
       GlobalVariables.GCM_ID: gcmId
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.logoutAPI);
-    final Response _result = await _dio.post(GlobalVariables.logoutAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.logoutAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.logoutAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of userLogout response : ' + value.toString());
@@ -1945,13 +1762,9 @@ class RestAPI
     });
     print('ID : ' + pollId);
     print('OPTION : ' + optionId);
-    print('baseurl : ' + baseUrl + GlobalVariables.pollVoteAPI);
-    final Response _result = await _dio.post(GlobalVariables.pollVoteAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.pollVoteAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.pollVoteAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addPollVote response : ' + value.toString());
@@ -1972,14 +1785,10 @@ class RestAPI
       GlobalVariables.ID: id,
       GlobalVariables.status: status
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.gatePassWrongEntryAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.gatePassWrongEntryAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.gatePassWrongEntryAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.gatePassWrongEntryAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addGatePassWrongEntry response : ' + value.toString());
@@ -1996,14 +1805,10 @@ class RestAPI
 
     FormData formData = FormData.fromMap(
         {GlobalVariables.societyId: societyId, GlobalVariables.SR_NO: srNo});
-    print('baseurl : ' + baseUrl + GlobalVariables.deleteExpectedVisitorAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.deleteExpectedVisitorAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.deleteExpectedVisitorAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.deleteExpectedVisitorAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of deleteExpectedVisitor response : ' + value.toString());
@@ -2021,13 +1826,9 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.accountLedgerAPI);
-    final Response _result = await _dio.post(GlobalVariables.accountLedgerAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.accountLedgerAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.accountLedgerAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getExpenseAccountLedger : ' + value.toString());
@@ -2035,8 +1836,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getExpenseData(String societyId, String startDate,
-      String endDate, String heads, String ledgerYear) async {
+  Future<DataResponse> getExpenseData(String societyId, String? startDate,
+      String? endDate, String? heads, String? ledgerYear) async {
     // TODO: implement getExpenseData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
@@ -2055,13 +1856,9 @@ class RestAPI
       "LEDGER_YEAR": ledgerYear,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.expenseAPI);
-    final Response _result = await _dio.post(GlobalVariables.expenseAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.expenseAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.expenseAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getExpenseData : ' + value.toString());
@@ -2078,13 +1875,9 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.expenseBankAPI);
-    final Response _result = await _dio.post(GlobalVariables.expenseBankAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.expenseBankAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.expenseBankAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getExpenseBankAccount : ' + value.toString());
@@ -2100,7 +1893,7 @@ class RestAPI
       String ledgerId,
       String date,
       String narration,
-      String attachment) async {
+      String? attachment) async {
     // TODO: implement addExpense
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(amount, GlobalVariables.AMOUNT);
@@ -2122,18 +1915,24 @@ class RestAPI
       GlobalVariables.NARRATION: narration,
       GlobalVariables.ATTACHMENT: attachment
     });
-    print(GlobalVariables.societyId + ": " + societyId);
+    print({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.AMOUNT: amount,
+      GlobalVariables.REFERENCE_NO: referenceNo,
+      GlobalVariables.TRANSACTION_TYPE: transactionType,
+      GlobalVariables.BANK: bank,
+      GlobalVariables.DATE: date,
+      GlobalVariables.LEDGER_ID: ledgerId,
+      GlobalVariables.NARRATION: narration,
+      GlobalVariables.ATTACHMENT: attachment
+    }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addExpenseAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.addExpenseAPI);
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(GlobalVariables.addExpenseAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addExpenseAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addExpense : ' + value.toString());
@@ -2154,13 +1953,9 @@ class RestAPI
       GlobalVariables.EMAIL_ID: emailId,
       'YEAR': year
     });
-    print('baseurl : ' + baseUrl + GlobalVariables.receiptMailAPI);
-    final Response _result = await _dio.post(GlobalVariables.receiptMailAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.receiptMailAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.receiptMailAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getReceiptMail response : ' + value.toString());
@@ -2182,13 +1977,9 @@ class RestAPI
       GlobalVariables.Type: staffType,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.staffCountAPI);
-    final Response _result = await _dio.post(GlobalVariables.staffCountAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.staffCountAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.staffCountAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of staffCount : ' + value.toString());
@@ -2213,14 +2004,10 @@ class RestAPI
       GlobalVariables.Type: type
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.staffRoleDetailsAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.staffRoleDetailsAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.staffRoleDetailsAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.staffRoleDetailsAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of staffRoleDetails : ' + value.toString());
@@ -2249,13 +2036,9 @@ class RestAPI
     print(GlobalVariables.flat + ": " + flat);
     print('Rate : ' + rate);
     print('SID : ' + staffId);
-    print('baseurl : ' + baseUrl + GlobalVariables.addStaffRattingAPI);
-    final Response _result = await _dio.post(GlobalVariables.addStaffRattingAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.addStaffRattingAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addStaffRattingAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addStaffRatting response : ' + value.toString());
@@ -2282,13 +2065,9 @@ class RestAPI
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
     print('SID : ' + staffId);
-    print('baseurl : ' + baseUrl + GlobalVariables.addHouseholdAPI);
-    final Response _result = await _dio.post(GlobalVariables.addHouseholdAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.addHouseholdAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addHouseholdAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addHouseHold response : ' + value.toString());
@@ -2315,13 +2094,9 @@ class RestAPI
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
     print('SID : ' + staffId);
-    print('baseurl : ' + baseUrl + GlobalVariables.removeHouseholdAPI);
-    final Response _result = await _dio.post(GlobalVariables.removeHouseholdAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.removeHouseholdAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.removeHouseholdAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of removeHouseHold response : ' + value.toString());
@@ -2340,13 +2115,9 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
     print(GlobalVariables.id + ": " + id);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.deleteVehicleAPI);
-    final Response _result = await _dio.post(GlobalVariables.deleteVehicleAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.deleteVehicleAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.deleteVehicleAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of deleteVehicle : ' + value.toString());
@@ -2372,14 +2143,10 @@ class RestAPI
       GlobalVariables.id: id
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.deleteFamilyMemberAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.deleteFamilyMemberAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.deleteFamilyMemberAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.deleteFamilyMemberAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of deleteFamilyMember : ' + value.toString());
@@ -2398,14 +2165,15 @@ class RestAPI
       "SOCIETY_ID": societyId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.displayClassifiedAPI);
+    print({
+      "User_Id": userId,
+      "SOCIETY_ID": societyId,
+    }.toString());
+    print('baseurl : ' + baseUrl! + GlobalVariables.displayClassifiedAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.displayClassifiedAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.displayClassifiedAPI,
+      options: restClientDiscoverOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of displayClassified : ' + value.toString());
@@ -2429,7 +2197,9 @@ class RestAPI
       String address,
       String pinCode,
       String societyName,
-      String societyId,String visibilityPriority) async {
+      String societyId,
+      String visibilityPriority,
+      String gcmId) async {
     // TODO: implement insertClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(name, "Name");
@@ -2464,23 +2234,20 @@ class RestAPI
       "Price": price,
       "Locality": locality,
       "City": city,
-      "Img_Name": images,
+      "Img_Name[]": images,
       "Address": address,
       "Pincode": pinCode,
       "Society_Name": societyName,
       "SOCIETY_ID": societyId,
       "add_visibility": visibilityPriority,
+      "GCM_ID": gcmId,
     });
     //print(GlobalVariables.societyId+": "+socId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.insertClassifiedAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.insertClassifiedAPI);
     final Response _result =
-    await _dio.post(GlobalVariables.insertClassifiedAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.insertClassifiedAPI,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of insertClassifiedData : ' + value.toString());
@@ -2540,7 +2307,7 @@ class RestAPI
       "Price": price,
       "Locality": locality,
       "City": city,
-      "Img_Name": images,
+      "Img_Name[]": images,
       "Address": address,
       "Pincode": pinCode,
       "Society_Name": societyName,
@@ -2548,13 +2315,9 @@ class RestAPI
     });
     print("C_Id: " + classifiedId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.editClassifiedData);
-    final Response _result = await _dio.post(GlobalVariables.editClassifiedData,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.editClassifiedData);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.editClassifiedData,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of editClassifiedData : ' + value.toString());
@@ -2570,13 +2333,9 @@ class RestAPI
       "Id": Id,
     });
     print('appName : ' + appName);
-    print('baseurl : ' + baseUrl + GlobalVariables.exclusiveOfferAPI);
-    final Response _result = await _dio.post(GlobalVariables.exclusiveOfferAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.exclusiveOfferAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.exclusiveOfferAPI,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of getExclusiveOfferData : ' + value.toString());
@@ -2586,14 +2345,10 @@ class RestAPI
   @override
   Future<DataResponse> getCityData() async {
     // TODO: implement getCityData
-    print('baseurl : ' + baseUrl + GlobalVariables.cityAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.cityAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.cityAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl),
+      baseUrl!+GlobalVariables.cityAPI,
+      options: restClientDiscoverOption(),
     );
     final value = _result.data;
     print('value of getCityData : ' + value.toString());
@@ -2636,15 +2391,11 @@ class RestAPI
     });
 
     print('baseurl : ' +
-        baseUrl +
+        baseUrl! +
         GlobalVariables.insertUserInfoOnExclusiveGetCode);
     final Response _result =
-    await _dio.post(GlobalVariables.insertUserInfoOnExclusiveGetCode,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.insertUserInfoOnExclusiveGetCode,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of insertClassifiedData : ' + value.toString());
@@ -2653,7 +2404,7 @@ class RestAPI
 
   @override
   Future<DataResponse> getOwnerClassifiedData(String userId, String societyId,
-      String classifiedId) async {
+      String? classifiedId) async {
     // TODO: implement getOwnerClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     FormData formData = FormData.fromMap({
@@ -2661,15 +2412,17 @@ class RestAPI
       "SOCIETY_ID": societyId,
       "Id": classifiedId,
     });
+    print({
+      "User_Id": userId,
+      "SOCIETY_ID": societyId,
+      "Id": classifiedId,
+    }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.displayOwnerClassifiedAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.displayOwnerClassifiedAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.displayOwnerClassifiedAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.displayOwnerClassifiedAPI,
+      options: restClientDiscoverOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of displayOwnerClassifiedAPI : ' + value.toString());
@@ -2714,14 +2467,10 @@ class RestAPI
     });
 
     print('C_Id : ' + C_Id);
-    print('baseurl : ' + baseUrl + GlobalVariables.interestedClassified);
+    print('baseurl : ' + baseUrl! + GlobalVariables.interestedClassified);
     final Response _result =
-    await _dio.post(GlobalVariables.interestedClassified,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.interestedClassified,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of interestedClassified : ' + value.toString());
@@ -2731,14 +2480,16 @@ class RestAPI
   @override
   Future<DataResponse> getServicesCategory() async {
     // TODO: implement getServicesCategory
-    print('baseurl : ' + baseUrl + GlobalVariables.servicesCategory);
+    print('baseurl : ' + baseUrl! + GlobalVariables.servicesCategory);
+
+    FormData formData = FormData.fromMap({
+      "flag": GlobalVariables.appFlag,
+    });
+
     final Response _result = await _dio.post(
-      GlobalVariables.servicesCategory,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl),
+      baseUrl!+GlobalVariables.servicesCategory,
+      options: restClientDiscoverOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of getServicesCategory : ' + value.toString());
@@ -2758,14 +2509,11 @@ class RestAPI
       "Type": societyId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.servicePerCategory);
+    print('baseurl : ' + baseUrl! + GlobalVariables.servicePerCategory);
     final Response _result = await _dio.post(
-      GlobalVariables.servicePerCategory,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.servicePerCategory,
+      options: restClientDiscoverOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of getServicePerCategory : ' + value.toString());
@@ -2813,14 +2561,10 @@ class RestAPI
     });
 
     print('S_Id : ' + S_Id);
-    print('baseurl : ' + baseUrl + GlobalVariables.bookServicePerCategory);
+    print('baseurl : ' + baseUrl! + GlobalVariables.bookServicePerCategory);
     final Response _result =
-    await _dio.post(GlobalVariables.bookServicePerCategory,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.bookServicePerCategory,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of bookServicePerCategory : ' + value.toString());
@@ -2837,14 +2581,11 @@ class RestAPI
       "SOCIETY_ID": societyId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.ownerServices);
+    print('baseurl : ' + baseUrl! + GlobalVariables.ownerServices);
     final Response _result = await _dio.post(
-      GlobalVariables.ownerServices,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.ownerServices,
+      options: restClientDiscoverOption(),
+        data: formData
     );
     final value = _result.data;
     print('value of ownerServices : ' + value.toString());
@@ -2868,16 +2609,12 @@ class RestAPI
       "SOCIETY_ID": societyId
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addServicesRatting);
+    print('baseurl : ' + baseUrl! + GlobalVariables.addServicesRatting);
     print('Rating : ' + rate);
     print('S_Id : ' + S_Id);
     print('User_Id : ' + userId);
-    final Response _result = await _dio.post(GlobalVariables.addServicesRatting,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addServicesRatting,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of insertClassifiedData : ' + value.toString());
@@ -2898,15 +2635,11 @@ class RestAPI
     });
 
     print('baseurl : ' +
-        baseUrl +
+        baseUrl! +
         GlobalVariables.updateClassifiedReasonForRemove);
     final Response _result =
-    await _dio.post(GlobalVariables.updateClassifiedReasonForRemove,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.updateClassifiedReasonForRemove,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of updateClassifiedStatus : ' + value.toString());
@@ -2923,14 +2656,10 @@ class RestAPI
       "C_Id": classifiedId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.activeClassifiedStatus);
+    print('baseurl : ' + baseUrl! + GlobalVariables.activeClassifiedStatus);
     final Response _result =
-    await _dio.post(GlobalVariables.activeClassifiedStatus,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.activeClassifiedStatus,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of updateClassifiedStatus : ' + value.toString());
@@ -2950,14 +2679,10 @@ class RestAPI
       "Id": imageId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.deleteClassifiedImage);
+    print('baseurl : ' + baseUrl! + GlobalVariables.deleteClassifiedImage);
     final Response _result =
-    await _dio.post(GlobalVariables.deleteClassifiedImage,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    await _dio.post(baseUrl!+GlobalVariables.deleteClassifiedImage,
+        options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
     print('value of updateClassifiedStatus : ' + value.toString());
@@ -2968,7 +2693,7 @@ class RestAPI
   Future<DataResponse> broadcastMail(String societyId,
       String userId,
       List<String> flats,
-      String attachment,
+      String? attachment,
       String sendTo,
       String subject,
       String description,
@@ -2982,7 +2707,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.ATTACHMENT: attachment,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SUBJECT: subject,
@@ -2995,23 +2720,20 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
-          GlobalVariables.ATTACHMENT: attachment,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SUBJECT: subject,
           GlobalVariables.DESCRIPTION: description,
           GlobalVariables.societyName: societyName,
           GlobalVariables.societyEmail: societyMail,
+          GlobalVariables.ATTACHMENT: attachment,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastEmailAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastEmailAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastEmailAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastEmailAPI,
+      options: restClientOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3035,7 +2757,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       //GlobalVariables.ATTACHMENT: attachment,
       GlobalVariables.SEND_TO: sendTo,
       "title": subject,
@@ -3046,21 +2768,18 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           //GlobalVariables.ATTACHMENT: attachment,
           GlobalVariables.SEND_TO: sendTo,
           "title": subject,
           "message": description,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastNotificationAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastNotificationAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastNotificationAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastNotificationAPI,
+      options: restClientOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of broadcastNotification : ' + value.toString());
@@ -3076,14 +2795,11 @@ class RestAPI
       GlobalVariables.societyId: societyId,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.flatNoAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.flatNoAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.flatNoAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.flatNoAPI,
+      options: restClientOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of broadcastNotification : ' + value.toString());
@@ -3102,7 +2818,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       GlobalVariables.name: name,
@@ -3113,21 +2829,18 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           GlobalVariables.name: name,
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3151,7 +2864,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       GlobalVariables.meeting_name: meeting_name,
@@ -3167,7 +2880,7 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           GlobalVariables.meeting_name: meeting_name,
@@ -3179,14 +2892,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+        baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3211,7 +2921,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       "date4": date4,
@@ -3228,7 +2938,7 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           "date3": date4,
@@ -3241,14 +2951,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3273,7 +2980,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       "date3": date3,
@@ -3290,7 +2997,7 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           "date3": date3,
@@ -3303,14 +3010,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData,
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3328,7 +3032,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       "date2": date2,
@@ -3342,7 +3046,7 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           "date2": date2,
@@ -3352,14 +3056,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3380,7 +3081,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       "reason": reason,
@@ -3399,7 +3100,7 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           "reason": reason,
@@ -3414,14 +3115,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3440,7 +3138,7 @@ class RestAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
-      GlobalVariables.FLATS: flats,
+      "FLATS[]": flats,
       GlobalVariables.SEND_TO: sendTo,
       GlobalVariables.SMS_TYPE: smsType,
       "date": date,
@@ -3457,7 +3155,7 @@ class RestAPI
         {
           GlobalVariables.societyId: societyId,
           GlobalVariables.userID: userId,
-          GlobalVariables.FLATS: flats,
+          "FLATS[]": flats,
           GlobalVariables.SEND_TO: sendTo,
           GlobalVariables.SMS_TYPE: smsType,
           "date": date,
@@ -3470,14 +3168,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.broadcastSMSAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.broadcastSMSAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
@@ -3515,13 +3210,9 @@ class RestAPI
       GlobalVariables.INTERCOM: INTERCOM,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.editUnitDetailsAPI);
-    final Response _result = await _dio.post(GlobalVariables.editUnitDetailsAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.editUnitDetailsAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.editUnitDetailsAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of editUnitDetails : ' + value.toString());
@@ -3544,13 +3235,9 @@ class RestAPI
     }.toString());
     //  print(GlobalVariables.block + ": " + block);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.unitDetailsAPI);
-    final Response _result = await _dio.post(GlobalVariables.unitDetailsAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.unitDetailsAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitDetailsAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getUnitDetails : ' + value.toString());
@@ -3570,13 +3257,9 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
     print(GlobalVariables.type + ": " + type);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.userTypeListAPI);
-    final Response _result = await _dio.post(GlobalVariables.userTypeListAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.userTypeListAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.userTypeListAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getUserTypeListAPI : ' + value.toString());
@@ -3598,14 +3281,10 @@ class RestAPI
       GlobalVariables.userID: userId,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.userManagementDashboardAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.userManagementDashboardAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.userManagementDashboardAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.userManagementDashboardAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getUserManagementDashboard : ' + value.toString());
@@ -3617,7 +3296,7 @@ class RestAPI
       String flat, String name,
       String mobile, String Email, String livesHere, String membershipType,
       String address,
-      String profilePic, String notForModerator, String societyName) async {
+      String? profilePic, String notForModerator, String societyName) async {
     // TODO: implement addMemberByAdmin
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -3642,7 +3321,7 @@ class RestAPI
       GlobalVariables.societyName: societyName,
     });
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addMemberByAdminAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.addMemberByAdminAPI);
 
     print("from data" + {
       GlobalVariables.userID: userId,
@@ -3661,12 +3340,8 @@ class RestAPI
     }.toString());
     // print('attachment lengtth : ' + profilePic.length.toString());
     final Response _result = await _dio.post(
-        GlobalVariables.addMemberByAdminAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.addMemberByAdminAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addMemberByAdmin : ' + value.toString());
@@ -3684,13 +3359,9 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
     //  print(GlobalVariables.block + ": " + block);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.blockAPI);
-    final Response _result = await _dio.post(GlobalVariables.blockAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.blockAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.blockAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getBlock : ' + value.toString());
@@ -3713,13 +3384,9 @@ class RestAPI
       GlobalVariables.block: block,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.flatAPI);
-    final Response _result = await _dio.post(GlobalVariables.flatAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.flatAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.flatAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getFlat : ' + value.toString());
@@ -3735,13 +3402,9 @@ class RestAPI
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
-    print('baseurl : ' + baseUrl + GlobalVariables.smsDataAPI);
-    final Response _result = await _dio.post(GlobalVariables.smsDataAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.smsDataAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.smsDataAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of smsData : ' + value.toString());
@@ -3757,13 +3420,9 @@ class RestAPI
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
-    print('baseurl : ' + baseUrl + GlobalVariables.moveOutRequestAPI);
-    final Response _result = await _dio.post(GlobalVariables.moveOutRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.moveOutRequestAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.moveOutRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getMoveOutRequest : ' + value.toString());
@@ -3779,13 +3438,9 @@ class RestAPI
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
-    print('baseurl : ' + baseUrl + GlobalVariables.pendingRequestAPI);
-    final Response _result = await _dio.post(GlobalVariables.pendingRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.pendingRequestAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.pendingRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getPendingRequest : ' + value.toString());
@@ -3801,13 +3456,9 @@ class RestAPI
       GlobalVariables.societyId: societyId,
     });
     print(GlobalVariables.societyId + ": " + societyId);
-    print('baseurl : ' + baseUrl + GlobalVariables.rentalRequestAPI);
-    final Response _result = await _dio.post(GlobalVariables.rentalRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.rentalRequestAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.rentalRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getRentalRequest : ' + value.toString());
@@ -3831,14 +3482,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.sendInviteAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.sendInviteAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.sendInviteAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.sendInviteAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of getSendInvite : ' + value.toString());
@@ -3865,14 +3513,11 @@ class RestAPI
           GlobalVariables.societyName: societyName,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.approvePendingRequestAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.approvePendingRequestAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.approvePendingRequestAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.approvePendingRequestAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of getSendInvite : ' + value.toString());
@@ -3898,14 +3543,11 @@ class RestAPI
           "Reason": Reason,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.deactivateUserAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.deactivateUserAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.deactivateUserAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.deactivateUserAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     print('value of deactivateUser : ' + value.toString());
@@ -3937,13 +3579,9 @@ class RestAPI
       GlobalVariables.societyName: societyName,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.nocApproveAPI);
-    final Response _result = await _dio.post(GlobalVariables.nocApproveAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.nocApproveAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.nocApproveAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of nocApproveAPI : ' + value.toString());
@@ -3952,9 +3590,9 @@ class RestAPI
 
   @override
   Future<StatusMsgResponse> addAgreement(String societyId, String block,
-      String flat, List<Map<String, String>> userID,
+      String flat, List<Map<String, String?>> userID,
       String agreementFrom, String agreementTo, String agreement,
-      String rentedTo, String nocIssue, String fileType, bool isAdmin) async {
+      String rentedTo, String? nocIssue, String fileType, bool isAdmin) async {
     // TODO: implement addAgreement
     FormData formData = FormData.fromMap(isAdmin ? {
       GlobalVariables.societyId: societyId,
@@ -4006,17 +3644,13 @@ class RestAPI
       "FILE_TYPE": fileType,
     }.toString());
 
-    print('baseurl : ' + baseUrl +
+    print('baseurl : ' + baseUrl! +
         (isAdmin ? GlobalVariables.adminAddAgreementAPI : GlobalVariables
             .addAgreementAPI));
     final Response _result = await _dio.post(
-        isAdmin ? GlobalVariables.adminAddAgreementAPI : GlobalVariables
+        isAdmin ? baseUrl!+GlobalVariables.adminAddAgreementAPI : baseUrl!+GlobalVariables
             .addAgreementAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addAgreementAPI : ' + value.toString());
@@ -4056,14 +3690,10 @@ class RestAPI
       GlobalVariables.Noc_Issue: nocIssue,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.adminAddAgreementAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.adminAddAgreementAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.adminAddAgreementAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.adminAddAgreementAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addAgreementAPI : ' + value.toString());
@@ -4084,14 +3714,11 @@ class RestAPI
           "Bill_no": billNo,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.billPDFAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.billPDFAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.billPDFAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.billPDFAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     //print('value of getBillPDFData : ' + value.toString());
@@ -4112,14 +3739,11 @@ class RestAPI
           "Receipt_no": receiptNo,
         }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.receiptPDFAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.receiptPDFAPI);
     final Response _result = await _dio.post(
-      GlobalVariables.receiptPDFAPI,
-      options: RequestOptions(
-        //method: GlobalVariables.Post,
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl, data: formData),
+      baseUrl!+GlobalVariables.receiptPDFAPI,
+      options: restClientOption(),
+      data: formData
     );
     final value = _result.data;
     //print('value of getBillPDFData : ' + value.toString());
@@ -4151,13 +3775,10 @@ class RestAPI
       GlobalVariables.Type: isAdmin ? 'Admin' : ''
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.renewAgreementAPI);
-    final Response _result = await _dio.post(GlobalVariables.renewAgreementAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.renewAgreementAPI);
+    final Response _result = await _dio.post(
+        baseUrl!+GlobalVariables.renewAgreementAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addAgreementAPI : ' + value.toString());
@@ -4179,13 +3800,10 @@ class RestAPI
       GlobalVariables.userID: userId,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.closeAgreementAPI);
-    final Response _result = await _dio.post(GlobalVariables.closeAgreementAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.closeAgreementAPI);
+    final Response _result = await _dio.post(
+        baseUrl!+GlobalVariables.closeAgreementAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addAgreementAPI : ' + value.toString());
@@ -4202,13 +3820,9 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl + GlobalVariables.incomeLedgerAPI);
-    final Response _result = await _dio.post(GlobalVariables.incomeLedgerAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl!+ GlobalVariables.incomeLedgerAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.incomeLedgerAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getExpenseIncomeLedger : ' + value.toString());
@@ -4227,14 +3841,10 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print(
-        'baseurl : ' + baseUrl + GlobalVariables.monthExpensePendingRequestAPI);
+        'baseurl : ' + baseUrl! + GlobalVariables.monthExpensePendingRequestAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.monthExpensePendingRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.monthExpensePendingRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getMonthExpensePendingRequest : ' + value.toString());
@@ -4262,23 +3872,20 @@ class RestAPI
     print({
       GlobalVariables.societyId: societyId,
       "amount": amount,
-      "ledger_id": ledgerId,
+      "ledger": ledgerId,
       "date": date,
       "due_date": dueDate,
       "flat_no": flatNo,
       "narration": narration,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.addInvoiceAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.addInvoiceAPI);
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(GlobalVariables.addInvoiceAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    final Response _result = await _dio.post(
+        baseUrl!+GlobalVariables.addInvoiceAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addInvoice : ' + value.runtimeType.toString());
@@ -4300,21 +3907,17 @@ class RestAPI
       GlobalVariables.ID: id,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.cancelReceiptRequestAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.cancelReceiptRequestAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.cancelReceiptRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.cancelReceiptRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of cancelReceiptRequest : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
-  @override
+  /*@override
   Future<StatusMsgResponse> approveReceiptRequest(String societyId,
       String id) async {
     // TODO: implement approveReceiptRequest
@@ -4328,19 +3931,15 @@ class RestAPI
       GlobalVariables.ID: id,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.approveReceiptRequestAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.approveReceiptRequestAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.approveReceiptRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.approveReceiptRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of approveReceiptRequest : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
-  }
+  }*/
 
   @override
   Future<DataResponse> getHeadWiseExpenseData(String societyId,String startDate,String endDate) async {
@@ -4358,13 +3957,10 @@ class RestAPI
       "END_DATE": endDate,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.headWiseExpenseAPI);
-    final Response _result = await _dio.post(GlobalVariables.headWiseExpenseAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.headWiseExpenseAPI);
+    final Response _result = await _dio.post(
+        baseUrl!+GlobalVariables.headWiseExpenseAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getHeadWiseExpenseData : ' + value.toString());
@@ -4372,11 +3968,11 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addApproveReceiptRequest(String socId,
+  Future<StatusMsgResponse> addApproveReceiptRequest(String socId,String invoiceNo,
       String flatNo,
-      String paymentDate, String amount, String penaltyAmount,
+      String paymentDate, String amount,/* String penaltyAmount,*/
       String referenceNo, String transactionMode, String bankAccountNo,
-      String id, String narration) async {
+      String? id, String narration) async {
     // TODO: implement addApproveReceiptRequest
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     // ArgumentError.checkNotNull(id, GlobalVariables.ID);
@@ -4392,40 +3988,38 @@ class RestAPI
 
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: socId,
+      GlobalVariables.INVOICE_NO: invoiceNo,
       GlobalVariables.AMOUNT: amount,
       GlobalVariables.REFERENCE_NO: referenceNo,
       GlobalVariables.TRANSACTION_MODE: transactionMode,
       GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
       GlobalVariables.PAYMENT_DATE: paymentDate,
       "FLAT_NO": flatNo,
-      "PENALTY_AMOUNT": penaltyAmount,
+      //"PENALTY_AMOUNT": penaltyAmount,
       GlobalVariables.NARRATION: narration,
       GlobalVariables.ID: id
     });
     print({
       GlobalVariables.societyId: socId,
+      GlobalVariables.INVOICE_NO: invoiceNo,
       GlobalVariables.AMOUNT: amount,
       GlobalVariables.REFERENCE_NO: referenceNo,
       GlobalVariables.TRANSACTION_MODE: transactionMode,
       GlobalVariables.BANK_ACCOUNTNO: bankAccountNo,
       GlobalVariables.PAYMENT_DATE: paymentDate,
       "FLAT_NO": flatNo,
-      "PENALTY_AMOUNT": penaltyAmount,
+      //"PENALTY_AMOUNT": penaltyAmount,
       GlobalVariables.NARRATION: narration,
       GlobalVariables.ID: id
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.approveReceiptRequestAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.approveReceiptRequestAPI);
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
     final Response _result = await _dio.post(
-        GlobalVariables.approveReceiptRequestAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.approveReceiptRequestAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addApproveReceiptRequest : ' + value.toString());
@@ -4436,12 +4030,9 @@ class RestAPI
   @override
   Future<PaymentChargesResponse> getPaymentCharges() async {
     // TODO: implement getPaymentCharges
-    print('baseurl : ' + baseUrl + GlobalVariables.paymentChargesAPI);
-    final Response _result = await _dio.post(GlobalVariables.paymentChargesAPI,
-      options: RequestOptions(
-          headers: <String, dynamic>{
-            "Authorization": GlobalVariables.AUTH,
-          }, baseUrl: baseUrl),
+    print('baseurl : ' + baseUrl! + GlobalVariables.paymentChargesAPI);
+    final Response _result = await _dio.post(baseUrl!+GlobalVariables.paymentChargesAPI,
+      options: restClientOption(),
     );
     final value = _result.data;
     print('value of getPaymentCharges : ' + value.toString());
@@ -4466,14 +4057,10 @@ class RestAPI
       "VOUCHER_NO": voucherNo,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.updateExpenseAttachmentAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.updateExpenseAttachmentAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.updateExpenseAttachmentAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.updateExpenseAttachmentAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of updateExpenseAttachment : ' + value.toString());
@@ -4516,14 +4103,11 @@ class RestAPI
       "Phone":loggedPhone,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.referAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.referAPI);
 
-    final Response _result = await _dio.post(GlobalVariables.referAPI,
-      options: RequestOptions(
-        headers: <String, dynamic>{
-          "Authorization": GlobalVariables.AUTH,
-        }, baseUrl: baseUrl,
-      ),
+    final Response _result = await _dio.post(
+      baseUrl!+GlobalVariables.referAPI,
+      options: restClientOption(),
       data: formData,
     );
     final value = _result.data;
@@ -4546,14 +4130,10 @@ class RestAPI
       "AMOUNT": amount,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.amountCalculationAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.amountCalculationAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.amountCalculationAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.amountCalculationAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of updateExpenseAttachment : ' + value.toString());
@@ -4575,14 +4155,10 @@ class RestAPI
       GlobalVariables.Type: type,
     }.toString());
 
-    print('baseurl : ' + baseUrl + GlobalVariables.staffDeleteAPI);
+    print('baseurl : ' + baseUrl! + GlobalVariables.staffDeleteAPI);
     final Response _result = await _dio.post(
-        GlobalVariables.staffDeleteAPI,
-        options: RequestOptions(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization": GlobalVariables.AUTH,
-            }, baseUrl: baseUrl),
+        baseUrl!+GlobalVariables.staffDeleteAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of staffDelete : ' + value.toString());

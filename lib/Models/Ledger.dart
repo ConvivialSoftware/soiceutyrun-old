@@ -1,18 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:societyrun/main.dart';
 
 @JsonSerializable(
 )
 class Ledger {
-  String RECEIPT_NO;
-  String LEDGER;
-  String NARRATION;
-  String TYPE;
-  String LEDGER_TYPE;
-  String PURPOSE;
-  String NAME;
-  String AMOUNT;
-  String C_DATE;
-  String REMARK;
+  String? RECEIPT_NO;
+  String? LEDGER;
+  String? NARRATION;
+  String? TYPE;
+  String? LEDGER_TYPE;
+  String? PURPOSE;
+  String? NAME;
+  String? AMOUNT;
+  String? C_DATE;
+  String? REMARK;
 
   Ledger({this.RECEIPT_NO, this.LEDGER, this.NARRATION, this.TYPE,
     this.LEDGER_TYPE, this.PURPOSE, this.NAME, this.AMOUNT,

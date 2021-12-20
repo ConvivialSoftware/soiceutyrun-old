@@ -17,10 +17,11 @@ import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
+import 'package:societyrun/main.dart';
 
 class UserManagementResponse extends ChangeNotifier {
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
   String noOfUnits = '0',
       registerUser = '0',
       activeUser = '0',
@@ -33,38 +34,38 @@ class UserManagementResponse extends ChangeNotifier {
       openComplaint = '0',
       maintenanceStaff = '0',
       normalStaff = '0';
-  List<User> registerList = List<User>();
-  List<User> unRegisterList = List<User>();
-  List<User> activeUserList = List<User>();
-  List<User> inactiveUserList = List<User>();
-  List<User> mobileUserList = List<User>();
-  List<User> notMobileUserList = List<User>();
-  List<Block> blockList = List<Block>();
-  List<Flat> flatList = List<Flat>();
-  List<UnitDetails> unitDetailsList = List<UnitDetails>();
-  List<UnitDetails> unitDetailsListForAdmin = List<UnitDetails>();
-  List<Member> pendingRequestList = List<Member>();
-  List<TenantRentalRequest> rentalRequestList = List<TenantRentalRequest>();
-  List<TenantRentalRequest> moveOutRequestList = List<TenantRentalRequest>();
+  List<User> registerList = <User>[];
+  List<User> unRegisterList = <User>[];
+  List<User> activeUserList = <User>[];
+  List<User> inactiveUserList = <User>[];
+  List<User> mobileUserList = <User>[];
+  List<User> notMobileUserList = <User>[];
+  List<Block> blockList = <Block>[];
+  List<Flat> flatList = <Flat>[];
+  List<UnitDetails> unitDetailsList = <UnitDetails>[];
+  List<UnitDetails> unitDetailsListForAdmin = <UnitDetails>[];
+  List<Member> pendingRequestList = <Member>[];
+  List<TenantRentalRequest> rentalRequestList = <TenantRentalRequest>[];
+  List<TenantRentalRequest> moveOutRequestList = <TenantRentalRequest>[];
 
-  List<Member> memberList = new List<Member>();
-  List<TenantRentalRequest> tenantAgreementList = new List<TenantRentalRequest>();
-  List<Member> tenantList = new List<Member>();
-  List<Staff> staffList = new List<Staff>();
-  List<Vehicle> vehicleList = new List<Vehicle>();
+  List<Member> memberList = <Member>[];
+  List<TenantRentalRequest> tenantAgreementList = <TenantRentalRequest>[];
+  List<Member> tenantList = <Member>[];
+  List<Staff> staffList = <Staff>[];
+  List<Vehicle> vehicleList = <Vehicle>[];
 
-  List<Member> memberListForAdmin = new List<Member>();
-  List<TenantRentalRequest> tenantAgreementListForAdmin = new List<TenantRentalRequest>();
-  List<Member> tenantListForAdmin = new List<Member>();
-  List<Staff> staffListForAdmin = new List<Staff>();
-  List<Vehicle> vehicleListForAdmin = new List<Vehicle>();
+  List<Member> memberListForAdmin = <Member>[];
+  List<TenantRentalRequest> tenantAgreementListForAdmin = <TenantRentalRequest>[];
+  List<Member> tenantListForAdmin = <Member>[];
+  List<Staff> staffListForAdmin = <Staff>[];
+  List<Vehicle> vehicleListForAdmin = <Vehicle>[];
 
-  List<Receipt> pendingList = new List<Receipt>();
-  List<PayOption> payOptionList = new List<PayOption>();
-  List<Bills> billList = new List<Bills>();
-  List<Ledger> ledgerList = new List<Ledger>();
-  List<OpeningBalance> openingBalanceList = new List<OpeningBalance>();
-  static List<LedgerYear> listYear = List<LedgerYear>();
+  List<Receipt> pendingList = <Receipt>[];
+  List<PayOption> payOptionList = <PayOption>[];
+  List<Bills> billList = <Bills>[];
+  List<Ledger> ledgerList = <Ledger>[];
+  List<OpeningBalance> openingBalanceList = <OpeningBalance>[];
+  static List<LedgerYear> listYear = <LedgerYear>[];
   double totalOutStanding = 0;
   String openingBalance = "0.0";
   String openingBalanceRemark = "";
@@ -72,16 +73,16 @@ class UserManagementResponse extends ChangeNotifier {
   bool hasRazorPayGateway=false;
   bool hasPayTMGateway=false;
 
-  List<HeadWiseExpense> headWiseExpenseList = List<HeadWiseExpense>();
-  List<MonthExpenses> monthExpenseList = List<MonthExpenses>();
-  List<Receipt> adminPendingList = new List<Receipt>();
+  List<HeadWiseExpense> headWiseExpenseList = <HeadWiseExpense>[];
+  List<MonthExpenses> monthExpenseList = <MonthExpenses>[];
+  List<Receipt> adminPendingList = <Receipt>[];
   String receiptCount='0';
   String receiptAmount='0';
   String expenseCount='0';
   String expenseAmount='0';
 
-  List<PaymentMethod> preferredMethod = List<PaymentMethod>();
-  List<PaymentMethod> otherMethod = List<PaymentMethod>();
+  List<PaymentMethod> preferredMethod = <PaymentMethod>[];
+  List<PaymentMethod> otherMethod = <PaymentMethod>[];
 
   getPaymentCharges() async {
     if(preferredMethod.isEmpty) {
@@ -91,16 +92,16 @@ class UserManagementResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = await RestClient(dio);
     await restClient.getPaymentCharges().then((value) {
-      if(value.status){
+      if(value.status!){
 
-        List<PaymentPerGateway> razorPay = List<PaymentPerGateway>();
-        List<PaymentPerGateway> paytm = List<PaymentPerGateway>();
+        List<PaymentPerGateway> razorPay = <PaymentPerGateway>[];
+      //  List<PaymentPerGateway> paytm = List<PaymentPerGateway>();
 
-        razorPay = List<PaymentPerGateway>.from(value.Razorpay.map((i) => PaymentPerGateway.fromJson(i)));
-        paytm = List<PaymentPerGateway>.from(value.Paytm.map((i) => PaymentPerGateway.fromJson(i)));
+        razorPay = List<PaymentPerGateway>.from(value.Razorpay!.map((i) => PaymentPerGateway.fromJson(i)));
+        //paytm = List<PaymentPerGateway>.from(value.Paytm.map((i) => PaymentPerGateway.fromJson(i)));
 
-        preferredMethod = List<PaymentMethod>.from(razorPay[0].Preferred_Method.map((i) => PaymentMethod.fromJson(i)));
-        otherMethod = List<PaymentMethod>.from(paytm[0].Other_Method.map((i) => PaymentMethod.fromJson(i)));
+        preferredMethod = List<PaymentMethod>.from(razorPay[0].Preferred_Method!.map((i) => PaymentMethod.fromJson(i)));
+        otherMethod = List<PaymentMethod>.from(razorPay[0].Other_Method!.map((i) => PaymentMethod.fromJson(i)));
       }
     });
     isLoading=false;
@@ -108,7 +109,7 @@ class UserManagementResponse extends ChangeNotifier {
   }
 
 
-  Future<dynamic> getPayOption(String block ,String flat) async {
+  Future<dynamic> getPayOption(String? block ,String? flat) async {
     if (payOptionList.length == 0) {
       isLoading = true;
       notifyListeners();
@@ -119,8 +120,8 @@ class UserManagementResponse extends ChangeNotifier {
     String societyId = await GlobalFunctions.getSocietyId();
 
     await restClient.getPayOptionData(societyId).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         payOptionList =
             List<PayOption>.from(_list.map((i) => PayOption.fromJson(i)));
         print('before ' + payOptionList.length.toString());
@@ -131,13 +132,13 @@ class UserManagementResponse extends ChangeNotifier {
             print(payOptionList[0].KEY_ID.toString());
 
             if (payOptionList[0].KEY_ID != null &&
-                payOptionList[0].KEY_ID.length > 0 &&
+                payOptionList[0].KEY_ID!.length > 0 &&
                 payOptionList[0].SECRET_KEY != null &&
-                payOptionList[0].SECRET_KEY.length > 0) {
+                payOptionList[0].SECRET_KEY!.length > 0) {
               hasRazorPayGateway = true;
             }
             if (payOptionList[0].PAYTM_URL != null &&
-                payOptionList[0].PAYTM_URL.length > 0) {
+                payOptionList[0].PAYTM_URL!.length > 0) {
               hasPayTMGateway = true;
             }
             print('hasPayTMGateway' + hasPayTMGateway.toString());
@@ -152,7 +153,7 @@ class UserManagementResponse extends ChangeNotifier {
       block = await GlobalFunctions.getBlock();
       flat = await GlobalFunctions.getFlat();
     }
-    getAllBillData(block,flat);
+    getAllBillData(block!,flat!);
     return payOptionList;
   }
 
@@ -163,14 +164,14 @@ class UserManagementResponse extends ChangeNotifier {
     }
     final dio = Dio();
     final RestClientERP restClientERP =
-        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERPView);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     //String flat = await GlobalFunctions.getFlat();
    // String block = await GlobalFunctions.getBlock();
     //  _progressDialog.show();
     restClientERP.getAllBillData(societyId, flat, block).then((value) {
       print('Response : ' + value.toString());
-      List<dynamic> _list = value.data;
+      List<dynamic> _list = value.data!;
 
       billList = List<Bills>.from(_list.map((i) => Bills.fromJson(i)));
 
@@ -194,15 +195,15 @@ class UserManagementResponse extends ChangeNotifier {
     String userId = await GlobalFunctions.getUserId();
 
     restClient.getMembersData(societyId, block, flat).then((value) {
-      if (value.status) {
+      if (value.status!) {
 
-        memberList = List<Member>.from(value.members.map((i) => Member.fromJson(i)));
-        staffList = List<Staff>.from(value.staff.map((i) => Staff.fromJson(i)));
+        memberList = List<Member>.from(value.members!.map((i) => Member.fromJson(i)));
+        staffList = List<Staff>.from(value.staff!.map((i) => Staff.fromJson(i)));
         vehicleList =
-            List<Vehicle>.from(value.vehicles.map((i) => Vehicle.fromJson(i)));
-        tenantAgreementList = new List<TenantRentalRequest>();
-        tenantList = List<Member>();
-        tenantAgreementList = List<TenantRentalRequest>.from(value.Tenant_Agreement.map((i) => TenantRentalRequest.fromJson(i)));
+            List<Vehicle>.from(value.vehicles!.map((i) => Vehicle.fromJson(i)));
+        tenantAgreementList = <TenantRentalRequest>[];
+        tenantList = <Member>[];
+        tenantAgreementList = List<TenantRentalRequest>.from(value.Tenant_Agreement!.map((i) => TenantRentalRequest.fromJson(i)));
 
         /*for(int i=0;i<memberList.length;i++){
           if (memberList[i].TYPE == 'Tenant') {
@@ -219,7 +220,7 @@ class UserManagementResponse extends ChangeNotifier {
         }
 
         for(int i=0;i<tenantAgreementList.length;i++){
-          List<Member> tenant = List<Member>.from(tenantAgreementList[i].tenant_name.map((i) => Member.fromJson(i)));
+          List<Member> tenant = List<Member>.from(tenantAgreementList[i].tenant_name!.map((i) => Member.fromJson(i)));
           for(int j=0;j<tenant.length;j++){
             tenant[j].AGREEMENT_ID = tenantAgreementList[i].ID;
             tenantList.add(tenant[j]);
@@ -248,22 +249,22 @@ class UserManagementResponse extends ChangeNotifier {
     // String userId = await GlobalFunctions.getUserId();
 
     await restClient.getMembersData(societyId, block, flat).then((value) {
-      if (value.status) {
+      if (value.status!) {
 
-        memberListForAdmin = List<Member>.from(value.members.map((i) => Member.fromJson(i)));
+        memberListForAdmin = List<Member>.from(value.members!.map((i) => Member.fromJson(i)));
         print('before memberList length : ' + memberList.length.toString());
-        staffListForAdmin = List<Staff>.from(value.staff.map((i) => Staff.fromJson(i)));
+        staffListForAdmin = List<Staff>.from(value.staff!.map((i) => Staff.fromJson(i)));
         vehicleListForAdmin =
-            List<Vehicle>.from(value.vehicles.map((i) => Vehicle.fromJson(i)));
+            List<Vehicle>.from(value.vehicles!.map((i) => Vehicle.fromJson(i)));
         unitDetailsListForAdmin =
-            List<UnitDetails>.from(value.unit.map((i) => UnitDetails.fromJson(i)));
+            List<UnitDetails>.from(value.unit!.map((i) => UnitDetails.fromJson(i)));
 
-        tenantAgreementListForAdmin = new List<TenantRentalRequest>();
-        tenantListForAdmin = List<Member>();
-        tenantAgreementListForAdmin = List<TenantRentalRequest>.from(value.Tenant_Agreement.map((i) => TenantRentalRequest.fromJson(i)));
+        tenantAgreementListForAdmin = <TenantRentalRequest>[];
+        tenantListForAdmin = <Member>[];
+        tenantAgreementListForAdmin = List<TenantRentalRequest>.from(value.Tenant_Agreement!.map((i) => TenantRentalRequest.fromJson(i)));
 
         for(int i=0;i<tenantAgreementListForAdmin.length;i++){
-          List<Member> tenant = List<Member>.from(tenantAgreementListForAdmin[i].tenant_name.map((i) => Member.fromJson(i)));
+          List<Member> tenant = List<Member>.from(tenantAgreementListForAdmin[i].tenant_name!.map((i) => Member.fromJson(i)));
           for(int j=0;j<tenant.length;j++){
             tenant[j].AGREEMENT_ID = tenantAgreementListForAdmin[i].ID;
             tenantListForAdmin.add(tenant[j]);
@@ -304,14 +305,16 @@ class UserManagementResponse extends ChangeNotifier {
   //  String flat = await GlobalFunctions.getFlat();
     // String block = await GlobalFunctions.getBlock();
 
+    try{
     await restClientERP
-        .getLedgerData(societyId, flat, block, year)
+          .getLedgerData(societyId, flat, block, year??'')
         .then((value) {
-      print('Response : ' + value.toString());
-      List<dynamic> _listLedger = value.ledger;
-      List<dynamic> _listPending = value.pending_request;
-      List<dynamic> _listOpeningBalance = value.openingBalance;
-      List<dynamic> _year = value.year;
+
+        logger.wtf(value);
+        List<dynamic> _listLedger = value.ledger!;
+        List<dynamic> _listPending = value.pending_request!;
+        List<dynamic> _listOpeningBalance = value.openingBalance!;
+        List<dynamic> _year = value.year!;
 
       ledgerList = List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
       pendingList = List<Receipt>.from(_listPending.map((i) => Receipt.fromJson(i)));
@@ -321,21 +324,25 @@ class UserManagementResponse extends ChangeNotifier {
           List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
       openingBalance = double.parse(openingBalanceList[0].AMOUNT.toString())
           .toStringAsFixed(2);
-      openingBalanceRemark = openingBalanceList[0].Remark;
+        openingBalanceRemark = openingBalanceList[0].Remark!;
       double totalAmount = 0;
 
       for (int i = 0; i < ledgerList.length; i++) {
         print("_ledgerList[i].RECEIPT_NO : " +
             ledgerList[i].RECEIPT_NO.toString());
         print("_ledgerList[i].TYPE : " + ledgerList[i].TYPE.toString());
-        if (ledgerList[i].TYPE.toLowerCase().toString() == 'bill') {
-          totalAmount += double.parse(ledgerList[i].AMOUNT);
+          if (ledgerList[i].TYPE!.toLowerCase().toString() == 'bill') {
+            totalAmount += double.parse(ledgerList[i].AMOUNT!);
         } else {
-          totalAmount -= double.parse(ledgerList[i].AMOUNT);
+            totalAmount -= double.parse(ledgerList[i].AMOUNT!);
         }
         totalOutStanding = totalAmount + double.parse(openingBalance);
       }
     });
+    }catch(e){
+      logger.e(e);
+    }
+
     isLoading = false;
     notifyListeners();
     return ledgerList;
@@ -351,21 +358,21 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.getUserManagementDashboard(societyId,userId);
 
     List<UserManagementDashBoard> _list = List<UserManagementDashBoard>.from(
-        result.data.map((i) => UserManagementDashBoard.fromJson(i)));
+        result.data!.map((i) => UserManagementDashBoard.fromJson(i)));
 
     if (_list.length > 0) {
-      noOfUnits = _list[0].units;
-      registerUser = _list[0].register_user;
-      activeUser = _list[0].active_user;
-      mobileUser = _list[0].mobile_user;
-      rentalRequest = _list[0].rental_request;
-      pendingRequest = _list[0].pending_request;
-      moveOutRequest = _list[0].moveout_request;
-      smsData = _list[0].sms_data;
-      closeComplaint = _list[0].close_complaint;
-      openComplaint = _list[0].open_complaint;
-      maintenanceStaff = _list[0].maintenanceStaff;
-      normalStaff = _list[0].normalStaff;
+      noOfUnits = _list[0].units!;
+      registerUser = _list[0].register_user!;
+      activeUser = _list[0].active_user!;
+      mobileUser = _list[0].mobile_user!;
+      rentalRequest = _list[0].rental_request!;
+      pendingRequest = _list[0].pending_request!;
+      moveOutRequest = _list[0].moveout_request!;
+      smsData = _list[0].sms_data!;
+      closeComplaint = _list[0].close_complaint!;
+      openComplaint = _list[0].open_complaint!;
+      maintenanceStaff = _list[0].maintenanceStaff!;
+      normalStaff = _list[0].normalStaff!;
     }
 
     isLoading = false;
@@ -383,27 +390,27 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.getUseTypeList(societyId, type);
 
     if (type == 'Registered user')
-      registerList = List<User>.from(result.data.map((i) => User.fromJson(i)));
+      registerList = List<User>.from(result.data!.map((i) => User.fromJson(i)));
 
     if (type == 'logged In')
       activeUserList =
-          List<User>.from(result.data.map((i) => User.fromJson(i)));
+          List<User>.from(result.data!.map((i) => User.fromJson(i)));
 
     if (type == 'yet to login')
       inactiveUserList =
-          List<User>.from(result.data.map((i) => User.fromJson(i)));
+          List<User>.from(result.data!.map((i) => User.fromJson(i)));
 
     if (type == 'Mobile user')
       mobileUserList =
-          List<User>.from(result.data.map((i) => User.fromJson(i)));
+          List<User>.from(result.data!.map((i) => User.fromJson(i)));
 
     if (type == 'Not Mobile user')
       notMobileUserList =
-          List<User>.from(result.data.map((i) => User.fromJson(i)));
+          List<User>.from(result.data!.map((i) => User.fromJson(i)));
 
     if (type == 'Not yet Registered')
       unRegisterList =
-          List<User>.from(result.data.map((i) => User.fromJson(i)));
+          List<User>.from(result.data!.map((i) => User.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -424,8 +431,8 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.getUnitDetails(societyId, block);
 
     unitDetailsList =
-        List<UnitDetails>.from(result.data.map((i) => UnitDetails.fromJson(i)));
-    blockList = List<Block>.from(result.unit.map((i) => Block.fromJson(i)));
+        List<UnitDetails>.from(result.data!.map((i) => UnitDetails.fromJson(i)));
+    blockList = List<Block>.from(result.unit!.map((i) => Block.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -464,7 +471,7 @@ class UserManagementResponse extends ChangeNotifier {
       String LivesHere,
       String address,
       String notModerator,
-      String attachment) async {
+      String? attachment) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
@@ -502,7 +509,7 @@ class UserManagementResponse extends ChangeNotifier {
     String societyId = await GlobalFunctions.getSocietyId();
     var result = await restClient.getBlock(societyId);
 
-    blockList = List<Block>.from(result.data.map((i) => Block.fromJson(i)));
+    blockList = List<Block>.from(result.data!.map((i) => Block.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -520,7 +527,7 @@ class UserManagementResponse extends ChangeNotifier {
     String societyId = await GlobalFunctions.getSocietyId();
     var result = await restClient.getFlat(societyId, block);
 
-    flatList = List<Flat>.from(result.data.map((i) => Flat.fromJson(i)));
+    flatList = List<Flat>.from(result.data!.map((i) => Flat.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -541,7 +548,7 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.getPendingMemberRequest(societyId);
 
     pendingRequestList =
-        List<Member>.from(result.data.map((i) => Member.fromJson(i)));
+        List<Member>.from(result.data!.map((i) => Member.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -562,7 +569,7 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.getMoveOutRequest(societyId);
 
     moveOutRequestList = List<TenantRentalRequest>.from(
-        result.data.map((i) => TenantRentalRequest.fromJson(i)));
+        result.data!.map((i) => TenantRentalRequest.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -583,7 +590,7 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.getRentalRequest(societyId);
 
     rentalRequestList = List<TenantRentalRequest>.from(
-        result.data.map((i) => TenantRentalRequest.fromJson(i)));
+        result.data!.map((i) => TenantRentalRequest.fromJson(i)));
 
     isLoading = false;
     notifyListeners();
@@ -671,12 +678,12 @@ class UserManagementResponse extends ChangeNotifier {
 
   Future<StatusMsgResponse> addAgreement(
       societyId,block,flat,
-      List<Map<String,String>> userId,
+      List<Map<String,String?>> userId,
       String agreementFrom,
       String agreementTo,
       String agreement,
       String rentedTo,
-      String nocIssue,
+      String? nocIssue,
       String fileType,
       bool isAdmin
       ) async {
@@ -753,13 +760,13 @@ class UserManagementResponse extends ChangeNotifier {
     await restClientERP
         .getMonthExpensePendingRequest(societyId)
         .then((value) {
-      receiptCount = value.Receipt_count;
-      receiptAmount = value.Receipt_amount;
-      expenseCount = value.Expense_count;
-      expenseAmount = value.Expense_amount;
-      monthExpenseList = new List<MonthExpenses>();
-      monthExpenseList = List<MonthExpenses>.from(value.expense.map((i) => MonthExpenses.fromJson(i)));
-      adminPendingList = List<Receipt>.from(value.pending_request.map((i) => Receipt.fromJson(i)));
+      receiptCount = value.Receipt_count!;
+      receiptAmount = value.Receipt_amount!;
+      expenseCount = value.Expense_count!;
+      expenseAmount = value.Expense_amount!;
+      monthExpenseList = <MonthExpenses>[];
+      monthExpenseList = List<MonthExpenses>.from(value.expense!.map((i) => MonthExpenses.fromJson(i)));
+      adminPendingList = List<Receipt>.from(value.pending_request!.map((i) => Receipt.fromJson(i)));
     });
     isLoading = false;
     notifyListeners();
@@ -777,7 +784,7 @@ class UserManagementResponse extends ChangeNotifier {
     return result;
   }
 
-  Future<StatusMsgResponse> approveReceiptRequest(
+ /* Future<StatusMsgResponse> approveReceiptRequest(
       String id,) async {
     Dio dio = Dio();
     RestClientERP restClient = RestClientERP(dio,baseUrl: GlobalVariables.BaseURLERP);
@@ -786,7 +793,7 @@ class UserManagementResponse extends ChangeNotifier {
     var result = await restClient.approveReceiptRequest(societyId,id,);
 
     return result;
-  }
+  }*/
 
   Future<dynamic> getHeadWiseExpenseData(String startDate,String endDate) async {
     if(headWiseExpenseList.length<0) {
@@ -801,7 +808,7 @@ class UserManagementResponse extends ChangeNotifier {
         .getHeadWiseExpenseData(societyId,startDate,endDate)
         .then((value) {
 
-      headWiseExpenseList = List<HeadWiseExpense>.from(value.data.map((i) => HeadWiseExpense.fromJson(i)));
+      headWiseExpenseList = List<HeadWiseExpense>.from(value.data!.map((i) => HeadWiseExpense.fromJson(i)));
     });
     isLoading = false;
     notifyListeners();
@@ -811,7 +818,7 @@ class UserManagementResponse extends ChangeNotifier {
 }
 
 class UserManagementDashBoard {
-  String units,
+  String? units,
       sms_data,
       mobile_user,
       register_user,
@@ -854,7 +861,7 @@ class UserManagementDashBoard {
 }
 
 class User {
-  String USER_ID,
+  String? USER_ID,
       BLOCK,
       FLAT,
       USER_NAME,
@@ -891,7 +898,7 @@ class User {
 }
 
 class UnitDetails {
-  String ID,
+  String? ID,
       BLOCK,
       FLAT,
       CONSUMER_NO,
@@ -900,7 +907,7 @@ class UnitDetails {
       GSTIN_NO,
       BILLING_NAME,
       INTERCOM;
-  List<dynamic> unitMember;
+  List<dynamic>? unitMember;
 
   UnitDetails({
     this.ID,
@@ -932,7 +939,7 @@ class UnitDetails {
 }
 
 class Block {
-  String BLOCK;
+  String? BLOCK;
 
   Block({this.BLOCK});
 
@@ -944,7 +951,7 @@ class Block {
 }
 
 class Flat {
-  String FLAT;
+  String? FLAT;
 
   Flat({this.FLAT});
 
@@ -956,7 +963,7 @@ class Flat {
 }
 
 class UnitMember {
-  String NAME, TYPE;
+  String? NAME, TYPE;
 
   UnitMember({this.NAME, this.TYPE});
 
@@ -969,7 +976,7 @@ class UnitMember {
 }
 
 class TenantRentalRequest {
-  String ID,
+  String? ID,
       U_ID,
       RENTED_TO,
       POLICE_VERIFICATION,
@@ -989,7 +996,7 @@ class TenantRentalRequest {
       TERMINATION_DATE,
       BELONGINGS_RETURNED,
       MOVEOUT_LETTER;
-  List<dynamic> tenant_name;
+  List<dynamic>? tenant_name;
 
   TenantRentalRequest(
       {this.ID,
@@ -1042,7 +1049,7 @@ class TenantRentalRequest {
 }
 
 class Tenant {
-  String NAME,
+  String? NAME,
       PROFILE_PHOTO,
       BLOCK,
       FLAT,
@@ -1086,7 +1093,7 @@ class Tenant {
 
 class HeadWiseExpense{
 
-  String id,heads,amount;
+  String? id,heads,amount;
 
   HeadWiseExpense({this.id,this.heads, this.amount});
 

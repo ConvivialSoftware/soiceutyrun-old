@@ -11,16 +11,16 @@ class SQLiteDbProvider {
   SQLiteDbProvider._();
 
   static final SQLiteDbProvider db = SQLiteDbProvider._();
-  static Database _database;
+  static Database? _database;
   static final _databaseName = "SocietyRun.db";
   static final _databaseVersion = 1;
   static final _notificationTableName = 'Notification';
 
   Future<Database> get getDatabase async {
-    if (_database != null) return _database;
+    if (_database != null) return _database!;
     _database = await initDataBase();
     print('DB : ' + 'created');
-    return _database;
+    return _database!;
   }
 
   Future<void> getDataBaseInstance() async {
@@ -123,10 +123,10 @@ class SQLiteDbProvider {
 
   getNotificationTableCount(String userId) async {
     final db = await getDatabase;
-    int count = Sqflite.firstIntValue(
+    int? count = Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM ' + _notificationTableName+' WHERE read=0 and uid='+"'"+userId+"'"));
     print('Count : ' + count.toString());
-    GlobalVariables.notificationCounterValueNotifer.value = count;
+    GlobalVariables.notificationCounterValueNotifer.value = count!;
     GlobalVariables.notificationCounterValueNotifer.notifyListeners();
     print('notificationCounterValueNotifer : ' +
         GlobalVariables.notificationCounterValueNotifer.value.toString());
@@ -160,6 +160,16 @@ class SQLiteDbProvider {
     );
     String userId = await GlobalFunctions.getUserId();
     getNotificationTableCount(userId);
+    return result;
+  }
+
+  updateUnReadNotification() async {
+    final db = await getDatabase;
+    print('updateUnReadNotification');
+    var result = await db.rawUpdate("UPDATE "+_notificationTableName+" SET read = 1 ");
+    String userId = await GlobalFunctions.getUserId();
+    getNotificationTableCount(userId);
+    print('success read 1');
     return result;
   }
 

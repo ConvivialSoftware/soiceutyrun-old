@@ -12,14 +12,14 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 
 class LoginDashBoardResponse extends ChangeNotifier {
-  List<Banners> bannerList = List<Banners>();
-  List<Banners> referBannerList = List<Banners>();
-  List<Banners> serviceBannerList = List<Banners>();
-  static List<LoginResponse> societyList = new List<LoginResponse>();
-  String duesRs;
-  String duesDate;
-  bool isLoading = true;
-  String errMsg;
+  List<Banners> bannerList = <Banners>[];
+  List<Banners> referBannerList = <Banners>[];
+  List<Banners> serviceBannerList = <Banners>[];
+  static List<LoginResponse> societyList = <LoginResponse>[];
+  String? duesRs;
+  String? duesDate;
+  bool? isLoading = true;
+  String? errMsg;
 
   Future<dynamic> getDuesData() async {
     final dio = Dio();
@@ -32,7 +32,7 @@ class LoginDashBoardResponse extends ChangeNotifier {
     await restClientERP.getDuesData(societyId, flat, block).then((value) {
       print('Response : ' + value.toString());
 
-      if (value.status) {
+      if (value.status!) {
         GlobalVariables.isERPAccount = true;
       } else {
         GlobalVariables.isERPAccount = false;
@@ -43,7 +43,7 @@ class LoginDashBoardResponse extends ChangeNotifier {
       if (duesRs == null) {
         duesRs = '0.0';
       }
-      if (duesRs.length == 0) {
+      if (duesRs!.length == 0) {
         duesRs = "0.0";
       }
       if (duesDate == 'null') duesDate = '-';
@@ -59,10 +59,10 @@ class LoginDashBoardResponse extends ChangeNotifier {
     final RestClient restClient = RestClient(dio);
     await restClient.getBannerData().then((value) {
       print('Response : ' + value.toString());
-      if (value.status) {
-        bannerList = List<Banners>.from(value.data.map((i) => Banners.fromJson(i)));
-        referBannerList = List<Banners>.from(value.refer.map((i) => Banners.fromJson(i)));
-        serviceBannerList = List<Banners>.from(value.service.map((i) => Banners.fromJson(i)));
+      if (value.status!) {
+        bannerList = List<Banners>.from(value.data!.map((i) => Banners.fromJson(i)));
+        referBannerList = List<Banners>.from(value.refer!.map((i) => Banners.fromJson(i)));
+        serviceBannerList = List<Banners>.from(value.service!.map((i) => Banners.fromJson(i)));
       }
     });
 
@@ -75,9 +75,9 @@ class LoginDashBoardResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
 
-    await restClient.getAllSocietyData(loggedUsername).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
+    await restClient.getAllSocietyData(loggedUsername).then((value) async {
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         societyList = List<LoginResponse>.from(
             _list.map((i) => LoginResponse.fromJson(i)));
       } else {
@@ -88,15 +88,25 @@ class LoginDashBoardResponse extends ChangeNotifier {
         }
       }
 
+      String prefDate = await GlobalFunctions.getShowUpdateAppDialogDate();
+      String currentDate = GlobalFunctions.getCurrentDate("yyyy-MM-dd");
+      int days = GlobalFunctions.getDaysFromDate(currentDate, prefDate);
+      print("prefDate : "+prefDate.toString());
+      print("currentDate : "+currentDate.toString());
+      print("days : "+days.toString());
+
+      if(days==2) {
+        GlobalFunctions.setShowUpdateAppDialogDate(currentDate);
       if (Platform.isAndroid) {
         if (value.android_version != AppPackageInfo.version) {
           //show app update Dialog
-          GlobalFunctions.appUpdateDialog(context, value.android_type);
+            GlobalFunctions.appUpdateDialog(context, value.android_type!);
         }
       } else if (Platform.isIOS) {
         if (value.ios_version != AppPackageInfo.version) {
           //show app update Dialog
-          GlobalFunctions.appUpdateDialog(context, value.ios_type);
+            GlobalFunctions.appUpdateDialog(context, value.ios_type!);
+          }
         }
       }
     });
@@ -112,19 +122,19 @@ class LoginDashBoardResponse extends ChangeNotifier {
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
     restClient.getProfileData(societyId, userId).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         List<ProfileInfo> _profileList =
             List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
-        GlobalVariables.userNameValueNotifer.value = _profileList[0].NAME;
+        GlobalVariables.userNameValueNotifer.value = _profileList[0].NAME!;
         GlobalVariables.userImageURLValueNotifer.value =
-            _profileList[0].PROFILE_PHOTO;
+            _profileList[0].PROFILE_PHOTO!;
         GlobalVariables.userImageURLValueNotifer.notifyListeners();
         GlobalVariables.userNameValueNotifer.notifyListeners();
         GlobalFunctions.saveUserProfileToSharedPreferences(
-            _profileList[0].PROFILE_PHOTO);
+            _profileList[0].PROFILE_PHOTO!);
         GlobalFunctions.saveDisplayUserNameToSharedPreferences(
-            _profileList[0].NAME);
+            _profileList[0].NAME!);
 
         isLoading = false;
         notifyListeners();
@@ -135,39 +145,39 @@ class LoginDashBoardResponse extends ChangeNotifier {
 
 @JsonSerializable()
 class LoginResponse {
-  String ID;
-  String USER_ID;
-  String SOCIETY_ID;
-  String BLOCK;
-  String FLAT;
-  String USER_NAME;
-  String MOBILE;
-  String PASSWORD;
-  String USER_TYPE;
-  String gcm_id;
-  String token_id;
-  String C_DATE;
-  String message;
-  String Society_Name;
-  String Address;
-  String Reg_no;
-  String Contact;
-  String Email;
-  String society_Permissions;
-  String Name;
-  String Role;
-  String TYPE;
-  String Photo;
-  String Permissions;
-  String Consumer_no;
-  bool status;
-  String Staff_QR_Image;
-  String google_parameter;
-  String User_Status;
-  String LoggedUsername;
-  String SMS_CREDIT;
-  String LAST_LOGIN;
-  bool isSelected;
+  String? ID;
+  String? USER_ID;
+  String? SOCIETY_ID;
+  String? BLOCK;
+  String? FLAT;
+  String? USER_NAME;
+  String? MOBILE;
+  String? PASSWORD;
+  String? USER_TYPE;
+  String? gcm_id;
+  String? token_id;
+  String? C_DATE;
+  String? message;
+  String? Society_Name;
+  String? Address;
+  String? Reg_no;
+  String? Contact;
+  String? Email;
+  String? society_Permissions;
+  String? Name;
+  String? Role;
+  String? TYPE;
+  String? Photo;
+  String? Permissions;
+  String? Consumer_no;
+  bool? status;
+  String? Staff_QR_Image;
+  String? google_parameter;
+  String? User_Status;
+  String? LoggedUsername;
+  String? SMS_CREDIT;
+  String? LAST_LOGIN;
+  bool? isSelected;
 
   LoginResponse({
     this.ID,

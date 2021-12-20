@@ -2,8 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class ComplaintArea {
 
-  String ID;
-  String COMPLAINT_AREA;
+  String? ID;
+  String? COMPLAINT_AREA;
 
 
   ComplaintArea({this.ID, this.COMPLAINT_AREA});

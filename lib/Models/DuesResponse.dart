@@ -3,10 +3,10 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 @JsonSerializable()
 class DuesResponse {
 
-  String DUES;
-  String DUE_DATE;
-  bool status;
-  String message;
+  String? DUES;
+  String? DUE_DATE;
+  bool? status;
+  String? message;
 
   DuesResponse({this.DUES, this.DUE_DATE, this.status, this.message});
 

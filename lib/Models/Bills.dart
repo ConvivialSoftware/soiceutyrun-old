@@ -2,29 +2,31 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Bills {
-  String BLOCK;
-  String NAME;
-  String TYPE;
-  String REMARK;
-  String START_DATE;
-  String C_DATE;
-  String END_DATE;
-  String DUE_DATE;
-  String HEAD;
-  String INVOICE_NO;
-  double AMOUNT;
-  int RECEIVED;
-  int PENALTY_REM;
-  String DISCOUNT;
-  String FLAT;
+  String? BLOCK;
+  String? NAME;
+  String? Email;
+  String? TYPE;
+  String? REMARK;
+  String? START_DATE;
+  String? C_DATE;
+  String? END_DATE;
+  String? DUE_DATE;
+  String? HEAD;
+  String? INVOICE_NO;
+  double? AMOUNT;
+  int? RECEIVED;
+  int? PENALTY_REM;
+  String? DISCOUNT;
+  String? FLAT;
 
-  Bills({this.BLOCK, this.NAME, this.TYPE, this.REMARK, this.START_DATE, this.C_DATE, this.END_DATE, this.DUE_DATE, this.HEAD, this.INVOICE_NO, this.AMOUNT, this.RECEIVED, this.DISCOUNT, this.FLAT,this.PENALTY_REM});
+  Bills({this.BLOCK, this.NAME,this.Email, this.TYPE, this.REMARK, this.START_DATE, this.C_DATE, this.END_DATE, this.DUE_DATE, this.HEAD, this.INVOICE_NO, this.AMOUNT, this.RECEIVED, this.DISCOUNT, this.FLAT,this.PENALTY_REM});
 
 
   factory Bills.fromJson(Map<String, dynamic> json){
     return Bills(
         BLOCK: json['BLOCK'],
         NAME: json['NAME'],
+        Email: json['Email'],
         TYPE: json['TYPE']??'',
         REMARK: json['REMARK'],
         START_DATE: json['START_DATE'],

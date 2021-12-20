@@ -2,9 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class ComplaintCategory {
 
-  String ID;
-  String COMPLAINT_CATEGORY;
-  String STATUS;
+  String? ID;
+  String? COMPLAINT_CATEGORY;
+  String? STATUS;
 
 
   ComplaintCategory({this.ID, this.COMPLAINT_CATEGORY,this.STATUS});

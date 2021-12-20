@@ -2,14 +2,14 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 class MonthExpensePendingRequestResponse{
 
-  List<dynamic> expense;
-  List<dynamic> pending_request;
-  String Receipt_count;
-  String Receipt_amount;
-  String Expense_count;
-  String Expense_amount;
-  String message;
-  bool status;
+  List<dynamic>? expense;
+  List<dynamic>? pending_request;
+  String? Receipt_count;
+  String? Receipt_amount;
+  String? Expense_count;
+  String? Expense_amount;
+  String? message;
+  bool? status;
 
   MonthExpensePendingRequestResponse({this.expense,this.pending_request,this.message, this.status,this.Receipt_count,this.Receipt_amount,this.Expense_count,this.Expense_amount});
 
@@ -32,14 +32,14 @@ class MonthExpensePendingRequestResponse{
 
 class MonthExpenses{
 
-  String month,exp_amount;
+  String? month,exp_amount;
 
   MonthExpenses({this.month, this.exp_amount});
 
   factory MonthExpenses.fromJson(Map<String,dynamic> map){
     return MonthExpenses(
       month: map["month"],
-      exp_amount: map["exp_amount"],
+      exp_amount: map["exp_amount"]??"0",
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable(
 )
 class VoucherAmount {
-  String head_name;
-  String amount;
+  String? head_name;
+  String? amount;
 
   VoucherAmount({this.head_name, this.amount});
 

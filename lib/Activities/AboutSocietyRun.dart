@@ -4,17 +4,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-
-//import 'package:dynamic_widget/dynamic_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/WebViewScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Banners.dart';
@@ -34,7 +31,6 @@ class BaseAboutSocietyRunInfo extends StatefulWidget {
 
 class AboutSocietyRunInfoState
     extends State<BaseAboutSocietyRunInfo> {
-  ProgressDialog _progressDialog;
   var societyId, name, phone, block, flat;
 
   // List<Banners> value.bannerList = List<Banners>();
@@ -58,29 +54,13 @@ class AboutSocietyRunInfoState
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<LoginDashBoardResponse>.value(
       value: Provider.of<LoginDashBoardResponse>(context),
       child: Consumer<LoginDashBoardResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                AppLocalizations.of(context).translate('about_societyrun'),
-                textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-              ),
+            appBar: CustomAppBar(
+              title:AppLocalizations.of(context).translate('about_societyrun'),
             ),
             body: getBaseLayout(value),
           ),
@@ -180,7 +160,7 @@ class AboutSocietyRunInfoState
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => BaseWebViewScreen(
-                                          value.bannerList[itemIndex].Url +
+                                          value.bannerList[itemIndex].Url! +
                                               '?' +
                                               'SID=' +
                                               societyId.toString() +

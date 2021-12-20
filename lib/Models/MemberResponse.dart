@@ -1,13 +1,13 @@
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 class MemberResponse {
-  List<dynamic> members;
-  List<dynamic> staff;
-  List<dynamic> vehicles;
-  List<dynamic> unit;
-  List<dynamic> Tenant_Agreement;
-  String message;
-  bool status;
+  List<dynamic>? members;
+  List<dynamic>? staff;
+  List<dynamic>? vehicles;
+  List<dynamic>? unit;
+  List<dynamic>? Tenant_Agreement;
+  String? message;
+  bool? status;
 
   MemberResponse({this.members,this.staff, this.vehicles,this.unit,this.message, this.status,this.Tenant_Agreement});
 

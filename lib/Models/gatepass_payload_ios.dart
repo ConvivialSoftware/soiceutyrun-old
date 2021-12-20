@@ -1,7 +1,7 @@
 class GatePassPayloadIos {
-  int from;
-  Payload payload;
-  String msgID;
+  int? from;
+  Payload? payload;
+  String? msgID;
 
   GatePassPayloadIos({this.from, this.payload, this.msgID});
 
@@ -16,7 +16,7 @@ class GatePassPayloadIos {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['from'] = this.from;
     if (this.payload != null) {
-      data['payload'] = this.payload.toJson();
+      data['payload'] = this.payload!.toJson();
     }
     data['msgID'] = this.msgID;
     return data;
@@ -24,23 +24,23 @@ class GatePassPayloadIos {
 }
 
 class Payload {
-  String cONTACT;
-  String iNTIME;
-  String sound;
-  String uSERID;
-  String title;
-  String body;
-  String vISITORNAME;
-  String vID;
-  String iNDATE;
-  String iMAGE;
-  String iNBY;
-  String fROMVISITOR;
-  String nOOFVISITORS;
-  String iD;
-  String dATETIME;
-  String rEASON;
-  String tYPE;
+  String? cONTACT;
+  String? iNTIME;
+  String? sound;
+  String? uSERID;
+  String? title;
+  String? body;
+  String? vISITORNAME;
+  String? vID;
+  String? iNDATE;
+  String? iMAGE;
+  String? iNBY;
+  String? fROMVISITOR;
+  String? nOOFVISITORS;
+  String? iD;
+  String? dATETIME;
+  String? rEASON;
+  String? tYPE;
 
   Payload(
       {this.cONTACT,

@@ -38,6 +38,7 @@ class GlobalVariables {
   static var keyEmail = "email";
   static var keySocietyPermission = "society_permission";
   static var keyName = "name";
+  static var lastMsgId = "lastMsgId";
   static var keyStaffQRImage = "staff_qr_image";
   static var keyPhoto = "photo";
   static var keyUserPermission = "user_permission";
@@ -54,6 +55,7 @@ class GlobalVariables {
   static var keyLastLogin = "LAST_LOGIN";
   static var keySocietyContact = "Contact";
   static var keyNotificationBackGroundData = "NotificationBackGroundData";
+  static var keyShowUpdateAppDialogDate = "updateDate";
 
   //static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
@@ -98,6 +100,7 @@ class GlobalVariables {
   //static var waterIconPath = "assets/other_assets/water_icon.svg";
   static var imageIconPath = "assets/other_assets/Icon awesome-file-image.svg";
   static var pdfIconPath = "assets/other_assets/Icon awesome-file-pdf.svg";
+  static var camaraIconPath = "assets/other_assets/Icon awesome-camara-image.svg";
   //static var downloadIconPath = "assets/other_assets/Icon awesome-download.svg";
  // static var pdfBackIconPath = "assets/other_assets/icon-pdf.svg";
   static var creditCardPath = "assets/other_assets/credit_card.png";
@@ -140,15 +143,15 @@ class GlobalVariables {
   static var smileIconPath = "assets/other_assets/smile.png";
   static var sadIconPath = "assets/other_assets/sad.png";
   static var bannerIconPath = "assets/other_assets/banner.png";
-  static var emailIconPath = "assets/other_assets/email.png";
-  static var receiptIconPath = "assets/other_assets/receipt.png";
-  static var userIconPath = "assets/other_assets/user.png";
+  static var emailIconPath = "assets/other_assets/email.svg";
+  static var receiptIconPath = "assets/other_assets/receipt.svg";
+  static var userManagementIconPath = "assets/other_assets/user_management.svg";
   static var notAllowedImagePath = "assets/other_assets/notAllowed.svg";
-  static var bachelorsImagePath = "assets/other_assets/bachelors.png";
-  static var familyImagePath = "assets/other_assets/family.png";
-  static var commercialImagePath = "assets/other_assets/commercial.png";
-  static var referAndEarnImagePath = "assets/other_assets/refer_earn.png";
-  static var rateImagePath = "assets/other_assets/rate.png";
+  static var bachelorsImagePath = "assets/other_assets/bachelors.svg";
+  static var familyImagePath = "assets/other_assets/family.svg";
+  static var commercialImagePath = "assets/other_assets/commercial.svg";
+  static var referAndEarnImagePath = "assets/other_assets/refer.svg";
+  static var rateImagePath = "assets/other_assets/rate.svg";
   static var alreadyPaidImagePath = "assets/other_assets/already_paid.png";
 
   static var bottomBGPath = "assets/bottom_menu/bottom_bg.svg";
@@ -288,8 +291,11 @@ class GlobalVariables {
   static var AUTHERP =
       "Basic " + base64Url.encode(utf8.encode(authorizedTokenERP));
   static const BaseURLERP = "https://housingsocietyerp.com/";
-  static const BaseURLERPView = "https://housing.convivialsoftware.com/";
+//  static const BaseURLERPView = "https://housing.convivialsoftware.com/";
  // static const BaseURLDiscover = "https://mydemosites.in/";
+
+  static const authorizedTokenDiscover = "socrun:Plmn#091";
+  static var AUTHDiscover = "Basic " + base64Url.encode(utf8.encode(authorizedTokenDiscover));
   static const BaseURLDiscover = "https://societyrun.com//Flutter/Classified/Login/";
 
   /*Api Name for BaseURLDiscover*/
@@ -595,6 +601,7 @@ class NotificationTypes{
   static const String TYPE_MyHousehold = "MyHousehold";
   static const String TYPE_PaymentRequest = "PaymentRequest";
   static const String TYPE_Expense = "Expense";
+  static const String TYPE_Document = "Document";
 
 }
 

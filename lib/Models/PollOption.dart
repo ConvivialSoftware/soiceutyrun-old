@@ -1,8 +1,8 @@
 class PollOption {
-  String ANS_ID;
-  String ANS;
-  String VOTES;
-  bool isSelected;
+  String? ANS_ID;
+  String? ANS;
+  String? VOTES;
+  bool? isSelected;
 
   PollOption({this.ANS_ID, this.ANS,this.VOTES,this.isSelected=false});
 

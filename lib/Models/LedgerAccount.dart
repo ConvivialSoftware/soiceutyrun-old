@@ -3,8 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable(
 )
 class LedgerAccount {
-  String id;
-  String name;
+  String? id;
+  String? name;
 
   LedgerAccount({this.id, this.name});
 
@@ -19,7 +19,7 @@ class LedgerAccount {
 
   @override
   String toString() {
-    return '$name'.toLowerCase() + ' $name'.toUpperCase();
+    return '$name';
     //return name;
   }
 

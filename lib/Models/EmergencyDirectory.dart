@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class EmergencyDirectory {
-  String ID, Name, Contact_No, Address, Sequence, STATUS, Category;
+  String? ID, Name, Contact_No, Address, Sequence, STATUS, Category;
 
   EmergencyDirectory(
       {this.ID,

@@ -1,43 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'GlobalVariables.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  var title;
-  //var scafold_key;
-  BuildContext context;
+class CustomAppBar extends StatefulWidget  implements PreferredSizeWidget {
 
-  //CustomAppBar.ScafoldKey(this.title,this.context,this.scafold_key);
+  String title;
+  List<Widget>? actions;
+  Widget? leading;
+  PreferredSize? bottom;
 
-  CustomAppBar(this.title, this.context);
+  CustomAppBar({
+    required this.title, this.actions,
+    this.leading,
+    this.bottom
+  });
+
+  @override
+  _CustomAppBarState createState() => _CustomAppBarState();
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => new Size.fromHeight(bottom!=null? 80.0 : kToolbarHeight);
+}
+
+class _CustomAppBarState
+    extends State<CustomAppBar> /*implements PreferredSizeWidget*/ {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return AppBar(
-          title: Text(title),
+      title: text(widget.title,
+          textColor: GlobalVariables.white,
+          fontSize: GlobalVariables.textSizeMedium),
         backgroundColor: GlobalVariables.primaryColor,
         centerTitle: true,
-          leading: getIconButton());
-
-  }
-
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
-
-  navigatePage() {
-    Navigator.of(context).pop();
-  }
-
-  getIconButton() {
-   // if (title != AppLocalizations.of(context).translate('overview')) {
-      return IconButton(
-          icon: Icon(Icons.arrow_back, color: GlobalVariables.white),
-          onPressed: () => navigatePage());
-   /* } else {
-      return IconButton(
-          icon: Icon(Icons.dehaze, color: GlobalVariables.white),
-          onPressed: () => scafold_key.currentState.openDrawer());
-    }*/
+      leading: widget.leading?? InkWell(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: AppIcon(
+          Icons.arrow_back,
+          iconColor: GlobalVariables.white,
+        ),
+      ),
+      actions: widget.actions,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+        color: GlobalVariables.white
+        ),
+      ),
+      bottom: widget.bottom,
+    );
   }
 }

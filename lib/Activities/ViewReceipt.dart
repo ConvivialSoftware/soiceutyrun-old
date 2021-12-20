@@ -4,12 +4,15 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Receipt.dart';
@@ -24,9 +27,9 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseViewReceipt extends StatefulWidget {
-  String invoiceNo, yearSelectedItem;
-  Receipt receipt;
-  String mBlock,mFLat;
+  String? invoiceNo, yearSelectedItem;
+  Receipt? receipt;
+  String? mBlock, mFLat;
 
   BaseViewReceipt(this.invoiceNo, this.yearSelectedItem,this.mBlock,this.mFLat,
       {this.receipt});
@@ -34,30 +37,29 @@ class BaseViewReceipt extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ViewReceiptState(invoiceNo);
+    return ViewReceiptState();
   }
 }
 
-class ViewReceiptState extends State<BaseViewReceipt> {
+class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
   ReceiptViewResponse _receiptViewList = ReceiptViewResponse();
-  List<Receipt> _receiptList = new List<Receipt>();
+  List<Receipt> _receiptList = <Receipt>[];
 
   String name = "", email = "";
-  String invoiceNo;
 
-  ViewReceiptState(this.invoiceNo);
-
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   TextEditingController _emailTextController = TextEditingController();
   bool isEditEmail = false;
-  String _taskId;
-  ReceivePort _port = ReceivePort();
+
+  /*String _taskId;
+  ReceivePort _port = ReceivePort();*/
   bool isStoragePermission = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPrefData();
-    if(invoiceNo!=null) {
+    if (widget.invoiceNo != null) {
       GlobalFunctions.checkInternetConnection().then((internet) {
         if (internet) {
           getReceiptData();
@@ -67,10 +69,10 @@ class ViewReceiptState extends State<BaseViewReceipt> {
         }
       });
     }else{
-      _receiptList.add(widget.receipt);
+      _receiptList.add(widget.receipt!);
     }
 
-    IsolateNameServer.registerPortWithName(
+    /*IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       String id = data[0];
@@ -91,11 +93,11 @@ class ViewReceiptState extends State<BaseViewReceipt> {
       });
     });
 
-    FlutterDownloader.registerCallback(downloadCallback);
+    FlutterDownloader.registerCallback(downloadCallback);*/
     super.initState();
   }
 
-  @override
+  /*@override
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
@@ -134,21 +136,17 @@ class ViewReceiptState extends State<BaseViewReceipt> {
   Future<bool> _openDownloadedFile(String id) {
     GlobalFunctions.showToast("Downloading completed");
     return FlutterDownloader.open(taskId: id);
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         key: _scaffoldKey,
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          actions: widget.yearSelectedItem != null
+        appBar: CustomAppBar(
+          actions: _receiptList.length>0 && _receiptList[0].STATUS=='A'
               ? [
                   AppIconButton(Icons.mail, iconColor: GlobalVariables.white,
                       onPressed: () {
@@ -175,23 +173,13 @@ class ViewReceiptState extends State<BaseViewReceipt> {
             SizedBox(width: 16,),
                 ]
               : [],
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            widget.yearSelectedItem != null
+          title: _receiptList.length>0 && _receiptList[0].STATUS=='A'
                 ? AppLocalizations.of(context).translate('receipt') +
                     ' #' +
-                    invoiceNo
-                : widget.receipt!=null ? widget.receipt.FLAT_NO:'',
-            textColor: GlobalVariables.white,
-          ),
+                  widget.invoiceNo!
+              : widget.receipt != null
+                  ? widget.receipt!.FLAT_NO!
+                  : '',
         ),
         body: getBaseLayout(),
       ),
@@ -203,8 +191,6 @@ class ViewReceiptState extends State<BaseViewReceipt> {
         ? SingleChildScrollView(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
                 _receiptList.length > 0
                     ? Column(
                         children: [
@@ -216,7 +202,7 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                                   alignment: Alignment.topRight,
                                   child: text(
                                       GlobalFunctions.convertDateFormat(
-                                          _receiptList[0].PAYMENT_DATE,
+                                          _receiptList[0].PAYMENT_DATE!,
                                           "dd-MM-yyyy"),
                                       textColor: GlobalVariables.grey,
                                       fontSize:
@@ -228,7 +214,8 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                                 Container(
                                   alignment: Alignment.center,
                                   child: text(
-                                      GlobalFunctions.getCurrencyFormat((_receiptList[0].AMOUNT +
+                                      GlobalFunctions.getCurrencyFormat(
+                                          (_receiptList[0].AMOUNT! +
                                           double.parse(
                                               _receiptList[0]
                                                   .PENALTY_AMOUNT??'0'))
@@ -249,7 +236,7 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                                 Container(
                                   alignment: Alignment.center,
                                   child: text(
-                                      widget.yearSelectedItem != null
+                                      _receiptList[0].STATUS=='A'
                                           ? ''
                                           : '*Unapproved Receipt',
                                       textColor: GlobalVariables.red,
@@ -395,7 +382,56 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                               ],
                             ),
                           ),
-                          AppUserPermission.isUserAccountingPermission && widget.yearSelectedItem == null
+                          _receiptList[0].ATTACHMENT!.isNotEmpty
+                              ? AppContainer(
+                            isListItem: true,
+                            child: InkWell(
+                              onTap: () {
+                                downloadAttachment(_receiptList[0].ATTACHMENT);
+                              },
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      AppIcon(
+                                        Icons.attachment,
+                                        iconColor: GlobalVariables.skyBlue,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Flexible(
+                                        child: text(
+                                           AppLocalizations.of(context)
+                                                .translate('attachment'),
+                                            fontSize: GlobalVariables.textSizeSMedium,
+                                            textColor: GlobalVariables.skyBlue),
+                                      ),
+                                      SizedBox(width: 4,),
+                                      if(downloading) Stack(
+                                        alignment: AlignmentDirectional.center,
+                                        children: [
+                                          Container(
+                                            //height: 20,
+                                            //width: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              //value: 71.0,
+                                            ),
+                                          ),
+                                          //SizedBox(width: 4,),
+                                          Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                              : SizedBox(),
+                          AppUserPermission.isUserAccountingPermission &&
+                              _receiptList[0].STATUS!='A'
                               ? Container(
                             margin: EdgeInsets.all(16.0),
                                   child: Row(
@@ -408,7 +444,8 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                                             AppLocalizations.of(context)
                                                 .translate('cancel').toString().toUpperCase(),
                                             onPressed: () {
-                                              cancelReceiptRequest(_receiptList[0].ID);
+                                              cancelReceiptRequest(
+                                                  _receiptList[0].ID!);
                                             }),
                                       ),
                                       Container(
@@ -418,12 +455,29 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                                                 AppLocalizations.of(context)
                                                     .translate('approve'),
                                             onPressed: () {
+                                              List<String> arr = _receiptList[0]
+                                                  .FLAT_NO!
+                                                  .split(" ");
 
-                                              List<String> arr = _receiptList[0].FLAT_NO.split(" ");
-
-                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseAlreadyPaid(_receiptList[0].INVOICE_NO, _receiptList[0].AMOUNT.toDouble(), arr[0].trim(), arr[1].trim(),int.parse(_receiptList[0].PENALTY_AMOUNT),receiptData: _receiptList[0],isAdmin: true,)));
-
-
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          BaseAlreadyPaid(
+                                                            _receiptList[0]
+                                                                .INVOICE_NO!,
+                                                            _receiptList[0]
+                                                                .AMOUNT!
+                                                                .toDouble(),
+                                                            arr[0].trim(),
+                                                            arr[1].trim(),
+                                                            int.parse(_receiptList[
+                                                                    0]
+                                                                .PENALTY_AMOUNT!),
+                                                            receiptData:
+                                                                _receiptList[0],
+                                                            isAdmin: true,
+                                                          )));
                                             }),
                                       ),
                                     ],
@@ -442,6 +496,7 @@ class ViewReceiptState extends State<BaseViewReceipt> {
   Future<void> getSharedPrefData() async {
     email = await GlobalFunctions.getUserName();
     name = await GlobalFunctions.getDisplayName();
+    //consumerId = await GlobalFunctions.getConsumerID();
     setState(() {});
   }
 
@@ -459,16 +514,20 @@ class ViewReceiptState extends State<BaseViewReceipt> {
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-   // String flat = await GlobalFunctions.getFlat();
-   // String block = await GlobalFunctions.getBlock();
-    _progressDialog.show();
+    if(widget.mBlock==null){
+      widget.mBlock = await GlobalFunctions.getBlock();
+    }
+    if(widget.mFLat==null){
+      widget.mFLat = await GlobalFunctions.getFlat();
+    }
+    _progressDialog!.show();
     restClientERP
-            .getReceiptData(
-                societyId, widget.mFLat, widget.mBlock, invoiceNo, widget.yearSelectedItem)
+            .getReceiptData(societyId, widget.mFLat!, widget.mBlock!,
+                widget.invoiceNo!, widget.yearSelectedItem)
             .then((value) {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       print('Response : ' + value.toString());
-      List<dynamic> _list = value.data;
+      List<dynamic> _list = value.data!;
 
       _receiptList = List<Receipt>.from(_list.map((i) => Receipt.fromJson(i)));
 
@@ -476,8 +535,8 @@ class ViewReceiptState extends State<BaseViewReceipt> {
 
       //getAllBillData();
     }) /*.catchError((Object obj) {
-      //   if(_progressDialog.isShowing()){
-      //    _progressDialog.hide();
+      //   if(_progressDialog.isShowed){
+      //    _progressDialog.dismiss();
       //  }
       switch (obj.runtimeType) {
         case DioError:
@@ -500,7 +559,7 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                 builder: (BuildContext context, StateSetter _stateState) {
               isEditEmail
                   ? _emailTextController.text = ''
-                  : _emailTextController.text = email;
+                  : _emailTextController.text = (_receiptViewList.Email!=null ? _receiptViewList.Email : email)!;
 
               return Dialog(
                   shape: RoundedRectangleBorder(
@@ -526,7 +585,9 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                           alignment: Alignment.topLeft,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: primaryText(
-                            'Send #'+_receiptList[0].RECEIPT_NO+' on below email id',
+                            'Send #' +
+                                _receiptList[0].RECEIPT_NO! +
+                                ' on below email id',
                            /* GlobalFunctions.convertDateFormat(
                                 _receiptList[0].PAYMENT_DATE,
                                 'dd-MM-yyyy') *//*+
@@ -612,9 +673,9 @@ class ViewReceiptState extends State<BaseViewReceipt> {
                                   if (_emailTextController.text.length > 0) {
                                     Navigator.of(context).pop();
                                     getReceiptMail(
-                                        _receiptList[0].RECEIPT_NO,
+                                        _receiptList[0].RECEIPT_NO!,
                                         _emailTextController.text,
-                                        widget.yearSelectedItem);
+                                        widget.yearSelectedItem!);
                                   } else {
                                     GlobalFunctions.showToast(
                                         'Please Enter Email ID');

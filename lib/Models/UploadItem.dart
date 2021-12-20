@@ -2,9 +2,9 @@
 
 class UploadItem{
 
-  final String id;
-  final String tag;
-  final MediaType type;
+  final String? id;
+  final String? tag;
+  final MediaType? type;
   final int progress;
   //final UploadTaskStatus status;
 
@@ -16,7 +16,7 @@ class UploadItem{
     //this.status = UploadTaskStatus.undefined,
   });
 
-  UploadItem copyWith({/*UploadTaskStatus status*/ int progress}) => UploadItem(
+  UploadItem copyWith({/*UploadTaskStatus status*/ int? progress}) => UploadItem(
       id: this.id,
       tag: this.tag,
       type: this.type,

@@ -3,11 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable(
 )
 class Vehicle {
-  String ID;
-  String VEHICLE_NO;
-  String MODEL;
-  String WHEEL;
-  String STICKER_NO;
+  String? ID;
+  String? VEHICLE_NO;
+  String? MODEL;
+  String? WHEEL;
+  String? STICKER_NO;
 
   Vehicle({this.ID,this.VEHICLE_NO, this.MODEL, this.WHEEL, this.STICKER_NO});
 

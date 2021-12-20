@@ -5,12 +5,13 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/AWS/AWSClient.dart';
+//import 'package:societyrun/AWS/AWSClient.dart';
 import 'package:societyrun/Activities/AddTenant.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UploadItem.dart';
@@ -38,8 +39,8 @@ class BaseAddAgreement extends StatefulWidget {
 }
 
 class AddAgreementState extends State<BaseAddAgreement> {
-  String attachmentFilePath;
-  String attachmentFileName;
+  String? attachmentFilePath;
+  String? attachmentFileName;
 
   TextEditingController _agreementFromController = TextEditingController();
   TextEditingController _agreementToController = TextEditingController();
@@ -53,19 +54,19 @@ class AddAgreementState extends State<BaseAddAgreement> {
       new List<DropdownMenuItem<String>>();
   String _selectedFlat;*/
 
-  List<String> _rentedList = new List<String>();
+  List<String> _rentedList = <String>[];
   List<DropdownMenuItem<String>> _rentedToListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedRentedTo;
+  <DropdownMenuItem<String>>[];
+  String? _selectedRentedTo;
 
-  List<String> _groupCountList = new List<String>();
+  List<String> _groupCountList = <String>[];
   List<DropdownMenuItem<String>> _groupCountListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedGroupCount;
+  <DropdownMenuItem<String>>[];
+  String? _selectedGroupCount;
 
-  String _selectedIssueNOC;
+  String? _selectedIssueNOC;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
 
  // List<String> selectedUserList = List<String>();
@@ -78,6 +79,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getRentedToData();
     getGroupCountData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -127,7 +129,6 @@ class AddAgreementState extends State<BaseAddAgreement> {
   @override
   Widget build(BuildContext context) {
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of<UserManagementResponse>(context),
@@ -135,23 +136,8 @@ class AddAgreementState extends State<BaseAddAgreement> {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                  AppLocalizations.of(context).translate('add_agreement'),
-                  textColor: GlobalVariables.white,
-                  fontSize: GlobalVariables.textSizeMedium),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('add_agreement'),
             ),
             body: getBaseLayout(value),
           ),
@@ -178,7 +164,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
             Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               decoration: BoxDecoration(
                   color: GlobalVariables.white,
                   borderRadius: BorderRadius.circular(10),
@@ -191,7 +177,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
                   items: _rentedToListItems,
                   value: _selectedRentedTo,
                   onChanged: (value){
-                    _selectedRentedTo=value;
+                    _selectedRentedTo=value as String?;
                     setState(() {});
                   },
                   isExpanded: true,
@@ -275,7 +261,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
                   items: _groupCountListItems,
                   value: _selectedGroupCount,
                   onChanged: (value){
-                    _selectedGroupCount=value;
+                    _selectedGroupCount=value as String?;
                     setState(() {});
                   },
                   isExpanded: true,
@@ -533,15 +519,16 @@ class AddAgreementState extends State<BaseAddAgreement> {
 
                   if(verifyInfo()) {
                     AddAgreementInfo agreementInfo = AddAgreementInfo(
-                      rentedTo: _selectedRentedTo,
+                      rentedTo: _selectedRentedTo!,
                       startDate: _agreementFromController.text,
                       endDate: _agreementToController.text,
-                      noOfBachelor: _selectedGroupCount,
-                      isNocEmail: _selectedIssueNOC,
-                      agreementAttachmentPath: GlobalFunctions.convertFileToString(attachmentFilePath),
+                      noOfBachelor: _selectedGroupCount!,
+                      isNocEmail: _selectedIssueNOC?? AppLocalizations.of(context)
+                          .translate('no'),
+                      agreementAttachmentPath: GlobalFunctions.convertFileToString(attachmentFilePath!),
                       block: widget.block,
                       flat: widget.flat,
-                      agreementAttachmentName: attachmentFileName
+                      agreementAttachmentName: attachmentFileName!
                     );
 
                     Navigator.push(context, MaterialPageRoute(
@@ -719,8 +706,8 @@ class AddAgreementState extends State<BaseAddAgreement> {
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
       attachmentFilePath = value;
-      attachmentFileName = attachmentFilePath.substring(
-          attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+      attachmentFileName = attachmentFilePath!.substring(
+          attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
       print('file Name : ' + attachmentFileName.toString());
       setState(() {});
     });
@@ -732,6 +719,15 @@ class AddAgreementInfo{
 
   String rentedTo,startDate,endDate,noOfBachelor,isNocEmail,agreementAttachmentPath,agreementAttachmentName,block,flat;
 
-  AddAgreementInfo({this.rentedTo, this.startDate, this.endDate,
-      this.noOfBachelor, this.isNocEmail, this.agreementAttachmentPath,this.block,this.flat,this.agreementAttachmentName});
+  AddAgreementInfo({
+    required this.rentedTo,
+    required this.startDate,
+    required this.endDate,
+    required this.noOfBachelor,
+    required this.isNocEmail,
+    required this.agreementAttachmentPath,
+    required this.block,
+    required this.flat,
+    required this.agreementAttachmentName
+  });
 }

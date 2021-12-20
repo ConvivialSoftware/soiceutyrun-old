@@ -2,16 +2,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Bank {
-  String ACCOUNT_NO;
-  String BANK_NAME;
-  String ID;
-  String BANK_BRANCH;
-  String IFSC_CODE;
-  String ACCOUNT_TYPE;
-  String REMARK;
-  String OPENING_BALANCE;
-  String RECEIVE_PAYMENT;
-  String STATUS;
+  String? ACCOUNT_NO;
+  String? BANK_NAME;
+  String? ID;
+  String? BANK_BRANCH;
+  String? IFSC_CODE;
+  String? ACCOUNT_TYPE;
+  String? REMARK;
+  String? OPENING_BALANCE;
+  String? RECEIVE_PAYMENT;
+  String? STATUS;
 
   Bank({this.ACCOUNT_NO, this.BANK_NAME, this.ID, this.BANK_BRANCH,
     this.IFSC_CODE, this.ACCOUNT_TYPE, this.REMARK,

@@ -6,22 +6,22 @@ import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class NearByShopResponse extends ChangeNotifier {
-  List<NearByShop> nearByShopList = List<NearByShop>();
-  List<NearByShopCategory> nearByShopCategoryList = List<NearByShopCategory>();
+  List<NearByShop> nearByShopList = <NearByShop>[];
+  List<NearByShopCategory> nearByShopCategoryList = <NearByShopCategory>[];
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
 
-  Future<String> getExclusiveOfferData(String appName,String Id) async {
+  Future<String> getExclusiveOfferData(String appName,String? Id) async {
     try {
       print('getClassifiedData');
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-      await restClient.getExclusiveOfferData(appName,Id).then((value) {
+      await restClient.getExclusiveOfferData(appName,Id??'').then((value) {
         nearByShopList = List<NearByShop>.from(
-            value.data.map((i) => NearByShop.fromJson(i)));
+            value.data!.map((i) => NearByShop.fromJson(i)));
         nearByShopCategoryList = List<NearByShopCategory>.from(
-            value.category.map((i) => NearByShopCategory.fromJson(i)));
+            value.category!.map((i) => NearByShopCategory.fromJson(i)));
         print('nearByShopList : ' + nearByShopList.toString());
         print('nearByShopCategoryList : ' + nearByShopCategoryList.toString());
         isLoading = false;
@@ -30,7 +30,7 @@ class NearByShopResponse extends ChangeNotifier {
       });
     } catch (e) {
       errMsg = e.toString();
-      print('errMsg : '+errMsg);
+      print('errMsg : '+errMsg!);
       isLoading = false;
       notifyListeners();
     }
@@ -55,7 +55,7 @@ class NearByShopResponse extends ChangeNotifier {
 }
 
 class NearByShop {
-  String Id,
+  String? Id,
       Category,
       Title,
       short_description,
@@ -116,7 +116,7 @@ class NearByShop {
 }
 
 class NearByShopCategory {
-  String Id, Category_Name;
+  String? Id, Category_Name;
 
   NearByShopCategory({
     this.Id,
@@ -132,7 +132,7 @@ class NearByShopCategory {
 }
 
 class NearByShopOfferDetails {
-  String Id, Exclusive_Id,Description;
+  String? Id, Exclusive_Id,Description;
 
   NearByShopOfferDetails({
     this.Id,
@@ -150,7 +150,7 @@ class NearByShopOfferDetails {
 }
 
 class NearByShopTermsCondition {
-  String Id, Exclusive_Id,Description;
+  String? Id, Exclusive_Id,Description;
 
   NearByShopTermsCondition({
     this.Id,

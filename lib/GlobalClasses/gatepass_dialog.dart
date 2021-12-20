@@ -1,33 +1,34 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'GlobalVariables.dart';
 
 class GatePassDialog extends StatefulWidget {
-  final GatePassPayload message;
+  final GatePassPayload? message;
 
-  const GatePassDialog({Key key, this.message}) : super(key: key);
+  const GatePassDialog({Key? key, this.message}) : super(key: key);
 
   @override
   _GatePassDialogState createState() => _GatePassDialogState();
 }
 
 class _GatePassDialogState extends State<GatePassDialog> {
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   static const double padding = 5.0;
   static const double ovalRadius = 70.0;
   String _from="";
   String _block="";
   String _visitorName="";
   String _noOfVisitors="";
-  String _visitorType;
+  String? _visitorType;
   String _visitorContact="";
   String _societyId="";
   String _vid="";
@@ -44,16 +45,16 @@ class _GatePassDialogState extends State<GatePassDialog> {
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     _handleMessage();
     _getSocietyData();
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return WillPopScope(
       onWillPop: (){
-        return;
+        return Future.value(true);
       },
       child: Dialog(
           backgroundColor: Colors.transparent,
@@ -376,22 +377,22 @@ class _GatePassDialogState extends State<GatePassDialog> {
   }
 
   void _handleMessage() {
-      _from =widget.message.fROMVISITOR;
-      _vid = widget.message.vID;
-      _uid = widget.message.uSERID;
-      _block = widget.message.rEASON;
-      _visitorName = widget.message.vISITORNAME;
-      _visitorType = widget.message.vSITORTYPE;
-      _visitorContact = widget.message.cONTACT;
-      _noOfVisitors = widget.message.nOOFVISITORS;
-      _inBy = widget.message.iNBY;
-      _reason = widget.message.rEASON;
-      _inDate = widget.message.iNDATE;
-      _inTime = widget.message.iNTIME;
-      _visitorImage = widget.message.iMAGE;
-      _popupTitle = widget.message.title;
-      _id = widget.message.iD;
-      _gcm_id = widget.message.GCM_ID;
+      _from =widget.message!.fROMVISITOR??'';
+      _vid = widget.message?.vID??'';
+      _uid = widget.message?.uSERID??'';
+      _block = widget.message?.rEASON??'';
+      _visitorName = widget.message?.vISITORNAME??'';
+      _visitorType = widget.message?.vSITORTYPE??'';
+      _visitorContact = widget.message?.cONTACT??'';
+      _noOfVisitors = widget.message?.nOOFVISITORS??'';
+      _inBy = widget.message?.iNBY??'';
+      _reason = widget.message?.rEASON??'';
+      _inDate = widget.message?.iNDATE??'';
+      _inTime = widget.message?.iNTIME??'';
+      _visitorImage = widget.message?.iMAGE??'';
+      _popupTitle = widget.message?.title??'';
+      _id = widget.message?.iD??'';
+      _gcm_id = widget.message?.GCM_ID??'';
   }
 
   void _getSocietyData() async {
@@ -402,18 +403,19 @@ class _GatePassDialogState extends State<GatePassDialog> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     //String gcmId = await GlobalFunctions.getFCMToken();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .postApproveGatePass(_id, GatePassStatus.APPROVED, _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
-      _progressDialog.hide();
-      if (value.status) {
-        GlobalFunctions.showToast(value.message);
+      _progressDialog!.dismiss();
         Navigator.pop(context);
+      if (value.status!) {
+        GlobalFunctions.showToast(value.message!);
+
       }
     }).catchError((Object obj) {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       print('res : ' + obj.toString());
       switch (obj.runtimeType) {
         case DioError:
@@ -433,18 +435,19 @@ class _GatePassDialogState extends State<GatePassDialog> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
    // String gcmId = await GlobalFunctions.getFCMToken();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .postApproveGatePass(_id, GatePassStatus.REJECTED, _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
-      _progressDialog.hide();
-      if (value.status) {
-        GlobalFunctions.showToast(value.message);
+      _progressDialog!.dismiss();
         Navigator.pop(context);
+      if (value.status!) {
+        GlobalFunctions.showToast(value.message!);
+
       }
     }).catchError((Object obj) {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       print('res : ' + obj.toString());
       switch (obj.runtimeType) {
         case DioError:
@@ -463,18 +466,19 @@ class _GatePassDialogState extends State<GatePassDialog> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     // String gcmId = await GlobalFunctions.getFCMToken();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .postApproveGatePass(_id, _visitorType==GlobalVariables.GatePass_Delivery  ? GatePassStatus.LEAVE_AT_GATE :  GatePassStatus.WAIT_AT_GATE , _gcm_id, _societyId)
         .then((value) {
       print('status : ' + value.status.toString());
-      _progressDialog.hide();
-      if (value.status) {
-        GlobalFunctions.showToast(value.message);
+      _progressDialog!.dismiss();
         Navigator.pop(context);
+      if (value.status!) {
+        GlobalFunctions.showToast(value.message!);
+
       }
     }).catchError((Object obj) {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       print('res : ' + obj.toString());
       switch (obj.runtimeType) {
         case DioError:

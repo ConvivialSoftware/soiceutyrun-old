@@ -52,10 +52,10 @@ abstract class RestClient {
   @POST(GlobalVariables.editProfileAPI)
   Future<DataResponse> editProfileInfo(@Field("SOCIETY_ID") String socId, @Field("USER_ID") String userId,
       @Field("NAME") String name, @Field("MOBILE") String phone,
-      @Field("ALTERNATE_CONTACT1") String altCon1, @Field("PROFILE_PHOTO") String profilePhoto,
+      @Field("ALTERNATE_CONTACT1") String altCon1, @Field("PROFILE_PHOTO") String? profilePhoto,
       @Field("ADDRESS") String address, @Field("GENDER") String gender,
       @Field("DOB") String dob,/* @Field("ANNIVERSARY_DATE") String anniverDate,*/
-      @Field("BLOOD_GROUP") String bloodGroup, @Field("OCCUPATION") String occupation,
+      @Field("BLOOD_GROUP") String? bloodGroup, @Field("OCCUPATION") String occupation,
       /*@Field("HOBBIES") String hobbies, @Field("LANGUAGES") String language,
       @Field("FB_PROFILE") String fbProfile, @Field("LINKDIN_PROFILE") String linkDinProfile,
       @Field("INSTAGRAM") String instagram,*/ @Field("USER_NAME") String userName,@Field("TYPE") String type,@Field("LIVES_HERE") String livesHere);
@@ -111,7 +111,7 @@ abstract class RestClient {
   Future<StatusMsgResponse> getUpdateComplaintStatus(@Field(GlobalVariables.societyId) String socId, @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.userID) String userId,
       @Field(GlobalVariables.parentTicket) String ticketNo,@Field(GlobalVariables.status) String updateStatus,
-      @Field(GlobalVariables.COMMENT) String comment,@Field(GlobalVariables.ATTACHMENT) String attachment,
+      @Field(GlobalVariables.COMMENT) String comment,@Field(GlobalVariables.ATTACHMENT) String? attachment,
       @Field(GlobalVariables.TYPE) String type,@Field(GlobalVariables.ESCALATION_LEVEL) String escalationLevel,
       @Field(GlobalVariables.societyName) String socName,@Field(GlobalVariables.userEmail) String eMail,
       @Field(GlobalVariables.societyEmail) String socEmail,@Field(GlobalVariables.NAME) String userName);
@@ -124,7 +124,7 @@ abstract class RestClient {
       @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.TYPE) String type,
       /*@Field(GlobalVariables.COMPLAINT_AREA) String area,*/@Field(GlobalVariables.CATEGORY) String category,
       @Field(GlobalVariables.DESCRIPTION) String description,@Field(GlobalVariables.PRIORITY) String priority,
-      @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.ATTACHMENT) String attachment,@Field(GlobalVariables.ATTACHMENT_NAME) String ATTACHMENT_NAME,
+      @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.ATTACHMENT) String? attachment,@Field(GlobalVariables.ATTACHMENT_NAME) String? ATTACHMENT_NAME,
       @Field(GlobalVariables.societyName) String socName,@Field(GlobalVariables.userEmail) String eMail,
       @Field(GlobalVariables.societyEmail) String socEmail);
 
@@ -164,9 +164,9 @@ abstract class RestClient {
       @Field(GlobalVariables.flat) String flat ,@Field(GlobalVariables.NAME) String name,
       @Field(GlobalVariables.GENDER) String gender,@Field(GlobalVariables.DOB) String dob,
       @Field(GlobalVariables.USER_NAME) String userName,@Field(GlobalVariables.MOBILE) String mobile,@Field(GlobalVariables.ALTERNATE_CONTACT1) String alternateNumber,
-      @Field(GlobalVariables.BLOOD_GROUP) String bloodGroup,@Field(GlobalVariables.OCCUPATION) String occupation,
+      @Field(GlobalVariables.BLOOD_GROUP) String? bloodGroup,@Field(GlobalVariables.OCCUPATION) String occupation,
       @Field(GlobalVariables.LIVES_HERE) String hobbies,@Field(GlobalVariables.TYPE) String membershipType,
-      @Field(GlobalVariables.ADDRESS) String additionalInfo,@Field(GlobalVariables.PROFILE_PHOTO) String profilePic);
+      @Field(GlobalVariables.ADDRESS) String additionalInfo,@Field(GlobalVariables.PROFILE_PHOTO) String? profilePic);
 
 
   @FormUrlEncoded()
@@ -214,7 +214,7 @@ abstract class RestClient {
       @Field("ASSIGN_FLATS") String flatNo, @Field("GENDER") String gender,
       @Field("DOB") String dob, @Field("ROLE") String role,
       @Field("QUALIFICATION") String qualification, @Field("ADDRESS") String address,
-      @Field("IMAGE")String staffImage, @Field("Attachment") String identityProof);
+      @Field("IMAGE")String? staffImage, @Field("Attachment") String? identityProof);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addMaintenanceStaffMemberAPI)
@@ -230,8 +230,8 @@ abstract class RestClient {
       @Field("ROLE") String role,
       @Field("QUALIFICATION") String qualification,
       @Field("ADDRESS") String address,
-      @Field("PROFILE_PHOTO")String staffImage,
-      @Field("IDENTITY_PROOF") String identityProof);
+      @Field("PROFILE_PHOTO")String? staffImage,
+      @Field("IDENTITY_PROOF") String? identityProof);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.approveGatePassAPI)
@@ -320,7 +320,7 @@ abstract class RestClient {
   Future<DataResponse> broadcastMail(@Field(GlobalVariables.societyId) String societyId,
       @Field(GlobalVariables.userID) String userId,
       @Field("FLATS[]") List<String> flats,
-      @Field(GlobalVariables.ATTACHMENT) String attachment,@Field(GlobalVariables.SEND_TO) String sendTo,
+      @Field(GlobalVariables.ATTACHMENT) String? attachment,@Field(GlobalVariables.SEND_TO) String sendTo,
       @Field(GlobalVariables.SUBJECT) String subject,@Field(GlobalVariables.DESCRIPTION) String description
       ,@Field(GlobalVariables.societyName) String Society_Name,@Field(GlobalVariables.societyEmail) String Society_Email,);
 
@@ -494,7 +494,7 @@ abstract class RestClient {
       @Field(GlobalVariables.NAME) String name,@Field(GlobalVariables.PHONE) String mobile,
       @Field(GlobalVariables.Email) String Email, @Field(GlobalVariables.LIVES_HERE) String livesHere,
       @Field(GlobalVariables.TYPE) String membershipType, @Field(GlobalVariables.ADDRESS) String additionalInfo,
-      @Field(GlobalVariables.IDENTITY_PROOF) String profilePic,
+      @Field(GlobalVariables.IDENTITY_PROOF) String? profilePic,
       @Field(GlobalVariables.note) String notForModerator,
       @Field(GlobalVariables.societyName) String societyName
       );
@@ -569,12 +569,12 @@ abstract class RestClient {
       @Field(GlobalVariables.societyId) String societyId,
       @Field(GlobalVariables.block) String block,
       @Field(GlobalVariables.flat) String flat,
-      @Field("user_details[]") List<Map<String,String>> userID,
+      @Field("user_details[]") List<Map<String,String?>> userID,
       @Field(GlobalVariables.AGREEMENT_FROM) String agreementFrom,
       @Field(GlobalVariables.AGREEMENT_TO) String agreementTo,
       @Field(GlobalVariables.AGREEMENT) String agreement,
       @Field(GlobalVariables.RENTED_TO) String rentedTo,
-      @Field(GlobalVariables.Noc_Issue) String nocIssue,
+      @Field(GlobalVariables.Noc_Issue) String? nocIssue,
       //@Field(GlobalVariables.ATTACHMENT) String attchment,
       @Field("FILE_TYPE") String fileType,
       @Field("isAdmin") bool isAdmin,

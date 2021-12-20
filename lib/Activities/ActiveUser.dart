@@ -1,15 +1,16 @@
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/PollOption.dart';
@@ -40,31 +41,30 @@ class BaseActiveUser extends StatefulWidget {
 
 class ActiveUserState extends State<BaseActiveUser>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 /*
 
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '',userType='';
 */
 
-List<String> inviteUserList = List<String>();
+List<String> inviteUserList = <String>[];
 
 
 var photo = "";
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
+    _tabController?.addListener(_handleTabSelection);
     _handleTabSelection();
 
   }
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
         value: Provider.of(context),
@@ -73,24 +73,9 @@ var photo = "";
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('active_user'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('active_user'),
                 bottom: getTabLayout(),
-                elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
                getActiveUserLayout(value),
@@ -170,7 +155,7 @@ var photo = "";
   getActiveUserListItemLayout(int position, UserManagementResponse userManagementResponse) {
 
     var inDays = GlobalFunctions.getDaysFromDate(GlobalFunctions.getCurrentDate("yyyy-MM-dd"),
-        GlobalFunctions.convertDateFormat(userManagementResponse.activeUserList[position].LAST_LOGIN, "yyyy-MM-dd")
+        GlobalFunctions.convertDateFormat(userManagementResponse.activeUserList[position].LAST_LOGIN!, "yyyy-MM-dd")
     );
     if(inDays.toString()=='0'){
       inDays = 'Today';
@@ -234,7 +219,7 @@ var photo = "";
                                 ),
                                 SizedBox(width: 4,),
                                 Container(
-                                  child: AppIcon(userManagementResponse.activeUserList[position].gcm_id.isNotEmpty ?  Icons.phone_android : Icons.language ,iconColor: GlobalVariables.secondaryColor,iconSize: GlobalVariables.textSizeNormal,),
+                                  child: AppIcon(userManagementResponse.activeUserList[position].gcm_id!.isNotEmpty ?  Icons.phone_android : Icons.language ,iconColor: GlobalVariables.secondaryColor,iconSize: GlobalVariables.textSizeNormal,),
                                 ),
                               ],
                             ),
@@ -246,7 +231,7 @@ var photo = "";
                                 radius: GlobalVariables.textSizeVerySmall,
                               ),
                               child: text(
-                                  userManagementResponse.activeUserList[position].BLOCK + ' ' + userManagementResponse.activeUserList[position].FLAT,
+                                  userManagementResponse.activeUserList[position].BLOCK! + ' ' + userManagementResponse.activeUserList[position].FLAT!,
                                   fontSize: GlobalVariables.textSizeVerySmall,
                                   textColor: GlobalVariables.white,
                                   fontWeight: FontWeight.bold
@@ -323,11 +308,11 @@ var photo = "";
             alignment: Alignment.bottomRight,
             child: AppButton(textContent: 'Invite', onPressed: (){
 
-              _progressDialog.show();
+              _progressDialog!.show();
               Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
 
-                _progressDialog.hide();
-                if(value.status){
+                _progressDialog!.dismiss();
+                if(value.status!){
                   Navigator.of(context).pop();
                 }
 
@@ -377,7 +362,7 @@ var photo = "";
                   if(inviteUserList.contains(userManagementResponse.inactiveUserList[position].USER_ID)){
                     inviteUserList.remove(userManagementResponse.inactiveUserList[position].USER_ID);
                   }else{
-                    inviteUserList.add(userManagementResponse.inactiveUserList[position].USER_ID);
+                    inviteUserList.add(userManagementResponse.inactiveUserList[position].USER_ID!);
                   }
 
                   print('inviteUserList : '+inviteUserList.toString());
@@ -431,7 +416,7 @@ var photo = "";
                         children: [
                           Container(
                             child: text(
-                                userManagementResponse.inactiveUserList[position].BLOCK+' '+userManagementResponse.inactiveUserList[position].FLAT +' - ',
+                                userManagementResponse.inactiveUserList[position].BLOCK!+' '+userManagementResponse.inactiveUserList[position].FLAT! +' - ',
                                 fontSize: GlobalVariables.textSizeSMedium,
                                 textColor: GlobalVariables.black,
                                 textStyleHeight: 1.0
@@ -462,7 +447,7 @@ var photo = "";
 
   void _handleTabSelection() {
 
-      _callAPI(_tabController.index);
+      _callAPI(_tabController!.index);
 
   }
 

@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.societyrun12">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -51,6 +52,9 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
+
+            android:exported="true"
+            tools:node="merge"
             >
             <!--android:showWhenLocked="true"
             android:turnScreenOn="true"-->
@@ -69,7 +73,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <provider
+     <!--   <provider
             android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
             android:authorities="${applicationId}.flutter_downloader.provider"
             android:exported="false"
@@ -77,9 +81,9 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
-        </provider>
+        </provider>-->
 
-        <provider
+       <!-- <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             android:enabled="false"
@@ -89,13 +93,13 @@
             android:name="com.bluechilli.flutteruploader.FlutterUploaderInitializer"
             android:authorities="${applicationId}.flutter-upload-init"
             android:exported="false">
-            <!-- changes this number to configure the maximum number of concurrent tasks -->
+            &lt;!&ndash; changes this number to configure the maximum number of concurrent tasks &ndash;&gt;
             <meta-data
                 android:name="com.bluechilli.flutterupload.MAX_CONCURRENT_TASKS"
                 android:value="3" />
 
-            <!-- changes this number to configure connection timeout for the upload http request -->
+            &lt;!&ndash; changes this number to configure connection timeout for the upload http request &ndash;&gt;
             <meta-data android:name="com.bluechilli.flutteruploader.UPLOAD_CONNECTION_TIMEOUT_IN_SECONDS" android:value="3600" />
-        </provider>
+        </provider>-->
     </application>
 </manifest>

@@ -7,7 +7,7 @@ class AppLanguage extends ChangeNotifier{
 
   Locale _appLocale = Locale('en');
 
-  Locale get appLocal => _appLocale ?? Locale('en');
+  Locale get appLocal => _appLocale;
 
   fetchLocale() async{
 
@@ -16,7 +16,7 @@ class AppLanguage extends ChangeNotifier{
       _appLocale= Locale('en');
       return _appLocale;
     }
-    _appLocale = Locale(pref.getString(GlobalVariables.keyLanguageCode));
+    _appLocale = Locale(pref.getString(GlobalVariables.keyLanguageCode)!);
     return _appLocale;
 
   }

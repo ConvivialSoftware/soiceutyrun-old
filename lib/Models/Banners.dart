@@ -3,8 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable(
 )
 class Banners {
-  String IMAGE;
-  String Url;
+  String? IMAGE;
+  String? Url;
 
   Banners({this.IMAGE, this.Url});
 

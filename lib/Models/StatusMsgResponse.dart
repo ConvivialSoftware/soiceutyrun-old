@@ -1,11 +1,11 @@
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 class StatusMsgResponse {
-  String message;
-  bool status;
-  String pass_code;
-  String expire_time;
-  String otp;
+  String? message;
+  bool? status;
+  String? pass_code;
+  String? expire_time;
+  String? otp;
 
   StatusMsgResponse({this.message, this.status,this.pass_code,this.expire_time,this.otp});
 

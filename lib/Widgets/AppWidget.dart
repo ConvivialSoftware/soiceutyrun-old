@@ -6,6 +6,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:flutter_html/html_parser.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:societyrun/Widgets/AppImage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 BoxDecoration boxDecoration({double radius = 2,
   Color color = Colors.transparent,
@@ -31,7 +32,7 @@ Widget primaryText(var text,
       var maxLine = 99999,
       var latterSpacing = 0.5,
       var fontWeight = FontWeight.bold,var textStyleHeight=1.5}) {
-  return Text(text,
+  return Text(text??'',
       textAlign: isCentered ? TextAlign.center : TextAlign.start,
       maxLines: maxLine,
       overflow: TextOverflow.ellipsis,
@@ -95,7 +96,14 @@ Widget htmlText(var text,
       var latterSpacing = 0.5,
       var fontWeight = FontWeight.normal,var textStyleHeight=1.5}) {
   return Html(
-    useRichText: false,
+      data: text,
+    onLinkTap: (url, _, __, ___) {
+      launch(url!);
+    },
+
+
+  )/* Html(
+    //useRichText: false,
     customRender: htmlCustomRenderer,
     data: text,
     defaultTextStyle: TextStyle(
@@ -106,7 +114,7 @@ Widget htmlText(var text,
         letterSpacing: latterSpacing,
         fontWeight: fontWeight
     ),
-  );/*Text(text,
+  );*//*Text(text,
       textAlign: isCentered ? TextAlign.center : TextAlign.start,
       maxLines: maxLine,
       overflow: TextOverflow.ellipsis,
@@ -118,9 +126,9 @@ Widget htmlText(var text,
           fontWeight: fontWeight))*/;
 }
 
-Widget htmlCustomRenderer(dom.Node node, List<Widget> children) {
+Widget? htmlCustomRenderer(dom.Node? node, List<Widget> children) {
   if (node is dom.Element) {
-    print('node.localName : '+node.localName);
+    print('node.localName : '+node.localName!);
     switch (node.localName) {
       case "li":
         return customListItem(node);
@@ -225,11 +233,11 @@ Widget smallTextContainerOutlineLayout(textString){
 
 }
 
-Widget indicator({bool isActive,Color activeColor=GlobalVariables.white , Color inactiveColor=GlobalVariables.grey}) {
+Widget indicator({bool? isActive,Color activeColor=GlobalVariables.white , Color inactiveColor=GlobalVariables.grey}) {
   return AnimatedContainer(
     duration: Duration(milliseconds: 150),
     margin: EdgeInsets.symmetric(horizontal: 4.0),
-    height: isActive ? 6.0 : 4.0,
+    height: isActive! ? 6.0 : 4.0,
     width: isActive ? 6.0 : 4.0,
     decoration: BoxDecoration(
       color: isActive ? activeColor : inactiveColor,

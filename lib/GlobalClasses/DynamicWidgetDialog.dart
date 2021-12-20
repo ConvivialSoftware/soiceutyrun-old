@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
@@ -14,9 +14,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'GlobalVariables.dart';
 
 class DynamicWidgetDialog extends StatefulWidget {
-  final DBNotificationPayload message;
+  final DBNotificationPayload? message;
 
-  const DynamicWidgetDialog({Key key, this.message}) : super(key: key);
+  const DynamicWidgetDialog({Key? key, this.message}) : super(key: key);
 
   @override
   _DynamicWidgetDialogState createState() => _DynamicWidgetDialogState();
@@ -39,7 +39,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        return;
+        return Future.value(true);
       },
       child: Dialog(
           backgroundColor: Colors.transparent,
@@ -106,7 +106,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         text(
-                            _popupTitle??'',
+                            _popupTitle,
                             textColor : GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold
@@ -117,7 +117,7 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: text(
-                            _body??'',
+                            _body,
                             textColor: GlobalVariables.black,
                             fontSize: GlobalVariables.textSizeSMedium,
                           ),
@@ -245,8 +245,8 @@ class _DynamicWidgetDialogState extends State<DynamicWidgetDialog> {
   }
 
   void _handleMessage() {
-      _popupTitle = widget.message.title;
-      _body = widget.message.body;
+      _popupTitle = widget.message!.title!;
+      _body = widget.message!.body!;
   }
 
 }

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Poll {
-  String ID,
+  String? ID,
       USER_NAME,
       USER_PHOTO,
       DESCRIPTION,
@@ -16,7 +16,7 @@ class Poll {
       VOTED_TO,
       View_VOTED_TO;
       bool isGraphView;
-  List<dynamic> OPTION;
+  List<dynamic>? OPTION;
 
   Poll(
       {this.ID,

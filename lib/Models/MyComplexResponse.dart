@@ -12,25 +12,25 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 
 class MyComplexResponse extends ChangeNotifier{
 
-  List<Announcement> announcementList = List<Announcement>();
-  List<Announcement> meetingList = List<Announcement>();
-  List<Announcement> eventList = List<Announcement>();
-  List<Poll> pollList = List<Poll>();
-  List<Documents> documentList = List<Documents>();
+  List<Announcement> announcementList = <Announcement>[];
+  List<Announcement> meetingList = <Announcement>[];
+  List<Announcement> eventList = <Announcement>[];
+  List<Poll> pollList = <Poll>[];
+  List<Documents> documentList = <Documents>[];
 
-  List<DirectoryType> directoryList = List<DirectoryType>();
+  List<DirectoryType> directoryList = <DirectoryType>[];
 
-  List<NeighboursDirectory> _neighbourList = List<NeighboursDirectory>();
-  List<CommitteeDirectory> _committeeList = List<CommitteeDirectory>();
-  List<EmergencyDirectory> _emergencyList = List<EmergencyDirectory>();
+  List<NeighboursDirectory> _neighbourList = <NeighboursDirectory>[];
+  List<CommitteeDirectory> _committeeList = <CommitteeDirectory>[];
+  List<EmergencyDirectory> _emergencyList = <EmergencyDirectory>[];
 
 
-  List<NeighboursDirectory> neighbourList = List<NeighboursDirectory>();
-  List<CommitteeDirectory> committeeList = List<CommitteeDirectory>();
-  List<EmergencyDirectory> emergencyList = List<EmergencyDirectory>();
+  List<NeighboursDirectory> neighbourList = <NeighboursDirectory>[];
+  List<CommitteeDirectory> committeeList = <CommitteeDirectory>[];
+  List<EmergencyDirectory> emergencyList = <EmergencyDirectory>[];
 
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
 
   Future<dynamic> getAnnouncementData(String type) async{
 
@@ -58,8 +58,8 @@ class MyComplexResponse extends ChangeNotifier{
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
     await restClient.getAnnouncementData(societyId, type, userId).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         if(type=='Announcement') {
           announcementList =
           List<Announcement>.from(_list.map((i) => Announcement.fromJson(i)));
@@ -103,8 +103,8 @@ class MyComplexResponse extends ChangeNotifier{
     await restClient.getAnnouncementPollData(societyId, type, block, flat, userId)
         .then((value) {
 
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         pollList = List<Poll>.from(_list.map((i) => Poll.fromJson(i)));
 
         print("announcementPoll : " + _list.length.toString());
@@ -130,8 +130,8 @@ class MyComplexResponse extends ChangeNotifier{
     String userId = await GlobalFunctions.getUserId();
     await  restClient.getDocumentData(societyId, userId).then((value) {
 
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         documentList = List<Documents>.from(_list.map((i) => Documents.fromJson(i)));
         isLoading=false;
         notifyListeners();
@@ -153,10 +153,10 @@ class MyComplexResponse extends ChangeNotifier{
 
     await restClient.getAllMemberDirectoryData(societyId).then((value) {
 
-      if (value.status) {
-        List<dynamic> neighbourList = value.neighbour;
-        List<dynamic> committeeList = value.committee;
-        List<dynamic> emergencyList = value.emergency;
+      if (value.status!) {
+        List<dynamic> neighbourList = value.neighbour!;
+        List<dynamic> committeeList = value.committee!;
+        List<dynamic> emergencyList = value.emergency!;
 
         _neighbourList = List<NeighboursDirectory>.from(
             neighbourList.map((i) => NeighboursDirectory.fromJson(i)));
@@ -186,13 +186,15 @@ class MyComplexResponse extends ChangeNotifier{
   }
 
   Future<void> getNeighboursDirectoryData() async {
+    isLoading=true;
+    notifyListeners();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
     await restClient.getNeighboursDirectoryData(societyId).then((value) {
 
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         neighbourList = List<NeighboursDirectory>.from(_list.map((i) => NeighboursDirectory.fromJson(i)));
         isLoading=false;
         notifyListeners();
@@ -208,18 +210,20 @@ class MyComplexResponse extends ChangeNotifier{
         default:
       }
     });
-    return neighbourList;
+    //return neighbourList;
   }
 
   Future<void> getCommitteeDirectoryData() async {
+    isLoading=true;
+    notifyListeners();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
 
     await restClient.getCommitteeDirectoryData(societyId).then((value) {
 
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         committeeList = List<CommitteeDirectory>.from(_list.map((i) => CommitteeDirectory.fromJson(i)));
         isLoading=false;
         notifyListeners();
@@ -235,18 +239,20 @@ class MyComplexResponse extends ChangeNotifier{
         default:
       }
     });
-    return committeeList;
+    //return committeeList;
   }
 
   Future<void> getEmergencyDirectoryData() async {
+    isLoading=true;
+    notifyListeners();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
 
     await restClient.getEmergencyDirectoryData(societyId).then((value) {
 
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         emergencyList = List<EmergencyDirectory>.from(_list.map((i) => EmergencyDirectory.fromJson(i)));
         isLoading=false;
         notifyListeners();
@@ -263,7 +269,7 @@ class MyComplexResponse extends ChangeNotifier{
       }
     });
 
-    return emergencyList;
+   // return emergencyList;
   }
 
 
@@ -281,15 +287,15 @@ class MyComplexResponse extends ChangeNotifier{
 }
 
 class DirectoryType {
-  String directoryType;
-  List<dynamic> directoryTypeWiseList;
+  String? directoryType;
+  List<dynamic>? directoryTypeWiseList;
 
   DirectoryType({this.directoryType, this.directoryTypeWiseList});
 }
 
 class DirectoryTypeWiseData {
-  String name, field;
-  bool isCall, isMail, isSearch, isFilter;
+  String? name, field;
+  bool? isCall, isMail, isSearch, isFilter;
 
   DirectoryTypeWiseData(
       {this.name,

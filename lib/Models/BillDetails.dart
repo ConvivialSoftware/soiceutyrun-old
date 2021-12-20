@@ -1,14 +1,14 @@
 
 class BillDetails {
-  String INVOICE_NO;
-  String FLAT_NO;
-  String NAME;
-  String START_DATE;
-  String END_DATE;
-  String DUE_DATE;
-  String TYPE;
-  String REMARK;
-  String C_DATE;
+  String? INVOICE_NO;
+  String? FLAT_NO;
+  String? NAME;
+  String? START_DATE;
+  String? END_DATE;
+  String? DUE_DATE;
+  String? TYPE;
+  String? REMARK;
+  String? C_DATE;
 
   BillDetails(
       {this.INVOICE_NO,

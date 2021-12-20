@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Documents {
-  String ID,
+  String? ID,
       DOCUMENT,
       TITLE,
       DESCRIPTION,

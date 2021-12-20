@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Announcement {
-  String ID,
+  String? ID,
       USER_NAME,
       USER_PHOTO,
       SUBJECT,

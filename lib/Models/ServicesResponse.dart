@@ -6,11 +6,11 @@ import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class ServicesResponse extends ChangeNotifier {
-  List<Services> servicesList = List<Services>();
-  List<Services> ownerServicesList = List<Services>();
-  List<ServicesCategory> servicesCategoryList = List<ServicesCategory>();
+  List<Services> servicesList = <Services>[];
+  List<Services> ownerServicesList = <Services>[];
+  List<ServicesCategory> servicesCategoryList = <ServicesCategory>[];
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
 
   Future<void> getServicesCategory() async {
     try {
@@ -23,12 +23,12 @@ class ServicesResponse extends ChangeNotifier {
       var value = await restClient.getServicesCategory();
       print('servicesCategoryList value : ' + value.toString());
       servicesCategoryList = List<ServicesCategory>.from(
-          value.data.map((i) => ServicesCategory.fromJson(i)));
+          value.data!.map((i) => ServicesCategory.fromJson(i)));
       isLoading = false;
       notifyListeners();
     } catch (e) {
       errMsg = e.toString();
-      print('errMsg ' + errMsg);
+      print('errMsg ' + errMsg!);
       isLoading = false;
       notifyListeners();
     }
@@ -43,9 +43,9 @@ class ServicesResponse extends ChangeNotifier {
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       var value = await restClient.getServicePerCategory(category);
-      servicesList = List<Services>();
+      servicesList = <Services>[];
       servicesList =
-          List<Services>.from(value.data.map((i) => Services.fromJson(i)));
+          List<Services>.from(value.data!.map((i) => Services.fromJson(i)));
       isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -100,12 +100,12 @@ class ServicesResponse extends ChangeNotifier {
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       var value = await restClient.getOwnerServices(userId,societyId);
       ownerServicesList =
-          List<Services>.from(value.data.map((i) => Services.fromJson(i)));
+          List<Services>.from(value.data!.map((i) => Services.fromJson(i)));
       isLoading = false;
       notifyListeners();
     } catch (e) {
       errMsg = e.toString();
-      print('errMsg ' + errMsg);
+      print('errMsg ' + errMsg!);
       isLoading = false;
       notifyListeners();
     }
@@ -130,7 +130,7 @@ class ServicesResponse extends ChangeNotifier {
 }
 
 class Services {
-  String Id,
+  String? Id,
       User_Id,
       S_Id,
       Name,
@@ -179,7 +179,7 @@ class Services {
 }
 
 class ServicesCategory {
-  String Id, Category_Name,image;
+  String? Id, Category_Name,image;
 
   ServicesCategory({
     this.Id,
@@ -196,7 +196,7 @@ class ServicesCategory {
 }
 
 class ServicesCharges {
-  String Id, S_Id, Service_Title, Service_Price;
+  String? Id, S_Id, Service_Title, Service_Price;
 
   ServicesCharges({this.Id, this.S_Id, this.Service_Price, this.Service_Title});
 

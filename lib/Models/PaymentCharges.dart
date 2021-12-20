@@ -1,9 +1,9 @@
 class PaymentChargesResponse{
 
-  List<dynamic> Razorpay;
-  List<dynamic> Paytm;
-  String message;
-  bool status;
+  List<dynamic>? Razorpay;
+  List<dynamic>? Paytm;
+  String? message;
+  bool? status;
 
   PaymentChargesResponse({this.Razorpay, this.Paytm, this.message, this.status});
 
@@ -22,8 +22,8 @@ class PaymentChargesResponse{
 
 class PaymentPerGateway{
 
-  List<dynamic> Preferred_Method;
-  List<dynamic> Other_Method;
+  List<dynamic>? Preferred_Method;
+  List<dynamic>? Other_Method;
   PaymentPerGateway({this.Preferred_Method, this.Other_Method});
 
   factory PaymentPerGateway.fromJson(Map<String,dynamic> map){
@@ -38,7 +38,7 @@ class PaymentPerGateway{
 
 class PaymentMethod{
 
-  String variable,value;
+  String? variable,value;
 
   PaymentMethod({this.variable, this.value});
 

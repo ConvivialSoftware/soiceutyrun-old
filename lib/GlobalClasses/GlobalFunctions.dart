@@ -3,25 +3,27 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:ext_storage/ext_storage.dart';
+import 'package:external_path/external_path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter/services.dart';
+
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:flutter_share/flutter_share.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:ndialog/ndialog.dart';
+import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/Discover.dart';
-import 'package:societyrun/Activities/FindServices.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
@@ -34,14 +36,13 @@ import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
-import 'package:intl/intl.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GlobalFunctions {
-  static SharedPreferences sharedPreferences;
+  static SharedPreferences? sharedPreferences;
 
   static void showToast(String msg) {
     Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
@@ -60,41 +61,41 @@ class GlobalFunctions {
 
   static getLoginValue() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyIsLogin)) {
-      return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyIsLogin)) {
+      return sharedPreferences!.getBool(GlobalVariables.keyIsLogin);
     } else {
-      sharedPreferences.setBool(GlobalVariables.keyIsLogin, false);
-      return sharedPreferences.getBool(GlobalVariables.keyIsLogin);
+      sharedPreferences!.setBool(GlobalVariables.keyIsLogin, false);
+      return sharedPreferences!.getBool(GlobalVariables.keyIsLogin);
     }
   }
 
   static getUserName() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyUsername)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyUsername)) {
       print('username : ' +
-          sharedPreferences.getString(GlobalVariables.keyUsername));
-      return sharedPreferences.getString(GlobalVariables.keyUsername);
+          sharedPreferences!.getString(GlobalVariables.keyUsername)!);
+      return sharedPreferences!.getString(GlobalVariables.keyUsername);
     }
     return "";
   }
 
   static getLoggedUserName() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyLoggedUsername)) {
       print('keyLoggedUsername : ' +
-          sharedPreferences.getString(GlobalVariables.keyLoggedUsername));
-      return sharedPreferences.getString(GlobalVariables.keyLoggedUsername);
+          sharedPreferences!.getString(GlobalVariables.keyLoggedUsername)!);
+      return sharedPreferences!.getString(GlobalVariables.keyLoggedUsername);
     }
     return "";
   }
 
   static getFCMToken() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(
+    if (sharedPreferences!.getKeys().contains(
         Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken)) {
-      return sharedPreferences.getString(
+      return sharedPreferences!.getString(
           Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
     }
     return "";
@@ -102,211 +103,220 @@ class GlobalFunctions {
 
   static getPassword() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyPassword)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyPassword)) {
       print('keyPassword : ' +
-          sharedPreferences.getString(GlobalVariables.keyPassword));
-      return sharedPreferences.getString(GlobalVariables.keyPassword);
+          sharedPreferences!.getString(GlobalVariables.keyPassword)!);
+      return sharedPreferences!.getString(GlobalVariables.keyPassword);
     }
     return "";
   }
 
   static getDisplayName() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyName)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyName)) {
       print('display username : ' +
-          sharedPreferences.getString(GlobalVariables.keyName));
-      return sharedPreferences.getString(GlobalVariables.keyName);
+          sharedPreferences!.getString(GlobalVariables.keyName)!);
+      return sharedPreferences!.getString(GlobalVariables.keyName);
     }
     return "";
   }
 
+  static Future<bool> isLastMessage(String msgId) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var id = sharedPreferences!.getString(GlobalVariables.lastMsgId)??'';
+    sharedPreferences!.setString(GlobalVariables.lastMsgId, msgId);
+    return id == msgId;
+  }
+
   static getMobile() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyMobile)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyMobile)) {
       print('display username : ' +
-          sharedPreferences.getString(GlobalVariables.keyMobile));
-      return sharedPreferences.getString(GlobalVariables.keyMobile);
+          sharedPreferences!.getString(GlobalVariables.keyMobile)!);
+      return sharedPreferences!.getString(GlobalVariables.keyMobile);
     }
     return "";
   }
 
   static getUserId() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyUserId)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyUserId)) {
       print('display userid : ' +
-          sharedPreferences.getString(GlobalVariables.keyUserId));
-      return sharedPreferences.getString(GlobalVariables.keyUserId);
+          sharedPreferences!.getString(GlobalVariables.keyUserId)!);
+      return sharedPreferences!.getString(GlobalVariables.keyUserId);
     }
     return "";
   }
 
   static getSocietyId() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keySocietyId)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keySocietyId)) {
       print('keySocietyId : ' +
-          sharedPreferences.getString(GlobalVariables.keySocietyId));
-      return sharedPreferences.getString(GlobalVariables.keySocietyId);
+          sharedPreferences!.getString(GlobalVariables.keySocietyId)!);
+      return sharedPreferences!.getString(GlobalVariables.keySocietyId);
     }
     return "";
   }
 
   static getLoginId() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyId)) {
-      print('keyId : ' + sharedPreferences.getString(GlobalVariables.keyId));
-      return sharedPreferences.getString(GlobalVariables.keyId);
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyId)) {
+      print('keyId : ' + sharedPreferences!.getString(GlobalVariables.keyId)!);
+      return sharedPreferences!.getString(GlobalVariables.keyId);
     }
     return "";
   }
 
   static getSocietyName() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keySocietyName)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keySocietyName)) {
       print('keySocietyId : ' +
-          sharedPreferences.getString(GlobalVariables.keySocietyName));
-      return sharedPreferences.getString(GlobalVariables.keySocietyName);
+          sharedPreferences!.getString(GlobalVariables.keySocietyName)!);
+      return sharedPreferences!.getString(GlobalVariables.keySocietyName);
     }
     return "";
   }
 
   static getSocietyAddress() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keySocietyAddress)) {
       print('keySocietyAddress : ' +
-          sharedPreferences.getString(GlobalVariables.keySocietyAddress));
-      return sharedPreferences.getString(GlobalVariables.keySocietyAddress);
+          sharedPreferences!.getString(GlobalVariables.keySocietyAddress)!);
+      return sharedPreferences!.getString(GlobalVariables.keySocietyAddress);
     }
     return "";
   }
 
   static getSocietyEmail() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyEmail)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyEmail)) {
       print('keySocietyId : ' +
-          sharedPreferences.getString(GlobalVariables.keyEmail));
-      return sharedPreferences.getString(GlobalVariables.keyEmail);
+          sharedPreferences!.getString(GlobalVariables.keyEmail)!);
+      return sharedPreferences!.getString(GlobalVariables.keyEmail);
     }
     return "";
   }
 
   static getSocietyContact() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keySocietyContact)) {
+    if (sharedPreferences!
+        .getKeys()
+        .contains(GlobalVariables.keySocietyContact)) {
       print('keySocietyContact : ' +
-          sharedPreferences.getString(GlobalVariables.keySocietyContact));
-      return sharedPreferences.getString(GlobalVariables.keySocietyContact);
+          sharedPreferences!.getString(GlobalVariables.keySocietyContact)!);
+      return sharedPreferences!.getString(GlobalVariables.keySocietyContact);
     }
     return "";
   }
 
   static getFlat() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyFlat)) {
-      print(
-          'keyFlat : ' + sharedPreferences.getString(GlobalVariables.keyFlat));
-      return sharedPreferences.getString(GlobalVariables.keyFlat);
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyFlat)) {
+      print('keyFlat : ' +
+          sharedPreferences!.getString(GlobalVariables.keyFlat)!);
+      return sharedPreferences!.getString(GlobalVariables.keyFlat);
     }
     return "";
   }
 
   static getBlock() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyBlock)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyBlock)) {
       print('keyBlock : ' +
-          sharedPreferences.getString(GlobalVariables.keyBlock));
-      return sharedPreferences.getString(GlobalVariables.keyBlock);
+          sharedPreferences!.getString(GlobalVariables.keyBlock)!);
+      return sharedPreferences!.getString(GlobalVariables.keyBlock);
     }
     return "";
   }
 
   static getConsumerID() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyConsumerId)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyConsumerId)) {
       print('keyConsumerId : ' +
-          sharedPreferences.getString(GlobalVariables.keyConsumerId));
-      return sharedPreferences.getString(GlobalVariables.keyConsumerId);
+          sharedPreferences!.getString(GlobalVariables.keyConsumerId)!);
+      return sharedPreferences!.getString(GlobalVariables.keyConsumerId);
     }
     return "";
   }
 
   static getPhoto() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyPhoto)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyPhoto)) {
       print('keyPhoto : ' +
-          sharedPreferences.getString(GlobalVariables.keyPhoto));
-      return sharedPreferences.getString(GlobalVariables.keyPhoto);
+          sharedPreferences!.getString(GlobalVariables.keyPhoto)!);
+      return sharedPreferences!.getString(GlobalVariables.keyPhoto);
     }
     return "";
   }
 
   static getGoogleCoordinate() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyGoogleCoordinate)) {
       print('keyGoogleCoordinate : ' +
-          sharedPreferences.getString(GlobalVariables.keyGoogleCoordinate));
-      return sharedPreferences.getString(GlobalVariables.keyGoogleCoordinate);
+          sharedPreferences!.getString(GlobalVariables.keyGoogleCoordinate)!);
+      return sharedPreferences!.getString(GlobalVariables.keyGoogleCoordinate);
     }
     return "";
   }
 
   static getSocietyPermission() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keySocietyPermission)) {
       print('keySocietyPermission : ' +
-          sharedPreferences.getString(GlobalVariables.keySocietyPermission));
-      return sharedPreferences.getString(GlobalVariables.keySocietyPermission);
+          sharedPreferences!.getString(GlobalVariables.keySocietyPermission)!);
+      return sharedPreferences!.getString(GlobalVariables.keySocietyPermission);
     }
     return "";
   }
 
   static getUserPermission() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyUserPermission)) {
       print('keyUserPermission : ' +
-          sharedPreferences.getString(GlobalVariables.keyUserPermission));
-      return sharedPreferences.getString(GlobalVariables.keyUserPermission);
+          sharedPreferences!.getString(GlobalVariables.keyUserPermission)!);
+      return sharedPreferences!.getString(GlobalVariables.keyUserPermission);
     }
     return "";
   }
 
   static getSMSCredit() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keySMSCredit)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keySMSCredit)) {
       print('keySMSCredit : ' +
-          sharedPreferences.getString(GlobalVariables.keySMSCredit));
-      return sharedPreferences.getString(GlobalVariables.keySMSCredit);
+          sharedPreferences!.getString(GlobalVariables.keySMSCredit)!);
+      return sharedPreferences!.getString(GlobalVariables.keySMSCredit);
     }
     return "";
   }
 
   static getLastLogin() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyLastLogin)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyLastLogin)) {
       print('keyLastLogin : ' +
-          sharedPreferences.getString(GlobalVariables.keyLastLogin));
-      return sharedPreferences.getString(GlobalVariables.keyLastLogin);
+          sharedPreferences!.getString(GlobalVariables.keyLastLogin)!);
+      return sharedPreferences!.getString(GlobalVariables.keyLastLogin);
     }
     return "00-00-00 00:00:00";
   }
 
   static getDailyEntryNotification() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyDailyEntryNotification)) {
       print('keyDailyEntryNotification : ' +
-          sharedPreferences
+          sharedPreferences!
               .getBool(GlobalVariables.keyDailyEntryNotification)
               .toString());
-      return sharedPreferences
+      return sharedPreferences!
           .getBool(GlobalVariables.keyDailyEntryNotification);
     }
     return true;
@@ -314,14 +324,14 @@ class GlobalFunctions {
 
   static getGuestEntryNotification() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyGuestEntryNotification)) {
       print('keyGuestEntryNotification : ' +
-          sharedPreferences
+          sharedPreferences!
               .getBool(GlobalVariables.keyGuestEntryNotification)
               .toString());
-      return sharedPreferences
+      return sharedPreferences!
           .getBool(GlobalVariables.keyGuestEntryNotification);
     }
     return true;
@@ -329,14 +339,14 @@ class GlobalFunctions {
 
   static getInAppCallNotification() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyInAppCallNotification)) {
       print('keyInAppCallNotification : ' +
-          sharedPreferences
+          sharedPreferences!
               .getBool(GlobalVariables.keyInAppCallNotification)
               .toString());
-      return sharedPreferences
+      return sharedPreferences!
           .getBool(GlobalVariables.keyInAppCallNotification);
     }
     return true;
@@ -345,34 +355,34 @@ class GlobalFunctions {
   static Future<void> setInAppCallNotification(
       bool inAppCallNotification) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(
+    sharedPreferences!.setBool(
         GlobalVariables.keyInAppCallNotification, inAppCallNotification);
   }
 
   static Future<void> setDailyEntryNotification(
       bool dailyEntryNotification) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(
+    sharedPreferences!.setBool(
         GlobalVariables.keyDailyEntryNotification, dailyEntryNotification);
   }
 
   static Future<void> setGuestEntryNotification(
       bool guestEntryNotification) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(
+    sharedPreferences!.setBool(
         GlobalVariables.keyGuestEntryNotification, guestEntryNotification);
   }
 
   static getIsNewlyArrivedNotification() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences
+    if (sharedPreferences!
         .getKeys()
         .contains(GlobalVariables.keyIsNewlyArrivedNotification)) {
       print('getIsNewlyArrivedNotification : ' +
-          sharedPreferences
-              .getBool(GlobalVariables.keyIsNewlyArrivedNotification)
+          sharedPreferences!
+              .getBool(GlobalVariables.keyIsNewlyArrivedNotification)!
               .toString());
-      return sharedPreferences
+      return sharedPreferences!
           .getBool(GlobalVariables.keyIsNewlyArrivedNotification);
     }
     return false;
@@ -383,16 +393,16 @@ class GlobalFunctions {
     sharedPreferences = await SharedPreferences.getInstance();
     print('setIsNewlyArrivedNotification : ' +
         isNewlyArrivedNotification.toString());
-    sharedPreferences.setBool(GlobalVariables.keyIsNewlyArrivedNotification,
+    sharedPreferences!.setBool(GlobalVariables.keyIsNewlyArrivedNotification,
         isNewlyArrivedNotification);
   }
 
   static getUserType() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyUserType)) {
+    if (sharedPreferences!.getKeys().contains(GlobalVariables.keyUserType)) {
       print('display keyUserType : ' +
-          sharedPreferences.getString(GlobalVariables.keyUserType));
-      return sharedPreferences.getString(GlobalVariables.keyUserType);
+          sharedPreferences!.getString(GlobalVariables.keyUserType)!);
+      return sharedPreferences!.getString(GlobalVariables.keyUserType);
     }
     return "";
   }
@@ -400,18 +410,44 @@ class GlobalFunctions {
   static Future<void> setNotificationBackGroundData(
       String notificationBackGroundData) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(
-        GlobalVariables.keyNotificationBackGroundData, notificationBackGroundData);
+    sharedPreferences!.setString(GlobalVariables.keyNotificationBackGroundData,
+        notificationBackGroundData);
   }
 
   static getNotificationBackGroundData() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getKeys().contains(GlobalVariables.keyNotificationBackGroundData)) {
+    if (sharedPreferences!
+        .getKeys()
+        .contains(GlobalVariables.keyNotificationBackGroundData)) {
       print('display keyNotificationBackGroundData : ' +
-          sharedPreferences.getString(GlobalVariables.keyNotificationBackGroundData));
-      return sharedPreferences.getString(GlobalVariables.keyNotificationBackGroundData);
+          sharedPreferences!
+              .getString(GlobalVariables.keyNotificationBackGroundData)!);
+      return sharedPreferences!
+          .getString(GlobalVariables.keyNotificationBackGroundData);
     }
     return "";
+  }
+
+  static Future<void> setShowUpdateAppDialogDate(
+      String notificationBackGroundData) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences!.setString(
+        GlobalVariables.keyShowUpdateAppDialogDate, notificationBackGroundData);
+  }
+
+  static getShowUpdateAppDialogDate() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences!
+        .getKeys()
+        .contains(GlobalVariables.keyShowUpdateAppDialogDate)) {
+      print('display keyNotificationBackGroundData : ' +
+          sharedPreferences!
+              .getString(GlobalVariables.keyShowUpdateAppDialogDate)!);
+      return sharedPreferences!
+          .getString(GlobalVariables.keyShowUpdateAppDialogDate);
+    }
+
+    return getCurrentDate("yyyy-MM-dd");
   }
 
   static getAppLanguage() async {
@@ -441,40 +477,44 @@ class GlobalFunctions {
   static Future<void> saveDataToSharedPreferences(LoginResponse value) async {
     print('saveDataToSharedPreferences');
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(GlobalVariables.keyIsLogin, true);
-    sharedPreferences.setString(GlobalVariables.keyId, value.ID);
-    sharedPreferences.setString(GlobalVariables.keyUserId, value.USER_ID);
-    sharedPreferences.setString(GlobalVariables.keySocietyId, value.SOCIETY_ID);
-    sharedPreferences.setString(GlobalVariables.keyBlock, value.BLOCK);
-    sharedPreferences.setString(GlobalVariables.keyFlat, value.FLAT);
-    sharedPreferences.setString(GlobalVariables.keyUsername, value.USER_NAME);
-    sharedPreferences.setString(GlobalVariables.keyPassword, value.PASSWORD);
-    sharedPreferences.setString(GlobalVariables.keyMobile, value.MOBILE);
-    sharedPreferences.setString(GlobalVariables.keyUserType, value.TYPE);
-    sharedPreferences.setString(
-        GlobalVariables.keySocietyName, value.Society_Name);
-    sharedPreferences.setString(
-        GlobalVariables.keySocietyAddress, value.Address);
-    sharedPreferences.setString(GlobalVariables.keyEmail, value.Email);
-    sharedPreferences.setString(GlobalVariables.keySocietyContact, value.Contact);
-    sharedPreferences.setString(
-        GlobalVariables.keySocietyPermission, value.society_Permissions);
-    sharedPreferences.setString(GlobalVariables.keyName, value.Name);
-    sharedPreferences.setString(
-        GlobalVariables.keyStaffQRImage, value.Staff_QR_Image);
-    sharedPreferences.setString(GlobalVariables.keyPhoto, value.Photo);
-    sharedPreferences.setString(
-        GlobalVariables.keyUserPermission, value.Permissions);
-    sharedPreferences.setString(
-        GlobalVariables.keyConsumerId, value.Consumer_no);
-    sharedPreferences.setString(
-        GlobalVariables.keyLoggedUsername, value.LoggedUsername);
-    sharedPreferences.setString(
-        GlobalVariables.keyGoogleCoordinate, value.google_parameter);
-    sharedPreferences.setString(GlobalVariables.keySMSCredit, value.SMS_CREDIT);
-    sharedPreferences.setString(GlobalVariables.keyLastLogin, value.LAST_LOGIN);
-    GlobalVariables.userNameValueNotifer.value = value.Name;
-    GlobalVariables.userImageURLValueNotifer.value = value.Photo;
+    sharedPreferences!.setBool(GlobalVariables.keyIsLogin, true);
+    sharedPreferences!.setString(GlobalVariables.keyId, value.ID!);
+    sharedPreferences!.setString(GlobalVariables.keyUserId, value.USER_ID!);
+    sharedPreferences!
+        .setString(GlobalVariables.keySocietyId, value.SOCIETY_ID!);
+    sharedPreferences!.setString(GlobalVariables.keyBlock, value.BLOCK!);
+    sharedPreferences!.setString(GlobalVariables.keyFlat, value.FLAT!);
+    sharedPreferences!.setString(GlobalVariables.keyUsername, value.USER_NAME!);
+    sharedPreferences!.setString(GlobalVariables.keyPassword, value.PASSWORD!);
+    sharedPreferences!.setString(GlobalVariables.keyMobile, value.MOBILE!);
+    sharedPreferences!.setString(GlobalVariables.keyUserType, value.TYPE!);
+    sharedPreferences!
+        .setString(GlobalVariables.keySocietyName, value.Society_Name!);
+    sharedPreferences!
+        .setString(GlobalVariables.keySocietyAddress, value.Address!);
+    sharedPreferences!.setString(GlobalVariables.keyEmail, value.Email!);
+    sharedPreferences!
+        .setString(GlobalVariables.keySocietyContact, value.Contact!);
+    sharedPreferences!.setString(
+        GlobalVariables.keySocietyPermission, value.society_Permissions!);
+    sharedPreferences!.setString(GlobalVariables.keyName, value.Name!);
+    sharedPreferences!
+        .setString(GlobalVariables.keyStaffQRImage, value.Staff_QR_Image!);
+    sharedPreferences!.setString(GlobalVariables.keyPhoto, value.Photo!);
+    sharedPreferences!
+        .setString(GlobalVariables.keyUserPermission, value.Permissions!);
+    sharedPreferences!
+        .setString(GlobalVariables.keyConsumerId, value.Consumer_no!);
+    sharedPreferences!
+        .setString(GlobalVariables.keyLoggedUsername, value.LoggedUsername!);
+    sharedPreferences!.setString(
+        GlobalVariables.keyGoogleCoordinate, value.google_parameter!);
+    sharedPreferences!
+        .setString(GlobalVariables.keySMSCredit, value.SMS_CREDIT!);
+    sharedPreferences!
+        .setString(GlobalVariables.keyLastLogin, value.LAST_LOGIN!);
+    GlobalVariables.userNameValueNotifer.value = value.Name!;
+    GlobalVariables.userImageURLValueNotifer.value = value.Photo!;
     GlobalVariables.userImageURLValueNotifer.notifyListeners();
     GlobalVariables.userNameValueNotifer.notifyListeners();
     print('LAST_LOGIN : '+value.LAST_LOGIN.toString());
@@ -482,24 +522,24 @@ class GlobalFunctions {
 
   static Future<void> savePasswordToSharedPreferences(String password) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(GlobalVariables.keyPassword, password);
+    sharedPreferences!.setString(GlobalVariables.keyPassword, password);
   }
 
   static Future<void> saveDisplayUserNameToSharedPreferences(
       String userName) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(GlobalVariables.keyName, userName);
+    sharedPreferences!.setString(GlobalVariables.keyName, userName);
   }
 
   static Future<void> saveUserProfileToSharedPreferences(
       String profilePic) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(GlobalVariables.keyPhoto, profilePic);
+    sharedPreferences!.setString(GlobalVariables.keyPhoto, profilePic);
   }
 
   static Future<void> saveFCMToken(String token) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(
+    sharedPreferences!.setString(
         Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken,
         token);
   }
@@ -612,25 +652,24 @@ class GlobalFunctions {
   }
 
   static getNormalProgressDialogInstance(BuildContext context) {
-    ProgressDialog _progressDialog =
-        ProgressDialog(context, type: ProgressDialogType.Normal);
-    _progressDialog.style(
-        message: "      Please Wait",
-        borderRadius: 10.0,
-        backgroundColor: GlobalVariables.secondaryColor,
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        progressWidget: Center(
-            // alignment: Alignment.center,
-            child: CircularProgressIndicator(
-          color: GlobalVariables.white,
-        )),
-        messageTextStyle: TextStyle(
-            color: GlobalVariables.white,
-            fontSize: 14,
-            fontFamily: 'sans-serif',/*fontWeight: FontWeight.bold*/));
+    /*showDialog(
+      context: context,
+      builder: (context) =>
+          FutureProgressDialog(getFuture(), message: Text('Loading...')),
+    );*/
+
+    ProgressDialog _progressDialog = ProgressDialog(context,
+        message: Text('Please Wait'), title: SizedBox.shrink());
+
 
     return _progressDialog;
+  }
+
+  static Future getFuture() {
+    return Future(() async {
+      await Future.delayed(Duration(seconds: 5));
+      return 'Hello, Future Progress Dialog!';
+    });
   }
 
   static Widget loadingWidget(context) => Center(
@@ -661,7 +700,7 @@ class GlobalFunctions {
         ),
       );
 
-  static getDownLoadProgressDialogInstance(BuildContext context) {
+  /*static getDownLoadProgressDialogInstance(BuildContext context) {
     ProgressDialog _progressDialog =
         ProgressDialog(context, type: ProgressDialogType.Download);
     _progressDialog.style(
@@ -676,16 +715,17 @@ class GlobalFunctions {
         messageTextStyle: TextStyle(
             color: GlobalVariables.white,
             fontSize: 14,
-            fontFamily: 'sans-serif',/*
-            fontWeight: FontWeight.bold*/));
+            fontFamily: 'sans-serif',*/ /*
+            fontWeight: FontWeight.bold*/ /*));
 
     return _progressDialog;
   }
-
-  static saveDuesDataToSharedPreferences(String duesRs, String duesDate) async {
+*/
+  static saveDuesDataToSharedPreferences(
+      String? duesRs, String? duesDate) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(GlobalVariables.keyDuesRs, duesRs);
-    sharedPreferences.setString(GlobalVariables.keyDuesDate, duesDate);
+    sharedPreferences!.setString(GlobalVariables.keyDuesRs, duesRs!);
+    sharedPreferences!.setString(GlobalVariables.keyDuesDate, duesDate!);
   }
 
   static getSharedPreferenceDuesData() async {
@@ -693,9 +733,9 @@ class GlobalFunctions {
     Map<String, String> map = Map<String, String>();
     map = {
       GlobalVariables.keyDuesRs:
-          sharedPreferences.getString(GlobalVariables.keyDuesRs.toString()),
+          sharedPreferences!.getString(GlobalVariables.keyDuesRs.toString())!,
       GlobalVariables.keyDuesDate:
-          sharedPreferences.getString(GlobalVariables.keyDuesDate.toString()),
+          sharedPreferences!.getString(GlobalVariables.keyDuesDate.toString())!,
     };
     print('dues map : ' + map.toString());
     return map;
@@ -706,7 +746,7 @@ class GlobalFunctions {
 
     print('selected year : ' + selectedDate.year.toString());
 
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(1800, 8),
@@ -725,7 +765,7 @@ class GlobalFunctions {
     print('selected month : ' + startSelectedDate.month.toString().padLeft(2,'0'));
     print('selected day : ' + startSelectedDate.day.toString().padLeft(2,'0'));
 
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: startSelectedDate,
         firstDate:  DateTime(startSelectedDate.year, startSelectedDate.month, startSelectedDate.day),
@@ -741,7 +781,7 @@ class GlobalFunctions {
 
     print('selected year : ' + selectedDate.year.toString());
 
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate:
@@ -758,7 +798,7 @@ class GlobalFunctions {
 
     print('selected year : ' + selectedDate.year.toString());
 
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime(selectedDate.year),
         firstDate: DateTime(1800),
@@ -769,7 +809,7 @@ class GlobalFunctions {
     return selectedDate;
   }
 
-  static Future<String> getFilePath(BuildContext context) async {
+  static Future<String?> getFilePath(BuildContext context) async {
     /*return await FilePicker.getFilePath(
       type: FileType.custom,
       allowCompression: true,
@@ -778,11 +818,11 @@ class GlobalFunctions {
             ? _extension?.replaceAll(' ', '')?.split(',')
             : null*/ /*
     );*/
-    FilePickerResult result =
+    FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: false);
 
-    print('FilePickerResult : ' + result.toString());
-    print('result.files.single.path : ' + result.files.single.path.toString());
+    //print('FilePickerResult : ' + result.toString());
+    print('result.files.single.path : ' + result!.files.single.path.toString());
 
     return result.files.single.path;
   }
@@ -799,7 +839,7 @@ class GlobalFunctions {
     );
     print('getMultiFilePath result : '+result.toString());*/
     Map<String, String> map = Map<String, String>();
-    FilePickerResult result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       allowedExtensions: ['jpg', 'jgpe', 'png'],
       allowCompression: true,
@@ -808,9 +848,9 @@ class GlobalFunctions {
 
     List<String> keys = <String>[];
     List<String> values = <String>[];
-    for (int i = 0; i < result.files.length; i++) {
+    for (int i = 0; i < result!.files.length; i++) {
       keys.add(result.files[i].name);
-      values.add(result.files[i].path);
+      values.add(result.files[i].path!);
     }
 
     map = Map.fromIterables(keys, values);
@@ -852,18 +892,19 @@ class GlobalFunctions {
       minWidth: 400,
       format: format,
     );
-    print('After Compress : ' + _imageFile.lengthSync().toString());
+    print('After Compress : ' + _imageFile!.lengthSync().toString());
     return _imageFile.path;
   }
 
   static removeFileFromDirectory(String path) {
     final dir = Directory(path);
     dir.deleteSync(recursive: true);
+    print('File Delete Successfully');
   }
 
-  static removeAllFilesFromDirectory(String path) {
+  /*static removeAllFilesFromDirectory(String path) {
     Directory(path).delete(recursive: true);
-  }
+  }*/
 
   static Future<String> localPath() async {
     /* final directory = Platform.isAndroid
@@ -873,8 +914,8 @@ class GlobalFunctions {
     String path;
 
     if (Platform.isAndroid) {
-      path = await ExtStorage.getExternalStoragePublicDirectory(
-          ExtStorage.DIRECTORY_DOWNLOADS);
+      path = await ExternalPath.getExternalStoragePublicDirectory(
+          ExternalPath.DIRECTORY_DOWNLOADS);
     } else {
       final directory = await getApplicationDocumentsDirectory();
       path = directory.path;
@@ -883,8 +924,15 @@ class GlobalFunctions {
     return path;
   }
 
-  static Future<String> getTemporaryDirectoryPath() async {
+  /*static Future<String> getTemporaryDirectoryPath() async {
     Directory tempDir = await getTemporaryDirectory();
+   // print('getTemporaryDirectoryPath : '+tempDir.path.toString());
+    return tempDir.path;
+  }*/
+
+  static Future<String> getAppDocumentDirectory() async {
+    Directory tempDir = await getApplicationDocumentsDirectory();
+    print('getAppDocumentDirectory : '+tempDir.path.toString());
 
     return tempDir.path;
   }
@@ -898,35 +946,13 @@ class GlobalFunctions {
     return false;
   }
 */
-
-  static Future<String> downloadAttachment(var url, var _localPath) async {
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    print("path >>> $localPath");
-    final taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-          true, // click on notification to open downloaded file (for Android)
-    );
-    return taskId;
-  }
-
   static Future<void> shareData(var title, var text) async {
     await FlutterShare.share(title: title, text: text, chooserTitle: title);
   }
 
   static Future<void> clearSharedPreferenceData() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.clear();
+    sharedPreferences!.clear();
   }
 
   static String convertDateFormat(String date, String format) {
@@ -948,8 +974,8 @@ class GlobalFunctions {
 
   static Future<File> openCamera() async {
     final picker = ImagePicker();
-    final picture = await picker.getImage(source: ImageSource.camera);
-    return File(picture.path);
+    final picture = await picker.pickImage(source: ImageSource.camera);
+    return File(picture!.path);
   }
 
   static Future<bool> checkPermission(Permission permission) async {
@@ -1022,7 +1048,9 @@ class GlobalFunctions {
         builder: (BuildContext context) => StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
               return WillPopScope(
-                onWillPop: () {},
+                onWillPop: () {
+                  return Future.value(true);
+                },
                 child: Dialog(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
@@ -1062,8 +1090,8 @@ class GlobalFunctions {
                               //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  side:
-                                      BorderSide(color: GlobalVariables.primaryColor)),
+                                  side: BorderSide(
+                                      color: GlobalVariables.primaryColor)),
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('logout'),
@@ -1096,7 +1124,7 @@ class GlobalFunctions {
                   if (!isCompulsory) {
                     Navigator.of(context).pop();
                   }
-                  return;
+                  return Future.value(true);
                 },
                 child: Dialog(
                   shape: RoundedRectangleBorder(
@@ -1295,7 +1323,7 @@ class GlobalFunctions {
                 builder: (BuildContext context, StateSetter setState) {
               return WillPopScope(
                 onWillPop: () {
-                  return;
+                  return Future.value(true);
                 },
                 child: Dialog(
                   shape: RoundedRectangleBorder(
@@ -1352,8 +1380,8 @@ class GlobalFunctions {
                               //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  side:
-                                      BorderSide(color: GlobalVariables.primaryColor)),
+                                  side: BorderSide(
+                                      color: GlobalVariables.primaryColor)),
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('logout'),
@@ -1412,9 +1440,11 @@ class GlobalFunctions {
 
   static changeStatusColor(Color color) async {
     try {
-      await FlutterStatusbarcolor.setStatusBarColor(color, animate: true);
+      SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(statusBarColor: color));
+      /* await FlutterStatusbarcolor.setStatusBarColor(color, animate: true);
       FlutterStatusbarcolor.setStatusBarWhiteForeground(
-          useWhiteForeground(color));
+          useWhiteForeground(color));*/
     } on Exception catch (e) {
       print(e);
     }
@@ -1462,6 +1492,7 @@ class GlobalFunctions {
       print('file path : ' + '$path/$fileName');
       // await file.writeAsBytes(decodedBytes.buffer.asUint8List());
       print('complete');
+      OpenFile.open('$path/$fileName');
       return true;
     } catch (e) {
       print(e.toString());
@@ -1688,4 +1719,10 @@ static Future<void> redirectBannerClick(BuildContext context,String url) async {
   }
   }
 
+  static bool isEmailValid(String email) {
+    String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    bool emailValid =  RegExp(p).hasMatch(email);
+    return emailValid;
+  }
 }

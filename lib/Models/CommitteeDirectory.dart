@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class CommitteeDirectory {
-  String ID,
+  String? ID,
       POST,
       STATUS,
       C_DATE,

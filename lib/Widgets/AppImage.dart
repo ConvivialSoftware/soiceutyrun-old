@@ -80,8 +80,11 @@ class AppAssetsImage extends StatefulWidget {
   var image, radius, fit, borderColor, borderWidth, imageWidth, imageHeight,shape,imageColor;
 
   AppAssetsImage(this.image, { this.imageWidth=24.0, this.imageHeight=24.0,this.imageColor,
-     this.radius = 0.0, this.fit = BoxFit
-          .fill,this.borderColor=Colors.transparent, this.borderWidth=1.0,this.shape=BoxShape.circle});
+      this.radius = 0.0,
+      this.fit = BoxFit.fill,
+      this.borderColor = Colors.transparent,
+      this.borderWidth = 1.0,
+      this.shape = BoxShape.circle});
 
   @override
   _AppAssetsImageState createState() => _AppAssetsImageState();
@@ -102,8 +105,12 @@ class _AppAssetsImageState extends State<AppAssetsImage> {
           ),
           child: widget.image.toString().contains(".svg") ? SvgPicture.asset(
             widget.image,
-            width: double.parse(widget.imageWidth.toString()),
-            height: double.parse(widget.imageHeight.toString()),
+                  width: widget.imageWidth == null
+                      ? 70
+                      : double.parse(widget.imageWidth.toString()),
+                  height: widget.imageHeight == null
+                      ? 50
+                      : double.parse(widget.imageHeight.toString()),
             fit: widget.fit,
             color: widget.imageColor,
           ) : Container(

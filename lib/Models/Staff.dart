@@ -4,31 +4,31 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class Staff{
   
-  String SID;
-  String STAFF_NAME;
-  String GENDER;
-  String DOB;
-  String CONTACT;
-  String QUALIFICATION;
-  String ADDRESS;
-  String VEHICLE_NO;
-  String NOTES;
-  String ASSIGN_FLATS;
-  String STATUS;
-  String IN_OUTSS;
-  String IMAGE;
-  String C_DATE;
-  String Staff_QR_Image;
-  String QR_Text;
-  String Attachment;
-  String ROLE;
-  String RATINGS;
-  String NAME;
-  String EMAIL;
-  String PHONE;
-  String PHOTO;
-  String IDENTITY_PROOF;
-  String ID;
+  String? SID;
+  String? STAFF_NAME;
+  String? GENDER;
+  String? DOB;
+  String? CONTACT;
+  String? QUALIFICATION;
+  String? ADDRESS;
+  String? VEHICLE_NO;
+  String? NOTES;
+  String? ASSIGN_FLATS;
+  String? STATUS;
+  String? IN_OUTSS;
+  String? IMAGE;
+  String? C_DATE;
+  String? Staff_QR_Image;
+  String? QR_Text;
+  String? Attachment;
+  String? ROLE;
+  String? RATINGS;
+  String? NAME;
+  String? EMAIL;
+  String? PHONE;
+  String? PHOTO;
+  String? IDENTITY_PROOF;
+  String? ID;
 
  /* Staff({this.STAFF_NAME,  this.CONTACT,this.IMAGE});*/
  Staff({this.SID, this.STAFF_NAME, this.GENDER, this.DOB, this.CONTACT, this.QUALIFICATION, this.ADDRESS, this.VEHICLE_NO, this.NOTES,

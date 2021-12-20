@@ -28,7 +28,7 @@ import 'AppLanguage.dart';
 
 class ChangeLanguageNotifier extends StatelessWidget {
 
-   String title,name;
+   String? title,name;
 
   ChangeLanguageNotifier.title(this.title);
 
@@ -122,7 +122,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.CreateClassifiedListingPage:
       {
-        return BaseCreateClassifiedListing(null);
+        return null;
       }
       break;
 
@@ -188,13 +188,13 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.ListOfHomeServicePage:
       {
-        return BaseServicesPerCategory(null);
+        return null;
       }
       break;
 
     case GlobalVariables.DescriptionOfHomeServicePage:
       {
-        return BaseDescriptionOfHomeService(null);
+        return null;
       }
       break;
     case GlobalVariables.GuestOthersPage:

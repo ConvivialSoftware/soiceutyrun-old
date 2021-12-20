@@ -5,13 +5,15 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 class AppContainer extends StatelessWidget {
 
   Widget child;
-  double width,height;
+  double? width,height;
   bool isListItem;
   Color color;
   final EdgeInsetsGeometry padding;
 
 
-  AppContainer({this.child,width,
+  AppContainer({
+    required this.child,
+    width,
     height,this.isListItem=false,this.padding=const EdgeInsets.all(16.0),this.color=GlobalVariables.white});
 
   @override
@@ -25,11 +27,7 @@ class AppContainer extends StatelessWidget {
         radius: 10.0,
         color: color,
       ),
-      child: child ?? LimitedBox(
-        maxWidth: 0.0,
-        maxHeight: 0.0,
-        child: ConstrainedBox(constraints: const BoxConstraints.expand()),
-      ),
+      child: child
     );
   }
 }

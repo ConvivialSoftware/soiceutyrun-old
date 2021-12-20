@@ -1,8 +1,8 @@
 
 class BillHeads {
-  String AMOUNT;
-  String HEAD_NAME;
-  String DESCRIPTION;
+  String? AMOUNT;
+  String? HEAD_NAME;
+  String? DESCRIPTION;
 
   BillHeads({this.AMOUNT, this.HEAD_NAME,this.DESCRIPTION});
 

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Visitor {
-  String ID,
+  String? ID,
       SID,
       VISITOR_NAME,
       CONTACT,

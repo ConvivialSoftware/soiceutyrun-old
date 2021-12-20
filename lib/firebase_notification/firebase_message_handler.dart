@@ -7,9 +7,10 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
+import 'package:societyrun/main.dart';
 
 class FirebaseMessagingHandler {
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  late final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   static bool isInAppCallDialogOpen=false;
   static bool isDynamicDialogOpen=false;
@@ -24,16 +25,15 @@ class FirebaseMessagingHandler {
 
   void getToken() {
     firebaseMessaging.getToken().then((token) {
-      GlobalFunctions.saveFCMToken(token);
+      GlobalFunctions.saveFCMToken(token!);
       print("DEVICE TOKEN >>>> $token");
     });
   }
 
   void _iOSPermission() {
-    firebaseMessaging.configure();
-    firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(sound: true, badge: true, alert: true, provisional: false));
-    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-    });
+    //firebaseMessaging.configure();
+    firebaseMessaging.requestPermission(sound: true, badge: true, alert: true, provisional: false);
+   // firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {});
   }
 
   void refreshToken() {
@@ -61,7 +61,7 @@ class FirebaseMessagingHandler {
     showDialog<bool>(
       context: context,
       builder: (_) =>GatePassDialog(message: payload),
-    ).then((bool shouldNavigate) {
+    ).then((bool? shouldNavigate) {
       isInAppCallDialogOpen = false;
       print('after Dialog Close : '+FirebaseMessagingHandler.isInAppCallDialogOpen.toString());
       if (shouldNavigate == true) {
@@ -75,7 +75,7 @@ class FirebaseMessagingHandler {
     showDialog<bool>(
       context: context,
       builder: (_) =>DynamicWidgetDialog(message: payload),
-    ).then((bool shouldNavigate) {
+    ).then((bool? shouldNavigate) {
       isDynamicDialogOpen = false;
       print('after Dialog Close : '+FirebaseMessagingHandler.isDynamicDialogOpen.toString());
       if (shouldNavigate == true) {

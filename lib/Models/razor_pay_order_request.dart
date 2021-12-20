@@ -1,8 +1,8 @@
 class RazorPayOrderRequest {
-  double amount;
-  String currency;
-  String receipt;
-  int paymentCapture;
+  double? amount;
+  String? currency;
+  String? receipt;
+  int? paymentCapture;
 
   RazorPayOrderRequest(
       {this.amount, this.currency, this.receipt, this.paymentCapture});

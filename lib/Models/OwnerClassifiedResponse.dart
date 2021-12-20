@@ -6,13 +6,13 @@ import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class OwnerClassifiedResponse extends ChangeNotifier {
-  List<Classified> ownerClassifiedList = List<Classified>();
-  List<ClassifiedCategory> ownerClassifiedCategoryList = List<ClassifiedCategory>();
-  List<City> cityList = List<City>();
+  List<Classified> ownerClassifiedList = <Classified>[];
+  List<ClassifiedCategory> ownerClassifiedCategoryList = <ClassifiedCategory>[];
+  List<City> cityList = <City>[];
   bool isLoading = true;
-  String errMsg;
+  String? errMsg;
 
-  Future<String> getOwnerClassifiedData({String Id}) async {
+  Future<String> getOwnerClassifiedData({String? Id}) async {
     try {
       print('getClassifiedData');
       if(!isLoading){
@@ -25,9 +25,9 @@ class OwnerClassifiedResponse extends ChangeNotifier {
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       await restClient.getOwnerClassifiedData(userId,societyId,Id).then((value) {
         ownerClassifiedList = List<Classified>.from(
-            value.data.map((i) => Classified.fromJson(i)));
+            value.data!.map((i) => Classified.fromJson(i)));
         ownerClassifiedCategoryList = List<ClassifiedCategory>.from(
-            value.category.map((i) => ClassifiedCategory.fromJson(i)));
+            value.category!.map((i) => ClassifiedCategory.fromJson(i)));
         print('classifiedList : ' + ownerClassifiedList.toString());
         print('classifiedCategoryList : ' + ownerClassifiedCategoryList.toString());
         getCityData();
@@ -50,7 +50,7 @@ class OwnerClassifiedResponse extends ChangeNotifier {
       RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       await restClient.getCityData().then((value) {
         cityList = List<City>.from(
-            value.data.map((i) => City.fromJson(i)));
+            value.data!.map((i) => City.fromJson(i)));
         isLoading = false;
         notifyListeners();
       });
@@ -79,12 +79,13 @@ class OwnerClassifiedResponse extends ChangeNotifier {
     String userId = await GlobalFunctions.getUserId();
     String societyId = await GlobalFunctions.getSocietyId();
     String societyName = await GlobalFunctions.getSocietyName();
+    String gcmId = await GlobalFunctions.getFCMToken();
       final dio = Dio();
       final RestClientDiscover restClient =
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
      var result =  await restClient
           .insertClassifiedData(userId,name, email, phone, category, type, title,
-              description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId,addVisibility);
+              description,/* propertyDetails,*/ price, locality, city, images,address,pinCode,societyName,societyId,addVisibility,gcmId);
       isLoading = false;
       notifyListeners();
       print('insertClassifiedData : '+result.toString());
@@ -173,7 +174,7 @@ class OwnerClassifiedResponse extends ChangeNotifier {
 }
 
 class Classified {
-  String id,
+  String? id,
       Name,
       Email,
       Phone,
@@ -237,7 +238,7 @@ class Classified {
 }
 
 class ClassifiedCategory {
-  String Id, Category_Name;
+  String? Id, Category_Name;
 
   ClassifiedCategory({
     this.Id,
@@ -253,7 +254,7 @@ class ClassifiedCategory {
 }
 
 class ClassifiedImage {
-  String Id,Img_Name;
+  String? Id,Img_Name;
 
   ClassifiedImage({this.Img_Name,this.Id});
 
@@ -274,7 +275,7 @@ class ClassifiedImage {
 
 class Interested{
 
-  String Id,C_Id,User_Id,Society_Name,Unit,Mobile,Address,C_Date,User_Name,Profile_Image,User_Email;
+  String? Id,C_Id,User_Id,Society_Name,Unit,Mobile,Address,C_Date,User_Name,Profile_Image,User_Email;
 
   Interested({this.Id, this.C_Id, this.User_Id, this.Society_Name, this.Unit,
       this.Mobile, this.Address, this.C_Date,this.User_Name,this.Profile_Image,this.User_Email});
@@ -300,7 +301,7 @@ class Interested{
 
 
 class City {
-  String city;
+  String? city;
 
   City({this.city});
 

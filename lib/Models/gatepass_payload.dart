@@ -1,25 +1,25 @@
 class GatePassPayload {
-  String msgID;
-  String title;
-  String body;
-  String iD;
-  String tYPE;
-  String sound;
-  String vID;
-  String rEASON;
-  String iNBY;
-  String uSERID;
-  String iNDATE;
-  String iNTIME;
-  String fROMVISITOR;
-  String iMAGE;
-  String vISITORNAME;
-  String cONTACT;
-  String nOOFVISITORS;
-  String dATETIME;
-  String vSITORTYPE;
-  String GCM_ID;
-  bool isBackGround;
+  String? msgID;
+  String? title;
+  String? body;
+  String? iD;
+  String? tYPE;
+  String? sound;
+  String? vID;
+  String? rEASON;
+  String? iNBY;
+  String? uSERID;
+  String? iNDATE;
+  String? iNTIME;
+  String? fROMVISITOR;
+  String? iMAGE;
+  String? vISITORNAME;
+  String? cONTACT;
+  String? nOOFVISITORS;
+  String? dATETIME;
+  String? vSITORTYPE;
+  String? GCM_ID;
+  bool? isBackGround;
 
   GatePassPayload(
       {this.msgID,

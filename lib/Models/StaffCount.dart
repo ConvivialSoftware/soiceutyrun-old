@@ -2,8 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class StaffCount {
-  String ROLE;
-  String Role_count;
+  String? ROLE;
+  String? Role_count;
 
   StaffCount({this.ROLE, this.Role_count});
 

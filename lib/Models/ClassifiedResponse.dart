@@ -6,12 +6,12 @@ import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 
 class ClassifiedResponse extends ChangeNotifier {
-  List<Classified> classifiedList = List<Classified>();
-  List<ClassifiedCategory> classifiedCategoryList = List<ClassifiedCategory>();
-  List<City> cityList = List<City>();
+  List<Classified> classifiedList = <Classified>[];
+  List<ClassifiedCategory> classifiedCategoryList = <ClassifiedCategory>[];
+  List<City> cityList = <City>[];
   bool isLoading = true;
-  String errMsg;
-  List<DiscoverFilter> filterOptionList = List<DiscoverFilter>();
+  String? errMsg;
+  List<DiscoverFilter> filterOptionList = <DiscoverFilter>[];
 
   Future<String> getClassifiedData() async {
     try {
@@ -23,9 +23,9 @@ class ClassifiedResponse extends ChangeNotifier {
           RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       await restClient.getClassifiedData(userId,societyId).then((value) {
         classifiedList = List<Classified>.from(
-            value.data.map((i) => Classified.fromJson(i)));
+            value.data!.map((i) => Classified.fromJson(i)));
         classifiedCategoryList = List<ClassifiedCategory>.from(
-            value.category.map((i) => ClassifiedCategory.fromJson(i)));
+            value.category!.map((i) => ClassifiedCategory.fromJson(i)));
         print('classifiedList : ' + classifiedList.toString());
         print('classifiedCategoryList : ' + classifiedCategoryList.toString());
         getCityData();
@@ -48,7 +48,7 @@ class ClassifiedResponse extends ChangeNotifier {
       RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
       await restClient.getCityData().then((value) {
         cityList = List<City>.from(
-            value.data.map((i) => City.fromJson(i)));
+            value.data!.map((i) => City.fromJson(i)));
         filterOptionList = getFilterOptions();
         isLoading = false;
         notifyListeners();
@@ -63,7 +63,7 @@ class ClassifiedResponse extends ChangeNotifier {
 
   List<DiscoverFilter> getFilterOptions() {
 
-    filterOptionList = List<DiscoverFilter>();
+    filterOptionList = <DiscoverFilter>[];
    print('getFilterOptions');
     DiscoverFilter discoverFilter = DiscoverFilter(
       filterName: "All Location",
@@ -148,7 +148,7 @@ class ClassifiedResponse extends ChangeNotifier {
 }
 
 class Classified {
-  String id,
+  String? id,
       SOCIETY_ID,
       Name,
       Email,
@@ -214,7 +214,7 @@ class Classified {
 }
 
 class ClassifiedCategory {
-  String Id, Category_Name;
+  String? Id, Category_Name;
 
   ClassifiedCategory({
     this.Id,
@@ -230,7 +230,7 @@ class ClassifiedCategory {
 }
 
 class ClassifiedImage {
-  String Id,Img_Name;
+  String? Id,Img_Name;
 
   ClassifiedImage({this.Img_Name,this.Id});
 
@@ -251,7 +251,7 @@ class ClassifiedImage {
 
 
 class City {
-  String city;
+  String? city;
 
   City({this.city});
 
@@ -266,8 +266,8 @@ class City {
 
 class DiscoverFilter{
 
-  String filterName;
-  bool isSelected;
+  String? filterName;
+  bool? isSelected;
   DiscoverFilter({this.filterName, this.isSelected});
 
   factory DiscoverFilter.fromJson(Map<String,dynamic> map){

@@ -12,7 +12,7 @@ class AppButton extends StatefulWidget {
   EdgeInsets padding;
 
   AppButton({@required this.textContent,
-    @required this.onPressed,
+    required this.onPressed,
     this.bgColor = GlobalVariables.primaryColor,
     this.textColor = GlobalVariables.white,
     this.radius = 10.0,this.fontWeight=FontWeight.w600,this.padding=const EdgeInsets.all(0.0)});
@@ -39,7 +39,7 @@ class AppButtonState extends State<AppButton> {
   }
 
   @override
-  State<StatefulWidget> createState() {
+  State<StatefulWidget>? createState() {
     // TODO: implement createState
     return null;
   }

@@ -2,9 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class OpeningBalance {
 
-  String AMOUNT;
-  String DATE;
-  String Remark;
+  String? AMOUNT;
+  String? DATE;
+  String? Remark;
 
 
   OpeningBalance({this.AMOUNT, this.DATE,this.Remark});

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';

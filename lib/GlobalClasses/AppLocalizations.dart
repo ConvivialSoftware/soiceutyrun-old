@@ -6,17 +6,17 @@ import 'package:flutter/services.dart';
 
 class AppLocalizations{
 
-  final Locale locale;
+  late final Locale locale;
 
   AppLocalizations(this.locale);
 
   static AppLocalizations of (BuildContext context){
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
-  Map<String,String> _localizedStrings;
+  late Map<String,String> _localizedStrings;
 
   Future<bool> load() async {
 
@@ -36,7 +36,7 @@ class AppLocalizations{
   }
 
   String translate(String key){
-    return _localizedStrings[key];
+    return _localizedStrings[key]!;
   }
 
 }

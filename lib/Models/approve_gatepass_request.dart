@@ -1,6 +1,6 @@
 
 class ApproveGatePassRequest {
-  String vid,
+  String? vid,
       uid,
       reason,
       noOfVisitors,

@@ -2,28 +2,28 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class Receipt {
-  String ID;
-  String RECEIPT_NO;
-  String INVOICE_NO;
-  String FLAT_NO;
-  String NAME;
-  String PURPOSE;
-  int AMOUNT;
-  String PENALTY_AMOUNT;
-  String TRANSACTION_MODE;
-  String REFERENCE_NO;
-  String BANK_ACCOUNTNO;
-  String PAYMENT_DATE;
-  String CLEARANCE_DATE;
-  String ATTACHMENT;
-  String NARRATION;
-  String CHEQUE_BANKNAME;
-  String STATUS;
-  String RECONCILE;
-  String CANCEL_REASON;
-  String CANCEL_BY;
-  String ADDED_BY;
-  String C_DATE;
+  String? ID;
+  String? RECEIPT_NO;
+  String? INVOICE_NO;
+  String? FLAT_NO;
+  String? NAME;
+  String? PURPOSE;
+  int? AMOUNT;
+  String? PENALTY_AMOUNT;
+  String? TRANSACTION_MODE;
+  String? REFERENCE_NO;
+  String? BANK_ACCOUNTNO;
+  String? PAYMENT_DATE;
+  String? CLEARANCE_DATE;
+  String? ATTACHMENT;
+  String? NARRATION;
+  String? CHEQUE_BANKNAME;
+  String? STATUS;
+  String? RECONCILE;
+  String? CANCEL_REASON;
+  String? CANCEL_BY;
+  String? ADDED_BY;
+  String? C_DATE;
 
   Receipt(
       {this.ID,

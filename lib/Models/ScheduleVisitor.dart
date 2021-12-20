@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class ScheduleVisitor {
-  String ADD_FLAT,
+  String? ADD_FLAT,
       NAME,
       MOBILE_NO,
       DATE,

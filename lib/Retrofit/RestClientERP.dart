@@ -34,12 +34,12 @@ abstract class RestClientERP {
   @FormUrlEncoded()
   @POST(GlobalVariables.billAPI)
   Future<BillViewResponse> getBillData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
-      @Field("BLOCK") String block,@Field("INVOICE_NO") String invoiceNo,@Field("YEAR") String year );
+      @Field("BLOCK") String block,@Field("INVOICE_NO") String invoiceNo,@Field("YEAR") String? year );
 
   @FormUrlEncoded()
   @POST(GlobalVariables.receiptAPI)
   Future<ReceiptViewResponse> getReceiptData(@Field("SOCIETY_ID") String socId, @Field("FLAT") String flat,
-      @Field("BLOCK") String block,@Field("RECEIPT_NO") String receiptNo,@Field("YEAR") String year);
+      @Field("BLOCK") String block,@Field("RECEIPT_NO") String receiptNo,@Field("YEAR") String? year);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.bankAPI)
@@ -64,7 +64,7 @@ abstract class RestClientERP {
   @FormUrlEncoded()
   @POST(GlobalVariables.mailAPI)
   Future<StatusMsgResponse> getBillMail(@Field("SOCIETY_ID") String socId, @Field("TYPE") String type,
-      @Field("NUMBER") String number,@Field("Email_id") String emailId,@Field("YEAR") String year);
+      @Field("NUMBER") String number,@Field("Email_id") String emailId,@Field("YEAR") String? year);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.razorPayTransactionAPI)
@@ -73,8 +73,8 @@ abstract class RestClientERP {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.expenseAPI)
-  Future<DataResponse> getExpenseData(@Field("SOCIETY_ID") String socId,@Field("START_DATE") String startDate,@
-  Field("END_DATE") String endDate,@Field("HEADS") String heads,@Field("LEDGER_YEAR") String ledgerYear);
+  Future<DataResponse> getExpenseData(@Field("SOCIETY_ID") String socId,@Field("START_DATE") String? startDate,@
+  Field("END_DATE") String? endDate,@Field("HEADS") String? heads,@Field("LEDGER_YEAR") String? ledgerYear);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.accountLedgerAPI)
@@ -93,7 +93,7 @@ abstract class RestClientERP {
   Future<StatusMsgResponse> addExpense( @Field("SOCIETY_ID") String socId,@Field("AMOUNT") String amount,
       @Field("REFERENCE_NO") String referenceNo,@Field("TRANSACTION_TYPE") String transactionType,
       @Field("BANK") String bank,@Field("LEDGER_ID") String ledgerId,@Field("DATE") String date,
-      @Field("NARRATION") String narration, @Field("ATTACHMENT") String attachment);
+      @Field("NARRATION") String narration, @Field("ATTACHMENT") String? attachment);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.receiptMailAPI)
@@ -120,10 +120,10 @@ abstract class RestClientERP {
   @POST(GlobalVariables.cancelReceiptRequestAPI)
   Future<StatusMsgResponse> cancelReceiptRequest(@Field("SOCIETY_ID") String socId,@Field("ID") String id);
 
-  @FormUrlEncoded()
+ /* @FormUrlEncoded()
   @POST(GlobalVariables.approveReceiptRequestAPI)
   Future<StatusMsgResponse> approveReceiptRequest(@Field("SOCIETY_ID") String socId,@Field("ID") String id);
-
+*/
   @FormUrlEncoded()
   @POST(GlobalVariables.addInvoiceAPI)
   Future<StatusMsgResponse> addInvoice( @Field("SOCIETY_ID") String socId,@Field("amount") String amount,
@@ -133,12 +133,12 @@ abstract class RestClientERP {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.approveReceiptRequestAPI)
-  Future<StatusMsgResponse> addApproveReceiptRequest( @Field("SOCIETY_ID") String socId,
+  Future<StatusMsgResponse> addApproveReceiptRequest( @Field("SOCIETY_ID") String socId,@Field("INVOICE_NO") String invoiceNo,
       @Field("FLAT_NO") String flatNo,@Field("PAYMENT_DATE") String paymentDate,
-      @Field("AMOUNT") String amount,@Field("PENALTY_AMOUNT") String penaltyAmount,
+      @Field("AMOUNT") String amount,/*@Field("PENALTY_AMOUNT") String penaltyAmount,*/
       @Field("REFERENCE_NO") String referenceNo,@Field("TRANSACTION_MODE") String transactionMode,
       @Field("BANK_ACCOUNTNO") String bankAccountNo,
-      @Field("ID") String id,@Field("NARRATION") String narration);
+      @Field("ID") String? id,@Field("NARRATION") String narration);
 
 
   @FormUrlEncoded()

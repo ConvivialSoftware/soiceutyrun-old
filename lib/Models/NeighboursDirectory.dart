@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class NeighboursDirectory {
-  String ID, BLOCK, FLAT, TYPE, NAME, PERMISSIONS, Email, Phone;
+  String? ID, BLOCK, FLAT, TYPE, NAME, PERMISSIONS, Email, Phone;
 
   NeighboursDirectory(
       {this.ID,

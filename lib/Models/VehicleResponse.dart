@@ -1,9 +1,9 @@
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
 class VehicleResponse {
-  List<dynamic> data;
-  String message;
-  bool status;
+  List<dynamic>? data;
+  String? message;
+  bool? status;
 
   VehicleResponse({this.data, this.message, this.status});
 
