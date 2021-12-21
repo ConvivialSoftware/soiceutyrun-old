@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_switch/flutter_custom_switch.dart';
+//import 'package:flutter_custom_switch/flutter_custom_switch.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
@@ -30,34 +31,35 @@ class BaseOwnerClassifiedListItemDesc extends StatefulWidget {
 
 class CreateClassifiedListingState
     extends State<BaseOwnerClassifiedListItemDesc> {
-  List<ClassifiedImage> imageList;
-  List<Interested> interestedList;
+  List<ClassifiedImage>? imageList;
+  List<Interested>? interestedList;
 
   int _current = 0;
   int inDaysCount = 0;
   var width, height;
   bool isActivationClassified = false;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isMenuEnable=true;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     imageList = List<ClassifiedImage>.from(
         widget.classifiedList.Images.map((i) => ClassifiedImage.fromJson(i)));
     interestedList = List<Interested>.from(
         widget.classifiedList.Interested.map((i) => Interested.fromJson(i)));
     inDaysCount = GlobalFunctions.getDaysFromDate(
-        DateTime.now().toIso8601String(), widget.classifiedList.C_Date);
+        DateTime.now().toIso8601String(), widget.classifiedList.C_Date!);
     print('DaysCount : ' + inDaysCount.toString());
 
-    if (widget.classifiedList.Status
+    if (widget.classifiedList.Status!
         .toLowerCase()
         .trim() ==
         'active'){
       isMenuEnable=true;
-    }else if (widget.classifiedList.Status
+    }else if (widget.classifiedList.Status!
         .toLowerCase()
     .trim() ==
     'active' &&
@@ -75,32 +77,19 @@ class CreateClassifiedListingState
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<OwnerClassifiedResponse>.value(
         value: Provider.of<OwnerClassifiedResponse>(context),
         child: Consumer<OwnerClassifiedResponse>(
           builder: (context, value, child) {
             return Scaffold(
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                elevation: 0,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
+              appBar: CustomAppBar(
                 actions: [
                   PopupMenuButton(
                       icon: AppIcon(Icons.more_vert, iconColor: isMenuEnable ? GlobalVariables.white : GlobalVariables.transparent),
                       // add this line
                       itemBuilder: (_) => <PopupMenuItem<String>>[
-                            if (widget.classifiedList.Status
+                            if (widget.classifiedList.Status!
                                     .toLowerCase()
                                     .trim() ==
                                 'active')
@@ -112,7 +101,7 @@ class CreateClassifiedListingState
                                           textColor: GlobalVariables.black,
                                           fontSize: GlobalVariables.textSizeSMedium)),
                                   value: 'remove'),
-                            if (widget.classifiedList.Status
+                            if (widget.classifiedList.Status!
                                         .toLowerCase()
                                         .trim() ==
                                     'active' &&
@@ -200,7 +189,7 @@ class CreateClassifiedListingState
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            _progressDialog
+                                                            _progressDialog!
                                                                 .show();
                                                             Provider.of<OwnerClassifiedResponse>(
                                                                     context,
@@ -209,13 +198,13 @@ class CreateClassifiedListingState
                                                                 .activeClassifiedStatus(
                                                                     widget
                                                                         .classifiedList
-                                                                        .id)
+                                                                        .id!)
                                                                 .then((value) {
-                                                              _progressDialog
-                                                                  .hide();
+                                                              _progressDialog!
+                                                                  .dismiss();
                                                               GlobalFunctions
                                                                   .showToast(value
-                                                                      .message);
+                                                                      .message!);
                                                             });
                                                           },
                                                           child: text(
@@ -265,10 +254,7 @@ class CreateClassifiedListingState
                         }
                       })
                 ],
-                title: text(
-                  AppLocalizations.of(context).translate('create_listing'),
-                    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
-                ),
+                title: AppLocalizations.of(context).translate('create_listing'),
               ),
               body: getBaseLayout(value),
               bottomNavigationBar: Container(
@@ -279,10 +265,10 @@ class CreateClassifiedListingState
                 padding: EdgeInsets.all(20),
                 child: AppButton(
                     textContent: "Interested Customer (" +
-                        interestedList.length.toString() +
+                        interestedList!.length.toString() +
                         ")",
                     onPressed: () {
-                      if (interestedList.length > 0)
+                      if (interestedList!.length > 0)
                         showBottomSheet();
                       else
                         GlobalFunctions.showToast(
@@ -336,7 +322,7 @@ class CreateClassifiedListingState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CarouselSlider.builder(
-                itemCount: imageList.length,
+                itemCount: imageList!.length,
                 options: CarouselOptions(
                     autoPlay: true,
                     onPageChanged: (index, reason) {
@@ -368,7 +354,7 @@ class CreateClassifiedListingState
                                                   width: 300 ,
                                                   height: 500,
                                                   child: CarouselSlider.builder(
-                                                    itemCount: imageList.length,
+                                                    itemCount: imageList!.length,
                                                     options: CarouselOptions(
                                                         autoPlay: true,
                                                         onPageChanged: (index, reason) {
@@ -384,7 +370,7 @@ class CreateClassifiedListingState
                                                               child: Stack(
                                                                 children: <Widget>[
                                                                   CachedNetworkImage(
-                                                                    imageUrl: imageList[index].Img_Name,
+                                                                    imageUrl: imageList![index].Img_Name!,
                                                                     fit: BoxFit.fill,
                                                                   ),
                                                                 ],
@@ -395,7 +381,7 @@ class CreateClassifiedListingState
                                           }));
                                 },
                                 child: CachedNetworkImage(
-                                    imageUrl: imageList[index].Img_Name,
+                                    imageUrl: imageList![index].Img_Name!,
                                     fit: BoxFit.cover,
                                     width: 1000.0,
                                     height: MediaQuery.of(context).size.width * 0.8),
@@ -406,8 +392,8 @@ class CreateClassifiedListingState
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: imageList.map((url) {
-                  int index = imageList.indexOf(url);
+                children: imageList!.map((url) {
+                  int index = imageList!.indexOf(url);
                   //print('_current : ' + _current.toString());
                   //('index : ' + index.toString());
                   return Container(
@@ -447,13 +433,13 @@ class CreateClassifiedListingState
                   ),
                   Flexible(
                     child: text(
-                        widget.classifiedList.Address +
+                        widget.classifiedList.Address! +
                             ', ' +
-                            widget.classifiedList.Locality +
+                            widget.classifiedList.Locality! +
                             ', ' +
-                            widget.classifiedList.City +
+                            widget.classifiedList.City! +
                             ', ' +
-                            widget.classifiedList.Pincode,
+                            widget.classifiedList.Pincode!,
                         textColor: GlobalVariables.lightGray,
                         fontSize: GlobalVariables.textSizeSmall,
                         maxLine: 4),
@@ -533,7 +519,7 @@ class CreateClassifiedListingState
                               textColor: GlobalVariables.grey),
                           text(
                               GlobalFunctions.convertDateFormat(
-                                  widget.classifiedList.C_Date, 'dd-MM-yyyy'),
+                                  widget.classifiedList.C_Date!, 'dd-MM-yyyy'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               textColor: GlobalVariables.grey)
                         ],
@@ -596,7 +582,7 @@ class CreateClassifiedListingState
                 child: Builder(
                     builder: (context) => ListView.builder(
                           scrollDirection: Axis.vertical,
-                          itemCount: interestedList.length,
+                          itemCount: interestedList!.length,
                           itemBuilder: (context, position) {
                             return Container(
                               padding: EdgeInsets.all(16.0),
@@ -606,7 +592,7 @@ class CreateClassifiedListingState
                               ),
                               child: Row(
                                 children: <Widget>[
-                                  interestedList[position].Profile_Image.isEmpty
+                                  interestedList![position].Profile_Image!.isEmpty
                                       ? Image.asset(
                                           GlobalVariables
                                               .componentUserProfilePath,
@@ -618,8 +604,8 @@ class CreateClassifiedListingState
                                           backgroundColor:
                                               GlobalVariables.secondaryColor,
                                           backgroundImage: NetworkImage(
-                                              interestedList[position]
-                                                  .Profile_Image),
+                                              interestedList![position]
+                                                  .Profile_Image!),
                                         ),
                                   Expanded(
                                     child: Container(
@@ -632,7 +618,7 @@ class CreateClassifiedListingState
                                             MainAxisAlignment.spaceAround,
                                         children: <Widget>[
                                           text(
-                                              interestedList[position]
+                                              interestedList![position]
                                                   .User_Name,
                                               textColor: GlobalVariables.primaryColor,
                                               fontWeight: FontWeight.bold,
@@ -650,7 +636,7 @@ class CreateClassifiedListingState
                                                 onTap: () {
                                                   Uri _emailUri = Uri(
                                                       scheme: 'mailto',
-                                                      path: interestedList[
+                                                      path: interestedList![
                                                               position]
                                                           .User_Email,
                                                       queryParameters: {
@@ -659,7 +645,7 @@ class CreateClassifiedListingState
                                                   launch(_emailUri.toString());
                                                 },
                                                 child: text(
-                                                    interestedList[position]
+                                                    interestedList![position]
                                                         .User_Email,
                                                     textColor:
                                                         GlobalVariables.skyBlue,
@@ -684,11 +670,11 @@ class CreateClassifiedListingState
                                               InkWell(
                                                 onTap: () {
                                                   launch("tel://" +
-                                                      interestedList[position]
-                                                          .Mobile);
+                                                      interestedList![position]
+                                                          .Mobile!);
                                                 },
                                                 child: text(
-                                                    interestedList[position]
+                                                    interestedList![position]
                                                         .Mobile,
                                                     textColor:
                                                         GlobalVariables.skyBlue,
@@ -707,7 +693,7 @@ class CreateClassifiedListingState
                                             height: 5,
                                           ),
                                           text(
-                                              interestedList[position]
+                                              interestedList![position]
                                                   .Society_Name,
                                               textColor: GlobalVariables.grey,
                                               fontWeight: FontWeight.bold,
@@ -718,7 +704,7 @@ class CreateClassifiedListingState
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          text(interestedList[position].Address,
+                                          text(interestedList![position].Address,
                                               textColor: GlobalVariables.grey,
                                               fontWeight: FontWeight.bold,
                                               fontSize:
@@ -743,12 +729,12 @@ class CreateClassifiedListingState
         });
   }
 
-  List<String> _selectOptionList = List<String>();
+  List<String> _selectOptionList = <String>[];
 
   void deleteClassifiedItemLayout() {
-    _selectOptionList = List<String>();
+    _selectOptionList = <String>[];
 
-    switch (widget.classifiedList.Type.toLowerCase()) {
+    switch (widget.classifiedList.Type!.toLowerCase()) {
       case "sell":
         {
           _selectOptionList.add('I sold this item using Societyrun platform');
@@ -795,7 +781,7 @@ class CreateClassifiedListingState
                         Container(
                           alignment: Alignment.topLeft,
                           child: text(
-                              widget.classifiedList.Type.toLowerCase() !=
+                              widget.classifiedList.Type!.toLowerCase() !=
                                       'giveaway'
                                   ? 'Please select one'
                                   : 'Are you sure you want to remove this add?',
@@ -912,15 +898,15 @@ class CreateClassifiedListingState
                                               context,
                                               listen: false)
                                           .updateClassifiedStatus(
-                                              widget.classifiedList.id,
+                                              widget.classifiedList.id!,
                                               _selectedText)
                                           .then((value) {
                                         GlobalFunctions.showToast(
-                                            value.message);
+                                            value.message!);
                                       });
                                     },
                                     child: text(
-                                        widget.classifiedList.Type
+                                        widget.classifiedList.Type!
                                                     .toLowerCase() !=
                                                 'giveaway'
                                             ? 'Submit'

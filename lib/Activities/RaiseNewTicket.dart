@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
@@ -48,29 +49,30 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   // String _areaSelectedItem;
 
   List<DropdownMenuItem<String>> __categoryListItems =
-      new List<DropdownMenuItem<String>>();
+      <DropdownMenuItem<String>>[];
 
-  String _categorySelectedItem;
+  String? _categorySelectedItem;
 
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   bool isStoragePermission = false;
 
   List<DropdownMenuItem<String>> _blockListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedBlock;
+      <DropdownMenuItem<String>>[];
+  String? _selectedBlock;
 
   List<DropdownMenuItem<String>> _flatListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedFlat;
+      <DropdownMenuItem<String>>[];
+  String? _selectedFlat;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if(widget.isAdmin)
       getBlockFlatData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -106,8 +108,6 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<HelpDeskResponse>.value(
       value: Provider.of(context),
       child: Consumer<HelpDeskResponse>(
@@ -115,23 +115,8 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                elevation: 0,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('help_desk'),
-                    textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title:AppLocalizations.of(context).translate('help_desk'),
               ),
               body: getBaseLayout(value),
             ),
@@ -155,7 +140,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     print('Out If');
     if(value.complaintCategoryList.length>0){
       print('In If');
-      __categoryListItems = new  List<DropdownMenuItem<String>>();
+      __categoryListItems = <DropdownMenuItem<String>>[];
       for (int i = 0; i < value.complaintCategoryList.length; i++) {
         __categoryListItems.add(DropdownMenuItem(
           value: value.complaintCategoryList[i].COMPLAINT_CATEGORY,
@@ -207,7 +192,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                         items: _blockListItems,
                         value: _selectedBlock,
                         onChanged: (value){
-                          _selectedBlock=value;
+                          _selectedBlock=value as String?;
                           _selectedFlat=null;
                           getBlockFlatData();
                         },
@@ -248,7 +233,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                         items: _flatListItems,
                         value: _selectedFlat,
                         onChanged: (value){
-                          _selectedFlat=value;
+                          _selectedFlat=value as String?;
                           setState(() {
                           });
                         },
@@ -620,7 +605,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
             Container(
               alignment: Alignment.topLeft,
               height: 45,
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: AppButton(
                 textContent: AppLocalizations.of(context).translate('submit'),
                 onPressed: () {
@@ -646,7 +631,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
 */
 
-  void changeCategoryDropDownItem(String value) {
+  void changeCategoryDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _categorySelectedItem = value;
@@ -711,7 +696,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
         setState(() {});
       }
-      _progressDialog.hide();
+      _progressDialog.dismiss();
     });
 //800423_2020\-07\-30_20\:06\:12\.jpg
   }
@@ -729,25 +714,25 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     String societyEmail = await GlobalFunctions.getSocietyEmail();
     String userEmail = await GlobalFunctions.getUserName();
 
-    String attachmentName;
-    String attachment;
+    String? attachmentName;
+    String? attachment;
 
     if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
       attachment =
-          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .addComplaint(
             societyId,
-            widget.isAdmin ? _selectedBlock : block,
-            widget.isAdmin ? _selectedFlat : flat,
+            widget.isAdmin ? _selectedBlock! : block,
+            widget.isAdmin ? _selectedFlat! : flat,
             userId,
             complaintSubject.text,
             complaintType,
             /*_areaSelectedItem,*/
-            _categorySelectedItem,
+            _categorySelectedItem!,
             complaintDesc.text,
             complaintPriority,
             name,
@@ -756,23 +741,22 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
             societyName,
             userEmail,
             societyEmail)
-        .then((value) {
+        .then((value) async {
       print("add complaint response : " + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
-        if (attachmentFileName != null && attachmentFilePath != null) {
-          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-          GlobalFunctions.getTemporaryDirectoryPath()
-              .then((value) {
-            GlobalFunctions.removeAllFilesFromDirectory(
-                value);
-          });
+      _progressDialog!.dismiss();
+      if (value.status!) {
+        if (attachmentFileName != null &&
+            attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
         }
         Navigator.of(context).pop('back');
         /*Navigator.push(
             context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));*/
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 
@@ -791,16 +775,16 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   }
 
   void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
     print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-              attachmentFilePath, value.toString() + '/' + attachmentFileName)
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
+        print('Cache file path : ' + attachmentCompressFilePath!);
         setState(() {});
       });
     });
@@ -830,7 +814,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   }
 
 void setBlockData(List<Block> _blockList) {
-    _blockListItems = new List<DropdownMenuItem<String>>();
+    _blockListItems = <DropdownMenuItem<String>>[];
     for (int i = 0; i < _blockList.length; i++) {
       _blockListItems.add(DropdownMenuItem(
         value: _blockList[i].BLOCK,
@@ -848,7 +832,7 @@ void setBlockData(List<Block> _blockList) {
   }
 
   void setFlatData(List<Flat> _flatList) {
-    _flatListItems = new List<DropdownMenuItem<String>>();
+    _flatListItems = <DropdownMenuItem<String>>[];
     for (int i = 0; i < _flatList.length; i++) {
       //print(_flatList[i].FLAT.toString());
       _flatListItems.add(DropdownMenuItem(
@@ -870,7 +854,7 @@ void setBlockData(List<Block> _blockList) {
         .then((value) {
       setBlockData(value);
       Provider.of<UserManagementResponse>(context, listen: false)
-          .getFlat(_selectedBlock)
+          .getFlat(_selectedBlock!)
           .then((value) {
         setFlatData(value);
       });

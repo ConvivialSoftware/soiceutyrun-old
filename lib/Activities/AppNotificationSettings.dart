@@ -1,8 +1,9 @@
 //import 'package:custom_switch/custom_switch.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_switch/flutter_custom_switch.dart';
+//import 'package:flutter_custom_switch/flutter_custom_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
@@ -10,6 +11,7 @@ import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -46,23 +48,8 @@ class _BaseAppNotificationSettingsState
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('app_notification_settings'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+            title:AppLocalizations.of(context).translate('app_notification_settings'),
         ),
         body: getBaseLayout(),
       ),
@@ -159,10 +146,10 @@ class _BaseAppNotificationSettingsState
                     ),
                   ),
                   Container(
-                    child: FlutterCustomSwitch(
+                    child: FlutterSwitch(
                       activeColor: GlobalVariables.primaryColor,
                       value: isInAppCallNotification,
-                      onChanged: (value) {
+                      onToggle: (value) {
                         print("VALUE : $value");
                         setState(() {
                           isInAppCallNotification = value;
@@ -273,10 +260,10 @@ class _BaseAppNotificationSettingsState
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: FlutterCustomSwitch(
+                      child: FlutterSwitch(
                         activeColor: GlobalVariables.primaryColor,
                         value: isDailyEntryNotification,
-                        onChanged: (value) {
+                        onToggle: (value) {
                           print("VALUE : $value");
                           setState(() {
                             isDailyEntryNotification = value;
@@ -400,10 +387,10 @@ class _BaseAppNotificationSettingsState
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: FlutterCustomSwitch(
+                      child: FlutterSwitch(
                         activeColor: GlobalVariables.primaryColor,
                         value: isGuestEntryNotification,
-                        onChanged: (value) {
+                        onToggle: (value) {
                           print("VALUE : $value");
                           setState(() {
                             isGuestEntryNotification = value;

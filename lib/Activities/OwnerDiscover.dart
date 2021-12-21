@@ -11,6 +11,7 @@ import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OwnerClassifiedListItemDesc.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
@@ -23,7 +24,7 @@ import 'package:intl/intl.dart';
 class BaseOwnerDiscover extends StatefulWidget {
   String pageName;
 
-  String classifiedId;
+  String? classifiedId;
   BaseOwnerDiscover(this.pageName,{this.classifiedId});
 
   @override
@@ -85,7 +86,7 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
             if(value.ownerClassifiedList.length>0) {
               if (widget.classifiedId != null) {
                 widget.classifiedId=null;
-                WidgetsBinding.instance.addPostFrameCallback((_) {
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
                   // Navigator.of(context).pop();
                   Navigator.push(
                       context,
@@ -106,29 +107,14 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
               length: value.ownerClassifiedCategoryList.length,
               child: Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
-                  title: text(
-                    AppLocalizations.of(context).translate('my_classified'),
-                    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
-                  ),
+                appBar: CustomAppBar(
+                  title: AppLocalizations.of(context).translate('my_classified'),
                   /*bottom: value.ownerClassifiedCategoryList.isNotEmpty
                       ? getTabLayout(value)
                       : PreferredSize(
                           preferredSize: Size.fromHeight(0.0),
                           child: Container(),
                         ),*/
-                  elevation: 0,
                 ),
                 body:
                     /*value.ownerClassifiedCategoryList.isNotEmpty && */!value.isLoading
@@ -233,14 +219,14 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
 
   getOwnerClassifiedListItemLayout(int position, OwnerClassifiedResponse value) {
     var daysCount =
-        GlobalFunctions.inDaysCount(value.ownerClassifiedList[position].C_Date);
+        GlobalFunctions.inDaysCount(value.ownerClassifiedList[position].C_Date!);
     // print('page : '+_tabController.index.toString());
     List<ClassifiedImage> imageList = List<ClassifiedImage>.from(value
         .ownerClassifiedList[position].Images
         .map((i) => ClassifiedImage.fromJson(i)));
     //print('imageList[0].img : ' + imageList[0].img);
     var  inDaysCount = GlobalFunctions.getDaysFromDate(
-        DateTime.now().toIso8601String(), value.ownerClassifiedList[position].C_Date);
+        DateTime.now().toIso8601String(), value.ownerClassifiedList[position].C_Date!);
     print('DaysCount : ' + inDaysCount.toString());
     return InkWell(
       onTap: () {
@@ -320,8 +306,8 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
                             Flexible(
                               child: text(
                                   value.ownerClassifiedList[position]
-                                      .Locality+' - '+value.ownerClassifiedList[position]
-                                      .City,
+                                      .Locality!+' - '+value.ownerClassifiedList[position]
+                                      .City!,
                                   textStyleHeight: 1.0,
                                   fontSize: GlobalVariables.textSizeSmall,),
                             ),
@@ -347,7 +333,7 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
                                   text(
                                       GlobalFunctions.convertDateFormat(
                                           value.ownerClassifiedList[position]
-                                              .C_Date,
+                                              .C_Date!,
                                           'dd-MMM-yyyy'),
                                     textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeSmall,),
@@ -370,7 +356,7 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
                                 ],
                               ),
                             ),
-                            value.ownerClassifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
+                            value.ownerClassifiedList[position].Status!.toLowerCase()=='inactive' ?  Container(
                               child: text(value.ownerClassifiedList[position].Status,
                                   fontSize: GlobalVariables.textSizeSmall,
                                   maxLine: 1,
@@ -396,7 +382,7 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
               children: <Widget>[
                 Container(
                   child: text(
-                      GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[position].Price),
+                      GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[position].Price!),
                       textColor: GlobalVariables.black,
                       fontSize: GlobalVariables.textSizeMedium,
                       fontWeight: FontWeight.bold),
@@ -404,7 +390,7 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: BoxDecoration(
-                      color: getClassifiedTypeColor(value.ownerClassifiedList[position].Type),
+                      color: getClassifiedTypeColor(value.ownerClassifiedList[position].Type!),
                       borderRadius: BorderRadius.circular(5)),
                   child: text(value.ownerClassifiedList[position].Type,
                     fontSize: GlobalVariables.textSizeSmall,

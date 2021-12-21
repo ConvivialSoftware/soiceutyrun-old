@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
@@ -31,11 +32,11 @@ class BaseDisplayProfileInfo extends StatefulWidget {
 
 class DisplayProfileInfoState
     extends State<BaseDisplayProfileInfo> {
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
-  List<ProfileInfo> _profileList = List<ProfileInfo>();
+  List<ProfileInfo> _profileList = <ProfileInfo>[];
 
-  String userId,
+  String? userId,
       societyId,
       societyName,
       userType,
@@ -51,6 +52,7 @@ class DisplayProfileInfoState
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         geProfileData();
@@ -60,38 +62,38 @@ class DisplayProfileInfoState
       }
     });
 
-    if (loggedUserType.toLowerCase() == 'tenant' &&
-        userType.toLowerCase() == 'tenant') {
+    if (loggedUserType!.toLowerCase() == 'tenant' &&
+        userType!.toLowerCase() == 'tenant') {
       isEditOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() != 'tenant' &&
-        userType.toLowerCase() == 'tenant') {
+    } else if (loggedUserType!.toLowerCase() != 'tenant' &&
+        userType!.toLowerCase() == 'tenant') {
       isEditOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() != 'tenant' &&
-        userType.toLowerCase() != 'tenant') {
+    } else if (loggedUserType!.toLowerCase() != 'tenant' &&
+        userType!.toLowerCase() != 'tenant') {
       isEditOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'tenant' &&
-        userType.toLowerCase() != 'tenant') {
+    } else if (loggedUserType!.toLowerCase() == 'tenant' &&
+        userType!.toLowerCase() != 'tenant') {
       isEditOptionDisplay = false;
     }
-    print('loggedUserType : ' + loggedUserType.toLowerCase());
-    print('userType : ' + userType.toLowerCase());
+    print('loggedUserType : ' + loggedUserType!.toLowerCase());
+    print('userType : ' + userType!.toLowerCase());
 
 
 
-    if (loggedUserType.toLowerCase() == 'owner') {
+    if (loggedUserType!.toLowerCase() == 'owner') {
       isDeleteOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'owner family' &&
-        userType == 'owner') {
+    } else if (loggedUserType!.toLowerCase() == 'owner family' &&
+        userType! == 'owner') {
       isDeleteOptionDisplay = false;
-    } else if (loggedUserType.toLowerCase() == 'owner' &&
-        userType == 'owner family') {
+    } else if (loggedUserType!.toLowerCase() == 'owner' &&
+        userType! == 'owner family') {
       isDeleteOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'owner' &&
-        userType == 'tenant') {
+    } else if (loggedUserType!.toLowerCase() == 'owner' &&
+        userType! == 'tenant') {
       isDeleteOptionDisplay = true;
-    } else if (loggedUserType.toLowerCase() == 'owner' && userType == 'owner') {
+    } else if (loggedUserType!.toLowerCase() == 'owner' && userType == 'owner') {
       isDeleteOptionDisplay = false;
-    } else if (loggedUserType.toLowerCase() == 'tenant' &&
+    } else if (loggedUserType!.toLowerCase() == 'tenant' &&
         userType == 'tenant') {
       isDeleteOptionDisplay = true;
     }
@@ -106,13 +108,95 @@ class DisplayProfileInfoState
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('my_profile'),
+          leading: InkWell(
+            onTap: () {
+              if (!isEdit) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.of(context).pop('profile');
+              }
+            },
+            child: AppIcon(
+              Icons.arrow_back,
+              iconColor: GlobalVariables.white,
+            ),
+          ),
+          actions: [
+            PopupMenuButton(
+                icon: AppIcon(Icons.more_vert,
+                    iconColor:
+                    // isMenuEnable ?
+                    GlobalVariables.white
+                  // : GlobalVariables.transparent
+                ),
+                // add this line
+                itemBuilder: (_) => <PopupMenuItem<String>>[
+                  if(isEditOptionDisplay)
+
+                    new PopupMenuItem<String>(
+                        child: Container(
+                            width: 100,
+                            height: 30,
+                            child: text("Edit",
+                                textColor: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeSMedium)),
+                        value: 'edit'),
+                  new PopupMenuItem<String>(
+                      child: Container(
+                          width: 100,
+                          height: 30,
+                          child: text("Move Out",
+                              textColor: GlobalVariables.black,
+                              fontSize: GlobalVariables.textSizeSMedium)),
+                      value: 'move_out'),
+                ],
+                onSelected: (index) async {
+                  switch (index) {
+                    case 'move_out':
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext
+                          context) =>
+                              StatefulBuilder(builder:
+                                  (BuildContext context,
+                                  StateSetter
+                                  setState) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          10.0)),
+                                  child:
+                                  deleteFamilyMemberLayout(),
+                                );
+                              }));
+                      break;
+                    case 'edit':
+
+                      var result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  BaseEditProfileInfo(userId, societyId)));
+
+                      print('Back Result : ' + result.toString());
+                      if (result == 'profile') {
+                        isEdit = true;
+                        geProfileData();
+                      }
+
+                      break;
+                  }
+                }),
+          ],
+        )/*AppBar(
+          backgroundColor: GlobalVariables.red,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -201,7 +285,7 @@ class DisplayProfileInfoState
             AppLocalizations.of(context).translate('my_profile'),
             style: TextStyle(color: GlobalVariables.white),
           ),
-        ),
+        )*/,
         body: WillPopScope(
             child: getBaseLayout(),
             onWillPop: () {
@@ -210,7 +294,7 @@ class DisplayProfileInfoState
               } else {
                 Navigator.of(context).pop('profile');
               }
-              return;
+              return Future.value(true);
             }),
       ),
     );
@@ -225,16 +309,27 @@ class DisplayProfileInfoState
     print('societyName : ' + societyName.toString());
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-    _progressDialog.show();
-    restClient.getProfileData(societyId, userId).then((value) {
-      _progressDialog.hide();
-      if (value.status) {
-        List<dynamic> _list = value.data;
+    _progressDialog!.show();
+    restClient.getProfileData(societyId!, userId!).then((value) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         _profileList =
             List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
         print('Display User Type : ' + _profileList[0].TYPE.toString());
         print('Display User Type : ' + userType.toString());
         setState(() {});
+      }
+    }).catchError((Object obj) {
+      GlobalFunctions.showToast('Exception : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            GlobalFunctions.showToast('DioError Result : ' + res.toString());
+          }
+          break;
+        default:
       }
     });
   }
@@ -291,7 +386,7 @@ class DisplayProfileInfoState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                              child: _profileList[0].PROFILE_PHOTO.length == 0
+                              child: _profileList[0].PROFILE_PHOTO!.length == 0
                                   ? AppAssetsImage(
                                       GlobalVariables.componentUserProfilePath,
                                       imageWidth: 60.0,
@@ -341,8 +436,8 @@ class DisplayProfileInfoState
                                   ],
                                 ),
                                 secondaryText(societyName),
-                                secondaryText(_profileList[0].BLOCK +
-                                    _profileList[0].FLAT),
+                                secondaryText(_profileList[0].BLOCK! +
+                                    _profileList[0].FLAT!),
                                 // secondaryText(_profileList[0].Phone),
                               ],
                             ),
@@ -423,7 +518,7 @@ class DisplayProfileInfoState
                           secondaryText(_profileList[0].DOB == '0000-00-00'
                               ? ''
                               : GlobalFunctions.convertDateFormat(
-                                  _profileList[0].DOB, "dd-MM-yyyy")),
+                                  _profileList[0].DOB!, "dd-MM-yyyy")),
                         ],
                       ),
                       Divider(),
@@ -439,7 +534,7 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          secondaryText(_profileList[0].ADDRESS, maxLine: 3),
+                          Flexible(child: secondaryText(_profileList[0].ADDRESS, maxLine: 3)),
                         ],
                       ),
                       SizedBox(height: 16),
@@ -468,8 +563,8 @@ class DisplayProfileInfoState
                         ],
                       ),
                       Divider(),
-                      _profileList[0].ALTERNATE_CONTACT1.isNotEmpty? SizedBox(height: 16):SizedBox(),
-                      _profileList[0].ALTERNATE_CONTACT1.isNotEmpty?Row(
+                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty? SizedBox(height: 16):SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty?Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -483,7 +578,7 @@ class DisplayProfileInfoState
                           secondaryText(_profileList[0].ALTERNATE_CONTACT1??''),
                         ],
                       ):SizedBox(),
-                      _profileList[0].ALTERNATE_CONTACT1.isNotEmpty?Divider():SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty?Divider():SizedBox(),
                       SizedBox(height: 8),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -602,16 +697,16 @@ class DisplayProfileInfoState
   }
 
   Future<void> moveOutMember() async {
-    _progressDialog.show();
+    _progressDialog!.show();
     Provider.of<UserManagementResponse>(context, listen: false)
-        .deactivateUser(userId, _reasonController.text, _profileList[0].BLOCK,
-            _profileList[0].FLAT)
+        .deactivateUser(userId!, _reasonController.text, _profileList[0].BLOCK!,
+            _profileList[0].FLAT!)
         .then((value) {
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         Navigator.of(context).pop('back');
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 }

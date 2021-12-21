@@ -2,15 +2,16 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_entry_text_field/pin_entry_text_field.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'base_stateful.dart';
 
 class BaseOtp extends StatefulWidget {
 
@@ -22,7 +23,7 @@ class BaseOtp extends StatefulWidget {
   State<StatefulWidget> createState() {
     // TODO: implement createState
     // GlobalFunctions.showToast("OTP page");
-    return OtpState(expire_time, otp, username);
+    return OtpState();
   }
 
 }
@@ -30,14 +31,15 @@ class BaseOtp extends StatefulWidget {
 class OtpState extends State<BaseOtp> {
 
   String entered_pin = "";
-  String expire_time, otp, username;
 
-  OtpState(this.expire_time, this.otp, this.username);
+  // String expire_time, otp, username;
 
-  String fcmToken;
-  ProgressDialog _progressDialog;
+//  OtpState(this.expire_time, this.otp, this.username);
 
-  Timer _timer;
+  String? fcmToken;
+  ProgressDialog? _progressDialog;
+
+  Timer? _timer;
   int _start = 60;
   bool isResendEnable = false;
   var displayNumber = '';
@@ -47,15 +49,16 @@ class OtpState extends State<BaseOtp> {
   @override
   void initState() {
     super.initState();
-    print('expire_Time: ' + expire_time.toString());
-    print('OTP : ' + otp.toString());
-    print('MobileNo : ' + username.toString());
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    print('expire_Time: ' + widget.expire_time.toString());
+    print('OTP : ' + widget.otp.toString());
+    print('MobileNo : ' + widget.username.toString());
     startTimer();
-    if (username.contains('@')) {
-      displayNumber = username.replaceRange(2, 8, "*" * 6);
+    if (widget.username.contains('@')) {
+      displayNumber = widget.username.replaceRange(2, 8, "*" * 6);
       isEmail = true;
     } else {
-      displayNumber = username.replaceRange(2, 8, "*" * 6);
+      displayNumber = widget.username.replaceRange(2, 8, "*" * 6);
       isEmail = false;
     }
   }
@@ -65,7 +68,6 @@ class OtpState extends State<BaseOtp> {
     // TODO: implement build
     //   GlobalFunctions.showToast("Otpstate page");
     //  var otp_mobile_text=AppLocalizations.of(context).translate('')
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
     return Builder(
       builder: (context) =>
@@ -112,49 +114,30 @@ class OtpState extends State<BaseOtp> {
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: PinEntryTextField(
-                        showFieldAsBox: true,
-                        fields: 6,
-                        isTextObscure: false,
-                        fieldWidth: 50.0,
-                        fontSize: GlobalVariables.textSizeLargeMedium,
-                        onSubmit: (String pin) {
+                  child: OTPTextField(
+                    length: 6,
+                    width: MediaQuery.of(context).size.width,
+                    //fieldWidth: 20,
+                    style: TextStyle(fontSize: 17),
+                    textFieldAlignment: MainAxisAlignment.spaceAround,
+                    fieldStyle: FieldStyle.underline,
+                    onCompleted: (pin) {
                           entered_pin = pin;
-                          // GlobalFunctions.showToast(entered_pin);
                         },
                       ),
                     ),
                     Container(
-                      height: 45,
-                      margin: EdgeInsets.fromLTRB(30, 50, 25, 10),
-                      child: ButtonTheme(
-                        minWidth: MediaQuery
-                            .of(context)
-                            .size
-                            .width / 2,
-                        child: RaisedButton(
-                          color: GlobalVariables.primaryColor,
+                  margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: AppButton(
+                      textContent:
+                          AppLocalizations.of(context).translate('enter_otp'),
                           onPressed: () {
                             if (_timer != null) {
-                              _timer.cancel();
+                          _timer!.cancel();
                               _start = 60;
                             }
                             verifyOTP();
-                          },
-                          textColor: GlobalVariables.white,
-                          //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: GlobalVariables.primaryColor)
-                          ),
-                          child: text(
-                            AppLocalizations.of(context)
-                                .translate('enter_otp'),
-                            fontSize: GlobalVariables.textSizeMedium,
-                            textColor: GlobalVariables.white
-                          ),
-                        ),
-                      ),
+                      }),
                     ),
                     Container(
                       margin: EdgeInsets.all(50),
@@ -162,10 +145,11 @@ class OtpState extends State<BaseOtp> {
                         children: <Widget>[
                           Container(
                             alignment: Alignment.center,
-                            child: text(AppLocalizations.of(context).translate(
-                                "not_received_otp"), textColor: GlobalVariables
-                                .black, fontSize: 15
-                            ),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate("not_received_otp"),
+                            textColor: GlobalVariables.black,
+                            fontSize: 15),
                           ),
                           InkWell(
                             onTap: () {
@@ -179,8 +163,8 @@ class OtpState extends State<BaseOtp> {
                             child: Container(
                               alignment: Alignment.center,
                               child: text(
-                                  AppLocalizations.of(context).translate(
-                                      "resend"), textColor: isResendEnable
+                            AppLocalizations.of(context).translate("resend"),
+                            textColor: isResendEnable
                                       ? GlobalVariables.primaryColor
                                       : GlobalVariables.grey,
                                   fontSize: GlobalVariables.textSizeNormal,
@@ -236,15 +220,21 @@ class OtpState extends State<BaseOtp> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     fcmToken = await GlobalFunctions.getFCMToken();
-    _progressDialog.show();
-    restClient.getOTPLogin(
-        expire_time, otp, entered_pin, isEmail ? "" : username,
-        isEmail ? username : "", fcmToken).then((value) {
+    _progressDialog!.show();
+    restClient
+            .getOTPLogin(
+                widget.expire_time,
+                widget.otp,
+                entered_pin,
+                isEmail ? "" : widget.username,
+                isEmail ? widget.username : "",
+                fcmToken!)
+            .then((value) {
       print('add member Status value : ' + value.toString());
-      _progressDialog.hide();
-      GlobalFunctions.showToast(value.message);
-      if (value.status) {
-        value.LoggedUsername = username;
+      _progressDialog!.dismiss();
+      GlobalFunctions.showToast(value.message!);
+      if (value.status!) {
+        value.LoggedUsername = widget.username;
         GlobalFunctions.saveDataToSharedPreferences(value);
         Navigator.push(
             context,
@@ -262,7 +252,7 @@ class OtpState extends State<BaseOtp> {
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog.dismiss();
           }
           break;
         default:
@@ -274,8 +264,7 @@ class OtpState extends State<BaseOtp> {
   @override
   void dispose() {
     super.dispose();
-    if (_timer != null)
-      _timer.cancel();
+    if (_timer != null) _timer!.cancel();
   }
 
   void startTimer() {
@@ -297,28 +286,30 @@ class OtpState extends State<BaseOtp> {
     final RestClient restClient = RestClient(dio);
 
     // _progressDialog.show();
-    restClient.getResendOTP(
-        otp, isEmail ? "" : username, isEmail ? username : "").then((value) {
+    restClient
+            .getResendOTP(widget.otp, isEmail ? "" : widget.username,
+                isEmail ? widget.username : "")
+            .then((value) {
       print('get OTP value : ' + value.toString());
       // GlobalFunctions.showToast('otp : '+value.otp.toString());
-      //     _progressDialog.hide();
-      if (value.status) {
-        expire_time = value.expire_time;
-        otp = value.otp;
+      //     _progressDialog.dismiss();
+      if (value.status!) {
+        widget.expire_time = value.expire_time!;
+        widget.otp = value.otp!;
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog.dismiss();
           }
           break;
         default:
       }
-    })*/;
+    })*/
+        ;
   }
-
-}
+  }

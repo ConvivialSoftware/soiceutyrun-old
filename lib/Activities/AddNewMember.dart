@@ -1,12 +1,14 @@
 import 'dart:io';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -26,26 +28,26 @@ class BaseAddNewMember extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return AddNewMemberState(this.memberType);
+    return AddNewMemberState();
   }
 }
 
 class AddNewMemberState extends State<BaseAddNewMember> {
-  String memberType;
+ // String memberType;
 
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
 
-  String attachmentPoliceVerificationFilePath;
-  String attachmentPoliceVerificationFileName;
-  String attachmentPoliceVerificationCompressFilePath;
+ /* String? attachmentPoliceVerificationFilePath;
+  String? attachmentPoliceVerificationFileName;
+  String? attachmentPoliceVerificationCompressFilePath;
 
-  String attachmentIdentityProofFilePath;
-  String attachmentIdentityProofFileName;
-  String attachmentIdentityProofCompressFilePath;
-
-  AddNewMemberState(this.memberType);
+  String? attachmentIdentityProofFilePath;
+  String? attachmentIdentityProofFileName;
+  String? attachmentIdentityProofCompressFilePath;
+*/
+  //AddNewMemberState(this.memberType);
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
@@ -57,30 +59,31 @@ class AddNewMemberState extends State<BaseAddNewMember> {
   //TextEditingController _hobbiesController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
-  List<String> _bloodGroupList = new List<String>();
+  List<String> _bloodGroupList = <String>[];
   List<DropdownMenuItem<String>> __bloodGroupListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedBloodGroup;
+      <DropdownMenuItem<String>>[];
+  String? _selectedBloodGroup;
 
-  List<String> _membershipTypeList = new List<String>();
+  List<String> _membershipTypeList = <String>[];
   List<DropdownMenuItem<String>> __membershipTypeListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedMembershipType;
+      <DropdownMenuItem<String>>[];
+  String? _selectedMembershipType;
 
-  List<String> _livesHereList = new List<String>();
+  List<String> _livesHereList = <String>[];
   List<DropdownMenuItem<String>> __livesHereListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedLivesHere;
+      <DropdownMenuItem<String>>[];
+  String? _selectedLivesHere;
 
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
@@ -94,28 +97,12 @@ class AddNewMemberState extends State<BaseAddNewMember> {
   @override
   Widget build(BuildContext context) {
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('add_new_member'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title:  AppLocalizations.of(context).translate('add_new_member'),
         ),
         body: getBaseLayout(),
       ),
@@ -266,23 +253,24 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
-                      contact.phoneNumber.toString());
+                      contact.phoneNumber!.number.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                     //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                     /* String phoneNumber = contact.phoneNumber!.number
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          contact.phoneNumber!.number
                               .toString()
                               .indexOf('(') -
-                              1);
-                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                              1);*/
+                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
+                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber);
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
                   });
@@ -300,19 +288,19 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
                       contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                      String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          _contact!.phoneNumber
                               .toString()
                               .indexOf('(') -
                               1);
@@ -514,7 +502,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image:
-                                          FileImage(File(attachmentFilePath)),
+                                          FileImage(File(attachmentFilePath!)),
                                       fit: BoxFit.cover),
                                   border: Border.all(
                                       color: GlobalVariables.primaryColor,
@@ -604,7 +592,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                 ),
               ],
             ),
-            _selectedMembershipType =="Tenant" ? Row(
+           /* _selectedMembershipType =="Tenant" ? Row(
               children: <Widget>[
                 Flexible(
                   flex: 1,
@@ -626,7 +614,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   image:
-                                  FileImage(File(attachmentIdentityProofFilePath)),
+                                  FileImage(File(attachmentIdentityProofFilePath!)),
                                   fit: BoxFit.cover),
                               border: Border.all(
                                   color: GlobalVariables.primaryColor,
@@ -770,7 +758,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                   ),
                 ),
               ],
-            ) : SizedBox(),
+            ) : SizedBox(),*/
             Container(
               alignment: Alignment.topLeft,
               height: 45,
@@ -792,7 +780,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
     if (_nameController.text.length > 0) {
       // if(_dobController.text.length>0){
 
-      if (_mobileController.text.length > 0) {
+      if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
         //  if(_emailController.text.length>0){
 
         //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
@@ -801,7 +789,16 @@ class AddNewMemberState extends State<BaseAddNewMember> {
 
         if (_selectedMembershipType != null) {
           if (_selectedLivesHere != null) {
+
+            if(_alterMobileController.text.length>0){
+              if (_alterMobileController.text.length > 0 && _alterMobileController.text.length==10) {
             addMember();
+              }else{
+                GlobalFunctions.showToast('Please Enter Valid Alternate Mobile Number');
+              }
+            }else {
+              addMember();
+            }
           } else {
             GlobalFunctions.showToast('Please Select Lives Here');
           }
@@ -819,7 +816,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
       } else {
-        GlobalFunctions.showToast('Please Enter Mobile Number');
+        GlobalFunctions.showToast('Please Enter Valid Mobile Number');
       }
       /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
@@ -837,18 +834,18 @@ class AddNewMemberState extends State<BaseAddNewMember> {
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
 
-    String attachmentName;
-    String attachment;
+    String? attachmentName;
+    String? attachment;
 
     if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
       attachment =
-          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
     //print('attachment lengtth : '+attachment.length.toString());
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
             .addMember(
                 userId,
@@ -863,21 +860,19 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                 _alterMobileController.text,
                 _selectedBloodGroup,
                 _occupationController.text,
-                _selectedLivesHere,
-                _selectedMembershipType,
+                _selectedLivesHere!,
+                _selectedMembershipType!,
                 _addressController.text,
                 attachment)
-            .then((value) {
+            .then((value) async {
       print('add member Status value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         if (attachmentFileName != null && attachmentFilePath != null) {
-          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-          GlobalFunctions.getTemporaryDirectoryPath()
-              .then((value) {
-            GlobalFunctions.removeAllFilesFromDirectory(
-                value);
-          });
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
         }
         Navigator.of(context).pop();
         Navigator.push(
@@ -886,14 +881,14 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                 builder: (context) => BaseMyUnit(
                     AppLocalizations.of(context).translate('my_household'))));
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog.dismiss();
           }
           break;
         default:
@@ -917,23 +912,23 @@ class AddNewMemberState extends State<BaseAddNewMember> {
   }
 
   void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
     print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-              attachmentFilePath, value.toString() + '/' + attachmentFileName)
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
+        print('Cache file path : ' + attachmentCompressFilePath!);
         setState(() {});
       });
     });
   }
 
 
-  void openIdentityProofFile(BuildContext context) {
+  /*void openIdentityProofFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
       attachmentIdentityProofFilePath = value;
       getCompressIdentityProofFilePath();
@@ -948,16 +943,16 @@ class AddNewMemberState extends State<BaseAddNewMember> {
   }
 
   void getCompressIdentityProofFilePath() {
-    attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(
-        attachmentIdentityProofFilePath.lastIndexOf('/') + 1, attachmentIdentityProofFilePath.length);
+    attachmentIdentityProofFileName = attachmentIdentityProofFilePath!.substring(
+        attachmentIdentityProofFilePath!.lastIndexOf('/') + 1, attachmentIdentityProofFilePath!.length);
     print('file Name : ' + attachmentIdentityProofFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-              attachmentIdentityProofFilePath, value.toString() + '/' + attachmentIdentityProofFileName)
+              attachmentIdentityProofFilePath!, value.toString() + '/' + attachmentIdentityProofFileName!)
           .then((value) {
         attachmentIdentityProofCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentIdentityProofCompressFilePath);
+        print('Cache file path : ' + attachmentIdentityProofCompressFilePath!);
         setState(() {});
       });
     });
@@ -972,20 +967,20 @@ class AddNewMemberState extends State<BaseAddNewMember> {
   }
 
   void getCompressPoliceVerificationFilePath() {
-    attachmentPoliceVerificationFileName = attachmentPoliceVerificationFilePath.substring(
-        attachmentPoliceVerificationFilePath.lastIndexOf('/') + 1, attachmentPoliceVerificationFilePath.length);
+    attachmentPoliceVerificationFileName = attachmentPoliceVerificationFilePath!.substring(
+        attachmentPoliceVerificationFilePath!.lastIndexOf('/') + 1, attachmentPoliceVerificationFilePath!.length);
     print('file Name : ' + attachmentPoliceVerificationFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-          attachmentPoliceVerificationFilePath, value.toString() + '/' + attachmentPoliceVerificationFileName)
+          attachmentPoliceVerificationFilePath!, value.toString() + '/' + attachmentPoliceVerificationFileName!)
           .then((value) {
         attachmentPoliceVerificationCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentPoliceVerificationCompressFilePath);
+        print('Cache file path : ' + attachmentPoliceVerificationCompressFilePath!);
         setState(() {});
       });
     });
-  }
+  }*/
 
   void getBloodGroupData() {
     _bloodGroupList = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
@@ -1052,7 +1047,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
     setState(() {});
   }
 
-  void changeBloodGroupDropDownItem(String value) {
+  void changeBloodGroupDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedBloodGroup = value;
@@ -1060,7 +1055,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
     });
   }
 
-  void changeMembershipTypeDropDownItem(String value) {
+  void changeMembershipTypeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedMembershipType = value;
@@ -1068,7 +1063,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
     });
   }
 
-  void changeLivesHereDropDownItem(String value) {
+  void changeLivesHereDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedLivesHere = value;

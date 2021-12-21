@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
@@ -15,16 +15,16 @@ import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
-import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
-import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
+import 'package:societyrun/Activities/ViewBill.dart';
+import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/GlobalClasses/SystemAlertWindow.dart';
+
+//import 'package:societyrun/GlobalClasses/SystemAlertWindow.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
-import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
@@ -32,10 +32,12 @@ import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
+import '../main.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-Map<String, dynamic> receivedMessage;
+Map<String, dynamic>? receivedMessage;
 final String androidChannelIdVisitor = "1001";
 final String androidChannelIdOther = "1002";
 final String androidChannelName = "societyrun_channel";
@@ -43,7 +45,44 @@ final String androidChannelDesc = "channel_for_gatepass_feature";
 
 //const String TYPE_MANUALLY_STATUS_UPDATE = "manually_status_update";
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+var androidPlatformChannelSpecificsForVisitor = AndroidNotificationDetails(
+  androidChannelIdVisitor,
+  androidChannelName,
+  androidChannelDesc,
+  importance: Importance.max,
+  priority: Priority.high,
+  ticker: 'ticker',
+  enableLights: true,
+  color: Colors.green,
+  ledColor: const Color.fromARGB(255, 255, 0, 0),
+  ledOnMs: 1000,
+  ledOffMs: 500,
+  playSound: true,
+  sound: RawResourceAndroidNotificationSound("alert"),
+);
+
+var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  androidChannelIdOther,
+  androidChannelName,
+  androidChannelDesc,
+  importance: Importance.max,
+  priority: Priority.high,
+  ticker: 'ticker',
+  enableLights: true,
+  color: Colors.green,
+  ledColor: const Color.fromARGB(255, 255, 0, 0),
+  ledOnMs: 1000,
+  ledOffMs: 500,
+  playSound: true,
+);
+
+var iOSPlatformChannelSpecificsForVisitor =
+    IOSNotificationDetails(sound: "alert.caf");
+var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
+  // logger.wtf(message.messageId);
+  //
   GlobalVariables.isNewlyArrivedNotification = true;
   //GlobalFunctions.setIsNewlyArrivedNotification(true);
   GatePassPayload gatePassPayload;
@@ -51,22 +90,24 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
       GlobalVariables.isAlreadyTapped.toString());
   /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
       GlobalVariables.isNewlyArrivedNotification.toString());*/
-  print("myBackgroundMessageHandler onMessage >>>> $message");
+  print("myBackgroundMessageHandler onMessage >>>> ${message.notification}");
+  print("myBackgroundMessageHandler contentAvailable >>>> ${message.contentAvailable}");
+  print("myBackgroundMessageHandler sentTime >>>> ${message.sentTime.toString()}");
   Map data;
   /*Map notification;
   notification = message["notification"];
   notification["click_action"]="FLUTTER_NOTIFICATION_CLICK";*/
   GlobalFunctions.setNotificationBackGroundData(message.toString());
-  print("After myBackgroundMessageHandler onMessage >>>> $message");
+  print("After myBackgroundMessageHandler onMessage >>>> ${message.data.toString()}");
   if (Platform.isIOS) {
-    data = message;
+    data = message.data;
   } else {
-    data = message['data'];
+    data = message.data;
   }
   try {
     String uuid = Uuid().v1();
     String payloadData = data["society"];
-    Map society;
+    Map<String, dynamic> society;
     society = json.decode(payloadData.toString());
     society["isBackGround"] = true;
     society["msgID"] = uuid;
@@ -77,51 +118,25 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
       _dbNotificationPayload.nid = uuid;
       SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
 
-      var androidPlatformChannelSpecifics;
-      if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
-          gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-        androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          androidChannelIdVisitor,
-          androidChannelName,
-          androidChannelDesc,
-          importance: Importance.max,
-          priority: Priority.high,
-          ticker: 'ticker',
-          enableLights: true,
-          color: Colors.green,
-          ledColor: const Color.fromARGB(255, 255, 0, 0),
-          ledOnMs: 1000,
-          ledOffMs: 500,
-          playSound: true,
-          sound: RawResourceAndroidNotificationSound("alert"),
-        );
-      } else {
-        androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          androidChannelIdOther,
-          androidChannelName,
-          androidChannelDesc,
-          importance: Importance.max,
-          priority: Priority.high,
-          ticker: 'ticker',
-          enableLights: true,
-          color: Colors.green,
-          ledColor: const Color.fromARGB(255, 255, 0, 0),
-          ledOnMs: 1000,
-          ledOffMs: 500,
-          playSound: true,
-        );
-      }
-      var iOSPlatformChannelSpecifics =
-          IOSNotificationDetails(sound: "alert.caf");
-
       var platformChannelSpecifics = NotificationDetails(
-           android : androidPlatformChannelSpecifics, iOS:iOSPlatformChannelSpecifics);
+          android: (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
+                  gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY)
+              ? !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!) ? androidPlatformChannelSpecificsForVisitor
+              : androidPlatformChannelSpecifics : androidPlatformChannelSpecifics,
+          iOS: (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
+                  gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY)
+              ? iOSPlatformChannelSpecificsForVisitor
+              : iOSPlatformChannelSpecifics);
       GlobalVariables.isAlreadyTapped = false;
       print('onMessage myBackgroundMessageHandler after isAlreadyTapped : ' +
           GlobalVariables.isAlreadyTapped.toString());
-      flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+      if(gatePassPayload.tYPE != NotificationTypes.TYPE_VISITOR_VERIFY) {
+        Random random = new Random();
+        print('generate background randomNumber : ');
+        flutterLocalNotificationsPlugin.show(random.nextInt(20), gatePassPayload.title,
           gatePassPayload.body, platformChannelSpecifics,
-          payload: /*data["society"]*/ json.encode(society));
+            payload: json.encode(society));
+      }
     }
   } catch (e) {
     print(e);
@@ -132,10 +147,12 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
 
 abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   final _fcm = FirebaseMessagingHandler();
-  static BuildContext _ctx;
+  static BuildContext? _ctx;
   bool isDailyEntryNotification = false;
   bool isGuestEntryNotification = false;
   bool isInAppCallNotification = false;
+  Random random = new Random();
+  int randomNumber=1;
 
 /*
   String _platformVersion = 'Unknown';
@@ -145,7 +162,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
 */
 
-  static BuildContext get getCtx => _ctx;
+  static BuildContext get getCtx => _ctx!;
+  static const MethodChannel _channel = MethodChannel('com.societyrun12/create_channel');
 
   static void setCtx(BuildContext currentContext) {
     _ctx = currentContext;
@@ -156,11 +174,13 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
+    print('call base init');
     _fcm.setListeners();
     setState(() {
       _ctx = this.context;
     });
     firebaseCloudMessagingListeners();
+    createNotificationChannel();
    /* _initPlatformState();
     _requestPermissions();
     SystemAlertWindow.registerOnClickListener(SystemAlertOverlayWindow.callBackFunction);*/
@@ -179,6 +199,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       print('Mounted context : ' + context.toString());
     }
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 /*
   Future<void> _initPlatformState() async {
     String platformVersion;
@@ -220,8 +246,38 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
+    var details = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (details!.didNotificationLaunchApp) {
+      print("didNotificationLaunchApp :"+details.payload.toString());
+      selectNotification(details.payload);
+    }
 
-    _fcm.firebaseMessaging.configure(
+    FirebaseMessaging.onMessage.listen((message) {
+      randomNumber = random.nextInt(20);
+      print('randomNumber : '+randomNumber.toString());
+      // logger.wtf('data:${message.data}');
+      logger.wtf('notification:${message.notification?.body??'NO BODY'}');
+      logger.wtf('notification:${message.notification?.title??'TITLE'}');
+      GlobalVariables.isNewlyArrivedNotification = true;
+      GlobalVariables.isAlreadyTapped = false;
+      _showNotification(message.data, false);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('onMessageOpened: ${message}');
+      GlobalVariables.isNewlyArrivedNotification = true;
+      GlobalVariables.isAlreadyTapped = false;
+      showDialogAlertOnOpen(message.data);
+    });
+
+    FirebaseMessaging.instance.getInitialMessage().then((value) {
+      print('onInitialMessage: $value');
+      showDialogAlertOnOpen(value!.data);
+    });
+
+    FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+    /*_fcm.firebaseMessaging.configure(
       onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage before isAlreadyTapped : ' +
@@ -248,16 +304,28 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         //GlobalFunctions.showToast("OnResume");
         _showNotification(message, true);
       },
-    );
+    );*/
+  }
+  showDialogAlertOnOpen(Map<String, dynamic> message) {
+
+    String payloadSData = message["society"];
+   var society = json.decode(payloadSData.toString());
+    GatePassPayload gatePassPayload = GatePassPayload.fromJson(society);
+    if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
+        gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+      if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
+        _fcm.showAlert(_ctx!, gatePassPayload);
+      }
+    }
   }
 
-  Future selectNotification(String payload) async {
+  Future selectNotification(String? payload) async {
     print('selectNotification context : ' + _ctx.toString());
     print('In selectNotification method');
     try {
       // bool isNewlyArrivedNotification = await GlobalFunctions.getIsNewlyArrivedNotification();
       //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
-
+      //await flutterLocalNotificationsPlugin.cancel(1);
       isGuestEntryNotification =
       await GlobalFunctions.getGuestEntryNotification();
       isDailyEntryNotification =
@@ -266,7 +334,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       await GlobalFunctions.getInAppCallNotification();
       String userId = await GlobalFunctions.getUserId();
 
-      Map<String, dynamic> temp = json.decode(payload);
+      Map<String, dynamic> temp = json.decode(payload!);
       GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
       print('selectNotification isNewlyArrivedNotification : ' +
         GlobalVariables.isNewlyArrivedNotification.toString());
@@ -285,11 +353,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       if (GlobalVariables.isNewlyArrivedNotification) {
         GlobalVariables.isNewlyArrivedNotification = false;
         //GlobalFunctions.setIsNewlyArrivedNotification(false);
-        if (gatePassPayload.isBackGround) {
+        if (gatePassPayload.isBackGround!) {
           GlobalVariables.isAlreadyTapped = false;
         }
       }else{
-        if (gatePassPayload.isBackGround) {
+        if (gatePassPayload.isBackGround!) {
           GlobalVariables.isAlreadyTapped = false;
         }
       }
@@ -300,30 +368,32 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
         if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
             gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-          if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+          if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
             if(isInAppCallNotification) {
-              _fcm.showAlert(_ctx, gatePassPayload);
+              _fcm.showAlert(_ctx!, gatePassPayload);
             }else{
-              navigate(gatePassPayload, _ctx);
+              navigate(gatePassPayload, _ctx!);
             }
           } else {
-            navigate(gatePassPayload, _ctx);
+            navigate(gatePassPayload, _ctx!);
           }
         }else if(gatePassPayload.tYPE == NotificationTypes.TYPE_BROADCAST){
-          _fcm.showDynamicAlert(_ctx, _dbNotificationPayload);
+          _fcm.showDynamicAlert(_ctx!, _dbNotificationPayload);
         } else {
           print('IF selectNotification gatePassPayload.tYPE : ' +
               gatePassPayload.tYPE.toString());
-          navigate(gatePassPayload, _ctx);
+          navigate(gatePassPayload, _ctx!);
         }
       }
     } catch (e) {
       print('exception : ' + e.toString());
-      _fcm.showErrorDialog(_ctx, e);
+      _fcm.showErrorDialog(_ctx!, e);
     }
   }
 
-  _showNotification(Map<String, dynamic> message, bool shouldRedirect) async {
+  _showNotification(Map<String, dynamic> message, bool shouldRedirect,
+      {bool showLocalNotification = true}) async {
+
     //SystemAlertOverlayWindow.showOverLayWindow(_isShowingWindow,prefMode);
     print('_showNotification context : ' + _ctx.toString());
     // bool isNewlyArrivedNotification =
@@ -348,12 +418,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     if (Platform.isIOS) {
       data = message;
     } else {
-      data = message['data'] as Map;
+      data = message;
     }
     try {
       String uuid = Uuid().v1();
       String payloadSData = data["society"];
-      Map society;
+      Map<String, dynamic> society;
       society = json.decode(payloadSData.toString());
       society["isBackGround"] = shouldRedirect;
       society["msgID"] = uuid;
@@ -374,14 +444,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
         }
       }
-      if(!gatePassPayload.isBackGround) {
+      if (!gatePassPayload.isBackGround!) {
       //  if (GlobalVariables.isNewlyArrivedNotification) {
          // GlobalVariables.isNewlyArrivedNotification = false;
           //GlobalFunctions.setIsNewlyArrivedNotification(false);
           try {
             if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
                 gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-              if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+            if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
                 print('_showNotification isAlreadyTapped : ' +
                     GlobalVariables.isAlreadyTapped.toString());
                 if ((gatePassPayload.vSITORTYPE ==
@@ -389,12 +459,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                     gatePassPayload.vSITORTYPE ==
                         GlobalVariables.GatePass_Delivery)) {
                   if (isInAppCallNotification) {
-                    _fcm.showAlert(_ctx, gatePassPayload);
+                  _fcm.showAlert(_ctx!, gatePassPayload);
                   }
                 } else {
                   if (isGuestEntryNotification) {
                     if (isInAppCallNotification) {
-                      _fcm.showAlert(_ctx, gatePassPayload);
+                    _fcm.showAlert(_ctx!, gatePassPayload);
                     }
                   }
                 }
@@ -418,38 +488,23 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             print(e);
           }
           if (gatePassPayload.tYPE != NotificationTypes.TYPE_SInApp) {
-            var androidPlatformChannelSpecifics;
             if ((gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
                 gatePassPayload.tYPE ==
                     NotificationTypes.TYPE_VISITOR_VERIFY) &&
-                !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME)) {
+              !GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
               print('if showGuestNotification');
               if (!isInAppCallNotification) {
                 print('false isInAppCallNotification');
-                androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                  androidChannelIdOther,
-                  androidChannelName,
-                  androidChannelDesc,
-                  importance: Importance.max,
-                  priority: Priority.high,
-                  ticker: 'ticker',
-                  enableLights: true,
-                  color: Colors.green,
-                  ledColor: const Color.fromARGB(255, 255, 0, 0),
-                  ledOnMs: 1000,
-                  ledOffMs: 500,
-                  playSound: true,
-                );
-                var iOSPlatformChannelSpecifics =
-                IOSNotificationDetails(sound: "alert.caf");
                 var platformChannelSpecifics = NotificationDetails(
                     android: androidPlatformChannelSpecifics,
                     iOS: iOSPlatformChannelSpecifics);
 
                 try {
-                  flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                if(showLocalNotification) {
+                  flutterLocalNotificationsPlugin.show(randomNumber, gatePassPayload.title,
                       gatePassPayload.body, platformChannelSpecifics,
                       payload: /*data["society"]*/ json.encode(society));
+                }
                 } catch (e) {
                   print(e);
                 }
@@ -458,31 +513,16 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                   GlobalVariables.GatePass_Taxi ||
                   gatePassPayload.vSITORTYPE ==
                       GlobalVariables.GatePass_Delivery)) {
-                androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                  androidChannelIdVisitor,
-                  androidChannelName,
-                  androidChannelDesc,
-                  importance: Importance.max,
-                  priority: Priority.high,
-                  ticker: 'ticker',
-                  enableLights: true,
-                  color: Colors.green,
-                  ledColor: const Color.fromARGB(255, 255, 0, 0),
-                  ledOnMs: 1000,
-                  ledOffMs: 500,
-                  playSound: true,
-                  sound: RawResourceAndroidNotificationSound("alert"),
-                );
-                var iOSPlatformChannelSpecifics =
-                IOSNotificationDetails(sound: "alert.caf");
                 var platformChannelSpecifics = NotificationDetails(
-                    android: androidPlatformChannelSpecifics,
-                    iOS: iOSPlatformChannelSpecifics);
+                  android: androidPlatformChannelSpecificsForVisitor,
+                  iOS: iOSPlatformChannelSpecificsForVisitor);
 
                 try {
-                  flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                if(showLocalNotification) {
+                  flutterLocalNotificationsPlugin.show(randomNumber, gatePassPayload.title,
                       gatePassPayload.body, platformChannelSpecifics,
                       payload: /*data["society"]*/ json.encode(society));
+                }
                 } catch (e) {
                   print(e);
                 }
@@ -490,34 +530,18 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                 print('else showGuestNotification');
                 if (isGuestEntryNotification) {
                   print('else showGuestNotification');
-                  androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                    androidChannelIdVisitor,
-                    androidChannelName,
-                    androidChannelDesc,
-                    importance: Importance.max,
-                    priority: Priority.high,
-                    ticker: 'ticker',
-                    enableLights: true,
-                    color: Colors.green,
-                    ledColor: const Color.fromARGB(255, 255, 0, 0),
-                    ledOnMs: 1000,
-                    ledOffMs: 500,
-                    playSound: true,
-                    sound: RawResourceAndroidNotificationSound("alert"),
-                  );
-                  print('else showGuestNotification Alert');
-                  var iOSPlatformChannelSpecifics =
-                  IOSNotificationDetails(sound: "alert.caf");
                   var platformChannelSpecifics = NotificationDetails(
-                      android: androidPlatformChannelSpecifics,
-                      iOS: iOSPlatformChannelSpecifics);
+                    android: androidPlatformChannelSpecificsForVisitor,
+                    iOS: iOSPlatformChannelSpecificsForVisitor);
 
                   try {
                     print('else showGuestNotification TRY');
+                  if(showLocalNotification) {
                     flutterLocalNotificationsPlugin.show(
-                        1, gatePassPayload.title,
+                        randomNumber, gatePassPayload.title,
                         gatePassPayload.body, platformChannelSpecifics,
                         payload: /*data["society"]*/ json.encode(society));
+                  }
                   } catch (e) {
                     print('else showGuestNotification CATCH');
                     print(e);
@@ -528,30 +552,16 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             else {
               if (isDailyEntryNotification) {
                 print('if showDailyNotification');
-                androidPlatformChannelSpecifics = AndroidNotificationDetails(
-                  androidChannelIdOther,
-                  androidChannelName,
-                  androidChannelDesc,
-                  importance: Importance.max,
-                  priority: Priority.high,
-                  ticker: 'ticker',
-                  enableLights: true,
-                  color: Colors.green,
-                  ledColor: const Color.fromARGB(255, 255, 0, 0),
-                  ledOnMs: 1000,
-                  ledOffMs: 500,
-                  playSound: true,
-                );
-                var iOSPlatformChannelSpecifics =
-                IOSNotificationDetails(sound: "alert.caf");
                 var platformChannelSpecifics = NotificationDetails(
                     android: androidPlatformChannelSpecifics,
                     iOS: iOSPlatformChannelSpecifics);
 
                 try {
-                  flutterLocalNotificationsPlugin.show(1, gatePassPayload.title,
+                if(showLocalNotification) {
+                  flutterLocalNotificationsPlugin.show(randomNumber, gatePassPayload.title,
                       gatePassPayload.body, platformChannelSpecifics,
                       payload: /*data["society"]*/ json.encode(society));
+                }
                 } catch (e) {
                   print(e);
                 }
@@ -573,235 +583,247 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   Future<void> navigate(GatePassPayload temp, BuildContext context) async {
     print('context : ' + context.toString());
     if (temp.tYPE == NotificationTypes.TYPE_COMPLAINT) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD, false)));
-      if (result == null) {
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD!, false)));
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_ASSIGN_COMPLAINT) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(temp.iD, true)));
-      if (result == null) {
+                  BaseComplaintInfoAndComments.ticketNo(temp.iD!, true)));
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_MEETING) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('meetings'))));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_ANNOUNCEMENT) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('announcement'))));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_EVENT) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('events'))));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
+    }else if (temp.tYPE == NotificationTypes.TYPE_Document) {
+      /*final result = await */Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('documents'))));
+      /*if (result == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => BaseDashBoard()),
+            (Route<dynamic> route) => false);
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_POLL) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('poll_survey'))));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_VISITOR ||
         temp.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
                   AppLocalizations.of(context).translate('my_gate'),
                   temp.vID)));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_BILL) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseMyUnit(
-                  AppLocalizations.of(context).translate('my_dues'))));
-      if (result == null) {
+              builder: (context) => BaseViewBill(temp.iD!, null, null, null)));
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_RECEIPT) {
-      String block = await GlobalFunctions.getBlock();
-      String flat = await GlobalFunctions.getFlat();
-      final result = await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseLedger(block,flat)));
-      if (result == null) {
+      //String block = await GlobalFunctions.getBlock();
+      //String flat = await GlobalFunctions.getFlat();
+      /*final result = await */Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseViewReceipt(temp.iD!, null, null, null)));
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_FVISITOR) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
                   AppLocalizations.of(context).translate('my_gate'),
                   temp.vID)));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_SInApp) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
                   AppLocalizations.of(context).translate('my_gate'),
                   temp.vID)));
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_NEW_OFFER) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseNearByShopNotificationItemDetails(temp.iD)));
-      if (result == null) {
+              builder: (context) =>
+                  BaseNearByShopNotificationItemDetails(temp.iD!)));
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
             (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_INTERESTED_CUSTOMER) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(temp.iD)));
-      if (result == null) {
+              builder: (context) =>
+                  BaseOwnerClassifiedNotificationItemDesc(temp.iD!)));
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_UserManagement) {
-      final result = await Navigator.push(
-          context,
+      /*final result = await */Navigator.push(context,
           MaterialPageRoute(
               builder: (context) => BaseUserManagement()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_MyHousehold) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseAdmin()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_PaymentRequest) {
-      final result = await Navigator.push(
+      /*final result = await */Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseAdmin()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_Expense) {
-      final result = await Navigator.push(
-          context,
+      /*final result = await */Navigator.push(context,
           MaterialPageRoute(
               builder: (context) => BaseExpenseSearchAdd()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
-      if (result == null) {
+      /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
                 (Route<dynamic> route) => false);
-      }
+      }*/
     }else if (temp.tYPE == NotificationTypes.TYPE_WEB) {
       launch(GlobalVariables.appURL);
     } else {
@@ -811,5 +833,24 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
               builder: (BuildContext context) => BaseDashBoard()),
           (Route<dynamic> route) => false);
     }
+  }
+
+  Future<void> createNotificationChannel() async {
+
+    Map<String, String> channelMap = {
+      "id": androidChannelIdVisitor,
+      "name": androidChannelName,
+      "description": androidChannelDesc,
+    };
+    try {
+      await _channel.invokeMethod('createNotificationChannel', channelMap);
+      setState(() {
+        //_statusText = _finished;
+      });
+    } on PlatformException catch (e) {
+      //_statusText = _error;
+      print('createNotificationChannel'+e.toString());
+    }
+
   }
 }

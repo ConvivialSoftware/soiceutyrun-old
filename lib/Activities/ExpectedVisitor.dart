@@ -6,6 +6,7 @@ import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/GuestOthers.dart';
 import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -23,59 +24,38 @@ class BaseExpectedVisitor extends StatefulWidget {
 
 class ExpectedVisitorState extends State<BaseExpectedVisitor>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  List<VisitorInfo> _visitorInfoList = new List<VisitorInfo>();
+ /* TabController? _tabController;
+  //List<VisitorInfo> _visitorInfoList = <VisitorInfo>[];
 
   var name = "", photo = "", societyId, flat, block, duesRs = "", duesDate = "";
 
   int position = 0;
 
   var username, password;
-  ProgressDialog _progressDialog;
-
+  ProgressDialog? _progressDialog;
+*/
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    getVisitorInfoList();
+    //_tabController = TabController(length: 2, vsync: this);
+   // getVisitorInfoList();
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    //_progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('expected_visitor'),
           ),
-          title: text(
-            AppLocalizations.of(context).translate('expected_visitor'),
-            textColor: GlobalVariables.white,
-          ),
-          // bottom: getTabLayout(),
-          //elevation: 5,
-        ),
-        /* body: TabBarView(controller: _tabController, children: <Widget>[
-          getMyTicketLayout(),
-          getMyDocumentsLayout(),
-        ]),*/
-        body: getVisitorLayout(),
+        //body: getVisitorLayout(),
       ),
     );
   }
 
-  getTabLayout() {
+  /*getTabLayout() {
     return PreferredSize(
       preferredSize: Size.fromHeight(40.0),
       child: TabBar(
@@ -103,50 +83,6 @@ class ExpectedVisitorState extends State<BaseExpectedVisitor>
     );
   }
 
-  getVisitorInfoList() {
-    _visitorInfoList = [
-      VisitorInfo(
-          visitorName: "SavitaBai",
-          visitorInOut: "Inside",
-          visitorRate: "4.3",
-          visitorTime: "Free : 9-11 am,12-2pm",
-          visitorHours: "4 Hours",
-          visitorAddress:
-              "Room No 5, Maneklal Chawl, Ekta Nagar, Kandivali West Mumbai-400067",
-          visitorMobile: "99999 99990",
-          visitorDuty: "Cook"),
-      VisitorInfo(
-          visitorName: "Vidhya",
-          visitorInOut: "",
-          visitorRate: "4.7",
-          visitorTime: "Free : 8-8:30 am,4-5pm",
-          visitorHours: "7 Hours",
-          visitorAddress:
-              "Room No 5, Maneklal Chawl, Ekta Nagar, Kandivali West Mumbai-400067",
-          visitorMobile: "99999 99990",
-          visitorDuty: "Cook"),
-      VisitorInfo(
-          visitorName: "Ramesh",
-          visitorInOut: "Inside",
-          visitorRate: "4.3",
-          visitorTime: "Free : 9-11 am,12-2pm",
-          visitorHours: "3 Hours",
-          visitorAddress:
-              "Room No 5, Maneklal Chawl, Ekta Nagar, Kandivali West Mumbai-400067",
-          visitorMobile: "99999 99990",
-          visitorDuty: "Cook"),
-      VisitorInfo(
-          visitorName: "Ramesh",
-          visitorInOut: "Inside",
-          visitorRate: "4.3",
-          visitorTime: "Free : 9-11 am,12-2pm",
-          visitorHours: "3 Hours",
-          visitorAddress:
-              "Room No 5, Maneklal Chawl, Ekta Nagar, Kandivali West Mumbai-400067",
-          visitorMobile: "99999 99990",
-          visitorDuty: "Cook"),
-    ];
-  }
 
   getVisitorLayout() {
     print('MyTicketLayout Tab Call');
@@ -161,8 +97,6 @@ class ExpectedVisitorState extends State<BaseExpectedVisitor>
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0),
                 getVisitorsCardLayout(),
                 visitorFilterDateLayout(),
                 getVisitorListData(), // getActivitiesListDataLayout(),
@@ -239,7 +173,7 @@ class ExpectedVisitorState extends State<BaseExpectedVisitor>
                       Container(
                           child: AppIcon(
                         Icons.call,
-                        iconColor: GlobalVariables.AccentColor,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       )),
                       Container(
@@ -252,7 +186,7 @@ class ExpectedVisitorState extends State<BaseExpectedVisitor>
                       Container(
                           child: AppIcon(
                         Icons.share,
-                        iconColor: GlobalVariables.AccentColor,
+                        iconColor: GlobalVariables.secondaryColor,
                         iconSize: GlobalVariables.textSizeNormal,
                       )),
                     ],
@@ -558,8 +492,7 @@ class ExpectedVisitorState extends State<BaseExpectedVisitor>
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0), //ticketOpenClosedLayout(),
+                //ticketOpenClosedLayout(),
                 //   getDocumentListDataLayout(),
               ],
             ),
@@ -1086,26 +1019,5 @@ class ExpectedVisitorState extends State<BaseExpectedVisitor>
         ],
       ),
     );
-  }
-}
-
-class VisitorInfo {
-  String visitorName,
-      visitorInOut,
-      visitorRate,
-      visitorTime,
-      visitorHours,
-      visitorAddress,
-      visitorMobile,
-      visitorDuty;
-
-  VisitorInfo(
-      {this.visitorName,
-      this.visitorInOut,
-      this.visitorRate,
-      this.visitorTime,
-      this.visitorHours,
-      this.visitorAddress,
-      this.visitorMobile,
-      this.visitorDuty});
+  }*/
 }

@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:dio/dio.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,18 +43,19 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends BaseStatefulState<LoginPage> {
   bool isLogin = false;
   AppLanguage appLanguage = AppLanguage();
-  String fcmToken;
+  String? fcmToken;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   bool _obscurePassword = true;
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
-  List<Banners> _bannerList = List<Banners>();
+  List<Banners> _bannerList = <Banners>[];
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBannerData();
@@ -67,9 +69,6 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-
     return Builder(
       builder: (context) => Scaffold(
         body: Container(
@@ -546,12 +545,12 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
     final restClient = RestClient(dio);
     //  var date = GlobalFunctions.getAppLanguage();
 
-    _progressDialog.show();
-    restClient.getLogin(username, password, fcmToken).then((value) {
+    _progressDialog!.show();
+    restClient.getLogin(username, password, fcmToken!).then((value) {
       print('status : ' + value.status.toString());
-      GlobalFunctions.showToast(value.message);
-      _progressDialog.hide();
-      if (value.status) {
+      GlobalFunctions.showToast(value.message!);
+      _progressDialog!.dismiss();
+      if (value.status!) {
         value.PASSWORD = password;
         value.LoggedUsername = username;
         GlobalFunctions.saveDataToSharedPreferences(value);
@@ -589,8 +588,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
     final RestClient restClient = RestClient(dio);
     restClient.getBannerData().then((value) {
       print('Response : ' + value.toString());
-      if (value.status) {
-        List<dynamic> _list = value.front;
+      if (value.status!) {
+        List<dynamic> _list = value.front!;
         print('complaint list length : ' + _list.length.toString());
 
         // print('first complaint : ' + _list[0].toString());

@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+//import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/ExpenseVoucher.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
@@ -42,13 +43,14 @@ class ExpenseState extends State<BaseExpense> {
   var societyId, flat, block;
   var _totalSumUp=0.0;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
-  List<Expense> _expenseList = List<Expense>();
+  List<Expense> _expenseList = <Expense>[];
   @override
   void initState() {
     super.initState();
-
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    // TODO: implement build
     GlobalFunctions.checkInternetConnection().then((value) {
       if(value){
 
@@ -62,28 +64,12 @@ class ExpenseState extends State<BaseExpense> {
 
   @override
   Widget build(BuildContext context) {
-      _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         //resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('expense'),
-            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('expense'),
         ),
         body:  getExpenseLayout(),
       ),
@@ -165,11 +151,11 @@ class ExpenseState extends State<BaseExpense> {
 
   getExpenseDescListItemLayout(int position) {
 
-    List<VoucherAmount> _voucherAmountList = List<VoucherAmount>();
-    _voucherAmountList = List<VoucherAmount>.from(_expenseList[position].head_details.map((i) => VoucherAmount.fromJson(i)));
+    List<VoucherAmount> _voucherAmountList = <VoucherAmount>[];
+    _voucherAmountList = List<VoucherAmount>.from(_expenseList[position].head_details!.map((i) => VoucherAmount.fromJson(i)));
     double _voucherAmount=0.0;
     for(int i=0;i<_voucherAmountList.length;i++){
-      _voucherAmount +=double.parse(_voucherAmountList[i].amount);
+      _voucherAmount +=double.parse(_voucherAmountList[i].amount!);
     }
 
     return InkWell(
@@ -225,7 +211,7 @@ class ExpenseState extends State<BaseExpense> {
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE, "dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
+                              child: text(GlobalFunctions.convertDateFormat(_expenseList[position].PAYMENT_DATE!, "dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall
                               ),
                             )
                           ],
@@ -301,20 +287,20 @@ class ExpenseState extends State<BaseExpense> {
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP.getExpenseData(societyId,startDate,endDate,heads,ledgerYear).then((value) {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       print('Response : ' + value.toString());
-      List<dynamic> _list = value.data;
+      List<dynamic> _list = value.data!;
      _expenseList = List<Expense>.from(_list.map((i) => Expense.fromJson(i)));
       //getExpenseAccountLedger();
       for(int j=0;j<_expenseList.length;j++){
-        _totalSumUp += double.parse(_expenseList[j].AMOUNT==null ? '0' : _expenseList[j].AMOUNT);
+        _totalSumUp += double.parse(_expenseList[j].AMOUNT==null ? '0' : _expenseList[j].AMOUNT!);
       }
       setState(() {});
     })/*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){
-      //    _progressDialog.hide();
+      //    _progressDialog.dismiss();
       //  }
       switch (obj.runtimeType) {
         case DioError:

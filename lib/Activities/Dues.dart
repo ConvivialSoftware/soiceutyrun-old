@@ -1,5 +1,5 @@
-
-import 'package:clipboard_manager/clipboard_manager.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +14,7 @@ import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -30,7 +31,8 @@ import 'package:intl/intl.dart';
 class BaseDues extends StatefulWidget {
 
   bool isAdmin;
-  String mBlock,mFlat;
+  String? mBlock, mFlat;
+
   BaseDues({this.isAdmin=false,this.mBlock,this.mFlat});
 
   @override
@@ -38,8 +40,7 @@ class BaseDues extends StatefulWidget {
 }
 
 class _BaseDuesState extends State<BaseDues> {
-
-  Razorpay _razorpay;
+  Razorpay? _razorpay;
   String _selectedPaymentGateway = "RazorPay";
   Map<String, String> _duesMap = Map<String, String>();
   bool hasPayTMGateway = false;
@@ -53,10 +54,11 @@ class _BaseDuesState extends State<BaseDues> {
   var userId = "",
       societyId;
   var email = '', phone = '', consumerId = '', societyName = '', userType = '';
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   @override
   void initState() {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     print('_BaseDuesState init');
     getSharedPreferenceDuesData();
     getSharedPreferenceData();
@@ -67,29 +69,23 @@ class _BaseDuesState extends State<BaseDues> {
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of(context),
       child: Consumer<UserManagementResponse>(
         builder: (context, value, child) {
           return Scaffold(
-            appBar: widget.isAdmin ? AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
+            appBar: widget.isAdmin
+                ? CustomAppBar(
+                    title: widget.mBlock! +
+                        ' ' +
+                        widget.mFlat! +
+                        '-' +
+                        AppLocalizations.of(context).translate('dues'),
+                  )
+                : PreferredSize(
+                    child: SizedBox(),
+                    preferredSize: Size(0, 0),
               ),
-              title: text(
-                widget.mBlock+' '+widget.mFlat+'-'+AppLocalizations.of(context).translate('dues'),
-                textColor: GlobalVariables.white,
-              ),
-            ) : PreferredSize(child: SizedBox(), preferredSize: Size(0, 0),),
             backgroundColor: GlobalVariables.veryLightGray,
             body: value.isLoading ?GlobalFunctions.loadingWidget(context) : getMyDuesLayout(value),
           );
@@ -102,7 +98,7 @@ class _BaseDuesState extends State<BaseDues> {
   void dispose() {
     print('_BaseDuesState dispose');
     if (_razorpay != null) {
-      _razorpay.clear();
+      _razorpay!.clear();
     }
     super.dispose();
   }
@@ -110,8 +106,8 @@ class _BaseDuesState extends State<BaseDues> {
   getSharedPreferenceDuesData() {
     GlobalFunctions.getSharedPreferenceDuesData().then((map) {
       _duesMap = map;
-      duesRs = _duesMap[GlobalVariables.keyDuesRs];
-      duesDate = _duesMap[GlobalVariables.keyDuesDate];
+      duesRs = _duesMap[GlobalVariables.keyDuesRs]!;
+      duesDate = _duesMap[GlobalVariables.keyDuesDate]!;
       setState(() {});
     });
   }
@@ -205,8 +201,9 @@ class _BaseDuesState extends State<BaseDues> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      BaseLedger(widget.mBlock,widget.mFlat)));
+                                              builder: (context) => BaseLedger(
+                                                  widget.mBlock!,
+                                                  widget.mFlat!)));
                         },
                         child: smallTextContainerOutlineLayout(
                             AppLocalizations.of(context)
@@ -275,7 +272,7 @@ class _BaseDuesState extends State<BaseDues> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color:
-                          getBillTypeColor(value.billList[position].TYPE),
+                              getBillTypeColor(value.billList[position].TYPE!),
                         ),
                         child: text(
                           value.billList[position].TYPE != null
@@ -287,8 +284,8 @@ class _BaseDuesState extends State<BaseDues> {
                           fontSize: GlobalVariables.textSizeSmall,
                         ),
                       ),
-                      (value.billList[position].AMOUNT -
-                          value.billList[position].RECEIVED) <=
+                      (value.billList[position].AMOUNT! -
+                                  value.billList[position].RECEIVED!) <=
                           0
                           ? text(
                         'Paid',
@@ -311,8 +308,9 @@ class _BaseDuesState extends State<BaseDues> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         text(
-                          GlobalFunctions.getCurrencyFormat((value.billList[position].AMOUNT -
-                    value.billList[position].RECEIVED)
+                          GlobalFunctions.getCurrencyFormat(
+                              (value.billList[position].AMOUNT! -
+                                      value.billList[position].RECEIVED!)
                         .toString()) ,/*+
                               double.parse((value.billList[position].AMOUNT -
                                   value.billList[position].RECEIVED)
@@ -325,7 +323,7 @@ class _BaseDuesState extends State<BaseDues> {
                         text(
                           value.billList[position].DUE_DATE != null
                               ? GlobalFunctions.convertDateFormat(
-                              value.billList[position].DUE_DATE,
+                                  value.billList[position].DUE_DATE!,
                               "dd-MM-yyyy")
                               : '',
                           textColor: GlobalVariables.primaryColor,
@@ -335,26 +333,20 @@ class _BaseDuesState extends State<BaseDues> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 8,),
+                  Divider(),
                   Container(
-                    color: GlobalVariables.secondaryColor,
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Divider(
-                      height: 1,
-                      color: GlobalVariables.secondaryColor,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         InkWell(
                           onTap: () {
-                            if (value.billList[position].TYPE
+                            if (value.billList[position].TYPE!
                                 .toLowerCase()
                                 .toString() ==
                                 'bill' ||
-                                value.billList[position].TYPE
+                                value.billList[position].TYPE!
                                     .toLowerCase()
                                     .toString() ==
                                     'invoice') {
@@ -363,7 +355,9 @@ class _BaseDuesState extends State<BaseDues> {
                                   MaterialPageRoute(
                                       builder: (context) => BaseViewBill(
                                           value.billList[position].INVOICE_NO,
-                                          null,widget.mBlock,widget.mFlat)));
+                                          null,
+                                          widget.mBlock!,
+                                          widget.mFlat!)));
                             } else {
                               Navigator.push(
                                   context,
@@ -462,15 +456,19 @@ class _BaseDuesState extends State<BaseDues> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           BaseAlreadyPaid(
-                                              value.billList[position]
-                                                  .INVOICE_NO,
-                                              value.billList[position].AMOUNT,
-                                              widget.mBlock, widget.mFlat,value.billList[position].PENALTY_REM,isAdmin: widget.isAdmin,)));
+                                            value.billList[position].INVOICE_NO!,
+                                            value.billList[position].AMOUNT!,
+                                            widget.mBlock!,
+                                            widget.mFlat!,
+                                            value
+                                                .billList[position].PENALTY_REM!,
+                                            isAdmin: widget.isAdmin,
+                                          )));
                               if (result == 'back') {
                                 Provider.of<UserManagementResponse>(context,
                                     listen: false)
                                     .getAllBillData(
-                                    widget.mBlock, widget.mFlat);
+                                        widget.mBlock!, widget.mFlat!);
                               }
                             }else{
                               GlobalFunctions.showAdminPermissionDialogToAccessFeature(context,true);
@@ -547,9 +545,9 @@ class _BaseDuesState extends State<BaseDues> {
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
-              value.pendingList[position].PAYMENT_DATE.length > 0
+              value.pendingList[position].PAYMENT_DATE!.length > 0
                   ? GlobalFunctions.convertDateFormat(
-                  value.pendingList[position].PAYMENT_DATE, 'dd-MM-yyyy')
+                      value.pendingList[position].PAYMENT_DATE!, 'dd-MM-yyyy')
                   : "",
               textColor: GlobalVariables.grey,
               fontSize: GlobalVariables.textSizeSMedium,
@@ -1053,8 +1051,8 @@ class _BaseDuesState extends State<BaseDues> {
                 );
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
-      getRazorPayOrderID(position, value.payOptionList[0].KEY_ID,
-          value.payOptionList[0].SECRET_KEY, double.parse(textAmount), value);
+      getRazorPayOrderID(position, value.payOptionList[0].KEY_ID!,
+          value.payOptionList[0].SECRET_KEY!, double.parse(textAmount), value);
     }
   }
 
@@ -1162,11 +1160,11 @@ class _BaseDuesState extends State<BaseDues> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      ClipboardManager.copyToClipBoard(consumerId)
+                      FlutterClipboard.copy(consumerId)
                           .then((value) {
                         GlobalFunctions.showToast("Copied to Clipboard");
                         launch(
-                            UserManagementResponse.payOptionList[0].PAYTM_URL);
+                            UserManagementResponse.payOptionList[0].PAYTM_URL!);
                       });
                     }),
                 Container(
@@ -1223,11 +1221,11 @@ class _BaseDuesState extends State<BaseDues> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (value.ledgerList[position].TYPE
+                        if (value.ledgerList[position].TYPE!
                             .toLowerCase()
                             .toString() ==
                             'bill' ||
-                            value.ledgerList[position].TYPE
+                            value.ledgerList[position].TYPE!
                                 .toLowerCase()
                                 .toString() ==
                                 'invoice') {
@@ -1255,7 +1253,7 @@ class _BaseDuesState extends State<BaseDues> {
                               /*double.parse(value.ledgerList[position].AMOUNT
                                   .toString())
                                   .toStringAsFixed(2)*/,
-                          textColor: value.ledgerList[position].TYPE
+                          textColor: value.ledgerList[position].TYPE!
                               .toLowerCase()
                               .toString() ==
                               'bill'
@@ -1366,7 +1364,7 @@ class _BaseDuesState extends State<BaseDues> {
             builder: (BuildContext context, StateSetter setState) {
               isEditEmail
                   ? _emailTextController.text = ''
-                  : _emailTextController.text = email;
+                  : _emailTextController.text = value.billList[position].Email ?? email;
 
               return Dialog(
                   shape: RoundedRectangleBorder(
@@ -1389,7 +1387,9 @@ class _BaseDuesState extends State<BaseDues> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: primaryText(
-                            'Send #'+value.billList[position].INVOICE_NO+' on below email id',
+                              'Send #' +
+                                  value.billList[position].INVOICE_NO! +
+                                  ' on below email id',
                             textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSMedium
                             /*GlobalFunctions.convertDateFormat(
@@ -1484,8 +1484,8 @@ class _BaseDuesState extends State<BaseDues> {
                                       0) {
                                     Navigator.of(context).pop();
                                     getBillMail(
-                                        value.billList[position].INVOICE_NO,
-                                        value.billList[position].TYPE,
+                                        value.billList[position].INVOICE_NO!,
+                                        value.billList[position].TYPE!,
                                         _emailTextController.text,
                                         null);
                                   } else {
@@ -1713,11 +1713,11 @@ class _BaseDuesState extends State<BaseDues> {
     RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
     amount = textAmount * 100;
     invoiceNo = UserManagementResponse.billList[position].INVOICE_NO;
-    _progressDialog.show();
+    _progressDialog!.show();
     RazorPayOrderRequest request = new RazorPayOrderRequest(
         amount: amount,
         currency: "INR",
-        receipt: widget.mBlock + ' ' + widget.mFlat + '-' + invoiceNo,
+        receipt: widget.mBlock! + ' ' + widget.mFlat! + '-' + invoiceNo,
         paymentCapture: 1);
     restClientRazorPay
         .getRazorPayOrderID(request, razorKey, secret_key)
@@ -1740,30 +1740,33 @@ class _BaseDuesState extends State<BaseDues> {
     //String flat = await GlobalFunctions.getFlat();
 
     restClientERP
-        .postRazorPayTransactionOrderID(societyId, widget.mBlock + ' ' + widget.mFlat, orderId,
+        .postRazorPayTransactionOrderID(
+            societyId,
+            widget.mBlock! + ' ' + widget.mFlat!,
+            orderId,
         (double.parse(amount) / 100).toString())
         .then((value) {
       print('Value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         if (_razorpay != null) {
-          _razorpay.clear();
+          _razorpay!.clear();
         }
         _razorpay = Razorpay();
-        _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-        _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-        _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+        _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+        _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+        _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-        openCheckOut(position, UserManagementResponse.payOptionList[0].KEY_ID,
+        openCheckOut(position, UserManagementResponse.payOptionList[0].KEY_ID!,
             orderId, amount, UserManagementResponse);
       } else {
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       }
     });
   }
 
   Future<void> addOnlinePaymentRequest(
-      String paymentId, String paymentStatus, String orderId) async {
+      String paymentId, String paymentStatus, String? orderId) async {
     final dio = Dio();
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -1779,12 +1782,12 @@ class _BaseDuesState extends State<BaseDues> {
         "-" +
         DateTime.now().toLocal().day.toString().padLeft(2, '0');
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .addOnlinePaymentRequest(
         societyId,
-        widget.mFlat,
-        widget.mBlock,
+            widget.mFlat!,
+            widget.mBlock!,
         invoiceNo,
         (amount / 100).toString(),
         paymentId,
@@ -1792,15 +1795,15 @@ class _BaseDuesState extends State<BaseDues> {
         "Razorpay",
         paymentDate,
         paymentStatus,
-        orderId)
+            orderId!)
         .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         // Navigator.of(context).pop('back');
         if (paymentStatus == 'success') {
           Provider.of<UserManagementResponse>(context, listen: false)
-              .getPayOption(widget.mBlock,widget.mFlat)
+              .getPayOption(widget.mBlock!, widget.mFlat!)
               .then((value) {
 
           });
@@ -1809,7 +1812,7 @@ class _BaseDuesState extends State<BaseDues> {
           paymentFailureDialog();
         }
       } else {
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       }
       amount = null;
       invoiceNo = null;
@@ -1831,12 +1834,12 @@ class _BaseDuesState extends State<BaseDues> {
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
     // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-    addOnlinePaymentRequest(response.paymentId, 'success', response.orderId);
+    addOnlinePaymentRequest(response.paymentId!, 'success', response.orderId);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
-    print('Razor Error Response : ' + response.message);
-    GlobalFunctions.showToast(" " + response.message.toString());
+    print('Razor Error Response : ' + response.message!);
+    GlobalFunctions.showToast(" " + response.message!.toString());
     addOnlinePaymentRequest('', 'failure', orderId);
   }
 
@@ -1861,36 +1864,37 @@ class _BaseDuesState extends State<BaseDues> {
       'amount': amount,
       'name': societyName,
       'order_id': orderId,
-      'description': widget.mBlock + ' ' + widget.mFlat + '-' + invoiceNo + '/' + billType,
+      'description':
+          widget.mBlock! + ' ' + widget.mFlat! + '-' + invoiceNo + '/' + billType,
       'prefill': {'contact': phone, 'email': email}
     };
 
     try {
-      _razorpay.open(option);
+      _razorpay!.open(option);
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e as String?);
     }
   }
 
   Future<void> getBillMail(
-      String invoice_no, String type, String emailId, String year) async {
+      String invoice_no, String type, String emailId, String? year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .getBillMail(
         societyId, type, invoice_no, _emailTextController.text, year)
         .then((value) {
       print('Response : ' + value.toString());
 
-      GlobalFunctions.showToast(value.message);
-      _progressDialog.hide();
+      GlobalFunctions.showToast(value.message!);
+      _progressDialog!.dismiss();
     }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog!.isShowed) {
+        _progressDialog!.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:

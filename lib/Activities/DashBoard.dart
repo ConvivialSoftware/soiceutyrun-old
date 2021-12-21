@@ -70,22 +70,22 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     with WidgetsBindingObserver, ChangeNotifier {
    final GlobalKey<ScaffoldState> dashboardScaffoldKey = new GlobalKey<ScaffoldState>();
 
-  String selectedSocietyName;
-  List<LoginResponse> mSocietyList = new List<LoginResponse>();
+  String? selectedSocietyName;
+  List<LoginResponse> mSocietyList = <LoginResponse>[];
 
   // String _selectedItem;
   // List<DropdownMenuItem<String>> _societyListItems = new List<DropdownMenuItem<String>>();
 
   //List<LoginResponse> _societyList = new List<LoginResponse>();
-  LoginResponse _selectedSocietyLogin;
+  LoginResponse? _selectedSocietyLogin;
   var username, password, societyId, flat, block;
 
   /*duesRs = "0.0", duesDate = ""*/
 
-  List<RootTitle> _list = new List<RootTitle>();
+  List<RootTitle> _list = <RootTitle>[];
   int _currentIndex = 0;
   int _moreIndex = 0;
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   var name = '';
   var email = '', phone = '';
@@ -102,7 +102,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    WidgetsBinding.instance!.addObserver(this);
     GlobalFunctions.isAllowForRunApp().then((value) {
       if (value) {
         getSharedPreferenceData();
@@ -126,7 +127,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -135,7 +136,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     if (state == AppLifecycleState.resumed) {
       // user returned to our app
       //GlobalFunctions.showToast('Resume');
-      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       SQLiteDbProvider.db.getDataBaseInstance();
     } else if (state == AppLifecycleState.inactive) {
       // app is inactive
@@ -152,8 +153,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     }
   }
 
-  int _activeMeterIndex;
-
   @override
   Widget build(BuildContext context) {
     FirebaseMessagingHandler().getToken();
@@ -161,8 +160,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     print('BaseStatefulState context : ' + BaseStatefulState.getCtx.toString());
     print(
         'DashBoard _dashboardSacfoldKey : ' + dashboardScaffoldKey.toString());
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getExpandableListViewData(context);
 
     // TODO: implement build
@@ -187,7 +184,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
 
   getBodyLayout(LoginDashBoardResponse value) {
-    return value.isLoading
+    return value.isLoading!
         ? GlobalFunctions.loadingWidget(context)
         : Stack(
             children: <Widget>[
@@ -222,7 +219,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                 child: SizedBox(
                                     child: GestureDetector(
                                   onTap: () {
-                                    dashboardScaffoldKey.currentState
+                                    dashboardScaffoldKey.currentState!
                                         .openDrawer();
                                   },
                                   child: SvgPicture.asset(
@@ -272,7 +269,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                             .then((value) {
                                           GlobalFunctions.setBaseContext(
                                               dashboardScaffoldKey
-                                                  .currentContext);
+                                                  .currentContext!);
                                         });
                                         //}
                                       },
@@ -281,7 +278,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                               .notificationCounterValueNotifer,
                                           builder: (BuildContext context,
                                               int newNotificationCounterValue,
-                                              Widget child) {
+                                              Widget? child) {
                                             return Stack(
                                               children: [
                                                 Container(
@@ -355,7 +352,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                 .userImageURLValueNotifer,
                                             builder: (BuildContext context,
                                                 String userImageURLValueNotifer,
-                                                Widget child) {
+                                                Widget? child) {
                                               return GestureDetector(
                                                   onTap: () {
                                                     // GlobalFunctions.showToast('profile_user');
@@ -857,7 +854,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       builder: (context) =>
                                           BaseFindServices())).then((value) {
                                 GlobalFunctions.setBaseContext(
-                                    dashboardScaffoldKey.currentContext);
+                                    dashboardScaffoldKey.currentContext!);
                               });
                             } else {
                               GlobalFunctions
@@ -935,8 +932,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       dashboardScaffoldKey.currentContext);
                                 });*/
 
-                                GlobalFunctions.redirectBannerClick(dashboardScaffoldKey.currentContext,loginDashBoardResponse
-                                    .bannerList[itemIndex].Url);
+                                GlobalFunctions.redirectBannerClick(dashboardScaffoldKey.currentContext!,loginDashBoardResponse
+                                    .bannerList[itemIndex].Url!);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
@@ -1151,7 +1148,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                   GlobalVariables.userImageURLValueNotifer,
                               builder: (BuildContext context,
                                   String userImageURLValueNotifer,
-                                  Widget child) {
+                                  Widget? child) {
                                 return userImageURLValueNotifer.isEmpty
                                     ? AppAssetsImage(
                                         GlobalVariables
@@ -1193,7 +1190,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       GlobalVariables.userNameValueNotifer,
                                   builder: (BuildContext context,
                                       String userNameValueNotifer,
-                                      Widget child) {
+                                      Widget? child) {
                                     print('Name : ' +
                                         userNameValueNotifer.toString());
                                     print('Name1 : ' + name.toString());
@@ -1229,7 +1226,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 child: secondaryText(
                   (AppLocalizations.of(context).translate("str_consumer_id") +
                       ' : ' +
-                      snapshot.data[GlobalVariables.keyConsumerId]),
+                      snapshot.data![GlobalVariables.keyConsumerId]),
                   //textAlign: TextAlign.left,
 
                   textColor: GlobalVariables.white,
@@ -1456,7 +1453,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               },
               ignoreNativeDialog: Platform.isAndroid,
               // Set to false if you want to show the Apple's native app rating dialog on iOS or Google's native app rating dialog (depends on the current Platform).
-              dialogStyle: DialogStyle(),
               // Custom dialog styles.
               onDismissed: () => _rateMyApp.callEvent(RateMyAppEventType
                   .laterButtonPressed), // Called when the user dismissed the dialog (either by taping outside or by pressing the "back" button).
@@ -1668,7 +1664,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         .getDuesData()
         .then((value) {
       if (dashboardScaffoldKey.currentState != null) {
-        if (dashboardScaffoldKey.currentState.isDrawerOpen) {
+        if (dashboardScaffoldKey.currentState!.isDrawerOpen) {
           Navigator.of(context).pop();
         }
       }
@@ -1725,7 +1721,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               ),
                               !AppUserPermission.isUserHideMyDuesPermission
                                   ? double.parse(
-                                              loginDashBoardResponse.duesRs) >
+                                              loginDashBoardResponse.duesRs!) >
                                           0
                                       ? text(
                                           getBillPaymentStatus(
@@ -1752,7 +1748,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               text(
                                 !AppUserPermission.isUserHideMyDuesPermission
                                     ? GlobalFunctions.getCurrencyFormat(
-                                        loginDashBoardResponse.duesRs)
+                                        loginDashBoardResponse.duesRs!)
                                     /*double.parse(
                                                 loginDashBoardResponse.duesRs)
                                             .toStringAsFixed(2)*/
@@ -1763,18 +1759,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               ),
                               Visibility(
                                 visible: double.parse(
-                                            loginDashBoardResponse.duesRs) >
+                                            loginDashBoardResponse.duesRs!) >
                                         0
                                     ? true
                                     : false,
                                 child: text(
                                   !AppUserPermission.isUserHideMyDuesPermission
-                                      ? loginDashBoardResponse.duesDate.length >
+                                      ? loginDashBoardResponse.duesDate!.length >
                                                   0 &&
                                               loginDashBoardResponse.duesDate !=
                                                   '-'
                                           ? GlobalFunctions.convertDateFormat(
-                                              loginDashBoardResponse.duesDate,
+                                              loginDashBoardResponse.duesDate!,
                                               'dd-MM-yyyy')
                                           : '-'
                                       : '',
@@ -1809,7 +1805,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                             .then((value) {
                                             GlobalFunctions.setBaseContext(
                                                 dashboardScaffoldKey
-                                                    .currentContext);
+                                                    .currentContext!);
                                           })
                                         : GlobalFunctions
                                             .showAdminPermissionDialogToAccessFeature(
@@ -1835,7 +1831,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                             .then((value) {
                                             GlobalFunctions.setBaseContext(
                                                 dashboardScaffoldKey
-                                                    .currentContext);
+                                                    .currentContext!);
                                           })
                                         : GlobalFunctions
                                             .showAdminPermissionDialogToAccessFeature(
@@ -1906,7 +1902,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               builder: (context) => BaseAboutSocietyRunInfo()))
                       .then((value) {
                     GlobalFunctions.setBaseContext(
-                        dashboardScaffoldKey.currentContext);
+                        dashboardScaffoldKey.currentContext!);
                   });
                 },
                 textColor: GlobalVariables.white,
@@ -1975,9 +1971,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       print('result back : ' + result.toString());
       if (result == 'back') {
         getDuesData();
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       } else {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       }
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
@@ -1987,7 +1983,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyUnit(
                       AppLocalizations.of(context).translate('my_dues'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
@@ -1997,7 +1993,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyUnit(
                       AppLocalizations.of(context).translate('my_household'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
@@ -2007,7 +2003,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyUnit(
                       AppLocalizations.of(context).translate('my_documents'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('my_tenants')) {
       //Redirect to  My Tenants
@@ -2017,7 +2013,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyUnit(
                       AppLocalizations.of(context).translate('my_tenants'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('my_complex')) {
       //Redirect to  My Complex
@@ -2027,7 +2023,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('my_complex'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('announcement')) {
       //Redirect to News Board
@@ -2037,7 +2033,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('announcement'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('meetings')) {
       //Redirect to News Board
@@ -2047,7 +2043,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('meetings'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  Poll Survey
@@ -2058,7 +2054,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('poll_survey'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('directory')) {
       //Redirect to  Directory
@@ -2068,7 +2064,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('directory'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('documents')) {
       //Redirect to  Documents
@@ -2079,7 +2075,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('documents'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
@@ -2090,12 +2086,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyComplex(
                       AppLocalizations.of(context).translate('events'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('discover')) {
       //Redirect to  Discover
       //GlobalFunctions.comingSoonDialog(context);
-      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
     } else if (item == AppLocalizations.of(context).translate('classified')) {
       //Redirect to  classified
       //GlobalFunctions.comingSoonDialog(context);
@@ -2105,7 +2101,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseDiscover(
                       AppLocalizations.of(context).translate('classified'))))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('services')) {
       //Redirect to  services
@@ -2113,7 +2109,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseFindServices()))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item ==
         AppLocalizations.of(context).translate('exclusive_offer')) {
@@ -2123,7 +2119,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseNearByShopPerCategory())).then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('facilities')) {
       //Redirect to Facilities
@@ -2138,7 +2134,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   builder: (context) => BaseMyGate(
                       AppLocalizations.of(context).translate('my_gate'), null)))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item ==
         AppLocalizations.of(context).translate('my_activities')) {
@@ -2149,7 +2145,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               builder: (context) => BaseMyGate(
                   AppLocalizations.of(context).translate('my_activities'),
                   null))).then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  My Dues
@@ -2165,7 +2161,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseHelpDesk(false)))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('expense')) {
       //Redirect to  Help Desk
@@ -2173,7 +2169,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseExpenseSearchAdd()))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('admin')) {
       //Redirect to  Admin
@@ -2187,7 +2183,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseHelpDesk(true)))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('broadcast')) {
       //Redirect to  Help Desk
@@ -2195,7 +2191,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(
               context, MaterialPageRoute(builder: (context) => BaseBroadcast()))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item ==
         AppLocalizations.of(context).translate('user_management')) {
@@ -2204,7 +2200,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseUserManagement()))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('about_us')) {
       //Redirect to  Admin
@@ -2213,7 +2209,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
           context,
           MaterialPageRoute(
               builder: (context) => BaseAboutSocietyRunInfo())).then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item ==
         AppLocalizations.of(context).translate('change_password')) {
@@ -2222,7 +2218,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseChangePassword()))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item == AppLocalizations.of(context).translate('settings')) {
       //Redirect to  Admin
@@ -2230,7 +2226,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       Navigator.push(context,
               MaterialPageRoute(builder: (context) => BaseAppSettings()))
           .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       });
     } else if (item ==
         AppLocalizations.of(context).translate('switch_society')) {
@@ -2335,12 +2331,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     );
   }
 
-  DateTime currentBackPressTime;
+  DateTime? currentBackPressTime;
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
       currentBackPressTime = now;
       GlobalFunctions.showToast(
           AppLocalizations.of(context).translate('leave_app'));
@@ -2358,12 +2354,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         MaterialPageRoute(
             builder: (context) => BaseDisplayProfileInfo(userId, userType)));
     if (result == 'profile') {
-      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
       Provider.of<LoginDashBoardResponse>(context, listen: false)
           .geProfileData()
           .then((value) {});
     } else {
-      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext);
+      GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
     }
   }
 
@@ -2373,7 +2369,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
-    final toDateTine = DateTime.parse(loginDashBoardResponse.duesDate);
+    final toDateTine = DateTime.parse(loginDashBoardResponse.duesDate!);
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -2395,7 +2391,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
-    final toDateTine = DateTime.parse(loginDashBoardResponse.duesDate);
+    final toDateTine = DateTime.parse(loginDashBoardResponse.duesDate!);
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -2423,8 +2419,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
     _progressDialog.show();
     restClient.userLogout(societyId, userId, gcmId).then((value) {
       print('Response : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog.dismiss();
+      if (value.status!) {
         GlobalFunctions.clearSharedPreferenceData();
         Navigator.pushAndRemoveUntil(
             context,
@@ -2432,10 +2428,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 builder: (BuildContext context) => new BaseLoginPage()),
             (Route<dynamic> route) => false);
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog.isShowed) {
+        _progressDialog.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:
@@ -2580,6 +2576,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
                 child: AppContainer(
+                  child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -2595,6 +2592,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       ),
                       ListView.builder(
                           itemCount: mSocietyList.length,
+                           // scrollDirection: Axis.vertical,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, position) {
@@ -2603,8 +2601,21 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                 setState(() {
                                   print('mSocietyList : ' +
                                       mSocietyList.toString());
-                                  //print('mSocietyList : '+mSocietyList.toString());
-                                  mSocietyList.forEach((element) {
+
+                                    for(int i=0;i<mSocietyList.length;i++){
+                                      if(mSocietyList[i].ID==mSocietyList[position].ID){
+                                        if (mSocietyList[i].isSelected!) {
+                                          mSocietyList[i].isSelected = false;
+                                        } else {
+                                          mSocietyList[i].isSelected = true;
+                                          _selectedSocietyLogin =  mSocietyList[i];
+                                        }
+                                      }else{
+                                        mSocietyList[i].isSelected = false;
+                                      }
+                                    }
+
+                                    /*mSocietyList.forEach((element) {
                                     print('societyName : ' +
                                         element.Society_Name);
                                     print('society selected : ' +
@@ -2616,7 +2627,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       element.isSelected = true;
                                       _selectedSocietyLogin = element;
                                     }
-                                  });
+                                    });*/
                                 });
                               },
                               child: Container(
@@ -2670,7 +2681,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                                         null
                                                     ? ''
                                                     : mSocietyList[position]
-                                                        .Society_Name,
+                                                      .BLOCK!+' '+mSocietyList[position]
+                                                      .FLAT!+' '+mSocietyList[position]
+                                                      .Society_Name!,
                                                 textColor:
                                                     GlobalVariables.primaryColor,
                                                 fontSize: GlobalVariables
@@ -2698,22 +2711,18 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               Navigator.of(context).pop();
                               // setState(() {
                               GlobalFunctions.saveDataToSharedPreferences(
-                                  _selectedSocietyLogin);
+                                    _selectedSocietyLogin!);
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   new MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           BaseDashBoard()),
                                   (Route<dynamic> route) => false);
-                              // print('for _selctedItem:' + _selectedItem);
-                              /* getDuesData();
-                            getSharedPreferenceData();*/
-
-                              //});
                             }),
                       ),
                     ],
                   ),
+                ),
                 ),
 
                 /*  child: DropdownButton(
@@ -2760,7 +2769,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   }
 
   Future<void> getSocietyData() async {
-    mSocietyList = new List<LoginResponse>();
+    mSocietyList = <LoginResponse>[];
     password = await GlobalFunctions.getPassword();
     societyId = await GlobalFunctions.getSocietyId();
     String loginId = await GlobalFunctions.getLoginId();
@@ -2775,21 +2784,21 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       LoginResponse loginResponse = LoginDashBoardResponse.societyList[i];
       loginResponse.isSelected = false;
 
-      print('"loginResponse.ID : ' + loginResponse.ID);
+      print('"loginResponse.ID : ' + loginResponse.ID!);
       print('ShardPref societyId : ' + societyId);
-      print('SocietyId ' + loginResponse.SOCIETY_ID);
-      print('PASSWORD ' + loginResponse.PASSWORD);
+      print('SocietyId ' + loginResponse.SOCIETY_ID!);
+      print('PASSWORD ' + loginResponse.PASSWORD!);
 
       print('SocietyId ' +
-          loginResponse.Society_Name +
+          loginResponse.Society_Name! +
           " " +
-          loginResponse.BLOCK +
+          loginResponse.BLOCK! +
           " " +
-          loginResponse.FLAT);
+          loginResponse.FLAT!);
 
-      print('User Status : ' + loginResponse.User_Status);
+      print('User Status : ' + loginResponse.User_Status!);
       //loginResponse.User_Status='C';
-      print('User Status : ' + loginResponse.User_Status);
+      print('User Status : ' + loginResponse.User_Status!);
       if (loginResponse.User_Status != 'C') {
         if (loginId == loginResponse.ID) {
           if (mSocietyList.length > 0) {
@@ -2865,11 +2874,11 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       print('_selectedItem initial : ' + selectedSocietyName.toString());
       _selectedSocietyLogin = mSocietyList[0];
       // if(_selectedSocietyLogin.User_Status!='C') {
-      _selectedSocietyLogin.PASSWORD = password;
-      _selectedSocietyLogin.LoggedUsername = loggedUsername;
-      _selectedSocietyLogin.isSelected = true;
-      print("Flat" + _selectedSocietyLogin.FLAT.toString());
-      GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin);
+      _selectedSocietyLogin!.PASSWORD = password;
+      _selectedSocietyLogin!.LoggedUsername = loggedUsername;
+      _selectedSocietyLogin!.isSelected = true;
+      print("Flat" + _selectedSocietyLogin!.FLAT.toString());
+      GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin!);
     } else {
       //show logout Dialog
       GlobalFunctions.forceLogoutDialog(context);
@@ -2881,14 +2890,13 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
 class RootTitle {
   String title;
-  String rootIconData;
+  String? rootIconData;
 
   //IconData innerIconData;
   List<RootTitle> items;
 
   RootTitle(
-      {this.title,
-      this.rootIconData,
+      {required this.title, this.rootIconData,
       /* this.innerIconData, */ this.items = const <RootTitle>[]});
 }
 
@@ -2904,7 +2912,7 @@ class EntryItem extends StatefulWidget {
 }
 
 class _EntryItemState extends State<EntryItem> {
-  int _activeMeterIndex;
+  int? _activeMeterIndex;
 
   Widget _buildTitle(RootTitle root) {
     return Container(
@@ -2976,6 +2984,7 @@ class _EntryItemState extends State<EntryItem> {
         // color: GlobalVariables.grey,
         margin: EdgeInsets.fromLTRB(55, 0, 0, 0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(0, 8, 0, 8),

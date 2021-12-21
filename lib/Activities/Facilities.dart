@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:societyrun/Activities/BanquetBooking.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
@@ -17,12 +18,12 @@ class BaseFacilities extends StatefulWidget {
 
 class FacilitiesState extends State<BaseFacilities> {
 
-  List<BookingHistory> _bookingHistoryList = List<BookingHistory>();
+  //List<BookingHistory> _bookingHistoryList = <BookingHistory>[];
 
   @override
   void initState() {
     super.initState();
-    getBookingHistoryList();
+    //getBookingHistoryList();
   }
 
   @override
@@ -30,30 +31,15 @@ class FacilitiesState extends State<BaseFacilities> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
+        appBar: CustomAppBar(
+          title : AppLocalizations.of(context).translate('facilities'),
           ),
-          title: Text(
-            AppLocalizations.of(context).translate('facilities'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
-        ),
-        body: getFacilitiesLayout(),
+       // body: getFacilitiesLayout(),
       ),
     );
   }
 
-   getFacilitiesLayout() {
+ /*  getFacilitiesLayout() {
     print('MyTicketLayout Tab Call');
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -66,8 +52,6 @@ class FacilitiesState extends State<BaseFacilities> {
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 130.0),
                 getFacilitiesCardLayout(),
                 //addActivitiesFabLayout(),
               ],
@@ -445,14 +429,14 @@ class FacilitiesState extends State<BaseFacilities> {
 
     ];
 
-  }
+  }*/
 }
 
-class BookingHistory {
+/*class BookingHistory {
   
   String date,facilitiesType,payPrice;
 
   BookingHistory({this.date, this.facilitiesType, this.payPrice});
 
 
-}
+}*/

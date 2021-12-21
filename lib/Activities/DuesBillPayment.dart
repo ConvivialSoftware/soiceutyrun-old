@@ -1,4 +1,5 @@
-import 'package:clipboard_manager/clipboard_manager.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bills.dart';
@@ -31,8 +33,8 @@ class BaseDuesBillPayment extends StatefulWidget {
 
 class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   var amount=0.0, invoiceNo, referenceNo, billType, orderId;
-  ProgressDialog _progressDialog;
-  Razorpay _razorpay;
+  ProgressDialog? _progressDialog;
+  Razorpay? _razorpay;
   var userId = "", societyId;
   var email = '', phone = '', consumerId = '', societyName = '', userType = '';
   var displayAmount;
@@ -40,10 +42,13 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   //(widget.bills.AMOUNT- widget.bills.RECEIVED)
   @override
   void initState() {
-    displayAmount = (widget.bills.AMOUNT - widget.bills.RECEIVED);
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    displayAmount = (widget.bills.AMOUNT! - widget.bills.RECEIVED!);
+    WidgetsBinding.instance!.addPostFrameCallback((_){
     getSharedPreferenceData();
     Provider.of<UserManagementResponse>(context, listen: false)
         .getPaymentCharges();
+    });
     super.initState();
   }
 
@@ -51,28 +56,22 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   void dispose() {
     print('_BaseDuesState dispose');
     if (_razorpay != null) {
-      _razorpay.clear();
+      _razorpay!.clear();
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of<UserManagementResponse>(context),
       child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Scaffold(
           backgroundColor: GlobalVariables.veryLightGray,
-          appBar: AppBar(
-            title: Text(widget.bills.TYPE == 'Bill'
+          appBar: CustomAppBar(
+            title: widget.bills.TYPE! == 'Bill'
                 ? 'Maintenance Bill'
-                : widget.bills.TYPE),
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: Icon(Icons.arrow_back)),
+                : widget.bills.TYPE!,
           ),
           body: getBaseDuesBillPaymentLayout(value),
         );
@@ -142,7 +141,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                         widget.bills.DUE_DATE != null
                             ? 'Due On ' +
                                 GlobalFunctions.convertDateFormat(
-                                    widget.bills.DUE_DATE, "dd MMM yyyy")
+                                    widget.bills.DUE_DATE!, "dd MMM yyyy")
                             : '',
                         textColor: GlobalVariables.grey,
                         fontSize: GlobalVariables.textSizeSMedium,
@@ -198,8 +197,8 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     _amountTextController.text = (displayAmount).toString();
     isEditAmount = false;
     if ((displayAmount) > 0) {
-      if (value.payOptionList[0].Status) {
-        if (value.hasRazorPayGateway) {
+      if (value.payOptionList[0].Status!) {
+        //if (value.hasRazorPayGateway) {
           showModalBottomSheet(
             isScrollControlled: true,
             backgroundColor: GlobalVariables.transparent,
@@ -210,35 +209,9 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                       getListOfPaymentGateway(context, setState, value));
             },
           );
-          /*  showModalBottomSheet(
-              isScrollControlled: true,
-                backgroundColor: Colors.white,
-                context: context,
-                builder: (BuildContext context) {
-                  return
-                });*/
-
-          /*_selectedPaymentGateway = 'RazorPay';
-            */ /*getListOfPaymentGateway(
-                            context,
-                            setState,
-                            position,
-                            value)*/ /*
-          } else if (value.hasPayTMGateway) {
-            //Paytm Payment method execute
-
-            _selectedPaymentGateway = 'PayTM';
-            print('_selectedPaymentGateway' +
-                _selectedPaymentGateway);
-
-            */ /*getListOfPaymentGateway(
-                            context,
-                            setState,
-                            position,
-                            value),*/
-        } else {
+        /*} else {
           GlobalFunctions.showToast("Online Payment Option is not available.");
-        }
+        }*/
       } else {
         GlobalFunctions.showToast("Online Payment Option is not available.");
       }
@@ -823,7 +796,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                                   Container(
                                     child: text(
                                         value.preferredMethod[position]
-                                                .variable +
+                                                .variable! +
                                             " : ",
                                         fontSize:
                                             GlobalVariables.textSizeSMedium),
@@ -869,7 +842,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                                 children: [
                                   Container(
                                     child: text(
-                                        value.otherMethod[position].variable +
+                                        value.otherMethod[position].variable! +
                                             " : ",
                                         fontSize:
                                             GlobalVariables.textSizeSMedium),
@@ -1059,8 +1032,8 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                 );
               }));
     } else if (_selectedPaymentGateway == 'RazorPay') {
-      getRazorPayOrderID(value.payOptionList[0].KEY_ID,
-          value.payOptionList[0].SECRET_KEY, double.parse(textAmount), value);
+      getRazorPayOrderID(value.payOptionList[0].KEY_ID!,
+          value.payOptionList[0].SECRET_KEY!, double.parse(textAmount), value);
     }
   }
 
@@ -1071,11 +1044,11 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
         RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
     amount = textAmount * 100;
     invoiceNo = widget.bills.INVOICE_NO;
-    _progressDialog.show();
+    _progressDialog!.show();
     RazorPayOrderRequest request = new RazorPayOrderRequest(
         amount: amount,
         currency: "INR",
-        receipt: widget.bills.BLOCK + ' ' + widget.bills.FLAT + '-' + invoiceNo,
+        receipt: widget.bills.BLOCK! + ' ' + widget.bills.FLAT! + '-' + invoiceNo,
         paymentCapture: 1);
     restClientRazorPay
         .getRazorPayOrderID(request, razorKey, secret_key)
@@ -1100,25 +1073,25 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     restClientERP
         .postRazorPayTransactionOrderID(
             societyId,
-            widget.bills.BLOCK + ' ' + widget.bills.FLAT,
+            widget.bills.BLOCK! + ' ' + widget.bills.FLAT!,
             orderId,
             (double.parse(amount) / 100).toString())
         .then((value) {
       print('Value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         if (_razorpay != null) {
-          _razorpay.clear();
+          _razorpay!.clear();
         }
         _razorpay = Razorpay();
-        _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-        _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-        _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+        _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+        _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+        _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-        openCheckOut(UserManagementResponse.payOptionList[0].KEY_ID, orderId,
+        openCheckOut(UserManagementResponse.payOptionList[0].KEY_ID!, orderId,
             amount, UserManagementResponse);
       } else {
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       }
     });
   }
@@ -1126,12 +1099,12 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Razor Success Response : ' + response.toString());
     // GlobalFunctions.showToast("Success : " + response.paymentId.toString());
-    addOnlinePaymentRequest(response.paymentId, 'success', response.orderId);
+    addOnlinePaymentRequest(response.paymentId!, 'success', response.orderId!);
   }
 
   _handlePaymentError(PaymentFailureResponse response) {
-    print('Razor Error Response : ' + response.message);
-    GlobalFunctions.showToast(" " + response.message.toString());
+    print('Razor Error Response : ' + response.message!);
+    //GlobalFunctions.showToast(" " + response.message.toString());
     addOnlinePaymentRequest('', 'failure', orderId);
   }
 
@@ -1155,9 +1128,9 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
       'amount': amount,
       'name': societyName,
       'order_id': orderId,
-      'description': widget.bills.BLOCK +
+      'description': widget.bills.BLOCK! +
           ' ' +
-          widget.bills.FLAT +
+          widget.bills.FLAT! +
           '-' +
           invoiceNo +
           '/' +
@@ -1166,9 +1139,9 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     };
 
     try {
-      _razorpay.open(option);
+      _razorpay!.open(option);
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e as String?);
     }
   }
 
@@ -1190,12 +1163,12 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
         DateTime.now().toLocal().day.toString().padLeft(2, '0');
 
     amount = (amount / 100);
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .addOnlinePaymentRequest(
         societyId,
-        widget.bills.FLAT,
-        widget.bills.BLOCK,
+        widget.bills.FLAT!,
+        widget.bills.BLOCK!,
         invoiceNo,
         amount.toString(),
         paymentId,
@@ -1206,8 +1179,8 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
         orderId)
         .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         // Navigator.of(context).pop('back');
         if (paymentStatus == 'success') {
           print('setState');
@@ -1217,7 +1190,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
           print('After '+displayAmount.toString());
           print('setState');
           Provider.of<UserManagementResponse>(context, listen: false)
-              .getPayOption(widget.bills.BLOCK, widget.bills.FLAT)
+              .getPayOption(widget.bills.BLOCK!, widget.bills.FLAT!)
               .then((value) {
           });
           Provider.of<LoginDashBoardResponse>(context, listen: false)
@@ -1230,7 +1203,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
           paymentFailureDialog();
         }
       } else {
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       }
       //   amount = null;
       // invoiceNo = null;
@@ -1503,11 +1476,11 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      ClipboardManager.copyToClipBoard(consumerId)
+                      FlutterClipboard.copy(consumerId)
                           .then((value) {
                         GlobalFunctions.showToast("Copied to Clipboard");
                         launch(
-                            UserManagementResponse.payOptionList[0].PAYTM_URL);
+                            UserManagementResponse.payOptionList[0].PAYTM_URL!);
                       });
                     }),
                 Container(

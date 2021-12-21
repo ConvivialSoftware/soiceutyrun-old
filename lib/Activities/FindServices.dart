@@ -10,6 +10,7 @@ import 'package:societyrun/Activities/OwnerServices.dart';
 import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
@@ -51,18 +52,8 @@ class DiscoverState extends State<BaseFindServices> {
             return Builder(
               builder: (context) => Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
+                appBar: CustomAppBar(
+                  title: AppLocalizations.of(context).translate('find_services'),
                   actions: [
                     InkWell(
                       onTap: (){
@@ -90,12 +81,6 @@ class DiscoverState extends State<BaseFindServices> {
                       ),
                     ),
                   ],
-                  title: text(
-                    AppLocalizations.of(context).translate('find_services'),
-                    textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
-                  ),
-                  //bottom: getTabLayout(),
-                  //elevation: 0,
                 ),
                 body: value.isLoading ? GlobalFunctions.loadingWidget(context):getServiceLayout(value),
               ),
@@ -196,7 +181,7 @@ class DiscoverState extends State<BaseFindServices> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  BaseServicesPerCategory(value.servicesCategoryList[index].Category_Name)));
+                                  BaseServicesPerCategory(value.servicesCategoryList[index].Category_Name!)));
                     },
                     child: Container(
                      // margin: EdgeInsets.only(left: 6, right: 6, top: 6, bottom: 6),
@@ -256,7 +241,7 @@ class DiscoverState extends State<BaseFindServices> {
                   ? InkWell(
                 onTap: () {
                   GlobalFunctions.redirectBannerClick(context,loginDashBoardResponse
-                      .serviceBannerList[itemIndex].Url);
+                      .serviceBannerList[itemIndex].Url!);
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,

@@ -1,7 +1,8 @@
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:html/parser.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
@@ -27,8 +29,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 class BaseMyGate extends StatefulWidget {
-  String pageName;
-  String _VID;
+  String? pageName;
+  String? _VID;
   String type;
   bool isAdmin;
 
@@ -37,13 +39,13 @@ class BaseMyGate extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyGateState(pageName, this._VID);
+    return MyGateState();
   }
 }
 
 class MyGateState extends State<BaseMyGate>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   // List<Visitor> value.visitorList = new List<Visitor>();
   // List<ScheduleVisitor> value.scheduleVisitorList = new List<ScheduleVisitor>();
@@ -57,36 +59,32 @@ class MyGateState extends State<BaseMyGate>
   // List<LoginResponse> _societyList = new List<LoginResponse>();
   // LoginResponse _selectedSocietyLogin ;
   var username, password;
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   // bool isActivitiesAPICall = false;
   bool isHelperAPICall = false;
 
   // List<Staff> _staffList = new List<Staff>();
-  List<String> _scheduleList = new List<String>();
+  List<String> _scheduleList = <String>[];
   List<DropdownMenuItem<String>> _scheduleListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedSchedule;
+      <DropdownMenuItem<String>>[];
+  String? _selectedSchedule;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
 
-  String pageName;
-  String _VID;
-
-  MyGateState(this.pageName, this._VID);
-
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
 
   // List<StaffCount> value.staffListCount = List<StaffCount>();
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-    print(pageName.toString());
+    _tabController!.addListener(_handleTabSelection);
+    print(widget.pageName.toString());
     _handleTabSelection();
     // getTicketDescriptionList();
     //getDocumentDescriptionList();
@@ -96,10 +94,10 @@ class MyGateState extends State<BaseMyGate>
   void afterBuild(visitorList) {
     // executes after build is done
     print('After Build');
-    if (_VID != null && visitorList.length > 0) {
-      print('VID : ' + _VID.toString());
+    if (widget._VID != null && visitorList.length > 0) {
+      print('VID : ' + widget._VID.toString());
       for (int i = 0; i < visitorList.length; i++) {
-        if (visitorList[i].ID == _VID) {
+        if (visitorList[i].ID == widget._VID) {
           print('value.visitorList[i].ID : ' + visitorList[i].ID.toString());
           showDialog(
               context: context,
@@ -119,9 +117,8 @@ class MyGateState extends State<BaseMyGate>
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    if (pageName != null) {
-      redirectToPage(pageName);
+    if (widget.pageName != null) {
+      redirectToPage(widget.pageName!);
     }
     print('after build');
     // TODO: implement build
@@ -132,24 +129,9 @@ class MyGateState extends State<BaseMyGate>
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('my_gate'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('my_gate'),
                 bottom: getTabLayout(),
-                elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
                 getMyActivitiesLayout(value),
@@ -247,7 +229,7 @@ class MyGateState extends State<BaseMyGate>
               context,
               MaterialPageRoute(
                   builder: (context) => BaseStaffListPerCategory(
-                      value.staffListCount[position].ROLE,widget.type,isAdmin: widget.isAdmin,)));
+                      value.staffListCount[position].ROLE!,widget.type,isAdmin: widget.isAdmin,)));
         },
         child: AppContainer(
           isListItem: true,
@@ -290,7 +272,7 @@ class MyGateState extends State<BaseMyGate>
 
     _progressDialog.show();
     restClient.staffCount(societyId).then((value) {
-      _progressDialog.hide();
+      _progressDialog.dismiss();
       List<dynamic> _list = value.data;
       value.staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
       setState(() {});
@@ -554,33 +536,33 @@ class MyGateState extends State<BaseMyGate>
   getVisitorsListItemLayout(int position, GatePass value) {
     String Time = "";
     String Date = "";
-    if (value.visitorList[position].OUT_TIME.length > 0) {
-      if (value.visitorList[position].STATUS.toLowerCase() == 'out') {
+    if (value.visitorList[position].OUT_TIME!.length > 0) {
+      if (value.visitorList[position].STATUS!.toLowerCase() == 'out') {
         Time = /*value.visitorList[position].IN_TIME +
             " - " +*/
-            value.visitorList[position].OUT_TIME;
+            value.visitorList[position].OUT_TIME!;
       } else {
-        Time = value.visitorList[position].IN_TIME;
+        Time = value.visitorList[position].IN_TIME!;
       }
     } else {
-      Time = value.visitorList[position].IN_TIME;
+      Time = value.visitorList[position].IN_TIME!;
     }
 
-    if (value.visitorList[position].OUT_DATE.length > 0) {
-      if (value.visitorList[position].STATUS.toLowerCase() == 'out') {
+    if (value.visitorList[position].OUT_DATE!.length > 0) {
+      if (value.visitorList[position].STATUS!.toLowerCase() == 'out') {
         Date = /*value.visitorList[position].IN_DATE +
             " - " +*/
-            value.visitorList[position].OUT_DATE;
+            value.visitorList[position].OUT_DATE!;
       } else {
-        Date = value.visitorList[position].IN_DATE;
+        Date = value.visitorList[position].IN_DATE!;
       }
     } else {
-      Date = value.visitorList[position].IN_DATE;
+      Date = value.visitorList[position].IN_DATE!;
     }
 
     var visitorStatus = getVisitorAllowStatus(
-        value.visitorList[position].VISITOR_STATUS,
-        value.visitorList[position].VISITOR_USER_STATUS);
+        value.visitorList[position].VISITOR_STATUS!,
+        value.visitorList[position].VISITOR_USER_STATUS!);
     var visitorUserStatus = value.visitorList[position].VISITOR_USER_STATUS;
     //  print('value.visitorList[position].VISITOR_STATUS : ' + visitorStatus);
     // print('value.visitorList[position].VISITOR_USER_STATUS : ' + visitorStatus);
@@ -605,7 +587,7 @@ class MyGateState extends State<BaseMyGate>
               Container(
                 child: Row(
                   children: <Widget>[
-                    value.visitorList[position].IMAGE.isEmpty
+                    value.visitorList[position].IMAGE!.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 40.0,
@@ -663,22 +645,22 @@ class MyGateState extends State<BaseMyGate>
                           // margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           decoration: BoxDecoration(
-                              color: value.visitorList[position].VISITOR_STATUS
+                              color: value.visitorList[position].VISITOR_STATUS!
                                           .toLowerCase() ==
                                       'no-answer'
                                   ? GlobalVariables.grey
-                                  : value.visitorList[position].STATUS
+                                  : value.visitorList[position].STATUS!
                                               .toLowerCase() ==
                                           'in'
                                       ? GlobalVariables.primaryColor
                                       : GlobalVariables.red,
                               borderRadius: BorderRadius.circular(5)),
                           child: text(
-                            value.visitorList[position].VISITOR_STATUS
+                            value.visitorList[position].VISITOR_STATUS!
                                         .toLowerCase() ==
                                     'no-answer'
                                 ? 'No-Answer'
-                                : value.visitorList[position].STATUS
+                                : value.visitorList[position].STATUS!
                                             .toLowerCase() ==
                                         'in'
                                     ? 'Arrived'
@@ -704,7 +686,7 @@ class MyGateState extends State<BaseMyGate>
               SizedBox(
                 height: 8,
               ),
-              value.visitorList[position].FROM_VISITOR.length > 0 &&
+              value.visitorList[position].FROM_VISITOR!.length > 0 &&
                       value.visitorList[position].FROM_VISITOR != null
                   ? Container(
                       margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -774,7 +756,7 @@ class MyGateState extends State<BaseMyGate>
                           alignment: Alignment.center,
                           child: InkWell(
                             onTap: () {
-                              if (visitorUserStatus.toLowerCase() !=
+                              if (visitorUserStatus!.toLowerCase() !=
                                   'wrong entry') {
                                 showDialog(
                                     context: context,
@@ -800,7 +782,7 @@ class MyGateState extends State<BaseMyGate>
                                     child: AppIconButton(
                                   /* visitorUserStatus.toLowerCase() != 'wrong entry' ?*/
                                   Icons.block /*: null*/,
-                                  iconColor: visitorUserStatus.toLowerCase() !=
+                                  iconColor: visitorUserStatus!.toLowerCase() !=
                                           'wrong entry'
                                       ? GlobalVariables.secondaryColor
                                       : GlobalVariables.AccentColor,
@@ -832,9 +814,9 @@ class MyGateState extends State<BaseMyGate>
                         child: Align(
                           alignment: Alignment.center,
                           child: AppIconButton(Icons.call,
-                              iconColor: GlobalVariables.primaryColor, onPressed: () {
+                              iconColor: GlobalVariables.secondaryColor, onPressed: () {
                             launch(
-                                'tel://' + value.visitorList[position].CONTACT);
+                                'tel://' + value.visitorList[position].CONTACT!);
                           }),
                         ),
                       ),
@@ -970,7 +952,7 @@ class MyGateState extends State<BaseMyGate>
                         ),
                         text(
                           GlobalFunctions.convertDateFormat(
-                              value.scheduleVisitorList[position].DATE,
+                              value.scheduleVisitorList[position].DATE!,
                               'dd-MM-yyyy'),
                           textColor: GlobalVariables.grey,
                           fontSize: GlobalVariables.textSizeSmall,
@@ -1051,7 +1033,7 @@ class MyGateState extends State<BaseMyGate>
                         String userName =
                             await GlobalFunctions.getDisplayName();
                         DateTime earlier = DateTime.parse(
-                            value.scheduleVisitorList[position].DATE);
+                            value.scheduleVisitorList[position].DATE!);
 
                         DateTime date = DateTime.now();
                         String todayDate = GlobalFunctions.convertDateFormat(
@@ -1064,12 +1046,12 @@ class MyGateState extends State<BaseMyGate>
                         String sharedMsg = userName +
                             ' has invited you using <a href="https://societyrun.com/">societyrun.com</a> on ' +
                             GlobalFunctions.convertDateFormat(
-                                value.scheduleVisitorList[position].DATE,
+                                value.scheduleVisitorList[position].DATE!,
                                 "dd MMM yyyy") +
                             ' till' +
                             ' 11: 59 PM. ' +
                             'Please use ' +
-                            value.scheduleVisitorList[position].PASS_CODE +
+                            value.scheduleVisitorList[position].PASS_CODE! +
                             ' as entry code at gate. ' +
                             'Google coordinates : <a href=' +
                             mapUrl +
@@ -1079,8 +1061,8 @@ class MyGateState extends State<BaseMyGate>
                             '';
                         var sharedDocument = parse(sharedMsg);
                         String sharedParsedString =
-                            parse(sharedDocument.body.text)
-                                .documentElement
+                            parse(sharedDocument.body!.text)
+                                .documentElement!
                                 .text;
 
                         GlobalFunctions.shareData(
@@ -1097,7 +1079,7 @@ class MyGateState extends State<BaseMyGate>
                           iconColor: GlobalVariables.primaryColor,
                           iconSize: 20, onPressed: () {
                         launch('tel://' +
-                            value.scheduleVisitorList[position].MOBILE_NO);
+                            value.scheduleVisitorList[position].MOBILE_NO!);
                       }),
                     ),
                   ),
@@ -1172,7 +1154,7 @@ class MyGateState extends State<BaseMyGate>
                   return DropdownButton(
                     items: _scheduleListItems,
                     value: _selectedSchedule,
-                    onChanged: (String value) {
+                    onChanged: (String? value) {
                       print('clickable value : ' + value.toString());
                       setState(() {
                         _selectedSchedule = value;
@@ -1212,22 +1194,23 @@ class MyGateState extends State<BaseMyGate>
                       Icons.contacts,
                       iconColor: GlobalVariables.secondaryColor,
                       onPressed: () async {
-                        Contact contact = await _contactPicker.selectContact();
-                        print('contact Name : ' + contact.fullName);
+                        PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                        print('contact Name : ' + contact.fullName!);
                         print('contact Number : ' +
                             contact.phoneNumber.toString());
                         _contact = contact;
                         setState(() {
                           if (_contact != null) {
-                            _nameController.text = _contact.fullName;
-                            String phoneNumber = _contact.phoneNumber
+                            _nameController.text = _contact!.fullName!;
+                            /*String phoneNumber = _contact!.phoneNumber
                                 .toString()
                                 .substring(
                                     0,
-                                    _contact.phoneNumber
+                                    _contact!.phoneNumber
                                             .toString()
                                             .indexOf('(') -
-                                        1);
+                                        1);*/
+                            String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                             _mobileController.text = phoneNumber.toString();
                             // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                           }
@@ -1301,14 +1284,14 @@ class MyGateState extends State<BaseMyGate>
   }
 
   Future<void> addScheduleVisitorGatePass() async {
-    _progressDialog.show();
+    _progressDialog!.show();
     Provider.of<GatePass>(context, listen: false)
         .addScheduleVisitorGatePass(
             _nameController.text, _mobileController.text, _selectedSchedule)
         .then((value) async {
       print('add Schedule Visitor value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         Navigator.of(context).pop();
         DateTime now = DateTime.now();
         DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -1344,7 +1327,7 @@ class MyGateState extends State<BaseMyGate>
                     backgroundColor: Colors.transparent,
                     elevation: 0.0,
                     child: displayPassCode(
-                        value.pass_code,
+                        value.pass_code!,
                         userName,
                         googleParameter,
                         _nameController.text,
@@ -1353,9 +1336,9 @@ class MyGateState extends State<BaseMyGate>
                   );
                 }));
         setState(() {});
-        print('passCode : ' + value.pass_code);
+        print('passCode : ' + value.pass_code!);
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 
@@ -1394,20 +1377,20 @@ class MyGateState extends State<BaseMyGate>
   void redirectToPage(String item) {
     if (item == AppLocalizations.of(context).translate('my_gate')) {
       //Redirect to Discover
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     } else if (item ==
         AppLocalizations.of(context).translate('my_activities')) {
       //Redirect to  Classified
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     } else if (item == AppLocalizations.of(context).translate('helpers')) {
       //Redirect to  Services
-      _tabController.animateTo(1);
+      _tabController!.animateTo(1);
     } else {
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     }
-    if (pageName != null) {
-      pageName = null;
-      if (_tabController.index == 0) {
+    if (widget.pageName != null) {
+      widget.pageName = null;
+      if (_tabController!.index == 0) {
         _handleTabSelection();
       }
     }
@@ -1449,7 +1432,7 @@ class MyGateState extends State<BaseMyGate>
         '';
     var sharedDocument = parse(sharedMsg);
     String sharedParsedString =
-        parse(sharedDocument.body.text).documentElement.text;
+        parse(sharedDocument.body!.text).documentElement!.text;
 
     String line1 = "Entry code created for";
     String line2 = visitorName;
@@ -1609,33 +1592,33 @@ class MyGateState extends State<BaseMyGate>
     String Time = "";
     String Date = "";
     // String image = value.visitorList[position].IMAGE;
-    if (visitorList[position].OUT_TIME.length > 0) {
-      if (visitorList[position].STATUS.toLowerCase() == 'out') {
+    if (visitorList[position].OUT_TIME!.length > 0) {
+      if (visitorList[position].STATUS!.toLowerCase() == 'out') {
         Time = /*value.visitorList[position].IN_TIME +
             " - " +*/
-            visitorList[position].OUT_TIME;
+            visitorList[position].OUT_TIME!;
       } else {
-        Time = visitorList[position].IN_TIME;
+        Time = visitorList[position].IN_TIME!;
       }
     } else {
-      Time = visitorList[position].IN_TIME;
+      Time = visitorList[position].IN_TIME!;
     }
 
-    if (visitorList[position].OUT_DATE.length > 0) {
-      if (visitorList[position].STATUS.toLowerCase() == 'out') {
+    if (visitorList[position].OUT_DATE!.length > 0) {
+      if (visitorList[position].STATUS!.toLowerCase() == 'out') {
         Date = /* value.visitorList[position].IN_DATE +
             " - " +*/
-            visitorList[position].OUT_DATE;
+            visitorList[position].OUT_DATE!;
       } else {
-        Date = visitorList[position].IN_DATE;
+        Date = visitorList[position].IN_DATE!;
       }
     } else {
-      Date = visitorList[position].IN_DATE;
+      Date = visitorList[position].IN_DATE!;
     }
 
     var visitorStatus = getVisitorAllowStatus(
-        visitorList[position].VISITOR_STATUS,
-        visitorList[position].VISITOR_USER_STATUS);
+        visitorList[position].VISITOR_STATUS!,
+        visitorList[position].VISITOR_USER_STATUS!);
     return Stack(
       children: <Widget>[
         Align(
@@ -1686,20 +1669,20 @@ class MyGateState extends State<BaseMyGate>
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                       decoration: BoxDecoration(
                           color: visitorList[position]
-                                      .VISITOR_STATUS
+                                      .VISITOR_STATUS!
                                       .toLowerCase() ==
                                   'no-answer'
                               ? GlobalVariables.grey
-                              : visitorList[position].STATUS.toLowerCase() ==
+                              : visitorList[position].STATUS!.toLowerCase() ==
                                       'in'
                                   ? GlobalVariables.skyBlue
                                   : GlobalVariables.grey,
                           borderRadius: BorderRadius.circular(5)),
                       child: text(
-                        visitorList[position].VISITOR_STATUS.toLowerCase() ==
+                        visitorList[position].VISITOR_STATUS!.toLowerCase() ==
                                 'no-answer'
                             ? 'No-Answer'
-                            : visitorList[position].STATUS.toLowerCase() == 'in'
+                            : visitorList[position].STATUS!.toLowerCase() == 'in'
                                 ? 'Arrived'
                                 : 'Left',
                         textColor: GlobalVariables.white,
@@ -1741,7 +1724,7 @@ class MyGateState extends State<BaseMyGate>
                                             //borderRadius: BorderRadius.all(Radius.circular(50))
                                           ),
                                           child: Image.network(
-                                            visitorList[position].IMAGE,
+                                            visitorList[position].IMAGE!,
                                             scale: 1.0,
                                             fit: BoxFit.fill,
                                             width: MediaQuery.of(context)
@@ -1761,7 +1744,7 @@ class MyGateState extends State<BaseMyGate>
                             radius: 20,
                             backgroundColor: GlobalVariables.secondaryColor,
                             backgroundImage:
-                                NetworkImage(visitorList[position].IMAGE),
+                                NetworkImage(visitorList[position].IMAGE!),
                           ),
                         ),
                         SizedBox(
@@ -1778,7 +1761,7 @@ class MyGateState extends State<BaseMyGate>
                           iconSize: 20.0,
                           iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
-                            launch('tel://' + visitorList[position].CONTACT);
+                            launch('tel://' + visitorList[position].CONTACT!);
                           },
                         ),
                       ],
@@ -1890,7 +1873,7 @@ class MyGateState extends State<BaseMyGate>
                 color: GlobalVariables.white, shape: BoxShape.circle),
             child: CircleAvatar(
               child: SvgPicture.asset(
-                getVisitorStatusIcon(visitorList[position].TYPE),
+                getVisitorStatusIcon(visitorList[position].TYPE!),
                 width: 50,
                 height: 50,
                 color: GlobalVariables.white,
@@ -1925,10 +1908,10 @@ class MyGateState extends State<BaseMyGate>
   }
 
   void _handleTabSelection() {
-    if (pageName == null) {
+    if (widget.pageName == null) {
       print('Call _handleTabSelection');
       //if(_tabController.indexIsChanging){
-      _callAPI(_tabController.index);
+      _callAPI(_tabController!.index);
       //}
     }
   }
@@ -2005,17 +1988,17 @@ class MyGateState extends State<BaseMyGate>
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .addGatePassWrongEntry(
-            societyId, value.visitorList[position].ID, 'Wrong Entry')
+            societyId, value.visitorList[position].ID!, 'Wrong Entry')
         .then((value1) {
-      if (value1.status) {
+      if (value1.status!) {
         value.visitorList[position].VISITOR_USER_STATUS = 'Wrong Entry';
         setState(() {});
       }
-      GlobalFunctions.showToast(value1.message);
-      _progressDialog.hide();
+      GlobalFunctions.showToast(value1.message!);
+      _progressDialog!.dismiss();
     });
   }
 
@@ -2023,15 +2006,15 @@ class MyGateState extends State<BaseMyGate>
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
-    String srNo = value.scheduleVisitorList[position].SR_NO;
-    _progressDialog.show();
+    String srNo = value.scheduleVisitorList[position].SR_NO!;
+    _progressDialog!.show();
     restClient.deleteExpectedVisitor(societyId, srNo).then((value1) {
-      _progressDialog.hide();
-      if (value1.status) {
+      _progressDialog!.dismiss();
+      if (value1.status!) {
         value.scheduleVisitorList.removeAt(position);
         setState(() {});
       }
-      GlobalFunctions.showToast(value1.message);
+      GlobalFunctions.showToast(value1.message!);
     });
   }
 

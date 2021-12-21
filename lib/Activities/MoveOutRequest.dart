@@ -2,10 +2,11 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:ndialog/ndialog.dart';
@@ -16,6 +17,7 @@ import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/PollOption.dart';
@@ -46,101 +48,15 @@ class BaseMoveOutRequest extends StatefulWidget {
 
 class MoveOutRequestState extends State<BaseMoveOutRequest>
     with SingleTickerProviderStateMixin {
-  //TabController _tabController;
-
-/*
-  var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
-  var email = '', phone = '', consumerId = '', societyName = '',userType='';
-*/
-
-  String _taskId,_localPath;
-  ReceivePort _port = ReceivePort();
-  ProgressDialog _progressDialog;
-  
   @override
   void initState() {
-    getLocalPath();
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
     Provider.of<UserManagementResponse>(context,listen: false).getMoveOutRequest();
     super.initState();
-
-  }
-
-
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
-    });
-  }
-
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-    IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
     }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-      true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    // _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
@@ -150,22 +66,8 @@ class MoveOutRequestState extends State<BaseMoveOutRequest>
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('move_out_request'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('move_out_request'),
               ),
               body: getMoveOutRequestLayout(value),
             ),
@@ -212,11 +114,11 @@ class MoveOutRequestState extends State<BaseMoveOutRequest>
 
   getMoveOutRequestListItemLayout(int position, UserManagementResponse value) {
     List<Tenant> tenantDetailsList = List<Tenant>.from(value
-        .moveOutRequestList[position].tenant_name
+        .moveOutRequestList[position].tenant_name!
         .map((i) => Tenant.fromJson(i)));
     var tenantName = '';
     for (int i = 0; i < tenantDetailsList.length; i++) {
-      tenantName += ',' + tenantDetailsList[i].NAME;
+      tenantName += ',' + tenantDetailsList[i].NAME!;
     }
 
     return InkWell(
@@ -261,9 +163,9 @@ class MoveOutRequestState extends State<BaseMoveOutRequest>
                                   radius: GlobalVariables.textSizeSmall,
                                 ),
                                 child: text(
-                                    tenantDetailsList[0].BLOCK +
+                                    tenantDetailsList[0].BLOCK! +
                                         ' ' +
-                                        tenantDetailsList[0].FLAT,
+                                        tenantDetailsList[0].FLAT!,
                                     fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.white,
                                     fontWeight: FontWeight.bold),
@@ -287,7 +189,10 @@ class MoveOutRequestState extends State<BaseMoveOutRequest>
                               ),
                               Container(
                                 child: text(
-                                    GlobalFunctions.convertDateFormat(value.moveOutRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
+                                    GlobalFunctions.convertDateFormat(
+                                        value.moveOutRequestList[position]
+                                            .AGREEMENT_TO!,
+                                        "dd-MM-yyyy"),
                                     fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.black,
                                     textStyleHeight: 1.0),

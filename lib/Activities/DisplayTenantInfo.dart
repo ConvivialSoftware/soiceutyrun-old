@@ -6,15 +6,17 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Member.dart';
@@ -43,53 +45,29 @@ class BaseTenantInfo extends StatefulWidget {
   }
 }
 
-class TenantInfoState extends State<BaseTenantInfo> {
+class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
 
-  String societyId;
-  String _taskId,_localPath;
-  ReceivePort _port = ReceivePort();
+  String? societyId;
 
   TextEditingController _agreementFromController = TextEditingController();
   TextEditingController _agreementToController = TextEditingController();
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
   /*FlutterUploader uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
   StreamSubscription _resultSubscription;
   Map<String, UploadItem> _tasks = {};*/
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
-    getLocalPath();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
 
    /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
@@ -126,69 +104,55 @@ class TenantInfoState extends State<BaseTenantInfo> {
 
   }
 
-
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    //_progressSubscription?.cancel();
-    //_resultSubscription?.cancel();
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-    IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-      true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('my_tenant'),
+          actions: [
+              PopupMenuButton(
+                  icon: AppIcon(Icons.more_vert,
+                      iconColor:
+                      // isMenuEnable ?
+                      GlobalVariables.white
+                    // : GlobalVariables.transparent
+                  ),
+                  // add this line
+                  itemBuilder: (_) => <PopupMenuItem<String>>[
+                    new PopupMenuItem<String>(
+                        child: Container(
+                          //width: 200,
+                          // height: 30,
+                            child: text(AppLocalizations.of(context).translate('renew_agreement'),
+                                textColor: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeSMedium)),
+                        value: 'renew'),
+                    new PopupMenuItem<String>(
+                        child: Container(
+                          // width: 100,
+                          // height: 30,
+                            child: text(AppLocalizations.of(context).translate('terminate'),
+                                textColor: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeSMedium)),
+                        value: 'close'),
+                  ],
+                  onSelected: (index) async {
+                    switch (index) {
+                      case 'renew':
+                        print('Id : '+widget._tenantRentalRequest.ID!);
+                        showRenewAgreementDialog();
+                        break;
+                      case 'close':
+                        showCloseAgreementDialog();
+                        break;
+                    }
+                  }),
+          ],
+        )/*AppBar(
+          backgroundColor: GlobalVariables.red,
           centerTitle: true,
           elevation: 0,
           leading: InkWell(
@@ -243,7 +207,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
             AppLocalizations.of(context).translate('my_tenant'),
             style: TextStyle(color: GlobalVariables.white),
           ),
-        ),
+        )*/,
         body: getBaseLayout(),
       ),
     );
@@ -270,7 +234,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
   }
 
   getTenantInfoLayout() {
-    List<Member> tenantInfo = List<Member>.from(widget._tenantRentalRequest.tenant_name.map((i) => Member.fromJson(i)));
+    List<Member> tenantInfo = List<Member>.from(widget._tenantRentalRequest.tenant_name!.map((i) => Member.fromJson(i)));
     return Container(
       margin: EdgeInsets.only(top: 8),
       child: SingleChildScrollView(
@@ -285,7 +249,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
                         // scrollDirection: Axis.vertical,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount:
-                            widget._tenantRentalRequest.tenant_name.length,
+                            widget._tenantRentalRequest.tenant_name!.length,
                         itemBuilder: (context, position) {
                           return InkWell(
                             onTap: () {
@@ -294,7 +258,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           BaseDisplayProfileInfo(
-                                              tenantInfo[position].ID,
+                                              tenantInfo[position].ID!,
                                               'tenant')));
                             },
                             child: Container(
@@ -305,7 +269,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
                                     children: [
                                       Container(
                                           //margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                          child: tenantInfo[position].PROFILE_PHOTO
+                                          child: tenantInfo[position].PROFILE_PHOTO!
                                                   .isEmpty
                                               ? AppAssetsImage(
                                                   GlobalVariables
@@ -340,13 +304,13 @@ class TenantInfoState extends State<BaseTenantInfo> {
                                               tenantInfo[position].NAME,
                                               maxLine: 2,
                                             ),
-                                            tenantInfo[position].MOBILE
+                                            tenantInfo[position].MOBILE!
                                                         .length >
                                                     0
                                                 ? InkWell(
                                                     onTap: () {
                                                       launch("tel://" +
-                                                          tenantInfo[position].MOBILE);
+                                                          tenantInfo[position].MOBILE!);
                                                     },
                                                     child: secondaryText(
                                                         tenantInfo[position].MOBILE,
@@ -396,13 +360,13 @@ class TenantInfoState extends State<BaseTenantInfo> {
                                           iconColor: GlobalVariables.grey,
                                           iconSize: 20.0,
                                           onPressed: () {
-                                            String name = tenantInfo[position].NAME;
+                                            String name = tenantInfo[position].NAME!;
                                             String title = '';
                                             String text = 'Name : ' +
                                                 name +
                                                 '\nContact : ' +
-                                                tenantInfo[position].MOBILE;
-                                            title = tenantInfo[position].NAME;
+                                                tenantInfo[position].MOBILE!;
+                                            title = tenantInfo[position].NAME!;
                                             print('titlee : ' + title);
                                             GlobalFunctions.shareData(
                                                 title, text);
@@ -526,7 +490,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
                         width: 8,
                       ),
                       secondaryText(
-                          GlobalFunctions.convertDateFormat(widget._tenantRentalRequest.AGREEMENT_FROM, "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
+                          GlobalFunctions.convertDateFormat(widget._tenantRentalRequest.AGREEMENT_FROM!, "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
                           ? ''
                           : GlobalFunctions.convertDateFormat(_profileList[0].DOB,"dd-MM-yyyy")*/
                           ),
@@ -548,7 +512,7 @@ class TenantInfoState extends State<BaseTenantInfo> {
                         width: 8,
                       ),
                       secondaryText(
-                          GlobalFunctions.convertDateFormat(widget._tenantRentalRequest.AGREEMENT_TO, "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
+                          GlobalFunctions.convertDateFormat(widget._tenantRentalRequest.AGREEMENT_TO!, "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
                           ? ''
                           : GlobalFunctions.convertDateFormat(_profileList[0].DOB,"dd-MM-yyyy")*/
                           ),
@@ -562,14 +526,30 @@ class TenantInfoState extends State<BaseTenantInfo> {
               child: InkWell(
                 onTap: (){
                   downloadAttachment(
-                      widget._tenantRentalRequest.AGREEMENT, _localPath);
+                      widget._tenantRentalRequest.AGREEMENT);
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(Icons.attach_file,color: GlobalVariables.secondaryColor,),
                     SizedBox(width: 8,),
-                    text('Agreement Attachment',textColor: GlobalVariables.skyBlue,fontSize: GlobalVariables.textSizeSMedium)
+                    text('Agreement Attachment',textColor: GlobalVariables.skyBlue,fontSize: GlobalVariables.textSizeSMedium),
+                    SizedBox(width: 4,),
+                    if(downloading) Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Container(
+                          //height: 20,
+                          //width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            //value: 71.0,
+                          ),
+                        ),
+                        //SizedBox(width: 4,),
+                        Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -765,22 +745,22 @@ class TenantInfoState extends State<BaseTenantInfo> {
                                   if (_agreementFromController.text.length > 0) {
                                     if (_agreementToController.text.length > 0) {
                                       if (attachmentFilePath != null) {
-                                        _progressDialog.show();
+                                        _progressDialog!.show();
 
                                         Provider.of<UserManagementResponse>(context,
                                             listen: false)
                                             .renewAgreement(
-                                            widget._tenantRentalRequest.ID,
+                                            widget._tenantRentalRequest.ID!,
                                             _agreementFromController.text,
                                             _agreementToController.text,
-                                            GlobalFunctions.convertFileToString(attachmentFilePath),
-                                            attachmentFileName.substring(attachmentFileName.indexOf(".")+1,attachmentFileName.length),
+                                            GlobalFunctions.convertFileToString(attachmentFilePath!),
+                                            attachmentFileName!.substring(attachmentFileName!.indexOf(".")+1,attachmentFileName!.length),
                                             widget.isAdmin)
                                             .then((value) async {
-                                          _progressDialog.hide();
+                                          _progressDialog!.dismiss();
 
-                                          GlobalFunctions.showToast(value.message);
-                                          if (value.status) {
+                                          GlobalFunctions.showToast(value.message!);
+                                          if (value.status!) {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
 /*
@@ -846,8 +826,8 @@ class TenantInfoState extends State<BaseTenantInfo> {
   void openFile(BuildContext context, StateSetter setState) {
     GlobalFunctions.getFilePath(context).then((value) {
       attachmentFilePath = value;
-      attachmentFileName = attachmentFilePath.substring(
-          attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+      attachmentFileName = attachmentFilePath!.substring(
+          attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
       print('file Name : ' + attachmentFileName.toString());
       setState(() {});
     });
@@ -884,10 +864,10 @@ class TenantInfoState extends State<BaseTenantInfo> {
                               child: FlatButton(
                                 onPressed: () {
 
-                                  Provider.of<UserManagementResponse>(context,listen: false).closeAgreement(widget._tenantRentalRequest.ID).then((value) {
+                                  Provider.of<UserManagementResponse>(context,listen: false).closeAgreement(widget._tenantRentalRequest.ID!).then((value) {
 
-                                    GlobalFunctions.showToast(value.message);
-                                    if(value.status){
+                                    GlobalFunctions.showToast(value.message!);
+                                    if(value.status!){
                                       Navigator.of(context).pop();
                                     }
 

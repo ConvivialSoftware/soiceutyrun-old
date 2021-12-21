@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ClassifiedResponse.dart';
@@ -30,46 +31,31 @@ class BaseClassifiedListItemDesc extends StatefulWidget {
 
 class CreateClassifiedListingState
     extends State<BaseClassifiedListItemDesc> {
-   List<ClassifiedImage> imageList;
+  List<ClassifiedImage>? imageList;
 
   int _current = 0;
   var width,height;
-   ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   @override
   void initState() {
     super.initState();
-    imageList = List<ClassifiedImage>.from(widget.classifiedList.Images
-        .map((i) => ClassifiedImage.fromJson(i)));
-    print('imageList : '+imageList.length.toString());
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    imageList = List<ClassifiedImage>.from(
+        widget.classifiedList.Images.map((i) => ClassifiedImage.fromJson(i)));
+    print('imageList : ' + imageList!.length.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height =  MediaQuery.of(context).size.height;
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            'Classified Details',
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
-          ),
+        appBar: CustomAppBar(
+          title: 'Classified Details',
         ),
         body: getBaseLayout(),
         /*bottomNavigationBar: Container(
@@ -103,10 +89,13 @@ class CreateClassifiedListingState
               width: width,
               margin: EdgeInsets.all(16),
               child: AppButton(textContent: "I'm Interested", onPressed: () {
-                _progressDialog.show();
-                Provider.of<ClassifiedResponse>(context,listen: false).interestedClassified(widget.classifiedList.id).then((value) {
+                  _progressDialog!.show();
+                  Provider.of<ClassifiedResponse>(context, listen: false)
+                      .interestedClassified(widget.classifiedList.id!)
+                      .then((value) {
                   print('then value : '+value.toString());
-                  _progressDialog.hide();
+                    _progressDialog!.dismiss();
+                    GlobalFunctions.showToast(value.message!);
                   return showDialog(
                       context: context,
                       builder: (BuildContext context) => StatefulBuilder(
@@ -146,7 +135,6 @@ class CreateClassifiedListingState
                               ),
                             );
                           }));
-                  GlobalFunctions.showToast(value.message);
                 });
 
               },textColor: GlobalVariables.white,)),
@@ -164,7 +152,7 @@ class CreateClassifiedListingState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CarouselSlider.builder(
-              itemCount: imageList.length,
+              itemCount: imageList!.length,
               options: CarouselOptions(
                   autoPlay: true,
                   onPageChanged: (index, reason) {
@@ -180,7 +168,7 @@ class CreateClassifiedListingState
                         child: Stack(
                           children: <Widget>[
                             CachedNetworkImage(
-                                imageUrl: imageList[index].Img_Name,
+                                imageUrl: imageList![index].Img_Name!,
                                 fit: BoxFit.cover,
                                 width: 1000.0,
                                 height:
@@ -191,8 +179,8 @@ class CreateClassifiedListingState
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: imageList.map((url) {
-                int index = imageList.indexOf(url);
+              children: imageList!.map((url) {
+                int index = imageList!.indexOf(url);
                 //print('_current : ' + _current.toString());
                 //('index : ' + index.toString());
                 return Container(
@@ -225,7 +213,14 @@ class CreateClassifiedListingState
                 ),
                 SizedBox(width: 4,),
                 Flexible(
-                  child: text(widget.classifiedList.Address+', '+widget.classifiedList.Locality+', '+widget.classifiedList.City+', '+widget.classifiedList.Pincode,
+                  child: text(
+                      widget.classifiedList.Address! +
+                          ', ' +
+                          widget.classifiedList.Locality! +
+                          ', ' +
+                          widget.classifiedList.City! +
+                          ', ' +
+                          widget.classifiedList.Pincode!,
                       /*widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '':widget.classifiedList.Pincode.toString())*/
                       textColor: GlobalVariables.grey,
                       fontSize: GlobalVariables.textSizeSmall,
@@ -244,7 +239,10 @@ class CreateClassifiedListingState
                       color: Colors.transparent,
                       borderRadius:
                       BorderRadius.all(Radius.circular(8))),*/
-                  child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(widget.classifiedList.Price))*/GlobalFunctions.getCurrencyFormat(widget.classifiedList.Price),
+                  child: text(
+                      /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(widget.classifiedList.Price))*/
+                      GlobalFunctions.getCurrencyFormat(
+                          widget.classifiedList.Price!),
                       textColor: GlobalVariables.black,
                       fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.w500),
@@ -292,7 +290,10 @@ class CreateClassifiedListingState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         secondaryText('Posted',),
-                        secondaryText(GlobalFunctions.convertDateFormat(widget.classifiedList.C_Date, 'dd-MM-yyyy'),)
+                        secondaryText(
+                          GlobalFunctions.convertDateFormat(
+                              widget.classifiedList.C_Date!, 'dd-MM-yyyy'),
+                        )
                       ],
                     ),
                   ),

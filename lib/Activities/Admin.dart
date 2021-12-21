@@ -12,6 +12,7 @@ import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/MonthExpensePendingRequestResponse.dart';
@@ -52,14 +53,8 @@ class _BaseAdminState extends State<BaseAdmin> {
         return Builder(
             builder: (context) => Scaffold(
                   backgroundColor: GlobalVariables.white,
-                  appBar: AppBar(
-                    title: text(AppLocalizations.of(context).translate('admin'),
-                        textColor: GlobalVariables.white),
-                    leading: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(Icons.arrow_back)),
+                  appBar: CustomAppBar(
+                    title: AppLocalizations.of(context).translate('admin'),
                   ),
                   body: getBaseAdminLayout(value),
                 ));
@@ -103,15 +98,12 @@ class _BaseAdminState extends State<BaseAdmin> {
                   switch (position) {
                     case 0:
                       return getComplaintDataLayout(value);
-                      break;
                     case 1:
                       return getUserLayout(value);
-                      break;
                     case 2:
                       return getERPLayout(value);
-                      break;
                     default:
-                      return AppContainer();
+                      return AppContainer(child: SizedBox(),);
                   }
                 },
                 options: CarouselOptions(
@@ -487,9 +479,8 @@ class _BaseAdminState extends State<BaseAdmin> {
         onTap: (){
           Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      BaseUserManagement())).then((value) {
+                  MaterialPageRoute(builder: (context) => BaseUserManagement()))
+              .then((value) {
             GlobalFunctions.setBaseContext(context);
           });
         },
@@ -712,7 +703,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                                   FittedBox(
                                     child: text(
                                         GlobalFunctions.getCurrencyFormat(
-                                            value.receiptAmount??'0'),
+                                            value.receiptAmount),
                                         textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeNormal,
@@ -738,7 +729,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                                   FittedBox(
                                     child: text(
                                         GlobalFunctions.getCurrencyFormat(
-                                            value.expenseAmount??'0'),
+                                            value.expenseAmount),
                                         textColor: GlobalVariables.primaryColor,
                                         fontSize:
                                             GlobalVariables.textSizeNormal,
@@ -890,9 +881,9 @@ class _BaseAdminState extends State<BaseAdmin> {
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
-              value.adminPendingList[position].PAYMENT_DATE.length > 0
+              value.adminPendingList[position].PAYMENT_DATE!.length > 0
                   ? GlobalFunctions.convertDateFormat(
-                      value.adminPendingList[position].PAYMENT_DATE,
+                      value.adminPendingList[position].PAYMENT_DATE!,
                       'dd-MM-yyyy')
                   : "",
               textColor: GlobalVariables.grey,
@@ -978,7 +969,7 @@ class SliderCardName {
 }*/
 
 class BarChart extends StatelessWidget {
-  final List<MonthExpenses> data;
+  final List<MonthExpenses>? data;
 
   BarChart({@required this.data});
 
@@ -988,12 +979,12 @@ class BarChart extends StatelessWidget {
     List<charts.Series<MonthExpenses, String>> series = [
       charts.Series(
         id: "Subscribers",
-        data: data,
+        data: data!,
         // seriesColor : charts.ColorUtil.fromDartColor(GlobalVariables.black  ),
-        domainFn: (MonthExpenses series, _) => series.month,
+        domainFn: (MonthExpenses series, _) => series.month!,
         measureFn: (MonthExpenses series, _) {
           //print('series.exp_amount : ' + series.exp_amount);
-          return double.parse(series.exp_amount);
+          return double.parse(series.exp_amount!);
         },
         colorFn: (MonthExpenses series, _) =>
             charts.ColorUtil.fromDartColor(GlobalVariables.primaryColor),

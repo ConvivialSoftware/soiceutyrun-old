@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
@@ -19,23 +20,8 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('new_booking'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('new_booking'),
         ),
         body: getBaseLayout(),
       ),

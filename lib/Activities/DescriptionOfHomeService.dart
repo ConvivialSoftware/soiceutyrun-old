@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
@@ -41,11 +42,13 @@ class DescriptionOfHomeServiceState
   TextEditingController _requirementController = TextEditingController();
   TextEditingController _bookingDateController = TextEditingController();
   var width,height;
-  List<ServicesCharges> _serviceChargesList;
-  ProgressDialog _progressDialog;
+  List<ServicesCharges>? _serviceChargesList;
+  ProgressDialog? _progressDialog;
+
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPrefData();
     _serviceChargesList = List<ServicesCharges>.from(widget._services.charges
         .map((i) => ServicesCharges.fromJson(i)));
@@ -54,7 +57,6 @@ class DescriptionOfHomeServiceState
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     width = MediaQuery.of(context).size.width;
     height =  MediaQuery.of(context).size.height;
     // TODO: implement build
@@ -66,23 +68,8 @@ class DescriptionOfHomeServiceState
             return Builder(
               builder: (context) => Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  elevation: 0,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
-                  title: text(
-                    widget._services.Category+ ' Services',
-                    textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-                  ),
+                appBar: CustomAppBar(
+                  title: widget._services.Category! + ' Services',
                 ),
                 body: getBaseLayout(),
               ),
@@ -114,19 +101,21 @@ class DescriptionOfHomeServiceState
           child: Container(
               width: width,
               margin: EdgeInsets.all(16),
-              child: AppButton(textContent: "Book Service", onPressed: () {
-
+              child: AppButton(
+                textContent: "Book Service",
+                onPressed: () {
                 if(_bookingDateController.text.length>0) {
                   if (_requirementController.text.length > 0) {
-                    _progressDialog.show();
+                      _progressDialog!.show();
                     Provider.of<ServicesResponse>(context, listen: false)
-                        .bookServicePerCategory(widget._services.Id,
+                          .bookServicePerCategory(
+                              widget._services.Id!,
                         _requirementController.text.toString(),
                         _nameController.text, _mobileController.text,
                         _emailController.text, _bookingDateController.text)
                         .then((value) {
-                      _progressDialog.hide();
-                      if (value.status) {
+                        _progressDialog!.dismiss();
+                        if (value.status!) {
                         Navigator.of(context).pop();
                       }
                       _requirementController.text='';
@@ -246,7 +235,11 @@ class DescriptionOfHomeServiceState
                   margin: EdgeInsets.only(right: 8, top: 8),
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 5),
-                  child: FittedBox(child: text(widget._services.Discount+'% Discount', fontSize: GlobalVariables.textSizeSmall, textColor: GlobalVariables.white,fontWeight: FontWeight.bold)),
+                  child: FittedBox(
+                      child: text(widget._services.Discount! + '% Discount',
+                          fontSize: GlobalVariables.textSizeSmall,
+                          textColor: GlobalVariables.white,
+                          fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -265,7 +258,7 @@ class DescriptionOfHomeServiceState
                 Builder(
                     builder: (context) => ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
-                        itemCount: _serviceChargesList.length,
+                        itemCount: _serviceChargesList!.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int position) {
                           return getHomeCareChargesListItemLayout(position);
@@ -487,16 +480,22 @@ class DescriptionOfHomeServiceState
                             color: GlobalVariables.primaryColor,
                             borderRadius: BorderRadius.circular(50)),
                       ),
-                      SizedBox(width: 8,),
-                      secondaryText(
-                        _serviceChargesList[position].Service_Title,
-                        textStyleHeight: 1.0
+                      SizedBox(
+                        width: 8,
                       ),
+                      secondaryText(_serviceChargesList![position].Service_Title,
+                          textStyleHeight: 1.0),
                     ],
                   ),
                 ),
                 text(
-                    GlobalFunctions.getCurrencyFormat((int.parse(_serviceChargesList[position].Service_Price)-(int.parse(_serviceChargesList[position].Service_Price)*int.parse(widget._services.Discount)/100)).toString())
+                    GlobalFunctions.getCurrencyFormat((int.parse(
+                                _serviceChargesList![position].Service_Price!) -
+                            (int.parse(_serviceChargesList![position]
+                                    .Service_Price!) *
+                                int.parse(widget._services.Discount!) /
+                                100))
+                        .toString())
                   /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*//*GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price)*/,
 
                 textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
@@ -504,10 +503,10 @@ class DescriptionOfHomeServiceState
               ],
             ),
           ),
-          _serviceChargesList.length-1!=position ? Container(
-            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child:Divider()
-          ):Container()
+          _serviceChargesList!.length - 1 != position
+              ? Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0), child: Divider())
+              : Container()
         ],
       ),
     );
@@ -517,10 +516,8 @@ class DescriptionOfHomeServiceState
 
     return showDialog(
           context: context,
-          builder: (BuildContext context) =>
-              StatefulBuilder(builder:
-                  (BuildContext context,
-                  StateSetter _setState) {
+        builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, StateSetter _setState) {
                 return Dialog(
                   /*shape: RoundedRectangleBorder(
                                                 borderRadius:

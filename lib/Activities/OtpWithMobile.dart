@@ -7,6 +7,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
@@ -24,20 +25,20 @@ class OtpWithMobileState extends State<BaseOtpWithMobile> {
 
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   bool isEmail=false;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     //GlobalFunctions.showToast(AppLocalizations.of(context).translate('opt_not_on_mail'));
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         body: Container(
@@ -384,26 +385,27 @@ class OtpWithMobileState extends State<BaseOtpWithMobile> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient.getOTP(isEmail ? "" : _mobileController.text, isEmail ? _emailController.text : "").then((value) {
       print('get OTP value : '+value.toString());
-      _progressDialog.hide();
-      if(value.status){
+      _progressDialog!.dismiss();
+      if (value.status!) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    BaseOtp(value.expire_time,value.otp,isEmail ? _emailController.text : _mobileController.text)));
+                    BaseOtp(value.expire_time!, value.otp!,
+                        isEmail ? _emailController.text : _mobileController
+                            .text)));
       }
-      GlobalFunctions.showToast(value.message);
-
+      GlobalFunctions.showToast(value.message!);
     })/*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog.dismiss();
           }
           break;
         default:

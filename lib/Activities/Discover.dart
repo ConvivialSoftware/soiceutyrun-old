@@ -13,6 +13,7 @@ import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/ServicesPerCategory.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ClassifiedResponse.dart';
@@ -24,25 +25,24 @@ import 'base_stateful.dart';
 import 'package:intl/intl.dart';
 
 class BaseDiscover extends StatefulWidget {
-  String pageName;
+  String? pageName;
 
   BaseDiscover(this.pageName);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return DiscoverState(pageName);
+    return DiscoverState();
   }
 }
 
 //TickerProviderStateMixi
 class DiscoverState extends State<BaseDiscover>
     with SingleTickerProviderStateMixin ,AfterLayoutMixin<BaseDiscover> {
-  TabController _tabController;
-  String pageName,societyId;
+  TabController? _tabController;
+  String? societyId;
   var width, height;
 
-  DiscoverState(this.pageName);
 
   @override
   void dispose() {
@@ -58,8 +58,8 @@ class DiscoverState extends State<BaseDiscover>
         .then((tabLength) {
       print('tablength : ' + tabLength.toString());
       _tabController = TabController(length: int.parse(tabLength), vsync: this);
-      _tabController.addListener(() {
-        print('_tabController.index : ' + _tabController.index.toString());
+      _tabController!.addListener(() {
+        print('_tabController.index : ' + _tabController!.index.toString());
         // _handleSelection(_tabController.index);
         setState(() {});
       });
@@ -90,8 +90,46 @@ class DiscoverState extends State<BaseDiscover>
               length: value.classifiedCategoryList.length,
               child: Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
+                appBar: CustomAppBar(
+                  title: AppLocalizations.of(context).translate('classified'),
+                  bottom: value.classifiedCategoryList.isNotEmpty
+                      ? getTabLayout(value)
+                      : PreferredSize(
+                    preferredSize: Size.fromHeight(0.0),
+                    child: Container(),
+                  ),
+                  actions: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BaseOwnerDiscover(
+                                    AppLocalizations.of(context)
+                                        .translate('my_classified'))));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 16),
+                        child: Row(
+                          children: [
+                            AppIcon(
+                              Icons.history,
+                              iconColor: GlobalVariables.white,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            text(
+                                AppLocalizations.of(context).translate('my_ads'),textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSmall)
+                            // iconColor: GlobalVariables.white,
+                            //   iconSize: GlobalVariables.textSizeSMedium),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),/*AppBar(
+                  backgroundColor: GlobalVariables.red,
                   centerTitle: true,
                   leading: InkWell(
                     onTap: () {
@@ -143,7 +181,7 @@ class DiscoverState extends State<BaseDiscover>
                           child: Container(),
                         ),
                   elevation: 0,
-                ),
+                ),*/
                 body:
                     /*value.classifiedCategoryList.isNotEmpty && */ !value
                             .isLoading
@@ -182,11 +220,11 @@ class DiscoverState extends State<BaseDiscover>
     for (int i = 0; i < value.classifiedList.length; i++) {
       var category = value
           .classifiedCategoryList[
-              _tabController == null ? 0 : _tabController.index]
+              _tabController == null ? 0 : _tabController!.index]
           .Category_Name;
       //print('category : ' + category.toString());
-      if (category.toLowerCase() ==
-          value.classifiedList[i].Category.toLowerCase()) {
+      if (category!.toLowerCase() ==
+          value.classifiedList[i].Category!.toLowerCase()) {
         _classifiedResponse.classifiedList.add(value.classifiedList[i]);
         //print('runtime : '+_classifiedValue.runtimeType.toString());
       }
@@ -194,7 +232,7 @@ class DiscoverState extends State<BaseDiscover>
 
     for(int j=0;j<_classifiedResponse.classifiedList.length;j++){
       for(int k=0;k<value.filterOptionList.length;k++){
-        if(value.filterOptionList[k].isSelected){
+        if(value.filterOptionList[k].isSelected!){
 
           if(value.filterOptionList[k].filterName=='All Location'){
             //Nothing to Do
@@ -212,8 +250,8 @@ class DiscoverState extends State<BaseDiscover>
     var tabName = 'No Data Found For ' +
         value
             .classifiedCategoryList[
-                _tabController == null ? 0 : _tabController.index]
-            .Category_Name;
+                _tabController == null ? 0 : _tabController!.index]
+            .Category_Name!;
     print('getClassifiedLayout Tab Call');
     return Stack(
       children: <Widget>[
@@ -294,7 +332,7 @@ class DiscoverState extends State<BaseDiscover>
                 ),
                 child: text(
                     providerValue.filterOptionList[position].filterName,
-                    textColor: providerValue.filterOptionList[position].isSelected ? GlobalVariables.primaryColor : GlobalVariables.black,
+                    textColor: providerValue.filterOptionList[position].isSelected! ? GlobalVariables.primaryColor : GlobalVariables.black,
                     isCentered: true
                 ),
 
@@ -326,12 +364,12 @@ class DiscoverState extends State<BaseDiscover>
 
   getClassifiedListItemLayout(int position, ClassifiedResponse value) {
     var daysCount =
-        GlobalFunctions.inDaysCount(value.classifiedList[position].C_Date);
+        GlobalFunctions.inDaysCount(value.classifiedList[position].C_Date!);
     // print('page : '+_tabController.index.toString());
     List<ClassifiedImage> imageList = List<ClassifiedImage>.from(value
         .classifiedList[position].Images
         .map((i) => ClassifiedImage.fromJson(i)));
-    //print('imageList[0].img : ' + imageList[0].img);
+    print('imageList.length : ' + imageList.length.toString());
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -394,10 +432,10 @@ class DiscoverState extends State<BaseDiscover>
                                 Flexible(
                                   child: text(
                                       value.classifiedList[position]
-                                              .Locality +
+                                              .Locality! +
                                           ' - ' +
                                           value.classifiedList[position]
-                                              .City,fontSize: GlobalVariables.textSizeSmall,
+                                              .City!,fontSize: GlobalVariables.textSizeSmall,
                                   textStyleHeight: 1.0,
                                   textColor: GlobalVariables.grey),
                                 ),
@@ -423,7 +461,7 @@ class DiscoverState extends State<BaseDiscover>
                                       text(
                                           GlobalFunctions.convertDateFormat(
                                               value.classifiedList[position]
-                                                  .C_Date,
+                                                  .C_Date!,
                                               'dd-MMM-yyyy'),
                                           textColor: GlobalVariables.grey,
                                           fontSize: GlobalVariables.textSizeSmall,),
@@ -453,7 +491,7 @@ class DiscoverState extends State<BaseDiscover>
                                     ],
                                   ),
                                 ),
-                                value.classifiedList[position].Status.toLowerCase()=='inactive' ?  Container(
+                                value.classifiedList[position].Status!.toLowerCase()=='inactive' ?  Container(
                                   child: text(value.classifiedList[position].Status,
                                       fontSize: GlobalVariables.textSizeSmall,
                                       maxLine: 1,
@@ -480,7 +518,7 @@ class DiscoverState extends State<BaseDiscover>
                     Container(
                       //NumberFormat.currency(locale: 'IN').format(
                       child: text(
-                          GlobalFunctions.getCurrencyFormat(value.classifiedList[position].Price),
+                          GlobalFunctions.getCurrencyFormat(value.classifiedList[position].Price!),
                           textColor: GlobalVariables.black,
                           fontSize: GlobalVariables.textSizeMedium,
                           fontWeight: FontWeight.bold),
@@ -488,7 +526,7 @@ class DiscoverState extends State<BaseDiscover>
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         decoration: BoxDecoration(
-                            color: getClassifiedTypeColor(value.classifiedList[position].Type),
+                            color: getClassifiedTypeColor(value.classifiedList[position].Type!),
                             borderRadius: BorderRadius.circular(5)),
                       child: text(value.classifiedList[position].Type,
                           fontSize: GlobalVariables.textSizeSmall,

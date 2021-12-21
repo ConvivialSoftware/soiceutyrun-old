@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -31,32 +32,23 @@ class AddVehicleState extends State<BaseAddVehicle> {
 
   String _selectedVehicleType = "2 Wheeler";
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('add_vehicle'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title:  AppLocalizations.of(context).translate('add_vehicle'),
         ),
         body: getBaseLayout(),
       ),
@@ -213,7 +205,7 @@ class AddVehicleState extends State<BaseAddVehicle> {
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .addVehicle(
             societyId,
@@ -226,19 +218,19 @@ class AddVehicleState extends State<BaseAddVehicle> {
             userId)
         .then((value) {
       print('add vehicle Status value : ' + value.toString());
-      if (value.status) {
+      if (value.status!) {
         Navigator.pop(context);
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
 
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog!.dismiss();
           }
           break;
         default:

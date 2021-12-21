@@ -4,6 +4,7 @@ import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/GuestOthers.dart';
 import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -24,23 +25,8 @@ class CabState extends State<BaseCab> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: Text(
-            AppLocalizations.of(context).translate('cab'),
-            style: TextStyle(color: GlobalVariables.white),
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('cab'),
         ),
         body: getBaseLayout(),
       ),

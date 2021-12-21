@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:clipboard/clipboard.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
@@ -31,8 +33,8 @@ class NearByShopPerCategoryItemDetailsState
 
   var width, height;
 
-  List<NearByShopOfferDetails> offerDetailsList=List<NearByShopOfferDetails>();
-  List<NearByShopTermsCondition> termsConditionList=List<NearByShopTermsCondition>();
+  List<NearByShopOfferDetails> offerDetailsList=<NearByShopOfferDetails>[];
+  List<NearByShopTermsCondition> termsConditionList=<NearByShopTermsCondition>[];
 
 
   @override
@@ -55,22 +57,8 @@ class NearByShopPerCategoryItemDetailsState
     return Builder(
       builder: (context) => Scaffold(
         //resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.white,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.primaryColor,
-            ),
-          ),
-          title: text(
-            'Offer Details',
-              textColor: GlobalVariables.primaryColor, fontSize: GlobalVariables.textSizeMedium,
-          ),
+        appBar: CustomAppBar(
+          title: 'Offer Details',
         ),
         body: getBaseLayout(),
       ),
@@ -80,7 +68,7 @@ class NearByShopPerCategoryItemDetailsState
   getBaseLayout(){
     return Container(
       decoration: BoxDecoration(
-        color: Color(int.parse(widget.nearByShopList.card_bg)),
+        color: Color(int.parse(widget.nearByShopList.card_bg!)),
       ),
       child: Column(
         children: [
@@ -89,7 +77,7 @@ class NearByShopPerCategoryItemDetailsState
               children: [
                 Container(
                   padding: EdgeInsets.all(16.0),
-                  color: Color(int.parse(widget.nearByShopList.card_bg)),
+                  color: Color(int.parse(widget.nearByShopList.card_bg!)),
                   height: double.infinity,
                   //padding: EdgeInsets.only(left: 8,right: 8,top: 8),
                   child: SingleChildScrollView(
@@ -115,7 +103,7 @@ class NearByShopPerCategoryItemDetailsState
                                     'Till ' +
                                         GlobalFunctions.convertDateFormat(
                                             widget
-                                                .nearByShopList.exp_date,
+                                                .nearByShopList.exp_date!,
                                             'dd-MMM-yyyy'),
                                     fontSize: GlobalVariables.textSizeSmall,
                                   ),
@@ -192,7 +180,7 @@ class NearByShopPerCategoryItemDetailsState
                                             InkWell(
                                               onTap: (){
 
-                                                launch("tel://" +  widget.nearByShopList.vendor_mobile);
+                                                launch("tel://" +  widget.nearByShopList.vendor_mobile!);
                                               },
                                               child: Container(
                                                 margin: EdgeInsets.only(top: 8),
@@ -274,7 +262,7 @@ class NearByShopPerCategoryItemDetailsState
                                     child: new CircleAvatar(
                                       backgroundColor: Color(int.parse(
                                           widget.nearByShopList
-                                              .vendor_logo_bg)),
+                                              .vendor_logo_bg!)),
                                       child: Container(
                                           //margin: EdgeInsets.only(top: 8),
                                           alignment: Alignment.center,
@@ -285,7 +273,7 @@ class NearByShopPerCategoryItemDetailsState
                                           child: CachedNetworkImage(
                                             imageUrl: widget
                                                 .nearByShopList
-                                                .vendor_logo,
+                                                .vendor_logo!,
                                           )),
                                       radius: 50,
                                     ),
@@ -484,14 +472,14 @@ class NearByShopPerCategoryItemDetailsState
               margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
               child: AppButton(
                 textContent: widget
-                    .nearByShopList.Offer_Code.isNotEmpty ? "Get Code": "Enquiry Now",
+                    .nearByShopList.Offer_Code!.isNotEmpty ? "Get Code": "Enquiry Now",
                 onPressed: () {
                   insertUserInfoOnExclusiveGetCode();
                  if( widget
-                      .nearByShopList.Offer_Code.isNotEmpty){
+                      .nearByShopList.Offer_Code!.isNotEmpty){
                    showBottomSheet() ;
                  }else{
-                   launch(widget.nearByShopList.redeem);
+                   launch(widget.nearByShopList.redeem!);
                  }
                 },
                 textColor: GlobalVariables.white,
@@ -554,7 +542,7 @@ class NearByShopPerCategoryItemDetailsState
                           height: 16,
                         ),
                         widget
-                            .nearByShopList.Offer_Code.isNotEmpty ? Row(
+                            .nearByShopList.Offer_Code!.isNotEmpty ? Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Flexible(
@@ -584,9 +572,9 @@ class NearByShopPerCategoryItemDetailsState
                                       ),
                                       InkWell(
                                           onTap: () {
-                                            ClipboardManager.copyToClipBoard(
+                                            FlutterClipboard.copy(
                                                     widget.nearByShopList
-                                                        .Offer_Code)
+                                                        .Offer_Code!)
                                                 .then((value) {
                                               GlobalFunctions.showToast(
                                                   "Copied to Clipboard");
@@ -615,7 +603,7 @@ class NearByShopPerCategoryItemDetailsState
                           width: MediaQuery.of(context).size.width,
                           child: FlatButton(
                               onPressed: () {
-                                launch(widget.nearByShopList.redeem);
+                                launch(widget.nearByShopList.redeem!);
                               },
                               color: GlobalVariables.primaryColor,
                               child: text('Redeem',

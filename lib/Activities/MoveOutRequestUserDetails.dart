@@ -4,18 +4,20 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AppNotificationSettings.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -36,118 +38,28 @@ class BaseMoveOutRequestUserDetails extends StatefulWidget {
   _BaseMoveOutRequestUserDetailsState createState() => _BaseMoveOutRequestUserDetailsState();
 }
 
-class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDetails> {
+class _BaseMoveOutRequestUserDetailsState extends AppStatefulState<BaseMoveOutRequestUserDetails> {
 
-  List<Tenant> tenantDetailsList =  List<Tenant>();
-  String _taskId,_localPath;
-  ReceivePort _port = ReceivePort();
-  ProgressDialog _progressDialog;
+  List<Tenant> tenantDetailsList =  <Tenant>[];
+  ProgressDialog? _progressDialog;
+  int _selectedPosition=0;
   @override
   void initState() {
     super.initState();
-
-    tenantDetailsList = List<Tenant>.from(widget.moveOutRequest.tenant_name
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    tenantDetailsList = List<Tenant>.from(widget.moveOutRequest.tenant_name!
         .map((i) => Tenant.fromJson(i)));
 
     print(tenantDetailsList.toString());
-    getLocalPath();
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
   }
-
-
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-    IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-      true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('move_out_request'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('move_out_request'),
         ),
         body: getBaseLayout(),
       ),
@@ -212,7 +124,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                         ),
                         Container(
                           child: text(
-                              GlobalFunctions.convertDateFormat(widget.moveOutRequest.AGREEMENT_TO, "dd-MM-yyyy"),
+                              GlobalFunctions.convertDateFormat(widget.moveOutRequest.AGREEMENT_TO!, "dd-MM-yyyy"),
                               fontSize: GlobalVariables.textSizeSMedium,
                               textColor: GlobalVariables.black,
                               textStyleHeight: 1.0),
@@ -228,10 +140,10 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                       children: [
                         InkWell(
                           onTap: (){
-                            if(widget.moveOutRequest.AGREEMENT.isNotEmpty) {
+                            if(widget.moveOutRequest.AGREEMENT!.isNotEmpty) {
                               downloadAttachment(
                                   widget.moveOutRequest
-                                      .AGREEMENT, _localPath);
+                                      .AGREEMENT);
                             }else{
                               GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
                             }
@@ -253,15 +165,31 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                                     textColor: GlobalVariables.skyBlue,
                                     textStyleHeight: 1.0),
                               ),
+                              SizedBox(width: 4,),
+                              if(downloading) Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                ],
+                              )
                             ],
                           ),
                         ),
                         InkWell(
                           onTap: (){
-                            if(widget.moveOutRequest.TENANT_CONSENT.isNotEmpty) {
+                            if(widget.moveOutRequest.TENANT_CONSENT!.isNotEmpty) {
                               downloadAttachment(
                                   widget.moveOutRequest
-                                      .TENANT_CONSENT, _localPath);
+                                      .TENANT_CONSENT);
                             }else{
                               GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
                             }
@@ -283,6 +211,22 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                                     textColor: GlobalVariables.skyBlue,
                                     textStyleHeight: 1.0),
                               ),
+                              SizedBox(width: 4,),
+                              if(downloading) Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -297,10 +241,10 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                       children: [
                         InkWell(
                           onTap: (){
-                            if(widget.moveOutRequest.OWNER_CONSENT.isNotEmpty) {
+                            if(widget.moveOutRequest.OWNER_CONSENT!.isNotEmpty) {
                               downloadAttachment(
                                   widget.moveOutRequest
-                                      .OWNER_CONSENT, _localPath);
+                                      .OWNER_CONSENT);
                             }else{
                               GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
                             }
@@ -322,15 +266,31 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                                     textColor: GlobalVariables.skyBlue,
                                     textStyleHeight: 1.0),
                               ),
+                              SizedBox(width: 4,),
+                              if(downloading) Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                ],
+                              )
                             ],
                           ),
                         ),
                         InkWell(
                           onTap: (){
-                            if(widget.moveOutRequest.AUTH_FORM.isNotEmpty) {
+                            if(widget.moveOutRequest.AUTH_FORM!.isNotEmpty) {
                               downloadAttachment(
                                   widget.moveOutRequest
-                                      .AUTH_FORM, _localPath);
+                                      .AUTH_FORM);
                             }else{
                               GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
                             }
@@ -352,6 +312,22 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                                     textColor: GlobalVariables.skyBlue,
                                     textStyleHeight: 1.0),
                               ),
+                              SizedBox(width: 4,),
+                              if(downloading) Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -417,7 +393,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                           // alignment: Alignment.center,
                           /* decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25)),*/
-                          child: tenantDetailsList[position].PROFILE_PHOTO.isEmpty
+                          child: tenantDetailsList[position].PROFILE_PHOTO!.isEmpty
                               ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 60.0,
@@ -457,9 +433,9 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 child: text(
-                                  tenantDetailsList[position].BLOCK +
+                                  tenantDetailsList[position].BLOCK! +
                                       ' ' +
-                                      tenantDetailsList[position].FLAT,
+                                      tenantDetailsList[position].FLAT!,
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.grey,
                                   textStyleHeight: 1.0
@@ -468,7 +444,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                               SizedBox(
                                 height: 4,
                               ),
-                              tenantDetailsList[position].EMAIL.isNotEmpty ? Container(
+                              tenantDetailsList[position].EMAIL!.isNotEmpty ? Container(
                                 child: text(
                                   tenantDetailsList[position].EMAIL,
                                   fontSize: GlobalVariables.textSizeSMedium,
@@ -479,7 +455,7 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                               SizedBox(
                                 height: 4,
                               ),
-                              tenantDetailsList[position].MOBILE.isNotEmpty ? Container(
+                              tenantDetailsList[position].MOBILE!.isNotEmpty ? Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                                 child: text(
                                   tenantDetailsList[position].MOBILE,
@@ -495,6 +471,8 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                           ),
                         ),
                       ),
+                      Row(
+                        children: [
                       Container(
                         child: IconButton(
                             icon: AppIcon(
@@ -503,13 +481,32 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
                               iconSize: GlobalVariables.textSizeLarge,
                             ),
                             onPressed: () {
-                              if(tenantDetailsList[position].POLICE_VERIFICATION.isNotEmpty) {
+                                  if(tenantDetailsList[position].POLICE_VERIFICATION!.isNotEmpty) {
+                                    _selectedPosition=position;
                                 downloadAttachment(
-                                    tenantDetailsList[position].POLICE_VERIFICATION, _localPath);
+                                        tenantDetailsList[position].POLICE_VERIFICATION);
                               }else{
                                 GlobalFunctions.showToast(AppLocalizations.of(context).translate('document_not_available'));
                               }
                             }),
+                          ),
+                          SizedBox(width: 4,),
+                          if(downloading && position==_selectedPosition) Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Container(
+                                //height: 20,
+                                //width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  //value: 71.0,
+                                ),
+                              ),
+                              //SizedBox(width: 4,),
+                              Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                            ],
+                          )
+                        ],
                       )
                     ],
                   ),
@@ -592,13 +589,13 @@ class _BaseMoveOutRequestUserDetailsState extends State<BaseMoveOutRequestUserDe
 
   Future<void> moveOutMember() async {
 
-    _progressDialog.show();
-    Provider.of<UserManagementResponse>(context,listen: false).deactivateUser(widget.moveOutRequest.U_ID, _reasonController.text,tenantDetailsList[0].BLOCK,tenantDetailsList[0].FLAT).then((value) {
-      _progressDialog.hide();
-      if(value.status){
+    _progressDialog!.show();
+    Provider.of<UserManagementResponse>(context,listen: false).deactivateUser(widget.moveOutRequest.U_ID!, _reasonController.text,tenantDetailsList[0].BLOCK!,tenantDetailsList[0].FLAT!).then((value) {
+      _progressDialog!.dismiss();
+      if(value.status!){
         Navigator.of(context).pop('back');
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
 
   }

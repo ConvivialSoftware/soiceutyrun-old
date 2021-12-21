@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+//import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/Expense.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LedgerAccount.dart';
@@ -35,19 +36,19 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
   bool isFiltered=false;
 
 
-  List<LedgerAccount> _ledgerAccountList = new List<LedgerAccount>();
-  List<String> _ledgerAccountStringList = new List<String>();
-  LedgerAccount _selectedLedgerAccount;
+  List<LedgerAccount> _ledgerAccountList = <LedgerAccount>[];
+  List<String> _ledgerAccountStringList = <String>[];
+  LedgerAccount? _selectedLedgerAccount;
 
   List<DropdownMenuItem<String>> _yearListItems =
-  new List<DropdownMenuItem<String>>();
-  List<LedgerYear> _listYear = List<LedgerYear>();
-  String _yearSelectedItem;
+  <DropdownMenuItem<String>>[];
+  List<LedgerYear> _listYear = <LedgerYear>[];
+  String? _yearSelectedItem;
 
   Map<String, double> dataMap={};
   var _totalSumUp=0;
   var startDate,endDate;
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   List<Color> defaultColorList = [
 
@@ -79,6 +80,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
 
   @override
   void initState() {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     //DateTime selectedDate = DateTime.now();
     getHeadWiseData(null,null);
     //endDate = GlobalFunctions.convertDateFormat(selectedDate.toIso8601String(), 'dd-MM-yyyy');
@@ -94,15 +96,36 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+
     return ChangeNotifierProvider<UserManagementResponse>.value(
         value: Provider.of<UserManagementResponse>(context),
       child: Consumer<UserManagementResponse>(builder: (context,value,child){
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('expense'),
+              actions: [
+                AppIconButton(
+                  Icons.filter_alt_sharp,
+                  iconColor: isFiltered ? GlobalVariables.skyBlue : GlobalVariables.white,
+                  onPressed: (){
+                    showSearchWiseBottomSheet();
+                  },
+                ),
+                SizedBox(width: 8,),
+                isFiltered ? InkWell(
+                    onTap: (){
+                      isFiltered=false;
+                      getHeadWiseData(null, null);
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: text('Clear',textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSmall))):SizedBox(),
+                SizedBox(width: 20,),
+              ],
+            )/*AppBar(
+              backgroundColor: GlobalVariables.red,
               centerTitle: true,
               elevation: 0,
               leading: InkWell(
@@ -137,7 +160,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                   AppLocalizations.of(context).translate('expense'),
                   textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
               ),
-            ),
+            )*/,
             body: getBaseLayout(context,value),
           ),
         );
@@ -658,7 +681,8 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
   }
 
 
-  void changeLedgerAccountDropDownItem(LedgerAccount value) {
+/*
+  void changeLedgerAccountDropDownItem(LedgerAccount? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedLedgerAccount = value;
@@ -667,6 +691,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
       print('_selctedItem value: ' + _selectedLedgerAccount.id.toString());
     });
   }
+*/
 
 
   getExpenseAccountLedger() async {
@@ -674,20 +699,20 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-      _progressDialog.show();
+      _progressDialog!.show();
     restClientERP.getExpenseAccountLedger(societyId).then((value) {
       print('Response : ' + value.toString());
-      List<dynamic> _list = value.data;
-      List<dynamic> _listLedgerYear = value.Year;
+      List<dynamic> _list = value.data!;
+      List<dynamic> _listLedgerYear = value.Year!;
 
       _ledgerAccountList = List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
       for (int i = 0; i < _ledgerAccountList.length; i++) {
         LedgerAccount _ledgerAccount = _ledgerAccountList[i];
-        _ledgerAccountStringList.add(_ledgerAccount.name);
+        _ledgerAccountStringList.add(_ledgerAccount.name!);
       }
 
-      _yearListItems = new List<DropdownMenuItem<String>>();
-      _listYear = List<LedgerYear>();
+      _yearListItems = <DropdownMenuItem<String>>[];
+      _listYear = <LedgerYear>[];
 
       _listYear  = List<LedgerYear>.from(_listLedgerYear.map((i) => LedgerYear.fromJson(i)));
       for (int i = 0; i < _listYear.length; i++) {
@@ -715,7 +740,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                 ));
             if (_yearSelectedItem == null) {
               _yearSelectedItem = _listYear[i].years;
-              print('_yearSelectedItem : ' + _yearSelectedItem);
+              print('_yearSelectedItem : ' + _yearSelectedItem!);
             }
           }
         } else {
@@ -734,13 +759,13 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
         _yearSelectedItem = _listYear[0].years;
       }
 
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       setState(() {
         showSearchWiseBottomSheet();
       });
     }) /*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){
-      //    _progressDialog.hide();
+      //    _progressDialog.dismiss();
       //  }
       switch (obj.runtimeType) {
         case DioError:
@@ -787,7 +812,7 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                    child: text(GlobalFunctions.getCurrencyFormat(value.headWiseExpenseList[position].amount,),
+                    child: text(GlobalFunctions.getCurrencyFormat(value.headWiseExpenseList[position].amount!,),
                         fontSize: GlobalVariables.textSizeSMedium,textColor: defaultColorList.length > position ? defaultColorList[position] : GlobalVariables.primaryColor,fontWeight: FontWeight.bold),
                   ),
                   Container(
@@ -805,14 +830,17 @@ class _BaseExpenseSearchAddState extends State<BaseExpenseSearchAdd> {
 
   }
 
-  void getHeadWiseData(String startDate,String endDate) {
+  void getHeadWiseData(String? startDate,String? endDate) {
    // if(isFiltered){
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-      _progressDialog.show();
-    //}
-    Provider.of<UserManagementResponse>(context,listen: false).getHeadWiseExpenseData(startDate,endDate).then((value) {
+    WidgetsBinding.instance!.addPostFrameCallback((_){
+      _progressDialog!.show();
+    });
 
-        _progressDialog.hide();
+    //}
+    Provider.of<UserManagementResponse>(context,listen: false).getHeadWiseExpenseData(startDate??'',endDate??'').then((value) {
+      _progressDialog!.dismiss();
+
       _totalSumUp=0;
       for(int j=0;j<value.length;j++){
         dataMap[value[j].heads] = double.parse(value[j].amount==null ? '0' : value[j].amount);

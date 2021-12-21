@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
@@ -23,7 +24,7 @@ import 'base_stateful.dart';
 
 class BaseAlreadyPaid extends StatefulWidget {
   bool isAdmin;
-  Receipt receiptData;
+  Receipt? receiptData;
   String invoiceNo;
   double amount;
   int penaltyAmount;
@@ -38,15 +39,15 @@ class BaseAlreadyPaid extends StatefulWidget {
 }
 
 class AlreadyPaidState extends State<BaseAlreadyPaid> {
+  List<Bank> _bankList = <Bank>[];
 
-  List<Bank> _bankList = new List<Bank>();
  // List<BankResponse> _bankResponseList = new List<BankResponse>();
   String paymentType="Cheque";
   //String complaintPriority="No";
 
   TextEditingController _chequeBankNameController  =  TextEditingController();
   TextEditingController _amountController  =  TextEditingController();
-  TextEditingController _penaltyAmountController  =  TextEditingController();
+  //TextEditingController _penaltyAmountController = TextEditingController();
   TextEditingController _noteController  =  TextEditingController();
   TextEditingController _referenceController  = TextEditingController();
   TextEditingController _dateController = TextEditingController();
@@ -62,16 +63,16 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
 
 
   List<DropdownMenuItem<String>> __bankListItems =
-  new List<DropdownMenuItem<String>>();
+      <DropdownMenuItem<String>>[];
 
-  String _bankSelectedItem;
-  String _bankAccountNoSelectedItem;
+  String? _bankSelectedItem;
+  String? _bankAccountNoSelectedItem;
 
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission=false;
 
  /* String invoiceNo;
@@ -81,6 +82,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
     });
@@ -94,50 +96,32 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     });
     if(widget.isAdmin){
       if(widget.receiptData!=null) {
-        print('PAYMENT_DATE : ' + widget.receiptData.PAYMENT_DATE);
+        print('PAYMENT_DATE : ' + widget.receiptData!.PAYMENT_DATE!);
         _dateController.text = GlobalFunctions.convertDateFormat(
-            widget.receiptData.PAYMENT_DATE, "dd-MM-yyyy");
-        insertedDate = widget.receiptData.PAYMENT_DATE;
-        _chequeBankNameController.text = widget.receiptData.CHEQUE_BANKNAME;
-        _noteController.text = widget.receiptData.NARRATION;
-        _referenceController.text = widget.receiptData.REFERENCE_NO;
-        paymentType = widget.receiptData.TRANSACTION_MODE;
+            widget.receiptData!.PAYMENT_DATE!, "dd-MM-yyyy");
+        insertedDate = widget.receiptData!.PAYMENT_DATE;
+        _chequeBankNameController.text = widget.receiptData!.CHEQUE_BANKNAME!;
+        _noteController.text = widget.receiptData!.NARRATION!;
+        _referenceController.text = widget.receiptData!.REFERENCE_NO!;
+        paymentType = widget.receiptData!.TRANSACTION_MODE!;
       }
       _amountController.text=(double.parse(widget.amount.toString())-double.parse(widget.penaltyAmount.toString())).toStringAsFixed(2);
     }else {
       _amountController.text=(double.parse(widget.amount.toString())).toStringAsFixed(2);
-      _dateController.text = DateTime
-          .now()
-          .toLocal()
-          .day
-          .toString()
-          .padLeft(2, '0') + "-" + DateTime
-          .now()
-          .toLocal()
-          .month
-          .toString()
-          .padLeft(2, '0') + "-" + DateTime
-          .now()
-          .toLocal()
-          .year
-          .toString();
-      insertedDate = DateTime
-          .now()
-          .toLocal()
-          .year
-          .toString() + "-" + DateTime
-          .now()
-          .toLocal()
-          .month
-          .toString()
-          .padLeft(2, '0') + "-" + DateTime
-          .now()
-          .toLocal()
-          .day
-          .toString()
-          .padLeft(2, '0');
+      _dateController.text =
+          DateTime.now().toLocal().day.toString().padLeft(2, '0') +
+              "-" +
+              DateTime.now().toLocal().month.toString().padLeft(2, '0') +
+              "-" +
+              DateTime.now().toLocal().year.toString();
+      insertedDate = DateTime.now().toLocal().year.toString() +
+          "-" +
+          DateTime.now().toLocal().month.toString().padLeft(2, '0') +
+          "-" +
+          DateTime.now().toLocal().day.toString().padLeft(2, '0');
     }
-    _penaltyAmountController.text=double.parse(widget.penaltyAmount.toString()).toStringAsFixed(2);
+/*    _penaltyAmountController.text =
+        double.parse(widget.penaltyAmount.toString()).toStringAsFixed(2);*/
   }
 
   @override
@@ -145,27 +129,17 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     // TODO: implement build
 
     print('call build');
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.pop(context,'back');
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            widget.isAdmin?AppLocalizations.of(context).translate('add_receipt')+' '+widget.mBlock+' '+widget.mFlat :AppLocalizations.of(context).translate('already_paid'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title: widget.isAdmin
+              ? AppLocalizations.of(context).translate('add_receipt') +
+                  ' ' +
+                  widget.mBlock +
+                  ' ' +
+                  widget.mFlat
+              : AppLocalizations.of(context).translate('already_paid'),
         ),
         body: getBaseLayout(),
       ),
@@ -355,12 +329,14 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                 controllerCallback: _amountController,
                 keyboardType: TextInputType.number,
               ),
-              widget.isAdmin ? AppTextField(
+              /*widget.isAdmin
+                  ? AppTextField(
                 textHintContent:
                 AppLocalizations.of(context).translate('penalty_amount') ,
                 controllerCallback: _penaltyAmountController,
                 keyboardType: TextInputType.number,
-              ):SizedBox(),
+                    )
+                  : SizedBox(),*/
               AppTextField(
                 textHintContent:
                 AppLocalizations.of(context).translate('reference_no')+'*',
@@ -391,7 +367,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                       ) : BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: FileImage(File(attachmentFilePath)),
+                                        image:
+                                            FileImage(File(attachmentFilePath!)),
                               fit: BoxFit.cover
                           ),
                           border: Border.all(color: GlobalVariables.primaryColor,width: 2.0)
@@ -490,7 +467,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     );
   }
 
-  void changeBankDropDownItem(String value) {
+  void changeBankDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _bankSelectedItem = value;
@@ -510,11 +487,11 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
    String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP.getBankData(societyId,widget.invoiceNo).then((value) {
       print('Response : ' + value.toString());
-      _progressDialog.hide();
-      List<dynamic> _list = value.bank;
+      _progressDialog!.dismiss();
+      List<dynamic> _list = value.bank!;
 
       _bankList = List<Bank>.from(_list.map((i)=>Bank.fromJson(i)));
 
@@ -532,7 +509,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         ));
         if(widget.isAdmin){
           if(widget.receiptData!=null) {
-            if (widget.receiptData.BANK_ACCOUNTNO == _bankList[i].ACCOUNT_NO) {
+            if (widget.receiptData!.BANK_ACCOUNTNO == _bankList[i].ACCOUNT_NO) {
               _bankSelectedItem = _bankList[i].BANK_NAME;
               _bankAccountNoSelectedItem = _bankList[i].ACCOUNT_NO;
             }
@@ -554,10 +531,10 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
    // _progressDialog.show();
     restClientERP.amountCalculation(societyId,widget.invoiceNo,widget.amount.toString()).then((value) {
       //print('Response : ' + value.toString());
-     // _progressDialog.hide();
+      // _progressDialog.dismiss();
       print('bsnk list lenght : '+value.toString());
       _amountController.text = (value.AMOUNT).toString();
-      _penaltyAmountController.text = value.PENALTY.toString();
+      //_penaltyAmountController.text = value.PENALTY.toString();
       setState(() {
       });
 
@@ -578,8 +555,9 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     String attachment;
 
     if(attachmentFileName!=null && attachmentFilePath!=null){
-      attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachmentName = attachmentFileName!;
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }else{
       attachmentName="";
       attachment="";
@@ -588,27 +566,39 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     print('Before : Date :'+_dateController.text);
     String date= GlobalFunctions.convertDateFormat(_dateController.text,"yyyy-MM-dd");
     print('Date :'+date);*/
-    _progressDialog.show();
-    restClientERP.addAlreadyPaidPaymentRequest(societyId, widget.mFlat, widget.mBlock,widget.invoiceNo,_amountController.text,
-        _referenceController.text,paymentType,_bankAccountNoSelectedItem,insertedDate,userId,_noteController.text,_chequeBankNameController.text.toString(),attachment,"P").then((value) {
+    _progressDialog!.show();
+    restClientERP
+            .addAlreadyPaidPaymentRequest(
+                societyId,
+                widget.mFlat,
+                widget.mBlock,
+                widget.invoiceNo,
+                _amountController.text,
+                _referenceController.text,
+                paymentType,
+                _bankAccountNoSelectedItem!,
+                insertedDate,
+                userId,
+                _noteController.text,
+                _chequeBankNameController.text.toString(),
+                attachment,
+                "P")
+            .then((value) async {
       print("add paymentRequest response : "+ value.toString());
-      _progressDialog.hide();
-      if(value.status){
+      _progressDialog!.dismiss();
+      if (value.status!) {
      //   Navigator.of(context).pop();
         if(attachmentFileName!=null && attachmentFilePath!=null){
-         // GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-          GlobalFunctions.getTemporaryDirectoryPath()
-              .then((value) {
-            GlobalFunctions.removeAllFilesFromDirectory(
-                value);
-          });
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
         }
         Provider.of<UserManagementResponse>(context, listen: false)
             .getLedgerData(null,widget.mBlock,widget.mFlat);
         getMessageInfo();
       }
-      GlobalFunctions.showToast(value.message);
-
+      GlobalFunctions.showToast(value.message!);
     })/*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
@@ -638,13 +628,16 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   }
 
   void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
     print('file Name : '+attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
+          .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
+        print('Cache file path : ' + attachmentCompressFilePath!);
         setState(() {
         });
       });
@@ -652,16 +645,16 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   }
 
   void verifyData() {
-
-
-    if(_bankSelectedItem.length>0){
-
+    if (_bankSelectedItem!=null) {
       if(_referenceController.text.length>0){
-
+        if(double.parse(_amountController.text)>0) {
         if(widget.isAdmin){
           addApproveReceiptPaymentRequest();
         }else {
           addPaymentRequest();
+        }
+        }else{
+          GlobalFunctions.showToast("Please Enter Valid Amount");
         }
       }else{
         GlobalFunctions.showToast("Please Enter Reference Number");
@@ -735,9 +728,12 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                         child: text(AppLocalizations.of(context)
-                            .translate('already_paid_status'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
+                                  .translate('already_paid_status'),
+                              textColor: GlobalVariables.primaryColor,
+                              fontSize: GlobalVariables.textSizeNormal,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),Container(
+                        Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: text(AppLocalizations.of(context)
                               .translate('already_paid_status_desc'),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
@@ -767,7 +763,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     String societyId = await GlobalFunctions.getSocietyId();
     //  String block = await GlobalFunctions.getBlock();
     // String flat = await GlobalFunctions.getFlat();
-    String userId = await GlobalFunctions.getUserId();
+   // String userId = await GlobalFunctions.getUserId();
    /* String attachmentName;
     String attachment;
 
@@ -782,12 +778,25 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     print('Before : Date :'+_dateController.text);
     String date= GlobalFunctions.convertDateFormat(_dateController.text,"yyyy-MM-dd");
     print('Date :'+date);*/
-    _progressDialog.show();
-    restClientERP.addApproveReceiptRequest(societyId, widget.mBlock+' '+widget.mFlat,insertedDate,_amountController.text,_penaltyAmountController.text,
-        _referenceController.text,paymentType,_bankAccountNoSelectedItem,widget.receiptData==null? null : widget.receiptData.ID,_noteController.text,).then((value) {
+    _progressDialog!.show();
+    restClientERP
+        .addApproveReceiptRequest(
+      societyId,
+      widget.invoiceNo,
+      widget.mBlock + ' ' + widget.mFlat,
+      insertedDate,
+      _amountController.text,
+      //_penaltyAmountController.text,
+      _referenceController.text,
+      paymentType,
+      _bankAccountNoSelectedItem!,
+      widget.receiptData == null ? null : widget.receiptData!.ID,
+      _noteController.text,
+    )
+        .then((value) {
       print("addApproveReceiptRequest : "+ value.toString());
-      _progressDialog.hide();
-      if(value.status){
+      _progressDialog!.dismiss();
+      if (value.status!) {
            Navigator.of(context).pop();
            Navigator.of(context).pop();
         /*if(attachmentFileName!=null && attachmentFilePath!=null){
@@ -802,8 +811,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         Provider.of<UserManagementResponse>(context,listen: false).getMonthExpensePendingRequestData();
         //getMessageInfo();
       }
-      GlobalFunctions.showToast(value.message);
-
+      GlobalFunctions.showToast(value.message!);
     });
 
 

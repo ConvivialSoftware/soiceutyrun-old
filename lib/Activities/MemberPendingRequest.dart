@@ -1,4 +1,4 @@
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +10,7 @@ import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/PollOption.dart';
@@ -46,11 +47,12 @@ class MemberPendingRequestState
   var email = '', phone = '', consumerId = '', societyName = '',userType='';
 */
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     //_tabController = TabController(length: 2, vsync: this);
     //_tabController.addListener(_handleTabSelection);
     //  getSharedPreferenceData();
@@ -61,7 +63,6 @@ class MemberPendingRequestState
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
@@ -71,22 +72,8 @@ class MemberPendingRequestState
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('pending_request'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('pending_request'),
               ),
               body: getMemberPendingRequestLayout(value),
             ),
@@ -147,7 +134,7 @@ class MemberPendingRequestState
              alignment: Alignment.center,
             /* decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25)),*/
-              child: value.pendingRequestList[position].PROFILE_PHOTO.isEmpty
+              child: value.pendingRequestList[position].PROFILE_PHOTO!.isEmpty
                   ? AppAssetsImage(
                 GlobalVariables.componentUserProfilePath,
                 imageWidth: 30.0,
@@ -198,9 +185,9 @@ class MemberPendingRequestState
                           radius: GlobalVariables.textSizeSmall,
                         ),
                         child: text(
-                          value.pendingRequestList[position].BLOCK +
+                          value.pendingRequestList[position].BLOCK! +
                               ' ' +
-                              value.pendingRequestList[position].FLAT,
+                              value.pendingRequestList[position].FLAT!,
                           fontSize: GlobalVariables.textSizeSmall,
                           textColor: GlobalVariables.white,
                           textStyleHeight: 1.5,
@@ -209,14 +196,14 @@ class MemberPendingRequestState
                       ),
                     ],
                   ),
-                  value.pendingRequestList[position].EMAIL.isNotEmpty? Container(
+                  value.pendingRequestList[position].EMAIL!.isNotEmpty? Container(
                     child: text(
                         value.pendingRequestList[position].EMAIL,
                         fontSize: GlobalVariables.textSizeSMedium,
                         textColor: GlobalVariables.black,
                         textStyleHeight: 1.5),
                   ) : SizedBox(),
-                  value.pendingRequestList[position].MOBILE.isNotEmpty ? Container(
+                  value.pendingRequestList[position].MOBILE!.isNotEmpty ? Container(
                     child: text(
                         value.pendingRequestList[position].MOBILE,
                         fontSize: GlobalVariables.textSizeSMedium,
@@ -265,11 +252,11 @@ class MemberPendingRequestState
                                                       child: FlatButton(
                                                         onPressed: () {
                                                           Navigator.of(context).pop();
-                                                          _progressDialog.show();
-                                                          Provider.of<UserManagementResponse>(context,listen: false).deleteFamilyMember(value.pendingRequestList[position].ID).then((value) {
+                                                          _progressDialog!.show();
+                                                          Provider.of<UserManagementResponse>(context,listen: false).deleteFamilyMember(value.pendingRequestList[position].ID!).then((value) {
 
-                                                            _progressDialog.hide();
-                                                            GlobalFunctions.showToast(value.message);
+                                                            _progressDialog!.dismiss();
+                                                            GlobalFunctions.showToast(value.message!);
                                                             print('value : '+value.toString());
 
                                                           });
@@ -344,10 +331,10 @@ class MemberPendingRequestState
                                                         onPressed: () {
                                                           Navigator.of(context).pop();
                                                           _progressDialog.show();
-                                                          Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID).then((value) {
+                                                          Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID!).then((value) {
 
-                                                            _progressDialog.hide();
-                                                            GlobalFunctions.showToast(value.message);
+                                                            _progressDialog.dismiss();
+                                                            GlobalFunctions.showToast(value.message!);
                                                             print('value : '+value.toString());
 
                                                           });

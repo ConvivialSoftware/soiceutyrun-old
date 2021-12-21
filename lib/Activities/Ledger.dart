@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Ledger.dart';
@@ -24,7 +25,7 @@ import 'base_stateful.dart';
 
 class BaseLedger extends StatefulWidget {
 
-  String mBlock,mFlat;
+  String? mBlock,mFlat;
   BaseLedger(this.mBlock, this.mFlat);
 
   @override
@@ -35,15 +36,16 @@ class BaseLedger extends StatefulWidget {
 }
 
 class LedgerState extends State<BaseLedger> {
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   List<DropdownMenuItem<String>> _yearListItems =
-      new List<DropdownMenuItem<String>>();
+      <DropdownMenuItem<String>>[];
 
-  String _yearSelectedItem;
+  String? _yearSelectedItem;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // getTransactionList();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -59,31 +61,14 @@ class LedgerState extends State<BaseLedger> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-
     return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of<UserManagementResponse>(context),
       child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                AppLocalizations.of(context).translate('ledger'),
-                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-              ),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('ledger'),
             ),
             body: getBaseLayout(value),
           ),
@@ -121,7 +106,7 @@ class LedgerState extends State<BaseLedger> {
                   child: DropdownButton(
                     items: _yearListItems,
                     onChanged: (value) {
-                      _yearSelectedItem = value;
+                      _yearSelectedItem = value as String?;
                       print('_selctedItem:' +
                           _yearSelectedItem.toString());
 
@@ -310,11 +295,11 @@ class LedgerState extends State<BaseLedger> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (value.ledgerList[position].TYPE
+                        if (value.ledgerList[position].TYPE!
                                     .toLowerCase()
                                     .toString() ==
                                 'bill' ||
-                            value.ledgerList[position].TYPE
+                            value.ledgerList[position].TYPE!
                                     .toLowerCase()
                                     .toString() ==
                                 'invoice') {
@@ -340,7 +325,7 @@ class LedgerState extends State<BaseLedger> {
                               double.parse(value.ledgerList[position].AMOUNT
                                       .toString())
                                   .toStringAsFixed(2),
-                          textColor: value.ledgerList[position].TYPE
+                          textColor: value.ledgerList[position].TYPE!
                                           .toLowerCase()
                                           .toString() ==
                                       'bill'
@@ -416,9 +401,9 @@ class LedgerState extends State<BaseLedger> {
 
   getLedgerData(var year) async {
     Provider.of<UserManagementResponse>(context, listen: false)
-        .getLedgerData(year,widget.mBlock,widget.mFlat)
+        .getLedgerData(year,widget.mBlock!,widget.mFlat!)
         .then((value) {
-      _yearListItems = new List<DropdownMenuItem<String>>();
+      _yearListItems = <DropdownMenuItem<String>>[];
       if (UserManagementResponse.listYear.length > 0) {
         for (int i = 0; i < UserManagementResponse.listYear.length; i++) {
           print('_listYear : ' +
@@ -451,7 +436,7 @@ class LedgerState extends State<BaseLedger> {
                   ));
               if (_yearSelectedItem == null) {
                 _yearSelectedItem = UserManagementResponse.listYear[i].years;
-                print('_yearSelectedItem : ' + _yearSelectedItem);
+                print('_yearSelectedItem : ' + _yearSelectedItem!);
               }
             }
           } else {

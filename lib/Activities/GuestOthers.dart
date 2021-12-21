@@ -4,6 +4,7 @@ import 'package:societyrun/Activities/Cab.dart';
 import 'package:societyrun/Activities/Delivery.dart';
 import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -25,23 +26,8 @@ class GuestOthersState extends State<BaseGuestOthers> {
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child:AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('guests_other'),
-            textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('guests_other'),
         ),
         body: getBaseLayout(),
       ),

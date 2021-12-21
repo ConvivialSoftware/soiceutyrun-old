@@ -5,16 +5,19 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/Directory.dart';
 import 'package:societyrun/Activities/ViewPollGraph.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Announcement.dart';
@@ -32,7 +35,7 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'base_stateful.dart';
 
 class BaseMyComplex extends StatefulWidget {
-  String pageName;
+  String? pageName;
 
   //final int pageIndex;
   BaseMyComplex(this.pageName);
@@ -40,126 +43,44 @@ class BaseMyComplex extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyComplexState(pageName);
+    return MyComplexState();
   }
 }
 
-class MyComplexState extends State<BaseMyComplex>
+class MyComplexState extends AppStatefulState<BaseMyComplex>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
-  var name, _localPath;
-  String _taskId;
-  ReceivePort _port = ReceivePort();
-  String _selectedItem;
+  var name;
+
+  // String _taskId;
+  // ReceivePort _port = ReceivePort();
+  String? _selectedItem;
   List<DropdownMenuItem<String>> _societyListItems =
-      new List<DropdownMenuItem<String>>();
+      <DropdownMenuItem<String>>[];
 
-  ProgressDialog _progressDialog;
-  ProgressDialog _downloadProgress;
-
-  String pageName;
-
-  bool isStoragePermission = false;
-
-/*
-  bool isAnnouncementTabAPICall = false;
-  bool isMeetingsTabAPICall = false;
-  bool isPollTabAPICall = false;
-  bool isDocumentsTabAPICall = false;
-  bool isDirectoryTabAPICall = false;
-  bool isEventsTabAPICall = false;*/
-
-  MyComplexState(this.pageName);
+  ProgressDialog? _progressDialog;
+  int? _selectedPosition;
 
   @override
   void initState() {
-    print(">>>>>>>PAGENAME $pageName");
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    print(">>>>>>>PAGENAME $widget.pageName");
     getDisplayName();
-    getLocalPath();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
-    //flutterDownloadInitialize();
     _tabController = TabController(length: 6, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-    print('pageName : ' + pageName.toString());
-    if (pageName == null) {
+    _tabController!.addListener(_handleTabSelection);
+    print('pageName : ' + widget.pageName.toString());
+    if (widget.pageName == null) {
       _handleTabSelection();
     }
-
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
   }
 
   @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-          true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    if (pageName != null) {
+    if (widget.pageName != null) {
       try {
-        redirectToPage(pageName);
+        redirectToPage(widget.pageName!);
       } catch (e) {
         print(e);
       }
@@ -171,23 +92,9 @@ class MyComplexState extends State<BaseMyComplex>
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(AppLocalizations.of(context).translate('my_complex'),
-                  textColor: GlobalVariables.white,
-                  fontSize: GlobalVariables.textSizeMedium),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('my_complex'),
               bottom: getTabLayout(),
-              elevation: 0,
             ),
             body: TabBarView(controller: _tabController, children: <Widget>[
               getNewsBoardLayout(value),
@@ -277,7 +184,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                    child: value.announcementList[position].USER_PHOTO.isEmpty
+                    child: value.announcementList[position].USER_PHOTO!.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 40.0,
@@ -317,7 +224,7 @@ class MyComplexState extends State<BaseMyComplex>
                               children: <Widget>[
                                 Container(
                                   child: text(
-                                    value.announcementList[position].BLOCK
+                                    value.announcementList[position].BLOCK!
                                                 .length >
                                             0
                                         ? value.announcementList[position].BLOCK
@@ -365,15 +272,16 @@ class MyComplexState extends State<BaseMyComplex>
             textColor: GlobalVariables.grey,
             fontSize: GlobalVariables.textSizeSMedium,
           )),
-          value.announcementList[position].ATTACHMENT.length > 0
+          value.announcementList[position].ATTACHMENT!.length > 0
               ? Divider()
               : Container(),
-          value.announcementList[position].ATTACHMENT.length > 0
+          value.announcementList[position].ATTACHMENT!.length > 0
               ? InkWell(
                   onTap: () {
-                    String url = value.announcementList[position].ATTACHMENT;
-
-                    print("storagePermiassion : " +
+                    _selectedPosition = position;
+                    downloadAttachment(
+                        value.announcementList[position].ATTACHMENT);
+                    /*print("storagePermiassion : " +
                         isStoragePermission.toString());
                     if (isStoragePermission) {
                       downloadAttachment(url, _localPath);
@@ -387,7 +295,7 @@ class MyComplexState extends State<BaseMyComplex>
                               .translate('download_permission'));
                         }
                       });
-                    }
+                    }*/
                   },
                   child: Row(
                     children: <Widget>[
@@ -399,6 +307,28 @@ class MyComplexState extends State<BaseMyComplex>
                         "Attachment",
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSmall,
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      if (downloading && position == _selectedPosition)
+                        Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Container(
+                              //height: 20,
+                              //width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                //value: 71.0,
+                              ),
+                            ),
+                            //SizedBox(width: 4,),
+                            Container(
+                                child: text(downloadRate.toString(),
+                                    fontSize: GlobalVariables.textSizeSmall,
+                                    textColor: GlobalVariables.skyBlue))
+                          ],
                       )
                     ],
                   ),
@@ -537,7 +467,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                    child: value.meetingList[position].USER_PHOTO.isEmpty
+                    child: value.meetingList[position].USER_PHOTO!.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 40.0,
@@ -571,7 +501,7 @@ class MyComplexState extends State<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: primaryText(
-                            value.meetingList[position].USER_NAME,
+                            value.meetingList[position].USER_NAME??'',
                             fontSize: GlobalVariables.textSizeSMedium,
                             /*textColor: GlobalVariables.green,
                             fontWeight: FontWeight.bold,*/
@@ -584,7 +514,7 @@ class MyComplexState extends State<BaseMyComplex>
                               children: <Widget>[
                                 Container(
                                   child: text(
-                                    value.meetingList[position].BLOCK.length > 0
+                                    value.meetingList[position].BLOCK!.length > 0
                                         ? value.meetingList[position].BLOCK
                                                 .toString() +
                                             ' ' +
@@ -652,13 +582,14 @@ class MyComplexState extends State<BaseMyComplex>
                         value.meetingList[position].VENUE,
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
-                          textStyleHeight: 1.0
+                          textStyleHeight: 1.0),
                       ),
-                    ),
                   ],
+                    ),
                 ),
+              SizedBox(
+                height: 4,
               ),
-              SizedBox(height: 4,),
               Container(
                 child: Row(
                   children: <Widget>[
@@ -683,13 +614,14 @@ class MyComplexState extends State<BaseMyComplex>
                             .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
-                          textStyleHeight: 1.0
+                          textStyleHeight: 1.0),
                       ),
-                    ),
                   ],
+                    ),
                 ),
+              SizedBox(
+                height: 4,
               ),
-              SizedBox(height: 4,),
               Container(
                 child: Row(
                   children: <Widget>[
@@ -715,15 +647,17 @@ class MyComplexState extends State<BaseMyComplex>
               ),
             ],
           ),
-          value.meetingList[position].ATTACHMENT.length > 0
+          value.meetingList[position].ATTACHMENT!.length > 0
               ? Divider()
               : Container(),
-          value.meetingList[position].ATTACHMENT.length > 0
+          value.meetingList[position].ATTACHMENT!.length > 0
               ? InkWell(
                   onTap: () {
-                    String url = value.meetingList[position].ATTACHMENT;
-
-                    print("storagePermiassion : " +
+                    _selectedPosition = position;
+                    downloadAttachment(
+                      value.meetingList[position].ATTACHMENT,
+                    );
+                    /*print("storagePermiassion : " +
                         isStoragePermission.toString());
                     if (isStoragePermission) {
                       downloadAttachment(url, _localPath);
@@ -737,7 +671,7 @@ class MyComplexState extends State<BaseMyComplex>
                               .translate('download_permission'));
                         }
                       });
-                    }
+                    }*/
                   },
                   child: Container(
                     child: Row(
@@ -754,6 +688,28 @@ class MyComplexState extends State<BaseMyComplex>
                             textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSmall,
                           ),
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        if (downloading && position == _selectedPosition)
+                          Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Container(
+                                //height: 20,
+                                //width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  //value: 71.0,
+                                ),
+                              ),
+                              //SizedBox(width: 4,),
+                              Container(
+                                  child: text(downloadRate.toString(),
+                                      fontSize: GlobalVariables.textSizeSmall,
+                                      textColor: GlobalVariables.skyBlue))
+                            ],
                         )
                       ],
                     ),
@@ -799,41 +755,41 @@ class MyComplexState extends State<BaseMyComplex>
     print('>>>>> ' + position.toString());
 
     print('EXPIRY_DATE : ' +
-        GlobalFunctions.isDateSameOrGrater(value.pollList[position].EXPIRY_DATE)
+        GlobalFunctions.isDateSameOrGrater(value.pollList[position].EXPIRY_DATE!)
             .toString());
     print('SECRET_POLL : ' + value.pollList[position].SECRET_POLL.toString());
-    print('VOTED_TO : ' + value.pollList[position].VOTED_TO.length.toString());
+    print('VOTED_TO : ' + value.pollList[position].VOTED_TO!.length.toString());
     if (!GlobalFunctions.isDateExpireForPoll(
-            value.pollList[position].EXPIRY_DATE) &&
-        (value.pollList[position].VOTED_TO.length > 0) &&
-        value.pollList[position].SECRET_POLL.toLowerCase() == 'no') {
+            value.pollList[position].EXPIRY_DATE!) &&
+        (value.pollList[position].VOTED_TO!.length > 0) &&
+        value.pollList[position].SECRET_POLL!.toLowerCase() == 'no') {
       print('>>> 1st');
       value.pollList[position].isGraphView = true;
     }
     if (GlobalFunctions.isDateExpireForPoll(
-        value.pollList[position].EXPIRY_DATE)) {
+        value.pollList[position].EXPIRY_DATE!)) {
       print('>>> 2nd');
       value.pollList[position].isGraphView = true;
     }
 
     if (!GlobalFunctions.isDateExpireForPoll(
-            value.pollList[position].EXPIRY_DATE) &&
-        (value.pollList[position].VOTED_TO.length == 0)) {
+            value.pollList[position].EXPIRY_DATE!) &&
+        (value.pollList[position].VOTED_TO!.length == 0)) {
       print('>>> 3rd');
       value.pollList[position].isGraphView = false;
     }
 
     if (!GlobalFunctions.isDateExpireForPoll(
-            value.pollList[position].EXPIRY_DATE) &&
-        (value.pollList[position].VOTED_TO.length > 0) &&
-        value.pollList[position].SECRET_POLL.toLowerCase() == 'yes') {
+            value.pollList[position].EXPIRY_DATE!) &&
+        (value.pollList[position].VOTED_TO!.length > 0) &&
+        value.pollList[position].SECRET_POLL!.toLowerCase() == 'yes') {
       print('>>> 4th');
       value.pollList[position].isGraphView = false;
     }
 
     print('>>>>> ' + position.toString());
     print('>>>>> value.pollList[position].VOTED_TO.length : ' +
-        value.pollList[position].VOTED_TO.length.toString());
+        value.pollList[position].VOTED_TO!.length.toString());
     return AppContainer(
       isListItem: true,
       child: Column(
@@ -842,7 +798,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                  child: value.pollList[position].USER_PHOTO.isEmpty
+                  child: value.pollList[position].USER_PHOTO!.isEmpty
                       ? AppAssetsImage(
                           GlobalVariables.componentUserProfilePath,
                           imageWidth: 40.0,
@@ -884,7 +840,7 @@ class MyComplexState extends State<BaseMyComplex>
                               height: 10,
                               decoration: BoxDecoration(
                                   color: !GlobalFunctions.isDateSameOrGrater(
-                                      value.pollList[position].EXPIRY_DATE)
+                                          value.pollList[position].EXPIRY_DATE!)
                                       ? GlobalVariables.primaryColor
                                       : GlobalVariables.red,
                                   shape: BoxShape.circle),
@@ -898,9 +854,9 @@ class MyComplexState extends State<BaseMyComplex>
                               children: <Widget>[
                                 Container(
                                   child: text(
-                                    value.pollList[position].BLOCK +
+                                    value.pollList[position].BLOCK! +
                                         ' ' +
-                                        value.pollList[position].FLAT,
+                                        value.pollList[position].FLAT!,
                                     textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
                                   ),
@@ -950,9 +906,9 @@ class MyComplexState extends State<BaseMyComplex>
                   child: Row(
                     children: <Widget>[
                       (!GlobalFunctions.isDateSameOrGrater(
-                                  value.pollList[position].EXPIRY_DATE) &&
-                              (value.pollList[position].VOTED_TO.length > 0) &&
-                              value.pollList[position].SECRET_POLL
+                                  value.pollList[position].EXPIRY_DATE!) &&
+                              (value.pollList[position].VOTED_TO!.length > 0) &&
+                              value.pollList[position].SECRET_POLL!
                                       .toLowerCase() ==
                                   'yes')
                           ? Container(
@@ -973,7 +929,7 @@ class MyComplexState extends State<BaseMyComplex>
                                     "  (Result On " +
                                         GlobalFunctions.convertDateFormat(
                                             value
-                                                .pollList[position].EXPIRY_DATE,
+                                                .pollList[position].EXPIRY_DATE!,
                                             "dd MMM yy") +
                                         ")",
                                     textColor: GlobalVariables.primaryColor,
@@ -992,7 +948,7 @@ class MyComplexState extends State<BaseMyComplex>
                   ? InkWell(
                       onTap: () {
                         List<PollOption> _optionList = List<PollOption>.from(
-                            value.pollList[position].OPTION
+                            value.pollList[position].OPTION!
                                 .map((i) => PollOption.fromJson(i)));
                         Navigator.push(
                             context,
@@ -1006,8 +962,8 @@ class MyComplexState extends State<BaseMyComplex>
                           Container(
                           //  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: GlobalFunctions.isDateSameOrGrater(
-                                        value.pollList[position].EXPIRY_DATE) &&
-                                    (value.pollList[position].VOTED_TO.length >
+                                        value.pollList[position].EXPIRY_DATE!) &&
+                                    (value.pollList[position].VOTED_TO!.length >
                                         0)
                                 ? text(
                                     "See Poll Result",
@@ -1035,35 +991,35 @@ class MyComplexState extends State<BaseMyComplex>
                       ),
                     )
                   : Container(),
-              (value.pollList[position].VOTED_TO.length == 0) &&
-                      value.pollList[position].VOTE_PERMISSION.toLowerCase() ==
+              (value.pollList[position].VOTED_TO!.length == 0) &&
+                      value.pollList[position].VOTE_PERMISSION!.toLowerCase() ==
                           'yes' &&
                       !GlobalFunctions.isDateSameOrGrater(
-                          value.pollList[position].EXPIRY_DATE)
+                          value.pollList[position].EXPIRY_DATE!)
                   ? InkWell(
                       onTap: () {
                         String optionId = '';
                         List<PollOption> _optionList = List<PollOption>.from(
-                            value.pollList[position].OPTION
+                            value.pollList[position].OPTION!
                                 .map((i) => PollOption.fromJson(i)));
                         for (int i = 0; i < _optionList.length; i++) {
                           if (_optionList[i].ANS_ID ==
                               value.pollList[position].View_VOTED_TO) {
-                            optionId = _optionList[i].ANS_ID;
+                            optionId = _optionList[i].ANS_ID!;
                             _optionList[i].VOTES =
-                                (int.parse(_optionList[i].VOTES) + 1)
+                                (int.parse(_optionList[i].VOTES!) + 1)
                                     .toString();
                             break;
                           }
                         }
 
-                        addPollVote(value.pollList[position].ID, optionId,
+                        addPollVote(value.pollList[position].ID!, optionId,
                             position, _optionList, value);
                       },
                       child: Container(
                         alignment: Alignment.topRight,
                         padding: EdgeInsets.all(8),
-                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
                           color: GlobalVariables.primaryColor,
                           borderRadius: BorderRadius.circular(35),
@@ -1182,7 +1138,7 @@ class MyComplexState extends State<BaseMyComplex>
     );
   }
 
-  void changeDropDownItem(String value) {
+  void changeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     /*setState(() {
       _selectedItem = value;
@@ -1219,8 +1175,7 @@ class MyComplexState extends State<BaseMyComplex>
   }
 
   getDirectoryListItemLayout(int position, MyComplexResponse value) {
-
-    String type = value.directoryList[position].directoryType;
+    String type = value.directoryList[position].directoryType!;
 
     return Column(
       children: <Widget>[
@@ -1243,8 +1198,8 @@ class MyComplexState extends State<BaseMyComplex>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  BaseDirectory(value.directoryList[position])));
+                              builder: (context) => BaseDirectory(
+                                  value.directoryList[position])));
                     }
                   },
                   child: smallTextContainerOutlineLayout(AppLocalizations.of(context).translate('see_all'))),
@@ -1259,8 +1214,8 @@ class MyComplexState extends State<BaseMyComplex>
                   builder: (context) => ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: value.directoryList[position]
-                          .directoryTypeWiseList.length,
+                      itemCount: value
+                          .directoryList[position].directoryTypeWiseList!.length,
                       itemBuilder: (context, childPosition) {
                         return getDirectoryTypeWiseItemLayout(
                             position, childPosition, type, value);
@@ -1282,26 +1237,25 @@ class MyComplexState extends State<BaseMyComplex>
     String name = '', field = '', permission = '';
     if (type == 'Committee') {
       name = value
-          .directoryList[position].directoryTypeWiseList[childPosition].NAME;
+          .directoryList[position].directoryTypeWiseList![childPosition].NAME;
 
       field = value
-          .directoryList[position].directoryTypeWiseList[childPosition].POST;
-
+          .directoryList[position].directoryTypeWiseList![childPosition].POST;
     }
 
     if (type == 'Emergency') {
-      name = value.directoryList[position].directoryTypeWiseList[childPosition]
+      name = value.directoryList[position].directoryTypeWiseList![childPosition]
                   .Name ==
               null
           ? ''
-          : value.directoryList[position].directoryTypeWiseList[childPosition]
+          : value.directoryList[position].directoryTypeWiseList![childPosition]
               .Name;
 
-      field = value.directoryList[position].directoryTypeWiseList[childPosition]
+      field = value.directoryList[position].directoryTypeWiseList![childPosition]
                   .Category ==
               null
           ? ''
-          : value.directoryList[position].directoryTypeWiseList[childPosition]
+          : value.directoryList[position].directoryTypeWiseList![childPosition]
               .Category;
 
       print('name : ' + name);
@@ -1311,22 +1265,22 @@ class MyComplexState extends State<BaseMyComplex>
 
     if (type == 'Neighbours') {
       name = value
-          .directoryList[position].directoryTypeWiseList[childPosition].NAME;
+          .directoryList[position].directoryTypeWiseList![childPosition].NAME;
 
-      field = value.directoryList[position].directoryTypeWiseList[childPosition]
+      field = value.directoryList[position].directoryTypeWiseList![childPosition]
               .BLOCK +
           "-" +
-          value.directoryList[position].directoryTypeWiseList[childPosition]
+          value.directoryList[position].directoryTypeWiseList![childPosition]
               .FLAT;
 
     }
 
     if (type == 'Near By Shops') {
       name = value
-          .directoryList[position].directoryTypeWiseList[childPosition].name;
+          .directoryList[position].directoryTypeWiseList![childPosition].name;
 
       field = value
-          .directoryList[position].directoryTypeWiseList[childPosition].field;
+          .directoryList[position].directoryTypeWiseList![childPosition].field;
     }
     if (name == null) name = '';
 
@@ -1379,7 +1333,10 @@ class MyComplexState extends State<BaseMyComplex>
               ],
             ),
           ),
-          childPosition != value.directoryList[position].directoryTypeWiseList.length-1 ?  Divider() : SizedBox(),
+          childPosition !=
+                  value.directoryList[position].directoryTypeWiseList!.length - 1
+              ? Divider()
+              : SizedBox(),
         ],
       ),
     );
@@ -1693,7 +1650,7 @@ class MyComplexState extends State<BaseMyComplex>
             child: Row(
               children: <Widget>[
                 Container(
-                    child: value.eventList[position].USER_PHOTO.isEmpty
+                    child: value.eventList[position].USER_PHOTO!.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 40.0,
@@ -1733,10 +1690,10 @@ class MyComplexState extends State<BaseMyComplex>
                               children: <Widget>[
                                 Container(
                                   child: text(
-                                    value.eventList[position].BLOCK.length > 0
-                                        ? value.eventList[position].BLOCK +
+                                    value.eventList[position].BLOCK!.length > 0
+                                        ? value.eventList[position].BLOCK! +
                                             ' ' +
-                                            value.eventList[position].FLAT
+                                            value.eventList[position].FLAT!
                                         : "Maintannance Staff",
                                     textColor: GlobalVariables.grey,
                                     fontSize: GlobalVariables.textSizeVerySmall,
@@ -1773,9 +1730,10 @@ class MyComplexState extends State<BaseMyComplex>
               value.eventList[position].DESCRIPTION,
               textColor: GlobalVariables.grey,
               fontSize: GlobalVariables.textSizeSMedium,
-            )
+              )),
+          SizedBox(
+            height: 8,
           ),
-          SizedBox(height: 8,),
           Column(
             children: <Widget>[
               Row(
@@ -1795,12 +1753,13 @@ class MyComplexState extends State<BaseMyComplex>
                       value.eventList[position].VENUE,
                       textColor: GlobalVariables.primaryColor,
                       fontSize: GlobalVariables.textSizeSMedium,
-                      textStyleHeight: 1.0
+                        textStyleHeight: 1.0),
                     ),
-                  ),
                 ],
+                  ),
+              SizedBox(
+                height: 4,
               ),
-              SizedBox(height: 4,),
               Container(
                 child: Row(
                   children: <Widget>[
@@ -1815,18 +1774,19 @@ class MyComplexState extends State<BaseMyComplex>
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                       child: text(
-                        value.eventList[position].START_DATE +
+                          value.eventList[position].START_DATE! +
                             ' to ' +
-                            value.eventList[position].END_DATE,
+                              value.eventList[position].END_DATE!,
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
-                          textStyleHeight: 1.0
+                          textStyleHeight: 1.0),
                       ),
-                    ),
                   ],
+                    ),
                 ),
+              SizedBox(
+                height: 4,
               ),
-              SizedBox(height: 4,),
               Container(
                 child: Row(
                   children: <Widget>[
@@ -1841,9 +1801,9 @@ class MyComplexState extends State<BaseMyComplex>
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                       child: text(
-                        value.eventList[position].START_TIME +
+                          value.eventList[position].START_TIME! +
                             ' to ' +
-                            value.eventList[position].END_TIME,
+                              value.eventList[position].END_TIME!,
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0
@@ -1854,22 +1814,15 @@ class MyComplexState extends State<BaseMyComplex>
               ),
             ],
           ),
-          value.eventList[position].ATTACHMENT.length > 0
-              ? Container(
-                  height: 2,
-                  color: GlobalVariables.secondaryColor,
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Divider(
-                    height: 2,
-                  ),
-                )
+          value.eventList[position].ATTACHMENT!.length > 0
+              ? Divider()
               : Container(),
-          value.eventList[position].ATTACHMENT.length > 0
+          value.eventList[position].ATTACHMENT!.length > 0
               ? InkWell(
                   onTap: () {
-                    String url = value.eventList[position].ATTACHMENT;
-
-                    print("storagePermiassion : " +
+                    _selectedPosition = position;
+                    downloadAttachment(value.eventList[position].ATTACHMENT);
+                    /*print("storagePermiassion : " +
                         isStoragePermission.toString());
                     if (isStoragePermission) {
                       downloadAttachment(url, _localPath);
@@ -1883,7 +1836,7 @@ class MyComplexState extends State<BaseMyComplex>
                               .translate('download_permission'));
                         }
                       });
-                    }
+                    }*/
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -1901,6 +1854,28 @@ class MyComplexState extends State<BaseMyComplex>
                             textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeVerySmall,
                           ),
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        if (downloading && position == _selectedPosition)
+                          Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Container(
+                                //height: 20,
+                                //width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  //value: 71.0,
+                                ),
+                              ),
+                              //SizedBox(width: 4,),
+                              Container(
+                                  child: text(downloadRate.toString(),
+                                      fontSize: GlobalVariables.textSizeSmall,
+                                      textColor: GlobalVariables.skyBlue))
+                            ],
                         )
                       ],
                     ),
@@ -1917,43 +1892,36 @@ class MyComplexState extends State<BaseMyComplex>
     setState(() {});
   }
 
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
-    });
-  }
-
   void redirectToPage(String item) {
     // print(">>>>>>>${item}");
     if (item == AppLocalizations.of(context).translate('my_complex')) {
       //Redirect to my Unit
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     } else if (item == AppLocalizations.of(context).translate('announcement')) {
       //Redirect to  NewsBoard
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     } else if (item == AppLocalizations.of(context).translate('meetings')) {
       //Redirect to  PollSurvey
-      _tabController.animateTo(1);
+      _tabController!.animateTo(1);
     } else if (item == AppLocalizations.of(context).translate('poll_survey')) {
       //Redirect to  PollSurvey
-      _tabController.animateTo(2);
+      _tabController!.animateTo(2);
     } else if (item == AppLocalizations.of(context).translate('documents')) {
       //Redirect to  Directory
-      _tabController.animateTo(3);
+      _tabController!.animateTo(3);
     } else if (item == AppLocalizations.of(context).translate('directory')) {
       //Redirect to  Document
-      _tabController.animateTo(4);
+      _tabController!.animateTo(4);
     } else if (item == AppLocalizations.of(context).translate('events')) {
       //Redirect to  Events
-      _tabController.animateTo(5);
+      _tabController!.animateTo(5);
     } else {
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     }
 
-    if (pageName != null) {
-      pageName = null;
-      if (_tabController.index == 0) {
+    if (widget.pageName != null) {
+      widget.pageName = null;
+      if (_tabController!.index == 0) {
         _handleTabSelection();
       }
     }
@@ -1962,12 +1930,12 @@ class MyComplexState extends State<BaseMyComplex>
   void _handleTabSelection() {
     print('Call _handleTabSelection');
     //if(_tabController.indexIsChanging){
-    _callAPI(_tabController.index);
+    _callAPI(_tabController!.index);
     //}
   }
 
   void _callAPI(int index) {
-    print('_callAPI pageName : ' + pageName.toString());
+    print('_callAPI pageName : ' + widget.pageName.toString());
     print('_callAPI index : ' + index.toString());
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -2100,9 +2068,8 @@ class MyComplexState extends State<BaseMyComplex>
                         textColor: GlobalVariables.white,
                         fontSize: GlobalVariables.textSizeVerySmall),
                     decoration: BoxDecoration(
-                        color: getDocumentTypeColor(value
-                            .documentList[position]
-                            .DOCUMENT_CATEGORY),
+                        color: getDocumentTypeColor(
+                            value.documentList[position].DOCUMENT_CATEGORY!),
                         borderRadius: BorderRadius.circular(5)),
                   ),
                 )
@@ -2140,12 +2107,15 @@ class MyComplexState extends State<BaseMyComplex>
                   ],
                 ),
               ),*/
-              value.documentList[position].DOCUMENT.length != null
+              value.documentList[position].DOCUMENT!.length != null
                   ? Container(
                       // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: InkWell(
                         onTap: () {
-                          print("storagePermiassion : " +
+                          _selectedPosition = position;
+                          downloadAttachment(
+                              value.documentList[position].DOCUMENT);
+                          /*print("storagePermiassion : " +
                               isStoragePermission.toString());
                           if (isStoragePermission) {
                             downloadAttachment(
@@ -2164,7 +2134,7 @@ class MyComplexState extends State<BaseMyComplex>
                                         .translate('download_permission'));
                               }
                             });
-                          }
+                          }*/
                         },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -2181,6 +2151,29 @@ class MyComplexState extends State<BaseMyComplex>
                                 textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeSmall,
                               ),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            if (downloading && position == _selectedPosition)
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(
+                                      child: text(downloadRate.toString(),
+                                          fontSize:
+                                              GlobalVariables.textSizeSmall,
+                                          textColor: GlobalVariables.skyBlue))
+                                ],
                             )
                           ],
                         ),
@@ -2191,12 +2184,11 @@ class MyComplexState extends State<BaseMyComplex>
               text(
                   value.documentList[position].USER_NAME == null
                       ? 'Posted By: - '
-                      : 'Posted By: ' +
-                          value.documentList[position].USER_NAME,
+                      : 'Posted By: ' + value.documentList[position].USER_NAME!,
                   textColor: GlobalVariables.grey,
                   fontSize: GlobalVariables.textSizeSmall),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -2223,7 +2215,7 @@ class MyComplexState extends State<BaseMyComplex>
     //  print("value.pollList[position].SECRET_POLL : "+value.pollList[position].SECRET_POLL.toString());
     // print("value.pollList[position].OPTION : "+value.pollList[position].OPTION.toString());
     List<PollOption> _optionList = List<PollOption>.from(
-        value.pollList[position].OPTION.map((i) => PollOption.fromJson(i)));
+        value.pollList[position].OPTION!.map((i) => PollOption.fromJson(i)));
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -2248,16 +2240,16 @@ class MyComplexState extends State<BaseMyComplex>
 
   getPollOptionListItemLayout(
       int position, PollOption pollOption, MyComplexResponse value) {
-    if (value.pollList[position].VOTED_TO.length > 0) {
+    if (value.pollList[position].VOTED_TO!.length > 0) {
       if (pollOption.ANS_ID.toString().toLowerCase() ==
-          value.pollList[position].VOTED_TO.toLowerCase()) {
+          value.pollList[position].VOTED_TO!.toLowerCase()) {
         pollOption.isSelected = true;
       } else {
         pollOption.isSelected = false;
       }
-    } else if (value.pollList[position].View_VOTED_TO.length > 0) {
+    } else if (value.pollList[position].View_VOTED_TO!.length > 0) {
       if (pollOption.ANS_ID.toString().toLowerCase() ==
-          value.pollList[position].View_VOTED_TO.toLowerCase()) {
+          value.pollList[position].View_VOTED_TO!.toLowerCase()) {
         pollOption.isSelected = true;
       } else {
         pollOption.isSelected = false;
@@ -2269,7 +2261,7 @@ class MyComplexState extends State<BaseMyComplex>
     return InkWell(
       //  splashColor: GlobalVariables.mediumGreen,
       onTap: () {
-        if (value.pollList[position].VOTE_PERMISSION.toLowerCase() == 'yes') {
+        if (value.pollList[position].VOTE_PERMISSION!.toLowerCase() == 'yes') {
           setState(() {
             pollOption.isSelected = true;
             value.pollList[position].View_VOTED_TO = pollOption.ANS_ID;
@@ -2332,22 +2324,22 @@ class MyComplexState extends State<BaseMyComplex>
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
         .addPollVote(societyId, userId, block, flat, pollId, optionId)
         .then((value) async {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
       print('Response : ' + value.toString());
-      if (value.status) {
+      if (value.status!) {
         myComplexValue.pollList[position].VOTED_TO = optionId;
         myComplexValue.pollList[position].VOTE_PERMISSION = 'NO';
 
-        if (myComplexValue.pollList[position].SECRET_POLL.toLowerCase() ==
+        if (myComplexValue.pollList[position].SECRET_POLL!.toLowerCase() ==
             'yes') {
           setState(() {});
-          GlobalFunctions.showToast(value.message +
+          GlobalFunctions.showToast(value.message! +
               '. You can view result of poll after ' +
-              myComplexValue.pollList[position].EXPIRY_DATE);
+              myComplexValue.pollList[position].EXPIRY_DATE!);
         } else {
           setState(() {});
           Navigator.push(
@@ -2357,7 +2349,7 @@ class MyComplexState extends State<BaseMyComplex>
                       myComplexValue.pollList[position], optionList)));
         }
       } else {
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       }
     });
   }

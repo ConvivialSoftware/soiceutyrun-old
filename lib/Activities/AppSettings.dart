@@ -10,6 +10,7 @@ import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -36,23 +37,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('settings'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('settings'),
         ),
         body: getBaseLayout(),
         bottomNavigationBar: appDetailsLayout(),
@@ -688,8 +674,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
     _progressDialog.show();
     restClient.userLogout(societyId, userId, gcmId).then((value) {
       print('Response : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog.dismiss();
+      if (value.status!) {
         GlobalFunctions.clearSharedPreferenceData();
         Navigator.pushAndRemoveUntil(
             context,
@@ -697,10 +683,10 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 builder: (BuildContext context) => new BaseLoginPage()),
             (Route<dynamic> route) => false);
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog.isShowed) {
+        _progressDialog.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:clipboard/clipboard.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
@@ -41,8 +43,8 @@ class NearByShopNotificationItemDetailsState
     with SingleTickerProviderStateMixin {
   var width, height;
 
-  List<NearByShopOfferDetails> offerDetailsList=List<NearByShopOfferDetails>();
-  List<NearByShopTermsCondition> termsConditionList=List<NearByShopTermsCondition>();
+  List<NearByShopOfferDetails> offerDetailsList=<NearByShopOfferDetails>[];
+  List<NearByShopTermsCondition> termsConditionList=<NearByShopTermsCondition>[];
 
 
   @override
@@ -93,22 +95,8 @@ class NearByShopNotificationItemDetailsState
             return Builder(
               builder: (context) => Scaffold(
                 //resizeToAvoidBottomPadding: false,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.white,
-                  centerTitle: true,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.primaryColor,
-                    ),
-                  ),
-                  title: text(
-                    'Offer Details',
-                    textColor: GlobalVariables.primaryColor, fontSize: GlobalVariables.textSizeMedium,
-                  ),
+                appBar: CustomAppBar(
+                  title: 'Offer Details',
                 ),
                 body: !value.isLoading ? getBaseLayout(value) : GlobalFunctions.loadingWidget(context),
               ),
@@ -122,7 +110,7 @@ class NearByShopNotificationItemDetailsState
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        color: Color(int.parse(value.nearByShopList[0].card_bg)),
+        color: Color(int.parse(value.nearByShopList[0].card_bg!)),
       ),
       child: Column(
         children: [
@@ -130,7 +118,7 @@ class NearByShopNotificationItemDetailsState
             child: Stack(
               children: [
                 Container(
-                  color: Color(int.parse(value.nearByShopList[0].card_bg)),
+                  color: Color(int.parse(value.nearByShopList[0].card_bg!)),
                   height: double.infinity,
                   //padding: EdgeInsets.only(left: 8,right: 8,top: 8),
                   child: SingleChildScrollView(
@@ -158,7 +146,7 @@ class NearByShopNotificationItemDetailsState
                                         child: text(
                                           'Till ' +
                                               GlobalFunctions.convertDateFormat(
-                                                  value.nearByShopList[0].exp_date,
+                                                  value.nearByShopList[0].exp_date!,
                                                   'dd-MMM-yyyy'),
                                           fontSize:GlobalVariables.textSizeSmall,
                                         ),
@@ -336,7 +324,7 @@ class NearByShopNotificationItemDetailsState
                                           child: new CircleAvatar(
                                             backgroundColor: Color(int.parse(
                                                 value.nearByShopList[0]
-                                                    .vendor_logo_bg)),
+                                                    .vendor_logo_bg!)),
                                             child: Container(
                                               //margin: EdgeInsets.only(top: 8),
                                                 alignment: Alignment.center,
@@ -346,7 +334,7 @@ class NearByShopNotificationItemDetailsState
                                                     top: 16),
                                                 child: CachedNetworkImage(
                                                   imageUrl: value.nearByShopList[0]
-                                                      .vendor_logo,
+                                                      .vendor_logo!,
                                                 )),
                                             radius: 50,
                                           ),
@@ -644,9 +632,9 @@ class NearByShopNotificationItemDetailsState
                                       ),
                                       InkWell(
                                           onTap: () {
-                                            ClipboardManager.copyToClipBoard(
+                                            FlutterClipboard.copy(
                                                 value.nearByShopList[0]
-                                                    .Offer_Code)
+                                                    .Offer_Code!)
                                                 .then((value) {
                                               GlobalFunctions.showToast(
                                                   "Copied to Clipboard");
@@ -675,7 +663,7 @@ class NearByShopNotificationItemDetailsState
                           width: MediaQuery.of(context).size.width,
                           child: FlatButton(
                               onPressed: () {
-                                launch(value.nearByShopList[0].redeem);
+                                launch(value.nearByShopList[0].redeem!);
                               },
                               color: GlobalVariables.primaryColor,
                               child: text('Redeem',

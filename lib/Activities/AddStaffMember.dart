@@ -1,12 +1,14 @@
 import 'dart:io';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/StaffCount.dart';
@@ -37,14 +39,14 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   //String memberType;
 
 
-  String attachmentFilePath;
-  String attachmentIdentityProofFilePath;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentIdentityProofFilePath;
+  String? attachmentCompressFilePath;
 
 
-  String attachmentFileName;
-  String attachmentIdentityProofFileName;
-  String attachmentIdentityProofCompressFilePath;
+  String? attachmentFileName;
+  String? attachmentIdentityProofFileName;
+  String? attachmentIdentityProofCompressFilePath;
 
 
  // AddStaffMemberState(this.memberType);
@@ -58,9 +60,9 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   //TextEditingController _noteController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
-  List<StaffCount> _roleTypeList = new List<StaffCount>();
-  List<DropdownMenuItem<String>> __roleTypeListItems = new List<DropdownMenuItem<String>>();
-  String _selectedRoleType;
+  List<StaffCount> _roleTypeList = <StaffCount>[];
+  List<DropdownMenuItem<String>> __roleTypeListItems = <DropdownMenuItem<String>>[];
+  String? _selectedRoleType;
 
   //String _selectedMembershipType;
 
@@ -72,24 +74,25 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
  // String _selectedOccupation="Software Engg.";
   String _selectedGender="Male";
   String _selectedStaffType="Staff";
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission=false;
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
   //String mobileNumber;
   //AddStaffMemberState(this.mobileNumber);
 
   List<DropdownMenuItem<String>> _blockListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedBlock;
+  <DropdownMenuItem<String>>[];
+  String? _selectedBlock;
 
   List<DropdownMenuItem<String>> _flatListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedFlat;
+  <DropdownMenuItem<String>>[];
+  String? _selectedFlat;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBlockFlatData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
@@ -102,28 +105,12 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   Widget build(BuildContext context) {
 
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     //_mobileController.text = mobileNumber;
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('add_staff_member'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title:  AppLocalizations.of(context).translate('add_staff_member'),
         ),
         body: getBaseLayout(),
       ),
@@ -166,92 +153,6 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.lightGray,
-                            width: 2.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButtonFormField(
-                          items: _blockListItems,
-                          value: _selectedBlock,
-                          onChanged: (value){
-                            _selectedBlock=value;
-                            _selectedFlat=null;
-                            getBlockFlatData();
-                          },
-                          isExpanded: true,
-                          icon: AppIcon(
-                            Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.secondaryColor,
-                          ),
-                          decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
-                              labelText: AppLocalizations.of(context)
-                                  .translate('block'),
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      decoration: BoxDecoration(
-                          color: GlobalVariables.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: GlobalVariables.lightGray,
-                            width: 2.0,
-                          )),
-                      child: ButtonTheme(
-                        child: DropdownButtonFormField(
-                          items: _flatListItems,
-                          value: _selectedFlat,
-                          onChanged: (value){
-                            _selectedFlat=value;
-                            setState(() {
-                            });
-                          },
-                          isExpanded: true,
-                          icon: AppIcon(
-                            Icons.keyboard_arrow_down,
-                            iconColor: GlobalVariables.secondaryColor,
-                          ),
-                          decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
-                              labelText: AppLocalizations.of(context)
-                                  .translate('flat'),
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
@@ -344,6 +245,92 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                   ],
                 ),
               ),
+              _selectedStaffType=="Staff" ? Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: GlobalVariables.lightGray,
+                            width: 2.0,
+                          )),
+                      child: ButtonTheme(
+                        child: DropdownButtonFormField(
+                          items: _blockListItems,
+                          value: _selectedBlock,
+                          onChanged: (value){
+                            _selectedBlock=value as String?;
+                            _selectedFlat=null;
+                            getBlockFlatData();
+                          },
+                          isExpanded: true,
+                          icon: AppIcon(
+                            Icons.keyboard_arrow_down,
+                            iconColor: GlobalVariables.secondaryColor,
+                          ),
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('block'),
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                      decoration: BoxDecoration(
+                          color: GlobalVariables.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: GlobalVariables.lightGray,
+                            width: 2.0,
+                          )),
+                      child: ButtonTheme(
+                        child: DropdownButtonFormField(
+                          items: _flatListItems,
+                          value: _selectedFlat,
+                          onChanged: (value){
+                            _selectedFlat=value as String?;
+                            setState(() {
+                            });
+                          },
+                          isExpanded: true,
+                          icon: AppIcon(
+                            Icons.keyboard_arrow_down,
+                            iconColor: GlobalVariables.secondaryColor,
+                          ),
+                          decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('flat'),
+                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ):SizedBox(),
               AppTextField(textHintContent: AppLocalizations.of(context).translate('name'), controllerCallback: _nameController),
               AppTextField(
                 textHintContent:
@@ -356,22 +343,23 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                   Icons.phone_android,
                   iconColor: GlobalVariables.secondaryColor,
                   onPressed: () async {
-                    Contact contact = await _contactPicker.selectContact();
-                    print('contact Name : ' + contact.fullName);
+                    PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                    print('contact Name : ' + contact.fullName!);
                     print('contact Number : ' +
                         contact.phoneNumber.toString());
                     _contact = contact;
                     setState(() {
                       if (_contact != null) {
                         //  _nameController.text = _contact.fullName;
-                        String phoneNumber = _contact.phoneNumber
+                        /*String phoneNumber = _contact!.phoneNumber
                             .toString()
                             .substring(
                             0,
-                            _contact.phoneNumber
+                            _contact!.phoneNumber
                                 .toString()
                                 .indexOf('(') -
-                                1);
+                                1);*/
+                        String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                         _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                         // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                       }
@@ -563,7 +551,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image:
-                                    FileImage(File(attachmentFilePath)),
+                                    FileImage(File(attachmentFilePath!)),
                                     fit: BoxFit.cover),
                                 border: Border.all(
                                     color: GlobalVariables.primaryColor,
@@ -675,7 +663,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image:
-                                    FileImage(File(attachmentIdentityProofFilePath)),
+                                    FileImage(File(attachmentIdentityProofFilePath!)),
                                     fit: BoxFit.cover),
                                 border: Border.all(
                                     color: GlobalVariables.primaryColor,
@@ -806,9 +794,9 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
     if(_nameController.text.length>0){
 
-        if(_mobileController.text.length>0){
+      if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
 
-            if(_selectedRoleType!=null || _selectedRoleType.length>0){
+            if(_selectedRoleType!=null || _selectedRoleType!.length>0){
 
               if(_addressController.text!=null && _addressController.text.length>0) {
                 if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null) {
@@ -825,7 +813,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
             }
 
         }else{
-          GlobalFunctions.showToast('Please Enter Mobile Number');
+          GlobalFunctions.showToast('Please Enter Valid Mobile Number');
         }
     }else{
       GlobalFunctions.showToast('Please Enter Name');
@@ -842,25 +830,25 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
 
-    String attachmentName;
-    String attachmentIdentityProofName;
-    String attachment;
-    String attachmentIdentityProof;
+    String? attachmentName;
+    String? attachmentIdentityProofName;
+    String? attachment;
+    String? attachmentIdentityProof;
 
     if(attachmentFileName!=null && attachmentFilePath!=null){
       attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
 
     if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
       attachmentIdentityProofName =  attachmentIdentityProofFileName;
-      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath);
+      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath!);
     }
 
    //print('attachment lengtth : '+attachment.length.toString());
 
-    _progressDialog.show();
+    _progressDialog!.show();
     if(_selectedStaffType=='Staff') {
       restClient.addStaffMember(
           userId,
@@ -871,34 +859,18 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
           block + ' ' + flat,
           _selectedGender,
           _dobController.text,
-          _selectedRoleType,
+          _selectedRoleType!,
           _qualificationController.text,
           _addressController.text,
           attachment,
-          attachmentIdentityProof).then((value) {
-        _progressDialog.hide();
-        if (value.status) {
+          attachmentIdentityProof).then((value) async {
+        _progressDialog!.dismiss();
+        if (value.status!) {
           Provider.of<UserManagementResponse>(context,listen: false).getUserManagementDashboard();
-          if (attachmentFileName != null && attachmentFilePath != null) {
-            //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-            GlobalFunctions.getTemporaryDirectoryPath()
-                .then((value) {
-              GlobalFunctions.removeAllFilesFromDirectory(
-                  value);
-            });
-          }
-          if (attachmentIdentityProofFileName != null &&
-              attachmentIdentityProofFilePath != null) {
-            //GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
-            GlobalFunctions.getTemporaryDirectoryPath()
-                .then((value) {
-              GlobalFunctions.removeAllFilesFromDirectory(
-                  value);
-            });
-          }
+          removeCacheImages();
           Navigator.of(context).pop();
         }
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       });
     }else{
       restClient.addMaintenanceStaffMember(
@@ -910,34 +882,18 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
           _vehicleNumberController.text,
           _selectedGender,
           _dobController.text,
-          _selectedRoleType,
+          _selectedRoleType!,
           _qualificationController.text,
           _addressController.text,
           attachment,
           attachmentIdentityProof).then((value) {
-        _progressDialog.hide();
-        if (value.status) {
+        _progressDialog!.dismiss();
+        if (value.status!) {
           Provider.of<UserManagementResponse>(context,listen: false).getUserManagementDashboard();
-          if (attachmentFileName != null && attachmentFilePath != null) {
-            //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-            GlobalFunctions.getTemporaryDirectoryPath()
-                .then((value) {
-              GlobalFunctions.removeAllFilesFromDirectory(
-                  value);
-            });
-          }
-          if (attachmentIdentityProofFileName != null &&
-              attachmentIdentityProofFilePath != null) {
-            //GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
-            GlobalFunctions.getTemporaryDirectoryPath()
-                .then((value) {
-              GlobalFunctions.removeAllFilesFromDirectory(
-                  value);
-            });
-          }
+          removeCacheImages();
           Navigator.of(context).pop();
         }
-        GlobalFunctions.showToast(value.message);
+        GlobalFunctions.showToast(value.message!);
       });
     }
 
@@ -958,13 +914,13 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
-    print('file Name : '+attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    attachmentFileName = attachmentFilePath!.substring(attachmentFilePath!.lastIndexOf('/')+1,attachmentFilePath!.length);
+    print('file Name : '+attachmentFileName!.toString());
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath!, value.toString()+'/'+attachmentFileName!).then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
+        print('Cache file path : '+attachmentCompressFilePath!);
         setState(() {
         });
       });
@@ -986,13 +942,13 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   void getCompressIdentityProofFilePath(){
-    attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(attachmentIdentityProofFilePath.lastIndexOf('/')+1,attachmentIdentityProofFilePath.length);
+    attachmentIdentityProofFileName = attachmentIdentityProofFilePath!.substring(attachmentIdentityProofFilePath!.lastIndexOf('/')+1,attachmentIdentityProofFilePath!.length);
     print('file Name : '+attachmentIdentityProofFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentIdentityProofFilePath, value.toString()+'/'+attachmentIdentityProofFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(attachmentIdentityProofFilePath!, value.toString()+'/'+attachmentIdentityProofFileName!).then((value) {
         attachmentIdentityProofCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentIdentityProofCompressFilePath);
+        print('Cache file path : '+attachmentIdentityProofCompressFilePath!);
         setState(() {
         });
       });
@@ -1005,18 +961,18 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient.staffCount(societyId,staffType).then((value) {
-      _progressDialog.hide();
-      List<dynamic> _list = value.Role;
-      _roleTypeList = new List<StaffCount>();
-      __roleTypeListItems = new List<DropdownMenuItem<String>>();
+      _progressDialog!.dismiss();
+      List<dynamic> _list = value.Role!;
+      _roleTypeList = <StaffCount>[];
+      __roleTypeListItems = <DropdownMenuItem<String>>[];
       _roleTypeList = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
       for(int i=0;i<_roleTypeList.length;i++){
         __roleTypeListItems.add(DropdownMenuItem(
           value: _roleTypeList[i].ROLE,
           child: Text(
-            _roleTypeList[i].ROLE,
+            _roleTypeList[i].ROLE!,
             style: TextStyle(color: GlobalVariables.primaryColor),
           ),
         ));
@@ -1033,7 +989,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
         .then((value) {
       setBlockData(value);
       Provider.of<UserManagementResponse>(context, listen: false)
-          .getFlat(_selectedBlock)
+          .getFlat(_selectedBlock!)
           .then((value) {
         setFlatData(value);
       });
@@ -1042,7 +998,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
 
   void setBlockData(List<Block> _blockList) {
-    _blockListItems = new List<DropdownMenuItem<String>>();
+    _blockListItems = <DropdownMenuItem<String>>[];
     for (int i = 0; i < _blockList.length; i++) {
       _blockListItems.add(DropdownMenuItem(
         value: _blockList[i].BLOCK,
@@ -1060,7 +1016,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   void setFlatData(List<Flat> _flatList) {
-    _flatListItems = new List<DropdownMenuItem<String>>();
+    _flatListItems = <DropdownMenuItem<String>>[];
     for (int i = 0; i < _flatList.length; i++) {
       //print(_flatList[i].FLAT.toString());
       _flatListItems.add(DropdownMenuItem(
@@ -1075,12 +1031,29 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
     setState(() {});
   }
 
-  void changeBRoleTypeDropDownItem(String value) {
+  void changeBRoleTypeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedRoleType = value;
       print('_selctedItem:' + _selectedRoleType.toString());
     });
+  }
+
+  Future<void> removeCacheImages() async {
+    if (attachmentFileName != null &&
+        attachmentFilePath != null) {
+      await GlobalFunctions.removeFileFromDirectory(
+          attachmentFilePath!);
+      await GlobalFunctions.removeFileFromDirectory(
+          attachmentCompressFilePath!);
+    }
+    if (attachmentIdentityProofFileName != null &&
+        attachmentIdentityProofFilePath != null) {
+      await GlobalFunctions.removeFileFromDirectory(
+          attachmentIdentityProofFilePath!);
+      await GlobalFunctions.removeFileFromDirectory(
+          attachmentIdentityProofCompressFilePath!);
+    }
   }
 
 }

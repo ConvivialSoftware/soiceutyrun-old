@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+//import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bank.dart';
@@ -21,8 +23,7 @@ import 'base_stateful.dart';
 class BaseAddExpense extends StatefulWidget {
 
   bool isAdmin;
-  String mBlock,mFlat;
-
+  String? mBlock, mFlat;
 
   BaseAddExpense({this.isAdmin=false,this.mBlock,this.mFlat});
 
@@ -34,31 +35,32 @@ class BaseAddExpense extends StatefulWidget {
 }
 
 class AddExpenseState extends State<BaseAddExpense> {
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
 
+  TextEditingController _ledgerAccController = TextEditingController();
   TextEditingController _paymentDateController = TextEditingController();
   TextEditingController _dueDateController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   TextEditingController _referenceController = TextEditingController();
   TextEditingController _noteController = TextEditingController();
 
-  List<LedgerAccount> _ledgerAccountList = new List<LedgerAccount>();
-  List<String> _ledgerAccountStringList = new List<String>();
-  LedgerAccount _selectedLedgerAccount;
+  List<LedgerAccount> _ledgerAccountList = <LedgerAccount>[];
+  List<String> _ledgerAccountStringList = <String>[];
+  LedgerAccount? _selectedLedgerAccount;
 
-  List<String> _paidByList = new List<String>();
+  List<String> _paidByList = <String>[];
   List<DropdownMenuItem<String>> _paidByListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedPaidBy;
+      <DropdownMenuItem<String>>[];
+  String? _selectedPaidBy;
 
-  List<Bank> _bankList = new List<Bank>();
+  List<Bank> _bankList = <Bank>[];
   List<DropdownMenuItem<String>> _bankAccountListItems =
-      new List<DropdownMenuItem<String>>();
-  String _selectedBankAccount;
+      <DropdownMenuItem<String>>[];
+  String? _selectedBankAccount;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
 
   String currentLedgerAccountText = '';
@@ -67,6 +69,7 @@ class AddExpenseState extends State<BaseAddExpense> {
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getPaidByData();
     _paymentDateController.text =
         DateTime.now().toLocal().day.toString().padLeft(2, '0') +
@@ -90,27 +93,17 @@ class AddExpenseState extends State<BaseAddExpense> {
   @override
   Widget build(BuildContext context) {
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            widget.isAdmin ? AppLocalizations.of(context).translate('add_invoice')+' '+widget.mBlock+' '+widget.mFlat:AppLocalizations.of(context).translate('add_expense'),
-            textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title: widget.isAdmin
+              ? AppLocalizations.of(context).translate('add_invoice') +
+                  ' ' +
+                  widget.mBlock! +
+                  ' ' +
+                  widget.mFlat!
+              : AppLocalizations.of(context).translate('add_expense'),
         ),
         body: getBaseLayout(),
       ),
@@ -153,8 +146,7 @@ class AddExpenseState extends State<BaseAddExpense> {
           child: Column(
             children: <Widget>[
               AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('payment_date'),
+                textHintContent: widget.isAdmin? AppLocalizations.of(context).translate('invoice_date') : AppLocalizations.of(context).translate('payment_date'),
                 controllerCallback: _paymentDateController,
                 borderWidth: 2.0,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -198,6 +190,7 @@ class AddExpenseState extends State<BaseAddExpense> {
               ):SizedBox(),
               Container(
                 width: double.infinity,
+                height: 70,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
@@ -207,28 +200,65 @@ class AddExpenseState extends State<BaseAddExpense> {
                       color: GlobalVariables.lightGray,
                       width: 2.0,
                     )),
-                child: SearchableDropdown(
-                  items: _ledgerAccountList.map((item) {
-                    return new DropdownMenuItem<LedgerAccount>(
-                        child: text(item.name), value: item);
-                  }).toList(),
-                  value: _selectedLedgerAccount,
-                  onChanged: changeLedgerAccountDropDownItem,
-                  isExpanded: true,
-                  isCaseSensitiveSearch: true,
-                  icon: AppIcon(null
-                      /*Icons.keyboard_arrow_down,
-                    color: GlobalVariables.mediumRed,*/
+                //.map((item) {
+                //                     return new DropdownMenuItem<LedgerAccount>(
+                //                         child: text(item.name), value: item);
+                //                   }).toList()
+                child: DropdownSearch<LedgerAccount>(
+                  mode: Mode.MENU,
+                  items: _ledgerAccountList,
+                  showSearchBox: true,
+                  searchFieldProps: TextFieldProps(
+                    controller: _ledgerAccController,
+                    autofocus: true,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _ledgerAccController.clear();
+                        },
                       ),
-                  underline: SizedBox(),
-                  hint: text(
-                    AppLocalizations.of(context).translate('ledger_account') +
-                        '*',
-                    textColor: GlobalVariables.lightGray,
+                    ),
+                  ),
+                  showClearButton: true,
+                  //validator: _selectedLedgerAccount!.name,
+                  onChanged: (value){
+                    setState(() {
+                      _selectedLedgerAccount = value;
+                      print('_selctedItem: ' + _selectedLedgerAccount.toString());
+                      print('_selctedItem name: ' + _selectedLedgerAccount!.name.toString());
+                      print('_selctedItem value: ' + _selectedLedgerAccount!.id.toString());
+                    });
+                  },
+                  clearButtonBuilder: (_) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Icon(
+                      Icons.clear,
+                      size: 24,
+                      color: Colors.black,
+                    ),
+                      ),
+                  dropdownButtonBuilder: (_) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Icon(
+                      Icons.arrow_drop_down,
+                      size: 24,
+                      color: Colors.black,
+                    ),
+                  ),
+                  dropdownSearchDecoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).translate('ledger_account') + '*',
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                    border: InputBorder.none,
+                    helperStyle: TextStyle(
+                      color: GlobalVariables.lightGray,
                     fontSize: GlobalVariables.textSizeSMedium,
+                    )
                   ),
                 ),
               ),
+              SizedBox(height: 0,),
               AppTextField(
                 textHintContent:
                     AppLocalizations.of(context).translate('amount') + '*',
@@ -378,8 +408,8 @@ class AddExpenseState extends State<BaseAddExpense> {
                                 : BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                        image:
-                                            FileImage(File(attachmentFilePath)),
+                                              image: FileImage(
+                                                  File(attachmentFilePath!)),
                                         fit: BoxFit.cover),
                                     border: Border.all(
                                         color: GlobalVariables.primaryColor,
@@ -532,50 +562,48 @@ class AddExpenseState extends State<BaseAddExpense> {
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     String attachmentName;
-    String attachment;
+    String? attachment;
 
     if (attachmentFileName != null && attachmentFilePath != null) {
-      attachmentName = attachmentFileName;
+      attachmentName = attachmentFileName!;
       attachment =
-          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
     // print('attachment lengtth : '+attachment.length.toString());
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .addExpense(
             societyId,
             _amountController.text,
             _referenceController.text,
-            _selectedPaidBy,
-            _selectedBankAccount,
-            _selectedLedgerAccount.id,
+            _selectedPaidBy!,
+            _selectedBankAccount!,
+            _selectedLedgerAccount!.id!,
             _paymentDateController.text,
             _noteController.text,
             attachment)
-        .then((value) {
+        .then((value) async {
       print('add member Status value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         if (attachmentFileName != null && attachmentFilePath != null) {
-          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-          GlobalFunctions.getTemporaryDirectoryPath()
-              .then((value) {
-            GlobalFunctions.removeAllFilesFromDirectory(
-                value);
-          });
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
         }
         Navigator.of(context).pop('back');
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog!.dismiss();
           }
           break;
         default:
@@ -590,30 +618,30 @@ class AddExpenseState extends State<BaseAddExpense> {
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .addInvoice(
             societyId,
             _amountController.text,
             _dueDateController.text,
-            widget.mBlock+' '+widget.mFlat,
-            _selectedLedgerAccount.id,
+            widget.mBlock! + ' ' + widget.mFlat!,
+            _selectedLedgerAccount!.id!,
             _paymentDateController.text,
             _noteController.text)
         .then((value) {
       print('add member Status value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         Navigator.of(context).pop('back');
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     }).catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog!.dismiss();
           }
           break;
         default:
@@ -636,16 +664,16 @@ class AddExpenseState extends State<BaseAddExpense> {
   }
 
   void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
     print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-              attachmentFilePath, value.toString() + '/' + attachmentFileName)
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
+        print('Cache file path : ' + attachmentCompressFilePath!);
         setState(() {});
       });
     });
@@ -664,17 +692,12 @@ class AddExpenseState extends State<BaseAddExpense> {
     }
   }
 
-  void changeLedgerAccountDropDownItem(LedgerAccount value) {
+  /* void changeLedgerAccountDropDownItem(LedgerAccount value) {
     print('clickable value : ' + value.toString());
-    setState(() {
-      _selectedLedgerAccount = value;
-      print('_selctedItem: ' + _selectedLedgerAccount.toString());
-      print('_selctedItem name: ' + _selectedLedgerAccount.name.toString());
-      print('_selctedItem value: ' + _selectedLedgerAccount.id.toString());
-    });
-  }
 
-  void changePaidByDropDownItem(String value) {
+  }*/
+
+  void changePaidByDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedPaidBy = value;
@@ -682,7 +705,7 @@ class AddExpenseState extends State<BaseAddExpense> {
     });
   }
 
-  void changeFromAccountDropDownItem(String value) {
+  void changeFromAccountDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedBankAccount = value;
@@ -695,19 +718,19 @@ class AddExpenseState extends State<BaseAddExpense> {
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
+    _progressDialog!.show();
     if(widget.isAdmin){
 
       restClientERP.getExpenseIncomeLedger(societyId).then((value) {
         print('Response : ' + value.toString());
-        List<dynamic> _list = value.data;
-        List<dynamic> _listBank = value.bank;
+        List<dynamic> _list = value.data!;
+        //List<dynamic> _listBank = value.bank!;
 
         _ledgerAccountList =
         List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
         for (int i = 0; i < _ledgerAccountList.length; i++) {
           LedgerAccount _ledgerAccount = _ledgerAccountList[i];
-          _ledgerAccountStringList.add(_ledgerAccount.name);
+          _ledgerAccountStringList.add(_ledgerAccount.name!);
         }
 
         /*_bankList = List<Bank>.from(_listBank.map((i) => Bank.fromJson(i)));
@@ -722,11 +745,11 @@ class AddExpenseState extends State<BaseAddExpense> {
         }
         print('bsnk list lenght : ' + _bankList.length.toString());*/
         //_categorySelectedItem = __categoryListItems[0].value;
-        _progressDialog.hide();
+        _progressDialog!.dismiss();
         setState(() {});
       }) /*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){
-      //    _progressDialog.hide();
+      //    _progressDialog.dismiss(;
       //  }
       switch (obj.runtimeType) {
         case DioError:
@@ -743,14 +766,14 @@ class AddExpenseState extends State<BaseAddExpense> {
     }else {
       restClientERP.getExpenseAccountLedger(societyId).then((value) {
         print('Response : ' + value.toString());
-        List<dynamic> _list = value.data;
-        List<dynamic> _listBank = value.bank;
+        List<dynamic> _list = value.data!;
+        List<dynamic> _listBank = value.bank!;
 
         _ledgerAccountList =
         List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
         for (int i = 0; i < _ledgerAccountList.length; i++) {
           LedgerAccount _ledgerAccount = _ledgerAccountList[i];
-          _ledgerAccountStringList.add(_ledgerAccount.name);
+          _ledgerAccountStringList.add(_ledgerAccount.name!);
         }
 
         _bankList = List<Bank>.from(_listBank.map((i) => Bank.fromJson(i)));
@@ -765,11 +788,11 @@ class AddExpenseState extends State<BaseAddExpense> {
         }
         print('bsnk list lenght : ' + _bankList.length.toString());
         //_categorySelectedItem = __categoryListItems[0].value;
-        _progressDialog.hide();
+        _progressDialog!.dismiss();
         setState(() {});
       }) /*.catchError((Object obj) {
       //   if(_progressDialog.isShowing()){
-      //    _progressDialog.hide();
+      //    _progressDialog.dismiss(;
       //  }
       switch (obj.runtimeType) {
         case DioError:

@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -25,15 +27,16 @@ class FeedbackState extends State<BaseFeedback> {
 
   TextEditingController complaintSubject = TextEditingController();
   TextEditingController complaintDesc = TextEditingController();
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
-  ProgressDialog _progressDialog;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
@@ -43,27 +46,11 @@ class FeedbackState extends State<BaseFeedback> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) =>
           Scaffold(
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                AppLocalizations.of(context).translate('feedback'),
-                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-              ),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('feedback'),
             ),
             body: getBaseLayout(),
           ),
@@ -176,7 +163,7 @@ class FeedbackState extends State<BaseFeedback> {
                       ) : BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: FileImage(File(attachmentFilePath)),
+                              image: FileImage(File(attachmentFilePath!)),
                               fit: BoxFit.cover
                           ),
                           border: Border.all(
@@ -257,7 +244,11 @@ class FeedbackState extends State<BaseFeedback> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(height: 16,),
+              AppButton(textContent: AppLocalizations.of(context).translate('submit'), onPressed: (){
+                verifyData();
+              }),
+              /*Container(
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -266,7 +257,7 @@ class FeedbackState extends State<BaseFeedback> {
                   child: RaisedButton(
                     color: GlobalVariables.primaryColor,
                     onPressed: () {
-                      verifyData();
+
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
@@ -280,7 +271,7 @@ class FeedbackState extends State<BaseFeedback> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
@@ -296,11 +287,11 @@ class FeedbackState extends State<BaseFeedback> {
     String flat = await GlobalFunctions.getFlat();
     String societyName = await GlobalFunctions.getSocietyName();
     String attachmentName;
-    String attachment;
-    _progressDialog.show();
+    String? attachment;
+    _progressDialog!.show();
     if (attachmentFileName != null && attachmentFilePath != null) {
-      attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachmentName = attachmentFileName!;
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
     restClient.addFeedback(
@@ -310,20 +301,19 @@ class FeedbackState extends State<BaseFeedback> {
         societyName,
         complaintSubject.text,
         complaintDesc.text,
-        attachment).then((value) {
-      _progressDialog.hide();
-      if (value.status) {
-        if (attachmentFileName != null && attachmentFilePath != null) {
-          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-          GlobalFunctions.getTemporaryDirectoryPath()
-              .then((value) {
-            GlobalFunctions.removeAllFilesFromDirectory(
-                value);
-          });
+        attachment!).then((value) async {
+      _progressDialog!.dismiss();
+      if (value.status!) {
+        if (attachmentFileName != null &&
+            attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
         }
         Navigator.of(context).pop();
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 
@@ -343,16 +333,16 @@ class FeedbackState extends State<BaseFeedback> {
   }
 
   void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
     print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-          attachmentFilePath, value.toString() + '/' + attachmentFileName)
+          attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
+        print('Cache file path : ' + attachmentCompressFilePath!);
         setState(() {});
       });
     });

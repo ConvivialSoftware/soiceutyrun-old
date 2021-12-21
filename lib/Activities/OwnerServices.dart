@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
@@ -42,23 +43,8 @@ class OwnerServicesState extends State<BaseOwnerServices> {
             print('Consumer Value : ' + value.ownerServicesList.toString());
             return Builder(
               builder: (context) => Scaffold(
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  elevation: 0,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
-                  title: text(
-                    AppLocalizations.of(context).translate('my_services'),
-                      textColor: GlobalVariables.white,
-                  ),
+                appBar: CustomAppBar(
+                  title: AppLocalizations.of(context).translate('my_services'),
                 ),
                 body: value.isLoading ? GlobalFunctions.loadingWidget(context) : getBaseLayout(value),
               ),
@@ -157,7 +143,7 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                                         width: 4,
                                       ),
                                       text(
-                                          GlobalFunctions.convertDateFormat(servicesList[position].booking_date, 'dd-MM-yyyy'),
+                                          GlobalFunctions.convertDateFormat(servicesList[position].booking_date!, 'dd-MM-yyyy'),
                                           textColor: GlobalVariables.grey,
                                           fontSize:
                                           GlobalVariables.textSizeSmall,
@@ -210,7 +196,7 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                                                             borderRadius:
                                                             BorderRadius.circular(
                                                                 10.0)),
-                                                        child: showMyRattingBar(setState,servicesList[position].S_Id));
+                                                        child: showMyRattingBar(setState,servicesList[position].S_Id!));
                                                   }));
 
                                         },
@@ -218,7 +204,7 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                                         child: Container(
                                           margin: EdgeInsets.fromLTRB(
                                               5, 0, 0, 0),
-                                          child: text(servicesList[position].Rating.length==0?'0.0' :servicesList[position].Rating.length==0?'0.0' : double.parse(servicesList[position].Rating)>0.0 ? servicesList[position].Rating :AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
+                                          child: text(servicesList[position].Rating!.length==0?'0.0' :servicesList[position].Rating!.length==0?'0.0' : double.parse(servicesList[position].Rating!)>0.0 ? servicesList[position].Rating :AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
                                         ),
                                       ),
                                     ],
@@ -265,29 +251,29 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                   itemBuilder: (context, index) {
                     switch (index) {
                       case 0:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_very_dissatisfied,
-                          iconColor: Colors.red,
+                          color: Colors.red,
                         );
                       case 1:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_dissatisfied,
-                          iconColor: Colors.redAccent,
+                          color: Colors.redAccent,
                         );
                       case 2:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_neutral,
-                          iconColor: Colors.amber,
+                          color: Colors.amber,
                         );
                       case 3:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_satisfied,
-                          iconColor: Colors.lightGreen,
+                          color: Colors.lightGreen,
                         );
                       case 4:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_very_satisfied,
-                          iconColor: Colors.green,
+                          color: Colors.green,
                         );
                       default:
                         return Container();
@@ -321,10 +307,10 @@ class OwnerServicesState extends State<BaseOwnerServices> {
               if (_myRate > 0) {
                 Navigator.of(context).pop();
                 Provider.of<ServicesResponse>(context,listen: false).updateServiceRatting(serviceId,_myRate.toString()).then((value) {
-                  if(value.status){
+                  if(value.status!){
                     _myRate=0.0;
                   }
-                  GlobalFunctions.showToast(value.message);
+                  GlobalFunctions.showToast(value.message!);
                 });
               } else {
                 GlobalFunctions.showToast(
@@ -349,10 +335,10 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                     if (_myRate > 0) {
                       Navigator.of(context).pop();
                       Provider.of<ServicesResponse>(context,listen: false).updateServiceRatting(serviceId,_myRate.toString()).then((value) {
-                        if(value.status){
+                        if(value.status!){
                           _myRate=0.0;
                         }
-                        GlobalFunctions.showToast(value.message);
+                        GlobalFunctions.showToast(value.message!);
                       });
                     } else {
                       GlobalFunctions.showToast(

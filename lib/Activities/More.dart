@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -38,23 +39,8 @@ class MoreState extends State<BaseMore> {
     return Builder(
       builder: (context) =>
           Scaffold(
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                AppLocalizations.of(context).translate('more'),
-                textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-              ),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('more'),
             ),
             body: getBaseLayout(),
           ),

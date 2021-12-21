@@ -3,6 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BroadcastResponse.dart';
@@ -20,89 +21,89 @@ class BaseBroadcast extends StatefulWidget {
 
 class _BaseBroadcastState extends State<BaseBroadcast>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  String pageName;
+  TabController? _tabController;
+  String? pageName;
 
-  List<BroadcastSendTo> broadcastSendToList = List<BroadcastSendTo>();
-  List<SMSTypes> smsTypesList = List<SMSTypes>();
-  List<Hours> hoursList = List<Hours>();
-  List<Minutes> minList = List<Minutes>();
-  List<AMPM> ampmList = List<AMPM>();
+  List<BroadcastSendTo> broadcastSendToList = <BroadcastSendTo>[];
+  List<SMSTypes> smsTypesList = <SMSTypes>[];
+  List<Hours> hoursList = <Hours>[];
+  List<Minutes> minList = <Minutes>[];
+  List<AMPM> ampmList = <AMPM>[];
 
   TextEditingController notificationSubject = TextEditingController();
   TextEditingController notificationDescription = TextEditingController();
 
   List<DropdownMenuItem<String>> _notificationSendToListItems =
-      new List<DropdownMenuItem<String>>();
-  String _notificationSendToSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _notificationSendToSelectedItem;
   List<DropdownMenuItem<String>> _mailSendToListItems =
-      new List<DropdownMenuItem<String>>();
-  String _mailSendToSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _mailSendToSelectedItem;
   List<DropdownMenuItem<String>> _smsSendToListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsSendToSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsSendToSelectedItem;
 
   List<DropdownMenuItem<String>> _smsTypesListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsTypesSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsTypesSelectedItem;
 
   List<DropdownMenuItem<String>> _notificationFlatNoListItems =
-      new List<DropdownMenuItem<String>>();
-  String _notificationFlatNoSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _notificationFlatNoSelectedItem;
 
   List<DropdownMenuItem<String>> _mailFlatNoListItems =
-      new List<DropdownMenuItem<String>>();
-  String _mailFlatNoSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _mailFlatNoSelectedItem;
 
   List<DropdownMenuItem<String>> _smsFlatNoListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsFlatNoSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsFlatNoSelectedItem;
 
   TextEditingController mailSubject = TextEditingController();
   TextEditingController mailDescription = TextEditingController();
 
   List<FlatMemberDetails> _notificationAssignFlatList =
-      List<FlatMemberDetails>();
-  List<FlatMemberDetails> _mailAssignFlatList = List<FlatMemberDetails>();
-  List<FlatMemberDetails> _smsAssignFlatList = List<FlatMemberDetails>();
+      <FlatMemberDetails>[];
+  List<FlatMemberDetails> _mailAssignFlatList = <FlatMemberDetails>[];
+  List<FlatMemberDetails> _smsAssignFlatList = <FlatMemberDetails>[];
 
   // String notificationAttachmentFilePath;
   // String notificationAttachmentFileName;
   // String notificationAttachmentCompressFilePath;
 
-  String mailAttachmentFilePath;
-  String mailAttachmentFileName;
-  String mailAttachmentCompressFilePath;
+  String? mailAttachmentFilePath;
+  String? mailAttachmentFileName;
+  String? mailAttachmentCompressFilePath;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   bool isStoragePermission = false;
 
   List<DropdownMenuItem<String>> _smsHoursListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsHoursSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsHoursSelectedItem;
 
   List<DropdownMenuItem<String>> _smsMinListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsMinSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsMinSelectedItem;
 
   List<DropdownMenuItem<String>> _smsAmPmListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsAmPmSelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsAmPmSelectedItem;
 
-  String societyName,smsCredit='0',smsSent='0',smsBalance="0";
+  String? societyName,smsCredit='0',smsSent='0',smsBalance="0";
 
   List<DropdownMenuItem<String>> _smsHours2ListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsHours2SelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsHours2SelectedItem;
 
   List<DropdownMenuItem<String>> _smsMin2ListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsMin2SelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsMin2SelectedItem;
 
   List<DropdownMenuItem<String>> _smsAmPm2ListItems =
-      new List<DropdownMenuItem<String>>();
-  String _smsAmPm2SelectedItem;
+      <DropdownMenuItem<String>>[];
+  String? _smsAmPm2SelectedItem;
 
   TextEditingController importantCommunicationController =
       TextEditingController();
@@ -125,6 +126,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     _tabController = TabController(length: 3, vsync: this);
     getSocietyName();
     getBroadcastSendToList();
@@ -180,7 +182,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
     });
   }
 
-  List<BroadcastSendTo> getBroadcastSendToList() {
+  getBroadcastSendToList() {
     broadcastSendToList
         .add(BroadcastSendTo("All Owners", "All Owners of this complex"));
     broadcastSendToList
@@ -233,7 +235,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
     }
   }
 
-  List<SMSTypes> getSMSTypesList() {
+  getSMSTypesList() {
     smsTypesList
         .add(SMSTypes("Important Communication", "Important Communication"));
     smsTypesList.add(SMSTypes("Meeting", "Meeting"));
@@ -346,31 +348,15 @@ class _BaseBroadcastState extends State<BaseBroadcast>
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<BroadcastResponse>.value(
       value: Provider.of(context),
       child: Consumer<BroadcastResponse>(
         builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('broadcast'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('broadcast'),
                 bottom: getTabLayout(),
-                elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
                 getNotificationBaseLayout(value),
@@ -526,9 +512,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     items: _notificationSendToListItems,
                     value: _notificationSendToSelectedItem,
                     onChanged: (value) {
-                      _notificationSendToSelectedItem = value;
+                      _notificationSendToSelectedItem = value as String?;
                       setState(() {
-                        print("value : " + value);
+                        print("value : " + value!);
                       });
                     },
                     isExpanded: true,
@@ -562,9 +548,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           items: _notificationFlatNoListItems,
                           value: _notificationFlatNoSelectedItem,
                           onChanged: (value) {
-                            _notificationFlatNoSelectedItem = value;
+                            _notificationFlatNoSelectedItem = value as String?;
                             setState(() {
-                              print("value : " + value);
+                              print("value : " + value!);
                               for (int i = 0;
                                   i < broadcastResponse.flatMemberList.length;
                                   i++) {
@@ -625,10 +611,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                   Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                     child: text(
-                                      _notificationAssignFlatList[index].BLOCK +
+                                      _notificationAssignFlatList[index].BLOCK! +
                                           ' ' +
                                           _notificationAssignFlatList[index]
-                                              .FLAT +
+                                              .FLAT! +
                                           ' ' /*+
                                           _notificationAssignFlatList[index]
                                               .NAME +
@@ -826,9 +812,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     items: _mailSendToListItems,
                     value: _mailSendToSelectedItem,
                     onChanged: (value) {
-                      _mailSendToSelectedItem = value;
+                      _mailSendToSelectedItem = value as String?;
                       setState(() {
-                        print("value : " + value);
+                        print("value : " + value!);
                       });
                     },
                     isExpanded: true,
@@ -862,9 +848,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           items: _mailFlatNoListItems,
                           value: _mailFlatNoSelectedItem,
                           onChanged: (value) {
-                            _mailFlatNoSelectedItem = value;
+                            _mailFlatNoSelectedItem = value as String?;
                             setState(() {
-                              print("value : " + value);
+                              print("value : " + value!);
 
                               for (int i = 0;
                                   i < broadcastResponse.flatMemberList.length;
@@ -926,9 +912,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                   Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                     child: text(
-                                      _mailAssignFlatList[index].BLOCK +
+                                      _mailAssignFlatList[index].BLOCK! +
                                           ' ' +
-                                          _mailAssignFlatList[index].FLAT +
+                                          _mailAssignFlatList[index].FLAT! +
                                           ' ' /*+
                                           _mailAssignFlatList[index].NAME +
                                           '-' +
@@ -1130,18 +1116,18 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                 GlobalFunctions.convertFileToString(notificationAttachmentCompressFilePath);
           }
 */
-          _progressDialog.show();
+          _progressDialog!.show();
           Provider.of<BroadcastResponse>(context, listen: false)
               .postNotificationBroadcast(
                   _notificationAssignFlatList,
                   _notificationSendToSelectedItem,
                   notificationSubject.text,
                   notificationDescription.text)
-              .then((value) {
-                _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
+              .then((value) async {
+                _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
 
-                if(value.status){
+                if(value.status!){
                   Navigator.of(context).pop();
                 }
             print('Value result : ' + value.toString());
@@ -1161,6 +1147,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   void mailOpenFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
       mailAttachmentFilePath = value;
+      print('selected pic path : '+mailAttachmentFilePath.toString());
       getMailCompressFilePath();
     });
   }
@@ -1168,22 +1155,23 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   void mailOpenCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
       mailAttachmentFilePath = value.path;
+      print('selected pic path : : '+mailAttachmentFilePath.toString());
       getMailCompressFilePath();
     });
   }
 
   void getMailCompressFilePath() {
-    mailAttachmentFileName = mailAttachmentFilePath.substring(
-        mailAttachmentFilePath.lastIndexOf('/') + 1,
-        mailAttachmentFilePath.length);
-    print('file Name : ' + mailAttachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(mailAttachmentFilePath,
-              value.toString() + '/' + mailAttachmentFileName)
+    mailAttachmentFileName = mailAttachmentFilePath!.substring(
+        mailAttachmentFilePath!.lastIndexOf('/') + 1,
+        mailAttachmentFilePath!.length);
+    //print('file Name : ' + mailAttachmentFileName.toString());
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
+      //print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(mailAttachmentFilePath!,
+              value.toString() + '/' + mailAttachmentFileName!)
           .then((value) {
         mailAttachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + mailAttachmentCompressFilePath);
+        print('mailAttachmentCompressFilePath : ' + mailAttachmentCompressFilePath!);
         setState(() {});
       });
     });
@@ -1194,15 +1182,15 @@ class _BaseBroadcastState extends State<BaseBroadcast>
       if (_mailSendToSelectedItem != null) {
         if (mailDescription.text.length > 0) {
           String attachmentName;
-          String attachment;
+          String? attachment;
 
           if (mailAttachmentFileName != null &&
               mailAttachmentFilePath != null) {
-            attachmentName = mailAttachmentFileName;
+            attachmentName = mailAttachmentFileName!;
             attachment = GlobalFunctions.convertFileToString(
-                mailAttachmentCompressFilePath);
+                mailAttachmentCompressFilePath!);
           }
-          _progressDialog.show();
+          _progressDialog!.show();
 
           Provider.of<BroadcastResponse>(context, listen: false)
               .postMailBroadcast(
@@ -1211,12 +1199,20 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   _mailSendToSelectedItem,
                   mailSubject.text,
                   mailDescription.text)
-              .then((value) {
+              .then((value) async {
 
-                _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
+                _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
 
-            if(value.status){
+            if(value.status!){
+              //Remove cache iMAGE
+              if (mailAttachmentFileName != null &&
+                  mailAttachmentFilePath != null) {
+                await GlobalFunctions.removeFileFromDirectory(
+                    mailAttachmentFilePath!);
+                await GlobalFunctions.removeFileFromDirectory(
+                    mailAttachmentCompressFilePath!);
+              }
               Navigator.of(context).pop();
             }
             print('Value result : ' + value.toString());
@@ -1416,9 +1412,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         items: _smsSendToListItems,
                         value: _smsSendToSelectedItem,
                         onChanged: (value) {
-                          _smsSendToSelectedItem = value;
+                          _smsSendToSelectedItem = value as String?;
                           setState(() {
-                            print("value : " + value);
+                            print("value : " + value!);
                           });
                         },
                         isExpanded: true,
@@ -1452,9 +1448,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               items: _smsFlatNoListItems,
                               value: _smsFlatNoSelectedItem,
                               onChanged: (value) {
-                                _smsFlatNoSelectedItem = value;
+                                _smsFlatNoSelectedItem = value as String?;
                                 setState(() {
-                                  print("value : " + value);
+                                  print("value : " + value!);
 
                                   for (int i = 0;
                                       i < broadcastResponse.flatMemberList.length;
@@ -1516,9 +1512,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                       Container(
                                         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                         child: text(
-                                          _smsAssignFlatList[index].BLOCK +
+                                          _smsAssignFlatList[index].BLOCK! +
                                               ' ' +
-                                              _smsAssignFlatList[index].FLAT +
+                                              _smsAssignFlatList[index].FLAT! +
                                               ' ' /*+
                                               _smsAssignFlatList[index].NAME +
                                               '-' +
@@ -1560,9 +1556,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         items: _smsTypesListItems,
                         value: _smsTypesSelectedItem,
                         onChanged: (value) {
-                          _smsTypesSelectedItem = value;
+                          _smsTypesSelectedItem = value as String?;
                           setState(() {
-                            print("value : " + value);
+                            print("value : " + value!);
                           });
                         },
                         isExpanded: true,
@@ -1661,7 +1657,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     controllerCallback: importantCommunicationController),
                 text(AppLocalizations.of(context)
                     .translate('important_communication_2')),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -1719,9 +1715,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHoursListItems,
                             value: _smsHoursSelectedItem,
                             onChanged: (value) {
-                              _smsHoursSelectedItem = value;
+                              _smsHoursSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -1759,9 +1755,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMinListItems,
                             value: _smsMinSelectedItem,
                             onChanged: (value) {
-                              _smsMinSelectedItem = value;
+                              _smsMinSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -1799,9 +1795,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPmListItems,
                             value: _smsAmPmSelectedItem,
                             onChanged: (value) {
-                              _smsAmPmSelectedItem = value;
+                              _smsAmPmSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -1831,7 +1827,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                 text(". " +
                     AppLocalizations.of(context).translate('attend_meeting') +
                     ". "),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -1886,9 +1882,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHoursListItems,
                             value: _smsHoursSelectedItem,
                             onChanged: (value) {
-                              _smsHoursSelectedItem = value;
+                              _smsHoursSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -1926,9 +1922,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMinListItems,
                             value: _smsMinSelectedItem,
                             onChanged: (value) {
-                              _smsMinSelectedItem = value;
+                              _smsMinSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -1966,9 +1962,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPmListItems,
                             value: _smsAmPmSelectedItem,
                             onChanged: (value) {
-                              _smsAmPmSelectedItem = value;
+                              _smsAmPmSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2010,9 +2006,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHours2ListItems,
                             value: _smsHours2SelectedItem,
                             onChanged: (value) {
-                              _smsHours2SelectedItem = value;
+                              _smsHours2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2050,9 +2046,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMin2ListItems,
                             value: _smsMin2SelectedItem,
                             onChanged: (value) {
-                              _smsMin2SelectedItem = value;
+                              _smsMin2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2090,9 +2086,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPm2ListItems,
                             value: _smsAmPm2SelectedItem,
                             onChanged: (value) {
-                              _smsAmPm2SelectedItem = value;
+                              _smsAmPm2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2117,7 +2113,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     AppLocalizations.of(context)
                         .translate('water_supply_necessary_arrangements') +
                     ". "),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -2170,9 +2166,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHoursListItems,
                             value: _smsHoursSelectedItem,
                             onChanged: (value) {
-                              _smsHoursSelectedItem = value;
+                              _smsHoursSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2210,9 +2206,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMinListItems,
                             value: _smsMinSelectedItem,
                             onChanged: (value) {
-                              _smsMinSelectedItem = value;
+                              _smsMinSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2250,9 +2246,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPmListItems,
                             value: _smsAmPmSelectedItem,
                             onChanged: (value) {
-                              _smsAmPmSelectedItem = value;
+                              _smsAmPmSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2294,9 +2290,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHours2ListItems,
                             value: _smsHours2SelectedItem,
                             onChanged: (value) {
-                              _smsHours2SelectedItem = value;
+                              _smsHours2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2334,9 +2330,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMin2ListItems,
                             value: _smsMin2SelectedItem,
                             onChanged: (value) {
-                              _smsMin2SelectedItem = value;
+                              _smsMin2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2374,9 +2370,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPm2ListItems,
                             value: _smsAmPm2SelectedItem,
                             onChanged: (value) {
-                              _smsAmPm2SelectedItem = value;
+                              _smsAmPm2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2401,7 +2397,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     AppLocalizations.of(context)
                         .translate('water_supply_necessary_arrangements') +
                     ". "),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -2455,9 +2451,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHoursListItems,
                             value: _smsHoursSelectedItem,
                             onChanged: (value) {
-                              _smsHoursSelectedItem = value;
+                              _smsHoursSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2495,9 +2491,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMinListItems,
                             value: _smsMinSelectedItem,
                             onChanged: (value) {
-                              _smsMinSelectedItem = value;
+                              _smsMinSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2535,9 +2531,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPmListItems,
                             value: _smsAmPmSelectedItem,
                             onChanged: (value) {
-                              _smsAmPmSelectedItem = value;
+                              _smsAmPmSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2562,7 +2558,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     AppLocalizations.of(context)
                         .translate('fire_drill_participate_without_fail') +
                     ". "),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -2642,9 +2638,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHoursListItems,
                             value: _smsHoursSelectedItem,
                             onChanged: (value) {
-                              _smsHoursSelectedItem = value;
+                              _smsHoursSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2682,9 +2678,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMinListItems,
                             value: _smsMinSelectedItem,
                             onChanged: (value) {
-                              _smsMinSelectedItem = value;
+                              _smsMinSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2722,9 +2718,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPmListItems,
                             value: _smsAmPmSelectedItem,
                             onChanged: (value) {
-                              _smsAmPmSelectedItem = value;
+                              _smsAmPmSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2766,9 +2762,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHours2ListItems,
                             value: _smsHours2SelectedItem,
                             onChanged: (value) {
-                              _smsHours2SelectedItem = value;
+                              _smsHours2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2806,9 +2802,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMin2ListItems,
                             value: _smsMin2SelectedItem,
                             onChanged: (value) {
-                              _smsMin2SelectedItem = value;
+                              _smsMin2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2846,9 +2842,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPm2ListItems,
                             value: _smsAmPm2SelectedItem,
                             onChanged: (value) {
-                              _smsAmPm2SelectedItem = value;
+                              _smsAmPm2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2870,7 +2866,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   ],
                 ),
                 // text(". "+AppLocalizations.of(context).translate('water_supply_necessary_arrangements')+". "),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -2924,9 +2920,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHoursListItems,
                             value: _smsHoursSelectedItem,
                             onChanged: (value) {
-                              _smsHoursSelectedItem = value;
+                              _smsHoursSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -2964,9 +2960,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMinListItems,
                             value: _smsMinSelectedItem,
                             onChanged: (value) {
-                              _smsMinSelectedItem = value;
+                              _smsMinSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -3004,9 +3000,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPmListItems,
                             value: _smsAmPmSelectedItem,
                             onChanged: (value) {
-                              _smsAmPmSelectedItem = value;
+                              _smsAmPmSelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -3048,9 +3044,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsHours2ListItems,
                             value: _smsHours2SelectedItem,
                             onChanged: (value) {
-                              _smsHours2SelectedItem = value;
+                              _smsHours2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -3088,9 +3084,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsMin2ListItems,
                             value: _smsMin2SelectedItem,
                             onChanged: (value) {
-                              _smsMin2SelectedItem = value;
+                              _smsMin2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -3128,9 +3124,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             items: _smsAmPm2ListItems,
                             value: _smsAmPm2SelectedItem,
                             onChanged: (value) {
-                              _smsAmPm2SelectedItem = value;
+                              _smsAmPm2SelectedItem = value as String?;
                               setState(() {
-                                print("value : " + value);
+                                print("value : " + value!);
                               });
                             },
                             isExpanded: true,
@@ -3155,7 +3151,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     AppLocalizations.of(context)
                         .translate('water_supply_necessary_arrangements') +
                     ". "),
-                text("-" + societyName),
+                text("-" + societyName!),
               ],
             ),
           );
@@ -3174,7 +3170,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
     Provider.of<UserManagementResponse>(context,listen: false).getUserManagementDashboard().then((value) {
 
       smsSent = value;
-      smsBalance = (int.parse(smsCredit)-int.parse(smsSent)).toString();
+      smsBalance = (int.parse(smsCredit!)-int.parse(smsSent!)).toString();
       setState(() {
 
       });
@@ -3186,18 +3182,18 @@ class _BaseBroadcastState extends State<BaseBroadcast>
     switch (_smsTypesSelectedItem) {
       case "Important Communication":
         {
-          _progressDialog.show();
+          _progressDialog!.show();
           Provider.of<BroadcastResponse>(context, listen: false)
               .importantCommunicationSMS(
                   _smsAssignFlatList,
-                  _smsSendToSelectedItem,
-                  _smsTypesSelectedItem,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
                   importantCommunicationController.text,
-                  societyName)
+                  societyName!)
               .then((value) {
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
@@ -3207,23 +3203,23 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Meeting":
         {
-          _progressDialog.show();
+          _progressDialog!.show();
           Provider.of<BroadcastResponse>(context, listen: false)
               .meetingSMS(
                   _smsAssignFlatList,
-                  _smsSendToSelectedItem,
-                  _smsTypesSelectedItem,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
                   meetingNameController.text,
                   meetingDateController.text,
-                  _smsHoursSelectedItem,
-                  _smsMinSelectedItem,
-                  _smsAmPmSelectedItem,
+                  _smsHoursSelectedItem!,
+                  _smsMinSelectedItem!,
+                  _smsAmPmSelectedItem!,
                   meetingVenueController.text,
-                  societyName)
+                  societyName!)
               .then((value) {
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
@@ -3233,14 +3229,14 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Water Supply":
         {
-          _progressDialog.show();
+          _progressDialog!.show();
           Provider.of<BroadcastResponse>(context,listen: false).waterSupplySMS(_smsAssignFlatList, 
-              _smsSendToSelectedItem, _smsTypesSelectedItem, waterSupplyDateController.text
-              , _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, 
-              _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+              _smsSendToSelectedItem!, _smsTypesSelectedItem!, waterSupplyDateController.text
+              , _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!,
+              _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
@@ -3253,11 +3249,11 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Water Disruption":
         {
-          _progressDialog.show();
-          Provider.of<BroadcastResponse>(context,listen: false).waterDisruptionSMS(_smsAssignFlatList, _smsSendToSelectedItem, _smsTypesSelectedItem, waterDisruptionDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsTypesSelectedItem, _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+          _progressDialog!.show();
+          Provider.of<BroadcastResponse>(context,listen: false).waterDisruptionSMS(_smsAssignFlatList, _smsSendToSelectedItem!, _smsTypesSelectedItem!, waterDisruptionDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsTypesSelectedItem!, _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
@@ -3270,12 +3266,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Fire Drill":
         {
-          _progressDialog.show();
-          Provider.of<BroadcastResponse>(context,listen: false).fireDrillSMS(_smsAssignFlatList, _smsSendToSelectedItem, 
-              _smsTypesSelectedItem, fillDrillDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, societyName).then((value) {
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+          _progressDialog!.show();
+          Provider.of<BroadcastResponse>(context,listen: false).fireDrillSMS(_smsAssignFlatList, _smsSendToSelectedItem!,
+              _smsTypesSelectedItem!, fillDrillDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!, societyName!).then((value) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
@@ -3288,11 +3284,11 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Service down":
         {
-          _progressDialog.show();
-          Provider.of<BroadcastResponse>(context,listen: false).serviceDownSMS(_smsAssignFlatList, _smsSendToSelectedItem, _smsTypesSelectedItem, serviceDownReason1Controller.text, serviceDownReason2Controller.text, serviceDownDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+          _progressDialog!.show();
+          Provider.of<BroadcastResponse>(context,listen: false).serviceDownSMS(_smsAssignFlatList, _smsSendToSelectedItem!, _smsTypesSelectedItem!, serviceDownReason1Controller.text, serviceDownReason2Controller.text, serviceDownDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!, _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
@@ -3304,12 +3300,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
         break;
       case "Power Outage":
         {
-          _progressDialog.show();
-          Provider.of<BroadcastResponse>(context,listen: false).powerOutageSMS(_smsAssignFlatList, _smsSendToSelectedItem, _smsTypesSelectedItem, powerOutageDateController.text, _smsHoursSelectedItem, _smsMinSelectedItem, _smsAmPmSelectedItem, _smsHours2SelectedItem, _smsMin2SelectedItem, _smsAmPm2SelectedItem, societyName).then((value) {
+          _progressDialog!.show();
+          Provider.of<BroadcastResponse>(context,listen: false).powerOutageSMS(_smsAssignFlatList, _smsSendToSelectedItem!, _smsTypesSelectedItem!, powerOutageDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!, _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
 
-            _progressDialog.hide();
-            GlobalFunctions.showToast(value.message);
-            if (value.status) {
+            _progressDialog!.dismiss();
+            GlobalFunctions.showToast(value.message!);
+            if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }

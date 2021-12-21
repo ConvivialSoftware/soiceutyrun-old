@@ -1,4 +1,4 @@
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +10,7 @@ import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/PollOption.dart';
@@ -40,29 +41,28 @@ class BaseMobileUser extends StatefulWidget {
 
 class MobileUserState extends State<BaseMobileUser>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '',userType='';
 
 //var photo="";
 
-  List<String> inviteUserList = List<String>();
-  ProgressDialog _progressDialog;
+  List<String> inviteUserList = <String>[];
+  ProgressDialog? _progressDialog;
   
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
+    _tabController!.addListener(_handleTabSelection);
     getSharedPreferenceData();
     _handleTabSelection();
 
   }
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
         value: Provider.of(context),
@@ -71,24 +71,9 @@ class MobileUserState extends State<BaseMobileUser>
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('mobile_user'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('mobile_user'),
                 bottom: getTabLayout(),
-                elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
                getMobileUserLayout(value),
@@ -169,7 +154,7 @@ class MobileUserState extends State<BaseMobileUser>
 
     print('value.activeUserList : '+userManagementResponse.mobileUserList.length.toString());
     var inDays = GlobalFunctions.getDaysFromDate(GlobalFunctions.getCurrentDate("yyyy-MM-dd"),
-        GlobalFunctions.convertDateFormat(userManagementResponse.mobileUserList[position].LAST_LOGIN, "yyyy-MM-dd")
+        GlobalFunctions.convertDateFormat(userManagementResponse.mobileUserList[position].LAST_LOGIN!, "yyyy-MM-dd")
     );
     if(inDays.toString()=='0'){
       inDays = 'Today';
@@ -241,7 +226,7 @@ class MobileUserState extends State<BaseMobileUser>
                                 radius: GlobalVariables.textSizeVerySmall,
                               ),
                               child: text(
-                                  userManagementResponse.mobileUserList[position].BLOCK + ' ' + userManagementResponse.mobileUserList[position].FLAT,
+                                  userManagementResponse.mobileUserList[position].BLOCK! + ' ' + userManagementResponse.mobileUserList[position].FLAT!,
                                   fontSize: GlobalVariables.textSizeVerySmall,
                                   textColor: GlobalVariables.white,
                                   fontWeight: FontWeight.bold
@@ -317,11 +302,11 @@ class MobileUserState extends State<BaseMobileUser>
           child: Align(
             alignment: Alignment.bottomRight,
             child: AppButton(textContent: 'Invite', onPressed: (){
-              _progressDialog.show();
+              _progressDialog!.show();
               Provider.of<UserManagementResponse>(context,listen: false).sendInviteAPI(inviteUserList).then((value) {
 
-                _progressDialog.hide();
-                if(value.status){
+                _progressDialog!.dismiss();
+                if(value.status!){
                   Navigator.of(context).pop();
                 }
 
@@ -363,7 +348,7 @@ class MobileUserState extends State<BaseMobileUser>
         if(inviteUserList.contains(userManagementResponse.notMobileUserList[position].USER_ID)){
           inviteUserList.remove(userManagementResponse.notMobileUserList[position].USER_ID);
         }else{
-          inviteUserList.add(userManagementResponse.notMobileUserList[position].USER_ID);
+          inviteUserList.add(userManagementResponse.notMobileUserList[position].USER_ID!);
         }
 
         print('inviteUserList : '+inviteUserList.toString());
@@ -421,7 +406,7 @@ class MobileUserState extends State<BaseMobileUser>
                           children: [
                             Container(
                               child: text(
-                                  userManagementResponse.notMobileUserList[position].BLOCK+' '+userManagementResponse.notMobileUserList[position].FLAT +' - ',
+                                  userManagementResponse.notMobileUserList[position].BLOCK!+' '+userManagementResponse.notMobileUserList[position].FLAT! +' - ',
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.black,
                                   textStyleHeight: 1.0
@@ -453,7 +438,7 @@ class MobileUserState extends State<BaseMobileUser>
 
   void _handleTabSelection() {
 
-      _callAPI(_tabController.index);
+      _callAPI(_tabController!.index);
 
   }
 

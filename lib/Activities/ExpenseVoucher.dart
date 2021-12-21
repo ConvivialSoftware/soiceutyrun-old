@@ -7,13 +7,15 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Expense.dart';
@@ -35,28 +37,20 @@ class BaseExpenseVoucher extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ExpenseVoucherState(_expense);
+    return ExpenseVoucherState();
   }
 }
 
-class ExpenseVoucherState extends State<BaseExpenseVoucher> {
-  ProgressDialog _progressDialog;
-  String attachmentFilePath;
-  String attachmentFileName;
+class ExpenseVoucherState extends AppStatefulState<BaseExpenseVoucher> {
+  ProgressDialog? _progressDialog;
+  String? attachmentFilePath;
+  String? attachmentFileName;
 
-  String attachmentFileImagePath;
-  String attachmentFileImageName;
-  String attachmentCompressFileImagePath;
-
-  Expense _expense;
-
-  ExpenseVoucherState(this._expense);
-
-  var _localPath;
+  String? attachmentFileImagePath;
+  String? attachmentFileImageName;
+  String? attachmentCompressFileImagePath;
   bool isStoragePermission = false;
 
-  String _taskId;
-  ReceivePort _port = ReceivePort();
   final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
       new GlobalKey<ScaffoldState>();
 
@@ -67,32 +61,6 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
 
   @override
   void initState() {
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
-    getLocalPath();
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(_dashboardSacfoldKey.currentContext).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
 
      /*_progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
@@ -127,99 +95,36 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
     });
 */
 
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-   // _progressSubscription?.cancel();
-   // _resultSubscription?.cancel();
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-          true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
-  }
-
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    GlobalFunctions.checkPermission(Permission.storage).then((value) {
+      isStoragePermission = value;
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         key: _dashboardSacfoldKey,
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: GlobalVariables.white,
-            ),
-          ),
-          title: text('Expense #' + _expense.VOUCHER_NO,
-              textColor: GlobalVariables.white,
-              fontSize: GlobalVariables.textSizeMedium),
+        appBar: CustomAppBar(
+          title: 'Expense #' + widget._expense.VOUCHER_NO!,
         ),
         body: WillPopScope(
             child: getBaseLayout(),
             onWillPop: () {
               Navigator.of(context).pop();
-              return;
+              return Future.value(true);
             }),
       ),
     );
   }
 
   getBaseLayout() {
-    print('_expense.ATTACHMENT : ' + _expense.ATTACHMENT.toString());
-    print('_expense.VOUCHER_NO : ' + _expense.VOUCHER_NO.toString());
+    print('_expense.ATTACHMENT : ' + widget._expense.ATTACHMENT.toString());
+    print('_expense.VOUCHER_NO : ' + widget._expense.VOUCHER_NO.toString());
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -231,12 +136,10 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
                 getExpenseVoucherLayout(),
-                _expense.ATTACHMENT.isEmpty
-                    ? attachExpenseFabLayout()
-                    : SizedBox(),
+                /*widget._expense.ATTACHMENT!.isEmpty
+                    ?*/ attachExpenseFabLayout()
+                   // : SizedBox(),
               ],
             ),
           ),
@@ -397,7 +300,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
 
   getExpenseVoucherLayout() {
     List<VoucherAmount> _voucherAmountList = List<VoucherAmount>.from(
-        _expense.head_details.map((i) => VoucherAmount.fromJson(i)));
+        widget._expense.head_details!.map((i) => VoucherAmount.fromJson(i)));
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.only(top: 8),
@@ -417,7 +320,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                     alignment: Alignment.topRight,
                     child: text(
                         GlobalFunctions.convertDateFormat(
-                            _expense.PAYMENT_DATE, "dd-MM-yyyy"),
+                            widget._expense.PAYMENT_DATE!, "dd-MM-yyyy"),
                         textColor: GlobalVariables.grey,
                         fontSize: GlobalVariables.textSizeSMedium),
                   ),
@@ -428,7 +331,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                     alignment: Alignment.center,
                     child: text(
                         GlobalFunctions.getCurrencyFormat(
-                            _expense.AMOUNT.toString()),
+                            widget._expense.AMOUNT.toString()),
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeXXLarge,
                         fontWeight: FontWeight.bold),
@@ -438,7 +341,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    child: text(_expense.BANK_NAME,
+                    child: text(widget._expense.BANK_NAME,
                         textColor: GlobalVariables.grey,
                         fontSize: GlobalVariables.textSizeLargeMedium,
                         maxLine: 3),
@@ -522,7 +425,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                                               child: Container(
                                                 child: AutoSizeText(
                                                   _voucherAmountList[position]
-                                                          .head_name +
+                                                          .head_name! +
                                                       ' : ',
                                                   style: TextStyle(
                                                       color:
@@ -587,7 +490,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                         Container(
                           //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                           child: AutoSizeText(
-                            _expense.TRANSACTION_TYPE,
+                            widget._expense.TRANSACTION_TYPE!,
                             style: TextStyle(
                                 color: GlobalVariables.grey,
                                 fontSize: GlobalVariables.textSizeSMedium),
@@ -615,7 +518,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                         Container(
                           //margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                           child: AutoSizeText(
-                            _expense.REFERENCE_NO,
+                            widget._expense.REFERENCE_NO!,
                             style: TextStyle(
                                 color: GlobalVariables.grey,
                                 fontSize: GlobalVariables.textSizeSMedium),
@@ -643,7 +546,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                         Container(
                           //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                           child: AutoSizeText(
-                            _expense.BANK_NAME,
+                            widget._expense.BANK_NAME!,
                             style: TextStyle(
                                 color: GlobalVariables.grey,
                                 fontSize: GlobalVariables.textSizeSMedium),
@@ -671,7 +574,7 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                         Flexible(
                           child: Container(
                             child: text(
-                              _expense.REMARK,
+                              widget._expense.REMARK,
                               textColor: GlobalVariables.grey,
                               fontSize: GlobalVariables.textSizeSMedium,
                               maxLine: 99,
@@ -684,29 +587,12 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                 ],
               ),
             ),
-            _expense.ATTACHMENT.isNotEmpty
+            widget._expense.ATTACHMENT!.isNotEmpty
                 ? AppContainer(
                     isListItem: true,
                     child: InkWell(
                       onTap: () {
-                        if (isStoragePermission) {
-                          downloadAttachment(_expense.ATTACHMENT, _localPath);
-                        } else {
-                          GlobalFunctions.askPermission(Permission.storage)
-                              .then((value) {
-                            if (value) {
-                              downloadAttachment(_expense.ATTACHMENT, _localPath);
-                            } else {
-                              GlobalFunctions.showToast(AppLocalizations.of(context)
-                                  .translate('download_permission'));
-                            }
-                          });
-                        }
-                        /* showModalBottomSheet(context: context, builder: (context){
-                    return StatefulBuilder(builder: (context,setState){
-                      return
-                    });
-                  });*/
+                        downloadAttachment(widget._expense.ATTACHMENT);
                       },
                       child: Column(
                         children: [
@@ -725,10 +611,25 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
                                         ? attachmentFileName
                                         : attachmentFileImageName != null
                                             ? attachmentFileImageName
-                                            : AppLocalizations.of(context)
-                                                .translate('attachment'),
+                                            : 'Tap to View Attachment',
                                     fontSize: GlobalVariables.textSizeSMedium,
                                     textColor: GlobalVariables.skyBlue),
+                              ),
+                              SizedBox(width: 4,),
+                              if(downloading) Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                ],
                               )
                             ],
                           ),
@@ -740,7 +641,8 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
             attachmentFileName != null ||
                 attachmentFileImageName != null
                 ? Container(
-              margin: EdgeInsets.only(top: 16,left: 16),
+
+              margin: EdgeInsets.all(16),
               alignment: Alignment.topLeft,
               child: AppButton(
                   textContent: 'Update',
@@ -758,10 +660,10 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
       attachmentFilePath = value;
-      attachmentFileName = attachmentFilePath.substring(
-          attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+      attachmentFileName = attachmentFilePath!.substring(
+          attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
       print('file Name : ' + attachmentFileName.toString());
-      print('file type : ' + attachmentFileName.substring(attachmentFileName.indexOf(".")+1,attachmentFileName.length));
+      print('file type : ' + attachmentFileName!.substring(attachmentFileName!.indexOf(".")+1,attachmentFileName!.length));
       setState(() {
         attachmentFileImageName = null;
         attachmentFileImagePath = null;
@@ -785,18 +687,18 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
   }
 
   void getCompressFilePath() {
-    attachmentFileImageName = attachmentFileImagePath.substring(
-        attachmentFileImagePath.lastIndexOf('/') + 1,
-        attachmentFileImagePath.length);
+    attachmentFileImageName = attachmentFileImagePath!.substring(
+        attachmentFileImagePath!.lastIndexOf('/') + 1,
+        attachmentFileImagePath!.length);
     print('file Name : ' + attachmentFileImageName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFileImagePath,
-              value.toString() + '/' + attachmentFileImageName)
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFileImagePath!,
+              value.toString() + '/' + attachmentFileImageName!)
           .then((value) {
         attachmentCompressFileImagePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFileImagePath);
-        print('file type : ' + attachmentFileImageName.substring(attachmentFileImageName.indexOf(".")+1,attachmentFileImageName.length));
+        print('Cache file path : ' + attachmentCompressFileImagePath!);
+        print('file type : ' + attachmentFileImageName!.substring(attachmentFileImageName!.indexOf(".")+1,attachmentFileImageName!.length));
         setState(() {
           attachmentFilePath = null;
           attachmentFileName = null;
@@ -812,22 +714,30 @@ class ExpenseVoucherState extends State<BaseExpenseVoucher> {
 
     String encodedFile,fileType;
     if(attachmentFileName != null && attachmentFilePath != null) {
-      encodedFile = GlobalFunctions.convertFileToString(attachmentFilePath);
-      fileType = attachmentFileName.substring(attachmentFileName.indexOf(".")+1,attachmentFileName.length);
+      encodedFile = GlobalFunctions.convertFileToString(attachmentFilePath!);
+      fileType = attachmentFileName!.substring(attachmentFileName!.indexOf(".")+1,attachmentFileName!.length);
     }else{
-      encodedFile = GlobalFunctions.convertFileToString(attachmentCompressFileImagePath);
-      fileType = attachmentFileImageName.substring(attachmentFileImageName.indexOf(".")+1,attachmentFileImageName.length);
+      encodedFile = GlobalFunctions.convertFileToString(attachmentCompressFileImagePath!);
+      fileType = attachmentFileImageName!.substring(attachmentFileImageName!.indexOf(".")+1,attachmentFileImageName!.length);
     }
 
     String societyId = await GlobalFunctions.getSocietyId();
     restClientERP
         .updateExpenseAttachment(
             societyId,
-            widget._expense.VOUCHER_NO,
+            widget._expense.VOUCHER_NO!,
            encodedFile,fileType)
         .then((value) async {
-      GlobalFunctions.showToast(value.message);
-      if (value.status) {
+      GlobalFunctions.showToast(value.message!);
+      if (value.status!) {
+
+        if (attachmentFilePath != null &&
+            attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFileImagePath!);
+        }
         /*if (attachmentFileName != null && attachmentFilePath != null) {
           print('attachmentFilePath : ' + attachmentFilePath.toString());
           print('attachmentFileName : ' + attachmentFileName.toString());

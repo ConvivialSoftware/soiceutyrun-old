@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:clipboard_manager/clipboard_manager.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,12 +20,14 @@ import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
 import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
@@ -44,9 +46,7 @@ class BaseNotifications extends StatefulWidget {
 
 class NotificationsState extends State<BaseNotifications> {
 
-  ProgressDialog _progressDialog;
-
-  List<DBNotificationPayload> _dbNotificationList = List<DBNotificationPayload>();
+  List<DBNotificationPayload> _dbNotificationList = <DBNotificationPayload>[];
   //var notificationFormatData='';
 
   @override
@@ -59,23 +59,9 @@ class NotificationsState extends State<BaseNotifications> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
+        appBar: CustomAppBar(
          /* actions: [
             AppIconButton(Icons.remove_red_eye,iconColor: GlobalVariables.white,onPressed: () async {
               notificationFormatData = await GlobalFunctions.getNotificationBackGroundData();
@@ -114,10 +100,7 @@ class NotificationsState extends State<BaseNotifications> {
 
             },)
           ],*/
-          title: text(
-            AppLocalizations.of(context).translate('notification')+" ("+GlobalVariables.notificationCounterValueNotifer.value.toString()+")",
-            textColor: GlobalVariables.white,
-          ),
+          title: AppLocalizations.of(context).translate('notification')+" ("+GlobalVariables.notificationCounterValueNotifer.value.toString()+")",
         ),
         body: getBaseLayout(),
       ),
@@ -136,8 +119,24 @@ class NotificationsState extends State<BaseNotifications> {
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      margin: EdgeInsets.all(16),
+                      width: 100,
+                      child: AppButton(
+                        textContent: AppLocalizations.of(context)
+                            .translate('read_all'),
+                        onPressed: () async {
+                        await SQLiteDbProvider.db.updateUnReadNotification();
+                        getNotificationData();
+                      },
+
+                      ),
+                    ),
+                  ),
+                ),
                 getNotificationsLayout(),
               ],
             ),
@@ -151,7 +150,7 @@ class NotificationsState extends State<BaseNotifications> {
     return Container(
       //padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(
-          18, MediaQuery.of(context).size.height / 15, 18, 0),
+          18,80, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
             // scrollDirection: Axis.vertical,
@@ -168,12 +167,12 @@ class NotificationsState extends State<BaseNotifications> {
   getNotificationsListItemLayout(int position) {
     var displayDate='';
     print(_dbNotificationList[position].DATE_TIME);
-    if(GlobalFunctions.isDateSameOrGrater(_dbNotificationList[position].DATE_TIME)){
+    if(GlobalFunctions.isDateSameOrGrater(_dbNotificationList[position].DATE_TIME!)){
       print('isDateSameOrGrater True');
-      displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME, 'dd MMM');
+      displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME!, 'dd MMM');
     }else{
       print('isDateSameOrGrater False');
-      displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME, 'hh:mm aa');
+      displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME!, 'hh:mm aa');
     }
 
     var image  =  GlobalVariables.appLogoGreenIcon;
@@ -332,14 +331,14 @@ class NotificationsState extends State<BaseNotifications> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(_dbNotificationPayload.ID, false)));
+                  BaseComplaintInfoAndComments.ticketNo(_dbNotificationPayload.ID!, false)));
 
     } else if (_dbNotificationPayload.TYPE== NotificationTypes.TYPE_ASSIGN_COMPLAINT) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(_dbNotificationPayload.ID, true)));
+                  BaseComplaintInfoAndComments.ticketNo(_dbNotificationPayload.ID!, true)));
 
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_MEETING) {
       Navigator.push(
@@ -361,6 +360,13 @@ class NotificationsState extends State<BaseNotifications> {
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('events'))));
+
+    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_Document) {
+     Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseMyComplex(
+                  AppLocalizations.of(context).translate('documents'))));
 
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_POLL) {
       Navigator.push(
@@ -404,12 +410,12 @@ class NotificationsState extends State<BaseNotifications> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseNearByShopNotificationItemDetails( _dbNotificationPayload.ID)));
+              builder: (context) => BaseNearByShopNotificationItemDetails( _dbNotificationPayload.ID!)));
     }else if (_dbNotificationPayload.TYPE  == NotificationTypes.TYPE_INTERESTED_CUSTOMER) {
        Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(_dbNotificationPayload.ID)));
+              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(_dbNotificationPayload.ID!)));
     }else if(_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BROADCAST){
       FirebaseMessagingHandler().showDynamicAlert(context, _dbNotificationPayload);
     }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_UserManagement) {

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
@@ -24,7 +25,7 @@ class BaseHelpDesk extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return HelpDeskState(isAssignComplaint);
+    return HelpDeskState();
   }
 }
 
@@ -43,18 +44,12 @@ class HelpDeskState extends State<BaseHelpDesk> {
 
   var societyId, flat, block;
 
-  ProgressDialog _progressDialog;
-  bool isAssignComplaint=false;
-
-  HelpDeskState(this.isAssignComplaint);
-
-
   @override
   void initState() {
     super.initState();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(isAssignComplaint).then((value) {
+        Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(widget.isAssignComplaint).then((value) {
           setState(() {
           });
         });
@@ -67,7 +62,7 @@ class HelpDeskState extends State<BaseHelpDesk> {
 
   @override
   Widget build(BuildContext context) {
-      _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+      //_progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<HelpDeskResponse>.value(
         value: Provider.of(context),
@@ -76,22 +71,8 @@ class HelpDeskState extends State<BaseHelpDesk> {
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               //resizeToAvoidBottomPadding: false,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('help_desk'),
-                  textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeMedium
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('help_desk'),
               ),
               body:  getMyTicketLayout(value),
             ),
@@ -105,15 +86,14 @@ class HelpDeskState extends State<BaseHelpDesk> {
     return WillPopScope(
       onWillPop: (){
         Navigator.pop(context);
-        return;
+        return Future.value(true);
       },
       child: Stack(
         children: <Widget>[
-          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-              context, 180.0),
+       //   GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
            ticketOpenClosedLayout() , //ticketFilterLayout(),
           !value.isLoading ?  getTicketListDataLayout(value) : GlobalFunctions.loadingWidget(context),
-          !isAssignComplaint ? addTicketFabLayout(): Container(),
+          !widget.isAssignComplaint ? addTicketFabLayout(): Container(),
         ],
       ),
     );
@@ -289,7 +269,7 @@ class HelpDeskState extends State<BaseHelpDesk> {
                         builder: (context) => BaseRaiseNewTicket()));
                 if(result=='back'){
                   GlobalFunctions.setBaseContext(context);
-                  Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(isAssignComplaint);
+                  Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(widget.isAssignComplaint);
                 }else{
                   GlobalFunctions.setBaseContext(context);
                 }
@@ -334,10 +314,10 @@ class HelpDeskState extends State<BaseHelpDesk> {
         final result = await  Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BaseComplaintInfoAndComments(isOpenTicket ? value.openComplaintList[position] : value.closeComplaintList[position],isAssignComplaint)));
+                builder: (context) => BaseComplaintInfoAndComments(isOpenTicket ? value.openComplaintList[position] : value.closeComplaintList[position],widget.isAssignComplaint)));
         if(result=='back'){
           GlobalFunctions.setBaseContext(context);
-          Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(isAssignComplaint);
+          Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(widget.isAssignComplaint);
         }else{
           GlobalFunctions.setBaseContext(context);
         }
@@ -359,7 +339,7 @@ class HelpDeskState extends State<BaseHelpDesk> {
                   ),
                   decoration: BoxDecoration(
                       color: getTicketCategoryColor(
-                          isOpenTicket ? value.openComplaintList[position].STATUS : value.closeComplaintList[position].STATUS),
+                          isOpenTicket ? value.openComplaintList[position].STATUS! : value.closeComplaintList[position].STATUS!),
                       borderRadius: BorderRadius.circular(5)),
                 ),
                 Column(
@@ -370,15 +350,15 @@ class HelpDeskState extends State<BaseHelpDesk> {
                       alignment: Alignment.topRight,
                       child: text(
                           'Ticket No: ' +
-                              ( isOpenTicket ? value.openComplaintList[position].TICKET_NO : value.closeComplaintList[position].TICKET_NO),
+                              ( isOpenTicket ? value.openComplaintList[position].TICKET_NO! : value.closeComplaintList[position].TICKET_NO!),
                           textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSmall
                       ),
                     ),
-                    isAssignComplaint ? Container(
+                    widget.isAssignComplaint ? Container(
                       alignment: Alignment.topRight,
                       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: text(
-                          'Unit No: '+ (isOpenTicket ? value.openComplaintList[position].BLOCK+' '+value.openComplaintList[position].FLAT : value.closeComplaintList[position].BLOCK+' '+value.closeComplaintList[position].FLAT),
+                          'Unit No: '+ (isOpenTicket ? value.openComplaintList[position].BLOCK!+' '+value.openComplaintList[position].FLAT! : value.closeComplaintList[position].BLOCK!+' '+value.closeComplaintList[position].FLAT!),
                           textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSmall
                       ),
                     ):Container(),
@@ -525,7 +505,7 @@ class HelpDeskState extends State<BaseHelpDesk> {
                 Container(
                   child: text(
                       'Issued on: ' +
-                          ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE,"dd-MM-yyyy")),
+                          ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE!,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE!,"dd-MM-yyyy")),
                       textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
                 ),
                 Row(
@@ -538,7 +518,7 @@ class HelpDeskState extends State<BaseHelpDesk> {
                     ),
                     SizedBox(width: 3,),
                     text(
-                        ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT ) +
+                        ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT )! +
                             ' Comments',
                         textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
                   ],

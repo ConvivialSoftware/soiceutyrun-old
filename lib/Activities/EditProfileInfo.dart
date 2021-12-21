@@ -1,11 +1,13 @@
 import 'dart:io';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
@@ -20,26 +22,24 @@ import 'base_stateful.dart';
 
 class BaseEditProfileInfo extends StatefulWidget {
 
-  String userId,societyId;
+  String? userId,societyId;
   BaseEditProfileInfo(this.userId,this.societyId);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return EditProfileInfoState(this.userId,this.societyId);
+    return EditProfileInfoState();
   }
 }
 
 class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
-  String userId,societyId;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
 
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  List<ProfileInfo> _profileList = <ProfileInfo>[];
 
-  List<ProfileInfo> _profileList = List<ProfileInfo>();
-
-  EditProfileInfoState(this.userId, this.societyId);
+  //EditProfileInfoState(this.userId, this.societyId);
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
@@ -51,29 +51,30 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   TextEditingController _infoController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
-  List<String> _bloodGroupList = new List<String>();
-  List<DropdownMenuItem<String>> __bloodGroupListItems = new List<DropdownMenuItem<String>>();
-  String _selectedBloodGroup;
+  List<String> _bloodGroupList = <String>[];
+  List<DropdownMenuItem<String>> __bloodGroupListItems = <DropdownMenuItem<String>>[];
+  String? _selectedBloodGroup;
 
-  List<String> _membershipTypeList = new List<String>();
-  List<DropdownMenuItem<String>> __membershipTypeListItems = new List<DropdownMenuItem<String>>();
-  String _selectedMembershipType;
+  List<String> _membershipTypeList = <String>[];
+  List<DropdownMenuItem<String>> __membershipTypeListItems = <DropdownMenuItem<String>>[];
+  String? _selectedMembershipType;
 
 
-  List<String> _livesHereList = new List<String>();
-  List<DropdownMenuItem<String>> __livesHereListItems = new List<DropdownMenuItem<String>>();
-  String _selectedLivesHere;
+  List<String> _livesHereList = <String>[];
+  List<DropdownMenuItem<String>> __livesHereListItems = <DropdownMenuItem<String>>[];
+  String? _selectedLivesHere;
 
  // String _selectedOccupation="Software Engg.";
   String _selectedGender="Male";
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission=false;
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
@@ -95,28 +96,12 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   Widget build(BuildContext context) {
 
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('edit_profile'),
-            textColor: GlobalVariables.white,
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('edit_profile'),
         ),
         body: getBaseLayout(),
       ),
@@ -261,22 +246,23 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
                       contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                      /*String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          _contact!.phoneNumber
                               .toString()
                               .indexOf('(') -
-                              1);
+                              1);*/
+                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                       _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
@@ -295,22 +281,23 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
                       contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                      /*String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          _contact!.phoneNumber
                               .toString()
                               .indexOf('(') -
-                              1);
+                              1);*/
+                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                       _alterMobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
@@ -596,7 +583,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                           fit: BoxFit.cover,
                           radius: 30.0,
                         )
-                            : attachmentFilePath.contains("http") ?
+                            : attachmentFilePath!.contains("http") ?
                         AppNetworkImage(attachmentFilePath,
                           imageWidth:60.0,
                           imageHeight:60.0,
@@ -726,7 +713,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
       //if(_dobController.text.length>0){
 
-        if(_mobileController.text.length>0){
+      if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
 
         //  if(_emailController.text.length>0){
 
@@ -739,7 +726,15 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
                     if(_selectedLivesHere!=null) {
 
+                      if(_alterMobileController.text.length>0){
+                        if (_alterMobileController.text.length > 0 && _alterMobileController.text.length==10) {
                       editProfileData();
+                        }else{
+                          GlobalFunctions.showToast('Please Enter Valid Alternate Mobile Number');
+                        }
+                      }else {
+                        editProfileData();
+                      }
 
                     }else{
                       GlobalFunctions.showToast('Please Select Lives Here');
@@ -758,7 +753,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
         }else{
-          GlobalFunctions.showToast('Please Enter Mobile Number');
+          GlobalFunctions.showToast('Please Enter Valid Mobile Number');
         }
       /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
@@ -785,13 +780,13 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   }
 
   void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(attachmentFilePath!.lastIndexOf('/')+1,attachmentFilePath!.length);
     print('file Name : '+attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath!, value.toString()+'/'+attachmentFileName!).then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
+        print('Cache file path : '+attachmentCompressFilePath!);
         setState(() {
         });
       });
@@ -849,7 +844,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     });
   }
 
-  void changeBloodGroupDropDownItem(String value) {
+  void changeBloodGroupDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedBloodGroup = value;
@@ -857,7 +852,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     });
   }
 
-  void changeMembershipTypeDropDownItem(String value) {
+  void changeMembershipTypeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedMembershipType = value;
@@ -865,7 +860,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     });
   }
 
-  void changeLivesHereDropDownItem(String value) {
+  void changeLivesHereDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedLivesHere = value;
@@ -879,30 +874,30 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     final RestClient restClient = RestClient(dio);
    // String societyId = await GlobalFunctions.getSocietyId();
    // String  userId = await GlobalFunctions.getUserId();
-    _progressDialog.show();
-    restClient.getProfileData(societyId,userId).then((value) {
-        _progressDialog.hide();
-      if (value.status) {
-        List<dynamic> _list = value.data;
+    _progressDialog!.show();
+    restClient.getProfileData(widget.societyId!,widget.userId!).then((value) {
+        _progressDialog!.dismiss();
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         _profileList = List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
         setState(() {
 
-          _nameController.text=_profileList[0].NAME;
-          _mobileController.text=_profileList[0].Phone;
-          _alterMobileController.text=_profileList[0].ALTERNATE_CONTACT1;
-          _selectedLivesHere=_profileList[0].LIVES_HERE.isEmpty ? null : _profileList[0].LIVES_HERE;
-          _selectedBloodGroup=_profileList[0].BLOOD_GROUP.isEmpty ? null : _profileList[0].BLOOD_GROUP;
-          _occupationController.text =_profileList[0].OCCUPATION;
+          _nameController.text=_profileList[0].NAME!;
+          _mobileController.text=_profileList[0].Phone!;
+          _alterMobileController.text=_profileList[0].ALTERNATE_CONTACT1!;
+          _selectedLivesHere=_profileList[0].LIVES_HERE!.isEmpty ? null : _profileList[0].LIVES_HERE;
+          _selectedBloodGroup=_profileList[0].BLOOD_GROUP!.isEmpty ? null : _profileList[0].BLOOD_GROUP;
+          _occupationController.text =_profileList[0].OCCUPATION!;
           if(_profileList[0].DOB!='0000-00-00')
-            _dobController.text= GlobalFunctions.convertDateFormat(_profileList[0].DOB, "dd-MM-yyyy");
-          _selectedGender=_profileList[0].GENDER;
-          _emailController.text=_profileList[0].Email;
-          _addressController.text=_profileList[0].ADDRESS;
+            _dobController.text= GlobalFunctions.convertDateFormat(_profileList[0].DOB!, "dd-MM-yyyy");
+          _selectedGender=_profileList[0].GENDER!;
+          _emailController.text=_profileList[0].Email!;
+          _addressController.text=_profileList[0].ADDRESS!;
        //   _hobbiesController.text=_profileList[0].HOBBIES;
-          _selectedMembershipType= _profileList[0].TYPE.isEmpty ? _membershipTypeList[0] : _profileList[0].TYPE;
+          _selectedMembershipType= _profileList[0].TYPE!.isEmpty ? _membershipTypeList[0] : _profileList[0].TYPE;
 
           attachmentFilePath = _profileList[0].PROFILE_PHOTO;
-          if(attachmentFilePath!=null && attachmentFilePath.length==0){
+          if(attachmentFilePath!=null && attachmentFilePath!.length==0){
             attachmentFilePath=null;
           }
           print('profile pic : '+_profileList[0].PROFILE_PHOTO.toString());
@@ -910,6 +905,17 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
         });
 
+      }
+    }).catchError((Object obj) {
+      GlobalFunctions.showToast('Exception : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            GlobalFunctions.showToast('DioError Result : ' + res.toString());
+          }
+          break;
+        default:
       }
     });
 
@@ -924,30 +930,42 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
      String  loggedUserId = await GlobalFunctions.getUserId();
 
     String attachmentName;
-    String attachment;
+    String? attachment;
     if(attachmentFileName!=null && attachmentFilePath!=null){
-      attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachmentName = attachmentFileName!;
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
-    _progressDialog.show();
-    restClient.editProfileInfo(societyId,userId,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_selectedMembershipType,_selectedLivesHere).then((value) {
-      _progressDialog.hide();
-      if (value.status) {
-        if(loggedUserId==userId) {
+    _progressDialog!.show();
+    restClient.editProfileInfo(widget.societyId!,widget.userId!,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_selectedMembershipType!,_selectedLivesHere!).then((value) async {
+      _progressDialog!.dismiss();
+      if (value.status!) {
+        if(loggedUserId==widget.userId!) {
           GlobalVariables.userNameValueNotifer.value = _nameController.text;
           GlobalVariables.userNameValueNotifer.notifyListeners();
         }
         if(attachmentFileName!=null && attachmentFilePath!=null){
-          //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-          GlobalFunctions.getTemporaryDirectoryPath()
-              .then((value) {
-            GlobalFunctions.removeAllFilesFromDirectory(
-                value);
-          });
+          if (attachmentFilePath != null &&
+              attachmentFilePath != null) {
+            await GlobalFunctions.removeFileFromDirectory(
+                attachmentFilePath!);
+            await GlobalFunctions.removeFileFromDirectory(
+                attachmentCompressFilePath!);
+          }
         }
         Navigator.of(context).pop('profile');
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
+    }).catchError((Object obj) {
+      GlobalFunctions.showToast('Exception : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            GlobalFunctions.showToast('DioError Result : ' + res.toString());
+          }
+          break;
+        default:
+      }
     });
 
   }

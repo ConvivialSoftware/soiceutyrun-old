@@ -1,13 +1,15 @@
 import 'dart:io';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -36,9 +38,9 @@ class AddNewMemberByAdminState
     extends State<BaseAddNewMemberByAdmin> {
 
 
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentFileName;
+  String? attachmentCompressFilePath;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
@@ -55,23 +57,25 @@ class AddNewMemberByAdminState
   new List<DropdownMenuItem<String>>();
   String _selectedFlat;*/
 
-  List<String> _membershipTypeList = new List<String>();
+  List<String> _membershipTypeList = <String>[];
   List<DropdownMenuItem<String>> __membershipTypeListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedMembershipType;
+      <DropdownMenuItem<String>>[];
+  String? _selectedMembershipType;
 
-  List<String> _livesHereList = new List<String>();
+  List<String> _livesHereList = <String>[];
   List<DropdownMenuItem<String>> __livesHereListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedLivesHere;
+      <DropdownMenuItem<String>>[];
+  String? _selectedLivesHere;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
+
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     /*Provider.of<UserManagementResponse>(context,listen: false).getBlock().then((value) {
       //setBlockData(value);
       //_selectedBlock=widget.block;
@@ -93,7 +97,6 @@ class AddNewMemberByAdminState
   @override
   Widget build(BuildContext context) {
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
         value:Provider.of<UserManagementResponse>(context),
@@ -101,24 +104,8 @@ class AddNewMemberByAdminState
         return Builder(
           builder: (context) =>
               Scaffold(
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  elevation: 0,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
-                  title: text(
-                      AppLocalizations.of(context).translate('add_new_member'),
-                      textColor: GlobalVariables.white,
-                      fontSize: GlobalVariables.textSizeMedium
-                  ),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('add_new_member'),
                 ),
                 body: getBaseLayout(value),
               ),
@@ -269,22 +256,21 @@ class AddNewMemberByAdminState
                   Icons.phone_android,
                   iconColor: GlobalVariables.secondaryColor,
                   onPressed: () async {
-                    Contact contact = await _contactPicker.selectContact();
-                    print('contact Name : ' + contact.fullName);
+                    PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                    print('contact Name : ' + contact.fullName!);
                     print('contact Number : ' +
                         contact.phoneNumber.toString());
                     _contact = contact;
                     setState(() {
                       if (_contact != null) {
-                        //  _nameController.text = _contact.fullName;
-                        String phoneNumber = _contact.phoneNumber
+                       /* //  _nameController.text = _contact.fullName;
+                        String phoneNumber = _contact!.phoneNumber
                             .toString()
                             .substring(
                             0,
-                            _contact.phoneNumber
-                                .toString()
-                                .indexOf('(') -
-                                1);
+                                _contact!.phoneNumber.toString().indexOf('(') -
+                                    1);*/
+                        String  phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                         _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                         // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                       }
@@ -558,7 +544,7 @@ class AddNewMemberByAdminState
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image:
-                                    FileImage(File(attachmentFilePath)),
+                                            FileImage(File(attachmentFilePath!)),
                                     fit: BoxFit.cover),
                                 border: Border.all(
                                     color: GlobalVariables.primaryColor,
@@ -687,16 +673,16 @@ class AddNewMemberByAdminState
   }
 
   Future<void> addMember() async {
-    String attachmentName;
-    String attachment;
+    String? attachmentName;
+    String? attachment;
 
     if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName;
       attachment =
-          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
-    _progressDialog.show();
+    _progressDialog!.show();
 
     Provider.of<UserManagementResponse>(context,listen: false).addMemberByAdmin(
         widget.block,
@@ -704,14 +690,23 @@ class AddNewMemberByAdminState
         _nameController.text,
         _mobileController.text,
         _emailController.text,
-        _selectedMembershipType,
-        _selectedLivesHere, _addressController.text,
-        _notModeratorController.text, attachment).then((value) {
+            _selectedMembershipType!,
+            _selectedLivesHere!,
+            _addressController.text,
+            _notModeratorController.text,
+            attachment)
+        .then((value) async {
+      _progressDialog!.dismiss();
 
-      _progressDialog.hide();
-
-      GlobalFunctions.showToast(value.message);
-      if (value.status) {
+      GlobalFunctions.showToast(value.message!);
+      if (value.status!) {
+        if (attachmentFileName != null &&
+            attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
+        }
         Navigator.of(context).pop();
       }
     });
@@ -732,16 +727,16 @@ class AddNewMemberByAdminState
   }
 
   void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
     print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-          attachmentFilePath, value.toString() + '/' + attachmentFileName)
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
+        print('Cache file path : ' + attachmentCompressFilePath!);
         setState(() {});
       });
     });
@@ -778,7 +773,7 @@ class AddNewMemberByAdminState
     setState(() {});
   }
 
-  void changeMembershipTypeDropDownItem(String value) {
+  void changeMembershipTypeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedMembershipType = value;
@@ -786,7 +781,7 @@ class AddNewMemberByAdminState
     });
   }
 
-  void changeLivesHereDropDownItem(String value) {
+  void changeLivesHereDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedLivesHere = value;

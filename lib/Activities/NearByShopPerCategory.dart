@@ -11,6 +11,7 @@ import 'package:societyrun/Activities/NearByShopPerCategoryItemDetails.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
@@ -26,7 +27,7 @@ import 'base_stateful.dart';
 
 class BaseNearByShopPerCategory extends StatefulWidget {
 
-  String exclusiveId;
+  String? exclusiveId;
   BaseNearByShopPerCategory({this.exclusiveId});
 
   @override
@@ -39,8 +40,8 @@ class BaseNearByShopPerCategory extends StatefulWidget {
 class NearByShopPerCategoryState
     extends State<BaseNearByShopPerCategory>
     with SingleTickerProviderStateMixin {
-  ProgressDialog _progressDialog;
-  TabController _tabController;
+  ProgressDialog? _progressDialog;
+  TabController? _tabController;
   var width, height;
 
   NearByShopPerCategoryState();
@@ -48,13 +49,14 @@ class NearByShopPerCategoryState
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController!.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     print('initState Call');
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -64,8 +66,8 @@ class NearByShopPerCategoryState
           print(', : ' + tabLength.toString());
           _tabController =
               TabController(length: int.parse(tabLength), vsync: this);
-          _tabController.addListener(() {
-            print('_tabController.index : ' + _tabController.index.toString());
+          _tabController!.addListener(() {
+            print('_tabController.index : ' + _tabController!.index.toString());
             setState(() {});
           });
         });
@@ -82,7 +84,6 @@ class NearByShopPerCategoryState
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<NearByShopResponse>.value(
         value: Provider.of<NearByShopResponse>(context),
@@ -92,7 +93,7 @@ class NearByShopPerCategoryState
             if(value.nearByShopList.length>0) {
               if (widget.exclusiveId != null) {
                 widget.exclusiveId=null;
-                WidgetsBinding.instance.addPostFrameCallback((_) {
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
                  // Navigator.of(context).pop();
 
 
@@ -115,29 +116,14 @@ class NearByShopPerCategoryState
               length: value.nearByShopCategoryList.length,
               child: Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
-                  title: text(
-                    AppLocalizations.of(context).translate('exclusive_offer'),
-                      textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium,
-                  ),
+                appBar: CustomAppBar(
+                  title: AppLocalizations.of(context).translate('exclusive_offer'),
                   bottom: value.nearByShopCategoryList.isNotEmpty
                       ? getTabLayout(value)
                       : PreferredSize(
                           preferredSize: Size.fromHeight(0.0),
                           child: Container(),
                         ),
-                  elevation: 0,
                 ),
                 body:
                     /*value.classifiedCategoryList.isNotEmpty && */ !value
@@ -222,18 +208,18 @@ class NearByShopPerCategoryState
   }
 
   getNearByShopPerCategoryLayout(NearByShopResponse value) {
-    int tabIndex = _tabController == null ? 0 : _tabController.index;
+    int tabIndex = _tabController == null ? 0 : _tabController!.index;
     NearByShopResponse _nearByShopResponse = NearByShopResponse();
     for (int i = 0; i < value.nearByShopList.length; i++) {
       var category = value.nearByShopCategoryList[tabIndex].Category_Name;
       print('category : ' + category.toString());
-      if (category.toLowerCase() ==
-          value.nearByShopList[i].Category.toLowerCase()) {
+      if (category!.toLowerCase() ==
+          value.nearByShopList[i].Category!.toLowerCase()) {
         _nearByShopResponse.nearByShopList.add(value.nearByShopList[i]);
       }
     }
 
-    String tabName = value.nearByShopCategoryList[tabIndex].Category_Name;
+    String tabName = value.nearByShopCategoryList[tabIndex].Category_Name!;
     return Stack(
       children: <Widget>[
         //GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
@@ -274,7 +260,7 @@ class NearByShopPerCategoryState
         decoration: boxDecoration(
           radius: 10,
           showShadow: false,
-          bgColor: Color(int.parse(value.nearByShopList[position].card_bg)),
+          bgColor: Color(int.parse(value.nearByShopList[position].card_bg!)),
         ),
         child: Stack(
           children: <Widget>[
@@ -295,7 +281,7 @@ class NearByShopPerCategoryState
                           child: text(
                             'Till ' +
                                 GlobalFunctions.convertDateFormat(
-                                    value.nearByShopList[position].exp_date,
+                                    value.nearByShopList[position].exp_date!,
                                     'dd-MMM-yyyy'),
                             fontSize: GlobalVariables.textSizeSmall,
                           ),
@@ -326,14 +312,14 @@ class NearByShopPerCategoryState
                                   fontWeight: FontWeight.bold,
                                   maxLine: 3,
                                   textColor: Color(int.parse(value
-                                      .nearByShopList[position].title_bg)))),
+                                      .nearByShopList[position].title_bg!)))),
                         ),
                         InkWell(
                           onTap: (){
                            /* var url = "https://wa.me/?text="+value.nearByShopList[position].Category+'\n'+value.nearByShopList[position].Title;
                             SocialShare.shareWhatsapp(url);*/
                             //launch(url);
-                            launch("tel://" + value.nearByShopList[position].vendor_mobile);
+                            launch("tel://" + value.nearByShopList[position].vendor_mobile!);
                           },
                           child: Container(
                             margin: EdgeInsets.only(top: 8),
@@ -362,7 +348,7 @@ class NearByShopPerCategoryState
                     ),
                     text(value.nearByShopList[position].short_description,
                         textColor: Color(int.parse(
-                            value.nearByShopList[position].title_bg)),
+                            value.nearByShopList[position].title_bg!)),
                         fontSize: GlobalVariables.textSizeMedium,
                         maxLine: 2),
                   ],
@@ -390,7 +376,14 @@ class NearByShopPerCategoryState
                           Icons.arrow_forward,
                           iconColor: GlobalVariables.primaryColor,
                         ),
-                        iconSize: 28,
+                        iconSize: 28, onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NearByShopPerCategoryItemDetails(
+                                        value.nearByShopList[position])));
+                      },
                       ),
                     ),
                   ),

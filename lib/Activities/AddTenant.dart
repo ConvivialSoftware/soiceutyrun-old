@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddAgreement.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UploadItem.dart';
@@ -38,20 +40,6 @@ class BaseAddTenant extends StatefulWidget {
 
 class AddTenantState extends State<BaseAddTenant> {
 
-  String attachmentFilePath;
-  String attachmentFileName;
-  String attachmentCompressFilePath;
-
-  /*String attachmentPoliceVerificationFilePath;
-  String attachmentPoliceVerificationFileName;
-  String attachmentPoliceVerificationCompressFilePath;*/
-
-  String attachmentIdentityProofFilePath;
-  String attachmentIdentityProofFileName;
-  String attachmentIdentityProofCompressFilePath;
-
-  //AddTenantState(this.memberType);
-
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
@@ -62,10 +50,10 @@ class AddTenantState extends State<BaseAddTenant> {
   //TextEditingController _hobbiesController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
-  List<String> _bloodGroupList = new List<String>();
+  List<String> _bloodGroupList = <String>[];
   List<DropdownMenuItem<String>> __bloodGroupListItems =
-  new List<DropdownMenuItem<String>>();
-  String _selectedBloodGroup;
+  <DropdownMenuItem<String>>[];
+  String? _selectedBloodGroup;
 
   ///private/var/mobile/Containers/Data/Application/9C028A34-9A90-4CFF-89DA-6F17D34AE672/tmp/com.convivial.SocietyRunApp-Inbox/Sample.pdf
  /* List<String> _membershipTypeList = new List<String>();
@@ -80,15 +68,15 @@ class AddTenantState extends State<BaseAddTenant> {
 
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
 
   final PageController pageController = PageController();
   int currentPageIndex = 0;
   int pageCount = 0;
-  List<AddTenantInfo> _addTenantInfoList;
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  List<AddTenantInfo> _addTenantInfoList=<AddTenantInfo>[];
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
 
 /*
   FlutterUploader uploader = FlutterUploader();
@@ -99,6 +87,7 @@ class AddTenantState extends State<BaseAddTenant> {
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBloodGroupData();
   //  getMembershipTypeData();
     // gteLivesHereData();
@@ -107,7 +96,12 @@ class AddTenantState extends State<BaseAddTenant> {
       isStoragePermission = value;
     });
     _selectedMembershipType = 'Tenant';
-    _addTenantInfoList = List(int.parse(widget.agreementInfo.noOfBachelor));
+    //_addTenantInfoList = List<AddTenantInfo>.filled(int.parse(widget.agreementInfo.noOfBachelor), null, growable: false);
+    //_addTenantInfoList.length = (int.parse(widget.agreementInfo.noOfBachelor));
+    //_addTenantInfoList.length = int.parse(widget.agreementInfo.noOfBachelor);
+
+    AddTenantInfo a = AddTenantInfo();
+    _addTenantInfoList = List.filled(int.parse(widget.agreementInfo.noOfBachelor), a);
 
    /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
@@ -154,28 +148,12 @@ class AddTenantState extends State<BaseAddTenant> {
   @override
   Widget build(BuildContext context) {
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-              AppLocalizations.of(context).translate('add_new_member'),
-              textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+        appBar: CustomAppBar(
+          title:  AppLocalizations.of(context).translate('add_tenant'),
         ),
         body: getBaseLayout(),
       ),
@@ -208,7 +186,8 @@ class AddTenantState extends State<BaseAddTenant> {
                });
              },
              itemBuilder: (context,position){
-               if(position == int.parse(widget.agreementInfo.noOfBachelor)) return null;
+               if(position == int.parse(widget.agreementInfo.noOfBachelor))
+                 return SizedBox();
                else
                  return getAddTenantLayout(position);
 
@@ -243,9 +222,21 @@ class AddTenantState extends State<BaseAddTenant> {
                  onPressed: () {
 
                    if(verifyInfo()) {
+
+                     if(_alterMobileController.text.length>0) {
+                       if (_alterMobileController.text.length > 0 &&
+                           _alterMobileController.text.length == 10) {
+                         addTenantInfo();
+                         removeViewData();
+                         pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
+                       } else {
+                         GlobalFunctions.showToast('Please Enter Valid Alternate Mobile Number');
+                       }
+                     }else{
                      addTenantInfo();
                      removeViewData();
                      pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
+                   }
                    }
                  },
                  child: text('Next', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.white),
@@ -260,7 +251,7 @@ class AddTenantState extends State<BaseAddTenant> {
                      addAgreementWithTenantDetails();
                    }
                  },
-                 child: text('Finish', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.white),
+                 child: text('Submit', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.white),
                )
              ],
            ),
@@ -406,22 +397,23 @@ class AddTenantState extends State<BaseAddTenant> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
                       contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                     /* String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          _contact!.phoneNumber
                               .toString()
                               .indexOf('(') -
-                              1);
+                              1);*/
+                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                       _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
@@ -440,22 +432,23 @@ class AddTenantState extends State<BaseAddTenant> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
                       contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                      /*String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          _contact!.phoneNumber
                               .toString()
                               .indexOf('(') -
-                              1);
+                              1);*/
+                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                       _alterMobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
@@ -474,98 +467,6 @@ class AddTenantState extends State<BaseAddTenant> {
                 iconColor: GlobalVariables.secondaryColor,
               ),
             ),
-           /* Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 3,
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: GlobalVariables.lightGray,
-                          width: 2.0,
-                        )),
-                    child: ButtonTheme(
-                      child: DropdownButtonFormField(
-                        items: __membershipTypeListItems,
-                        value: _selectedMembershipType,
-                        onChanged: changeMembershipTypeDropDownItem,
-                        isExpanded: true,
-                        icon: AppIcon(
-                          Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
-                        ),
-                        //underline: SizedBox(),
-                        *//* hint: text(AppLocalizations.of(context).translate('membership_type') + '*',
-                          textColor: GlobalVariables.lightGray,
-                          fontSize: GlobalVariables.textSizeSMedium,
-                        ),*//*
-                        decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
-                            labelText: AppLocalizations.of(context)
-                                .translate('membership_type') +
-                                '*',
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: GlobalVariables.lightGray,
-                          width: 2.0,
-                        )),
-                    child: ButtonTheme(
-                      child: DropdownButtonFormField(
-                        items: __livesHereListItems,
-                        value: _selectedLivesHere,
-                        onChanged: changeLivesHereDropDownItem,
-                        isExpanded: true,
-                        icon: AppIcon(
-                          Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.mediumGreen,
-                        ),
-                        // underline: SizedBox(),
-                        *//*hint: text(
-                            AppLocalizations.of(context)
-                                    .translate('lives_here') +
-                                '*',
-                            textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium),*//*
-                        decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
-                            labelText: AppLocalizations.of(context)
-                                .translate('lives_here') +
-                                '*',
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),*/
             Row(
               children: <Widget>[
                 Flexible(
@@ -632,308 +533,6 @@ class AddTenantState extends State<BaseAddTenant> {
                 contentPadding: EdgeInsets.only(top: 14),
               ),
             ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                          decoration: attachmentFilePath == null
-                              ? BoxDecoration(
-                            color: GlobalVariables.secondaryColor,
-                            borderRadius: BorderRadius.circular(25),
-                            //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                          )
-                              : BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image:
-                                  FileImage(File(attachmentFilePath)),
-                                  fit: BoxFit.cover),
-                              border: Border.all(
-                                  color: GlobalVariables.primaryColor,
-                                  width: 2.0)),
-                          //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Container(
-                              child: FlatButton.icon(
-                                onPressed: () {
-                                  if (isStoragePermission) {
-                                    openFile(context);
-                                  } else {
-                                    GlobalFunctions.askPermission(
-                                        Permission.storage)
-                                        .then((value) {
-                                      if (value) {
-                                        openFile(context);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            AppLocalizations.of(context)
-                                                .translate(
-                                                'download_permission'));
-                                      }
-                                    });
-                                  }
-                                },
-                                icon: AppIcon(
-                                  Icons.attach_file,
-                                  iconColor: GlobalVariables.secondaryColor,
-                                  iconSize: 20.0,
-                                ),
-                                label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('attach_photo'),
-                                    textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: text(
-                                  'OR',
-                                  textColor: GlobalVariables.lightGray,
-                                  fontSize: GlobalVariables.textSizeSMedium
-                              ),
-                            ),
-                            Container(
-                              child: FlatButton.icon(
-                                  onPressed: () {
-                                    if (isStoragePermission) {
-                                      openCamera(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openCamera(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                  'download_permission'));
-                                        }
-                                      });
-                                    }
-                                  },
-                                  icon: AppIcon(
-                                    Icons.camera_alt,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                    iconSize: 20.0,
-                                  ),
-                                  label: text(
-                                      AppLocalizations.of(context)
-                                          .translate('take_picture'),
-                                      textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeSMedium
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            _selectedMembershipType =="Tenant" ? Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                          decoration: attachmentIdentityProofFilePath == null
-                              ? BoxDecoration(
-                            color: GlobalVariables.secondaryColor,
-                            borderRadius: BorderRadius.circular(25),
-                            //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                          )
-                              : BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image:
-                                  FileImage(File(attachmentIdentityProofFilePath)),
-                                  fit: BoxFit.cover),
-                              border: Border.all(
-                                  color: GlobalVariables.primaryColor,
-                                  width: 2.0)),
-                          //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                        ),
-                        Column(
-                          //mainAxisAlignment: MainAxisAlignment.start,
-                          //crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              child: FlatButton.icon(
-                                onPressed: () {
-                                  if (isStoragePermission) {
-                                    openIdentityProofFile(context);
-                                  } else {
-                                    GlobalFunctions.askPermission(
-                                        Permission.storage)
-                                        .then((value) {
-                                      if (value) {
-                                        openIdentityProofFile(context);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            AppLocalizations.of(context)
-                                                .translate(
-                                                'download_permission'));
-                                      }
-                                    });
-                                  }
-                                },
-                                icon: AppIcon(
-                                  Icons.attach_file,
-                                  iconColor: GlobalVariables.secondaryColor,
-                                  iconSize: 20.0,
-                                ),
-                                label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('attach_identity_proof')+'*',
-                                    textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              ),
-                            ),
-                            Container(
-                              //alignment: Alignment.center,
-                              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: text(
-                                  'OR',
-                                  textColor: GlobalVariables.lightGray,
-                                  fontSize: GlobalVariables.textSizeSMedium
-                              ),
-                            ),
-                            Container(
-                              child: FlatButton.icon(
-                                  onPressed: () {
-                                    if (isStoragePermission) {
-                                      openIdentityProofCamera(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openIdentityProofCamera(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                  'download_permission'));
-                                        }
-                                      });
-                                    }
-                                  },
-                                  icon: AppIcon(
-                                    Icons.camera_alt,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                    iconSize: 20.0,
-                                  ),
-                                  label: text(
-                                      AppLocalizations.of(context)
-                                          .translate('take_identity_proof_picture')+'*',
-                                      textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeSMedium
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ) : SizedBox(),
-            /*_selectedMembershipType =="Tenant" ? Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Container(
-                              child: FlatButton.icon(
-                                onPressed: () {
-                                  if (isStoragePermission) {
-                                    openPoliceVerificationFile(context);
-                                  } else {
-                                    GlobalFunctions.askPermission(
-                                        Permission.storage)
-                                        .then((value) {
-                                      if (value) {
-                                        openPoliceVerificationFile(context);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            AppLocalizations.of(context)
-                                                .translate(
-                                                'download_permission'));
-                                      }
-                                    });
-                                  }
-                                },
-                                icon: AppIcon(
-                                  Icons.attach_file,
-                                  iconColor: GlobalVariables.mediumGreen,
-                                  iconSize: 20.0,
-                                ),
-                                label: text(
-                                    attachmentPoliceVerificationFileName!=null ? attachmentPoliceVerificationFileName : AppLocalizations.of(context)
-                                        .translate('attach_police_verification'),
-                                    textColor: GlobalVariables.green,
-                                    fontSize: GlobalVariables.textSizeSMedium
-                                ),
-                              ),
-                            ),
-
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ) : SizedBox(),*/
-            /*pageCount == int.parse(widget.agreementInfo.noOfBachelor)-1 ?
-            Container(
-              alignment: Alignment.topRight,
-              height: 45,
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: AppButton(
-                textContent: AppLocalizations.of(context).translate('submit'),
-                onPressed: () {
-                  verifyInfo();
-                },
-              ),
-
-            ) : Container(
-              alignment: Alignment.topRight,
-              height: 45,
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: AppButton(
-                textContent: AppLocalizations.of(context).translate('next'),
-                onPressed: () {
-                  verifyInfo();
-                },
-              ),
-            ),*/
           ],
         ),
       ),
@@ -944,7 +543,7 @@ class AddTenantState extends State<BaseAddTenant> {
     if (_nameController.text.length > 0) {
       // if(_dobController.text.length>0){
 
-      if (_mobileController.text.length > 0) {
+      if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
         //  if(_emailController.text.length>0){
 
         //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
@@ -953,12 +552,7 @@ class AddTenantState extends State<BaseAddTenant> {
 
         if (_selectedMembershipType != null) {
           if (_selectedLivesHere != null) {
-            if(attachmentIdentityProofFilePath!=null) {
               return true;
-            }else{
-              GlobalFunctions.showToast('Please Select Identity Proof Image');
-            }
-            //addMember();
           } else {
             GlobalFunctions.showToast('Please Select Lives Here');
           }
@@ -976,7 +570,7 @@ class AddTenantState extends State<BaseAddTenant> {
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
       } else {
-        GlobalFunctions.showToast('Please Enter Mobile Number');
+        GlobalFunctions.showToast('Please Enter Valid Mobile Number');
       }
       /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
@@ -999,11 +593,11 @@ class AddTenantState extends State<BaseAddTenant> {
     }
     String societyId = await GlobalFunctions.getSocietyId();
 
-    List<Map<String,String>> tlist = <Map<String,String>>[];
+    List<Map<String,String?>> tlist = <Map<String,String?>>[];
     // List<Map<String,String>> tlist = _addTenantInfoList.forEach((element) => element.toMap());
     _addTenantInfoList.forEach((element)=>tlist.add(element.toMap()));
 
-    _progressDialog.show();
+    _progressDialog!.show();
     Provider.of<UserManagementResponse>(context, listen: false)
         .addAgreement(
         societyId,
@@ -1018,11 +612,12 @@ class AddTenantState extends State<BaseAddTenant> {
         widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length),
         widget.isAdmin)
         .then((value) async {
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
 
-      GlobalFunctions.showToast(value.message);
-      if (value.status) {
+      GlobalFunctions.showToast(value.message!);
+      if (value.status!) {
         getMessageInfo();
+        await GlobalFunctions.removeFileFromDirectory(widget.agreementInfo.agreementAttachmentPath);
 
       //  Navigator.of(context).pop();
        // Navigator.of(context).pop();
@@ -1121,11 +716,14 @@ class AddTenantState extends State<BaseAddTenant> {
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           alignment: Alignment.topRight,
-                          child: FlatButton(onPressed: (){
+                          child: AppButton(
+                            textContent : AppLocalizations.of(context).translate('okay'),
+                            onPressed: (){
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
-                          }, child: text(AppLocalizations.of(context).translate('okay'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
-                          ),),
+        Navigator.of(context).pop();
+                          },
+                          ),
                         ),
                       ],
                     ),
@@ -1134,157 +732,6 @@ class AddTenantState extends State<BaseAddTenant> {
             }));
   }
 
- /* Future<void> addMember() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
-
-    String attachmentName;
-    String attachment;
-
-    if (attachmentFileName != null && attachmentFilePath != null) {
-      attachmentName = attachmentFileName;
-      attachment =
-          GlobalFunctions.convertFileToString(attachmentCompressFilePath);
-    }
-
-    //print('attachment lengtth : '+attachment.length.toString());
-
-    _progressDialog.show();
-    restClient
-        .addMember(
-        societyId,
-        block,
-        flat,
-        _nameController.text,
-        _selectedGender,
-        _dobController.text,
-        _emailController.text,
-        _mobileController.text,
-        _alterMobileController.text,
-        _selectedBloodGroup,
-        _occupationController.text,
-        _selectedLivesHere,
-        _selectedMembershipType,
-        _addressController.text,
-        attachment)
-        .then((value) {
-      print('add member Status value : ' + value.toString());
-      _progressDialog.hide();
-      if (value.status) {
-        if (attachmentFileName != null && attachmentFilePath != null) {
-          GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-        }
-        Navigator.of(context).pop();
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BaseMyUnit(
-                    AppLocalizations.of(context).translate('my_household'))));
-      }
-      GlobalFunctions.showToast(value.message);
-    }) *//*.catchError((Object obj) {
-      switch (obj.runtimeType) {
-        case DioError:
-          {
-            final res = (obj as DioError).response;
-            print('res : ' + res.toString());
-            _progressDialog.hide();
-          }
-          break;
-        default:
-      }
-    })*//*
-    ;
-  }
-*/
-  void openFile(BuildContext context) {
-    GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath = value;
-      getCompressFilePath();
-    });
-  }
-
-  void openCamera(BuildContext context) {
-    GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath = value.path;
-      getCompressFilePath();
-    });
-  }
-
-  void getCompressFilePath() {
-    attachmentFileName = attachmentFilePath.substring(
-        attachmentFilePath.lastIndexOf('/') + 1, attachmentFilePath.length);
-    print('file Name : ' + attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(
-          attachmentFilePath, value.toString() + '/' + attachmentFileName)
-          .then((value) {
-        attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath);
-        setState(() {});
-      });
-    });
-  }
-
-
-  void openIdentityProofFile(BuildContext context) {
-    GlobalFunctions.getFilePath(context).then((value) {
-      attachmentIdentityProofFilePath = value;
-      getCompressIdentityProofFilePath();
-    });
-  }
-
-  void openIdentityProofCamera(BuildContext context) {
-    GlobalFunctions.openCamera().then((value) {
-      attachmentIdentityProofFilePath = value.path;
-      getCompressIdentityProofFilePath();
-    });
-  }
-
-  void getCompressIdentityProofFilePath() {
-    attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(
-        attachmentIdentityProofFilePath.lastIndexOf('/') + 1, attachmentIdentityProofFilePath.length);
-    print('file Name : ' + attachmentIdentityProofFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(
-          attachmentIdentityProofFilePath, value.toString() + '/' + attachmentIdentityProofFileName)
-          .then((value) {
-        attachmentIdentityProofCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentIdentityProofCompressFilePath);
-        setState(() {});
-      });
-    });
-  }
-
-
- /* void openPoliceVerificationFile(BuildContext context) {
-    GlobalFunctions.getFilePath(context).then((value) {
-      attachmentPoliceVerificationFilePath = value;
-      getCompressPoliceVerificationFilePath();
-    });
-  }
-
-  void getCompressPoliceVerificationFilePath() {
-    attachmentPoliceVerificationFileName = attachmentPoliceVerificationFilePath.substring(
-        attachmentPoliceVerificationFilePath.lastIndexOf('/') + 1, attachmentPoliceVerificationFilePath.length);
-    print('file Name : ' + attachmentPoliceVerificationFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
-      print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(
-          attachmentPoliceVerificationFilePath, value.toString() + '/' + attachmentPoliceVerificationFileName)
-          .then((value) {
-        attachmentPoliceVerificationCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentPoliceVerificationCompressFilePath);
-        setState(() {});
-      });
-    });
-  }
-*/
   void getBloodGroupData() {
     _bloodGroupList = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
     for (int i = 0; i < _bloodGroupList.length; i++) {
@@ -1299,50 +746,7 @@ class AddTenantState extends State<BaseAddTenant> {
     //  _selectedBloodGroup = __bloodGroupListItems[0].value;
   }
 
- /* getMembershipTypeData() {
-    _membershipTypeList = ["Tenant"];
-    for (int i = 0; i < _membershipTypeList.length; i++) {
-      __membershipTypeListItems.add(DropdownMenuItem(
-        value: _membershipTypeList[i],
-        child: text(
-          _membershipTypeList[i],
-          textColor: GlobalVariables.black,
-          fontSize: GlobalVariables.textSizeSMedium
-        ),
-      ));
-    }
-    setState(() {});
-    *//*GlobalFunctions.getUserType().then((value) {
-      *//**//*if (value.toLowerCase() != 'tenant') {
-        if(memberType.toLowerCase()=='tenant'){
-          _membershipTypeList = ["Tenant"];
-        }else *//**//**//**//*if(value.toLowerCase()=='owner')*//**//**//**//*{
-          _membershipTypeList = ["Owner Family"];
-        }
-      } else {
-        _membershipTypeList = ["Tenant"];
-      }*//**//*
-
-      setState(() {});
-    });*//*
-  }
-
-  void gteLivesHereData() {
-    _livesHereList = ["Yes", "No"];
-    for (int i = 0; i < _livesHereList.length; i++) {
-      __livesHereListItems.add(DropdownMenuItem(
-        value: _livesHereList[i],
-        child: text(
-          _livesHereList[i],
-          textColor: GlobalVariables.black,
-        ),
-      ));
-    }
-    //   x
-    setState(() {});
-  }
-*/
-  void changeBloodGroupDropDownItem(String value) {
+  void changeBloodGroupDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedBloodGroup = value;
@@ -1366,7 +770,7 @@ class AddTenantState extends State<BaseAddTenant> {
     });
   }
 
-  Future<void> addTenantInfo() {
+   addTenantInfo() {
 
     print('Size : '+_addTenantInfoList.length.toString());
     print('pageCount : '+pageCount.toString());
@@ -1383,8 +787,8 @@ class AddTenantState extends State<BaseAddTenant> {
         occupations: _occupationController.text,
         bloodGroup: _selectedBloodGroup??'',
         permanentAddress: _addressController.text,
-        attachmentPhoto: attachmentCompressFilePath==null ?  '' : GlobalFunctions.convertFileToString(attachmentCompressFilePath),
-        attachmentIdentity: attachmentIdentityProofCompressFilePath==null ?  '' :GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath)
+        //attachmentPhoto: attachmentCompressFilePath==null ?  '' : GlobalFunctions.convertFileToString(attachmentCompressFilePath),
+       // attachmentIdentity: attachmentIdentityProofCompressFilePath==null ?  '' :GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath)
     );
 
     print('tanant list : '+_addTenantInfoList.toString());
@@ -1402,20 +806,20 @@ class AddTenantState extends State<BaseAddTenant> {
     _occupationController.text='';
     _selectedBloodGroup=null;
     _addressController.text='';
-    attachmentFileName=null;
+   /* attachmentFileName=null;
     attachmentFilePath=null;
     attachmentCompressFilePath=null;
     attachmentIdentityProofFileName=null;
     attachmentIdentityProofFilePath=null;
-    attachmentIdentityProofCompressFilePath=null;
+    attachmentIdentityProofCompressFilePath=null;*/
 
   }
 }
 
 class AddTenantInfo{
 
-  String name,gender,dob,mobile,alternateMobile,membershipType,
-  emailId,livesHere,occupations,bloodGroup,permanentAddress,attachmentPhoto,attachmentIdentity;
+  String? name,gender,dob,mobile,alternateMobile,membershipType,
+  emailId,livesHere,occupations,bloodGroup,permanentAddress;
 
   AddTenantInfo({
       this.name,
@@ -1429,11 +833,10 @@ class AddTenantInfo{
       this.occupations,
       this.bloodGroup,
       this.permanentAddress,
-      this.attachmentPhoto,
-      this.attachmentIdentity}
+      }
       );
 
-  Map<String, String> toMap() {
+  Map<String, String?> toMap() {
     return {
       GlobalVariables.NAME: name,
       GlobalVariables.GENDER: gender,
@@ -1446,8 +849,6 @@ class AddTenantInfo{
       GlobalVariables.LIVES_HERE: livesHere,
       GlobalVariables.TYPE: membershipType,
       GlobalVariables.ADDRESS: permanentAddress,
-      GlobalVariables.PROFILE_PHOTO: attachmentPhoto,
-      GlobalVariables.IDENTITY_PROOF: attachmentIdentity,
     };
   }
 }

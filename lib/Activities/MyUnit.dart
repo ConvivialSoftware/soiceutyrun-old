@@ -12,6 +12,7 @@ import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -25,20 +26,20 @@ import 'AddAgreement.dart';
 import 'base_stateful.dart';
 
 class BaseMyUnit extends StatefulWidget {
-  String pageName;
+  String? pageName;
 
   BaseMyUnit(this.pageName);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyUnitState(pageName);
+    return MyUnitState();
   }
 }
 
 class MyUnitState extends State<BaseMyUnit>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   var firstTicketContainerColor = GlobalVariables.secondaryColor;
   var secondTicketContainerColor = GlobalVariables.white;
@@ -50,28 +51,25 @@ class MyUnitState extends State<BaseMyUnit>
 
   var userId = "", societyId, name = "", flat, block;
   var email = '', phone = '', consumerId = '', societyName = '', userType = '';
-  ProgressDialog _progressDialog;
-  String pageName;
+  ProgressDialog? _progressDialog;
   bool isDuesTabAPICall = false;
   bool isHouseholdTabAPICall = false;
-
-  MyUnitState(this.pageName);
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPreferenceData();
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-    print(pageName.toString());
+    _tabController!.addListener(_handleTabSelection);
+    print(widget.pageName.toString());
     _handleTabSelection();
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    if (pageName != null) {
-      redirectToPage(pageName);
+    if (widget.pageName != null) {
+      redirectToPage(widget.pageName!);
     }
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
@@ -82,24 +80,9 @@ class MyUnitState extends State<BaseMyUnit>
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               //resizeToAvoidBottomPadding: false,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.pop(context, 'back');
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('my_unit'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('my_unit'),
                 bottom: getTabLayout(),
-                elevation: 0,
               ),
               body: WillPopScope(
                   child:
@@ -604,7 +587,7 @@ class MyUnitState extends State<BaseMyUnit>
   }
 
   getContactListItemLayout(var _list, int position, String memberType,
-      {UserManagementResponse userManagementInstance}) {
+      {UserManagementResponse? userManagementInstance}) {
     var call = '', email = '', userId, userType;
     if (memberType == 'family' || memberType == 'tenant') {
       if(memberType == 'tenant')
@@ -638,7 +621,7 @@ class MyUnitState extends State<BaseMyUnit>
                 .getUnitMemberData();
           }
         } else if (memberType == 'tenant') {
-          List<TenantRentalRequest> tenantRentalRequest = userManagementInstance
+          List<TenantRentalRequest> tenantRentalRequest = userManagementInstance!
               .tenantAgreementList
               .where((element) => element.ID == _list[position].AGREEMENT_ID)
               .toList();
@@ -887,7 +870,7 @@ class MyUnitState extends State<BaseMyUnit>
             children: <Widget>[
               Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: getIconForVehicle(value.vehicleList[position].WHEEL),
+                child: getIconForVehicle(value.vehicleList[position].WHEEL!),
               ),
               Expanded(
                 child: Container(
@@ -1024,36 +1007,36 @@ class MyUnitState extends State<BaseMyUnit>
 
     if (item == AppLocalizations.of(context).translate('my_unit')) {
       //Redirect to my Unit
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     } else if (item == AppLocalizations.of(context).translate('my_dues')) {
       //Redirect to  My Dues
-      _tabController.animateTo(0);
-      print('redirectToPage ' + pageName.toString());
+      _tabController!.animateTo(0);
+      print('redirectToPage ' + widget.pageName.toString());
     } else if (item == AppLocalizations.of(context).translate('my_household')) {
       //Redirect to  My Household
-      _tabController.animateTo(1);
-      print('redirectToPage ' + pageName.toString());
+      _tabController!.animateTo(1);
+      print('redirectToPage ' + widget.pageName.toString());
     } else if (item == AppLocalizations.of(context).translate('my_documents')) {
       //Redirect to  My Documents
-      _tabController.animateTo(2);
+      _tabController!.animateTo(2);
     } else if (item == AppLocalizations.of(context).translate('my_tenants')) {
       //Redirect to  My Tenants
     } else {
-      _tabController.animateTo(0);
+      _tabController!.animateTo(0);
     }
-    if (pageName != null) {
-      pageName = null;
-      if (_tabController.index == 0) {
+    if (widget.pageName != null) {
+      widget.pageName = null;
+      if (_tabController!.index == 0) {
         _handleTabSelection();
       }
     }
   }
 
   void _handleTabSelection() {
-    if (pageName == null) {
+    if (widget.pageName == null) {
       print('Call _handleTabSelection');
       //if(_tabController.indexIsChanging){
-      _callAPI(_tabController.index);
+      _callAPI(_tabController!.index);
       //}
     }
   }
@@ -1131,15 +1114,15 @@ class MyUnitState extends State<BaseMyUnit>
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     societyId = await GlobalFunctions.getSocietyId();
-    String id = UserManagementResponse.vehicleList[position].ID;
-    _progressDialog.show();
+    String id = UserManagementResponse.vehicleList[position].ID!;
+    _progressDialog!.show();
     restClient.deleteVehicle(id, societyId).then((value) {
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         UserManagementResponse.vehicleList.removeAt(position);
         setState(() {});
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 }

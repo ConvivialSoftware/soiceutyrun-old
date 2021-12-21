@@ -5,13 +5,16 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Comments.dart';
@@ -25,62 +28,59 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'HelpDesk.dart';
 
 class BaseComplaintInfoAndComments extends StatefulWidget {
-  Complaints _complaint;
-  final bool isAssignComplaint;
+  Complaints? complaints;
+  bool? isAssignComplaint;
 
   //final String ticketId;
-  BaseComplaintInfoAndComments(this._complaint, this.isAssignComplaint);
+  BaseComplaintInfoAndComments(this.complaints, this.isAssignComplaint);
 
   BaseComplaintInfoAndComments.ticketNo(
       String ticketId, this.isAssignComplaint) {
     print('Ticket No :' + ticketId);
-    _complaint = Complaints();
-    _complaint.TICKET_NO = ticketId;
+    complaints = Complaints();
+    complaints!.TICKET_NO = ticketId;
   }
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ComplaintInfoAndCommentsState(_complaint, isAssignComplaint);
+    return ComplaintInfoAndCommentsState();
   }
 }
 
 class ComplaintInfoAndCommentsState
-    extends State<BaseComplaintInfoAndComments> {
-  var userId, photo = "", _localPath;
-  List<Complaints> _complaintsList = new List<Complaints>();
-  List<Comments> _commentsList = new List<Comments>();
-  List<ComplaintStatus> _complaintStatusList = new List<ComplaintStatus>();
-  Complaints complaints;
+    extends AppStatefulState<BaseComplaintInfoAndComments> {
+  String? userId, photo = "";
+  List<Complaints> _complaintsList = <Complaints>[];
+  List<Comments> _commentsList = <Comments>[];
+  List<ComplaintStatus> _complaintStatusList = <ComplaintStatus>[];
 
-  ProgressDialog _progressDialog;
-  final bool isAssignComplaint;
+  //Complaints complaints;
 
-  bool isStoragePermission = false;
+  ProgressDialog? _progressDialog;
 
-  ComplaintInfoAndCommentsState(this.complaints, this.isAssignComplaint);
+  // final bool isAssignComplaint;
+
+  // bool isStoragePermission = false;
+
+  // ComplaintInfoAndCommentsState(this.complaints, this.isAssignComplaint);
 
   TextEditingController commentController = TextEditingController();
 
-  String _complaintType;
-  String _selectedItem;
+  String? _complaintType;
+  String? _selectedItem;
   List<DropdownMenuItem<String>> _complaintStatusListItems =
-      new List<DropdownMenuItem<String>>();
+      <DropdownMenuItem<String>>[];
 
   bool isComment = false;
-  String _taskId;
-  ReceivePort _port = ReceivePort();
   ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getUserId();
-    getLocalPath();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
-    if (isAssignComplaint) getComplaintStatus();
+    if (widget.isAssignComplaint!) getComplaintStatus();
     //getCommentsList();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -90,103 +90,20 @@ class ComplaintInfoAndCommentsState
             .translate('pls_check_internet_connectivity'));
       }
     });
-    if (complaints.SUBJECT != null) {
-      _complaintType = complaints.STATUS;
-    }
+    _complaintType = widget.complaints!.STATUS;
     print('_complaintType : '+_complaintType.toString());
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-          true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('complaint') +
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('complaint') +
                 " #" +
-                complaints.TICKET_NO,
-           textColor: GlobalVariables.white, fontSize: GlobalVariables.textSizeMedium
-          ),
+              widget.complaints!.TICKET_NO!,
         ),
         body: getBaseLayout(),
       ),
@@ -207,10 +124,10 @@ class ComplaintInfoAndCommentsState
   getComplaintInfoCommentLayout() {
     // _selectedItem = complaints.STATUS;
     print('value ' + _complaintType.toString());
-    print('attchment ' + complaints.ATTACHMENT.toString());
+    print('attchment ' + widget.complaints!.ATTACHMENT.toString());
     return SingleChildScrollView(
       controller: _scrollController,
-      child: complaints.SUBJECT != null
+      child: widget.complaints!.SUBJECT != null
           ? Column(
             children: <Widget>[
               AppContainer(
@@ -227,13 +144,13 @@ class ComplaintInfoAndCommentsState
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: text(
-                            complaints.STATUS,
+                              widget.complaints!.STATUS,
                            textColor: GlobalVariables.white,
                             fontSize: GlobalVariables.textSizeSmall,
                           ),
                           decoration: BoxDecoration(
                               color: getTicketCategoryColor(
-                                      complaints.STATUS),
+                                    widget.complaints!.STATUS!),
                               borderRadius:
                                   BorderRadius.circular(5)),
                         ),
@@ -250,8 +167,7 @@ class ComplaintInfoAndCommentsState
                               child: text(
                                   GlobalFunctions
                                       .convertDateFormat(
-                                      complaints.DATE,
-                                      "dd-MM-yyyy"),
+                                        widget.complaints!.DATE!, "dd-MM-yyyy"),
                                   textColor: GlobalVariables.grey,
                                   fontSize: GlobalVariables.textSizeSmall
                               ),
@@ -262,18 +178,18 @@ class ComplaintInfoAndCommentsState
                     )),
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: primaryText(complaints.SUBJECT,),
+                        child: primaryText(
+                          widget.complaints!.SUBJECT,
+                        ),
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: secondaryText(
-                        complaints.DESCRIPTION,
+                          widget.complaints!.DESCRIPTION,
                       ),
                     ),
-                    isAssignComplaint
-                        ? Divider()
-                        : SizedBox(),
-                    isAssignComplaint
+                      widget.isAssignComplaint! ? Divider() : SizedBox(),
+                      widget.isAssignComplaint!
                         ? Row(
                             mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
@@ -289,7 +205,7 @@ class ComplaintInfoAndCommentsState
                                     ),
                                   ),
                                   Container(
-                                    child: text(complaints.NAME,
+                                      child: text(widget.complaints!.NAME,
                                         textColor: GlobalVariables
                                                 .grey,
                                             fontSize: GlobalVariables.textSizeSmall),
@@ -308,9 +224,9 @@ class ComplaintInfoAndCommentsState
                                   ),
                                   Container(
                                     child: text(
-                                      complaints.BLOCK +
+                                        widget.complaints!.BLOCK! +
                                           ' ' +
-                                          complaints.FLAT,
+                                            widget.complaints!.FLAT!,
                                       textColor:
                                             GlobalVariables.grey,
                                         fontSize: GlobalVariables.textSizeSmall,
@@ -336,36 +252,20 @@ class ComplaintInfoAndCommentsState
                             ),
                             Container(
                               child: text(
-                                complaints.CATEGORY,
+                                  widget.complaints!.CATEGORY,
                                 textColor: GlobalVariables.grey,
                                   fontSize: GlobalVariables.textSizeSmall,
                               ),
                             ),
                           ],
                         ),
-                        complaints.ATTACHMENT!=null && complaints.ATTACHMENT.length>0 ? InkWell(
+                          widget.complaints!.ATTACHMENT != null &&
+                                  widget.complaints!.ATTACHMENT!.length > 0
+                              ? InkWell(
                           onTap: () {
-                            if(complaints.ATTACHMENT!=null) {
-                              String url = complaints.ATTACHMENT;
-                              if (isStoragePermission) {
-                                downloadAttachment(
-                                    url, _localPath);
-                              } else {
-                                GlobalFunctions.askPermission(
-                                    Permission.storage)
-                                    .then((value) {
-                                  if (value) {
+                                    if (widget.complaints!.ATTACHMENT != null) {
                                     downloadAttachment(
-                                        url, _localPath);
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        AppLocalizations.of(
-                                            context)
-                                            .translate(
-                                            'download_permission'));
-                                  }
-                                });
-                              }
+                                          widget.complaints!.ATTACHMENT);
                             }
                           },
                           child: Row(
@@ -385,7 +285,33 @@ class ComplaintInfoAndCommentsState
                                   "Attachment",
                                   textColor: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeVerySmall,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      if (downloading)
+                                        Stack(
+                                          alignment:
+                                              AlignmentDirectional.center,
+                                          children: [
+                                            Container(
+                                              //height: 20,
+                                              //width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                //value: 71.0,
+                                              ),
                                 ),
+                                            //SizedBox(width: 4,),
+                                            Container(
+                                                child: text(
+                                                    downloadRate.toString(),
+                                                    fontSize: GlobalVariables
+                                                        .textSizeSmall,
+                                                    textColor: GlobalVariables
+                                                        .skyBlue))
+                                          ],
                               )
                             ],
                           ),
@@ -395,13 +321,20 @@ class ComplaintInfoAndCommentsState
                   ],
                 ),
               ),
-              isAssignComplaint && complaints.STATUS.toLowerCase() == 'close' ? SizedBox()
+                widget.isAssignComplaint! &&
+                        widget.complaints!.STATUS!.toLowerCase() == 'close'
+                    ? SizedBox()
                : Visibility(
-                visible:complaints.STATUS.toLowerCase() == 'new' ||
-                        complaints.STATUS.toLowerCase() == 'reopen' ||
-                        complaints.STATUS.toLowerCase() == 'in progress' ||
-                        complaints.STATUS.toLowerCase() == 'close' ||
-                        complaints.STATUS.toLowerCase() == 'on hold'
+                        visible:
+                            widget.complaints!.STATUS!.toLowerCase() == 'new' ||
+                                    widget.complaints!.STATUS!.toLowerCase() ==
+                                        'reopen' ||
+                                    widget.complaints!.STATUS!.toLowerCase() ==
+                                        'in progress' ||
+                                    widget.complaints!.STATUS!.toLowerCase() ==
+                                        'close' ||
+                                    widget.complaints!.STATUS!.toLowerCase() ==
+                                        'on hold'
                     ? true
                     : false,
                 child: AppContainer(
@@ -409,7 +342,7 @@ class ComplaintInfoAndCommentsState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      isAssignComplaint
+                              widget.isAssignComplaint!
                           ? Flexible(
                               flex: 2,
                               child: Container(
@@ -445,46 +378,52 @@ class ComplaintInfoAndCommentsState
                                 ),
                               ),
                             )
-                          : complaints.STATUS.toLowerCase() == 'new' ||
-                                  complaints.STATUS.toLowerCase() ==
+                                  : widget.complaints!.STATUS!.toLowerCase() ==
+                                              'new' ||
+                                          widget.complaints!.STATUS!
+                                                  .toLowerCase() ==
                                       'reopen' ||
-                                  complaints.STATUS.toLowerCase() ==
-                                      'in progress' || complaints.STATUS.toLowerCase() == 'on hold'
+                                          widget.complaints!.STATUS!
+                                                  .toLowerCase() ==
+                                              'in progress' ||
+                                          widget.complaints!.STATUS!
+                                                  .toLowerCase() ==
+                                              'on hold'
                               ? Flexible(
                                   child: Row(
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _complaintType.toLowerCase() ==
+                                                  _complaintType!.toLowerCase() ==
                                                       'new' ||
-                                                  _complaintType
+                                                          _complaintType!
                                                           .toLowerCase() ==
                                                       'reopen' ||
-                                                  _complaintType
+                                                          _complaintType!
                                                           .toLowerCase() ==
                                                       'in progress' ||
-                                              _complaintType
+                                                          _complaintType!
                                                   .toLowerCase() ==
                                                   'on hold'
                                               ? _complaintType = "Close"
-                                              : _complaintType =
-                                                  complaints.STATUS;
+                                                      : _complaintType = widget
+                                                          .complaints!.STATUS;
                                           setState(() {});
                                         },
                                         child: Container(
                                           width: 30,
                                           height: 30,
                                           decoration: BoxDecoration(
-                                              color: _complaintType
+                                                      color: _complaintType!
                                                               .toLowerCase() ==
                                                           'new' ||
-                                                      _complaintType
+                                                              _complaintType!
                                                               .toLowerCase() ==
                                                           'reopen' ||
-                                                      _complaintType
+                                                              _complaintType!
                                                               .toLowerCase() ==
                                                           'in progress' ||
-                                                  _complaintType
+                                                              _complaintType!
                                                       .toLowerCase() ==
                                                       'on hold'
                                                   ? GlobalVariables.white
@@ -493,16 +432,16 @@ class ComplaintInfoAndCommentsState
                                                   BorderRadius.circular(
                                                       5),
                                               border: Border.all(
-                                                color: _complaintType
+                                                        color: _complaintType!
                                                                 .toLowerCase() ==
                                                             'new' ||
-                                                        _complaintType
+                                                                _complaintType!
                                                                 .toLowerCase() ==
                                                             'reopen' ||
-                                                        _complaintType
+                                                                _complaintType!
                                                                 .toLowerCase() ==
                                                             'in progress'||
-                                                    _complaintType
+                                                                _complaintType!
                                                         .toLowerCase() ==
                                                         'on hold'
                                                     ? GlobalVariables
@@ -535,7 +474,8 @@ class ComplaintInfoAndCommentsState
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _complaintType.toLowerCase() ==
+                                                  _complaintType!
+                                                              .toLowerCase() ==
                                                   "close"
                                               ? _complaintType = "Reopen"
                                               : _complaintType = "Close";
@@ -545,7 +485,7 @@ class ComplaintInfoAndCommentsState
                                           width: 30,
                                           height: 30,
                                           decoration: BoxDecoration(
-                                              color: _complaintType
+                                                      color: _complaintType!
                                                           .toLowerCase() ==
                                                       "close"
                                                   ? GlobalVariables.white
@@ -554,7 +494,7 @@ class ComplaintInfoAndCommentsState
                                                   BorderRadius.circular(
                                                       5),
                                               border: Border.all(
-                                                color: _complaintType
+                                                        color: _complaintType!
                                                             .toLowerCase() ==
                                                         "close"
                                                     ? GlobalVariables
@@ -589,11 +529,14 @@ class ComplaintInfoAndCommentsState
                           onPressed: (){
                             print('_complaintType : '+_complaintType.toString());
                             print('_selectedItem : '+_selectedItem.toString());
-                            if(isAssignComplaint){
+                                      if (widget.isAssignComplaint!) {
                               isComment = false;
                               updateComplaintStatus(context);
                             }else{
-                              if(_complaintType.toLowerCase()!='close' || _complaintType.toLowerCase()!='reopen'){
+                                        if (_complaintType!.toLowerCase() !=
+                                                'close' ||
+                                            _complaintType!.toLowerCase() !=
+                                                'reopen') {
                                 /*if(_complaintType.toLowerCase()=='close' || _complaintType.toLowerCase()=='completed'){
                                       GlobalFunctions.showToast('Please Select the Complaint Status');
                                     }else {*/
@@ -655,14 +598,14 @@ class ComplaintInfoAndCommentsState
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-              child: photo.isEmpty ? Image.asset(
+              child: photo!.isEmpty ? Image.asset(
                 GlobalVariables.componentUserProfilePath,
                 width: 20,
                 height: 20,
               ): CircleAvatar(
                 radius: 10,
                 backgroundColor: GlobalVariables.secondaryColor,
-                backgroundImage: NetworkImage(photo),
+                      backgroundImage: NetworkImage(photo!),
               ),
             ),
             Expanded(
@@ -798,8 +741,11 @@ class ComplaintInfoAndCommentsState
                 radius: 20,
                 backgroundColor: GlobalVariables.AccentColor,
                 backgroundImage: userId != _commentsList[position].USER_ID
-                    ? _commentsList[position].PROFILE_PHOTO.isNotEmpty ? NetworkImage(_commentsList[position].PROFILE_PHOTO) : AssetImage(GlobalVariables.componentUserProfilePath)
-                    : NetworkImage(photo),
+                    ? _commentsList[position].PROFILE_PHOTO!.isNotEmpty
+                        ? NetworkImage(_commentsList[position].PROFILE_PHOTO!)
+                        : AssetImage(GlobalVariables.componentUserProfilePath)
+                            as ImageProvider
+                    : NetworkImage(photo!),
               ),
               SizedBox(width: 8,),
               Expanded(
@@ -815,8 +761,7 @@ class ComplaintInfoAndCommentsState
                           text(
                             _commentsList[position].C_WHEN != '0000-00-00 00:00:00'
                                 ? GlobalFunctions.convertDateFormat(
-                                _commentsList[position].C_WHEN,
-                                "hh:mm aa")
+                                _commentsList[position].C_WHEN!, "hh:mm aa")
                                 : '',
                             textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeVerySmall,
                           ),
@@ -825,8 +770,7 @@ class ComplaintInfoAndCommentsState
                       text(
                         _commentsList[position].C_WHEN != '0000-00-00 00:00:00'
                             ? GlobalFunctions.convertDateFormat(
-                            _commentsList[position].C_WHEN,
-                            "dd-MM-yyyy")
+                            _commentsList[position].C_WHEN!, "dd-MM-yyyy")
                             : '',
                         textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeVerySmall,
                       ),
@@ -923,7 +867,7 @@ class ComplaintInfoAndCommentsState
     );
   }
 
-  void changeDropDownItem(String value) {
+  void changeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedItem = value;
@@ -954,9 +898,9 @@ class ComplaintInfoAndCommentsState
     }
     for(int i=0;i<_complaintStatusListItems.length;i++){
       if(_selectedItem==null){
-        if(complaints.STATUS!=null) {
-          if (complaints.STATUS.toLowerCase() ==
-              _complaintStatusListItems[i].value.toLowerCase()) {
+        if (widget.complaints!.STATUS != null) {
+          if (widget.complaints!.STATUS!.toLowerCase() ==
+              _complaintStatusListItems[i].value!.toLowerCase()) {
             _selectedItem = _complaintStatusListItems[i].value;
             break;
           }
@@ -967,20 +911,14 @@ class ComplaintInfoAndCommentsState
     if(_selectedItem==null) {
       _selectedItem = _complaintStatusListItems[0].value;
     }
-    print('_selectedItem length : ' + _selectedItem..toString());
+    print('_selectedItem length : ' + _selectedItem!
+      ..toString());
   }
 
   getUserId() {
     GlobalFunctions.getUserId().then((value) {
       userId = value;
       getUserPhoto();
-    });
-  }
-
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
     });
   }
 
@@ -995,20 +933,31 @@ class ComplaintInfoAndCommentsState
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     var societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog.show();
-    restClient.getCommentData(societyId, complaints.TICKET_NO).then((value) {
-      if (value.status) {
-        List<dynamic> _list = value.data;
+    _progressDialog!.show();
+    restClient.getCommentData(societyId, widget.complaints!.TICKET_NO!).then((value) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         _commentsList =
             List<Comments>.from(_list.map((i) => Comments.fromJson(i)));
-        print('complaints.SUBJECT : '+ complaints.SUBJECT.toString());
-        if (complaints.SUBJECT != null) {
-         // _progressDialog.hide();
-          Navigator.of(context).pop();
+        print('complaints.SUBJECT : ' + widget.complaints!.SUBJECT.toString());
+        if (widget.complaints!.SUBJECT != null) {
+          // Navigator.of(context).pop();
           setState(() {});
         } else {
           getComplaintDataAgainstTicketNo();
         }
+      }
+    }).catchError((Object obj) {
+      GlobalFunctions.showToast('Exception : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            GlobalFunctions.showToast('DioError Result : ' + res.toString());
+          }
+          break;
+        default:
       }
     });
   }
@@ -1017,21 +966,33 @@ class ComplaintInfoAndCommentsState
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     var societyId = await GlobalFunctions.getSocietyId();
-    if(!_progressDialog.isShowing()) {
-      _progressDialog.show();
-    }
+    //if(!_progressDialog.isShowing()) {
+    _progressDialog!.show();
+    //}
     restClient
-        .getComplaintDataAgainstTicketNo(societyId, complaints.TICKET_NO)
+        .getComplaintDataAgainstTicketNo(
+            societyId, widget.complaints!.TICKET_NO!)
         .then((value) {
-      //_progressDialog.hide();
-      Navigator.of(context).pop();
-      if (value.status) {
-        List<dynamic> _list = value.data;
+      _progressDialog!.dismiss();
+      //Navigator.of(context).pop();
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
         _complaintsList =
             List<Complaints>.from(_list.map((e) => Complaints.fromJson(e)));
-        complaints = _complaintsList[0];
-        _complaintType = complaints.STATUS;
+        widget.complaints = _complaintsList[0];
+        _complaintType = widget.complaints!.STATUS;
         setState(() {});
+      }
+    }).catchError((Object obj) {
+      GlobalFunctions.showToast('Exception : ' + obj.toString());
+      switch (obj.runtimeType) {
+        case DioError:
+          {
+            final res = (obj as DioError).response;
+            GlobalFunctions.showToast('DioError Result : ' + res.toString());
+          }
+          break;
+        default:
       }
     });
   }
@@ -1043,16 +1004,17 @@ class ComplaintInfoAndCommentsState
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
-    String ticketNo = complaints.TICKET_NO;
+    String ticketNo = widget.complaints!.TICKET_NO!;
     String societyName = await GlobalFunctions.getSocietyName();
     String societyEmail = await GlobalFunctions.getSocietyEmail();
     String userEmail = await GlobalFunctions.getUserName();
     String userName = await GlobalFunctions.getDisplayName();
     String comment = commentController.text;
-    String attachment;
-    String type = complaints.TYPE;
-    String escalationLevel = complaints.ESCALATION_LEVEL;
-    String complaintStatus = isAssignComplaint ? _selectedItem : _complaintType;
+    String? attachment;
+    String type = widget.complaints!.TYPE!;
+    String escalationLevel = widget.complaints!.ESCALATION_LEVEL!;
+    String complaintStatus =
+        widget.isAssignComplaint! ? _selectedItem! : _complaintType!;
 
     if (isComment) {
       var currentTime = DateTime.now();
@@ -1068,7 +1030,7 @@ class ComplaintInfoAndCommentsState
           ':' +
           currentTime.second.toString().padLeft(2, '0');
       Comments comments = Comments(
-          PARENT_TICKET: complaints.TICKET_NO,
+          PARENT_TICKET: widget.complaints!.TICKET_NO,
           USER_ID: userId,
           COMMENT: commentController.text,
           C_WHEN: str,
@@ -1081,15 +1043,18 @@ class ComplaintInfoAndCommentsState
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       commentController.clear();
       complaintStatus = "";
-    } else {
-      _progressDialog.show();
-      //  Navigator.of(context).pop();
     }
+    /*else {
+     // _progressDialog.show();
+      //  Navigator.of(context).pop();
+    }*/
 
     print('Status : ' + complaintStatus);
     print('Comment : ' + comment);
     print('isComment : ' + isComment.toString());
-
+    if (!isComment) {
+      _progressDialog!.show();
+    }
     restClient
         .getUpdateComplaintStatus(
             societyId,
@@ -1108,17 +1073,21 @@ class ComplaintInfoAndCommentsState
             userName)
         .then((value) {
       print("update status response : " + value.toString());
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      //if (_progressDialog.isShowing()) {
+      if (!isComment) {
+        _progressDialog!.dismiss();
       }
-      if (value.status) {
+      //}
+      if (value.status!) {
         commentController.clear();
         if (isComment) {
           GlobalFunctions.showToast(
               "Your comment has been updated to the complaint log.");
-          Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(isAssignComplaint).then((value) {});
+          Provider.of<HelpDeskResponse>(context, listen: false)
+              .getUnitComplaintData(widget.isAssignComplaint!)
+              .then((value) {});
         } else {
-          GlobalFunctions.showToast(value.message);
+          GlobalFunctions.showToast(value.message!);
           Navigator.pop(context,'back');
        //   Navigator.push(context, MaterialPageRoute(builder: (context) => BaseHelpDesk(false)));
         }
@@ -1128,7 +1097,7 @@ class ComplaintInfoAndCommentsState
 }
 
 class ComplaintStatus {
-  String complaintStatus;
+  String? complaintStatus;
 
   ComplaintStatus({this.complaintStatus});
 }

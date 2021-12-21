@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -31,27 +32,24 @@ class ChangePasswordState extends State<BaseChangePassword> {
 
   bool _obscureNewPassword = true;
   bool _obscureConfirmPassword = true;
-  String lastLogin;
+  String? lastLogin;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   @override
   void initState() {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getLastLogin();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) =>
           Scaffold(
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
+        appBar: CustomAppBar(
               leading: InkWell(
                 onTap: () {
                   getNavigatePage();
@@ -61,13 +59,11 @@ class ChangePasswordState extends State<BaseChangePassword> {
                   iconColor: GlobalVariables.white,
                 ),
               ),
-              title: text(
-                  AppLocalizations.of(context).translate('create_new_password'),
-                  textColor: GlobalVariables.white,
-                  fontSize: GlobalVariables.textSizeMedium
+          title: AppLocalizations.of(context).translate('create_new_password'),
               ),
-            ),
-            body: WillPopScope(child: getBaseLayout(), onWillPop: () async{
+        body: WillPopScope(
+            child: getBaseLayout(),
+            onWillPop: () async {
               getNavigatePage();
               return false;
             }),
@@ -207,13 +203,13 @@ class ChangePasswordState extends State<BaseChangePassword> {
     String societyId = await GlobalFunctions.getSocietyId();
     String userId = await GlobalFunctions.getUserId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient.changeNewPassword(
         societyId, userId, _confirmPasswordController.text).then((value) {
       print('changeNewPassword value : ' + value.toString());
-      GlobalFunctions.showToast(value.message);
-      _progressDialog.hide();
-      if (value.status) {
+      GlobalFunctions.showToast(value.message!);
+      _progressDialog!.dismiss();
+      if (value.status!) {
         GlobalFunctions.savePasswordToSharedPreferences(
             _confirmPasswordController.text);
         //TODO: send FirebaseToken To Server
@@ -232,7 +228,7 @@ class ChangePasswordState extends State<BaseChangePassword> {
           {
             final res = (obj as DioError).response;
             print('res : ' + res.toString());
-            _progressDialog.hide();
+            _progressDialog!.dismiss();
           }
           break;
         default:

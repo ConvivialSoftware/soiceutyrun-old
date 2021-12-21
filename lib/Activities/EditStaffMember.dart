@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
@@ -24,7 +25,7 @@ class BaseEditStaffMember extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return EditStaffMemberState(staff);
+    return EditStaffMemberState();
   }
 }
 
@@ -33,14 +34,14 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   //String memberType;
 
 
-  String attachmentFilePath;
-  String attachmentIdentityProofFilePath;
-  String attachmentCompressFilePath;
+  String? attachmentFilePath;
+  String? attachmentIdentityProofFilePath;
+  String? attachmentCompressFilePath;
 
 
-  String attachmentFileName;
-  String attachmentIdentityProofFileName;
-  String attachmentIdentityProofCompressFilePath;
+  String? attachmentFileName;
+  String? attachmentIdentityProofFileName;
+  String? attachmentIdentityProofCompressFilePath;
 
 
  // AddStaffMemberState(this.memberType);
@@ -53,11 +54,11 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   TextEditingController _noteController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
-  List<String> _roleTypeList = new List<String>();
-  List<DropdownMenuItem<String>> __roleTypeListItems = new List<DropdownMenuItem<String>>();
-  String _selectedRoleType;
+  List<String> _roleTypeList = <String>[];
+  List<DropdownMenuItem<String>> __roleTypeListItems = <DropdownMenuItem<String>>[];
+  String? _selectedRoleType;
 
-  String _selectedMembershipType;
+  String? _selectedMembershipType;
 
 
  // List<String> _livesHereList = new List<String>();
@@ -66,16 +67,13 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
 
  // String _selectedOccupation="Software Engg.";
   String _selectedGender="Male";
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   bool isStoragePermission=false;
-
-  Staff staff;
-  EditStaffMemberState(this.staff);
-
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission=value;
     });
@@ -84,21 +82,21 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
     /*societyId, block, flat, _staffList[0].STAFF_NAME,  _staffList[0].GENDER,  _staffList[0].DOB, _mobileController.text
         ,  _staffList[0].QUALIFICATION ,  _staffList[0].ADDRESS,  _staffList[0].NOTES, userId,
          _staffList[0].ROLE,  _staffList[0].IMAGE,  _staffList[0].Attachment,  _staffList[0].VEHICLE_NO*/
-    _nameController.text=staff.STAFF_NAME;
-    _selectedGender= staff.GENDER ==null ? 'Male' : staff.GENDER;
-    print('gender : '+staff.GENDER.toString());
-    _dobController.text = staff.DOB!=null ? GlobalFunctions.convertDateFormat(staff.DOB, "dd/MM/yyyy"):'';
-    _mobileController.text=staff.CONTACT!=null ? staff.CONTACT : '';
-    _qualificationController.text=staff.QUALIFICATION!=null ?staff.QUALIFICATION : '';
-    _addressController.text=staff.ADDRESS!=null ? staff.ADDRESS : '';
-    _noteController.text=staff.NOTES!=null ? staff.NOTES : '';
+    _nameController.text=widget.staff.STAFF_NAME!;
+    _selectedGender= widget.staff.GENDER! ==null ? 'Male' : widget.staff.GENDER!;
+    print('gender : '+widget.staff.GENDER.toString());
+    _dobController.text = widget.staff.DOB!=null ? GlobalFunctions.convertDateFormat(widget.staff.DOB!, "dd/MM/yyyy"):'';
+    _mobileController.text=widget.staff.CONTACT!=null ? widget.staff.CONTACT! : '';
+    _qualificationController.text=widget.staff.QUALIFICATION!=null ?widget.staff.QUALIFICATION! : '';
+    _addressController.text=widget.staff.ADDRESS!=null ? widget.staff.ADDRESS! : '';
+    _noteController.text=widget.staff.NOTES!=null ? widget.staff.NOTES! : '';
     if(_selectedRoleType!=null)
-      _selectedRoleType = staff.ROLE;
+      _selectedRoleType = widget.staff.ROLE;
     else
       _selectedRoleType =_roleTypeList[0];
-    attachmentFilePath = staff.IMAGE;
-    attachmentIdentityProofFilePath = staff.Attachment;
-    _vehicleNumberController.text=staff.VEHICLE_NO!=null ? staff.VEHICLE_NO : '';
+    attachmentFilePath = widget.staff.IMAGE;
+    attachmentIdentityProofFilePath = widget.staff.Attachment;
+    _vehicleNumberController.text=widget.staff.VEHICLE_NO!=null ? widget.staff.VEHICLE_NO! : '';
     //_dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
   }
 
@@ -106,27 +104,11 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   Widget build(BuildContext context) {
 
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('edit_staff_member'),
-            textColor: GlobalVariables.white,
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('edit_staff_member'),
         ),
         body: getBaseLayout(),
       ),
@@ -471,7 +453,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                             ) : BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: attachmentFilePath.contains("http") ? NetworkImage(attachmentFilePath) : FileImage(File(attachmentFilePath)),
+                                    image: attachmentFilePath!.contains("http") ? NetworkImage(attachmentFilePath!) : FileImage(File(attachmentFilePath!)) as ImageProvider,
                                     fit: BoxFit.cover,
                                 ),
                                 border: Border.all(color: GlobalVariables.primaryColor,width: 2.0)
@@ -567,7 +549,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                             ) : BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image:attachmentIdentityProofFilePath.contains("http") ? NetworkImage(attachmentIdentityProofFilePath) :  FileImage(File(attachmentIdentityProofFilePath)),
+                                    image:attachmentIdentityProofFilePath!.contains("http") ? NetworkImage(attachmentIdentityProofFilePath!) :  FileImage(File(attachmentIdentityProofFilePath!)) as ImageProvider,
                                     fit: BoxFit.cover
                                 ),
                                 border: Border.all(color: GlobalVariables.primaryColor,width: 2.0)
@@ -636,7 +618,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
 
         if(_mobileController.text.length>0){
 
-            if(_selectedRoleType!=null || _selectedRoleType.length>0){
+            if(_selectedRoleType!=null || _selectedRoleType!.length>0){
 
               if(_addressController.text!=null && _addressController.text.length>0) {
                 addMember();
@@ -671,49 +653,47 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
 
     String attachmentName;
     String attachmentIdentityProofName;
-    String attachment;
-    String attachmentIdentityProof;
+    String? attachment;
+    String? attachmentIdentityProof;
 
     if(attachmentFileName!=null && attachmentFilePath!=null){
-      attachmentName = attachmentFileName;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath);
+      attachmentName = attachmentFileName!;
+      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
 
     if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
-      attachmentIdentityProofName =  attachmentIdentityProofFileName;
-      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath);
+      attachmentIdentityProofName =  attachmentIdentityProofFileName!;
+      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath!);
     }
 
    //print('attachment lengtth : '+attachment.length.toString());
 
-    _progressDialog.show();
+    _progressDialog!.show();
    restClient.addStaffMember(userId,societyId,_nameController.text,
        _mobileController.text,_vehicleNumberController.text,block+' '+flat,
-       _selectedGender,_dobController.text,_selectedRoleType,
-       _qualificationController.text,_addressController.text,attachment,attachmentIdentityProof).then((value) {
+       _selectedGender,_dobController.text,_selectedRoleType!,
+       _qualificationController.text,_addressController.text,attachment!,attachmentIdentityProof!).then((value) async {
 
-         _progressDialog.hide();
-         if(value.status){
-           if(attachmentFileName!=null && attachmentFilePath!=null){
-             //GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
-             GlobalFunctions.getTemporaryDirectoryPath()
-                 .then((value) {
-               GlobalFunctions.removeAllFilesFromDirectory(
-                   value);
-             });
+         _progressDialog!.dismiss();
+         if(value.status!){
+           if (attachmentFilePath != null &&
+               attachmentFilePath != null) {
+             await GlobalFunctions.removeFileFromDirectory(
+                 attachmentFilePath!);
+             await GlobalFunctions.removeFileFromDirectory(
+                 attachmentCompressFilePath!);
            }
-           if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
-             //GlobalFunctions.removeFileFromDirectory(attachmentIdentityProofCompressFilePath);
-             GlobalFunctions.getTemporaryDirectoryPath()
-                 .then((value) {
-               GlobalFunctions.removeAllFilesFromDirectory(
-                   value);
-             });
+           if (attachmentIdentityProofFilePath != null &&
+               attachmentIdentityProofFilePath != null) {
+             await GlobalFunctions.removeFileFromDirectory(
+                 attachmentIdentityProofFilePath!);
+             await GlobalFunctions.removeFileFromDirectory(
+                 attachmentIdentityProofCompressFilePath!);
            }
            Navigator.of(context).pop();
          }
-         GlobalFunctions.showToast(value.message);
+         GlobalFunctions.showToast(value.message!);
    });
 
   }
@@ -740,13 +720,13 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   }
 
   void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath.substring(attachmentFilePath.lastIndexOf('/')+1,attachmentFilePath.length);
+    attachmentFileName = attachmentFilePath!.substring(attachmentFilePath!.lastIndexOf('/')+1,attachmentFilePath!.length);
     print('file Name : '+attachmentFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath, value.toString()+'/'+attachmentFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath!, value.toString()+'/'+attachmentFileName!).then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath);
+        print('Cache file path : '+attachmentCompressFilePath!);
         setState(() {
         });
       });
@@ -754,13 +734,13 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   }
 
   void getCompressIdentityProofFilePath(){
-    attachmentIdentityProofFileName = attachmentIdentityProofFilePath.substring(attachmentIdentityProofFilePath.lastIndexOf('/')+1,attachmentIdentityProofFilePath.length);
+    attachmentIdentityProofFileName = attachmentIdentityProofFilePath!.substring(attachmentIdentityProofFilePath!.lastIndexOf('/')+1,attachmentIdentityProofFilePath!.length);
     print('file Name : '+attachmentIdentityProofFileName.toString());
-    GlobalFunctions.getTemporaryDirectoryPath().then((value) {
+    GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentIdentityProofFilePath, value.toString()+'/'+attachmentIdentityProofFileName).then((value) {
+      GlobalFunctions.getFilePathOfCompressImage(attachmentIdentityProofFilePath!, value.toString()+'/'+attachmentIdentityProofFileName!).then((value) {
         attachmentIdentityProofCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentIdentityProofCompressFilePath);
+        print('Cache file path : '+attachmentIdentityProofCompressFilePath!);
         setState(() {
         });
       });
@@ -784,7 +764,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
 
  
 
-  void changeBRoleTypeDropDownItem(String value) {
+  void changeBRoleTypeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
     setState(() {
       _selectedRoleType = value;
