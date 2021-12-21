@@ -4,19 +4,21 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AboutSocietyRun.dart';
 import 'package:societyrun/Activities/AppNotificationSettings.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -39,123 +41,34 @@ class BaseRentalRequestUserDetails extends StatefulWidget {
 }
 
 class _BaseRentalRequestUserDetailsState
-    extends State<BaseRentalRequestUserDetails> {
-  List<Tenant> tenantDetailsList = List<Tenant>();
-  String _taskId, _localPath;
-  ReceivePort _port = ReceivePort();
-  ProgressDialog _progressDialog;
-  bool isStoragePermission = false;
+    extends AppStatefulState<BaseRentalRequestUserDetails> {
+  List<Tenant> tenantDetailsList = <Tenant>[];
+  ProgressDialog? _progressDialog;
+  int? _selectedPosition;
+  //bool isStoragePermission = false;
   @override
   void initState() {
     super.initState();
-
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     tenantDetailsList = List<Tenant>.from(
-        widget.rentalRequest.tenant_name.map((i) => Tenant.fromJson(i)));
+        widget.rentalRequest.tenant_name!.map((i) => Tenant.fromJson(i)));
 
     print(tenantDetailsList.toString());
-    getLocalPath();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
 
-    FlutterDownloader.registerCallback(downloadCallback);
-  }
-
-  void getLocalPath() {
-    GlobalFunctions.localPath().then((value) {
-      print("External Directory Path" + value.toString());
-      _localPath = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-          true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-              AppLocalizations.of(context).translate('rental_request') +
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('rental_request') +
                   ' ' +
-                  tenantDetailsList[0].BLOCK +
+                  tenantDetailsList[0].BLOCK! +
                   ' ' +
-                  tenantDetailsList[0].FLAT,
-              textColor: GlobalVariables.white,
-              fontSize: GlobalVariables.textSizeMedium),
+                  tenantDetailsList[0].FLAT!,
         ),
         body: getBaseLayout(),
       ),
@@ -183,8 +96,8 @@ class _BaseRentalRequestUserDetailsState
                 children: [
                   Container(
                     child: AppAssetsImage(
-                      widget.rentalRequest.RENTED_TO.toLowerCase()=='family' ? GlobalVariables.familyImagePath
-                          : widget.rentalRequest.RENTED_TO.toLowerCase()=='group'? GlobalVariables.bachelorsImagePath
+                      widget.rentalRequest.RENTED_TO!.toLowerCase()=='family' ? GlobalVariables.familyImagePath
+                          : widget.rentalRequest.RENTED_TO!.toLowerCase()=='group'? GlobalVariables.bachelorsImagePath
                           : GlobalVariables.commercialImagePath,
                       imageWidth: 60.0,
                       imageHeight: 60.0,
@@ -215,7 +128,7 @@ class _BaseRentalRequestUserDetailsState
                           Container(
                             child: text(
                                 'Expires on '+GlobalFunctions.convertDateFormat(
-                                    widget.rentalRequest.AGREEMENT_TO,
+                                    widget.rentalRequest.AGREEMENT_TO!,
                                     "dd-MM-yyyy"),
                                 fontSize: GlobalVariables.textSizeSMedium,
                                 textColor: GlobalVariables.black,
@@ -232,23 +145,9 @@ class _BaseRentalRequestUserDetailsState
                         children: [
                           InkWell(
                             onTap: () {
-                              if (widget.rentalRequest.AGREEMENT.isNotEmpty) {
-                                print("storagePermiassion : " +
-                                    isStoragePermission.toString());
-                                if (isStoragePermission) {
-                                  downloadAttachment(widget.rentalRequest.AGREEMENT, _localPath);
-                                } else {
-                                  GlobalFunctions.askPermission(Permission.storage)
-                                      .then((value) {
-                                    if (value) {
-                                      downloadAttachment(widget.rentalRequest.AGREEMENT, _localPath);
-                                    } else {
-                                      GlobalFunctions.showToast(AppLocalizations.of(context)
-                                          .translate('download_permission'));
-                                    }
-                                  });
-                                }
-                             //   downloadAttachment(widget.rentalRequest.AGREEMENT, _localPath);
+                              _selectedPosition=null;
+                              if (widget.rentalRequest.AGREEMENT!.isNotEmpty) {
+                                downloadAttachment(widget.rentalRequest.AGREEMENT);
                               } else {
                                 GlobalFunctions.showToast(
                                     AppLocalizations.of(context)
@@ -274,6 +173,22 @@ class _BaseRentalRequestUserDetailsState
                                       textColor: GlobalVariables.skyBlue,
                                       textStyleHeight: 1.0),
                                 ),
+                                SizedBox(width: 4,),
+                                if(downloading && _selectedPosition==null) Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Container(
+                                      //height: 20,
+                                      //width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        //value: 71.0,
+                                      ),
+                                    ),
+                                    //SizedBox(width: 4,),
+                                    Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -440,7 +355,7 @@ class _BaseRentalRequestUserDetailsState
                     // alignment: Alignment.center,
                     /* decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25)),*/
-                    child: tenantDetailsList[position].PROFILE_PHOTO.isEmpty
+                    child: tenantDetailsList[position].PROFILE_PHOTO!.isEmpty
                         ? AppAssetsImage(
                             GlobalVariables.componentUserProfilePath,
                             imageWidth: 60.0,
@@ -494,7 +409,7 @@ class _BaseRentalRequestUserDetailsState
                         SizedBox(
                           height: 4,
                         ),
-                        tenantDetailsList[position].EMAIL.isNotEmpty
+                        tenantDetailsList[position].EMAIL!.isNotEmpty
                             ? Container(
                                 child: text(tenantDetailsList[position].EMAIL,
                                     fontSize: GlobalVariables.textSizeSMedium,
@@ -505,7 +420,7 @@ class _BaseRentalRequestUserDetailsState
                         SizedBox(
                           height: 4,
                         ),
-                        tenantDetailsList[position].MOBILE.isNotEmpty
+                        tenantDetailsList[position].MOBILE!.isNotEmpty
                             ? Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                                 child: text(tenantDetailsList[position].MOBILE,
@@ -536,30 +451,16 @@ class _BaseRentalRequestUserDetailsState
                 )*/
               ],
             ),
-            Divider(),
-            Row(
+            tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty ? Divider(): SizedBox(),
+            tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
                   onTap: () {
-                    if (tenantDetailsList[position].IDENTITY_PROOF.isNotEmpty) {
-                      print("storagePermiassion : " +
-                          isStoragePermission.toString());
-                      if (isStoragePermission) {
-                        downloadAttachment(tenantDetailsList[position].IDENTITY_PROOF, _localPath);
-                      } else {
-                        GlobalFunctions.askPermission(Permission.storage)
-                            .then((value) {
-                          if (value) {
-                            downloadAttachment(tenantDetailsList[position].IDENTITY_PROOF, _localPath);
-                          } else {
-                            GlobalFunctions.showToast(AppLocalizations.of(context)
-                                .translate('download_permission'));
-                          }
-                        });
-                      }
-                      //   downloadAttachment(widget.rentalRequest.AGREEMENT, _localPath);
+                    if (tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty) {
+                      _selectedPosition=position;
+                      downloadAttachment(tenantDetailsList[position].IDENTITY_PROOF);
                     } else {
                       GlobalFunctions.showToast(
                           AppLocalizations.of(context)
@@ -585,6 +486,22 @@ class _BaseRentalRequestUserDetailsState
                             textColor: GlobalVariables.skyBlue,
                             textStyleHeight: 1.0),
                       ),
+                      SizedBox(width: 4,),
+                      if(downloading && position==_selectedPosition) Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            //height: 20,
+                            //width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              //value: 71.0,
+                            ),
+                          ),
+                          //SizedBox(width: 4,),
+                          Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -619,7 +536,7 @@ class _BaseRentalRequestUserDetailsState
                         ),
                       ),*/
               ],
-            ),
+            ): SizedBox(),
           ],
         ),
       ),
@@ -674,18 +591,18 @@ class _BaseRentalRequestUserDetailsState
                       if (_reasonController.text.length > 0) {
                         Navigator.of(context).pop();
 
-                        _progressDialog.show();
+                        _progressDialog!.show();
                         Provider.of<UserManagementResponse>(context,
                                 listen: false)
                             .nocApprove(
-                                widget.rentalRequest.ID,
-                                tenantDetailsList[0].BLOCK,
-                                tenantDetailsList[0].FLAT,
+                                widget.rentalRequest.ID!,
+                                tenantDetailsList[0].BLOCK!,
+                                tenantDetailsList[0].FLAT!,
                                 _reasonController.text)
                             .then((value) {
-                          _progressDialog.hide();
-                          GlobalFunctions.showToast(value.message);
-                          if (value.status) {
+                          _progressDialog!.dismiss();
+                          GlobalFunctions.showToast(value.message!);
+                          if (value.status!) {
                             Navigator.of(context).pop();
                           }
                         });

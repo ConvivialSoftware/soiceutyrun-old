@@ -90,7 +90,7 @@ class AboutSocietyRunInfoState
       }
     }).catchError((Object obj) {
       if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+        _progressDialog.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:

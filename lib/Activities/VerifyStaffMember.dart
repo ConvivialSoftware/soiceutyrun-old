@@ -5,6 +5,7 @@ import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/AddStaffMember.dart';
 import 'package:societyrun/Activities/EditStaffMember.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
@@ -22,43 +23,27 @@ class BaseVerifyStaffMember extends StatefulWidget {
 }
 
 class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   TextEditingController _mobileController = TextEditingController();
 
   String _mobileNumber = "";
 
-  List<Staff> _staffList = new List<Staff>();
+  List<Staff> _staffList = <Staff>[];
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('staff_mobile_no'),
-              textColor: GlobalVariables.white,
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('staff_mobile_no'),
         ),
         body: Container(),
         bottomNavigationBar: verifyStaffMemberFabLayout(),
@@ -515,11 +500,11 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-_progressDialog.show();
+_progressDialog!.show();
     restClient.getStaffMobileVerifyData(societyId,_mobileNumber).then((value) {
-        _progressDialog.hide();
-      if (value.status) {
-        List<dynamic> _list = value.data;
+        _progressDialog!.dismiss();
+      if (value.status!) {
+        List<dynamic> _list = value.data!;
 
         _staffList = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
         Navigator.of(context).pop();
@@ -545,7 +530,7 @@ _progressDialog.show();
                 builder: (context) =>
                     BaseAddStaffMember()));
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
 
   }

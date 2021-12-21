@@ -1,12 +1,14 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+//import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class BaseWebViewScreen extends StatefulWidget {
 
@@ -38,11 +40,8 @@ class WebViewScreenState extends State<BaseWebViewScreen> {
 
     return Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(
-          title: text(AppLocalizations.of(context).translate('app_name'),textColor: GlobalVariables.white),
-          backgroundColor: GlobalVariables.primaryColor,
-          //centerTitle: true,
-          leading: getIconButton(),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('app_name'),
         ),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -55,17 +54,11 @@ class WebViewScreenState extends State<BaseWebViewScreen> {
             _webViewCompleter.complete(webViewController);
           },
           initialUrl: url,
-        ),*/WebviewScaffold(
-            url: pageURL ,
+        ),*/WebView(
+            initialUrl: pageURL ,
           ),
         ),
       ),
     );
-  }
-
-  getIconButton() {
-    return AppIconButton(
-        Icons.arrow_back, iconColor: GlobalVariables.white,
-        onPressed: () => Navigator.of(context).pop());
   }
 }

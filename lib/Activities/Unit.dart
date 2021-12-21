@@ -26,21 +26,23 @@ class BaseUnit extends StatefulWidget {
 class _BaseUnitState extends State<BaseUnit> {
 
   List<DropdownMenuItem<String>> _unitListItems =
-  new List<DropdownMenuItem<String>>();
-  String _unitSelectedItem;
-  ProgressDialog _progressDialog;
+  <DropdownMenuItem<String>>[];
+  String? _unitSelectedItem;
+  ProgressDialog? _progressDialog;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    WidgetsBinding.instance!.addPostFrameCallback((_){
     Provider.of<UserManagementResponse>(context,listen: false).getUnitDetails("").then((value) {
       getUnitData(value);
+    });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<UserManagementResponse>.value(
         value: Provider.of<UserManagementResponse>(context),
       child: Consumer<UserManagementResponse>(builder: (context,value,child){
@@ -70,12 +72,12 @@ class _BaseUnitState extends State<BaseUnit> {
                             child: DropdownButton(
                               items: _unitListItems,
                               onChanged: (value) {
-                                _unitSelectedItem = value;
+                                _unitSelectedItem = value as String?;
                                 print('_selctedItem:' + _unitSelectedItem.toString());
                                 setState(() {
-                                  _progressDialog.show();
-                                  Provider.of<UserManagementResponse>(context,listen: false).getUnitDetails(_unitSelectedItem).then((value) {
-                                    _progressDialog.hide();
+                                  _progressDialog!.show();
+                                  Provider.of<UserManagementResponse>(context,listen: false).getUnitDetails(_unitSelectedItem!).then((value) {
+                                    _progressDialog!.dismiss();
                                   });
                                 });
                               },
@@ -118,13 +120,13 @@ class _BaseUnitState extends State<BaseUnit> {
 
   getUnitListDataLayout(UserManagementResponse userManagementResponse) {
 
-    List<UnitDetails> unitDetailsList = List<UnitDetails>();
+    List<UnitDetails> unitDetailsList = <UnitDetails>[];
     if(!widget.isRegisteredUnit){
       unitDetailsList = userManagementResponse.unitDetailsList;
     }else{
       unitDetailsList = userManagementResponse.unitDetailsList;
       for(int i=0;i<unitDetailsList.length;i++){
-        unitDetailsList.removeWhere((item) => item.unitMember.length == 0);
+        unitDetailsList.removeWhere((item) => item.unitMember!.length == 0);
       }
     }
 
@@ -157,8 +159,8 @@ class _BaseUnitState extends State<BaseUnit> {
                   }else {
                     Navigator.push(context, MaterialPageRoute(
                         builder: (context) =>
-                            BaseUnitUserDetails(unitDetailsList[position].BLOCK,
-                                unitDetailsList[position].FLAT)));
+                            BaseUnitUserDetails(unitDetailsList[position].BLOCK!,
+                                unitDetailsList[position].FLAT!)));
                   }
                 },
                 child: Container(
@@ -168,9 +170,9 @@ class _BaseUnitState extends State<BaseUnit> {
                   margin: EdgeInsets.fromLTRB(8, 8, 8, 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: position%2==0 ? GlobalVariables.averageGray : GlobalVariables.averageGreen,
+                    color: position%2==0 ? GlobalVariables.averageGray : GlobalVariables.secondaryColor.withOpacity(0.6),
                   ),
-                  child: text(unitDetailsList[position].BLOCK +' '+unitDetailsList[position].FLAT,
+                  child: text(unitDetailsList[position].BLOCK! +' '+unitDetailsList[position].FLAT!,
                       textColor: GlobalVariables.white,fontWeight: FontWeight.bold,fontSize: GlobalVariables.textSizeMedium),
                 ),
               );

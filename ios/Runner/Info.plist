@@ -87,9 +87,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-    <array>
-    	<string>workmanager.background.task</string>
-    </array>
 </dict>
 </plist>

@@ -62,7 +62,6 @@ class CreateClassifiedListingState
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<OwnerClassifiedResponse>.value(
         value: Provider.of<OwnerClassifiedResponse>(context),
@@ -409,7 +408,7 @@ class CreateClassifiedListingState
                       color: Colors.transparent,
                       borderRadius:
                       BorderRadius.all(Radius.circular(8))),*/
-                  child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price))*/GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[0].Price),
+                  child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price))*/GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[0].Price!),
                       textColor: GlobalVariables.black,
                       fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.w500),

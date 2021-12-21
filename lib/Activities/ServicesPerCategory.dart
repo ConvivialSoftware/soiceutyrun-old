@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
@@ -42,23 +43,8 @@ class ServicesPerCategoryState extends State<BaseServicesPerCategory> {
             return Builder(
               builder: (context) => Scaffold(
                 backgroundColor: GlobalVariables.veryLightGray,
-                appBar: AppBar(
-                  backgroundColor: GlobalVariables.primaryColor,
-                  centerTitle: true,
-                  elevation: 0,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: AppIcon(
-                      Icons.arrow_back,
-                      iconColor: GlobalVariables.white,
-                    ),
-                  ),
-                  title: Text(
-                    widget.category + ' Services',
-                    style: TextStyle(color: GlobalVariables.white),
-                  ),
+                appBar: CustomAppBar(
+                  title:  widget.category + ' Services',
                 ),
                 body: value.isLoading ? GlobalFunctions.loadingWidget(context) : getBaseLayout(value),
               ),
@@ -171,7 +157,7 @@ class ServicesPerCategoryState extends State<BaseServicesPerCategory> {
                             fontWeight: FontWeight.bold),
                       ),
                       Container(
-                        child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat((int.parse(value.servicesList[position].Price)-(int.parse(value.servicesList[position].Price)*int.parse(value.servicesList[position].Discount)/100)).toString()),
+                        child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits:0).format(double.parse(value.servicesList[position].Price))*/GlobalFunctions.getCurrencyFormat((int.parse(value.servicesList[position].Price!)-(int.parse(value.servicesList[position].Price!)*int.parse(value.servicesList[position].Discount!)/100)).toString()),
                             textColor: GlobalVariables.black,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
@@ -184,7 +170,7 @@ class ServicesPerCategoryState extends State<BaseServicesPerCategory> {
                               textDecoration: TextDecoration.lineThrough,
                               fontWeight: FontWeight.bold),
                           SizedBox(width: 4,),
-                          text('('+value.servicesList[position].Discount+'%)',
+                          text('('+value.servicesList[position].Discount!+'%)',
                               textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeSmall,
                               fontWeight: FontWeight.bold)

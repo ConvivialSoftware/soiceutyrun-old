@@ -5,6 +5,7 @@ import 'package:societyrun/Activities/Unit.dart';
 import 'package:societyrun/Activities/UnitUserDetails.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -31,22 +32,8 @@ class _BaseUnitDetailsState extends State<BaseUnitDetails> {
       child: Consumer<UserManagementResponse>(builder: (context,value,child){
         return Builder(
             builder: (context) => Scaffold(
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('unit'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title:  AppLocalizations.of(context).translate('unit'),
               ),
               body: BaseUnit(isDuesUnit: widget.isDuesUnit,isAddExpense: widget.isAddExpense,),
             ));

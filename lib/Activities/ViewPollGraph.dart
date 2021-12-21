@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Poll.dart';
@@ -33,8 +34,8 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
   void initState() {
     super.initState();
     for(int j=0;j<_optionList.length;j++){
-      dataMap[_optionList[j].ANS] = double.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
-      _totalParticipants += int.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES);
+      dataMap[_optionList[j].ANS!] = double.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES!);
+      _totalParticipants += int.parse(_optionList[j].VOTES==null ? '0' : _optionList[j].VOTES!);
     }
   }
 
@@ -43,23 +44,8 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('poll_graph'),
-              textColor: GlobalVariables.white,
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('poll_graph'),
         ),
         body: getBaseLayout(),
       ),
@@ -127,7 +113,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     secondaryText(
-                      !GlobalFunctions.isDateSameOrGrater(_poll.EXPIRY_DATE) ? 'Active' : 'Expired',
+                      !GlobalFunctions.isDateSameOrGrater(_poll.EXPIRY_DATE!) ? 'Active' : 'Expired',
                     ),
                     secondaryText(
                       "Total participants : "+ _totalParticipants.toString(),
@@ -158,7 +144,7 @@ class ViewPollGraphState extends State<BaseViewPollGraph> {
             ),
           ),
           secondaryText(
-           _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES+ ' votes',textColor: GlobalVariables.black
+           _optionList[position].VOTES==null ? '0' : _optionList[position].VOTES!+ ' votes',textColor: GlobalVariables.black
           )
         ],
       ),

@@ -727,17 +727,17 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .getReceiptMail(societyId, invoice_no, _emailTextController.text, year)
         .then((value) {
       print('Response : ' + value.toString());
 
-      GlobalFunctions.showToast(value.message);
-      _progressDialog.hide();
+      GlobalFunctions.showToast(value.message!);
+      _progressDialog!.dismiss();
     }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog!.isShowed) {
+        _progressDialog!.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:
@@ -757,12 +757,12 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
-    restClientERP.getReceiptPDFData(societyId, widget.invoiceNo).then((value) {
+    _progressDialog!.show();
+    restClientERP.getReceiptPDFData(societyId, widget.invoiceNo!).then((value) {
       print('Response : ' + value.dataString.toString());
 
       GlobalFunctions.convertBase64StringToFile(
-              value.dataString, 'Receipt' + widget.invoiceNo + '.pdf')
+              value.dataString!, 'Receipt' + widget.invoiceNo! + '.pdf')
           .then((value) {
         if(value){
           GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_folder'));
@@ -770,11 +770,11 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
           GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_failed'));
         }
       });
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
     }).catchError((Object obj) {
       print('obj : ' + obj.toString());
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog!.isShowed) {
+        _progressDialog!.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:
@@ -791,7 +791,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
   void cancelReceiptRequest(String id) {
 
     showDialog(
-        context: _scaffoldKey.currentContext,
+        context: _scaffoldKey.currentContext!,
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Dialog(
@@ -819,12 +819,17 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                               child: FlatButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
-                                  _progressDialog.show();
-                                  Provider.of<UserManagementResponse>(context,listen: false).cancelReceiptRequest(id).then((value) {
-                                    _progressDialog.hide();
-                                    GlobalFunctions.showToast(value.message);
-                                    if(value.status){
-                                      Navigator.of(_scaffoldKey.currentContext).pop();
+                                    _progressDialog!.show();
+                                    Provider.of<UserManagementResponse>(context,
+                                            listen: false)
+                                        .cancelReceiptRequest(id)
+                                        .then((value) {
+                                      _progressDialog!.dismiss();
+                                      GlobalFunctions.showToast(value.message!);
+                                      if (value.status!) {
+                                        Navigator.of(
+                                                _scaffoldKey.currentContext!)
+                                            .pop();
                                       Provider.of<UserManagementResponse>(context,listen: false).getMonthExpensePendingRequestData();
                                    //  Navigator.of(context).pop();
                                     }
@@ -928,5 +933,6 @@ class RecentTransaction {
   String transactionTitle;
   String transactionRs;
 
-  RecentTransaction({this.transactionTitle, this.transactionRs});
+  RecentTransaction(
+      {required this.transactionTitle, required this.transactionRs});
 }

@@ -5,12 +5,13 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BillDetails.dart';
@@ -27,39 +28,36 @@ import 'base_stateful.dart';
 
 class BaseViewBill extends StatefulWidget {
 
-  String invoiceNo,yearSelectedItem;
-  String mBlock,mFLat;
+  String? invoiceNo,yearSelectedItem;
+  String? mBlock,mFLat;
   BaseViewBill(this.invoiceNo,this.yearSelectedItem,this.mBlock,this.mFLat);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ViewBillState(invoiceNo);
+    return ViewBillState();
   }
 }
 
 class ViewBillState extends State<BaseViewBill> {
-  List<RecentTransaction> _recentTransactionList = new List<RecentTransaction>();
+  List<RecentTransaction> _recentTransactionList = <RecentTransaction>[];
   BillViewResponse _billViewList = BillViewResponse();
-  List<BillDetails> _billDetailsList = new List<BillDetails>();
-  List<BillHeads> _billHeadsList = new List<BillHeads>();
+  List<BillDetails> _billDetailsList = <BillDetails>[];
+  List<BillHeads> _billHeadsList = <BillHeads>[];
 
   String name="",consumerId="",email="";
-  String invoiceNo;
   double totalAmount=0.0;
-  ViewBillState(this.invoiceNo);
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   TextEditingController _emailTextController = TextEditingController();
   bool isEditEmail = false;
-  String _taskId;
-  ReceivePort _port = ReceivePort();
 
   bool isStoragePermission = false;
 
   @override
   void initState() {
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPrefData();
     //getTransactionList();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -74,29 +72,6 @@ class ViewBillState extends State<BaseViewBill> {
             .translate('pls_check_internet_connectivity'));
       }
     });
-
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-        if (status == DownloadTaskStatus.complete) {
-          _openDownloadedFile(_taskId).then((success) {
-            if (!success) {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: text('Cannot open this file')));
-            }
-          });
-        } else {
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: text('Download failed!')));
-        }
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
   }
 
@@ -106,46 +81,9 @@ class ViewBillState extends State<BaseViewBill> {
     super.dispose();
   }
 
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort send =
-    IsolateNameServer.lookupPortByName('downloader_send_port');
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
-    send.send([id, status, progress]);
-  }
-
-  void downloadAttachment(var url, var _localPath) async {
-    GlobalFunctions.showToast("Downloading attachment....");
-    String localPath = _localPath + Platform.pathSeparator + "Download";
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: localPath,
-      headers: {"auth": "test_for_sql_encoding"},
-      //fileName: "SocietyRunImage/Document",
-      showNotification: true,
-      // show download progress in status bar (for Android)
-      openFileFromNotification:
-      true, // click on notification to open downloaded file (for Android)
-    );
-  }
-
-  Future<bool> _openDownloadedFile(String id) {
-    GlobalFunctions.showToast("Downloading completed");
-    return FlutterDownloader.open(taskId: id);
-  }
-
-
   @override
   Widget build(BuildContext context) {
 
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
         value: Provider.of<UserManagementResponse>(context),
@@ -153,10 +91,7 @@ class ViewBillState extends State<BaseViewBill> {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
+            appBar: CustomAppBar(
               actions: [
                 AppIconButton(
                     Icons.mail,
@@ -187,19 +122,7 @@ class ViewBillState extends State<BaseViewBill> {
                     }),
                 SizedBox(width: 16,),
               ],
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                AppLocalizations.of(context).translate('bill')+ ' #'+invoiceNo,
-                textColor: GlobalVariables.white,
-              ),
+              title: AppLocalizations.of(context).translate('bill')+ ' #'+widget.invoiceNo!,
             ),
             body: getBaseLayout(value),
           ),
@@ -226,7 +149,7 @@ class ViewBillState extends State<BaseViewBill> {
                       children: [
                         Container(
                           alignment: Alignment.topRight,
-                          child: secondaryText(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
+                          child: secondaryText(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE!,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
                         ),
                         SizedBox(height: 4,),
                         Container(
@@ -274,10 +197,10 @@ class ViewBillState extends State<BaseViewBill> {
                             Container(
                               //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                               child: text(_billDetailsList[0]
-                                  .TYPE
+                                  .TYPE!
                                   .toLowerCase()
                                   .toString() ==
-                                  'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE,"dd-MM-yyyy")),
+                                  'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE!,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE!,"dd-MM-yyyy")),
                                   textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
                               ),
                             )
@@ -404,14 +327,23 @@ class ViewBillState extends State<BaseViewBill> {
     final RestClientERP restClientERP =
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
+
+    if(widget.mBlock==null){
+      widget.mBlock = await GlobalFunctions.getBlock();
+    }
+    if(widget.mFLat==null){
+      widget.mFLat = await GlobalFunctions.getFlat();
+    }
+
    // String flat = await GlobalFunctions.getFlat();
-   // String block = await GlobalFunctions.getBlock();
-    _progressDialog.show();
-    restClientERP.getBillData(societyId,widget.mFLat,widget.mBlock,invoiceNo,widget.yearSelectedItem).then((value) {
+   // String
+    _progressDialog!.show();
+    print(widget.mFLat.toString()+' '+widget.mBlock.toString()+' '+widget.invoiceNo.toString()+' '+widget.yearSelectedItem.toString());
+    restClientERP.getBillData(societyId,widget.mFLat!,widget.mBlock!,widget.invoiceNo!,widget.yearSelectedItem).then((value) {
       print('Response : ' + value.toString());
       _billViewList = value;
-      List<dynamic> _listBillDetails = value.BillDetails;
-      List<dynamic> _listHeads = value.HEADS;
+      List<dynamic> _listBillDetails = value.BillDetails!;
+      List<dynamic> _listHeads = value.HEADS!;
 
 
       print('_listBillDetails : ' + _listBillDetails.toString());
@@ -422,7 +354,7 @@ class ViewBillState extends State<BaseViewBill> {
       _billHeadsList = List<BillHeads>.from(_listHeads.map((i)=>BillHeads.fromJson(i)));
 
       for(int i=0;i<_billHeadsList.length;i++){
-        double amount = double.parse(_billHeadsList[i].AMOUNT);
+        double amount = double.parse(_billHeadsList[i].AMOUNT!);
         totalAmount+=amount;
       }
       BillHeads arrearsBillHeads = BillHeads();
@@ -438,7 +370,7 @@ class ViewBillState extends State<BaseViewBill> {
       _billHeadsList.add(arrearsBillHeads);
       _billHeadsList.add(penaltyBillHeads);
 
-        _progressDialog.hide();
+        _progressDialog!.dismiss();
         setState(() {});
 
     })/*.catchError((Object obj) {
@@ -462,7 +394,7 @@ class ViewBillState extends State<BaseViewBill> {
             builder: (BuildContext context, StateSetter _stateState) {
               isEditEmail
                   ? _emailTextController.text = ''
-                  : _emailTextController.text = email;
+                  : _emailTextController.text = (_billViewList.Email!=null ? _billViewList.Email : email)!;
 
               return Dialog(
                   shape: RoundedRectangleBorder(
@@ -488,7 +420,7 @@ class ViewBillState extends State<BaseViewBill> {
                           alignment: Alignment.topLeft,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: primaryText(
-                            'Send #'+_billDetailsList[0].INVOICE_NO+' on below email id',
+                            'Send #'+_billDetailsList[0].INVOICE_NO!+' on below email id',
                            /* GlobalFunctions.convertDateFormat(
                                 _billDetailsList[0].START_DATE,
                                 'dd-MM-yyyy') +
@@ -577,9 +509,9 @@ class ViewBillState extends State<BaseViewBill> {
                                   if (_emailTextController.text.length > 0) {
                                     Navigator.of(context).pop();
                                     getBillMail(
-                                        _billDetailsList[0].INVOICE_NO,
-                                        _billDetailsList[0].TYPE,
-                                        _emailTextController.text,widget.yearSelectedItem);
+                                        _billDetailsList[0].INVOICE_NO!,
+                                        _billDetailsList[0].TYPE!,
+                                        _emailTextController.text,widget.yearSelectedItem!);
                                   } else {
                                     GlobalFunctions.showToast(
                                         'Please Enter Email ID');
@@ -630,17 +562,17 @@ class ViewBillState extends State<BaseViewBill> {
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
    String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
         .getBillMail(societyId, type, invoice_no, _emailTextController.text,year)
         .then((value) {
       print('Response : ' + value.toString());
 
-      GlobalFunctions.showToast(value.message);
-      _progressDialog.hide();
+      GlobalFunctions.showToast(value.message!);
+      _progressDialog!.dismiss();
     }).catchError((Object obj) {
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog!.isShowed) {
+        _progressDialog!.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:
@@ -661,13 +593,13 @@ class ViewBillState extends State<BaseViewBill> {
     RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-    _progressDialog.show();
+    _progressDialog!.show();
     restClientERP
-        .getBillPDFData(societyId, widget.invoiceNo)
+        .getBillPDFData(societyId, widget.invoiceNo!)
         .then((value) {
       print('Response : ' + value.dataString.toString());
 
-      GlobalFunctions.convertBase64StringToFile(value.dataString,'Bill'+widget.invoiceNo+'.pdf').then((value) {
+      GlobalFunctions.convertBase64StringToFile(value.dataString!,'Bill'+widget.invoiceNo!+'.pdf').then((value) {
 
         if(value){
           GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_success'));
@@ -676,11 +608,11 @@ class ViewBillState extends State<BaseViewBill> {
         }
 
       });
-      _progressDialog.hide();
+      _progressDialog!.dismiss();
     }).catchError((Object obj) {
       print('obj : ' + obj.toString());
-      if (_progressDialog.isShowing()) {
-        _progressDialog.hide();
+      if (_progressDialog!.isShowed) {
+        _progressDialog!.dismiss();
       }
       switch (obj.runtimeType) {
         case DioError:
@@ -1179,7 +1111,10 @@ class RecentTransaction {
   String transactionTitle;
   String transactionRs;
 
-  RecentTransaction({this.transactionTitle, this.transactionRs});
+  RecentTransaction({
+    required this.transactionTitle,
+    required this.transactionRs
+  });
 }
 
 

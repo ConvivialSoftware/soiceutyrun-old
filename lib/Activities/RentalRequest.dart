@@ -2,10 +2,10 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
 import 'package:ndialog/ndialog.dart';
@@ -16,6 +16,7 @@ import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/PollOption.dart';
@@ -46,20 +47,21 @@ class BaseRentalRequest extends StatefulWidget {
 class RentalRequestState extends State<BaseRentalRequest>
     with SingleTickerProviderStateMixin {
 
-  ProgressDialog _progressDialog;
+  //ProgressDialog _progressDialog;
 
   @override
   void initState() {
-
+    WidgetsBinding.instance!.addPostFrameCallback((_){
     Provider.of<UserManagementResponse>(context, listen: false)
         .getRentalRequest();
+    });
     super.initState();
 
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    //_progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
@@ -69,32 +71,11 @@ class RentalRequestState extends State<BaseRentalRequest>
           return Builder(
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
+              appBar:
+              CustomAppBar(
+                title: AppLocalizations.of(context).translate('rental_request'),
                 ),
-                title: text(
-                  AppLocalizations.of(context).translate('rental_request'),
-                  textColor: GlobalVariables.white,
-                ),
-                // bottom: getTabLayout(),
-                // elevation: 0,
-              ),
-              body:
-                  /*TabBarView(controller: _tabController, children: <Widget>[
-               getRentalRequestLayout(value),
-          //      getTenantsLayout(value),
-                //getHelperLayout(),
-              ]),*/
-                  getRentalRequestLayout(value),
+              body: getRentalRequestLayout(value),
             ),
           );
         },
@@ -168,7 +149,7 @@ class RentalRequestState extends State<BaseRentalRequest>
 
   getRentalRequestListItemLayout(int position, UserManagementResponse value) {
     List<Tenant> tenantDetailsList = List<Tenant>.from(value
-        .rentalRequestList[position].tenant_name
+        .rentalRequestList[position].tenant_name!
         .map((i) => Tenant.fromJson(i)));
     var tenantName = tenantDetailsList[0].NAME;
     /*for (int i = 0; i < tenantDetailsList.length; i++) {
@@ -195,8 +176,8 @@ class RentalRequestState extends State<BaseRentalRequest>
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25)),
                       child: AppAssetsImage(
-                        value.rentalRequestList[position].RENTED_TO.toLowerCase()=='family' ? GlobalVariables.familyImagePath
-                        : value.rentalRequestList[position].RENTED_TO.toLowerCase()=='group'? GlobalVariables.bachelorsImagePath
+                        value.rentalRequestList[position].RENTED_TO!.toLowerCase()=='family' ? GlobalVariables.familyImagePath
+                        : value.rentalRequestList[position].RENTED_TO!.toLowerCase()=='group'? GlobalVariables.bachelorsImagePath
                         : GlobalVariables.commercialImagePath,
                         imageWidth: 40.0,
                         imageHeight: 40.0,
@@ -218,7 +199,7 @@ class RentalRequestState extends State<BaseRentalRequest>
                               Container(
                                 //  color:GlobalVariables.grey,
                                 child: Flexible(
-                                  child: text(tenantDetailsList.length>1 ? tenantName.replaceFirst(",", "")+' + '+(tenantDetailsList.length-1).toString():tenantName.replaceFirst(",", ""),
+                                  child: text(tenantDetailsList.length>1 ? tenantName!.replaceFirst(",", "")+' + '+(tenantDetailsList.length-1).toString():tenantName!.replaceFirst(",", ""),
                                       textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeMedium,
                                       fontWeight: FontWeight.bold,
@@ -233,9 +214,9 @@ class RentalRequestState extends State<BaseRentalRequest>
                                   radius: GlobalVariables.textSizeSmall,
                                 ),
                                 child: text(
-                                    tenantDetailsList[0].BLOCK +
+                                    tenantDetailsList[0].BLOCK! +
                                         ' ' +
-                                        tenantDetailsList[0].FLAT,
+                                        tenantDetailsList[0].FLAT!,
                                     fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.white,
                                     fontWeight: FontWeight.bold),
@@ -278,7 +259,7 @@ class RentalRequestState extends State<BaseRentalRequest>
                               ),*/
                               Container(
                                 child: text(
-                                    'Expires on '+GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO, "dd-MM-yyyy"),
+                                    'Expires on '+GlobalFunctions.convertDateFormat(value.rentalRequestList[position].AGREEMENT_TO!, "dd-MM-yyyy"),
                                     fontSize: GlobalVariables.textSizeSMedium,
                                     textColor: GlobalVariables.grey,
                                     textStyleHeight: 1.0),

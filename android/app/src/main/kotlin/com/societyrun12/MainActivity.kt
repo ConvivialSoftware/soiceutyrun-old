@@ -1,6 +1,17 @@
 package com.societyrun12
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.ContentResolver
+import android.media.AudioAttributes
+import android.net.Uri
+import android.os.Build
+import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
+import java.util.HashMap
+
 //import io.flutter.embedding.engine.FlutterEngine
 //import io.flutter.plugins.GeneratedPluginRegistrant
 
@@ -9,7 +20,8 @@ class MainActivity: FlutterActivity() {
 //    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
 //        GeneratedPluginRegistrant.registerWith(flutterEngine);
 //    }
-private val CHANNEL = "com.societyrun12/create_channel"
+
+    private val CHANNEL = "com.societyrun12/create_channel"
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

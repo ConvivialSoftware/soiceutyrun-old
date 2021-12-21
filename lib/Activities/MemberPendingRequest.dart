@@ -330,10 +330,10 @@ class MemberPendingRequestState
                                                       child: FlatButton(
                                                         onPressed: () {
                                                           Navigator.of(context).pop();
-                                                          _progressDialog.show();
+                                                          _progressDialog!.show();
                                                           Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID!).then((value) {
 
-                                                            _progressDialog.dismiss();
+                                                            _progressDialog!.dismiss();
                                                             GlobalFunctions.showToast(value.message!);
                                                             print('value : '+value.toString());
 

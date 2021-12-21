@@ -248,7 +248,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     AppAssetsImage(
-                      GlobalVariables.userIconPath,
+                      GlobalVariables.userProfileIconPath,
                       imageWidth: 28.0,
                       imageHeight: 28.0,
                     ),

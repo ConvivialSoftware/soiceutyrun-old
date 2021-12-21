@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/ReferAndEarn.dart';
@@ -20,7 +21,7 @@ class BaseSupport extends StatefulWidget {
   _BaseSupportState createState() => _BaseSupportState();
 }
 
-class _BaseSupportState extends State<BaseSupport> {
+class _BaseSupportState extends AppStatefulState<BaseSupport> {
 
   @override
   void initState() {

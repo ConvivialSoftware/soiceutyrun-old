@@ -7,6 +7,7 @@ import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
@@ -29,24 +30,25 @@ class BaseStaffListPerCategory extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return StaffListPerCategoryState(_roleName);
+    return StaffListPerCategoryState();
   }
 }
 
 class StaffListPerCategoryState
     extends State<BaseStaffListPerCategory> {
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
-  String _roleName;
+ // String _roleName;
 
-  StaffListPerCategoryState(this._roleName);
+//  StaffListPerCategoryState(this._roleName);
 
  // List<Staff> value.staffList = List<Staff>();
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPreferenceData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -60,7 +62,6 @@ class StaffListPerCategoryState
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<GatePass>.value(
         value: Provider.of<GatePass>(context),
@@ -69,22 +70,8 @@ class StaffListPerCategoryState
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             //resizeToAvoidBottomPadding: false,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(
-                _roleName,
-                  textColor: GlobalVariables.white,
-              ),
+            appBar: CustomAppBar(
+              title: widget._roleName,
             ),
             body: getStaffListPerCategoryLayout(value),
           ),
@@ -130,7 +117,7 @@ class StaffListPerCategoryState
   getStaffListPerCategoryListItemLayout(int position, GatePass value) {
 
     if(widget.type=="Staff" || widget.type=="Helper") {
-      List<String> _workHouseList = value.staffList[position].ASSIGN_FLATS
+      List<String> _workHouseList = value.staffList[position].ASSIGN_FLATS!
           .split(',');
       for (int i = 0; i < _workHouseList.length; i++) {
         if (_workHouseList[i].length == 0) {
@@ -144,15 +131,15 @@ class StaffListPerCategoryState
       bool isRattingDone = false;
       double totalRate = 0.0;
 
-      List<String> _unitRateList = List<String>();
+      List<String> _unitRateList = <String>[];
 
-      if (rates.contains(':')) {
+      if (rates!.contains(':')) {
         isRattingDone = true;
       }
       if (isRattingDone) {
-        _unitRateList = value.staffList[position].RATINGS.split(',');
+        _unitRateList = value.staffList[position].RATINGS!.split(',');
         for (int i = 0; i < _unitRateList.length; i++) {
-          List<String> _rate = List<String>();
+          List<String> _rate = <String>[];
           _rate = _unitRateList[i].split(':');
           if (_rate.length == 2) {
             print('_rate[1] : ' + _rate[1]);
@@ -197,7 +184,7 @@ class StaffListPerCategoryState
                     // alignment: Alignment.center,
                     /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                      child: staffImage.isEmpty
+                      child: staffImage!.isEmpty
                           ? AppAssetsImage(
                         GlobalVariables.componentUserProfilePath,
                         imageWidth: 70.0,
@@ -291,7 +278,7 @@ class StaffListPerCategoryState
                                     return Dialog(
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10.0)),
-                                      child: displayDeleteLayout(value.staffList[position].SID),
+                                      child: displayDeleteLayout(value.staffList[position].SID!),
                                     );
                                   }));
                         },
@@ -325,7 +312,7 @@ class StaffListPerCategoryState
                   // alignment: Alignment.center,
                   /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                    child: value.staffList[position].PHOTO.isEmpty
+                    child: value.staffList[position].PHOTO!.isEmpty
                         ? AppAssetsImage(
                       GlobalVariables.componentUserProfilePath,
                       imageWidth: 70.0,
@@ -374,7 +361,7 @@ class StaffListPerCategoryState
                                               return Dialog(
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(10.0)),
-                                                child: displayDeleteLayout(value.staffList[position].ID),
+                                                child: displayDeleteLayout(value.staffList[position].ID!),
                                               );
                                             }));
                                   },
@@ -455,11 +442,11 @@ class StaffListPerCategoryState
                   child: FlatButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      _progressDialog.show();
+                      _progressDialog!.show();
                       Provider.of<GatePass>(context,listen: false).getStaffDelete(id,widget.type).then((value) {
-                        _progressDialog.hide();
-                        GlobalFunctions.showToast(value.message);
-                        if(value.status) {
+                        _progressDialog!.dismiss();
+                        GlobalFunctions.showToast(value.message!);
+                        if(value.status!) {
                           Provider.of<GatePass>(
                               context, listen: false)
                               .getStaffRoleDetailsData(

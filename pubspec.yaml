@@ -195,18 +195,18 @@ flutter:
     - assets/other_assets/smile.png
     - assets/other_assets/sad.png
     - assets/other_assets/banner.png
-    - assets/other_assets/email.svg
-    - assets/other_assets/receipt.svg
+    - assets/other_assets/email.png
+    - assets/other_assets/receipt.png
     - assets/other_assets/user.png
     - assets/other_assets/notAllowed.svg
-    - assets/other_assets/bachelors.svg
-    - assets/other_assets/family.svg
-    - assets/other_assets/commercial.svg
-    - assets/other_assets/refer.svg
-    - assets/other_assets/rate.svg
+    - assets/other_assets/bachelors.png
+    - assets/other_assets/family.png
+    - assets/other_assets/commercial.png
+    - assets/other_assets/refer_earn.png
+    - assets/other_assets/rate.png
     - assets/other_assets/already_paid.png
-    - assets/other_assets/user_round.svg
-    - assets/other_assets/user_management.svg
+    #- assets/other_assets/user_round.svg
+    #- assets/other_assets/user_management.svg
   fonts:
     - family: sans-serif
       fonts:

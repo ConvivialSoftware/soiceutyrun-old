@@ -1,4 +1,4 @@
-import 'package:contact_picker/contact_picker.dart';
+//import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +13,7 @@ import 'package:societyrun/Activities/Unit.dart';
 import 'package:societyrun/Activities/UnitDetails.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ScheduleVisitor.dart';
@@ -41,9 +42,9 @@ class BaseRegisteredUnit extends StatefulWidget {
 
 class RegisteredUnitState extends State<BaseRegisteredUnit>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   /* var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '', userType = '';
@@ -54,8 +55,9 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
+    _tabController!.addListener(_handleTabSelection);
 
     //getSharedPreferenceData();
     _handleTabSelection();
@@ -63,7 +65,6 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
 
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
@@ -72,24 +73,9 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
         builder: (context, value, child) {
           return Builder(
             builder: (context) => Scaffold(
-              appBar: AppBar(
-                backgroundColor: GlobalVariables.primaryColor,
-                centerTitle: true,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: AppIcon(
-                    Icons.arrow_back,
-                    iconColor: GlobalVariables.white,
-                  ),
-                ),
-                title: text(
-                  AppLocalizations.of(context).translate('registered_unit'),
-                  textColor: GlobalVariables.white,
-                ),
+              appBar: CustomAppBar(
+                title: AppLocalizations.of(context).translate('registered_unit'),
                 bottom: getTabLayout(),
-                elevation: 0,
               ),
               body: TabBarView(controller: _tabController, children: <Widget>[
                 BaseUnit(isRegisteredUnit: true,),
@@ -251,7 +237,7 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
                                   child: AppIcon(
                                     userManagementResponse
                                             .registerList[position]
-                                            .gcm_id
+                                            .gcm_id!
                                             .isNotEmpty
                                         ? Icons.phone_android
                                         : Icons.language,
@@ -270,10 +256,10 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
                               ),
                               child: text(
                                   userManagementResponse
-                                          .registerList[position].BLOCK +
+                                          .registerList[position].BLOCK! +
                                       ' ' +
                                       userManagementResponse
-                                          .registerList[position].FLAT,
+                                          .registerList[position].FLAT!,
                                   fontSize: GlobalVariables.textSizeSMedium,
                                   textColor: GlobalVariables.white,
                                   fontWeight: FontWeight.bold,
@@ -329,7 +315,7 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
                                                               userManagementResponse
                                                                   .registerList[
                                                                       position]
-                                                                  .LAST_LOGIN,
+                                                                  .LAST_LOGIN!,
                                                               "yyyy-MM-dd"))
                                                   .toString() +
                                               ' days',
@@ -407,6 +393,7 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
     return InkWell(
       onTap: () async {},
       child: AppContainer(
+        isListItem: true,
         child: Column(
           children: [
             Row(
@@ -415,9 +402,9 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: text(
-                      userManagementResponse.unRegisterList[position].BLOCK +
+                      userManagementResponse.unRegisterList[position].BLOCK! +
                           ' ' +
-                          userManagementResponse.unRegisterList[position].FLAT,
+                          userManagementResponse.unRegisterList[position].FLAT!,
                       fontSize: GlobalVariables.textSizeMedium,
                       fontWeight: FontWeight.w500),
                 ),
@@ -428,9 +415,9 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
                         MaterialPageRoute(
                             builder: (context) => BaseAddNewMemberByAdmin(
                                 userManagementResponse
-                                    .unRegisterList[position].BLOCK,
+                                    .unRegisterList[position].BLOCK!,
                                 userManagementResponse
-                                    .unRegisterList[position].FLAT)));
+                                    .unRegisterList[position].FLAT!)));
                   },
                   child: Row(
                     children: [
@@ -460,7 +447,7 @@ class RegisteredUnitState extends State<BaseRegisteredUnit>
   }
 
   void _handleTabSelection() {
-    _callAPI(_tabController.index);
+    _callAPI(_tabController!.index);
   }
 
   void _callAPI(int index) {

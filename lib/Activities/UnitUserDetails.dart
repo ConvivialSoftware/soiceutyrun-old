@@ -20,6 +20,7 @@ import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -48,56 +49,42 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
   TextEditingController parkingSlotTextController = TextEditingController();
 
   List<DropdownMenuItem<String>> _unitRoleListItems =
-      new List<DropdownMenuItem<String>>();
+      <DropdownMenuItem<String>>[];
 
-  String _unitRoleSelectedItem, societyId;
+  String? _unitRoleSelectedItem, societyId;
 
-  ProgressDialog _progressDialog;
+  ProgressDialog? _progressDialog;
 
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getUnitRole();
     _unitRoleSelectedItem = 'Owned';
 
     Provider.of<UserManagementResponse>(context, listen: false)
         .getUnitDetailsMemberForAdminData(widget.block, widget.flat, true)
         .then((value) {
-      billerNameTextController.text = value[0].BILLING_NAME;
-      areaTextController.text = value[0].AREA;
+      billerNameTextController.text = value[0].BILLING_NAME!;
+      areaTextController.text = value[0].AREA!;
       //intercomTextController.text = '0';
-      gstinNoTextController.text = value[0].GSTIN_NO;
-      parkingSlotTextController.text = value[0].PARKING_SLOT;
-      intercomTextController.text = value[0].INTERCOM;
+      gstinNoTextController.text = value[0].GSTIN_NO!;
+      parkingSlotTextController.text = value[0].PARKING_SLOT!;
+      intercomTextController.text = value[0].INTERCOM??'';
       setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of<UserManagementResponse>(context),
       child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(widget.block + ' ' + widget.flat,
-                  textColor: GlobalVariables.white,
-                  fontSize: GlobalVariables.textSizeMedium),
+            appBar: CustomAppBar(
+              title: widget.block + ' ' + widget.flat,
             ),
             body: getBaseLayout(value),
           ),
@@ -288,12 +275,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                         ),
                       ),
                       Container(
-                        child: IconButton(
-                            icon: AppIcon(
+                        margin: EdgeInsets.fromLTRB(0, 20, 10, 20),
+                        child: AppIconButton(
                               Icons.edit,
                               iconColor: GlobalVariables.primaryColor,
                               iconSize: GlobalVariables.textSizeLarge,
-                            ),
                             onPressed: () {
                               showEditUnitDetailsLayout(userManagementResponse);
                             }),
@@ -960,7 +946,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     );
   }
 
-  getContactListItemLayout(var _list, int position, String memberType,{UserManagementResponse userManagementInstance}) {
+  getContactListItemLayout(var _list, int position, String memberType,{UserManagementResponse? userManagementInstance}) {
     var call = '', email = '', userId, userType;
     if (memberType=='family' || memberType=='tenant') {
       call = _list[position].Phone.toString();
@@ -978,7 +964,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     return InkWell(
       onTap: () async {
         print('userId : ' + userId);
-        print('societyId : ' + societyId);
+        print('societyId : ' + societyId!);
         if (memberType=='family') {
           var result = await Navigator.push(
               context,
@@ -991,7 +977,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
           }
         }else if(memberType=='tenant'){
 
-          List<TenantRentalRequest> tenantRentalRequest = userManagementInstance.tenantAgreementListForAdmin.where((element) => element.ID == _list[position].AGREEMENT_ID).toList();
+          List<TenantRentalRequest> tenantRentalRequest = userManagementInstance!.tenantAgreementListForAdmin.where((element) => element.ID == _list[position].AGREEMENT_ID).toList();
 //private/var/mobile/Containers/Data/Application/7C6B9535-92F8-437A-ABE7-BE8F1CA0F15E/tmp/com.convivial.SocietyRunApp-Inbox/Pay Slip September pdf (1).pdf
           if(tenantRentalRequest.length>0) {
             var result = await Navigator.push(
@@ -1236,7 +1222,7 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: getIconForVehicle(value.vehicleListForAdmin[position].WHEEL),
+                child: getIconForVehicle(value.vehicleListForAdmin[position].WHEEL!),
               ),
               Expanded(
                 child: Container(
@@ -1374,15 +1360,15 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-    String id = UserManagementResponse.vehicleListForAdmin[position].ID;
-    _progressDialog.show();
+    String id = UserManagementResponse.vehicleListForAdmin[position].ID!;
+    _progressDialog!.show();
     restClient.deleteVehicle(id, societyId).then((value) {
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         UserManagementResponse.vehicleListForAdmin.removeAt(position);
         setState(() {});
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 
@@ -1471,11 +1457,11 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                               child: DropdownButton(
                                 items: _unitRoleListItems,
                                 onChanged: (value) {
-                                  _unitRoleSelectedItem = value;
+                                  _unitRoleSelectedItem = value as String;
                                   print('_selctedItem:' +
                                       _unitRoleSelectedItem.toString());
                                   setState(() {
-                                    _progressDialog.show();
+                                    _progressDialog!.show();
                                   });
                                 },
                                 value: _unitRoleSelectedItem,
@@ -1513,14 +1499,14 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                   String consumerNo =
                                       await GlobalFunctions.getConsumerID();
 
-                                  _progressDialog.show();
+                                  _progressDialog!.show();
 
                                   Provider.of<UserManagementResponse>(context,
                                           listen: false)
                                       .editUnitDetails(
                                           widget.block,
                                           userManagementResponse
-                                              .unitDetailsList[0].ID,
+                                              .unitDetailsList[0].ID!,
                                           consumerNo,
                                           parkingSlotTextController.text,
                                           areaTextController.text,
@@ -1528,10 +1514,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                           billerNameTextController.text,
                                           intercomTextController.text)
                                       .then((value) {
-                                    _progressDialog.hide();
+                                    _progressDialog!.dismiss();
 
-                                    GlobalFunctions.showToast(value.message);
-                                    if (value.status) {
+                                    GlobalFunctions.showToast(value.message!);
+                                    if (value.status!) {
                                       Navigator.of(context).pop();
                                     }
                                   });

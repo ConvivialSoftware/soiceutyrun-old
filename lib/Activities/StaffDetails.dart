@@ -10,10 +10,12 @@ import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
+import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
+import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -25,7 +27,7 @@ class BaseStaffDetails extends StatefulWidget {
   BaseStaffDetails(this._staff);
 
   @override
-  _BaseStaffDetailsState createState() => _BaseStaffDetailsState(_staff);
+  _BaseStaffDetailsState createState() => _BaseStaffDetailsState();
 }
 
 class _BaseStaffDetailsState extends State<BaseStaffDetails> {
@@ -38,16 +40,12 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       unit = '';
   var email = '', phone = '', consumerId = '', societyName = '';
 
-  Staff _staff;
 
-  ProgressDialog _progressDialog;
-
-  _BaseStaffDetailsState(this._staff);
-
+  ProgressDialog? _progressDialog;
   double totalRate = 0.0;
 
-  List<String> _assignFlatList = List<String>();
-  List<String> _unitRateList = List<String>();
+  List<String> _assignFlatList = <String>[];
+  List<String> _unitRateList = <String>[];
   bool isRattingDone = false;
   bool isRattingDoneFromLoggedPerson = false;
   bool isStaffAdded = false;
@@ -55,15 +53,16 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPreferenceData();
 
-    if (_staff.RATINGS.contains(':')) {
+    if (widget._staff.RATINGS!.contains(':')) {
       isRattingDone = true;
     }
     if (isRattingDone) {
-      _unitRateList = _staff.RATINGS.split(',');
+      _unitRateList = widget._staff.RATINGS!.split(',');
       for (int i = 0; i < _unitRateList.length; i++) {
-        List<String> _rate = List<String>();
+        List<String> _rate = <String>[];
         _rate = _unitRateList[i].split(':');
         if (_rate.length == 2) {
           print('_rate[1] : ' + _rate[1]);
@@ -75,8 +74,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       totalRate = totalRate / _unitRateList.length;
     }
 
-    if (_staff.ASSIGN_FLATS.length > 0) {
-      _assignFlatList = _staff.ASSIGN_FLATS.split(',');
+    if (widget._staff.ASSIGN_FLATS!.length > 0) {
+      _assignFlatList = widget._staff.ASSIGN_FLATS!.split(',');
       for (int i = 0; i < _assignFlatList.length; i++) {
         if (_assignFlatList[i].length == 0) {
           _assignFlatList.removeAt(i);
@@ -90,27 +89,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
 
   @override
   Widget build(BuildContext context) {
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
-        appBar: AppBar(
-          backgroundColor: GlobalVariables.primaryColor,
-          centerTitle: true,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: AppIcon(
-              Icons.arrow_back,
-              iconColor: GlobalVariables.white,
-            ),
-          ),
-          title: text(
-            AppLocalizations.of(context).translate('staff_info'),
-            textColor: GlobalVariables.white,
-          ),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('staff_info'),
         ),
         body: getBaseLayout(),
         //bottomNavigationBar: addToHouseHoldLayout(),
@@ -129,7 +112,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         /*}else{
           Navigator.of(context).pop();
         }*/
-        return;
+        return Future.value(true);
       },
       child: Stack(
         children: <Widget>[
@@ -170,7 +153,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     }
     if (isRattingDone) {
       for (int i = 0; i < _unitRateList.length; i++) {
-        List<String> _rate = List<String>();
+        List<String> _rate = <String>[];
         _rate = _unitRateList[i].split(':');
         if (unit == _rate[0]) {
           isRattingDoneFromLoggedPerson = true;
@@ -210,7 +193,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                   // alignment: Alignment.center,
                   /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
-                  child: _staff.IMAGE.length == 0
+                  child: widget._staff.IMAGE!.length == 0
                       ? Image.asset(
                           GlobalVariables.componentUserProfilePath,
                           width: 70,
@@ -222,7 +205,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                  image: NetworkImage(_staff.IMAGE),
+                                  image: NetworkImage(widget._staff.IMAGE!),
                                   fit: BoxFit.cover),
                               border: Border.all(
                                   color: GlobalVariables.grey, width: 2.0)),
@@ -239,7 +222,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     children: [
                       Container(
                         child: primaryText(
-                          _staff.STAFF_NAME,
+                          widget._staff.STAFF_NAME,
                         ),
                       ),
                       SizedBox(
@@ -250,7 +233,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                           children: <Widget>[
                             Container(
                               child: text(
-                                _staff.CONTACT,
+                                widget._staff.CONTACT,
                                 textColor: GlobalVariables.grey,
                                 fontSize: GlobalVariables.textSizeSmall,
                               ),
@@ -266,7 +249,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
           ),
           Divider(),
           Visibility(
-            visible: _staff.CONTACT.length > 0 ? true : false,
+            visible: widget._staff.CONTACT!.length > 0 ? true : false,
             child: Container(
               //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: IntrinsicHeight(
@@ -281,7 +264,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                           Icons.call,
                           iconColor: GlobalVariables.primaryColor,
                           onPressed: () {
-                            launch("tel:" + _staff.CONTACT);
+                            launch("tel:" + widget._staff.CONTACT!);
                           },
                         ),
                       ),
@@ -296,11 +279,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                           iconColor: GlobalVariables.grey,
                           onPressed: () {
                             GlobalFunctions.shareData(
-                                _staff.STAFF_NAME,
+                                widget._staff.STAFF_NAME,
                                 'Name : ' +
-                                    _staff.STAFF_NAME +
+                                    widget._staff.STAFF_NAME! +
                                     '\nContact : ' +
-                                    _staff.CONTACT);
+                                    widget._staff.CONTACT!);
                           },
                         ),
                       ),
@@ -465,17 +448,10 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                   child: isRattingDoneFromLoggedPerson
                       ? Container()
                       : Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          decoration: BoxDecoration(
-                              color: GlobalVariables.primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: GlobalVariables.transparent,
-                                width: 3.0,
-                              )),
-                          child: InkWell(
-                              onTap: () {
+                            height: 50,
+                            child: AppButton(
+                              textContent: 'Add Your Ratting',
+                              onPressed: () {
                                 myRate = 0.0;
                                 showDialog(
                                     context: context,
@@ -492,32 +468,29 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                                   showMyRattingBar(setState));
                                         }));
                               },
-                              child: text('Add Your Ratting',
                                   textColor: GlobalVariables.white,
-                                  fontSize: GlobalVariables.textSizeSMedium,
-                                  textStyleHeight: 1.0)),
+                            ),
                         ),
                 )
               : Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  decoration: BoxDecoration(
+                    //margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    //padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    /* decoration: BoxDecoration(
                       color: GlobalVariables.primaryColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: GlobalVariables.transparent,
                         width: 3.0,
-                      )),
-                  child: InkWell(
-                      onTap: () {
+                        )),*/
+                    height: 50,
+                    child: AppButton(
+                      textContent: 'Add to Household',
+                      onPressed: () {
                         addHouseHold();
                       },
-                      child: text('Add to Household',
                           textColor: GlobalVariables.white,
-                          fontSize: GlobalVariables.textSizeSMedium,
-                          textStyleHeight: 1.0)),
                 ),
-        ),
+                  )),
       ),
     );
   }
@@ -533,40 +506,41 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
-              return AppIcon(
+              return Icon(
                 Icons.sentiment_very_dissatisfied,
-                iconColor: Colors.red,
+                color: Colors.red,
               );
             case 1:
-              return AppIcon(
+              return Icon(
                 Icons.sentiment_dissatisfied,
-                iconColor: Colors.redAccent,
+                color: Colors.redAccent,
               );
             case 2:
-              return AppIcon(
+              return Icon(
                 Icons.sentiment_neutral,
-                iconColor: Colors.amber,
+                color: Colors.amber,
               );
             case 3:
-              return AppIcon(
+              return Icon(
                 Icons.sentiment_satisfied,
-                iconColor: Colors.lightGreen,
+                color: Colors.lightGreen,
               );
             case 4:
-              return AppIcon(
+              return Icon(
                 Icons.sentiment_very_satisfied,
-                iconColor: Colors.green,
+                color: Colors.green,
               );
             default:
               return Container();
           }
         },
-        /* onRatingUpdate: (rating) {
-          print(rating);
+        //onRatingUpdate: null,
+         onRatingUpdate: (rating) {
+         /* print(rating);
           setState(() {
             totalRate = rating;
-          });
-        },*/
+          });*/
+        },
       ),
     );
   }
@@ -593,29 +567,29 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                   itemBuilder: (context, index) {
                     switch (index) {
                       case 0:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_very_dissatisfied,
-                          iconColor: Colors.red,
+                          color: Colors.red,
                         );
                       case 1:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_dissatisfied,
-                          iconColor: Colors.redAccent,
+                          color: Colors.redAccent,
                         );
                       case 2:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_neutral,
-                          iconColor: Colors.amber,
+                          color: Colors.amber,
                         );
                       case 3:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_satisfied,
-                          iconColor: Colors.lightGreen,
+                          color: Colors.lightGreen,
                         );
                       case 4:
-                        return AppIcon(
+                        return Icon(
                           Icons.sentiment_very_satisfied,
-                          iconColor: Colors.green,
+                          color: Colors.green,
                         );
                       default:
                         return Container();
@@ -684,13 +658,13 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
-    _progressDialog.show();
+    _progressDialog!.show();
     double _rate = 0.0;
     double otherMemberRate = 0.0;
-    if (_staff.RATINGS.contains(':')) {
-      _unitRateList = _staff.RATINGS.split(',');
+    if (widget._staff.RATINGS!.contains(':')) {
+      _unitRateList = widget._staff.RATINGS!.split(',');
       for (int i = 0; i < _unitRateList.length; i++) {
-        List<String> _rate = List<String>();
+        List<String> _rate = <String>[];
         _rate = _unitRateList[i].split(':');
         print('_rate[1] : ' + _rate[1]);
         otherMemberRate += double.parse(_rate[1]);
@@ -702,11 +676,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     isRattingDoneFromLoggedPerson = true;
     isRattingDone = true;
     restClient
-        .addStaffRatting(societyId, block, flat, _staff.SID,
+        .addStaffRatting(societyId, block, flat, widget._staff.SID!,
             totalRate.toStringAsFixed(1).toString())
         .then((value) {
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         //if (isRattingDone) {
 
         //  }
@@ -716,7 +690,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
           print('Total rate : ' + totalRate.toString());
         });
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 
@@ -726,15 +700,15 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
-    _progressDialog.show();
-    restClient.addHouseHold(societyId, block, flat, _staff.SID).then((value) {
-      _progressDialog.hide();
-      if (value.status) {
+    _progressDialog!.show();
+    restClient.addHouseHold(societyId, block, flat, widget._staff.SID!).then((value) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         _assignFlatList.add(unit);
         isStaffAdded = true;
         setState(() {});
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 
@@ -744,12 +718,12 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     String societyId = await GlobalFunctions.getSocietyId();
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient
-        .removeHouseHold(societyId, block, flat, _staff.SID)
+        .removeHouseHold(societyId, block, flat, widget._staff.SID!)
         .then((value) {
-      _progressDialog.hide();
-      if (value.status) {
+      _progressDialog!.dismiss();
+      if (value.status!) {
         for (int i = 0; i < _assignFlatList.length; i++) {
           if (_assignFlatList[i] == unit) {
             _assignFlatList.removeAt(i);
@@ -759,7 +733,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         isStaffAdded = false;
         setState(() {});
       }
-      GlobalFunctions.showToast(value.message);
+      GlobalFunctions.showToast(value.message!);
     });
   }
 }

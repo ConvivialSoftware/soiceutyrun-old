@@ -7,6 +7,7 @@ import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Widgets/AppImage.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -49,9 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 builder: (BuildContext context) =>
                     BaseDashBoard()),
                 (Route<dynamic> route) => false);
-        /* SchedulerBinding.instance.addPostFrameCallback((_) {
-
-        });*/
       }else{
         Navigator.pushAndRemoveUntil(
             context,
@@ -59,9 +57,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 builder: (BuildContext context) =>
                     BaseLoginPage()),
                 (Route<dynamic> route) => false);
-        /*SchedulerBinding.instance.addPostFrameCallback((_) {
-
-        });*/
       }
     });
   }

@@ -39,18 +39,18 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _messageController = TextEditingController();
-  ProgressDialog _progressDialog;
-  final ContactPicker _contactPicker = ContactPicker();
-  Contact _contact;
+  ProgressDialog? _progressDialog;
+  //final ContactPicker _contactPicker = ContactPicker();
+  PhoneContact? _contact;
   @override
   void initState() {
     super.initState();
+    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
   }
 
   @override
   Widget build(BuildContext context) {
     //GlobalFunctions.showToast(memberType.toString());
-    _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<LoginDashBoardResponse>.value(
         value: Provider.of<LoginDashBoardResponse>(context),
@@ -58,22 +58,8 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
-            appBar: AppBar(
-              backgroundColor: GlobalVariables.primaryColor,
-              centerTitle: true,
-              elevation: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppIcon(
-                  Icons.arrow_back,
-                  iconColor: GlobalVariables.white,
-                ),
-              ),
-              title: text(AppLocalizations.of(context).translate('refer_earn'),
-                  textColor: GlobalVariables.white,
-                  fontSize: GlobalVariables.textSizeMedium),
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('refer_earn'),
             ),
             body: getBaseLayout(value),
           ),
@@ -117,7 +103,7 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
                     ? InkWell(
                   onTap: () {
                     GlobalFunctions.redirectBannerClick(context,loginDashBoardResponse
-                        .referBannerList[itemIndex].Url);
+                        .referBannerList[itemIndex].Url!);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -171,22 +157,23 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  Contact contact = await _contactPicker.selectContact();
-                  print('contact Name : ' + contact.fullName);
+                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  print('contact Name : ' + contact.fullName!);
                   print('contact Number : ' +
                       contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                      String phoneNumber = _contact.phoneNumber
+                      /*String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
-                          _contact.phoneNumber
+                          _contact!.phoneNumber
                               .toString()
                               .indexOf('(') -
-                              1);
+                              1);*/
+                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
                       _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
@@ -234,7 +221,7 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
   void verifyInfo() {
     if (_societyNameController.text.length > 0) {
       if (_nameController.text.length > 0) {
-        if (_mobileController.text.length > 0) {
+        if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
           //  if(_emailController.text.length>0){
 
           //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
@@ -253,7 +240,7 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
         } else {
-          GlobalFunctions.showToast('Please Enter Mobile Number');
+          GlobalFunctions.showToast('Please Enter Valid Mobile Number');
         }
       } else {
         GlobalFunctions.showToast('Please Enter you name');
@@ -271,15 +258,15 @@ class ReferAndEarnState extends State<BaseReferAndEarn> {
     String loggedFlat = await GlobalFunctions.getFlat();
     String loggedUser = await GlobalFunctions.getDisplayName();
     String loggedPhone = await GlobalFunctions.getMobile();
-    _progressDialog.show();
+    _progressDialog!.show();
     restClient.referAndEarn(societyId, _societyNameController.text, _noOfFlatsController.text,
         _addressController.text, _nameController.text, _mobileController.text,
         _emailController.text, _messageController.text,
     loggedSocietyName,loggedFlat,loggedUser,loggedPhone).then((value) {
-      GlobalFunctions.showToast(value.message);
-      _progressDialog.hide();
+      GlobalFunctions.showToast(value.message!);
+      _progressDialog!.dismiss();
       //GlobalFunctions.showToast(value.status.runtimeType.toString());
-      if(value.status){
+      if(value.status!){
         print('value true');
         Navigator.of(context).pop();
         print('value navigate');
