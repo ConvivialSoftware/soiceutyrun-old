@@ -106,7 +106,7 @@ class GlobalVariables {
   static var creditCardPath = "assets/other_assets/credit_card.png";
   static var aboutUsPath = "assets/other_assets/about_us.svg";
   static var comingSoonPath = "assets/other_assets/coming_soon.png";
-  static var bikeIconPath = "assets/other_assets/bike.svg";
+  static  var bikeIconPath = "assets/other_assets/bike.svg";
   static var changePasswordPath = "assets/other_assets/change_password.svg";
   static var successIconPath = "assets/other_assets/success.svg";
   static var failureIconPath = "assets/other_assets/failure.svg";

@@ -255,7 +255,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     FirebaseMessaging.onMessage.listen((message) {
       randomNumber = random.nextInt(20);
       print('randomNumber : '+randomNumber.toString());
-      // logger.wtf('data:${message.data}');
+      print('onMessage:message.toString()');
       logger.wtf('notification:${message.notification?.body??'NO BODY'}');
       logger.wtf('notification:${message.notification?.title??'TITLE'}');
       GlobalVariables.isNewlyArrivedNotification = true;

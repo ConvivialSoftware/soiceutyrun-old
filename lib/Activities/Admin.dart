@@ -166,6 +166,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                                 GlobalVariables.emailIconPath,
                                 imageWidth: 28.0,
                                 imageHeight: 28.0,
+                                imageColor: GlobalVariables.black,
                               ),
                               SizedBox(
                                 width: 8,
@@ -248,7 +249,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     AppAssetsImage(
-                      GlobalVariables.userProfileIconPath,
+                      GlobalVariables.userManagementIconPath,
                       imageWidth: 28.0,
                       imageHeight: 28.0,
                     ),

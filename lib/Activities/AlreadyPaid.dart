@@ -105,7 +105,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         _referenceController.text = widget.receiptData!.REFERENCE_NO!;
         paymentType = widget.receiptData!.TRANSACTION_MODE!;
       }
-      _amountController.text=(double.parse(widget.amount.toString())-double.parse(widget.penaltyAmount.toString())).toStringAsFixed(2);
+      _amountController.text=(double.parse(widget.amount.toString())/*-double.parse(widget.penaltyAmount.t
+      oString())*/).toStringAsFixed(2);
     }else {
       _amountController.text=(double.parse(widget.amount.toString())).toStringAsFixed(2);
       _dateController.text =

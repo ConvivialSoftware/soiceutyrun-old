@@ -48,7 +48,7 @@ class _CustomAppBarState
       actions: widget.actions,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-        color: GlobalVariables.white
+        color: GlobalVariables.primaryColor
         ),
       ),
       bottom: widget.bottom,
