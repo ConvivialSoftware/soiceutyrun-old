@@ -590,7 +590,7 @@ class _BaseMoveOutRequestUserDetailsState extends AppStatefulState<BaseMoveOutRe
   Future<void> moveOutMember() async {
 
     _progressDialog!.show();
-    Provider.of<UserManagementResponse>(context,listen: false).deactivateUser(widget.moveOutRequest.U_ID!, _reasonController.text,tenantDetailsList[0].BLOCK!,tenantDetailsList[0].FLAT!).then((value) {
+    Provider.of<UserManagementResponse>(context,listen: false).tenantMoveOut(widget.moveOutRequest.ID!, _reasonController.text,tenantDetailsList[0].BLOCK!,tenantDetailsList[0].FLAT!).then((value) {
       _progressDialog!.dismiss();
       if(value.status!){
         Navigator.of(context).pop('back');

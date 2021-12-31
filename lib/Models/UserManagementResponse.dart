@@ -815,6 +815,22 @@ class UserManagementResponse extends ChangeNotifier {
     return headWiseExpenseList;
   }
 
+  Future<StatusMsgResponse> tenantMoveOut(String id,String Reason,String block,String flat) async {
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
+
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
+    String societyName = await GlobalFunctions.getSocietyName();
+    String societyEmail = await GlobalFunctions.getSocietyEmail();
+
+    var result = await restClient.tenantMoveOut(societyId,userId,Reason,id,societyName,societyEmail);
+
+    getUnitDetailsMemberForAdminData(block,flat,false);
+    getUserManagementDashboard();
+    getMoveOutRequest();
+    return result;
+  }
 }
 
 class UserManagementDashBoard {

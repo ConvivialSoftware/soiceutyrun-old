@@ -83,7 +83,7 @@ class MoveOutRequestState extends State<BaseMoveOutRequest>
       children: <Widget>[
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
             context, 150.0),
-       value.moveOutRequestList.length>0 ? getMoveOutRequestListDataLayout(value): GlobalFunctions.loadingWidget(context),
+       !value.isLoading ? getMoveOutRequestListDataLayout(value): GlobalFunctions.loadingWidget(context),
       ],
     );
   }

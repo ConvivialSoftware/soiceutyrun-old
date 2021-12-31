@@ -282,6 +282,7 @@ class GlobalVariables {
   static const referAPI = "Api/refer";
   static const maintenanceStaffRoleAPI = "Gatepassapp/role";
   static const staffDeleteAPI = "staff/staff_delete";
+  static const tenantMoveOutAPI = "Members/tenant_moveout";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";

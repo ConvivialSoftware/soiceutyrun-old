@@ -4165,5 +4165,37 @@ class RestAPI
     return StatusMsgResponse.fromJson(value);
   }
 
+  @override
+  Future<StatusMsgResponse> tenantMoveOut(String societyId, String userId,String Reason,
+      String id,String societyName,String societyEmail) async {
+    // TODO: implement deactivateUser
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.societyName: societyName,
+      GlobalVariables.societyEmail: societyEmail,
+      "ID": id,
+      "NOTE": Reason,
+    });
 
+    print("data: " +
+        {
+          GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
+          GlobalVariables.societyName: societyName,
+          GlobalVariables.societyEmail: societyEmail,
+          "ID": id,
+          "NOTE": Reason,
+        }.toString());
+
+    print('baseurl : ' + baseUrl! + GlobalVariables.tenantMoveOutAPI);
+    final Response _result = await _dio.post(
+        baseUrl!+GlobalVariables.tenantMoveOutAPI,
+        options: restClientOption(),
+        data: formData
+    );
+    final value = _result.data;
+    print('value of tenantMoveOut : ' + value.toString());
+    return StatusMsgResponse.fromJson(value);
+  }
 }
