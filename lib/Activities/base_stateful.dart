@@ -164,6 +164,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   static BuildContext get getCtx => _ctx!;
   static const MethodChannel _channel = MethodChannel('com.societyrun12/create_channel');
+  static const MethodChannel _channelForGatePass = MethodChannel('com.societyrun12/create_channel_gatepass');
 
   static void setCtx(BuildContext currentContext) {
     _ctx = currentContext;
@@ -459,12 +460,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
                     gatePassPayload.vSITORTYPE ==
                         GlobalVariables.GatePass_Delivery)) {
                   if (isInAppCallNotification) {
-                  _fcm.showAlert(_ctx!, gatePassPayload);
+                 // _fcm.showAlert(_ctx!, gatePassPayload);
+                    createNotificationChannelForGatePass(gatePassPayload.toJson());
                   }
                 } else {
                   if (isGuestEntryNotification) {
                     if (isInAppCallNotification) {
-                    _fcm.showAlert(_ctx!, gatePassPayload);
+                    //_fcm.showAlert(_ctx!, gatePassPayload);
+                      createNotificationChannelForGatePass(gatePassPayload.toJson());
                     }
                   }
                 }
@@ -853,4 +856,22 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }
 
   }
+
+  Future<void> createNotificationChannelForGatePass(Map<String, dynamic> channelMap) async {
+
+    try {
+      await _channelForGatePass.invokeMethod('createNotificationChannelForGatePass', channelMap).then((value) {
+        setState(() {
+          print("createNotificationChannelForGatePass");
+          print("Response : $value");
+          GlobalFunctions.showToast("$value");
+        });
+      });
+    } on PlatformException catch (e) {
+      //_statusText = _error;
+      print('createNotificationChannelForGatePass'+e.toString());
+    }
+
+  }
+
 }
