@@ -76,7 +76,7 @@ class AddVehicleState extends State<BaseAddVehicle> {
               controllerCallback: _vehicleNoController,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
-                new WhitelistingTextInputFormatter(RegExp("[A-Z0-9\\-]")),
+                new FilteringTextInputFormatter.allow(RegExp("[A-Z0-9\\-]")),
               ],
             ),
             Container(
