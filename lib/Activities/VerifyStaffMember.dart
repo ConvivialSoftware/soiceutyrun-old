@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
@@ -12,7 +11,6 @@ import 'package:societyrun/Models/Staff.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'base_stateful.dart';
 
 class BaseVerifyStaffMember extends StatefulWidget {
   @override
@@ -80,7 +78,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
             children: <Widget>[
               Flexible(
                 flex: 1,
-                child:Container(
+                child: Container(
                   width: MediaQuery.of(context).size.width / 1.1,
                   margin: EdgeInsets.fromLTRB(25, 25, 0, 10),
                   child: TextField(
@@ -105,12 +103,12 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             width: 2.0,
                           ),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(10.0))),
+                              BorderRadius.all(Radius.circular(10.0))),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: GlobalVariables.primaryColor, width: 2.0),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(10.0))),
+                              BorderRadius.all(Radius.circular(10.0))),
                     ),
                   ),
                 ),
@@ -121,7 +119,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('1');
                       },
                       child: Container(
@@ -139,9 +137,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('one_num'),
-                            textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -149,7 +147,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('2');
                       },
                       child: Container(
@@ -167,9 +165,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('two_num'),
-                            textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -177,7 +175,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('3');
                       },
                       child: Container(
@@ -195,9 +193,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('three_num'),
-                            textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -210,7 +208,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('4');
                       },
                       child: Container(
@@ -227,10 +225,10 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                               width: 2.0,
                             )),
                         child: text(
-                            AppLocalizations.of(context).translate('four_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          AppLocalizations.of(context).translate('four_num'),
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -238,7 +236,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('5');
                       },
                       child: Container(
@@ -256,9 +254,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('five_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -266,7 +264,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('6');
                       },
                       child: Container(
@@ -284,9 +282,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('six_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -299,7 +297,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('7');
                       },
                       child: Container(
@@ -317,9 +315,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('seven_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -327,7 +325,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('8');
                       },
                       child: Container(
@@ -345,9 +343,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('eight_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -355,7 +353,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('9');
                       },
                       child: Container(
@@ -373,9 +371,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('nine_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -388,7 +386,7 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         verifyNumber();
                       },
                       child: Container(
@@ -404,14 +402,17 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                               color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
-                        child:Icon(Icons.check,color: GlobalVariables.white,),
+                        child: Icon(
+                          Icons.check,
+                          color: GlobalVariables.white,
+                        ),
                       ),
                     ),
                   ),
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         appendNumber('0');
                       },
                       child: Container(
@@ -429,9 +430,9 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                             )),
                         child: text(
                           AppLocalizations.of(context).translate('zero_num'),
-                            textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeNormal,
-                              fontWeight: FontWeight.bold,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeNormal,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -439,8 +440,8 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                   Flexible(
                     flex: 1,
                     child: InkWell(
-                      onTap: (){
-                        if(_mobileController.text.length>0){
+                      onTap: () {
+                        if (_mobileController.text.length > 0) {
                           clearNumber();
                         }
                       },
@@ -457,7 +458,10 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
                               color: GlobalVariables.primaryColor,
                               width: 2.0,
                             )),
-                        child:Icon(Icons.backspace,color: GlobalVariables.primaryColor,),
+                        child: Icon(
+                          Icons.backspace,
+                          color: GlobalVariables.primaryColor,
+                        ),
                       ),
                     ),
                   ),
@@ -469,40 +473,34 @@ class VerifyStaffMemberState extends State<BaseVerifyStaffMember> {
   }
 
   void appendNumber(String number) {
-    _mobileNumber+=number;
+    _mobileNumber += number;
     setState(() {
-      _mobileController.text=_mobileNumber.toString();
+      _mobileController.text = _mobileNumber.toString();
     });
   }
 
   void verifyNumber() {
-
-    if(_mobileNumber.length==10){
-
+    if (_mobileNumber.length == 10) {
       verifyStaffMember();
-
-    }else{
-        GlobalFunctions.showToast('Invalid Mobile Number');
+    } else {
+      GlobalFunctions.showToast('Invalid Mobile Number');
     }
-
   }
 
   void clearNumber() {
     setState(() {
-      _mobileNumber = _mobileNumber.substring(0,_mobileNumber.length-1);
-      _mobileController.text=_mobileNumber.toString();
+      _mobileNumber = _mobileNumber.substring(0, _mobileNumber.length - 1);
+      _mobileController.text = _mobileNumber.toString();
     });
   }
 
-
   Future<void> verifyStaffMember() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-_progressDialog!.show();
-    restClient.getStaffMobileVerifyData(societyId,_mobileNumber).then((value) {
-        _progressDialog!.dismiss();
+    _progressDialog!.show();
+    restClient.getStaffMobileVerifyData(societyId, _mobileNumber).then((value) {
+      _progressDialog!.dismiss();
       if (value.status!) {
         List<dynamic> _list = value.data!;
 
@@ -511,8 +509,7 @@ _progressDialog!.show();
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                   BaseEditStaffMember(_staffList[0])));
+                builder: (context) => BaseEditStaffMember(_staffList[0])));
         /*Dialog infoDialog = Dialog(
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
@@ -521,54 +518,55 @@ _progressDialog!.show();
         showDialog(
             context: context, builder: (BuildContext context) => infoDialog);
 */
-
-      }else{
+      } else {
         Navigator.of(context).pop();
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    BaseAddStaffMember()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => BaseAddStaffMember()));
       }
       GlobalFunctions.showToast(value.message!);
     });
-
   }
 
   getDialogLayout() {
-    
     return Container(
       padding: EdgeInsets.all(25),
-      width: MediaQuery.of(context).size.width/1.2,
+      width: MediaQuery.of(context).size.width / 1.2,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          
           Container(
-            child: text(AppLocalizations.of(context).translate('add_staff_for_other_flat') ,
-                textColor: GlobalVariables.black,fontSize: GlobalVariables.textSizeLargeMedium
-            ),
+            child: text(
+                AppLocalizations.of(context)
+                    .translate('add_staff_for_other_flat'),
+                textColor: GlobalVariables.black,
+                fontSize: GlobalVariables.textSizeLargeMedium),
           ),
           Align(
             alignment: Alignment.topRight,
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-             // alignment: Alignment.topRight,
+              // alignment: Alignment.topRight,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Container(
                     //   alignment: Alignment.topRight,
-                    child: FlatButton(onPressed: (){
-                      Navigator.of(context).pop();
-                    }, child: text(AppLocalizations.of(context).translate('no'))),
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child:
+                            text(AppLocalizations.of(context).translate('no'))),
                   ),
                   Container(
-                  //  alignment: Alignment.topRight,
-                    child: FlatButton(onPressed: (){
-                      Navigator.of(context).pop();
-                      //addMember();
-                    }, child: text(AppLocalizations.of(context).translate('yes'))),
+                    //  alignment: Alignment.topRight,
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          //addMember();
+                        },
+                        child: text(
+                            AppLocalizations.of(context).translate('yes'))),
                   ),
                 ],
               ),
@@ -579,7 +577,7 @@ _progressDialog!.show();
     );
   }
 
- /* Future<void> addMember() async {
+  /* Future<void> addMember() async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -600,5 +598,4 @@ _progressDialog!.show();
     });
 
   }*/
-
 }

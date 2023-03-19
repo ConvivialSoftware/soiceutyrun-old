@@ -1,29 +1,23 @@
 import 'dart:io';
 
 //import 'package:contact_picker/contact_picker.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseAddNewMemberByAdmin extends StatefulWidget {
-  String block,flat;
-
+  String block, flat;
 
   BaseAddNewMemberByAdmin(this.block, this.flat);
 
@@ -34,10 +28,7 @@ class BaseAddNewMemberByAdmin extends StatefulWidget {
   }
 }
 
-class AddNewMemberByAdminState
-    extends State<BaseAddNewMemberByAdmin> {
-
-
+class AddNewMemberByAdminState extends State<BaseAddNewMemberByAdmin> {
   String? attachmentFilePath;
   String? attachmentFileName;
   String? attachmentCompressFilePath;
@@ -47,7 +38,6 @@ class AddNewMemberByAdminState
   TextEditingController _emailController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _notModeratorController = TextEditingController();
-
 
   /*List<DropdownMenuItem<String>> _blockListItems =
   new List<DropdownMenuItem<String>>();
@@ -99,32 +89,24 @@ class AddNewMemberByAdminState
     //GlobalFunctions.showToast(memberType.toString());
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
-        value:Provider.of<UserManagementResponse>(context),
-      child: Consumer<UserManagementResponse>(builder:(context,value,child){
+      value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
-          builder: (context) =>
-              Scaffold(
+          builder: (context) => Scaffold(
             appBar: CustomAppBar(
               title: AppLocalizations.of(context).translate('add_new_member'),
-                ),
-                body: getBaseLayout(value),
-              ),
+            ),
+            body: getBaseLayout(value),
+          ),
         );
       }),
-
     );
   }
 
   getBaseLayout(UserManagementResponse userManagementResponse) {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: GlobalVariables.veryLightGray,
       ),
@@ -156,7 +138,7 @@ class AddNewMemberByAdminState
         child: Container(
           child: Column(
             children: <Widget>[
-             /* Row(
+              /* Row(
                 children: <Widget>[
                   Flexible(
                     flex: 1,
@@ -242,12 +224,12 @@ class AddNewMemberByAdminState
               ),*/
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('name') + '*',
+                    AppLocalizations.of(context).translate('name') + '*',
                 controllerCallback: _nameController,
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('contact1') + '*',
+                    AppLocalizations.of(context).translate('contact1') + '*',
                 controllerCallback: _mobileController,
                 keyboardType: TextInputType.number,
                 maxLength: 10,
@@ -256,22 +238,27 @@ class AddNewMemberByAdminState
                   Icons.phone_android,
                   iconColor: GlobalVariables.secondaryColor,
                   onPressed: () async {
-                    PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                    PhoneContact contact =
+                        await FlutterContactPicker.pickPhoneContact();
                     print('contact Name : ' + contact.fullName!);
-                    print('contact Number : ' +
-                        contact.phoneNumber.toString());
+                    print('contact Number : ' + contact.phoneNumber.toString());
                     _contact = contact;
                     setState(() {
                       if (_contact != null) {
-                       /* //  _nameController.text = _contact.fullName;
+                        /* //  _nameController.text = _contact.fullName;
                         String phoneNumber = _contact!.phoneNumber
                             .toString()
                             .substring(
                             0,
                                 _contact!.phoneNumber.toString().indexOf('(') -
                                     1);*/
-                        String  phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
-                        _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                        String phoneNumber = contact.phoneNumber!.number!
+                            .trim()
+                            .toString()
+                            .replaceAll(" ", "");
+                        _mobileController.text =
+                            GlobalFunctions.getMobileFormatNumber(
+                                phoneNumber.toString());
                         // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                       }
                     });
@@ -280,7 +267,7 @@ class AddNewMemberByAdminState
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('email_id'),
+                    AppLocalizations.of(context).translate('email_id'),
                 controllerCallback: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 contentPadding: EdgeInsets.only(top: 14),
@@ -323,16 +310,19 @@ class AddNewMemberByAdminState
                             fontSize: GlobalVariables.textSizeSMedium,
                           ),*/
                           decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
+                              //filled: true,
+                              //fillColor: Hexcolor('#ecedec'),
                               labelText: AppLocalizations.of(context)
-                                  .translate('membership_type') +
+                                      .translate('membership_type') +
                                   '*',
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              labelStyle: TextStyle(
+                                  color: GlobalVariables.lightGray,
+                                  fontSize: GlobalVariables.textSizeSMedium),
                               enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent))
+                              // border: new CustomBorderTextFieldSkin().getSkin(),
+                              ),
                         ),
                       ),
                     ),
@@ -360,7 +350,7 @@ class AddNewMemberByAdminState
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.secondaryColor,
                           ),
-                         /* underline: SizedBox(),
+                          /* underline: SizedBox(),
                           hint: text(
                               AppLocalizations.of(context)
                                   .translate('lives_here') +
@@ -368,23 +358,26 @@ class AddNewMemberByAdminState
                               textColor: GlobalVariables.lightGray,
                               fontSize: GlobalVariables.textSizeSMedium),*/
                           decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
+                              //filled: true,
+                              //fillColor: Hexcolor('#ecedec'),
                               labelText: AppLocalizations.of(context)
-                                  .translate('lives_here') +
+                                      .translate('lives_here') +
                                   '*',
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                              labelStyle: TextStyle(
+                                  color: GlobalVariables.lightGray,
+                                  fontSize: GlobalVariables.textSizeSMedium),
                               enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent))
+                              // border: new CustomBorderTextFieldSkin().getSkin(),
+                              ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-             /* Visibility(
+              /* Visibility(
                 visible: _selectedMembershipType=='Tenant' ,
                 child: Container(
                   child: Column(
@@ -506,7 +499,7 @@ class AddNewMemberByAdminState
                 height: 100,
                 child: AppTextField(
                   textHintContent:
-                  AppLocalizations.of(context).translate('address'),
+                      AppLocalizations.of(context).translate('address'),
                   controllerCallback: _addressController,
                   maxLines: 99,
                   contentPadding: EdgeInsets.only(top: 14),
@@ -515,8 +508,8 @@ class AddNewMemberByAdminState
               Container(
                 height: 100,
                 child: AppTextField(
-                  textHintContent:
-                  AppLocalizations.of(context).translate('note_for_moderator'),
+                  textHintContent: AppLocalizations.of(context)
+                      .translate('note_for_moderator'),
                   controllerCallback: _notModeratorController,
                   maxLines: 99,
                   contentPadding: EdgeInsets.only(top: 14),
@@ -536,31 +529,31 @@ class AddNewMemberByAdminState
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
                             decoration: attachmentFilePath == null
                                 ? BoxDecoration(
-                              color: GlobalVariables.secondaryColor,
-                              borderRadius: BorderRadius.circular(25),
-                              //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                            )
+                                    color: GlobalVariables.secondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                  )
                                 : BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image:
-                                            FileImage(File(attachmentFilePath!)),
-                                    fit: BoxFit.cover),
-                                border: Border.all(
-                                    color: GlobalVariables.primaryColor,
-                                    width: 2.0)),
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: FileImage(
+                                            File(attachmentFilePath!)),
+                                        fit: BoxFit.cover),
+                                    border: Border.all(
+                                        color: GlobalVariables.primaryColor,
+                                        width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
                           Column(
                             children: <Widget>[
                               Container(
-                                child: FlatButton.icon(
+                                child: TextButton.icon(
                                   onPressed: () {
                                     if (isStoragePermission) {
                                       openFile(context);
                                     } else {
                                       GlobalFunctions.askPermission(
-                                          Permission.storage)
+                                              Permission.storage)
                                           .then((value) {
                                         if (value) {
                                           openFile(context);
@@ -568,7 +561,7 @@ class AddNewMemberByAdminState
                                           GlobalFunctions.showToast(
                                               AppLocalizations.of(context)
                                                   .translate(
-                                                  'download_permission'));
+                                                      'download_permission'));
                                         }
                                       });
                                     }
@@ -592,13 +585,13 @@ class AddNewMemberByAdminState
                                 ),
                               ),
                               Container(
-                                child: FlatButton.icon(
+                                child: TextButton.icon(
                                     onPressed: () {
                                       if (isStoragePermission) {
                                         openCamera(context);
                                       } else {
                                         GlobalFunctions.askPermission(
-                                            Permission.storage)
+                                                Permission.storage)
                                             .then((value) {
                                           if (value) {
                                             openCamera(context);
@@ -606,7 +599,7 @@ class AddNewMemberByAdminState
                                             GlobalFunctions.showToast(
                                                 AppLocalizations.of(context)
                                                     .translate(
-                                                    'download_permission'));
+                                                        'download_permission'));
                                           }
                                         });
                                       }
@@ -618,7 +611,8 @@ class AddNewMemberByAdminState
                                     label: text(
                                         AppLocalizations.of(context)
                                             .translate('take_picture'),
-                                        textColor: GlobalVariables.primaryColor)),
+                                        textColor:
+                                            GlobalVariables.primaryColor)),
                               ),
                             ],
                           ),
@@ -684,12 +678,13 @@ class AddNewMemberByAdminState
 
     _progressDialog!.show();
 
-    Provider.of<UserManagementResponse>(context,listen: false).addMemberByAdmin(
-        widget.block,
-        widget.flat,
-        _nameController.text,
-        _mobileController.text,
-        _emailController.text,
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .addMemberByAdmin(
+            widget.block,
+            widget.flat,
+            _nameController.text,
+            _mobileController.text,
+            _emailController.text,
             _selectedMembershipType!,
             _selectedLivesHere!,
             _addressController.text,
@@ -700,10 +695,8 @@ class AddNewMemberByAdminState
 
       GlobalFunctions.showToast(value.message!);
       if (value.status!) {
-        if (attachmentFileName != null &&
-            attachmentFilePath != null) {
-          await GlobalFunctions.removeFileFromDirectory(
-              attachmentFilePath!);
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
           await GlobalFunctions.removeFileFromDirectory(
               attachmentCompressFilePath!);
         }
@@ -744,7 +737,12 @@ class AddNewMemberByAdminState
 
   getMembershipTypeData() {
 //Tenantype
-    _membershipTypeList = ["Owner", "Co-Owner", "Associate Member", "Owner Family"];
+    _membershipTypeList = [
+      "Owner",
+      "Co-Owner",
+      "Associate Member",
+      "Owner Family"
+    ];
     for (int i = 0; i < _membershipTypeList.length; i++) {
       __membershipTypeListItems.add(DropdownMenuItem(
         value: _membershipTypeList[i],
@@ -825,6 +823,4 @@ class AddNewMemberByAdminState
 
   }
 */
-
-
 }

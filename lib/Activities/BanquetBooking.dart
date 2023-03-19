@@ -4,8 +4,6 @@ import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
-import 'base_stateful.dart';
-
 class BaseBanquetBooking extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -83,12 +81,13 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                      //  color: GlobalVariables.grey,
-                        alignment: Alignment(-1,-1),
+                        //  color: GlobalVariables.grey,
+                        alignment: Alignment(-1, -1),
                         child: Text(
                           AppLocalizations.of(context).translate('booking_for'),
                           style: TextStyle(
-                              color: GlobalVariables.secondaryColor, fontSize: 16),
+                              color: GlobalVariables.secondaryColor,
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -135,11 +134,12 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        alignment: Alignment(-1,-1),
+                        alignment: Alignment(-1, -1),
                         child: Text(
                           AppLocalizations.of(context).translate('date'),
                           style: TextStyle(
-                              color: GlobalVariables.secondaryColor, fontSize: 16),
+                              color: GlobalVariables.secondaryColor,
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -148,7 +148,6 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                       child: Container(
                         width: double.infinity,
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-
                         decoration: BoxDecoration(
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
@@ -187,11 +186,12 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        alignment: Alignment(-1,-1),
+                        alignment: Alignment(-1, -1),
                         child: Text(
                           AppLocalizations.of(context).translate('slot'),
                           style: TextStyle(
-                              color: GlobalVariables.secondaryColor, fontSize: 16),
+                              color: GlobalVariables.secondaryColor,
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -200,7 +200,6 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                       child: Container(
                         width: double.infinity,
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-
                         decoration: BoxDecoration(
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
@@ -239,11 +238,12 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        alignment: Alignment(-1,-1),
+                        alignment: Alignment(-1, -1),
                         child: Text(
                           AppLocalizations.of(context).translate('rate'),
                           style: TextStyle(
-                              color: GlobalVariables.secondaryColor, fontSize: 16),
+                              color: GlobalVariables.secondaryColor,
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -254,7 +254,9 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                         child: Text(
                           'Rs. 2500.00',
                           style: TextStyle(
-                              color: GlobalVariables.primaryColor, fontSize: 18,fontWeight: FontWeight.bold),
+                              color: GlobalVariables.primaryColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -269,11 +271,13 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        alignment: Alignment(-1,-1),
+                        alignment: Alignment(-1, -1),
                         child: Text(
-                          AppLocalizations.of(context).translate('special_request'),
+                          AppLocalizations.of(context)
+                              .translate('special_request'),
                           style: TextStyle(
-                              color: GlobalVariables.secondaryColor, fontSize: 16),
+                              color: GlobalVariables.secondaryColor,
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -282,7 +286,7 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                       child: Container(
                         alignment: Alignment.topLeft,
                         padding: EdgeInsets.all(10),
-                       // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         decoration: BoxDecoration(
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
@@ -309,11 +313,12 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        alignment: Alignment(-1,-1),
+                        alignment: Alignment(-1, -1),
                         child: Text(
                           AppLocalizations.of(context).translate('remark'),
                           style: TextStyle(
-                              color: GlobalVariables.secondaryColor, fontSize: 16),
+                              color: GlobalVariables.secondaryColor,
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -358,17 +363,17 @@ class BanquetBookingState extends State<BaseBanquetBooking> {
                       child: Container(
                         alignment: Alignment.topLeft,
                         height: 45,
-
                         child: ButtonTheme(
                           // minWidth: MediaQuery.of(context).size.width/2,
-                          child: RaisedButton(
+                          child: MaterialButton(
                             color: GlobalVariables.primaryColor,
                             onPressed: () {},
                             textColor: GlobalVariables.white,
                             //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: GlobalVariables.primaryColor)),
+                                side: BorderSide(
+                                    color: GlobalVariables.primaryColor)),
                             child: Text(
                               AppLocalizations.of(context).translate('submit'),
                               style: TextStyle(

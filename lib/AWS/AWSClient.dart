@@ -1,12 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
 //import 'package:amazon_cognito_identity_dart/cognito.dart';
-import 'package:path/path.dart' as path;
-import 'dart:typed_data';
 
 //import 'package:amazon_cognito_identity_dart/sig_v4.dart';
-import 'package:http/http.dart' as http;
-import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 
 /*
 class AWSClient {

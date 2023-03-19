@@ -1,39 +1,18 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 
 //import 'package:contact_picker/contact_picker.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:html/parser.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/MoveOutRequestUserDetails.dart';
-import 'package:societyrun/Activities/StaffCategory.dart';
-import 'package:societyrun/Activities/StaffDetails.dart';
-import 'package:societyrun/Activities/StaffListPerCategory.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/PollOption.dart';
-import 'package:societyrun/Models/ScheduleVisitor.dart';
-import 'package:societyrun/Models/Staff.dart';
-import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Models/Visitor.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
-import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
 
 class BaseMoveOutRequest extends StatefulWidget {
 

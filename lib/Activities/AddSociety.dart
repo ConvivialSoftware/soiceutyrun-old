@@ -4,9 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
 
-import 'base_stateful.dart';
 
 class BaseAddSociety extends StatefulWidget{
   @override
@@ -105,7 +103,7 @@ class AddSocietyState extends State<BaseAddSociety>{
                 margin: EdgeInsets.fromLTRB(30, 20, 25, 10),
                 child: ButtonTheme(
                   minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
+                  child: MaterialButton(
                     color: GlobalVariables.primaryColor,
                     onPressed: () {
 

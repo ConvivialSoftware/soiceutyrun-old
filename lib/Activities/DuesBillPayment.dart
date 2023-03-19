@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -32,7 +31,7 @@ class BaseDuesBillPayment extends StatefulWidget {
 }
 
 class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
-  var amount=0.0, invoiceNo, referenceNo, billType, orderId;
+  var amount = 0.0, invoiceNo, referenceNo, billType, orderId;
   ProgressDialog? _progressDialog;
   Razorpay? _razorpay;
   var userId = "", societyId;
@@ -44,10 +43,10 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   void initState() {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     displayAmount = (widget.bills.AMOUNT! - widget.bills.RECEIVED!);
-    WidgetsBinding.instance!.addPostFrameCallback((_){
-    getSharedPreferenceData();
-    Provider.of<UserManagementResponse>(context, listen: false)
-        .getPaymentCharges();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getSharedPreferenceData();
+      Provider.of<UserManagementResponse>(context, listen: false)
+          .getPaymentCharges();
     });
     super.initState();
   }
@@ -99,9 +98,8 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   }
 
   getBaseDuesBillPaymentLayout(UserManagementResponse value) {
-
-    print(displayAmount.toString()+':'+ amount.toString());
-    print(((displayAmount)-amount).toString());
+    print(displayAmount.toString() + ':' + amount.toString());
+    print(((displayAmount) - amount).toString());
     print('Base');
     return Stack(
       children: <Widget>[
@@ -121,7 +119,9 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    text(GlobalFunctions.getCurrencyFormat(displayAmount.toString()),
+                    text(
+                        GlobalFunctions.getCurrencyFormat(
+                            displayAmount.toString()),
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeXLarge,
                         fontWeight: FontWeight.bold,
@@ -193,22 +193,22 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
 
   void showBottomSheetForPaymentMethod(UserManagementResponse value) {
     _amountTextController.clear();
-   // amount = (widget.bills.AMOUNT - widget.bills.RECEIVED);
+    // amount = (widget.bills.AMOUNT - widget.bills.RECEIVED);
     _amountTextController.text = (displayAmount).toString();
     isEditAmount = false;
     if ((displayAmount) > 0) {
       if (value.payOptionList[0].Status!) {
         //if (value.hasRazorPayGateway) {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            backgroundColor: GlobalVariables.transparent,
-            context: context,
-            builder: (BuildContext context) {
-              return StatefulBuilder(
-                  builder: (BuildContext context, setState) =>
-                      getListOfPaymentGateway(context, setState, value));
-            },
-          );
+        showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: GlobalVariables.transparent,
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, setState) =>
+                    getListOfPaymentGateway(context, setState, value));
+          },
+        );
         /*} else {
           GlobalFunctions.showToast("Online Payment Option is not available.");
         }*/
@@ -606,7 +606,8 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                                       ? IconButton(
                                           icon: AppIcon(
                                             Icons.edit,
-                                            iconColor: GlobalVariables.primaryColor,
+                                            iconColor:
+                                                GlobalVariables.primaryColor,
                                             iconSize:
                                                 GlobalVariables.textSizeLarge,
                                           ),
@@ -684,10 +685,10 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                                                 : GlobalVariables.white,
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
-                                          color:
-                                              _selectedPaymentGateway != "PayTM"
-                                                  ? GlobalVariables.primaryColor
-                                                  : GlobalVariables.secondaryColor,
+                                          color: _selectedPaymentGateway !=
+                                                  "PayTM"
+                                              ? GlobalVariables.primaryColor
+                                              : GlobalVariables.secondaryColor,
                                           width: 2.0,
                                         )),
                                     child: AppIcon(Icons.check,
@@ -731,10 +732,10 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                                                 : GlobalVariables.white,
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
-                                          color:
-                                              _selectedPaymentGateway == "PayTM"
-                                                  ? GlobalVariables.primaryColor
-                                                  : GlobalVariables.secondaryColor,
+                                          color: _selectedPaymentGateway ==
+                                                  "PayTM"
+                                              ? GlobalVariables.primaryColor
+                                              : GlobalVariables.secondaryColor,
                                           width: 2.0,
                                         )),
                                     child: AppIcon(Icons.check,
@@ -1037,7 +1038,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     }
   }
 
-  void getRazorPayOrderID(String razorKey, String secret_key, double textAmount,
+  void getRazorPayOrderID(String razorKey, String secretKey, double textAmount,
       UserManagementResponse UserManagementResponse) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
@@ -1048,10 +1049,11 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     RazorPayOrderRequest request = new RazorPayOrderRequest(
         amount: amount,
         currency: "INR",
-        receipt: widget.bills.BLOCK! + ' ' + widget.bills.FLAT! + '-' + invoiceNo,
+        receipt:
+            widget.bills.BLOCK! + ' ' + widget.bills.FLAT! + '-' + invoiceNo,
         paymentCapture: 1);
     restClientRazorPay
-        .getRazorPayOrderID(request, razorKey, secret_key)
+        .getRazorPayOrderID(request, razorKey, secretKey)
         .then((value) {
       print('getRazorPayOrderID Response : ' + value.toString());
       orderId = value['id'];
@@ -1154,7 +1156,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     //  String block = await GlobalFunctions.getBlock();
     // String flat = await GlobalFunctions.getFlat();
 
-   // print("AMOUNT>>>>>>>> $amount");
+    // print("AMOUNT>>>>>>>> $amount");
 
     String paymentDate = DateTime.now().toLocal().year.toString() +
         "-" +
@@ -1166,17 +1168,17 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     _progressDialog!.show();
     restClientERP
         .addOnlinePaymentRequest(
-        societyId,
-        widget.bills.FLAT!,
-        widget.bills.BLOCK!,
-        invoiceNo,
-        amount.toString(),
-        paymentId,
-        "Online Transaction",
-        "Razorpay",
-        paymentDate,
-        paymentStatus,
-        orderId)
+            societyId,
+            widget.bills.FLAT!,
+            widget.bills.BLOCK!,
+            invoiceNo,
+            amount.toString(),
+            paymentId,
+            "Online Transaction",
+            "Razorpay",
+            paymentDate,
+            paymentStatus,
+            orderId)
         .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
       _progressDialog!.dismiss();
@@ -1184,20 +1186,18 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
         // Navigator.of(context).pop('back');
         if (paymentStatus == 'success') {
           print('setState');
-          print(displayAmount.toString()+' : '+ amount.toString());
-          print(((displayAmount)-amount).toString());
-          displayAmount = (displayAmount-amount);
-          print('After '+displayAmount.toString());
+          print(displayAmount.toString() + ' : ' + amount.toString());
+          print(((displayAmount) - amount).toString());
+          displayAmount = (displayAmount - amount);
+          print('After ' + displayAmount.toString());
           print('setState');
           Provider.of<UserManagementResponse>(context, listen: false)
               .getPayOption(widget.bills.BLOCK!, widget.bills.FLAT!)
-              .then((value) {
-          });
+              .then((value) {});
           Provider.of<LoginDashBoardResponse>(context, listen: false)
               .getDuesData()
               .then((value) {});
-          setState(() {
-          });
+          setState(() {});
           paymentSuccessDialog(paymentId);
         } else {
           paymentFailureDialog();
@@ -1280,7 +1280,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: text(
                                 AppLocalizations.of(context)
-                                        .translate('transaction_id'),
+                                    .translate('transaction_id'),
                                 textColor: GlobalVariables.grey,
                                 fontSize: GlobalVariables.textSizeSMedium,
                                 fontWeight: FontWeight.normal),
@@ -1407,7 +1407,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         showDialog(
@@ -1431,7 +1431,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                       )),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -1476,8 +1476,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      FlutterClipboard.copy(consumerId)
-                          .then((value) {
+                      FlutterClipboard.copy(consumerId).then((value) {
                         GlobalFunctions.showToast("Copied to Clipboard");
                         launch(
                             UserManagementResponse.payOptionList[0].PAYTM_URL!);

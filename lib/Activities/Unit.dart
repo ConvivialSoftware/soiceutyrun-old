@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddExpense.dart';
 import 'package:societyrun/Activities/Dues.dart';
 import 'package:societyrun/Activities/UnitUserDetails.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -34,7 +33,7 @@ class _BaseUnitState extends State<BaseUnit> {
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_){
     Provider.of<UserManagementResponse>(context,listen: false).getUnitDetails("").then((value) {
       getUnitData(value);
     });

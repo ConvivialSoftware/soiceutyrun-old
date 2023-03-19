@@ -1,5 +1,3 @@
-
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
@@ -13,15 +11,10 @@ import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:intl/intl.dart';
-import 'base_stateful.dart';
 
 class BaseDescriptionOfHomeService extends StatefulWidget {
-
   Services _services;
   BaseDescriptionOfHomeService(this._services);
-
-
 
   @override
   State<StatefulWidget> createState() {
@@ -34,14 +27,14 @@ class DescriptionOfHomeServiceState
     extends State<BaseDescriptionOfHomeService> {
   //List<HomeCareDescription> _homeCareList = List<HomeCareDescription>();
 
-  var name="",mobile="",mail="",photo="";
+  var name = "", mobile = "", mail = "", photo = "";
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _requirementController = TextEditingController();
   TextEditingController _bookingDateController = TextEditingController();
-  var width,height;
+  var width, height;
   List<ServicesCharges>? _serviceChargesList;
   ProgressDialog? _progressDialog;
 
@@ -50,15 +43,15 @@ class DescriptionOfHomeServiceState
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPrefData();
-    _serviceChargesList = List<ServicesCharges>.from(widget._services.charges
-        .map((i) => ServicesCharges.fromJson(i)));
+    _serviceChargesList = List<ServicesCharges>.from(
+        widget._services.charges.map((i) => ServicesCharges.fromJson(i)));
     //getHomeCareDescriptionList();
   }
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-    height =  MediaQuery.of(context).size.height;
+    height = MediaQuery.of(context).size.height;
     // TODO: implement build
     return ChangeNotifierProvider<ServicesResponse>.value(
         value: Provider.of<ServicesResponse>(context),
@@ -104,61 +97,66 @@ class DescriptionOfHomeServiceState
               child: AppButton(
                 textContent: "Book Service",
                 onPressed: () {
-                if(_bookingDateController.text.length>0) {
-                  if (_requirementController.text.length > 0) {
+                  if (_bookingDateController.text.length > 0) {
+                    if (_requirementController.text.length > 0) {
                       _progressDialog!.show();
-                    Provider.of<ServicesResponse>(context, listen: false)
+                      Provider.of<ServicesResponse>(context, listen: false)
                           .bookServicePerCategory(
                               widget._services.Id!,
-                        _requirementController.text.toString(),
-                        _nameController.text, _mobileController.text,
-                        _emailController.text, _bookingDateController.text)
-                        .then((value) {
+                              _requirementController.text.toString(),
+                              _nameController.text,
+                              _mobileController.text,
+                              _emailController.text,
+                              _bookingDateController.text)
+                          .then((value) {
                         _progressDialog!.dismiss();
                         if (value.status!) {
-                        Navigator.of(context).pop();
-                      }
-                      _requirementController.text='';
-                      _bookingDateController.text='';
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              StatefulBuilder(
-                                  builder: (BuildContext context,
-                                      StateSetter setState) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25.0)),
-                                      child: Container(
-                                        padding: EdgeInsets.all(16),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                                child: AppAssetsImage(GlobalVariables.successIconPath,imageWidth: 50.0,imageHeight: 50.0,)
-                                            ),
-                                            Container(
-                                              child: text(value.message,
-                                                  fontSize: GlobalVariables
-                                                      .textSizeSMedium,
-                                                  maxLine: 99),
-                                            ),
-                                          ],
-                                        ),
+                          Navigator.of(context).pop();
+                        }
+                        _requirementController.text = '';
+                        _bookingDateController.text = '';
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => StatefulBuilder(
+                                    builder: (BuildContext context,
+                                        StateSetter setState) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
+                                    child: Container(
+                                      padding: EdgeInsets.all(16),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              child: AppAssetsImage(
+                                            GlobalVariables.successIconPath,
+                                            imageWidth: 50.0,
+                                            imageHeight: 50.0,
+                                          )),
+                                          Container(
+                                            child: text(value.message,
+                                                fontSize: GlobalVariables
+                                                    .textSizeSMedium,
+                                                maxLine: 99),
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  }));
-                    });
+                                    ),
+                                  );
+                                }));
+                      });
+                    } else {
+                      GlobalFunctions.showToast(
+                          'Please Enter Your Requirement');
+                    }
                   } else {
-                    GlobalFunctions.showToast(
-                        'Please Enter Your Requirement');
+                    GlobalFunctions.showToast('Please Select Booking Date');
                   }
-                }else{
-                  GlobalFunctions.showToast('Please Select Booking Date');
-                }
-
-              },textColor: GlobalVariables.white,)),
+                },
+                textColor: GlobalVariables.white,
+              )),
         ),
       ],
     );
@@ -170,28 +168,29 @@ class DescriptionOfHomeServiceState
         children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(left: 16,top: 16),
+            padding: EdgeInsets.only(left: 16, top: 16),
             child: text(
               widget._services.Name,
               textColor: GlobalVariables.white,
-                  fontSize: GlobalVariables.textSizeLargeMedium,
-                  fontWeight: FontWeight.bold,
+              fontSize: GlobalVariables.textSizeLargeMedium,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 4,),
+          SizedBox(
+            height: 4,
+          ),
           Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.only(left: 16),
             child: text(
               widget._services.Title,
               textColor: GlobalVariables.lightGray,
-                fontSize: GlobalVariables.textSizeSMedium,
+              fontSize: GlobalVariables.textSizeSMedium,
             ),
           ),
           Stack(
             children: [
               AppContainer(
-
                 child: Column(
                   children: <Widget>[
                     Container(
@@ -200,7 +199,9 @@ class DescriptionOfHomeServiceState
                         'Service Description',
                       ),
                     ),
-                    SizedBox(height: 8,),
+                    SizedBox(
+                      height: 8,
+                    ),
                     Container(
                       alignment: Alignment.topLeft,
                       //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -216,9 +217,9 @@ class DescriptionOfHomeServiceState
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: widget._services.charges.length,
                               shrinkWrap: true,
-                              *//*gridDelegate:
+                              */ /*gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 4),*//*
+                                    crossAxisCount: 2, childAspectRatio: 4),*/ /*
                               itemBuilder: (BuildContext context, int position) {
                                 return getHomeCareDescriptionListItemLayout(
                                     position);
@@ -234,7 +235,8 @@ class DescriptionOfHomeServiceState
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.only(right: 8, top: 8),
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: boxDecoration(bgColor: GlobalVariables.orangeYellow, radius: 5),
+                  decoration: boxDecoration(
+                      bgColor: GlobalVariables.orangeYellow, radius: 5),
                   child: FittedBox(
                       child: text(widget._services.Discount! + '% Discount',
                           fontSize: GlobalVariables.textSizeSmall,
@@ -254,10 +256,12 @@ class DescriptionOfHomeServiceState
                     'Charges',
                   ),
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 Builder(
                     builder: (context) => ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: _serviceChargesList!.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int position) {
@@ -281,13 +285,16 @@ class DescriptionOfHomeServiceState
                   child: /*AppTextField(textHintContent: 'Write to us about your requirement',
                       controllerCallback: _requirementController,
                     borderColor: GlobalVariables.transparent,
-                  ),*/TextField(
+                  ),*/
+                      TextField(
                     controller: _requirementController,
                     //maxLines: 99,
                     decoration: InputDecoration(
                       hintText: 'Write to us about your requirement',
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium),
                     ),
                   ),
                 ),
@@ -298,7 +305,7 @@ class DescriptionOfHomeServiceState
             isListItem: true,
             child: AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('booking_date'),
+                  AppLocalizations.of(context).translate('booking_date'),
               controllerCallback: _bookingDateController,
               borderWidth: 2.0,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -320,7 +327,7 @@ class DescriptionOfHomeServiceState
             ),
           ),
           AppContainer(
-           isListItem:true,
+            isListItem: true,
             child: Column(
               children: <Widget>[
                 Container(
@@ -341,15 +348,17 @@ class DescriptionOfHomeServiceState
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        photo.isEmpty ? Image.asset(
-                          GlobalVariables.componentUserProfilePath,
-                          width: 40,
-                          height: 40,
-                        ): CircleAvatar(
-                          radius: 20,
-                          backgroundColor: GlobalVariables.secondaryColor,
-                          backgroundImage: NetworkImage(photo),
-                        ),
+                        photo.isEmpty
+                            ? Image.asset(
+                                GlobalVariables.componentUserProfilePath,
+                                width: 40,
+                                height: 40,
+                              )
+                            : CircleAvatar(
+                                radius: 20,
+                                backgroundColor: GlobalVariables.secondaryColor,
+                                backgroundImage: NetworkImage(photo),
+                              ),
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -366,34 +375,34 @@ class DescriptionOfHomeServiceState
                                 Container(
                                   //margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
                                   child: Container(
-                                    child: secondaryText(
-                                      mail,
-                                      fontSize: GlobalVariables.textSizeSmall
-                                    ),
+                                    child: secondaryText(mail,
+                                        fontSize:
+                                            GlobalVariables.textSizeSmall),
                                   ),
                                 ),
                                 Container(
-                                  child: secondaryText(
-                                    mobile,
-                                      fontSize: GlobalVariables.textSizeSmall
-                                  ),
+                                  child: secondaryText(mobile,
+                                      fontSize: GlobalVariables.textSizeSmall),
                                 )
                               ],
                             ),
                           ),
                         ),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             showBottomSheetEditInfoLayout();
                           },
                           child: Container(
                               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                               decoration: BoxDecoration(
-                                  color:GlobalVariables.primaryColor,
+                                  color: GlobalVariables.primaryColor,
                                   borderRadius: BorderRadius.circular(30)),
-                              child:AppIcon(Icons.edit,iconColor: GlobalVariables.white,iconSize: GlobalVariables.textSizeNormal  ,)
-                          ),
+                              child: AppIcon(
+                                Icons.edit,
+                                iconColor: GlobalVariables.white,
+                                iconSize: GlobalVariables.textSizeNormal,
+                              )),
                         ),
                       ],
                     ),
@@ -402,13 +411,13 @@ class DescriptionOfHomeServiceState
               ],
             ),
           ),
-      /*    Container(
+          /*    Container(
             alignment: Alignment.topLeft,
             height: 45,
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: ButtonTheme(
               // minWidth: MediaQuery.of(context).size.width/2,
-              child: RaisedButton(
+              child: MaterialButton(
                 color: GlobalVariables.green,
                 onPressed: () {},
                 textColor: GlobalVariables.white,
@@ -428,7 +437,7 @@ class DescriptionOfHomeServiceState
     );
   }
 
- /* getHomeCareDescriptionListItemLayout(int position) {
+  /* getHomeCareDescriptionListItemLayout(int position) {
     return Container(
       padding: EdgeInsets.all(5),
       //margin: EdgeInsets.fromLTRB(0, 10, 0, 0), // width: 100,
@@ -483,7 +492,8 @@ class DescriptionOfHomeServiceState
                       SizedBox(
                         width: 8,
                       ),
-                      secondaryText(_serviceChargesList![position].Service_Title,
+                      secondaryText(
+                          _serviceChargesList![position].Service_Title,
                           textStyleHeight: 1.0),
                     ],
                   ),
@@ -495,11 +505,10 @@ class DescriptionOfHomeServiceState
                                     .Service_Price!) *
                                 int.parse(widget._services.Discount!) /
                                 100))
-                        .toString())
-                  /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*//*GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price)*/,
-
-                textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium,textStyleHeight: 1.0
-                )
+                        .toString()) /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 0).format(double.parse(_serviceChargesList[position].Service_Price))*/ /*GlobalFunctions.getCurrencyFormat(_serviceChargesList[position].Service_Price)*/,
+                    textColor: GlobalVariables.primaryColor,
+                    fontSize: GlobalVariables.textSizeSMedium,
+                    textStyleHeight: 1.0)
               ],
             ),
           ),
@@ -512,64 +521,70 @@ class DescriptionOfHomeServiceState
     );
   }
 
-  showBottomSheetEditInfoLayout(){
-
+  showBottomSheetEditInfoLayout() {
     return showDialog(
-          context: context,
+        context: context,
         builder: (BuildContext context) => StatefulBuilder(
                 builder: (BuildContext context, StateSetter _setState) {
-                return Dialog(
-                  /*shape: RoundedRectangleBorder(
+              return Dialog(
+                /*shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         25.0)),*/
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: GlobalVariables.white),
-                    // height: MediaQuery.of(context).size.width * 1.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 16,
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                child: Container(
+                  margin: EdgeInsets.only(top: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      color: GlobalVariables.white),
+                  // height: MediaQuery.of(context).size.width * 1.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 16,
+                        ),
+                        AppTextField(
+                            textHintContent: 'Enter Name',
+                            controllerCallback: _nameController),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        AppTextField(
+                            textHintContent: 'Enter Email ID',
+                            controllerCallback: _emailController),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        AppTextField(
+                            textHintContent: 'Enter Mobile Number',
+                            controllerCallback: _mobileController),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          alignment: Alignment.topRight,
+                          height: 45,
+                          // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: AppButton(
+                            textContent: AppLocalizations.of(context)
+                                .translate('submit'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              name = _nameController.text;
+                              mail = _emailController.text;
+                              mobile = _mobileController.text;
+                              setState(() {});
+                            },
                           ),
-                          AppTextField(textHintContent: 'Enter Name', controllerCallback: _nameController),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          AppTextField(textHintContent: 'Enter Email ID', controllerCallback: _emailController),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          AppTextField(textHintContent: 'Enter Mobile Number', controllerCallback: _mobileController),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Container(
-                            alignment: Alignment.topRight,
-                            height: 45,
-                           // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: AppButton(
-                              textContent: AppLocalizations.of(context).translate('submit'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                name = _nameController.text;
-                                mail = _emailController.text;
-                                mobile = _mobileController.text;
-                                setState(() {
-
-                                });
-                              },
-                            ),
-                          ),
-                         /* Container(
+                        ),
+                        /* Container(
                             width: MediaQuery.of(context).size.width,
-                            child: FlatButton(
+                            child: TextButton(
                                 onPressed: () {
 
                                 },
@@ -577,16 +592,15 @@ class DescriptionOfHomeServiceState
                                 child: text('Submit',textColor: GlobalVariables.white,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.w500)
                             ),
                           )*/
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                );
-              }));
-
+                ),
+              );
+            }));
   }
 
- /* getHomeCareDescriptionList() {
+  /* getHomeCareDescriptionList() {
     _homeCareList = [
       HomeCareDescription(
           title: "Siddhivinayak Traders",
@@ -621,9 +635,9 @@ class DescriptionOfHomeServiceState
     photo = await GlobalFunctions.getPhoto();
 
     setState(() {
-      _nameController.text=name;
-      _emailController.text=mail;
-      _mobileController.text=mobile;
+      _nameController.text = name;
+      _emailController.text = mail;
+      _mobileController.text = mobile;
     });
   }
 }

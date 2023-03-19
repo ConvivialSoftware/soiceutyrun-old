@@ -1,18 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/MyComplex.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/CommitteeDirectory.dart';
-import 'package:societyrun/Models/EmergencyDirectory.dart';
 import 'package:societyrun/Models/MyComplexResponse.dart';
-import 'package:societyrun/Models/NeighboursDirectory.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -47,7 +39,7 @@ class DirectoryState extends State<BaseDirectory> {
       isNeighbours = true;
       isCommittee = false;
       isEmergency = false;
-      WidgetsBinding.instance!.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_){
 
       Provider.of<MyComplexResponse>(context, listen: false)
           .getNeighboursDirectoryData()
@@ -61,7 +53,7 @@ class DirectoryState extends State<BaseDirectory> {
       isCommittee = true;
       isNeighbours = false;
       isEmergency = false;
-      WidgetsBinding.instance!.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_){
       Provider.of<MyComplexResponse>(context, listen: false)
           .getCommitteeDirectoryData()
           .then((value) {
@@ -73,7 +65,7 @@ class DirectoryState extends State<BaseDirectory> {
       isCommittee = false;
       isNeighbours = false;
       isEmergency = true;
-      WidgetsBinding.instance!.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_){
       Provider.of<MyComplexResponse>(context, listen: false)
           .getEmergencyDirectoryData()
           .then((value) {

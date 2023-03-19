@@ -1,10 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -12,7 +10,6 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
@@ -30,8 +27,7 @@ class BaseDisplayProfileInfo extends StatefulWidget {
   }
 }
 
-class DisplayProfileInfoState
-    extends State<BaseDisplayProfileInfo> {
+class DisplayProfileInfoState extends State<BaseDisplayProfileInfo> {
   ProgressDialog? _progressDialog;
 
   List<ProfileInfo> _profileList = <ProfileInfo>[];
@@ -78,8 +74,6 @@ class DisplayProfileInfoState
     print('loggedUserType : ' + loggedUserType!.toLowerCase());
     print('userType : ' + userType!.toLowerCase());
 
-
-
     if (loggedUserType!.toLowerCase() == 'owner') {
       isDeleteOptionDisplay = true;
     } else if (loggedUserType!.toLowerCase() == 'owner family' &&
@@ -91,7 +85,8 @@ class DisplayProfileInfoState
     } else if (loggedUserType!.toLowerCase() == 'owner' &&
         userType! == 'tenant') {
       isDeleteOptionDisplay = true;
-    } else if (loggedUserType!.toLowerCase() == 'owner' && userType == 'owner') {
+    } else if (loggedUserType!.toLowerCase() == 'owner' &&
+        userType == 'owner') {
       isDeleteOptionDisplay = false;
     } else if (loggedUserType!.toLowerCase() == 'tenant' &&
         userType == 'tenant') {
@@ -130,55 +125,47 @@ class DisplayProfileInfoState
             PopupMenuButton(
                 icon: AppIcon(Icons.more_vert,
                     iconColor:
-                    // isMenuEnable ?
-                    GlobalVariables.white
-                  // : GlobalVariables.transparent
-                ),
+                        // isMenuEnable ?
+                        GlobalVariables.white
+                    // : GlobalVariables.transparent
+                    ),
                 // add this line
                 itemBuilder: (_) => <PopupMenuItem<String>>[
-                  if(isEditOptionDisplay)
-
-                    new PopupMenuItem<String>(
-                        child: Container(
-                            width: 100,
-                            height: 30,
-                            child: text("Edit",
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeSMedium)),
-                        value: 'edit'),
-                  new PopupMenuItem<String>(
-                      child: Container(
-                          width: 100,
-                          height: 30,
-                          child: text("Move Out",
-                              textColor: GlobalVariables.black,
-                              fontSize: GlobalVariables.textSizeSMedium)),
-                      value: 'move_out'),
-                ],
+                      if (isEditOptionDisplay)
+                        new PopupMenuItem<String>(
+                            child: Container(
+                                width: 100,
+                                height: 30,
+                                child: text("Edit",
+                                    textColor: GlobalVariables.black,
+                                    fontSize: GlobalVariables.textSizeSMedium)),
+                            value: 'edit'),
+                      new PopupMenuItem<String>(
+                          child: Container(
+                              width: 100,
+                              height: 30,
+                              child: text("Move Out",
+                                  textColor: GlobalVariables.black,
+                                  fontSize: GlobalVariables.textSizeSMedium)),
+                          value: 'move_out'),
+                    ],
                 onSelected: (index) async {
                   switch (index) {
                     case 'move_out':
                       showDialog(
                           context: context,
-                          builder: (BuildContext
-                          context) =>
+                          builder: (BuildContext context) =>
                               StatefulBuilder(builder:
-                                  (BuildContext context,
-                                  StateSetter
-                                  setState) {
+                                  (BuildContext context, StateSetter setState) {
                                 return Dialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
-                                      BorderRadius
-                                          .circular(
-                                          10.0)),
-                                  child:
-                                  deleteFamilyMemberLayout(),
+                                          BorderRadius.circular(10.0)),
+                                  child: deleteFamilyMemberLayout(),
                                 );
                               }));
                       break;
                     case 'edit':
-
                       var result = await Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -195,7 +182,7 @@ class DisplayProfileInfoState
                   }
                 }),
           ],
-        )/*AppBar(
+        ) /*AppBar(
           backgroundColor: GlobalVariables.red,
           centerTitle: true,
           elevation: 0,
@@ -285,7 +272,8 @@ class DisplayProfileInfoState
             AppLocalizations.of(context).translate('my_profile'),
             style: TextStyle(color: GlobalVariables.white),
           ),
-        )*/,
+        )*/
+        ,
         body: WillPopScope(
             child: getBaseLayout(),
             onWillPop: () {
@@ -335,7 +323,6 @@ class DisplayProfileInfoState
   }
 
   getBaseLayout() {
-
     return _profileList.length > 0
         ? Stack(
             children: <Widget>[
@@ -371,7 +358,6 @@ class DisplayProfileInfoState
   }
 
   getProfileInfoLayout() {
-
     return _profileList.length > 0
         ? SingleChildScrollView(
             child: Column(
@@ -534,7 +520,9 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          Flexible(child: secondaryText(_profileList[0].ADDRESS, maxLine: 3)),
+                          Flexible(
+                              child: secondaryText(_profileList[0].ADDRESS,
+                                  maxLine: 3)),
                         ],
                       ),
                       SizedBox(height: 16),
@@ -563,22 +551,29 @@ class DisplayProfileInfoState
                         ],
                       ),
                       Divider(),
-                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty? SizedBox(height: 16):SizedBox(),
-                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty?Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          AppIcon(
-                            Icons.call,
-                            iconColor: GlobalVariables.secondaryColor,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          secondaryText(_profileList[0].ALTERNATE_CONTACT1??''),
-                        ],
-                      ):SizedBox(),
-                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty?Divider():SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty
+                          ? SizedBox(height: 16)
+                          : SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                AppIcon(
+                                  Icons.call,
+                                  iconColor: GlobalVariables.secondaryColor,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                secondaryText(
+                                    _profileList[0].ALTERNATE_CONTACT1 ?? ''),
+                              ],
+                            )
+                          : SizedBox(),
+                      _profileList[0].ALTERNATE_CONTACT1!.isNotEmpty
+                          ? Divider()
+                          : SizedBox(),
                       SizedBox(height: 8),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -591,7 +586,7 @@ class DisplayProfileInfoState
                           SizedBox(
                             width: 8,
                           ),
-                          secondaryText(_profileList[0].Email??''),
+                          secondaryText(_profileList[0].Email ?? ''),
                         ],
                       ),
                       SizedBox(height: 8),
@@ -605,7 +600,7 @@ class DisplayProfileInfoState
         : Container();
   }
 
- /* editProfileFabLayout() {
+  /* editProfileFabLayout() {
     return Align(
       alignment: Alignment.bottomRight,
       child: Stack(
@@ -661,7 +656,7 @@ class DisplayProfileInfoState
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       if (_reasonController.text.length > 0) {
                         Navigator.of(context).pop();
@@ -677,7 +672,7 @@ class DisplayProfileInfoState
                   ),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

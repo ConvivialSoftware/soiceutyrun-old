@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ndialog/ndialog.dart';
@@ -17,16 +16,12 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:http/http.dart' as http;
-import 'dart:math';
-
-import 'base_stateful.dart';
 
 class BaseCreateClassifiedListing extends StatefulWidget {
-
   bool isEdit;
   Classified? classified;
 
-  BaseCreateClassifiedListing(this.isEdit,{this.classified});
+  BaseCreateClassifiedListing(this.isEdit, {this.classified});
 
   @override
   State<StatefulWidget> createState() {
@@ -43,8 +38,7 @@ class UploadImages {
       {this.imageName, this.imageBinaryString, this.isUploaded, this.imageID});
 }
 
-class CreateClassifiedListingState
-    extends State<BaseCreateClassifiedListing> {
+class CreateClassifiedListingState extends State<BaseCreateClassifiedListing> {
   var name = "", mobile = "", mail = "", photo = "";
 
   Map<String, String> imagesMap = Map<String, String>();
@@ -89,7 +83,7 @@ class CreateClassifiedListingState
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getSharedPrefData();
     getCategoryItemTypeData();
-    if(widget.isEdit){
+    if (widget.isEdit) {
       _titleController.text = widget.classified!.Title!;
       _descriptionController.text = widget.classified!.Description!;
       _priceController.text = widget.classified!.Price!;
@@ -101,7 +95,6 @@ class CreateClassifiedListingState
       _cityItemSelectedItem = widget.classified!.City;
 
       getImagesFromNetwork();
-
     }
   }
 
@@ -111,15 +104,19 @@ class CreateClassifiedListingState
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    List<cd.ClassifiedCategory> categoryList = Provider.of<cd.ClassifiedResponse>(context).classifiedCategoryList;
-    List<cd.City> cityList = Provider.of<cd.ClassifiedResponse>(context).cityList;
+    List<cd.ClassifiedCategory> categoryList =
+        Provider.of<cd.ClassifiedResponse>(context).classifiedCategoryList;
+    List<cd.City> cityList =
+        Provider.of<cd.ClassifiedResponse>(context).cityList;
 
     return ChangeNotifierProvider<OwnerClassifiedResponse>.value(
         value: Provider.of<OwnerClassifiedResponse>(context),
         child: Consumer<OwnerClassifiedResponse>(
           builder: (context, value, child) {
-            print('ownerClassifiedCategoryList Value : ' + categoryList.length.toString());
-            print('ownerClassifiedCategoryList Value : ' + value.cityList.length.toString());
+            print('ownerClassifiedCategoryList Value : ' +
+                categoryList.length.toString());
+            print('ownerClassifiedCategoryList Value : ' +
+                value.cityList.length.toString());
             _categoryListItems = <DropdownMenuItem<String>>[];
             for (int i = 0; i < categoryList.length; i++) {
               _categoryListItems.add(DropdownMenuItem(
@@ -154,8 +151,7 @@ class CreateClassifiedListingState
   getBaseLayout(OwnerClassifiedResponse value) {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 200.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
         getCreateClassifiedListingLayout(value),
       ],
     );
@@ -184,7 +180,8 @@ class CreateClassifiedListingState
                   onChanged: (value) {
                     setState(() {
                       _categorySelectedItem = value as String?;
-                      print('_categorySelectedItem : ' + _categorySelectedItem!);
+                      print(
+                          '_categorySelectedItem : ' + _categorySelectedItem!);
                     });
                   },
                   isExpanded: true,
@@ -194,10 +191,10 @@ class CreateClassifiedListingState
                   ),
                   underline: SizedBox(),
                   hint: text(
-                    AppLocalizations.of(context)
-                            .translate('select_category') +
+                    AppLocalizations.of(context).translate('select_category') +
                         "*",
-                    textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
+                    textColor: GlobalVariables.lightGray,
+                    fontSize: GlobalVariables.textSizeSMedium,
                   ),
                 ),
               ),
@@ -224,9 +221,9 @@ class CreateClassifiedListingState
                           _categoryItemTypeSelectedItem!);
                       if (_categoryItemTypeSelectedItem!.toLowerCase() ==
                           'giveaway') {
-                        _priceController.text='0.0';
-                      }else{
-                        _priceController.text='';
+                        _priceController.text = '0.0';
+                      } else {
+                        _priceController.text = '';
                       }
                     });
                   },
@@ -238,15 +235,15 @@ class CreateClassifiedListingState
                   underline: SizedBox(),
                   hint: text(
                     AppLocalizations.of(context).translate('i_want_to') + "*",
-                    textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
+                    textColor: GlobalVariables.lightGray,
+                    fontSize: GlobalVariables.textSizeSMedium,
                   ),
                 ),
               ),
             ),
             AppTextField(
               textHintContent:
-                  AppLocalizations.of(context).translate('title_selling') +
-                      "*",
+                  AppLocalizations.of(context).translate('title_selling') + "*",
               controllerCallback: _titleController,
               borderWidth: 2.0,
             ),
@@ -299,12 +296,11 @@ class CreateClassifiedListingState
                 Flexible(
                     child: AppTextField(
                   textHintContent:
-                      AppLocalizations.of(context).translate('pin_code') +
-                          "*",
+                      AppLocalizations.of(context).translate('pin_code') + "*",
                   controllerCallback: _pinCodeController,
                   borderWidth: 2.0,
                   keyboardType: TextInputType.number,
-                      maxLength: 6,
+                  maxLength: 6,
                 )),
                 SizedBox(
                   width: 5.0,
@@ -339,9 +335,9 @@ class CreateClassifiedListingState
                         ),
                         underline: SizedBox(),
                         hint: text(
-                          AppLocalizations.of(context).translate('city') +
-                              "*",
-                          textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
+                          AppLocalizations.of(context).translate('city') + "*",
+                          textColor: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium,
                         ),
                       ),
                     ),
@@ -374,7 +370,8 @@ class CreateClassifiedListingState
                                 : GlobalVariables.transparent,
                             width: 2.0,
                           )),
-                      child: AppIcon(Icons.check, iconColor: GlobalVariables.white),
+                      child: AppIcon(Icons.check,
+                          iconColor: GlobalVariables.white),
                     ),
                   ),
                   Flexible(
@@ -384,8 +381,7 @@ class CreateClassifiedListingState
                           AppLocalizations.of(context)
                               .translate('add_visibility'),
                           textColor: GlobalVariables.black,
-                          fontSize: GlobalVariables.textSizeSMedium
-                      ),
+                          fontSize: GlobalVariables.textSizeSMedium),
                     ),
                   ),
                 ],
@@ -405,80 +401,78 @@ class CreateClassifiedListingState
                         color: GlobalVariables.transparent,
                         width: 3.0,
                       )),
-                  child: FlatButton.icon(
+                  child: TextButton.icon(
                       onPressed: () {
                         GlobalFunctions.getMultiFilePath(context).then((value) {
-
-                            if (value.length > 5) {
-                              GlobalFunctions.showToast(
-                                  'Can not upload more than 5 images');
+                          if (value.length > 5) {
+                            GlobalFunctions.showToast(
+                                'Can not upload more than 5 images');
+                          } else {
+                            if (imagesMap.length == 0) {
+                              imagesMap = value;
                             } else {
-                              if (imagesMap.length == 0) {
-                                imagesMap = value;
+                              if (imagesMap.length + value.length > 5) {
+                                GlobalFunctions.showToast(
+                                    'Can not upload more than 5 images');
                               } else {
-                                if (imagesMap.length + value.length > 5) {
-                                  GlobalFunctions.showToast(
-                                      'Can not upload more than 5 images');
-                                } else {
-                                  imagesMap.addAll(value);
-                                }
+                                imagesMap.addAll(value);
                               }
-                              imagePathList =
-                                  imagesMap.entries.map((e) => (e.value))
-                                      .toList();
-                              imagePathKeyList =
-                                  imagesMap.entries.map((e) => (e.key))
-                                      .toList();
-                           /*   print('imagesMap : ' + imagesMap.length.toString());
+                            }
+                            imagePathList = imagesMap.entries
+                                .map((e) => (e.value))
+                                .toList();
+                            imagePathKeyList =
+                                imagesMap.entries.map((e) => (e.key)).toList();
+                            /*   print('imagesMap : ' + imagesMap.length.toString());
                               print('imagePathList : ' + imagePathList.length.toString());
                               print('imagePathList : ' + imagePathList.toString());
                               print('imagePathKeyList : ' + imagePathKeyList.length.toString());*/
                             imgBinaryList = [];
-                              for (int i = 0; i < imagePathList.length; i++) {
+                            for (int i = 0; i < imagePathList.length; i++) {
                               GlobalFunctions.getAppDocumentDirectory()
-                                    .then((value) {
-                                 // print('cache file Path : ' + value.toString());
-                                  if(imagePathList[i]!=value.toString() +
-                                      '/' +
-                                      imagePathKeyList[i]){
-
-                                    GlobalFunctions.getFilePathOfCompressImage(
-                                        imagePathList[i],
-                                        value.toString() +
-                                            '/' +
-                                            imagePathKeyList[i])
-                                        .then((value) {
-                                      //  print('Cache file path : ' + value);
-
-                                      imgBinaryList.add(UploadImages(
-                                        imageName: imagePathKeyList[i],
-                                        imageBinaryString: GlobalFunctions.convertFileToString(
-                                            value),
-                                        isUploaded: true,
-                                      ));
-                                      print('imgBinaryList : ' + imgBinaryList.length.toString());
-                                      //  print('imgBinaryList : ' + imgBinaryList.toString());
-                                    });
-                                  }else{
-                                    imgBinaryList.add(UploadImages(
-                                      imageName: imagePathKeyList[i],
-                                      imageBinaryString: GlobalFunctions.convertFileToString(
+                                  .then((value) {
+                                // print('cache file Path : ' + value.toString());
+                                if (imagePathList[i] !=
+                                    value.toString() +
+                                        '/' +
+                                        imagePathKeyList[i]) {
+                                  GlobalFunctions.getFilePathOfCompressImage(
+                                          imagePathList[i],
                                           value.toString() +
                                               '/' +
-                                              imagePathKeyList[i]),
-                                      isUploaded: false,
+                                              imagePathKeyList[i])
+                                      .then((value) {
+                                    //  print('Cache file path : ' + value);
+
+                                    imgBinaryList.add(UploadImages(
+                                      imageName: imagePathKeyList[i],
+                                      imageBinaryString:
+                                          GlobalFunctions.convertFileToString(
+                                              value),
+                                      isUploaded: true,
                                     ));
-                                  }
-
-                                });
-                              }
-                              print('imgBinaryList : ' +
-                                  imgBinaryList.toString());
-                              setState(() {});
+                                    print('imgBinaryList : ' +
+                                        imgBinaryList.length.toString());
+                                    //  print('imgBinaryList : ' + imgBinaryList.toString());
+                                  });
+                                } else {
+                                  imgBinaryList.add(UploadImages(
+                                    imageName: imagePathKeyList[i],
+                                    imageBinaryString:
+                                        GlobalFunctions.convertFileToString(
+                                            value.toString() +
+                                                '/' +
+                                                imagePathKeyList[i]),
+                                    isUploaded: false,
+                                  ));
+                                }
+                              });
                             }
-
+                            print(
+                                'imgBinaryList : ' + imgBinaryList.toString());
+                            setState(() {});
+                          }
                         });
-
                       },
                       icon: AppIcon(
                         Icons.camera_alt,
@@ -489,11 +483,16 @@ class CreateClassifiedListingState
                         textColor: GlobalVariables.white,
                       )),
                 ),
-                SizedBox(width: 16,),
+                SizedBox(
+                  width: 16,
+                ),
                 Flexible(
                   child: Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: text('* select up-to 5 photos,',fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.grey,maxLine: 3)),
+                      child: text('* select up-to 5 photos,',
+                          fontSize: GlobalVariables.textSizeSmall,
+                          textColor: GlobalVariables.grey,
+                          maxLine: 3)),
                 ),
               ],
             ),
@@ -506,10 +505,9 @@ class CreateClassifiedListingState
                               scrollDirection: Axis.horizontal,
                               itemCount: imagesMap.length,
                               itemBuilder: (context, position) {
-
-                           //     print('imagesMap : ' + imagesMap.toString());
-                             //   print('imagePathList : ' + imagePathList.toString());
-                               // print('imagePathKeyList : ' + imagePathKeyList.toString());
+                                //     print('imagesMap : ' + imagesMap.toString());
+                                //   print('imagePathList : ' + imagePathList.toString());
+                                // print('imagePathKeyList : ' + imagePathKeyList.toString());
                                 return GestureDetector(
                                   onLongPress: () {
                                     showModalBottomSheet(
@@ -530,36 +528,35 @@ class CreateClassifiedListingState
                                                         .transparent),
                                                 child: InkWell(
                                                     onTap: () {
-                                                      if(!widget.isEdit) {
+                                                      if (!widget.isEdit) {
                                                         imagesMap.remove(
-                                                            imagePathKeyList[position]);
+                                                            imagePathKeyList[
+                                                                position]);
                                                         imagePathList
-                                                            .removeAt(
-                                                            position);
+                                                            .removeAt(position);
                                                         imagePathKeyList
-                                                            .removeAt(
-                                                            position);
+                                                            .removeAt(position);
                                                         Navigator.of(context)
                                                             .pop();
                                                         setState(() {
-                                                          print(
-                                                              'imagesMap : ' +
-                                                                  imagesMap
-                                                                      .length
-                                                                      .toString());
-                                                          print(
-                                                              'imagePathList : ' +
-                                                                  imagePathList
-                                                                      .length
-                                                                      .toString());
-                                                          print(
-                                                              'imagePathKeyList : ' +
-                                                                  imagePathKeyList
-                                                                      .length
-                                                                      .toString());
+                                                          print('imagesMap : ' +
+                                                              imagesMap.length
+                                                                  .toString());
+                                                          print('imagePathList : ' +
+                                                              imagePathList
+                                                                  .length
+                                                                  .toString());
+                                                          print('imagePathKeyList : ' +
+                                                              imagePathKeyList
+                                                                  .length
+                                                                  .toString());
                                                         });
-                                                      }else{
-                                                        for(int i=0;i<imgBinaryList.length;i++){
+                                                      } else {
+                                                        for (int i = 0;
+                                                            i <
+                                                                imgBinaryList
+                                                                    .length;
+                                                            i++) {
                                                           if (imgBinaryList[i]
                                                               .isUploaded!) {
                                                             if (imgBinaryList[i]
@@ -568,12 +565,12 @@ class CreateClassifiedListingState
                                                                     position]) {
                                                               _progressDialog!
                                                                   .show();
-                                                              Provider.of<
-                                                                  OwnerClassifiedResponse>(
-                                                                  context,
-                                                                  listen: false)
+                                                              Provider.of<OwnerClassifiedResponse>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
                                                                   .deleteClassifiedImage(
-                                                                  widget
+                                                                      widget
                                                                           .classified!
                                                                           .id!,
                                                                       imgBinaryList[
@@ -587,43 +584,39 @@ class CreateClassifiedListingState
                                                                 setState(() {
                                                                   if (value
                                                                       .status!) {
-                                                                    imagesMap
-                                                                        .remove(
-                                                                        imagePathKeyList[position]);
+                                                                    imagesMap.remove(
+                                                                        imagePathKeyList[
+                                                                            position]);
                                                                     imagePathList
                                                                         .removeAt(
-                                                                        position);
+                                                                            position);
                                                                     imagePathKeyList
                                                                         .removeAt(
-                                                                        position);
+                                                                            position);
                                                                     imgBinaryList
                                                                         .removeAt(
-                                                                        i);
-                                                                    Navigator
-                                                                        .of(
-                                                                        context)
+                                                                            i);
+                                                                    Navigator.of(
+                                                                            context)
                                                                         .pop();
-                                                                    setState(() {
-                                                                      print(
-                                                                          'imagesMap : ' +
-                                                                              imagesMap
-                                                                                  .length
-                                                                                  .toString());
-                                                                      print(
-                                                                          'imagePathList : ' +
-                                                                              imagePathList
-                                                                                  .length
-                                                                                  .toString());
-                                                                      print(
-                                                                          'imagePathKeyList : ' +
-                                                                              imagePathKeyList
-                                                                                  .length
-                                                                                  .toString());
-                                                                      print(
-                                                                          'imgBinaryList : ' +
-                                                                              imgBinaryList
-                                                                                  .length
-                                                                                  .toString());
+                                                                    setState(
+                                                                        () {
+                                                                      print('imagesMap : ' +
+                                                                          imagesMap
+                                                                              .length
+                                                                              .toString());
+                                                                      print('imagePathList : ' +
+                                                                          imagePathList
+                                                                              .length
+                                                                              .toString());
+                                                                      print('imagePathKeyList : ' +
+                                                                          imagePathKeyList
+                                                                              .length
+                                                                              .toString());
+                                                                      print('imgBinaryList : ' +
+                                                                          imgBinaryList
+                                                                              .length
+                                                                              .toString());
                                                                     });
                                                                   }
                                                                   GlobalFunctions
@@ -635,15 +628,15 @@ class CreateClassifiedListingState
                                                               break;
                                                             }
                                                           }
-
                                                         }
                                                       }
                                                     },
                                                     child: AppIcon(
                                                       Icons.delete,
-                                                      iconSize: GlobalVariables.textSizeLarge,
-                                                      iconColor: GlobalVariables
-                                                          .white,
+                                                      iconSize: GlobalVariables
+                                                          .textSizeLarge,
+                                                      iconColor:
+                                                          GlobalVariables.white,
                                                     )),
                                               ),
                                             ],
@@ -773,118 +766,120 @@ class CreateClassifiedListingState
   }
 
   void verifyData(OwnerClassifiedResponse value) {
+    //  print('verifyData imgBinaryList : ' + imgBinaryList.toString());
+    //  print('imagesMap : ' + imagesMap.toString());
+    // print('imagePathList : ' + imagePathList.toString());
+    // print('imagePathKeyList : ' + imagePathKeyList.toString());
 
-  //  print('verifyData imgBinaryList : ' + imgBinaryList.toString());
-  //  print('imagesMap : ' + imagesMap.toString());
-   // print('imagePathList : ' + imagePathList.toString());
-   // print('imagePathKeyList : ' + imagePathKeyList.toString());
-
-    for(int i=0;i<imgBinaryList.length;i++){
-      if(!widget.isEdit) {
+    for (int i = 0; i < imgBinaryList.length; i++) {
+      if (!widget.isEdit) {
         uploadingImgBinaryList.add(imgBinaryList[i].imageBinaryString!);
-      }else{
+      } else {
         if (imgBinaryList[i].isUploaded!) {
           uploadingImgBinaryList.add(imgBinaryList[i].imageBinaryString!);
         }
       }
     }
-    print('verifyData imgBinaryList.length : ' + imgBinaryList.length.toString());
-    print('verifyData uploadingImgBinaryList.length : ' + uploadingImgBinaryList.length.toString());
+    print(
+        'verifyData imgBinaryList.length : ' + imgBinaryList.length.toString());
+    print('verifyData uploadingImgBinaryList.length : ' +
+        uploadingImgBinaryList.length.toString());
 
     if (_categorySelectedItem != null) {
       if (_categoryItemTypeSelectedItem != null) {
         if (_titleController.text.length > 0) {
           if (_descriptionController.text.length > 0) {
-           // if (_propertyController.text.length > 0) {
-              if (_priceController.text.length > 0) {
-                if (_addressController.text.length > 0) {
-                  if (_localityController.text.length > 0) {
-                    if (_cityItemSelectedItem != null) {
-                      if (_pinCodeController.text.length > 0) {
-                        if (imgBinaryList.length > 0) {
+            // if (_propertyController.text.length > 0) {
+            if (_priceController.text.length > 0) {
+              if (_addressController.text.length > 0) {
+                if (_localityController.text.length > 0) {
+                  if (_cityItemSelectedItem != null) {
+                    if (_pinCodeController.text.length > 0) {
+                      if (imgBinaryList.length > 0) {
                         _progressDialog!.show();
-                          if(!widget.isEdit) {
-                            Provider.of<OwnerClassifiedResponse>(context,
-                                listen: false)
-                                .insertClassifiedData(
-                                name,
-                                mail,
-                                mobile,
+                        if (!widget.isEdit) {
+                          Provider.of<OwnerClassifiedResponse>(context,
+                                  listen: false)
+                              .insertClassifiedData(
+                                  name,
+                                  mail,
+                                  mobile,
                                   _categorySelectedItem!,
                                   _categoryItemTypeSelectedItem!,
-                                _titleController.text,
-                                _descriptionController.text,
-                                //_propertyController.text,
-                                double.parse(_priceController.text)
-                                    .toStringAsFixed(2),
-                                _localityController.text,
+                                  _titleController.text,
+                                  _descriptionController.text,
+                                  //_propertyController.text,
+                                  double.parse(_priceController.text)
+                                      .toStringAsFixed(2),
+                                  _localityController.text,
                                   _cityItemSelectedItem!,
-                                uploadingImgBinaryList,
-                                _addressController.text,
-                                _pinCodeController.text,visibilityPriority)
-                                .then((value) {
-                              // print('insert value : '+ value.toString());
-                              // print('insert value : '+ value.status.toString());
-                              // print('insert value : '+ value.message.toString());
+                                  uploadingImgBinaryList,
+                                  _addressController.text,
+                                  _pinCodeController.text,
+                                  visibilityPriority)
+                              .then((value) {
+                            // print('insert value : '+ value.toString());
+                            // print('insert value : '+ value.status.toString());
+                            // print('insert value : '+ value.message.toString());
                             GlobalFunctions.showToast(value.message!);
                             _progressDialog!.dismiss();
                             if (value.status!) {
-                                Navigator.of(context).pop();
-                              }
-                            });
-                          }else{
-                            Provider.of<OwnerClassifiedResponse>(context,
-                                listen: false)
-                                .updateClassifiedData(
-                                  widget.classified!.id!,
-                                name,
-                                mail,
-                                mobile,
-                                  _categorySelectedItem!,
-                                  _categoryItemTypeSelectedItem!,
-                                _titleController.text,
-                                _descriptionController.text,
-                                //_propertyController.text,
-                                double.parse(_priceController.text).toStringAsFixed(2),
-                                _localityController.text,
-                                  _cityItemSelectedItem!,
-                                uploadingImgBinaryList,
-                                _addressController.text,
-                                _pinCodeController.text,visibilityPriority)
-                                .then((value) {
-                              // print('insert value : '+ value.toString());
-                              // print('insert value : '+ value.status.toString());
-                              // print('insert value : '+ value.message.toString());
-                            GlobalFunctions.showToast(value.message!);
-                            _progressDialog!.dismiss();
-                            if (value.status!) {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
-                                setState(() {
-
-                                });
-                              }
-                            });
-                          }
+                              Navigator.of(context).pop();
+                            }
+                          });
                         } else {
-                          GlobalFunctions.showToast(
-                              "Please select at least one Photo");
+                          Provider.of<OwnerClassifiedResponse>(context,
+                                  listen: false)
+                              .updateClassifiedData(
+                                  widget.classified!.id!,
+                                  name,
+                                  mail,
+                                  mobile,
+                                  _categorySelectedItem!,
+                                  _categoryItemTypeSelectedItem!,
+                                  _titleController.text,
+                                  _descriptionController.text,
+                                  //_propertyController.text,
+                                  double.parse(_priceController.text)
+                                      .toStringAsFixed(2),
+                                  _localityController.text,
+                                  _cityItemSelectedItem!,
+                                  uploadingImgBinaryList,
+                                  _addressController.text,
+                                  _pinCodeController.text,
+                                  visibilityPriority)
+                              .then((value) {
+                            // print('insert value : '+ value.toString());
+                            // print('insert value : '+ value.status.toString());
+                            // print('insert value : '+ value.message.toString());
+                            GlobalFunctions.showToast(value.message!);
+                            _progressDialog!.dismiss();
+                            if (value.status!) {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              setState(() {});
+                            }
+                          });
                         }
                       } else {
-                        GlobalFunctions.showToast("Please Enter PinCode");
+                        GlobalFunctions.showToast(
+                            "Please select at least one Photo");
                       }
                     } else {
-                      GlobalFunctions.showToast("Please Enter City");
+                      GlobalFunctions.showToast("Please Enter PinCode");
                     }
                   } else {
-                    GlobalFunctions.showToast("Please Enter Address");
+                    GlobalFunctions.showToast("Please Enter City");
                   }
                 } else {
-                  GlobalFunctions.showToast("Please Enter Locality");
+                  GlobalFunctions.showToast("Please Enter Address");
                 }
               } else {
-                GlobalFunctions.showToast("Please Enter Price");
+                GlobalFunctions.showToast("Please Enter Locality");
               }
+            } else {
+              GlobalFunctions.showToast("Please Enter Price");
+            }
             /*} else {
               GlobalFunctions.showToast("Please Enter Property Details");
             }*/
@@ -903,40 +898,36 @@ class CreateClassifiedListingState
   }
 
   Future<void> getImagesFromNetwork() async {
-
-    List<ClassifiedImage>   imageList = List<ClassifiedImage>.from(
+    List<ClassifiedImage> imageList = List<ClassifiedImage>.from(
         widget.classified!.Images.map((i) => ClassifiedImage.fromJson(i)));
 //    print('imageList : '+imageList.length.toString());
-    for(int i=0;i<imageList.length;i++){
+    for (int i = 0; i < imageList.length; i++) {
       String imageUrl = imageList[i].Img_Name!;
       final response = await http.get(Uri.parse(imageUrl));
       Directory tempDir = await getTemporaryDirectory();
       String imageName = imageList[i]
           .Img_Name!
           .substring(imageUrl.lastIndexOf('/') + 1, imageUrl.length);
-      final file = File(tempDir.path+'/'+imageName);
- //     print('imagePath : '+ tempDir.path+''+imageName);
+      final file = File(tempDir.path + '/' + imageName);
+      //     print('imagePath : '+ tempDir.path+''+imageName);
       file.writeAsBytesSync(response.bodyBytes);
-      imagesMap[imageName]=tempDir.path+'/'+imageName;
+      imagesMap[imageName] = tempDir.path + '/' + imageName;
     }
 //    print('imageMap : '+ imagesMap.toString());
-    imagePathList =
-        imagesMap.entries.map((e) => (e.value)).toList();
-    imagePathKeyList =
-        imagesMap.entries.map((e) => (e.key)).toList();
-  //  print('imagePathList : ' + imagePathList.toString());
-  //  print('imagePathKeyList : ' + imagePathKeyList.toString());
+    imagePathList = imagesMap.entries.map((e) => (e.value)).toList();
+    imagePathKeyList = imagesMap.entries.map((e) => (e.key)).toList();
+    //  print('imagePathList : ' + imagePathList.toString());
+    //  print('imagePathKeyList : ' + imagePathKeyList.toString());
     imgBinaryList = [];
     for (int i = 0; i < imagePathList.length; i++) {
       GlobalFunctions.getAppDocumentDirectory().then((value) {
-       // print('cache file Path : ' + value.toString());
+        // print('cache file Path : ' + value.toString());
         imgBinaryList.add(UploadImages(
-          imageName: imagePathKeyList[i],
-          imageBinaryString: GlobalFunctions.convertFileToString(
-              value.toString() + '/' + imagePathKeyList[i]),
-          isUploaded: true,
-          imageID: imageList[i].Id
-        ));
+            imageName: imagePathKeyList[i],
+            imageBinaryString: GlobalFunctions.convertFileToString(
+                value.toString() + '/' + imagePathKeyList[i]),
+            isUploaded: true,
+            imageID: imageList[i].Id));
         /*GlobalFunctions.getFilePathOfCompressImage(imagePathList[i], value.toString() + '/' + imagePathKeyList[i])
             .then((value) {
         //  print('Cache file path : ' + value);
@@ -946,9 +937,8 @@ class CreateClassifiedListingState
         });*/
       });
     }
-  //  print('imgBinaryList : ' + imgBinaryList.length.toString());
-   // print('imgBinaryList : ' + imgBinaryList.toString());
+    //  print('imgBinaryList : ' + imgBinaryList.length.toString());
+    // print('imgBinaryList : ' + imgBinaryList.toString());
     setState(() {});
-
   }
 }

@@ -7,7 +7,6 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/gatepass_dialog.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
-import 'package:societyrun/main.dart';
 
 class FirebaseMessagingHandler {
   late final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;

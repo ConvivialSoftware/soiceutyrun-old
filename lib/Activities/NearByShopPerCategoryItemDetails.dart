@@ -2,24 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 //import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
-import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NearByShopPerCategoryItemDetails extends StatefulWidget {
-
   NearByShop nearByShopList;
   NearByShopPerCategoryItemDetails(this.nearByShopList);
 
@@ -30,12 +25,11 @@ class NearByShopPerCategoryItemDetails extends StatefulWidget {
 
 class NearByShopPerCategoryItemDetailsState
     extends State<NearByShopPerCategoryItemDetails> {
-
   var width, height;
 
-  List<NearByShopOfferDetails> offerDetailsList=<NearByShopOfferDetails>[];
-  List<NearByShopTermsCondition> termsConditionList=<NearByShopTermsCondition>[];
-
+  List<NearByShopOfferDetails> offerDetailsList = <NearByShopOfferDetails>[];
+  List<NearByShopTermsCondition> termsConditionList =
+      <NearByShopTermsCondition>[];
 
   @override
   void dispose() {
@@ -45,8 +39,12 @@ class NearByShopPerCategoryItemDetailsState
   @override
   void initState() {
     super.initState();
-    offerDetailsList = List<NearByShopOfferDetails>.from(widget.nearByShopList.offer_details.map((i) => NearByShopOfferDetails.fromJson(i)));
-    termsConditionList = List<NearByShopTermsCondition>.from(widget.nearByShopList.terms_condition.map((i) => NearByShopTermsCondition.fromJson(i)));
+    offerDetailsList = List<NearByShopOfferDetails>.from(widget
+        .nearByShopList.offer_details
+        .map((i) => NearByShopOfferDetails.fromJson(i)));
+    termsConditionList = List<NearByShopTermsCondition>.from(widget
+        .nearByShopList.terms_condition
+        .map((i) => NearByShopTermsCondition.fromJson(i)));
   }
 
   @override
@@ -65,7 +63,7 @@ class NearByShopPerCategoryItemDetailsState
     );
   }
 
-  getBaseLayout(){
+  getBaseLayout() {
     return Container(
       decoration: BoxDecoration(
         color: Color(int.parse(widget.nearByShopList.card_bg!)),
@@ -90,20 +88,18 @@ class NearByShopPerCategoryItemDetailsState
                               children: [
                                 Container(
                                   alignment: Alignment.topRight,
-                                  margin: EdgeInsets.only(top: 16,),
+                                  margin: EdgeInsets.only(
+                                    top: 16,
+                                  ),
                                   padding: EdgeInsets.only(
-                                      left: 10,
-                                      right: 10,
-                                      top: 2,
-                                      bottom: 2),
+                                      left: 10, right: 10, top: 2, bottom: 2),
                                   decoration: boxDecoration(
                                       bgColor: GlobalVariables.white,
                                       radius: 5),
                                   child: text(
                                     'Till ' +
                                         GlobalFunctions.convertDateFormat(
-                                            widget
-                                                .nearByShopList.exp_date!,
+                                            widget.nearByShopList.exp_date!,
                                             'dd-MMM-yyyy'),
                                     fontSize: GlobalVariables.textSizeSmall,
                                   ),
@@ -112,7 +108,7 @@ class NearByShopPerCategoryItemDetailsState
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 8),
-                             // padding: ,
+                              // padding: ,
                               child: AppNetworkImage(
                                 widget.nearByShopList.Img_Name,
                                 imageWidth: width,
@@ -128,8 +124,7 @@ class NearByShopPerCategoryItemDetailsState
                             Container(
                               width: double.infinity,
                               decoration: boxDecoration(
-                                  radius: 10,
-                                  bgColor: GlobalVariables.white),
+                                  radius: 10, bgColor: GlobalVariables.white),
                               padding: EdgeInsets.all(16),
                               child: Stack(
                                 children: <Widget>[
@@ -143,28 +138,26 @@ class NearByShopPerCategoryItemDetailsState
                                               top: 8 /*,left: 16*/),
                                           alignment: Alignment.center,
                                           child: primaryText(
-                                              widget.nearByShopList
-                                                  .vendor_shop,
-                                             /* textColor:
+                                            widget.nearByShopList.vendor_shop,
+                                            /* textColor:
                                                   GlobalVariables.black,
                                               fontWeight: FontWeight.w500,
                                               fontSize: GlobalVariables
                                                   .textSizeLargeMedium,
-                                              maxLine: 2*/),
+                                              maxLine: 2*/
+                                          ),
                                         ),
                                         Divider(),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: primaryText(
-                                                  widget.nearByShopList
-                                                      .Title,
-                                                  /*textColor:
+                                                widget.nearByShopList.Title,
+                                                /*textColor:
                                                       GlobalVariables
                                                           .green,
                                                   fontWeight:
@@ -172,28 +165,33 @@ class NearByShopPerCategoryItemDetailsState
                                                   fontSize:
                                                       GlobalVariables
                                                           .textSizeMedium,
-                                                  maxLine: 4*/),
+                                                  maxLine: 4*/
+                                              ),
                                             ),
                                             SizedBox(
                                               width: 16,
                                             ),
                                             InkWell(
-                                              onTap: (){
-
-                                                launch("tel://" +  widget.nearByShopList.vendor_mobile!);
+                                              onTap: () {
+                                                launch("tel://" +
+                                                    widget.nearByShopList
+                                                        .vendor_mobile!);
                                               },
                                               child: Container(
                                                 margin: EdgeInsets.only(top: 8),
-                                                child:AppIcon(Icons.call,
-                                                  iconSize: GlobalVariables.textSizeNormal,
-                                                  iconColor: GlobalVariables.primaryColor,
+                                                child: AppIcon(
+                                                  Icons.call,
+                                                  iconSize: GlobalVariables
+                                                      .textSizeNormal,
+                                                  iconColor: GlobalVariables
+                                                      .primaryColor,
                                                 ),
                                               ),
                                             ),
-                                           /* SizedBox(
+                                            /* SizedBox(
                                               width: 16,
                                             ),*/
-                                           /* Container(
+                                            /* Container(
                                               margin:
                                                   EdgeInsets.only(top: 8),
                                               child: Icon(
@@ -212,14 +210,17 @@ class NearByShopPerCategoryItemDetailsState
                                           height: 8,
                                         ),
                                         secondaryText(
-                                            widget.nearByShopList
-                                                .short_description,),
+                                          widget
+                                              .nearByShopList.short_description,
+                                        ),
                                         SizedBox(
                                           height: 16,
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                                 child: Container(
@@ -233,9 +234,9 @@ class NearByShopPerCategoryItemDetailsState
                                                   ),
                                                   Flexible(
                                                       child: secondaryText(
-                                                          widget
-                                                              .nearByShopList
-                                                              .Location,)),
+                                                    widget.nearByShopList
+                                                        .Location,
+                                                  )),
                                                   SizedBox(
                                                     width: 8,
                                                   ),
@@ -255,25 +256,20 @@ class NearByShopPerCategoryItemDetailsState
                                     decoration: BoxDecoration(
                                         color: GlobalVariables.white,
                                         border: Border.all(
-                                            color:
-                                                GlobalVariables.lightGray,
+                                            color: GlobalVariables.lightGray,
                                             width: 2.0),
                                         shape: BoxShape.circle),
                                     child: new CircleAvatar(
-                                      backgroundColor: Color(int.parse(
-                                          widget.nearByShopList
-                                              .vendor_logo_bg!)),
+                                      backgroundColor: Color(int.parse(widget
+                                          .nearByShopList.vendor_logo_bg!)),
                                       child: Container(
                                           //margin: EdgeInsets.only(top: 8),
                                           alignment: Alignment.center,
                                           padding: EdgeInsets.only(
-                                              left: 16,
-                                              right: 16,
-                                              top: 16),
+                                              left: 16, right: 16, top: 16),
                                           child: CachedNetworkImage(
                                             imageUrl: widget
-                                                .nearByShopList
-                                                .vendor_logo!,
+                                                .nearByShopList.vendor_logo!,
                                           )),
                                       radius: 50,
                                     ),
@@ -284,26 +280,27 @@ class NearByShopPerCategoryItemDetailsState
                             SizedBox(
                               height: 16,
                             ),
-                            offerDetailsList.length>0 ? Container(
-                              decoration: boxDecoration(radius: 10),
-                              padding: EdgeInsets.all(16),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    child: primaryText(
-                                      AppLocalizations.of(context)
-                                          .translate('offer_details'),
-                                     /* textColor: GlobalVariables.green,
+                            offerDetailsList.length > 0
+                                ? Container(
+                                    decoration: boxDecoration(radius: 10),
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          child: primaryText(
+                                            AppLocalizations.of(context)
+                                                .translate('offer_details'),
+                                            /* textColor: GlobalVariables.green,
                                       fontWeight: FontWeight.w500,
                                       fontSize:«
                                           GlobalVariables.textSizeMedium,*/
-                                    ),
-                                    alignment: Alignment.topLeft,
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  /*Container(
+                                          ),
+                                          alignment: Alignment.topLeft,
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        /*Container(
                                    // margin: EdgeInsets.only(left: 10),
                                     child: htmlText("""
     <!--For a much more extensive example, look at example/main.dart-->
@@ -324,138 +321,145 @@ class NearByShopPerCategoryItemDetailsState
                                         maxLine: 99,
                                         textColor: GlobalVariables.grey),
                                   ),*/
-                                  Builder(
-                                      builder: (context) => ListView.builder(
-                                        physics:
-                                        const NeverScrollableScrollPhysics(),
-                                        itemCount: offerDetailsList.length,
-                                        itemBuilder: (context, position) {
-                                          return Container(
-                                            margin:
-                                            EdgeInsets.only(left: 10),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
-                                                  children: [
-                                                    Container(
-                                                      margin:
-                                                      EdgeInsets.only(
-                                                          top: 8),
-                                                      width: 8,
-                                                      height: 8,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                          GlobalVariables
-                                                              .primaryColor,
-                                                          shape: BoxShape
-                                                              .circle),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Flexible(
-                                                        child: Container(
-                                                            child: text(
-                                                                offerDetailsList[position].Description,
-                                                                fontSize:
-                                                                GlobalVariables.textSizeSMedium,
-                                                                maxLine: 99,
-                                                                textColor:
-                                                                GlobalVariables
-                                                                    .grey))),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 32,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                        //  scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                      )),
-                                ],
-                              ),
-                            ) : SizedBox(),
+                                        Builder(
+                                            builder:
+                                                (context) => ListView.builder(
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount:
+                                                          offerDetailsList
+                                                              .length,
+                                                      itemBuilder:
+                                                          (context, position) {
+                                                        return Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                8),
+                                                                    width: 8,
+                                                                    height: 8,
+                                                                    decoration: BoxDecoration(
+                                                                        color: GlobalVariables
+                                                                            .primaryColor,
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Flexible(
+                                                                      child: Container(
+                                                                          child: text(
+                                                                              offerDetailsList[position].Description,
+                                                                              fontSize: GlobalVariables.textSizeSMedium,
+                                                                              maxLine: 99,
+                                                                              textColor: GlobalVariables.grey))),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                height: 32,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                      //  scrollDirection: Axis.vertical,
+                                                      shrinkWrap: true,
+                                                    )),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(),
                             SizedBox(
                               height: 16,
                             ),
-                            termsConditionList.length>0 ? Container(
-                              decoration: boxDecoration(radius: 10),
-                              padding: EdgeInsets.all(16),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    child: primaryText(
-                                      AppLocalizations.of(context)
-                                          .translate('terms_conn'),
+                            termsConditionList.length > 0
+                                ? Container(
+                                    decoration: boxDecoration(radius: 10),
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          child: primaryText(
+                                            AppLocalizations.of(context)
+                                                .translate('terms_conn'),
+                                          ),
+                                          alignment: Alignment.topLeft,
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Builder(
+                                            builder:
+                                                (context) => ListView.builder(
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount:
+                                                          termsConditionList
+                                                              .length,
+                                                      itemBuilder:
+                                                          (context, position) {
+                                                        return Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                8),
+                                                                    width: 8,
+                                                                    height: 8,
+                                                                    decoration: BoxDecoration(
+                                                                        color: GlobalVariables
+                                                                            .primaryColor,
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Flexible(
+                                                                      child: Container(
+                                                                          child: text(
+                                                                              termsConditionList[position].Description,
+                                                                              fontSize: GlobalVariables.textSizeSMedium,
+                                                                              maxLine: 99,
+                                                                              textColor: GlobalVariables.grey))),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                height: 32,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                      //  scrollDirection: Axis.vertical,
+                                                      shrinkWrap: true,
+                                                    )),
+                                      ],
                                     ),
-                                    alignment: Alignment.topLeft,
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Builder(
-                                      builder:
-                                          (context) => ListView.builder(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount: termsConditionList.length,
-                                                itemBuilder:
-                                                    (context, position) {
-                                                  return Container(
-                                                    margin:
-                                                        EdgeInsets.only(
-                                                            left: 10),
-                                                    child: Column(
-                                                      children: [
-                                                        Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .only(
-                                                                      top:
-                                                                          8),
-                                                              width: 8,
-                                                              height: 8,
-                                                              decoration: BoxDecoration(
-                                                                  color: GlobalVariables
-                                                                      .primaryColor,
-                                                                  shape: BoxShape
-                                                                      .circle),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 8,
-                                                            ),
-                                                            Flexible(
-                                                                child: Container(
-                                                                    child: text(
-                                                                        termsConditionList[position].Description,
-                                                                        fontSize: GlobalVariables.textSizeSMedium,
-                                                                        maxLine: 99,
-                                                                        textColor: GlobalVariables.grey))),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 32,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                                //  scrollDirection: Axis.vertical,
-                                                shrinkWrap: true,
-                                              )),
-                                ],
-                              ),
-                            ):SizedBox(),
+                                  )
+                                : SizedBox(),
                           ],
                         ),
                       ],
@@ -471,16 +475,16 @@ class NearByShopPerCategoryItemDetailsState
               width: width,
               margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
               child: AppButton(
-                textContent: widget
-                    .nearByShopList.Offer_Code!.isNotEmpty ? "Get Code": "Enquiry Now",
+                textContent: widget.nearByShopList.Offer_Code!.isNotEmpty
+                    ? "Get Code"
+                    : "Enquiry Now",
                 onPressed: () {
                   insertUserInfoOnExclusiveGetCode();
-                 if( widget
-                      .nearByShopList.Offer_Code!.isNotEmpty){
-                   showBottomSheet() ;
-                 }else{
-                   launch(widget.nearByShopList.redeem!);
-                 }
+                  if (widget.nearByShopList.Offer_Code!.isNotEmpty) {
+                    showBottomSheet();
+                  } else {
+                    launch(widget.nearByShopList.redeem!);
+                  }
                 },
                 textColor: GlobalVariables.white,
               ),
@@ -541,71 +545,75 @@ class NearByShopPerCategoryItemDetailsState
                         SizedBox(
                           height: 16,
                         ),
-                        widget
-                            .nearByShopList.Offer_Code!.isNotEmpty ? Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Flexible(
-                              flex: 6,
-                              child: DottedBorder(
-                                child: Container(
-                                  //decoration: boxDecoration(radius: 1.0,color: GlobalVariables.lightGray),
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                            padding: EdgeInsets.all(8),
-                                            child: text(
-                                                widget
-                                                    .nearByShopList.Offer_Code,
-                                                textColor:
-                                                    GlobalVariables.black,
-                                                fontSize: GlobalVariables.textSizeSMedium,
-                                                maxLine: 1,
-                                                fontWeight: FontWeight.w500)),
+                        widget.nearByShopList.Offer_Code!.isNotEmpty
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 6,
+                                    child: DottedBorder(
+                                      child: Container(
+                                        //decoration: boxDecoration(radius: 1.0,color: GlobalVariables.lightGray),
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: text(
+                                                      widget.nearByShopList
+                                                          .Offer_Code,
+                                                      textColor:
+                                                          GlobalVariables.black,
+                                                      fontSize: GlobalVariables
+                                                          .textSizeSMedium,
+                                                      maxLine: 1,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            InkWell(
+                                                onTap: () {
+                                                  FlutterClipboard.copy(widget
+                                                          .nearByShopList
+                                                          .Offer_Code!)
+                                                      .then((value) {
+                                                    GlobalFunctions.showToast(
+                                                        "Copied to Clipboard");
+                                                  });
+                                                },
+                                                child: AppIcon(
+                                                  Icons.content_copy,
+                                                  iconColor:
+                                                      GlobalVariables.skyBlue,
+                                                  iconSize: 24,
+                                                ))
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        width: 16,
-                                      ),
-                                      InkWell(
-                                          onTap: () {
-                                            FlutterClipboard.copy(
-                                                    widget.nearByShopList
-                                                        .Offer_Code!)
-                                                .then((value) {
-                                              GlobalFunctions.showToast(
-                                                  "Copied to Clipboard");
-                                            });
-                                          },
-                                          child: AppIcon(
-                                            Icons.content_copy,
-                                            iconColor: GlobalVariables.skyBlue,
-                                            iconSize: 24,
-                                          ))
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            /*Flexible(
+                                  /*Flexible(
                                 flex: 2,
                                 child: text('Copy',textColor: GlobalVariables.skyBlue,fontWeight: FontWeight.w500,fontSize: GlobalVariables.textSizeMedium)
                             )*/
-                          ],
-                        ):SizedBox(),
+                                ],
+                              )
+                            : SizedBox(),
                         SizedBox(
                           height: 16,
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          child: FlatButton(
+                          child: TextButton(
                               onPressed: () {
                                 launch(widget.nearByShopList.redeem!);
                               },
-                              color: GlobalVariables.primaryColor,
+                             
                               child: text('Redeem',
                                   textColor: GlobalVariables.white,
                                   fontSize: GlobalVariables.textSizeSMedium,
@@ -631,7 +639,7 @@ class NearByShopPerCategoryItemDetailsState
     String address = await GlobalFunctions.getSocietyAddress();
 
     Provider.of<NearByShopResponse>(context, listen: false)
-        .insertUserInfoOnExclusiveGetCode(
-            societyName, block + ' ' + flat, mobile, address,userName,societyId,widget.nearByShopList.Id);
+        .insertUserInfoOnExclusiveGetCode(societyName, block + ' ' + flat,
+            mobile, address, userName, societyId, widget.nearByShopList.Id);
   }
 }

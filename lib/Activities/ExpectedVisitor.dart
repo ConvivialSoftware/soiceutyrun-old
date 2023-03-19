@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:ndialog/ndialog.dart';
-import 'package:societyrun/Activities/Cab.dart';
-import 'package:societyrun/Activities/Delivery.dart';
-import 'package:societyrun/Activities/GuestOthers.dart';
-import 'package:societyrun/Activities/HomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
-import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
-import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
-import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
 
 class BaseExpectedVisitor extends StatefulWidget {
   @override

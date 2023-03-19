@@ -8,7 +8,6 @@ import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
 import 'package:societyrun/Activities/Feedback.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -118,10 +117,10 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: text(
-                  AppLocalizations.of(context)
-                      .translate('app_notification_settings'),
-                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500
-                ),
+                    AppLocalizations.of(context)
+                        .translate('app_notification_settings'),
+                    fontSize: GlobalVariables.textSizeMedium,
+                    fontWeight: FontWeight.w500),
               ),
             ),
             Container(
@@ -191,8 +190,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                 )
                               : AppNetworkImage(
                                   photo,
-                            imageWidth: 60.0,
-                            imageHeight: 60.0,
+                                  imageWidth: 60.0,
+                                  imageHeight: 60.0,
                                   borderColor: GlobalVariables.grey,
                                   borderWidth: 1.0,
                                   fit: BoxFit.cover,
@@ -206,13 +205,11 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                child: text(
-                                  name,
-
-                                      textColor: GlobalVariables.black,
-                                      fontSize: GlobalVariables.textSizeLargeMedium,
-                                      fontWeight: FontWeight.bold
-                                ),
+                                child: text(name,
+                                    textColor: GlobalVariables.black,
+                                    fontSize:
+                                        GlobalVariables.textSizeLargeMedium,
+                                    fontWeight: FontWeight.bold),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -223,23 +220,23 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                                       ', '
                                           '' +
                                       societyName,
-                                    fontSize: GlobalVariables.textSizeSMedium,
-                                    textColor: GlobalVariables.grey,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.grey,
                                 ),
                               ),
                               Container(
                                 child: text(
                                   email,
-                                    fontSize: GlobalVariables.textSizeSMedium,
-                                    textColor: GlobalVariables.grey,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.grey,
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                                 child: text(
                                   phone,
-                                    fontSize: GlobalVariables.textSizeSMedium,
-                                    textColor: GlobalVariables.grey,
+                                  fontSize: GlobalVariables.textSizeSMedium,
+                                  textColor: GlobalVariables.grey,
                                 ),
                               ),
                             ],
@@ -315,14 +312,14 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             child: Container(
               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: text(
-                block +
-                    ' ' +
-                    flat +
-                    ','
-                        '' +
-                    societyName,
-               fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500
-              ),
+                  block +
+                      ' ' +
+                      flat +
+                      ','
+                          '' +
+                      societyName,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           Container(
@@ -365,7 +362,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: text(
                   AppLocalizations.of(context).translate('change_password'),
-                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -408,10 +406,9 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: text(
-                  AppLocalizations.of(context).translate('about_us'),
-                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500
-                ),
+                child: text(AppLocalizations.of(context).translate('about_us'),
+                    fontSize: GlobalVariables.textSizeMedium,
+                    fontWeight: FontWeight.w500),
               ),
             ),
             Container(
@@ -455,7 +452,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: text(
                   AppLocalizations.of(context).translate('feedback'),
-                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -508,7 +506,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: text(
                   AppLocalizations.of(context).translate('logout'),
-                  fontSize: GlobalVariables.textSizeMedium, fontWeight: FontWeight.w500,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -557,8 +556,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                             AppLocalizations.of(context)
                                 .translate('terms_conn'),
                             //textAlign: TextAlign.left,
-                              fontSize: GlobalVariables.textSizeSMedium,
-                              textColor: GlobalVariables.primaryColor,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                            textColor: GlobalVariables.primaryColor,
                           ),
                         )),
                   ),
@@ -586,8 +585,8 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                           AppLocalizations.of(context)
                               .translate('privacy_statement'),
                           //textAlign: TextAlign.left,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                            textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeSMedium,
+                          textColor: GlobalVariables.primaryColor,
                         ),
                       )),
                 )
@@ -600,9 +599,9 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
                 onTap: () {},
                 child: text(
                   'Version ' + AppPackageInfo.version,
-                //  textAlign: TextAlign.left,
-                    fontSize: GlobalVariables.textSizeMedium,
-                    textColor: GlobalVariables.black,
+                  //  textAlign: TextAlign.left,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  textColor: GlobalVariables.black,
                 ),
               )),
         ],
@@ -618,11 +617,10 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: text(
-              AppLocalizations.of(context).translate('sure_logout'),
-                  fontSize: GlobalVariables.textSizeLargeMedium,
-                  textColor: GlobalVariables.black,
-                  fontWeight: FontWeight.bold),
+            child: text(AppLocalizations.of(context).translate('sure_logout'),
+                fontSize: GlobalVariables.textSizeLargeMedium,
+                textColor: GlobalVariables.black,
+                fontWeight: FontWeight.bold),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -630,29 +628,27 @@ class _BaseAppSettingsState extends State<BaseAppSettings> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        logout(context);
-                      },
-                      child: text(
-                        AppLocalizations.of(context).translate('yes'),
-                            textColor: GlobalVariables.primaryColor,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold),
-                      ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      logout(context);
+                    },
+                    child: text(AppLocalizations.of(context).translate('yes'),
+                        textColor: GlobalVariables.primaryColor,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Container(
-                  child: FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: text(
-                        AppLocalizations.of(context).translate('no'),
-                            textColor: GlobalVariables.primaryColor,
-                            fontSize: GlobalVariables.textSizeMedium,
-                            fontWeight: FontWeight.bold),
-                      ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: text(AppLocalizations.of(context).translate('no'),
+                        textColor: GlobalVariables.primaryColor,
+                        fontSize: GlobalVariables.textSizeMedium,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),

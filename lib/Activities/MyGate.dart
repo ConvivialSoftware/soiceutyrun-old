@@ -6,18 +6,12 @@ import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:html/parser.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/StaffCategory.dart';
-import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/Activities/StaffListPerCategory.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
-import 'package:societyrun/Models/ScheduleVisitor.dart';
-import 'package:societyrun/Models/Staff.dart';
-import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Models/Visitor.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
@@ -34,7 +28,8 @@ class BaseMyGate extends StatefulWidget {
   String type;
   bool isAdmin;
 
-  BaseMyGate(this.pageName, this._VID,{this.type="Helper",this.isAdmin=false});
+  BaseMyGate(this.pageName, this._VID,
+      {this.type = "Helper", this.isAdmin = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -218,8 +213,10 @@ class MyGateState extends State<BaseMyGate>
                     )),
           )
         : Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/5),
-      child: GlobalFunctions.noDataFoundLayout(context, "No Data Found"),);
+            margin:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
+            child: GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+          );
   }
 
   getStaffCategoryListItemLayout(int position, GatePass value) {
@@ -229,7 +226,10 @@ class MyGateState extends State<BaseMyGate>
               context,
               MaterialPageRoute(
                   builder: (context) => BaseStaffListPerCategory(
-                      value.staffListCount[position].ROLE!,widget.type,isAdmin: widget.isAdmin,)));
+                        value.staffListCount[position].ROLE!,
+                        widget.type,
+                        isAdmin: widget.isAdmin,
+                      )));
         },
         child: AppContainer(
           isListItem: true,
@@ -495,42 +495,46 @@ class MyGateState extends State<BaseMyGate>
 
   getActivitiesListDataLayout(GatePass value) {
     return SingleChildScrollView(
-      child: value.scheduleVisitorList.length>0 || value.visitorList.length>0 ? Column(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: value.scheduleVisitorList.length,
-                      itemBuilder: (context, position) {
-                        return getScheduleVisitorListItemLayout(
-                            position, value);
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 8, 0, 16),
-            child: Builder(
-                builder: (context) => ListView.builder(
-                      // scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: value.visitorList.length,
-                      itemBuilder: (context, position) {
-                        return getVisitorsListItemLayout(position, value);
-                      }, //  scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    )),
-          ),
-        ],
-      ) :
-      Container(
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
-        child: GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
-      )
-    );
+        child: value.scheduleVisitorList.length > 0 ||
+                value.visitorList.length > 0
+            ? Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                    child: Builder(
+                        builder: (context) => ListView.builder(
+                              // scrollDirection: Axis.vertical,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: value.scheduleVisitorList.length,
+                              itemBuilder: (context, position) {
+                                return getScheduleVisitorListItemLayout(
+                                    position, value);
+                              }, //  scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                            )),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 8, 0, 16),
+                    child: Builder(
+                        builder: (context) => ListView.builder(
+                              // scrollDirection: Axis.vertical,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: value.visitorList.length,
+                              itemBuilder: (context, position) {
+                                return getVisitorsListItemLayout(
+                                    position, value);
+                              }, //  scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                            )),
+                  ),
+                ],
+              )
+            : Container(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height / 3),
+                child:
+                    GlobalFunctions.noDataFoundLayout(context, "No Data Found"),
+              ));
   }
 
   getVisitorsListItemLayout(int position, GatePass value) {
@@ -814,9 +818,10 @@ class MyGateState extends State<BaseMyGate>
                         child: Align(
                           alignment: Alignment.center,
                           child: AppIconButton(Icons.call,
-                              iconColor: GlobalVariables.secondaryColor, onPressed: () {
-                            launch(
-                                'tel://' + value.visitorList[position].CONTACT!);
+                              iconColor: GlobalVariables.secondaryColor,
+                              onPressed: () {
+                            launch('tel://' +
+                                value.visitorList[position].CONTACT!);
                           }),
                         ),
                       ),
@@ -874,7 +879,7 @@ class MyGateState extends State<BaseMyGate>
                         borderRadius: BorderRadius.circular(10),
                         color: GlobalVariables.green,
                       ),
-                      child: FlatButton.icon(
+                      child: TextButton.icon(
                         onPressed: () {},
                         icon: AppIcon(
                           Icons.edit,
@@ -895,7 +900,7 @@ class MyGateState extends State<BaseMyGate>
                         borderRadius: BorderRadius.circular(10),
                         color: GlobalVariables.green,
                       ),
-                      child: FlatButton.icon(
+                      child: TextButton.icon(
                           onPressed: () {},
                           icon: AppIcon(
                             Icons.cancel,
@@ -1194,7 +1199,8 @@ class MyGateState extends State<BaseMyGate>
                       Icons.contacts,
                       iconColor: GlobalVariables.secondaryColor,
                       onPressed: () async {
-                        PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                        PhoneContact contact =
+                            await FlutterContactPicker.pickPhoneContact();
                         print('contact Name : ' + contact.fullName!);
                         print('contact Number : ' +
                             contact.phoneNumber.toString());
@@ -1210,7 +1216,10 @@ class MyGateState extends State<BaseMyGate>
                                             .toString()
                                             .indexOf('(') -
                                         1);*/
-                            String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
+                            String phoneNumber = contact.phoneNumber!.number!
+                                .trim()
+                                .toString()
+                                .replaceAll(" ", "");
                             _mobileController.text = phoneNumber.toString();
                             // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                           }
@@ -1396,7 +1405,7 @@ class MyGateState extends State<BaseMyGate>
     }
   }
 
-  displayPassCode(String pass_code, String userName, String googleParameter,
+  displayPassCode(String passCode, String userName, String googleParameter,
       String visitorName, String visitorContact, String visitorDate) {
     DateTime date = DateTime.now();
     String todayDate =
@@ -1422,7 +1431,7 @@ class MyGateState extends State<BaseMyGate>
         ' till' +
         ' 11: 59 PM. ' +
         'Please use ' +
-        pass_code +
+        passCode +
         ' as entry code at gate. ' +
         'Google coordinates : <a href=' +
         mapUrl +
@@ -1436,7 +1445,7 @@ class MyGateState extends State<BaseMyGate>
 
     String line1 = "Entry code created for";
     String line2 = visitorName;
-    String line3 = pass_code;
+    String line3 = passCode;
     String line4 =
         "Please tell this number at security gate hassle free entry at society";
     return Stack(
@@ -1682,7 +1691,8 @@ class MyGateState extends State<BaseMyGate>
                         visitorList[position].VISITOR_STATUS!.toLowerCase() ==
                                 'no-answer'
                             ? 'No-Answer'
-                            : visitorList[position].STATUS!.toLowerCase() == 'in'
+                            : visitorList[position].STATUS!.toLowerCase() ==
+                                    'in'
                                 ? 'Arrived'
                                 : 'Left',
                         textColor: GlobalVariables.white,
@@ -2039,7 +2049,7 @@ class MyGateState extends State<BaseMyGate>
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         addGatePassWrongEntry(position, value);
@@ -2052,7 +2062,7 @@ class MyGateState extends State<BaseMyGate>
                       )),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -2092,7 +2102,7 @@ class MyGateState extends State<BaseMyGate>
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         deleteExpectedVisitor(position, value);
@@ -2105,7 +2115,7 @@ class MyGateState extends State<BaseMyGate>
                       )),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

@@ -9,10 +9,8 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
-import 'package:societyrun/Widgets/AppWidget.dart';
 
 import 'DashBoard.dart';
-import 'base_stateful.dart';
 
 class BaseChangePassword extends StatefulWidget {
 

@@ -1,24 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/AddNearByShop.dart';
-import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
-import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/OwnerServices.dart';
 import 'package:societyrun/Activities/ServicesPerCategory.dart';
-import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
-import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'base_stateful.dart';
 
 class BaseFindServices extends StatefulWidget {
   @override

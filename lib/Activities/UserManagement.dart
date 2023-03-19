@@ -2,23 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/ActiveUser.dart';
 import 'package:societyrun/Activities/AddStaffMember.dart';
-import 'package:societyrun/Activities/Dues.dart';
 import 'package:societyrun/Activities/MemberPendingRequest.dart';
 import 'package:societyrun/Activities/MobileUser.dart';
 import 'package:societyrun/Activities/MoveOutRequest.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/RegisteredUnit.dart';
 import 'package:societyrun/Activities/RentalRequest.dart';
-import 'package:societyrun/Activities/Unit.dart';
 import 'package:societyrun/Activities/UnitDetails.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseUserManagement extends StatefulWidget {

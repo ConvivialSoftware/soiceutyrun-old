@@ -14,8 +14,6 @@ import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
-import 'base_stateful.dart';
 
 class BaseOwnerClassifiedListItemDesc extends StatefulWidget {
   Classified classifiedList;
@@ -40,7 +38,7 @@ class CreateClassifiedListingState
   bool isActivationClassified = false;
 
   ProgressDialog? _progressDialog;
-  bool isMenuEnable=true;
+  bool isMenuEnable = true;
 
   @override
   void initState() {
@@ -54,23 +52,16 @@ class CreateClassifiedListingState
         DateTime.now().toIso8601String(), widget.classifiedList.C_Date!);
     print('DaysCount : ' + inDaysCount.toString());
 
-    if (widget.classifiedList.Status!
-        .toLowerCase()
-        .trim() ==
-        'active'){
-      isMenuEnable=true;
-    }else if (widget.classifiedList.Status!
-        .toLowerCase()
-    .trim() ==
-    'active' &&
-    inDaysCount < 30){
-      isMenuEnable=true;
-    }else if (inDaysCount > 30){
-      isMenuEnable=true;
-    }else{
-      isMenuEnable=false;
+    if (widget.classifiedList.Status!.toLowerCase().trim() == 'active') {
+      isMenuEnable = true;
+    } else if (widget.classifiedList.Status!.toLowerCase().trim() == 'active' &&
+        inDaysCount < 30) {
+      isMenuEnable = true;
+    } else if (inDaysCount > 30) {
+      isMenuEnable = true;
+    } else {
+      isMenuEnable = false;
     }
-
   }
 
   @override
@@ -86,7 +77,10 @@ class CreateClassifiedListingState
               appBar: CustomAppBar(
                 actions: [
                   PopupMenuButton(
-                      icon: AppIcon(Icons.more_vert, iconColor: isMenuEnable ? GlobalVariables.white : GlobalVariables.transparent),
+                      icon: AppIcon(Icons.more_vert,
+                          iconColor: isMenuEnable
+                              ? GlobalVariables.white
+                              : GlobalVariables.transparent),
                       // add this line
                       itemBuilder: (_) => <PopupMenuItem<String>>[
                             if (widget.classifiedList.Status!
@@ -99,7 +93,8 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Remove",
                                           textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeSMedium)),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                   value: 'remove'),
                             if (widget.classifiedList.Status!
                                         .toLowerCase()
@@ -112,7 +107,8 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Edit",
                                           textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeSMedium)),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                   value: 'edit'),
                             if (inDaysCount > 30)
                               new PopupMenuItem<String>(
@@ -121,7 +117,8 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Activate This Ads",
                                           textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeSMedium)),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                   value: 'active'),
                           ],
                       onSelected: (index) async {
@@ -166,11 +163,11 @@ class CreateClassifiedListingState
                                                   AppLocalizations.of(context)
                                                       .translate(
                                                           'sure_active_ads'),
-                                                      fontSize: GlobalVariables.textSizeLargeMedium,
-                                                      textColor:
-                                                          GlobalVariables.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                  fontSize: GlobalVariables
+                                                      .textSizeLargeMedium,
+                                                  textColor:
+                                                      GlobalVariables.black,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               Container(
@@ -181,7 +178,7 @@ class CreateClassifiedListingState
                                                       MainAxisAlignment.end,
                                                   children: <Widget>[
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
@@ -212,17 +209,18 @@ class CreateClassifiedListingState
                                                                     context)
                                                                 .translate(
                                                                     'yes'),
-                                                                textColor:
-                                                                    GlobalVariables
-                                                                        .primaryColor,
-                                                                fontSize: GlobalVariables.textSizeMedium,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           )),
                                                     ),
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
@@ -233,13 +231,14 @@ class CreateClassifiedListingState
                                                                     context)
                                                                 .translate(
                                                                     'no'),
-                                          textColor:
-                                                                    GlobalVariables
-                                                                        .primaryColor,
-                                                                fontSize: GlobalVariables.textSizeMedium,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           )),
                                                     ),
                                                   ],
@@ -330,7 +329,7 @@ class CreateClassifiedListingState
                         _current = index;
                       });
                     }),
-                itemBuilder: (context, index,int item) {
+                itemBuilder: (context, index, int item) {
                   return Container(
                       margin: EdgeInsets.all(5.0),
                       child: ClipRRect(
@@ -338,40 +337,56 @@ class CreateClassifiedListingState
                           child: Stack(
                             children: <Widget>[
                               InkWell(
-                                onTap: (){
+                                onTap: () {
                                   print('show pic');
                                   showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => StatefulBuilder(
-                                          builder: (BuildContext context, StateSetter setState) {
+                                      builder: (BuildContext context) =>
+                                          StatefulBuilder(builder:
+                                              (BuildContext context,
+                                                  StateSetter setState) {
                                             return Dialog(
-                                              // backgroundColor: GlobalVariables.transparent,
+                                                // backgroundColor: GlobalVariables.transparent,
                                                 shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10.0)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0)),
                                                 child: Container(
                                                   // color: GlobalVariables.transparent,
                                                   padding: EdgeInsets.all(16),
-                                                  width: 300 ,
+                                                  width: 300,
                                                   height: 500,
                                                   child: CarouselSlider.builder(
-                                                    itemCount: imageList!.length,
+                                                    itemCount:
+                                                        imageList!.length,
                                                     options: CarouselOptions(
                                                         autoPlay: true,
-                                                        onPageChanged: (index, reason) {
+                                                        onPageChanged:
+                                                            (index, reason) {
                                                           setState(() {
                                                             _current = index;
                                                           });
                                                         }),
-                                                    itemBuilder: (context, index,item) {
+                                                    itemBuilder:
+                                                        (context, index, item) {
                                                       return Container(
-                                                          margin: EdgeInsets.all(5.0),
+                                                          margin:
+                                                              EdgeInsets.all(
+                                                                  5.0),
                                                           child: ClipRRect(
-                                                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5.0)),
                                                               child: Stack(
-                                                                children: <Widget>[
+                                                                children: <
+                                                                    Widget>[
                                                                   CachedNetworkImage(
-                                                                    imageUrl: imageList![index].Img_Name!,
-                                                                    fit: BoxFit.fill,
+                                                                    imageUrl: imageList![
+                                                                            index]
+                                                                        .Img_Name!,
+                                                                    fit: BoxFit
+                                                                        .fill,
                                                                   ),
                                                                 ],
                                                               )));
@@ -384,7 +399,8 @@ class CreateClassifiedListingState
                                     imageUrl: imageList![index].Img_Name!,
                                     fit: BoxFit.cover,
                                     width: 1000.0,
-                                    height: MediaQuery.of(context).size.width * 0.8),
+                                    height: MediaQuery.of(context).size.width *
+                                        0.8),
                               ),
                             ],
                           )));
@@ -457,7 +473,9 @@ class CreateClassifiedListingState
                         color: Colors.transparent,
                         borderRadius:
                         BorderRadius.all(Radius.circular(8))),*/
-                    child: text(/*'Rs. ' + NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(widget.classifiedList.Price))*/GlobalFunctions.getCurrencyFormat(widget.classifiedList.Price!),
+                    child: text(
+                        /*'Rs. ' + NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(widget.classifiedList.Price))*/ GlobalFunctions
+                            .getCurrencyFormat(widget.classifiedList.Price!),
                         textColor: GlobalVariables.black,
                         fontSize: GlobalVariables.textSizeNormal,
                         fontWeight: FontWeight.w500),
@@ -592,7 +610,9 @@ class CreateClassifiedListingState
                               ),
                               child: Row(
                                 children: <Widget>[
-                                  interestedList![position].Profile_Image!.isEmpty
+                                  interestedList![position]
+                                          .Profile_Image!
+                                          .isEmpty
                                       ? Image.asset(
                                           GlobalVariables
                                               .componentUserProfilePath,
@@ -620,7 +640,8 @@ class CreateClassifiedListingState
                                           text(
                                               interestedList![position]
                                                   .User_Name,
-                                              textColor: GlobalVariables.primaryColor,
+                                              textColor:
+                                                  GlobalVariables.primaryColor,
                                               fontWeight: FontWeight.bold,
                                               fontSize: GlobalVariables
                                                   .textSizeMedium,
@@ -704,7 +725,8 @@ class CreateClassifiedListingState
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          text(interestedList![position].Address,
+                                          text(
+                                              interestedList![position].Address,
                                               textColor: GlobalVariables.grey,
                                               fontWeight: FontWeight.bold,
                                               fontSize:
@@ -848,13 +870,14 @@ class CreateClassifiedListingState
                                                 ),
                                                 Flexible(
                                                   child: Container(
-                                                      margin:
-                                                          EdgeInsets.fromLTRB(
+                                                      margin: EdgeInsets
+                                                          .fromLTRB(
                                                               10, 0, 0, 0),
                                                       child: text(
                                                           _selectOptionList[
                                                               position],
-                                                          fontSize: GlobalVariables.textSizeSMedium,
+                                                          fontSize: GlobalVariables
+                                                              .textSizeSMedium,
                                                           textColor:
                                                               GlobalVariables
                                                                   .black,
@@ -884,7 +907,8 @@ class CreateClassifiedListingState
                                 },
                                 child: Container(
                                     child: text('Close',
-                                        fontSize: GlobalVariables.textSizeMedium,
+                                        fontSize:
+                                            GlobalVariables.textSizeMedium,
                                         textColor: GlobalVariables.grey,
                                         fontWeight: FontWeight.w500)),
                               ),
@@ -911,7 +935,8 @@ class CreateClassifiedListingState
                                                 'giveaway'
                                             ? 'Submit'
                                             : 'Yes',
-                                        fontSize: GlobalVariables.textSizeMedium,
+                                        fontSize:
+                                            GlobalVariables.textSizeMedium,
                                         textColor: GlobalVariables.primaryColor,
                                         fontWeight: FontWeight.w500)),
                               )

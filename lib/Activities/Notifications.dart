@@ -1,11 +1,6 @@
-import 'dart:io';
 
 //import 'package:clipboard_manager/clipboard_manager.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
@@ -15,17 +10,13 @@ import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
-import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
-import 'package:societyrun/Activities/OwnerDiscover.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -33,8 +24,6 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'HelpDesk.dart';
-import 'base_stateful.dart';
 
 class BaseNotifications extends StatefulWidget {
   @override

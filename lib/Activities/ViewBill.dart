@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
@@ -24,13 +20,10 @@ import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseViewBill extends StatefulWidget {
-
-  String? invoiceNo,yearSelectedItem;
-  String? mBlock,mFLat;
-  BaseViewBill(this.invoiceNo,this.yearSelectedItem,this.mBlock,this.mFLat);
+  String? invoiceNo, yearSelectedItem;
+  String? mBlock, mFLat;
+  BaseViewBill(this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat);
 
   @override
   State<StatefulWidget> createState() {
@@ -45,8 +38,8 @@ class ViewBillState extends State<BaseViewBill> {
   List<BillDetails> _billDetailsList = <BillDetails>[];
   List<BillHeads> _billHeadsList = <BillHeads>[];
 
-  String name="",consumerId="",email="";
-  double totalAmount=0.0;
+  String name = "", consumerId = "", email = "";
+  double totalAmount = 0.0;
 
   ProgressDialog? _progressDialog;
 
@@ -66,7 +59,6 @@ class ViewBillState extends State<BaseViewBill> {
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBillData();
-
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -83,46 +75,46 @@ class ViewBillState extends State<BaseViewBill> {
 
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
-        value: Provider.of<UserManagementResponse>(context),
-      child: Consumer<UserManagementResponse>(builder: (context,value,child){
+      value: Provider.of<UserManagementResponse>(context),
+      child: Consumer<UserManagementResponse>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
             appBar: CustomAppBar(
               actions: [
-                AppIconButton(
-                    Icons.mail,
-                    iconColor: GlobalVariables.white,
-                    onPressed: (){
-                      emailBillDialog(context);
-                    }),
-                SizedBox(width: 16,),
-                AppIconButton(
-                    Icons.download_sharp,
-                    iconColor: GlobalVariables.white,
-                    onPressed: (){
-                      if (isStoragePermission) {
-                        print('true');
+                AppIconButton(Icons.mail, iconColor: GlobalVariables.white,
+                    onPressed: () {
+                  emailBillDialog(context);
+                }),
+                SizedBox(
+                  width: 16,
+                ),
+                AppIconButton(Icons.download_sharp,
+                    iconColor: GlobalVariables.white, onPressed: () {
+                  if (isStoragePermission) {
+                    print('true');
+                    getPDF();
+                  } else {
+                    GlobalFunctions.askPermission(Permission.storage)
+                        .then((value) {
+                      if (value) {
                         getPDF();
                       } else {
-                        GlobalFunctions.askPermission(Permission.storage)
-                            .then((value) {
-                          if (value) {
-                            getPDF();
-                          } else {
-                            GlobalFunctions.showToast(AppLocalizations.of(context)
-                                .translate('download_permission'));
-                          }
-                        });
+                        GlobalFunctions.showToast(AppLocalizations.of(context)
+                            .translate('download_permission'));
                       }
-
-                    }),
-                SizedBox(width: 16,),
+                    });
+                  }
+                }),
+                SizedBox(
+                  width: 16,
+                ),
               ],
-              title: AppLocalizations.of(context).translate('bill')+ ' #'+widget.invoiceNo!,
+              title: AppLocalizations.of(context).translate('bill') +
+                  ' #' +
+                  widget.invoiceNo!,
             ),
             body: getBaseLayout(value),
           ),
@@ -134,125 +126,198 @@ class ViewBillState extends State<BaseViewBill> {
   getBaseLayout(UserManagementResponse value) {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 150.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
         SizedBox(
-          child: _billDetailsList.length>0  ?
-          SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.only(top: 8),
-              child: Column(
-                children: <Widget>[
-                  AppContainer(
-                    isListItem: true,
+          child: _billDetailsList.length > 0
+              ? SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 8),
                     child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topRight,
-                          child: secondaryText(GlobalFunctions.convertDateFormat(_billDetailsList[0].DUE_DATE!,"dd-MM-yyyy"),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium),
-                        ),
-                        SizedBox(height: 4,),
-                        Container(
-                          alignment: Alignment.center,
-                          child: primaryText(GlobalFunctions.getCurrencyFormat(totalAmount.toString())/*double.parse(totalAmount.toString()).toStringAsFixed(2)*/,textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeXXLarge,fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 4,),
-                        Container(
-                          alignment: Alignment.center,
-                          child: text(consumerId,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium,maxLine: 3),
-                        )
-                      ],
-                    ),
-                  ),
-                  AppContainer(
-                    isListItem: true,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        primaryText("Details",),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              child: primaryText(AppLocalizations.of(context).translate('name')+ " : ",
-                                textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                        AppContainer(
+                          isListItem: true,
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.topRight,
+                                child: secondaryText(
+                                    GlobalFunctions.convertDateFormat(
+                                        _billDetailsList[0].DUE_DATE!,
+                                        "dd-MM-yyyy"),
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSMedium),
                               ),
-                            ),
-                            Container(
-                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                              child: secondaryText(_billDetailsList[0].NAME??'',),
-                            )
-                          ],
+                              SizedBox(
+                                height: 4,
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                child: primaryText(
+                                    GlobalFunctions.getCurrencyFormat(totalAmount
+                                        .toString()) /*double.parse(totalAmount.toString()).toStringAsFixed(2)*/,
+                                    textColor: GlobalVariables.primaryColor,
+                                    fontSize: GlobalVariables.textSizeXXLarge,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 4,
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                child: text(consumerId,
+                                    textColor: GlobalVariables.grey,
+                                    fontSize:
+                                        GlobalVariables.textSizeLargeMedium,
+                                    maxLine: 3),
+                              )
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 8,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              child: primaryText(AppLocalizations.of(context).translate('bill_period')+ " : ",
-                                  textColor: GlobalVariables.black,fontWeight: FontWeight.normal
+                        AppContainer(
+                          isListItem: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              primaryText(
+                                "Details",
                               ),
-                            ),
-                            Container(
-                              //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                              child: text(_billDetailsList[0]
-                                  .TYPE!
-                                  .toLowerCase()
-                                  .toString() ==
-                                  'invoice' ?  'NA': (GlobalFunctions.convertDateFormat(_billDetailsList[0].START_DATE!,"dd-MM-yyyy") + ' to ' + GlobalFunctions.convertDateFormat(_billDetailsList[0].END_DATE!,"dd-MM-yyyy")),
-                                  textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSMedium
+                              Divider(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: primaryText(
+                                        AppLocalizations.of(context)
+                                                .translate('name') +
+                                            " : ",
+                                        textColor: GlobalVariables.black,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: secondaryText(
+                                      _billDetailsList[0].NAME ?? '',
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: primaryText(
+                                        AppLocalizations.of(context)
+                                                .translate('bill_period') +
+                                            " : ",
+                                        textColor: GlobalVariables.black,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Container(
+                                    //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                                    child: text(
+                                        _billDetailsList[0]
+                                                    .TYPE!
+                                                    .toLowerCase()
+                                                    .toString() ==
+                                                'invoice'
+                                            ? 'NA'
+                                            : (GlobalFunctions
+                                                    .convertDateFormat(
+                                                        _billDetailsList[0]
+                                                            .START_DATE!,
+                                                        "dd-MM-yyyy") +
+                                                ' to ' +
+                                                GlobalFunctions
+                                                    .convertDateFormat(
+                                                        _billDetailsList[0]
+                                                            .END_DATE!,
+                                                        "dd-MM-yyyy")),
+                                        textColor: GlobalVariables.grey,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        AppContainer(
+                          isListItem: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              primaryText("Charges",
+                                  textColor: GlobalVariables.primaryColor),
+                              Divider(),
+                              _billHeadsList.length > 0
+                                  ? Builder(
+                                      builder: (context) => ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            // scrollDirection: Axis.vertical,
+                                            itemCount: _billHeadsList.length,
+                                            itemBuilder: (context, position) {
+                                              return Container(
+                                                  child: Column(
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child: Container(
+                                                          child: primaryText(
+                                                              _billHeadsList[
+                                                                      position]
+                                                                  .HEAD_NAME,
+                                                              textColor:
+                                                                  GlobalVariables
+                                                                      .black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        child: secondaryText(
+                                                            /*'Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2)*/ GlobalFunctions
+                                                                .getCurrencyFormat(
+                                                                    _billHeadsList[
+                                                                            position]
+                                                                        .AMOUNT
+                                                                        .toString()),
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .red,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4,
+                                                  )
+                                                ],
+                                              ));
+                                            }, //  scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                          ))
+                                  : Container(),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  AppContainer(
-                   isListItem: true,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        primaryText("Charges",textColor : GlobalVariables.primaryColor),
-                        Divider(),
-                        _billHeadsList.length>0 ? Builder(
-                            builder: (context) => ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              // scrollDirection: Axis.vertical,
-                              itemCount: _billHeadsList.length,
-                              itemBuilder: (context, position) {
-                                return Container(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Container(
-                                                child: primaryText(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.black,fontWeight: FontWeight.normal
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: secondaryText(/*'Rs. '+double.parse(_billHeadsList[position].AMOUNT).toStringAsFixed(2)*/GlobalFunctions.getCurrencyFormat(_billHeadsList[position].AMOUNT.toString()),textColor:  GlobalVariables.red,fontWeight: FontWeight.bold),
-                                            )
-                                          ],
-                                        ),
-                                       SizedBox(height: 4,)
-                                      ],
-                                    )
-                                );
-                              }, //  scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                            )):Container(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ) : SizedBox(),
+                )
+              : SizedBox(),
         ),
         /*Padding(
           padding: EdgeInsets.only(left: 16.0,bottom: 8.0,right: 16.0,),
@@ -278,102 +343,116 @@ class ViewBillState extends State<BaseViewBill> {
   }
 
   getDivider() {
-
     return Container(
       child: Divider(
         color: GlobalVariables.secondaryColor,
         height: 3,
       ),
     );
-
   }
 
   getBillChargesItemLayout(int position) {
-
     return Container(
         child: Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    child: text(_billHeadsList[position].HEAD_NAME,textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeLargeMedium),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  child: text(GlobalFunctions.getCurrencyFormat(_billHeadsList[position].AMOUNT.toString()),
-                      textColor:  GlobalVariables.red,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            position!=_recentTransactionList.length-1 ? Container(
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-              child: Divider(
-                color: GlobalVariables.AccentColor,
-                height: 3,
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(5),
+                child: text(_billHeadsList[position].HEAD_NAME,
+                    textColor: GlobalVariables.grey,
+                    fontSize: GlobalVariables.textSizeLargeMedium),
               ),
-            ):Container(),
+            ),
+            Container(
+              padding: EdgeInsets.all(5),
+              child: text(
+                  GlobalFunctions.getCurrencyFormat(
+                      _billHeadsList[position].AMOUNT.toString()),
+                  textColor: GlobalVariables.red,
+                  fontSize: GlobalVariables.textSizeMedium,
+                  fontWeight: FontWeight.bold),
+            )
           ],
-        )
-    );
-
+        ),
+        position != _recentTransactionList.length - 1
+            ? Container(
+                margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: Divider(
+                  color: GlobalVariables.AccentColor,
+                  height: 3,
+                ),
+              )
+            : Container(),
+      ],
+    ));
   }
 
   getBillData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-    if(widget.mBlock==null){
+    if (widget.mBlock == null) {
       widget.mBlock = await GlobalFunctions.getBlock();
     }
-    if(widget.mFLat==null){
+    if (widget.mFLat == null) {
       widget.mFLat = await GlobalFunctions.getFlat();
     }
 
-   // String flat = await GlobalFunctions.getFlat();
-   // String
+    // String flat = await GlobalFunctions.getFlat();
+    // String
     _progressDialog!.show();
-    print(widget.mFLat.toString()+' '+widget.mBlock.toString()+' '+widget.invoiceNo.toString()+' '+widget.yearSelectedItem.toString());
-    restClientERP.getBillData(societyId,widget.mFLat!,widget.mBlock!,widget.invoiceNo!,widget.yearSelectedItem).then((value) {
+    print(widget.mFLat.toString() +
+        ' ' +
+        widget.mBlock.toString() +
+        ' ' +
+        widget.invoiceNo.toString() +
+        ' ' +
+        widget.yearSelectedItem.toString());
+    restClientERP
+            .getBillData(societyId, widget.mFLat!, widget.mBlock!,
+                widget.invoiceNo!, widget.yearSelectedItem)
+            .then((value) {
       print('Response : ' + value.toString());
       _billViewList = value;
       List<dynamic> _listBillDetails = value.BillDetails!;
       List<dynamic> _listHeads = value.HEADS!;
 
-
       print('_listBillDetails : ' + _listBillDetails.toString());
-     // print("billdetails :" +_listBillDetails.toString());
-     // print("billdetails length:" +_listBillDetails.length.toString());
+      // print("billdetails :" +_listBillDetails.toString());
+      // print("billdetails length:" +_listBillDetails.length.toString());
 
-      _billDetailsList = List<BillDetails>.from(_listBillDetails.map((i)=>BillDetails.fromJson(i)));
-      _billHeadsList = List<BillHeads>.from(_listHeads.map((i)=>BillHeads.fromJson(i)));
+      _billDetailsList = List<BillDetails>.from(
+          _listBillDetails.map((i) => BillDetails.fromJson(i)));
+      _billHeadsList =
+          List<BillHeads>.from(_listHeads.map((i) => BillHeads.fromJson(i)));
 
-      for(int i=0;i<_billHeadsList.length;i++){
+      for (int i = 0; i < _billHeadsList.length; i++) {
         double amount = double.parse(_billHeadsList[i].AMOUNT!);
-        totalAmount+=amount;
+        totalAmount += amount;
       }
       BillHeads arrearsBillHeads = BillHeads();
-      arrearsBillHeads.AMOUNT = double.parse(value.ARREARS.toString()).toStringAsFixed(2);
-      arrearsBillHeads.HEAD_NAME="Arrears";
-      totalAmount+= double.parse(value.ARREARS.toString());
+      arrearsBillHeads.AMOUNT =
+          double.parse(value.ARREARS.toString()).toStringAsFixed(2);
+      arrearsBillHeads.HEAD_NAME = "Arrears";
+      totalAmount += double.parse(value.ARREARS.toString());
 
       BillHeads penaltyBillHeads = BillHeads();
-      penaltyBillHeads.AMOUNT = double.parse(value.PENALTY.toString()).toStringAsFixed(2);
-      penaltyBillHeads.HEAD_NAME="Penalty";
+      penaltyBillHeads.AMOUNT =
+          double.parse(value.PENALTY.toString()).toStringAsFixed(2);
+      penaltyBillHeads.HEAD_NAME = "Penalty";
 
-      totalAmount+= double.parse(value.PENALTY.toString());
+      totalAmount += double.parse(value.PENALTY.toString());
       _billHeadsList.add(arrearsBillHeads);
       _billHeadsList.add(penaltyBillHeads);
 
-        _progressDialog!.dismiss();
-        setState(() {});
-
-    })/*.catchError((Object obj) {
+      _progressDialog!.dismiss();
+      setState(() {});
+    }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -383,18 +462,20 @@ class ViewBillState extends State<BaseViewBill> {
           break;
         default:
       }
-    })*/;
+    })*/
+        ;
   }
-
 
   void emailBillDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter _stateState) {
+                builder: (BuildContext context, StateSetter _stateState) {
               isEditEmail
                   ? _emailTextController.text = ''
-                  : _emailTextController.text = (_billViewList.Email!=null ? _billViewList.Email : email)!;
+                  : _emailTextController.text = (_billViewList.Email != null
+                      ? _billViewList.Email
+                      : email)!;
 
               return Dialog(
                   shape: RoundedRectangleBorder(
@@ -420,15 +501,17 @@ class ViewBillState extends State<BaseViewBill> {
                           alignment: Alignment.topLeft,
                           margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: primaryText(
-                            'Send #'+_billDetailsList[0].INVOICE_NO!+' on below email id',
-                           /* GlobalFunctions.convertDateFormat(
+                            'Send #' +
+                                _billDetailsList[0].INVOICE_NO! +
+                                ' on below email id',
+                            /* GlobalFunctions.convertDateFormat(
                                 _billDetailsList[0].START_DATE,
                                 'dd-MM-yyyy') +
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
                                     _billDetailsList[0].END_DATE, 'dd-MM-yyyy')*/
-                              textColor: GlobalVariables.primaryColor,
-                              fontSize: GlobalVariables.textSizeSMedium,
+                            textColor: GlobalVariables.primaryColor,
+                            fontSize: GlobalVariables.textSizeSMedium,
                           ),
                         ),
                         Divider(),
@@ -458,8 +541,8 @@ class ViewBillState extends State<BaseViewBill> {
                                       decoration: InputDecoration(
                                         border: isEditEmail
                                             ? new UnderlineInputBorder(
-                                            borderSide: new BorderSide(
-                                                color: Colors.green))
+                                                borderSide: new BorderSide(
+                                                    color: Colors.green))
                                             : InputBorder.none,
                                         contentPadding: EdgeInsets.all(5),
                                       ),
@@ -471,25 +554,22 @@ class ViewBillState extends State<BaseViewBill> {
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
-                                        ? AppIconButton(
-                                          Icons.edit,
-                                          iconColor: GlobalVariables.primaryColor,
-                                          iconSize: 24,
-                                        onPressed: () {
-                                          _emailTextController.clear();
-                                          isEditEmail = true;
-                                          _stateState(() {});
-                                        })
-                                        : AppIconButton(
-                                          Icons.cancel,
-                                          iconColor: GlobalVariables.grey,
-                                          iconSize: 24,
-                                        onPressed: () {
-                                          _emailTextController.clear();
-                                          _emailTextController.text = email;
-                                          isEditEmail = false;
-                                          _stateState(() {});
-                                        }),
+                                        ? AppIconButton(Icons.edit,
+                                            iconColor:
+                                                GlobalVariables.primaryColor,
+                                            iconSize: 24, onPressed: () {
+                                            _emailTextController.clear();
+                                            isEditEmail = true;
+                                            _stateState(() {});
+                                          })
+                                        : AppIconButton(Icons.cancel,
+                                            iconColor: GlobalVariables.grey,
+                                            iconSize: 24, onPressed: () {
+                                            _emailTextController.clear();
+                                            _emailTextController.text = email;
+                                            isEditEmail = false;
+                                            _stateState(() {});
+                                          }),
                                   ),
                                 )
                               ],
@@ -500,7 +580,8 @@ class ViewBillState extends State<BaseViewBill> {
                           alignment: Alignment.topRight,
                           height: 45,
                           child: AppButton(
-                            textContent: AppLocalizations.of(context).translate('email_now'),
+                            textContent: AppLocalizations.of(context)
+                                .translate('email_now'),
                             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                             onPressed: () {
                               GlobalFunctions.checkInternetConnection()
@@ -511,7 +592,8 @@ class ViewBillState extends State<BaseViewBill> {
                                     getBillMail(
                                         _billDetailsList[0].INVOICE_NO!,
                                         _billDetailsList[0].TYPE!,
-                                        _emailTextController.text,widget.yearSelectedItem!);
+                                        _emailTextController.text,
+                                        widget.yearSelectedItem!);
                                   } else {
                                     GlobalFunctions.showToast(
                                         'Please Enter Email ID');
@@ -525,12 +607,12 @@ class ViewBillState extends State<BaseViewBill> {
                             },
                           ),
                         ),
-                     /*   Container(
+                        /*   Container(
                           alignment: Alignment.topRight,
                           //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
-                            child: RaisedButton(
+                            child: MaterialButton(
                               color: GlobalVariables.green,
                               onPressed: () {
 
@@ -556,15 +638,17 @@ class ViewBillState extends State<BaseViewBill> {
             }));
   }
 
-  Future<void> getBillMail(String invoice_no, String type, String emailId,String year) async {
+  Future<void> getBillMail(
+      String invoiceNo, String type, String emailId, String year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
-   String societyId = await GlobalFunctions.getSocietyId();
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog!.show();
     restClientERP
-        .getBillMail(societyId, type, invoice_no, _emailTextController.text,year)
+        .getBillMail(
+            societyId, type, invoiceNo, _emailTextController.text, year)
         .then((value) {
       print('Response : ' + value.toString());
 
@@ -587,26 +671,25 @@ class ViewBillState extends State<BaseViewBill> {
   }
 
   Future<void> getPDF() async {
-
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog!.show();
-    restClientERP
-        .getBillPDFData(societyId, widget.invoiceNo!)
-        .then((value) {
+    restClientERP.getBillPDFData(societyId, widget.invoiceNo!).then((value) {
       print('Response : ' + value.dataString.toString());
 
-      GlobalFunctions.convertBase64StringToFile(value.dataString!,'Bill'+widget.invoiceNo!+'.pdf').then((value) {
-
-        if(value){
-          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_success'));
-        }else{
-          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_failed'));
+      GlobalFunctions.convertBase64StringToFile(
+              value.dataString!, 'Bill' + widget.invoiceNo! + '.pdf')
+          .then((value) {
+        if (value) {
+          GlobalFunctions.showToast(
+              AppLocalizations.of(context).translate('download_success'));
+        } else {
+          GlobalFunctions.showToast(
+              AppLocalizations.of(context).translate('download_failed'));
         }
-
       });
       _progressDialog!.dismiss();
     }).catchError((Object obj) {
@@ -624,7 +707,6 @@ class ViewBillState extends State<BaseViewBill> {
         default:
       }
     });
-
   }
 /*
 
@@ -1076,7 +1158,7 @@ class ViewBillState extends State<BaseViewBill> {
 /*shape: RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                                25.0)),*//*
+                                                                25.0)),*/ /*
 
                                                 backgroundColor:
                                                 Colors.transparent,
@@ -1104,17 +1186,12 @@ class ViewBillState extends State<BaseViewBill> {
             }));
   }
 */
-
 }
 
 class RecentTransaction {
   String transactionTitle;
   String transactionRs;
 
-  RecentTransaction({
-    required this.transactionTitle,
-    required this.transactionRs
-  });
+  RecentTransaction(
+      {required this.transactionTitle, required this.transactionRs});
 }
-
-

@@ -23,11 +23,11 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.otpLoginAPI)
   Future<LoginResponse> getOTPLogin(
-      @Field("expire_time") String expire_time,
+      @Field("expire_time") String expireTime,
       @Field("otp") String otp,
-      @Field("send_otp") String send_otp,
-      @Field("mobile_no") String mobile_no,
-      @Field("Email_id") String Email_id,
+      @Field("send_otp") String sendOtp,
+      @Field("mobile_no") String mobileNo,
+      @Field("Email_id") String emailId,
       @Field("GCM_ID") String token);
 
   @FormUrlEncoded()
@@ -176,7 +176,7 @@ abstract class RestClient {
       @Field(GlobalVariables.PRIORITY) String priority,
       @Field(GlobalVariables.NAME) String name,
       @Field(GlobalVariables.ATTACHMENT) String? attachment,
-      @Field(GlobalVariables.ATTACHMENT_NAME) String? ATTACHMENT_NAME,
+      @Field(GlobalVariables.ATTACHMENT_NAME) String? attachmentName,
       @Field(GlobalVariables.societyName) String socName,
       @Field(GlobalVariables.userEmail) String eMail,
       @Field(GlobalVariables.societyEmail) String socEmail);
@@ -445,8 +445,8 @@ abstract class RestClient {
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SUBJECT) String subject,
     @Field(GlobalVariables.DESCRIPTION) String description,
-    @Field(GlobalVariables.societyName) String Society_Name,
-    @Field(GlobalVariables.societyEmail) String Society_Email,
+    @Field(GlobalVariables.societyName) String societyName,
+    @Field(GlobalVariables.societyEmail) String societyEmail,
   );
 
   @FormUrlEncoded()
@@ -460,8 +460,8 @@ abstract class RestClient {
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SUBJECT) String subject,
     @Field(GlobalVariables.DESCRIPTION) String description,
-    @Field(GlobalVariables.societyName) String Society_Name,
-    @Field(GlobalVariables.societyEmail) String Society_Email,
+    @Field(GlobalVariables.societyName) String societyName,
+    @Field(GlobalVariables.societyEmail) String societyEmail,
   );
 
   @FormUrlEncoded()
@@ -489,11 +489,11 @@ abstract class RestClient {
     @Field("FLATS[]") List<String> flats,
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SMS_TYPE) String smsType,
-    @Field(GlobalVariables.meeting_name) String meeting_name,
-    @Field(GlobalVariables.meeting_date) String meeting_date,
+    @Field(GlobalVariables.meeting_name) String meetingName,
+    @Field(GlobalVariables.meeting_date) String meetingDate,
     @Field(GlobalVariables.time) String time,
     @Field(GlobalVariables.minute) String minute,
-    @Field(GlobalVariables.time_type) String time_type,
+    @Field(GlobalVariables.time_type) String timeType,
     @Field(GlobalVariables.venue) String venue,
     @Field(GlobalVariables.societyName) String societyName,
   );
@@ -507,12 +507,12 @@ abstract class RestClient {
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SMS_TYPE) String smsType,
     @Field("date4") String date4,
-    @Field("start_time4") String start_time4,
-    @Field("start_minute4") String start_minute4,
-    @Field("start_time_type4") String start_time_type4,
-    @Field("end_time4") String end_time4,
-    @Field("end_minute4") String end_minute4,
-    @Field("end_time_type4") String end_time_type4,
+    @Field("start_time4") String startTime4,
+    @Field("start_minute4") String startMinute4,
+    @Field("start_time_type4") String startTimeType4,
+    @Field("end_time4") String endTime4,
+    @Field("end_minute4") String endMinute4,
+    @Field("end_time_type4") String endTimeType4,
     @Field(GlobalVariables.societyName) String societyName,
   );
 
@@ -525,12 +525,12 @@ abstract class RestClient {
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SMS_TYPE) String smsType,
     @Field("date3") String date3,
-    @Field("start_time3") String start_time3,
-    @Field("start_minute3") String start_minute3,
-    @Field("start_time_typ3") String start_time_type3,
-    @Field("end_time3") String end_time3,
-    @Field("end_minute3") String end_minute3,
-    @Field("end_time_type3") String end_time_type3,
+    @Field("start_time3") String startTime3,
+    @Field("start_minute3") String startMinute3,
+    @Field("start_time_typ3") String startTimeType3,
+    @Field("end_time3") String endTime3,
+    @Field("end_minute3") String endMinute3,
+    @Field("end_time_type3") String endTimeType3,
     @Field(GlobalVariables.societyName) String societyName,
   );
 
@@ -543,9 +543,9 @@ abstract class RestClient {
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SMS_TYPE) String smsType,
     @Field("date2") String date2,
-    @Field("start_time2") String start_time2,
-    @Field("start_minute2") String start_minute2,
-    @Field("start_time_type2") String start_time_type2,
+    @Field("start_time2") String startTime2,
+    @Field("start_minute2") String startMinute2,
+    @Field("start_time_type2") String startTimeType2,
     @Field(GlobalVariables.societyName) String societyName,
   );
 
@@ -560,12 +560,12 @@ abstract class RestClient {
     @Field("reason") String reason,
     @Field("reason1") String reason1,
     @Field("date1") String date1,
-    @Field("start_time1") String start_time1,
-    @Field("start_minute1") String start_minute1,
-    @Field("start_time_type1") String start_time_type1,
-    @Field("end_time") String end_time,
-    @Field("end_minute") String end_minute,
-    @Field("end_time_type") String end_time_type,
+    @Field("start_time1") String startTime1,
+    @Field("start_minute1") String startMinute1,
+    @Field("start_time_type1") String startTimeType1,
+    @Field("end_time") String endTime,
+    @Field("end_minute") String endMinute,
+    @Field("end_time_type") String endTimeType,
     @Field(GlobalVariables.societyName) String societyName,
   );
 
@@ -578,12 +578,12 @@ abstract class RestClient {
     @Field(GlobalVariables.SEND_TO) String sendTo,
     @Field(GlobalVariables.SMS_TYPE) String smsType,
     @Field("date") String date,
-    @Field("start_time") String start_time,
-    @Field("start_minute") String start_minute,
-    @Field("start_time_type") String start_time_type,
+    @Field("start_time") String startTime,
+    @Field("start_minute") String startMinute,
+    @Field("start_time_type") String startTimeType,
     @Field("time") String time,
     @Field("minute") String minute,
-    @Field("time_type") String time_type,
+    @Field("time_type") String timeType,
     @Field(GlobalVariables.societyName) String societyName,
   );
 
@@ -612,11 +612,11 @@ abstract class RestClient {
   Future<StatusMsgResponse> editUnitDetails(
     @Field(GlobalVariables.societyId) String societyId,
     @Field(GlobalVariables.id) String ID,
-    @Field(GlobalVariables.CONSUMER_NO) String CONSUMER_NO,
-    @Field(GlobalVariables.PARKING_SLOT) String PARKING_SLOT,
+    @Field(GlobalVariables.CONSUMER_NO) String consumerNo,
+    @Field(GlobalVariables.PARKING_SLOT) String parkingSlot,
     @Field(GlobalVariables.AREA) String AREA,
-    @Field(GlobalVariables.GSTIN_NO) String GSTIN_NO,
-    @Field(GlobalVariables.BILLING_NAME) String BILLING_NAME,
+    @Field(GlobalVariables.GSTIN_NO) String gstinNo,
+    @Field(GlobalVariables.BILLING_NAME) String billingName,
     @Field(GlobalVariables.INTERCOM) String INTERCOM,
   );
 
@@ -674,7 +674,7 @@ abstract class RestClient {
   Future<StatusMsgResponse> getSendInvite(
     @Field(GlobalVariables.societyId) String societyId,
     @Field(GlobalVariables.societyName) String societyName,
-    @Field("user_id[]") List<String> user_id,
+    @Field("user_id[]") List<String> userId,
   );
 
   @FormUrlEncoded()

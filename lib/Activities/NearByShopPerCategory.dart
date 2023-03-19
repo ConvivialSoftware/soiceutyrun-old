@@ -1,29 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 //import 'package:social_share/social_share.dart';
-import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/NearByShopPerCategoryItemDetails.dart';
-import 'package:societyrun/Activities/RaiseNewTicket.dart';
-import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
-import 'package:societyrun/Models/StaffCount.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'base_stateful.dart';
 
 class BaseNearByShopPerCategory extends StatefulWidget {
 
@@ -93,7 +82,7 @@ class NearByShopPerCategoryState
             if(value.nearByShopList.length>0) {
               if (widget.exclusiveId != null) {
                 widget.exclusiveId=null;
-                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                  // Navigator.of(context).pop();
 
 

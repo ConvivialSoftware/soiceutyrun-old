@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:societyrun/Activities/AboutSocietyRun.dart';
-import 'package:societyrun/Activities/ChangePassword.dart';
-import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/LoginPage.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -39,7 +34,6 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       block = "",
       unit = '';
   var email = '', phone = '', consumerId = '', societyName = '';
-
 
   ProgressDialog? _progressDialog;
   double totalRate = 0.0;
@@ -116,8 +110,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
       },
       child: Stack(
         children: <Widget>[
-          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-              context, 150.0),
+          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
           getStaffDetailsLayout(),
           addToHouseHoldLayout(),
         ],
@@ -440,14 +433,14 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
         color: GlobalVariables.veryLightGray,
         padding: EdgeInsets.all(10),
         child: Container(
-          height: 60,
-          width: 250,
-          alignment: Alignment.center,
-          child: isStaffAdded
-              ? Container(
-                  child: isRattingDoneFromLoggedPerson
-                      ? Container()
-                      : Container(
+            height: 60,
+            width: 250,
+            alignment: Alignment.center,
+            child: isStaffAdded
+                ? Container(
+                    child: isRattingDoneFromLoggedPerson
+                        ? Container()
+                        : Container(
                             height: 50,
                             child: AppButton(
                               textContent: 'Add Your Ratting',
@@ -468,11 +461,11 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                                                   showMyRattingBar(setState));
                                         }));
                               },
-                                  textColor: GlobalVariables.white,
+                              textColor: GlobalVariables.white,
                             ),
-                        ),
-                )
-              : Container(
+                          ),
+                  )
+                : Container(
                     //margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                     //padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     /* decoration: BoxDecoration(
@@ -488,8 +481,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                       onPressed: () {
                         addHouseHold();
                       },
-                          textColor: GlobalVariables.white,
-                ),
+                      textColor: GlobalVariables.white,
+                    ),
                   )),
       ),
     );
@@ -535,8 +528,8 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
           }
         },
         //onRatingUpdate: null,
-         onRatingUpdate: (rating) {
-         /* print(rating);
+        onRatingUpdate: (rating) {
+          /* print(rating);
           setState(() {
             totalRate = rating;
           });*/
@@ -639,7 +632,7 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
                     color: GlobalVariables.transparent,
                     width: 3.0,
                   )),
-              child: FlatButton(
+              child: TextButton(
                   onPressed: () {},
                   child: text(
                     'Submit',
@@ -701,7 +694,9 @@ class _BaseStaffDetailsState extends State<BaseStaffDetails> {
     String block = await GlobalFunctions.getBlock();
     String flat = await GlobalFunctions.getFlat();
     _progressDialog!.show();
-    restClient.addHouseHold(societyId, block, flat, widget._staff.SID!).then((value) {
+    restClient
+        .addHouseHold(societyId, block, flat, widget._staff.SID!)
+        .then((value) {
       _progressDialog!.dismiss();
       if (value.status!) {
         _assignFlatList.add(unit);

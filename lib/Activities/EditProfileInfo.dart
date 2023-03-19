@@ -1,5 +1,3 @@
-import 'dart:io';
-
 //import 'package:contact_picker/contact_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +16,9 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseEditProfileInfo extends StatefulWidget {
-
-  String? userId,societyId;
-  BaseEditProfileInfo(this.userId,this.societyId);
+  String? userId, societyId;
+  BaseEditProfileInfo(this.userId, this.societyId);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -32,7 +27,6 @@ class BaseEditProfileInfo extends StatefulWidget {
 }
 
 class EditProfileInfoState extends State<BaseEditProfileInfo> {
-
   String? attachmentFilePath;
   String? attachmentFileName;
   String? attachmentCompressFilePath;
@@ -52,22 +46,24 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   TextEditingController _addressController = TextEditingController();
 
   List<String> _bloodGroupList = <String>[];
-  List<DropdownMenuItem<String>> __bloodGroupListItems = <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> __bloodGroupListItems =
+      <DropdownMenuItem<String>>[];
   String? _selectedBloodGroup;
 
   List<String> _membershipTypeList = <String>[];
-  List<DropdownMenuItem<String>> __membershipTypeListItems = <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> __membershipTypeListItems =
+      <DropdownMenuItem<String>>[];
   String? _selectedMembershipType;
 
-
   List<String> _livesHereList = <String>[];
-  List<DropdownMenuItem<String>> __livesHereListItems = <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> __livesHereListItems =
+      <DropdownMenuItem<String>>[];
   String? _selectedLivesHere;
 
- // String _selectedOccupation="Software Engg.";
-  String _selectedGender="Male";
+  // String _selectedOccupation="Software Engg.";
+  String _selectedGender = "Male";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission=false;
+  bool isStoragePermission = false;
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
 
@@ -80,7 +76,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission=value;
+      isStoragePermission = value;
     });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -94,7 +90,6 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
 
   @override
   Widget build(BuildContext context) {
-
     //GlobalFunctions.showToast(memberType.toString());
     // TODO: implement build
     return Builder(
@@ -111,8 +106,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   getBaseLayout() {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 200.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
         getEditProfileInfoLayout(),
       ],
     );
@@ -125,8 +119,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
           children: <Widget>[
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('name') +
-                  '*',
+                  AppLocalizations.of(context).translate('name') + '*',
               controllerCallback: _nameController,
             ),
             Container(
@@ -148,10 +141,14 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color:   _selectedGender== "Male" ? GlobalVariables.primaryColor : GlobalVariables.white,
+                                  color: _selectedGender == "Male"
+                                      ? GlobalVariables.primaryColor
+                                      : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: _selectedGender== "Male" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
+                                    color: _selectedGender == "Male"
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -160,10 +157,9 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: text(
-                                AppLocalizations.of(context)
-                                    .translate('male'),
+                                AppLocalizations.of(context).translate('male'),
                                 textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -176,7 +172,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                     child: InkWell(
                       //  splashColor: GlobalVariables.mediumGreen,
                       onTap: () {
-                        _selectedGender="Female";
+                        _selectedGender = "Female";
                         setState(() {});
                       },
                       child: Container(
@@ -187,10 +183,14 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                  color: _selectedGender== "Female" ? GlobalVariables.primaryColor : GlobalVariables.white,
+                                  color: _selectedGender == "Female"
+                                      ? GlobalVariables.primaryColor
+                                      : GlobalVariables.white,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                    color: _selectedGender== "Female" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
+                                    color: _selectedGender == "Female"
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.secondaryColor,
                                     width: 2.0,
                                   )),
                               child: AppIcon(Icons.check,
@@ -202,7 +202,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                                 AppLocalizations.of(context)
                                     .translate('female'),
                                 textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -215,7 +215,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('date_of_birth'),
+                  AppLocalizations.of(context).translate('date_of_birth'),
               controllerCallback: _dobController,
               borderWidth: 2.0,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -225,19 +225,18 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
                   GlobalFunctions.getSelectedDateForDOB(context).then((value) {
-                    _dobController.text =
-                        value.day.toString().padLeft(2, '0') +
-                            "-" +
-                            value.month.toString().padLeft(2, '0') +
-                            "-" +
-                            value.year.toString();
+                    _dobController.text = value.day.toString().padLeft(2, '0') +
+                        "-" +
+                        value.month.toString().padLeft(2, '0') +
+                        "-" +
+                        value.year.toString();
                   });
                 },
               ),
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('contact1') + '*',
+                  AppLocalizations.of(context).translate('contact1') + '*',
               controllerCallback: _mobileController,
               keyboardType: TextInputType.number,
               maxLength: 10,
@@ -246,10 +245,10 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  PhoneContact contact =
+                      await FlutterContactPicker.pickPhoneContact();
                   print('contact Name : ' + contact.fullName!);
-                  print('contact Number : ' +
-                      contact.phoneNumber.toString());
+                  print('contact Number : ' + contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
@@ -262,8 +261,13 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                               .toString()
                               .indexOf('(') -
                               1);*/
-                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
-                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      String phoneNumber = contact.phoneNumber!.number!
+                          .trim()
+                          .toString()
+                          .replaceAll(" ", "");
+                      _mobileController.text =
+                          GlobalFunctions.getMobileFormatNumber(
+                              phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
                   });
@@ -272,7 +276,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('contact2'),
+                  AppLocalizations.of(context).translate('contact2'),
               controllerCallback: _alterMobileController,
               keyboardType: TextInputType.number,
               maxLength: 10,
@@ -281,10 +285,10 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  PhoneContact contact =
+                      await FlutterContactPicker.pickPhoneContact();
                   print('contact Name : ' + contact.fullName!);
-                  print('contact Number : ' +
-                      contact.phoneNumber.toString());
+                  print('contact Number : ' + contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
@@ -297,8 +301,13 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                               .toString()
                               .indexOf('(') -
                               1);*/
-                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
-                      _alterMobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      String phoneNumber = contact.phoneNumber!.number!
+                          .trim()
+                          .toString()
+                          .replaceAll(" ", "");
+                      _alterMobileController.text =
+                          GlobalFunctions.getMobileFormatNumber(
+                              phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
                   });
@@ -338,7 +347,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   //contentPadding: EdgeInsets.only(left: 0, bottom: 0, top:0 , right: 0),
-                  *//* enabledBorder: OutlineInputBorder(
+                  */ /* enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: GlobalVariables.mediumGreen,
                               width: 3.0,
@@ -349,13 +358,13 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                             borderSide: BorderSide(
                                 color: GlobalVariables.mediumGreen, width: 3.0),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),*//*
+                            BorderRadius.all(Radius.circular(10.0))),*/ /*
                 ),
               ),
             ),*/
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('email_id'),
+                  AppLocalizations.of(context).translate('email_id'),
               controllerCallback: _emailController,
               keyboardType: TextInputType.emailAddress,
               contentPadding: EdgeInsets.only(top: 14),
@@ -420,16 +429,19 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                           textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
                         ),*/
                         decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
                             labelText: AppLocalizations.of(context)
-                                .translate('membership_type') +
+                                    .translate('membership_type') +
                                 '*',
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            labelStyle: TextStyle(
+                                color: GlobalVariables.lightGray,
+                                fontSize: GlobalVariables.textSizeSMedium),
                             enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                            ),
                       ),
                     ),
                   ),
@@ -463,16 +475,19 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                           textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
                         ),*/
                         decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
                             labelText: AppLocalizations.of(context)
-                                .translate('lives_here') +
+                                    .translate('lives_here') +
                                 '*',
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            labelStyle: TextStyle(
+                                color: GlobalVariables.lightGray,
+                                fontSize: GlobalVariables.textSizeSMedium),
                             enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                            ),
                       ),
                     ),
                   ),
@@ -485,10 +500,10 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                   flex: 3,
                   child: AppTextField(
                     textHintContent:
-                    AppLocalizations.of(context).translate('occupation') +
-                        '*',
+                        AppLocalizations.of(context).translate('occupation') +
+                            '*',
                     controllerCallback: _occupationController,
-                  ),/*Container(
+                  ), /*Container(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     decoration: BoxDecoration(
@@ -533,21 +548,24 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                           Icons.keyboard_arrow_down,
                           iconColor: GlobalVariables.secondaryColor,
                         ),
-                       /* underline: SizedBox(),
+                        /* underline: SizedBox(),
                         hint: text(
                           AppLocalizations.of(context).translate('blood_group'),
                           textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeMedium,
                         ),*/
                         decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
                             labelText: AppLocalizations.of(context)
-                                .translate('blood_group') ,
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                                .translate('blood_group'),
+                            labelStyle: TextStyle(
+                                color: GlobalVariables.lightGray,
+                                fontSize: GlobalVariables.textSizeSMedium),
                             enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                            ),
                       ),
                     ),
                   ),
@@ -558,7 +576,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
               height: 100,
               child: AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('address'),
+                    AppLocalizations.of(context).translate('address'),
                 controllerCallback: _addressController,
                 maxLines: 99,
                 contentPadding: EdgeInsets.only(top: 14),
@@ -572,32 +590,35 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Row(
                       children: <Widget>[
-                        attachmentFilePath==null
+                        attachmentFilePath == null
                             ? AppAssetsImage(
-                          GlobalVariables
-                              .componentUserProfilePath,
-                          imageWidth:60.0,
-                          imageHeight:60.0,
-                          borderColor: GlobalVariables.grey,
-                          borderWidth: 1.0,
-                          fit: BoxFit.cover,
-                          radius: 30.0,
-                        )
-                            : attachmentFilePath!.contains("http") ?
-                        AppNetworkImage(attachmentFilePath,
-                          imageWidth:60.0,
-                          imageHeight:60.0,
-                          borderColor: GlobalVariables.grey,
-                          borderWidth: 1.0,
-                          fit: BoxFit.cover,
-                          radius: 30.0,) :
-                        AppFileImage(attachmentFilePath,
-                          imageWidth:60.0,
-                          imageHeight:60.0,
-                          borderColor: GlobalVariables.grey,
-                          borderWidth: 1.0,
-                          fit: BoxFit.cover,
-                          radius: 30.0,),
+                                GlobalVariables.componentUserProfilePath,
+                                imageWidth: 60.0,
+                                imageHeight: 60.0,
+                                borderColor: GlobalVariables.grey,
+                                borderWidth: 1.0,
+                                fit: BoxFit.cover,
+                                radius: 30.0,
+                              )
+                            : attachmentFilePath!.contains("http")
+                                ? AppNetworkImage(
+                                    attachmentFilePath,
+                                    imageWidth: 60.0,
+                                    imageHeight: 60.0,
+                                    borderColor: GlobalVariables.grey,
+                                    borderWidth: 1.0,
+                                    fit: BoxFit.cover,
+                                    radius: 30.0,
+                                  )
+                                : AppFileImage(
+                                    attachmentFilePath,
+                                    imageWidth: 60.0,
+                                    imageHeight: 60.0,
+                                    borderColor: GlobalVariables.grey,
+                                    borderWidth: 1.0,
+                                    fit: BoxFit.cover,
+                                    radius: 30.0,
+                                  ),
                         /*Container(
                           width:50,
                           height: 50,
@@ -619,68 +640,72 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                         Column(
                           children: <Widget>[
                             Container(
-                              child: FlatButton.icon(
+                              child: TextButton.icon(
                                 onPressed: () {
-
-                                  if(isStoragePermission) {
+                                  if (isStoragePermission) {
                                     openFile(context);
-                                  }else{
-                                    GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                      if(value){
+                                  } else {
+                                    GlobalFunctions.askPermission(
+                                            Permission.storage)
+                                        .then((value) {
+                                      if (value) {
                                         openFile(context);
-                                      }else{
-                                        GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                      } else {
+                                        GlobalFunctions.showToast(
+                                            AppLocalizations.of(context)
+                                                .translate(
+                                                    'download_permission'));
                                       }
                                     });
                                   }
-
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
                                   iconColor: GlobalVariables.secondaryColor,
                                 ),
                                 label: text(
-                                  AppLocalizations.of(context).translate('attach_photo'),
-                                  textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeSMedium
-                                ),
+                                    AppLocalizations.of(context)
+                                        .translate('attach_photo'),
+                                    textColor: GlobalVariables.primaryColor,
+                                    fontSize: GlobalVariables.textSizeSMedium),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                              child: text(
-                                'OR',
-                                textColor: GlobalVariables.lightGray,
-                                  fontSize: GlobalVariables.textSizeSMedium
-                              ),
+                              child: text('OR',
+                                  textColor: GlobalVariables.lightGray,
+                                  fontSize: GlobalVariables.textSizeSMedium),
                             ),
                             Container(
-                              child: FlatButton.icon(
+                              child: TextButton.icon(
                                   onPressed: () {
-
-                                    if(isStoragePermission) {
+                                    if (isStoragePermission) {
                                       openCamera(context);
-                                    }else{
-                                      GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                        if(value){
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                              Permission.storage)
+                                          .then((value) {
+                                        if (value) {
                                           openCamera(context);
-                                        }else{
-                                          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                      'download_permission'));
                                         }
                                       });
                                     }
-
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
                                     iconColor: GlobalVariables.secondaryColor,
                                   ),
                                   label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('take_picture'),
-                                    textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeSMedium
-                                  )),
+                                      AppLocalizations.of(context)
+                                          .translate('take_picture'),
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium)),
                             ),
                           ],
                         ),
@@ -708,140 +733,127 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   }
 
   void verifyInfo() {
-
-    if(_nameController.text.length>0){
-
+    if (_nameController.text.length > 0) {
       //if(_dobController.text.length>0){
 
-      if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
-
+      if (_mobileController.text.length > 0 &&
+          _mobileController.text.length == 10) {
         //  if(_emailController.text.length>0){
 
-           // if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
+        // if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
 
-             // if(_occupationController.text.length>0){
+        // if(_occupationController.text.length>0){
 
+        if (_selectedMembershipType != null) {
+          if (_selectedLivesHere != null) {
+            if (_alterMobileController.text.length > 0) {
+              if (_alterMobileController.text.length > 0 &&
+                  _alterMobileController.text.length == 10) {
+                editProfileData();
+              } else {
+                GlobalFunctions.showToast(
+                    'Please Enter Valid Alternate Mobile Number');
+              }
+            } else {
+              editProfileData();
+            }
+          } else {
+            GlobalFunctions.showToast('Please Select Lives Here');
+          }
+        } else {
+          GlobalFunctions.showToast('Please Select MemberShip Type');
+        }
 
-                  if(_selectedMembershipType!=null) {
-
-                    if(_selectedLivesHere!=null) {
-
-                      if(_alterMobileController.text.length>0){
-                        if (_alterMobileController.text.length > 0 && _alterMobileController.text.length==10) {
-                      editProfileData();
-                        }else{
-                          GlobalFunctions.showToast('Please Enter Valid Alternate Mobile Number');
-                        }
-                      }else {
-                        editProfileData();
-                      }
-
-                    }else{
-                      GlobalFunctions.showToast('Please Select Lives Here');
-                    }
-                  }else{
-                    GlobalFunctions.showToast('Please Select MemberShip Type');
-                  }
-
-              /*}else{
+        /*}else{
                 GlobalFunctions.showToast('Please Enter Occupation');
               }*/
-           /* }else{
+        /* }else{
               GlobalFunctions.showToast('Please Select BloodGroup');
             }*/
-          /*}else{
+        /*}else{
             GlobalFunctions.showToast('Please Enter EmailId');
           }*/
-        }else{
-          GlobalFunctions.showToast('Please Enter Valid Mobile Number');
-        }
+      } else {
+        GlobalFunctions.showToast('Please Enter Valid Mobile Number');
+      }
       /*}else{
         GlobalFunctions.showToast('Please Select Date of Birth');
       }*/
-    }else{
+    } else {
       GlobalFunctions.showToast('Please Enter Name');
     }
-
   }
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentFilePath = value;
       getCompressFilePath();
     });
-
   }
 
   void openCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath=value.path;
+      attachmentFilePath = value.path;
       getCompressFilePath();
     });
   }
 
-  void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath!.substring(attachmentFilePath!.lastIndexOf('/')+1,attachmentFilePath!.length);
-    print('file Name : '+attachmentFileName.toString());
+  void getCompressFilePath() {
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
+    print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getAppDocumentDirectory().then((value) {
-      print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath!, value.toString()+'/'+attachmentFileName!).then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
+          .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath!);
-        setState(() {
-        });
+        print('Cache file path : ' + attachmentCompressFilePath!);
+        setState(() {});
       });
     });
   }
 
-
   void getBloodGroupData() {
-
-    _bloodGroupList = ["A+","O+","B+","AB+","A-","O-","B-","AB-"];
-    for(int i=0;i<_bloodGroupList.length;i++){
+    _bloodGroupList = ["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"];
+    for (int i = 0; i < _bloodGroupList.length; i++) {
       __bloodGroupListItems.add(DropdownMenuItem(
         value: _bloodGroupList[i],
         child: text(
           _bloodGroupList[i],
           textColor: GlobalVariables.black,
-            fontSize: GlobalVariables.textSizeSMedium,
+          fontSize: GlobalVariables.textSizeSMedium,
         ),
       ));
     }
-  //  _selectedBloodGroup = __bloodGroupListItems[0].value;
+    //  _selectedBloodGroup = __bloodGroupListItems[0].value;
   }
 
   void getMembershipTypeData() {
-
-    _membershipTypeList = ["Owner","Owner Family","Tenant"];
-    for(int i=0;i<_membershipTypeList.length;i++){
+    _membershipTypeList = ["Owner", "Owner Family", "Tenant"];
+    for (int i = 0; i < _membershipTypeList.length; i++) {
       __membershipTypeListItems.add(DropdownMenuItem(
         value: _membershipTypeList[i],
-        child: text(
-          _membershipTypeList[i],
-          textColor: GlobalVariables.black,
-          fontSize: GlobalVariables.textSizeSMedium
-        ),
+        child: text(_membershipTypeList[i],
+            textColor: GlobalVariables.black,
+            fontSize: GlobalVariables.textSizeSMedium),
       ));
     }
-   // _selectedMembershipType = __membershipTypeListItems[0].value;
+    // _selectedMembershipType = __membershipTypeListItems[0].value;
   }
 
   void gteLivesHereData() {
-
-    _livesHereList = ["Yes","No"];
-    for(int i=0;i<_livesHereList.length;i++){
+    _livesHereList = ["Yes", "No"];
+    for (int i = 0; i < _livesHereList.length; i++) {
       __livesHereListItems.add(DropdownMenuItem(
         value: _livesHereList[i],
-        child: text(
-          _livesHereList[i],
-         textColor: GlobalVariables.black,
-            fontSize: GlobalVariables.textSizeSMedium
-        ),
+        child: text(_livesHereList[i],
+            textColor: GlobalVariables.black,
+            fontSize: GlobalVariables.textSizeSMedium),
       ));
     }
- //   _selectedLivesHere = __livesHereListItems[0].value;
-    setState(() {
-    });
+    //   _selectedLivesHere = __livesHereListItems[0].value;
+    setState(() {});
   }
 
   void changeBloodGroupDropDownItem(String? value) {
@@ -868,43 +880,47 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     });
   }
 
-  void getProfileData() async{
-
+  void getProfileData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
-   // String societyId = await GlobalFunctions.getSocietyId();
-   // String  userId = await GlobalFunctions.getUserId();
+    // String societyId = await GlobalFunctions.getSocietyId();
+    // String  userId = await GlobalFunctions.getUserId();
     _progressDialog!.show();
-    restClient.getProfileData(widget.societyId!,widget.userId!).then((value) {
-        _progressDialog!.dismiss();
+    restClient.getProfileData(widget.societyId!, widget.userId!).then((value) {
+      _progressDialog!.dismiss();
       if (value.status!) {
         List<dynamic> _list = value.data!;
-        _profileList = List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
+        _profileList =
+            List<ProfileInfo>.from(_list.map((i) => ProfileInfo.fromJson(i)));
         setState(() {
-
-          _nameController.text=_profileList[0].NAME!;
-          _mobileController.text=_profileList[0].Phone!;
-          _alterMobileController.text=_profileList[0].ALTERNATE_CONTACT1!;
-          _selectedLivesHere=_profileList[0].LIVES_HERE!.isEmpty ? null : _profileList[0].LIVES_HERE;
-          _selectedBloodGroup=_profileList[0].BLOOD_GROUP!.isEmpty ? null : _profileList[0].BLOOD_GROUP;
-          _occupationController.text =_profileList[0].OCCUPATION!;
-          if(_profileList[0].DOB!='0000-00-00')
-            _dobController.text= GlobalFunctions.convertDateFormat(_profileList[0].DOB!, "dd-MM-yyyy");
-          _selectedGender=_profileList[0].GENDER!;
-          _emailController.text=_profileList[0].Email!;
-          _addressController.text=_profileList[0].ADDRESS!;
-       //   _hobbiesController.text=_profileList[0].HOBBIES;
-          _selectedMembershipType= _profileList[0].TYPE!.isEmpty ? _membershipTypeList[0] : _profileList[0].TYPE;
+          _nameController.text = _profileList[0].NAME!;
+          _mobileController.text = _profileList[0].Phone!;
+          _alterMobileController.text = _profileList[0].ALTERNATE_CONTACT1!;
+          _selectedLivesHere = _profileList[0].LIVES_HERE!.isEmpty
+              ? null
+              : _profileList[0].LIVES_HERE;
+          _selectedBloodGroup = _profileList[0].BLOOD_GROUP!.isEmpty
+              ? null
+              : _profileList[0].BLOOD_GROUP;
+          _occupationController.text = _profileList[0].OCCUPATION!;
+          if (_profileList[0].DOB != '0000-00-00')
+            _dobController.text = GlobalFunctions.convertDateFormat(
+                _profileList[0].DOB!, "dd-MM-yyyy");
+          _selectedGender = _profileList[0].GENDER!;
+          _emailController.text = _profileList[0].Email!;
+          _addressController.text = _profileList[0].ADDRESS!;
+          //   _hobbiesController.text=_profileList[0].HOBBIES;
+          _selectedMembershipType = _profileList[0].TYPE!.isEmpty
+              ? _membershipTypeList[0]
+              : _profileList[0].TYPE;
 
           attachmentFilePath = _profileList[0].PROFILE_PHOTO;
-          if(attachmentFilePath!=null && attachmentFilePath!.length==0){
-            attachmentFilePath=null;
+          if (attachmentFilePath != null && attachmentFilePath!.length == 0) {
+            attachmentFilePath = null;
           }
-          print('profile pic : '+_profileList[0].PROFILE_PHOTO.toString());
-          print('profile pic : '+attachmentFilePath.toString());
-
+          print('profile pic : ' + _profileList[0].PROFILE_PHOTO.toString());
+          print('profile pic : ' + attachmentFilePath.toString());
         });
-
       }
     }).catchError((Object obj) {
       GlobalFunctions.showToast('Exception : ' + obj.toString());
@@ -918,36 +934,48 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
         default:
       }
     });
-
   }
 
-
-  void editProfileData() async{
-
+  void editProfileData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     // String societyId = await GlobalFunctions.getSocietyId();
-     String  loggedUserId = await GlobalFunctions.getUserId();
+    String loggedUserId = await GlobalFunctions.getUserId();
 
     String attachmentName;
     String? attachment;
-    if(attachmentFileName!=null && attachmentFilePath!=null){
+    if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName!;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
     _progressDialog!.show();
-    restClient.editProfileInfo(widget.societyId!,widget.userId!,_nameController.text,_mobileController.text,_alterMobileController.text,attachment,_addressController.text,_selectedGender,_dobController.text,_selectedBloodGroup,_occupationController.text,_emailController.text,_selectedMembershipType!,_selectedLivesHere!).then((value) async {
+    restClient
+        .editProfileInfo(
+            widget.societyId!,
+            widget.userId!,
+            _nameController.text,
+            _mobileController.text,
+            _alterMobileController.text,
+            attachment,
+            _addressController.text,
+            _selectedGender,
+            _dobController.text,
+            _selectedBloodGroup,
+            _occupationController.text,
+            _emailController.text,
+            _selectedMembershipType!,
+            _selectedLivesHere!)
+        .then((value) async {
       _progressDialog!.dismiss();
       if (value.status!) {
-        if(loggedUserId==widget.userId!) {
+        if (loggedUserId == widget.userId!) {
           GlobalVariables.userNameValueNotifer.value = _nameController.text;
           GlobalVariables.userNameValueNotifer.notifyListeners();
         }
-        if(attachmentFileName!=null && attachmentFilePath!=null){
-          if (attachmentFilePath != null &&
-              attachmentFilePath != null) {
-            await GlobalFunctions.removeFileFromDirectory(
-                attachmentFilePath!);
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          if (attachmentFilePath != null && attachmentFilePath != null) {
+            await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
             await GlobalFunctions.removeFileFromDirectory(
                 attachmentCompressFilePath!);
           }
@@ -967,7 +995,5 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
         default:
       }
     });
-
   }
-
 }

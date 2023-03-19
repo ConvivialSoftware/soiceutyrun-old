@@ -18,14 +18,11 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseAddExpense extends StatefulWidget {
-
   bool isAdmin;
   String? mBlock, mFlat;
 
-  BaseAddExpense({this.isAdmin=false,this.mBlock,this.mFlat});
+  BaseAddExpense({this.isAdmin = false, this.mBlock, this.mFlat});
 
   @override
   State<StatefulWidget> createState() {
@@ -146,7 +143,9 @@ class AddExpenseState extends State<BaseAddExpense> {
           child: Column(
             children: <Widget>[
               AppTextField(
-                textHintContent: widget.isAdmin? AppLocalizations.of(context).translate('invoice_date') : AppLocalizations.of(context).translate('payment_date'),
+                textHintContent: widget.isAdmin
+                    ? AppLocalizations.of(context).translate('invoice_date')
+                    : AppLocalizations.of(context).translate('payment_date'),
                 controllerCallback: _paymentDateController,
                 borderWidth: 2.0,
                 contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -166,28 +165,31 @@ class AddExpenseState extends State<BaseAddExpense> {
                   },
                 ),
               ),
-              widget.isAdmin ? AppTextField(
-                textHintContent:
-                AppLocalizations.of(context).translate('due_date'),
-                controllerCallback: _dueDateController,
-                borderWidth: 2.0,
-                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                readOnly: true,
-                suffixIcon: AppIconButton(
-                  Icons.date_range,
-                  iconColor: GlobalVariables.secondaryColor,
-                  onPressed: () {
-                    GlobalFunctions.getSelectedDate(context).then((value) {
-                      _dueDateController.text =
-                          value.day.toString().padLeft(2, '0') +
-                              "-" +
-                              value.month.toString().padLeft(2, '0') +
-                              "-" +
-                              value.year.toString();
-                    });
-                  },
-                ),
-              ):SizedBox(),
+              widget.isAdmin
+                  ? AppTextField(
+                      textHintContent:
+                          AppLocalizations.of(context).translate('due_date'),
+                      controllerCallback: _dueDateController,
+                      borderWidth: 2.0,
+                      contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      readOnly: true,
+                      suffixIcon: AppIconButton(
+                        Icons.date_range,
+                        iconColor: GlobalVariables.secondaryColor,
+                        onPressed: () {
+                          GlobalFunctions.getSelectedDate(context)
+                              .then((value) {
+                            _dueDateController.text =
+                                value.day.toString().padLeft(2, '0') +
+                                    "-" +
+                                    value.month.toString().padLeft(2, '0') +
+                                    "-" +
+                                    value.year.toString();
+                          });
+                        },
+                      ),
+                    )
+                  : SizedBox(),
               Container(
                 width: double.infinity,
                 height: 70,
@@ -204,72 +206,135 @@ class AddExpenseState extends State<BaseAddExpense> {
                 //                     return new DropdownMenuItem<LedgerAccount>(
                 //                         child: text(item.name), value: item);
                 //                   }).toList()
-                child: DropdownSearch<LedgerAccount>(
-                  mode: Mode.MENU,
-                  items: _ledgerAccountList,
-                  showSearchBox: true,
-                  searchFieldProps: TextFieldProps(
-                    controller: _ledgerAccController,
-                    autofocus: true,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () {
-                          _ledgerAccController.clear();
-                        },
+                child:  DropdownSearch<LedgerAccount>(
+                    items: _ledgerAccountList,
+
+                    popupProps: PopupProps.menu(showSearchBox: true),
+                    validator: (item) {
+                      if (item == null)
+                        return "Required field";
+                      else
+                        return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedLedgerAccount = value;
+                      });
+                    },
+                    clearButtonProps: ClearButtonProps(
+                      icon: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Icon(
+                          Icons.clear,
+                          size: 24,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  showClearButton: true,
-                  //validator: _selectedLedgerAccount!.name,
-                  onChanged: (value){
-                    setState(() {
-                      _selectedLedgerAccount = value;
-                      print('_selctedItem: ' + _selectedLedgerAccount.toString());
-                      print('_selctedItem name: ' + _selectedLedgerAccount!.name.toString());
-                      print('_selctedItem value: ' + _selectedLedgerAccount!.id.toString());
-                    });
-                  },
-                  clearButtonBuilder: (_) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Icon(
-                      Icons.clear,
-                      size: 24,
-                      color: Colors.black,
-                    ),
+
+                    dropdownButtonProps: DropdownButtonProps(
+                      icon: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Icon(
+                          Icons.arrow_drop_down,
+                          size: 24,
+                          color: Colors.black,
+                        ),
                       ),
-                  dropdownButtonBuilder: (_) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Icon(
-                      Icons.arrow_drop_down,
-                      size: 24,
-                      color: Colors.black,
                     ),
-                  ),
-                  dropdownSearchDecoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).translate('ledger_account') + '*',
-                    contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-                    border: InputBorder.none,
-                    helperStyle: TextStyle(
-                      color: GlobalVariables.lightGray,
-                    fontSize: GlobalVariables.textSizeSMedium,
-                    )
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)
+                                  .translate('ledger_account') +
+                              '*',
+                          contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                          border: InputBorder.none,
+                          helperStyle: TextStyle(
+                            color: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                          )),
+                    ),
                   ),
                 ),
+              SizedBox(
+                height: 0,
               ),
-              SizedBox(height: 0,),
               AppTextField(
                 textHintContent:
                     AppLocalizations.of(context).translate('amount') + '*',
                 controllerCallback: _amountController,
                 keyboardType: TextInputType.number,
               ),
-              widget.isAdmin ? SizedBox() :  Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 2,
-                    child: Container(
+              widget.isAdmin
+                  ? SizedBox()
+                  : Row(
+                      children: <Widget>[
+                        Flexible(
+                          flex: 2,
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            decoration: BoxDecoration(
+                                color: GlobalVariables.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: GlobalVariables.lightGray,
+                                  width: 2.0,
+                                )),
+                            child: ButtonTheme(
+                              child: DropdownButtonFormField(
+                                items: _paidByListItems,
+                                value: _selectedPaidBy,
+                                onChanged: changePaidByDropDownItem,
+                                isExpanded: true,
+                                icon: AppIcon(
+                                  Icons.keyboard_arrow_down,
+                                  iconColor: GlobalVariables.secondaryColor,
+                                ),
+                                /*underline: SizedBox(),
+                          hint: text(
+                            AppLocalizations.of(context).translate('paid_by') +
+                                '*',
+                            textColor: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                          ),*/
+                                decoration: InputDecoration(
+                                    //filled: true,
+                                    //fillColor: Hexcolor('#ecedec'),
+                                    labelText: AppLocalizations.of(context)
+                                            .translate('paid_by') +
+                                        '*',
+                                    labelStyle: TextStyle(
+                                        color: GlobalVariables.lightGray,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent))
+                                    // border: new CustomBorderTextFieldSkin().getSkin(),
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Flexible(
+                          flex: 3,
+                          child: AppTextField(
+                            textHintContent: AppLocalizations.of(context)
+                                    .translate('reference_no') +
+                                '*',
+                            controllerCallback: _referenceController,
+                          ),
+                        ),
+                      ],
+                    ),
+              widget.isAdmin
+                  ? SizedBox()
+                  : Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -282,97 +347,43 @@ class AddExpenseState extends State<BaseAddExpense> {
                           )),
                       child: ButtonTheme(
                         child: DropdownButtonFormField(
-                          items: _paidByListItems,
-                          value: _selectedPaidBy,
-                          onChanged: changePaidByDropDownItem,
+                          items: _bankAccountListItems,
+                          value: _selectedBankAccount,
+                          onChanged: changeFromAccountDropDownItem,
                           isExpanded: true,
                           icon: AppIcon(
                             Icons.keyboard_arrow_down,
                             iconColor: GlobalVariables.secondaryColor,
                           ),
                           /*underline: SizedBox(),
-                          hint: text(
-                            AppLocalizations.of(context).translate('paid_by') +
-                                '*',
-                            textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium,
-                          ),*/
-                          decoration: InputDecoration(
-                            //filled: true,
-                            //fillColor: Hexcolor('#ecedec'),
-                              labelText: AppLocalizations.of(context)
-                                  .translate('paid_by') +
-                                  '*',
-                              labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent))
-                            // border: new CustomBorderTextFieldSkin().getSkin(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: AppTextField(
-                      textHintContent: AppLocalizations.of(context)
-                              .translate('reference_no') +
-                          '*',
-                      controllerCallback: _referenceController,
-                    ),
-                  ),
-                ],
-              ),
-             widget.isAdmin ? SizedBox() :  Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButtonFormField(
-                    items: _bankAccountListItems,
-                    value: _selectedBankAccount,
-                    onChanged: changeFromAccountDropDownItem,
-                    isExpanded: true,
-                    icon: AppIcon(
-                      Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.secondaryColor,
-                    ),
-                    /*underline: SizedBox(),
                     hint: text(
                       AppLocalizations.of(context).translate('from_account') +
                           '*',
                       textColor: GlobalVariables.lightGray,
                       fontSize: GlobalVariables.textSizeSMedium,
                     ),*/
-                    decoration: InputDecoration(
-                      //filled: true,
-                      //fillColor: Hexcolor('#ecedec'),
-                        labelText: AppLocalizations.of(context)
-                            .translate('from_account') +
-                            '*',
-                        labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent))
-                      // border: new CustomBorderTextFieldSkin().getSkin(),
+                          decoration: InputDecoration(
+                              //filled: true,
+                              //fillColor: Hexcolor('#ecedec'),
+                              labelText: AppLocalizations.of(context)
+                                      .translate('from_account') +
+                                  '*',
+                              labelStyle: TextStyle(
+                                  color: GlobalVariables.lightGray,
+                                  fontSize: GlobalVariables.textSizeSMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent))
+                              // border: new CustomBorderTextFieldSkin().getSkin(),
+                              ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               Container(
                 height: 150,
                 child: AppTextField(
                   textHintContent:
-                  AppLocalizations.of(context).translate('enter_note'),
+                      AppLocalizations.of(context).translate('enter_note'),
                   controllerCallback: _noteController,
                   maxLines: 99,
                   contentPadding: EdgeInsets.only(top: 14),
@@ -387,113 +398,122 @@ class AddExpenseState extends State<BaseAddExpense> {
                   controllerCallback: _noteController,
                 ),
               ),*/
-              widget.isAdmin ? SizedBox() : Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath == null
-                                ? BoxDecoration(
-                                    color: GlobalVariables.secondaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                                  )
-                                : BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
+              widget.isAdmin
+                  ? SizedBox()
+                  : Row(
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                  decoration: attachmentFilePath == null
+                                      ? BoxDecoration(
+                                          color: GlobalVariables.secondaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                          //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                        )
+                                      : BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
                                               image: FileImage(
                                                   File(attachmentFilePath!)),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(
-                                        color: GlobalVariables.primaryColor,
-                                        width: 2.0)),
-                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                child: FlatButton.icon(
-                                  onPressed: () {
-                                    if (isStoragePermission) {
-                                      openFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
-                                  },
-                                  icon: AppIcon(
-                                    Icons.attach_file,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                  ),
-                                  label: text(
-                                    AppLocalizations.of(context)
-                                        .translate('attach_photo'),
-                                    textColor: GlobalVariables.primaryColor,
-                                  ),
+                                              fit: BoxFit.cover),
+                                          border: Border.all(
+                                              color:
+                                                  GlobalVariables.primaryColor,
+                                              width: 2.0)),
+                                  //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: text(
-                                  'OR',
-                                  textColor: GlobalVariables.lightGray,
-                                ),
-                              ),
-                              Container(
-                                child: FlatButton.icon(
-                                    onPressed: () {
-                                      if (isStoragePermission) {
-                                        openCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openCamera(context);
+                                Column(
+                                  children: <Widget>[
+                                    Container(
+                                      child: TextButton.icon(
+                                        onPressed: () {
+                                          if (isStoragePermission) {
+                                            openFile(context);
                                           } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
+                                            GlobalFunctions.askPermission(
+                                                    Permission.storage)
+                                                .then((value) {
+                                              if (value) {
+                                                openFile(context);
+                                              } else {
+                                                GlobalFunctions.showToast(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'download_permission'));
+                                              }
+                                            });
                                           }
-                                        });
-                                      }
-                                    },
-                                    icon: AppIcon(
-                                      Icons.camera_alt,
-                                      iconColor: GlobalVariables.secondaryColor,
+                                        },
+                                        icon: AppIcon(
+                                          Icons.attach_file,
+                                          iconColor:
+                                              GlobalVariables.secondaryColor,
+                                        ),
+                                        label: text(
+                                          AppLocalizations.of(context)
+                                              .translate('attach_photo'),
+                                          textColor:
+                                              GlobalVariables.primaryColor,
+                                        ),
+                                      ),
                                     ),
-                                    label: text(
-                                      AppLocalizations.of(context)
-                                          .translate('take_picture'),
-                                      textColor: GlobalVariables.primaryColor,
-                                    )),
-                              ),
-                            ],
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      child: text(
+                                        'OR',
+                                        textColor: GlobalVariables.lightGray,
+                                      ),
+                                    ),
+                                    Container(
+                                      child: TextButton.icon(
+                                          onPressed: () {
+                                            if (isStoragePermission) {
+                                              openCamera(context);
+                                            } else {
+                                              GlobalFunctions.askPermission(
+                                                      Permission.storage)
+                                                  .then((value) {
+                                                if (value) {
+                                                  openCamera(context);
+                                                } else {
+                                                  GlobalFunctions.showToast(
+                                                      AppLocalizations.of(
+                                                              context)
+                                                          .translate(
+                                                              'download_permission'));
+                                                }
+                                              });
+                                            }
+                                          },
+                                          icon: AppIcon(
+                                            Icons.camera_alt,
+                                            iconColor:
+                                                GlobalVariables.secondaryColor,
+                                          ),
+                                          label: text(
+                                            AppLocalizations.of(context)
+                                                .translate('take_picture'),
+                                            textColor:
+                                                GlobalVariables.primaryColor,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
               Container(
                 alignment: Alignment.topLeft,
                 height: 45,
@@ -501,9 +521,9 @@ class AddExpenseState extends State<BaseAddExpense> {
                 child: AppButton(
                   textContent: AppLocalizations.of(context).translate('submit'),
                   onPressed: () {
-                    if(widget.isAdmin){
+                    if (widget.isAdmin) {
                       verifyInvoiceInfo();
-                    }else {
+                    } else {
                       verifyInfo();
                     }
                   },
@@ -522,9 +542,9 @@ class AddExpenseState extends State<BaseAddExpense> {
         if (_selectedPaidBy != null) {
           if (_referenceController.text.length > 0) {
             if (_selectedBankAccount != null) {
-              if(widget.isAdmin){
+              if (widget.isAdmin) {
                 addInvoice();
-              }else {
+              } else {
                 addExpense();
               }
             } else {
@@ -547,7 +567,7 @@ class AddExpenseState extends State<BaseAddExpense> {
   void verifyInvoiceInfo() {
     if (_selectedLedgerAccount != null) {
       if (_amountController.text.length > 0) {
-                addInvoice();
+        addInvoice();
       } else {
         GlobalFunctions.showToast('Please Enter Amount');
       }
@@ -589,8 +609,7 @@ class AddExpenseState extends State<BaseAddExpense> {
       _progressDialog!.dismiss();
       if (value.status!) {
         if (attachmentFileName != null && attachmentFilePath != null) {
-          await GlobalFunctions.removeFileFromDirectory(
-              attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
           await GlobalFunctions.removeFileFromDirectory(
               attachmentCompressFilePath!);
         }
@@ -610,7 +629,6 @@ class AddExpenseState extends State<BaseAddExpense> {
       }
     });
   }
-
 
   Future<void> addInvoice() async {
     final dio = Dio();
@@ -719,15 +737,14 @@ class AddExpenseState extends State<BaseAddExpense> {
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     _progressDialog!.show();
-    if(widget.isAdmin){
-
+    if (widget.isAdmin) {
       restClientERP.getExpenseIncomeLedger(societyId).then((value) {
         print('Response : ' + value.toString());
         List<dynamic> _list = value.data!;
         //List<dynamic> _listBank = value.bank!;
 
-        _ledgerAccountList =
-        List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
+        _ledgerAccountList = List<LedgerAccount>.from(
+            _list.map((i) => LedgerAccount.fromJson(i)));
         for (int i = 0; i < _ledgerAccountList.length; i++) {
           LedgerAccount _ledgerAccount = _ledgerAccountList[i];
           _ledgerAccountStringList.add(_ledgerAccount.name!);
@@ -762,15 +779,15 @@ class AddExpenseState extends State<BaseAddExpense> {
         default:
       }
     })*/
-      ;
-    }else {
+          ;
+    } else {
       restClientERP.getExpenseAccountLedger(societyId).then((value) {
         print('Response : ' + value.toString());
         List<dynamic> _list = value.data!;
         List<dynamic> _listBank = value.bank!;
 
-        _ledgerAccountList =
-        List<LedgerAccount>.from(_list.map((i) => LedgerAccount.fromJson(i)));
+        _ledgerAccountList = List<LedgerAccount>.from(
+            _list.map((i) => LedgerAccount.fromJson(i)));
         for (int i = 0; i < _ledgerAccountList.length; i++) {
           LedgerAccount _ledgerAccount = _ledgerAccountList[i];
           _ledgerAccountStringList.add(_ledgerAccount.name!);
@@ -805,7 +822,7 @@ class AddExpenseState extends State<BaseAddExpense> {
         default:
       }
     })*/
-      ;
+          ;
     }
   }
 }

@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,47 +12,35 @@ import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/AppSettings.dart';
 import 'package:societyrun/Activities/Broadcast.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
-import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/Discover.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
-import 'package:societyrun/Activities/Expense.dart';
 import 'package:societyrun/Activities/ExpenseSearchAdd.dart';
 import 'package:societyrun/Activities/FindServices.dart';
 import 'package:societyrun/Activities/HelpDesk.dart';
 import 'package:societyrun/Activities/Ledger.dart';
-import 'package:societyrun/Activities/More.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 
 import 'package:societyrun/Activities/MyGate.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/NearByShopPerCategory.dart';
 import 'package:societyrun/Activities/Notifications.dart';
-import 'package:societyrun/Activities/OwnerDiscover.dart';
-import 'package:societyrun/Activities/OwnerServices.dart';
 import 'package:societyrun/Activities/Support.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/Banners.dart';
-import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/LoginResponse.dart';
-import 'package:societyrun/Models/ProfileInfo.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
-import 'package:societyrun/Widgets/AppDropDown.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:intl/intl.dart';
-import 'package:workmanager/workmanager.dart';
 
 import 'LoginPage.dart';
-import 'WebViewScreen.dart';
 
 class BaseDashBoard extends StatefulWidget {
   @override
@@ -68,7 +53,8 @@ class BaseDashBoard extends StatefulWidget {
 
 class DashBoardState extends BaseStatefulState<BaseDashBoard>
     with WidgetsBindingObserver, ChangeNotifier {
-   final GlobalKey<ScaffoldState> dashboardScaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> dashboardScaffoldKey =
+      new GlobalKey<ScaffoldState>();
 
   String? selectedSocietyName;
   List<LoginResponse> mSocietyList = <LoginResponse>[];
@@ -103,7 +89,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     GlobalFunctions.isAllowForRunApp().then((value) {
       if (value) {
         getSharedPreferenceData();
@@ -125,9 +111,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       }
     });
   }
+
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -905,12 +892,12 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                   ),
                   itemCount: loginDashBoardResponse.bannerList.length,
-                  itemBuilder: (BuildContext context, int itemIndex,
-                          int item) =>
-                      loginDashBoardResponse.bannerList.length > 0
-                          ? InkWell(
-                              onTap: () {
-                               /* Navigator.push(
+                  itemBuilder:
+                      (BuildContext context, int itemIndex, int item) =>
+                          loginDashBoardResponse.bannerList.length > 0
+                              ? InkWell(
+                                  onTap: () {
+                                    /* Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => BaseWebViewScreen(
@@ -932,25 +919,27 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       dashboardScaffoldKey.currentContext);
                                 });*/
 
-                                GlobalFunctions.redirectBannerClick(dashboardScaffoldKey.currentContext!,loginDashBoardResponse
-                                    .bannerList[itemIndex].Url!);
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                                //color: GlobalVariables.black,
-                                //alignment: Alignment.center,
-                                child: AppNetworkImage(
-                                  loginDashBoardResponse
-                                      .bannerList[itemIndex].IMAGE,
-                                  fit: BoxFit.fitWidth,
-                                  shape: BoxShape.rectangle,
-                                  borderColor: GlobalVariables.transparent,
-                                  radius: GlobalVariables.textSizeVerySmall,
-                                ),
-                              ),
-                            )
-                          : Container(),
+                                    GlobalFunctions.redirectBannerClick(
+                                        dashboardScaffoldKey.currentContext!,
+                                        loginDashBoardResponse
+                                            .bannerList[itemIndex].Url!);
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    //color: GlobalVariables.black,
+                                    //alignment: Alignment.center,
+                                    child: AppNetworkImage(
+                                      loginDashBoardResponse
+                                          .bannerList[itemIndex].IMAGE,
+                                      fit: BoxFit.fitWidth,
+                                      shape: BoxShape.rectangle,
+                                      borderColor: GlobalVariables.transparent,
+                                      radius: GlobalVariables.textSizeVerySmall,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                 ),
               ),
             ],
@@ -1274,7 +1263,9 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       child: Container(
         //color: GlobalVariables.black,
         child: Theme(
-          data: ThemeData(accentColor: GlobalVariables.primaryColor),
+          data: ThemeData(
+              colorScheme: ColorScheme.fromSwatch()
+                  .copyWith(secondary: GlobalVariables.primaryColor)),
           child: ListView.builder(
             itemCount: _list.length,
             itemBuilder: (BuildContext context, int index) =>
@@ -1549,19 +1540,17 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               RootTitle(
                   title: AppLocalizations.of(context).translate("helpers")),
             ]),
-      if (!AppSocietyPermission.isSocHideHelpDeskPermission)
-        new RootTitle(
-            title: AppLocalizations.of(context).translate('help_desk'),
-            rootIconData: GlobalVariables.mySupportIconPath,
-            // innerIconData: GlobalVariables.myFlatIconPath,
-            items: []),
-      if (!AppSocietyPermission.isSocHideExpensePermission)
-        new RootTitle(
-            title: AppLocalizations.of(context).translate('expense'),
-            rootIconData: GlobalVariables.expenseIconPath,
-            // innerIconData: GlobalVariables.myFlatIconPath,
-            items: []),
-    /*  else if (AppUserPermission.isUserAccountingPermission)
+      if (!AppSocietyPermission.isSocHideHelpDeskPermission) new RootTitle(
+          title: AppLocalizations.of(context).translate('help_desk'),
+          rootIconData: GlobalVariables.mySupportIconPath,
+          // innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      if (!AppSocietyPermission.isSocHideExpensePermission) new RootTitle(
+          title: AppLocalizations.of(context).translate('expense'),
+          rootIconData: GlobalVariables.expenseIconPath,
+          // innerIconData: GlobalVariables.myFlatIconPath,
+          items: []),
+      /*  else if (AppUserPermission.isUserAccountingPermission)
         new RootTitle(
             title: AppLocalizations.of(context).translate('expense'),
             rootIconData: GlobalVariables.expenseIconPath,
@@ -1734,7 +1723,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                         )
                                       : text(
                                           'Paid',
-                                          textColor: GlobalVariables.primaryColor,
+                                          textColor:
+                                              GlobalVariables.primaryColor,
                                           fontSize:
                                               GlobalVariables.textSizeSMedium,
                                           fontWeight: FontWeight.bold,
@@ -1765,7 +1755,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                     : false,
                                 child: text(
                                   !AppUserPermission.isUserHideMyDuesPermission
-                                      ? loginDashBoardResponse.duesDate!.length >
+                                      ? loginDashBoardResponse
+                                                      .duesDate!.length >
                                                   0 &&
                                               loginDashBoardResponse.duesDate !=
                                                   '-'
@@ -1893,7 +1884,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
-              child: RaisedButton(
+              child: MaterialButton(
                 color: GlobalVariables.primaryColor,
                 onPressed: () {
                   Navigator.push(
@@ -2246,7 +2237,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                   //child: supportLayout(),
                 );
               }));*/
-     /*  Navigator.push(
+      /*  Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseSupport())).then((value) {
@@ -2255,9 +2246,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
 
       Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
-          pageBuilder: (BuildContext context, _, __) =>
-              BaseSupport()));
-
+          pageBuilder: (BuildContext context, _, __) => BaseSupport()));
 
       /*Navigator.push(
           context, MaterialPageRoute(builder: (context) => BaseMore())).then((value) {
@@ -2299,7 +2288,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         logout(context);
@@ -2312,7 +2301,7 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                       )),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -2577,40 +2566,44 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                     borderRadius: BorderRadius.circular(10.0)),
                 child: AppContainer(
                   child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: text(
-                            AppLocalizations.of(context)
-                                .translate('switch_society'),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      ListView.builder(
-                          itemCount: mSocietyList.length,
-                           // scrollDirection: Axis.vertical,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, position) {
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  print('mSocietyList : ' +
-                                      mSocietyList.toString());
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('switch_society'),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        ListView.builder(
+                            itemCount: mSocietyList.length,
+                            // scrollDirection: Axis.vertical,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, position) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    print('mSocietyList : ' +
+                                        mSocietyList.toString());
 
-                                    for(int i=0;i<mSocietyList.length;i++){
-                                      if(mSocietyList[i].ID==mSocietyList[position].ID){
+                                    for (int i = 0;
+                                        i < mSocietyList.length;
+                                        i++) {
+                                      if (mSocietyList[i].ID ==
+                                          mSocietyList[position].ID) {
                                         if (mSocietyList[i].isSelected!) {
                                           mSocietyList[i].isSelected = false;
                                         } else {
                                           mSocietyList[i].isSelected = true;
-                                          _selectedSocietyLogin =  mSocietyList[i];
+                                          _selectedSocietyLogin =
+                                              mSocietyList[i];
                                         }
-                                      }else{
+                                      } else {
                                         mSocietyList[i].isSelected = false;
                                       }
                                     }
@@ -2628,101 +2621,109 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                                       _selectedSocietyLogin = element;
                                     }
                                     });*/
-                                });
-                              },
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Flexible(
-                                      flex: 2,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        //mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                                color: mSocietyList[position]
-                                                            .isSelected ==
-                                                        true
-                                                    ? GlobalVariables.primaryColor
-                                                    : GlobalVariables
-                                                        .transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                border: Border.all(
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Flexible(
+                                        flex: 2,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          //mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
                                                   color: mSocietyList[position]
                                                               .isSelected ==
                                                           true
-                                                      ? GlobalVariables.primaryColor
+                                                      ? GlobalVariables
+                                                          .primaryColor
                                                       : GlobalVariables
-                                                          .secondaryColor,
-                                                  width: 2.0,
-                                                )),
-                                            child: AppIcon(
-                                              Icons.check,
-                                              iconColor: mSocietyList[position]
-                                                          .isSelected ==
-                                                      true
-                                                  ? GlobalVariables.white
-                                                  : GlobalVariables.transparent,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  10, 0, 0, 0),
-                                              child: text(
-                                                mSocietyList[position]
-                                                            .Society_Name ==
-                                                        null
-                                                    ? ''
-                                                    : mSocietyList[position]
-                                                      .BLOCK!+' '+mSocietyList[position]
-                                                      .FLAT!+' '+mSocietyList[position]
-                                                      .Society_Name!,
-                                                textColor:
-                                                    GlobalVariables.primaryColor,
-                                                fontSize: GlobalVariables
-                                                    .textSizeSMedium,
+                                                          .transparent,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                    color: mSocietyList[
+                                                                    position]
+                                                                .isSelected ==
+                                                            true
+                                                        ? GlobalVariables
+                                                            .primaryColor
+                                                        : GlobalVariables
+                                                            .secondaryColor,
+                                                    width: 2.0,
+                                                  )),
+                                              child: AppIcon(
+                                                Icons.check,
+                                                iconColor:
+                                                    mSocietyList[position]
+                                                                .isSelected ==
+                                                            true
+                                                        ? GlobalVariables.white
+                                                        : GlobalVariables
+                                                            .transparent,
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            Flexible(
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    10, 0, 0, 0),
+                                                child: text(
+                                                  mSocietyList[position].Society_Name ==
+                                                          null
+                                                      ? ''
+                                                      : mSocietyList[position]
+                                                              .BLOCK! +
+                                                          ' ' +
+                                                          mSocietyList[position]
+                                                              .FLAT! +
+                                                          ' ' +
+                                                          mSocietyList[position]
+                                                              .Society_Name!,
+                                                  textColor: GlobalVariables
+                                                      .primaryColor,
+                                                  fontSize: GlobalVariables
+                                                      .textSizeSMedium,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: AppButton(
-                            textContent:
-                                AppLocalizations.of(context).translate('done'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              // setState(() {
-                              GlobalFunctions.saveDataToSharedPreferences(
-                                    _selectedSocietyLogin!);
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          BaseDashBoard()),
-                                  (Route<dynamic> route) => false);
+                              );
                             }),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          alignment: Alignment.topRight,
+                          child: AppButton(
+                              textContent: AppLocalizations.of(context)
+                                  .translate('done'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                // setState(() {
+                                GlobalFunctions.saveDataToSharedPreferences(
+                                    _selectedSocietyLogin!);
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            BaseDashBoard()),
+                                    (Route<dynamic> route) => false);
+                              }),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
                 ),
 
                 /*  child: DropdownButton(
@@ -2883,8 +2884,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       //show logout Dialog
       GlobalFunctions.forceLogoutDialog(context);
     }
-    print('mSocietyList : '+mSocietyList.toString());
-    print('mSocietyList : '+mSocietyList.length.toString());
+    print('mSocietyList : ' + mSocietyList.toString());
+    print('mSocietyList : ' + mSocietyList.length.toString());
   }
 }
 
@@ -2896,7 +2897,8 @@ class RootTitle {
   List<RootTitle> items;
 
   RootTitle(
-      {required this.title, this.rootIconData,
+      {required this.title,
+      this.rootIconData,
       /* this.innerIconData, */ this.items = const <RootTitle>[]});
 }
 

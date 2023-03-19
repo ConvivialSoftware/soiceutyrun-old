@@ -24,7 +24,6 @@ import 'package:societyrun/Models/NearByShopResponse.dart';
 import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:workmanager/workmanager.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -42,46 +41,19 @@ Logger logger = Logger(
       printEmojis: true,
       // Print an emoji for each log message
       printTime: false // Should each log print contain a timestamp
-  ),
+      ),
 );
 
 callbackNotificationDispatcher() {
   print('Call callbackLocationDispatcher Done');
-
-  Workmanager().executeTask((task,data) async {
-    // print("Native called background task: $backgroundTask"); //simpleTask will be emitted here.
-    //print('Input Data : '+inputData.toString());
-    switch (task) {
-      case Workmanager.iOSBackgroundTask:
-        {
-          print('iOSBackgroundTask');
-          showLocalNotification();
-        }
-        break;
-      case GlobalVariables.fetchNotificationBackground:
-        print(GlobalVariables.fetchNotificationBackground);
-        showLocalNotification();
-        break;
-    }
-    return Future.value(true);
-  });
 }
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   //flutterDownloadInitialize();
-  Workmanager().initialize(
-    callbackNotificationDispatcher,
-    isInDebugMode: false,
-  );
-  Workmanager().registerPeriodicTask(
-    "1",
-    GlobalVariables.fetchNotificationBackground,
-    frequency: Duration(hours: 8),
-  );
 
   runApp(BaseAppStart());
 }
@@ -140,33 +112,31 @@ Future<void> showLocalNotification() async {
     print('days : ' + days.toString());
 
     if (days == 0 || days == -1 || days == -2) {
-
-      String day='' ;
-      if(days==0){
+      String day = '';
+      if (days == 0) {
         day = 'Today';
-      }else if(days==-1){
-        day = days.abs().toString()+' Day';
-      }else if(days==-2){
-        day = days.abs().toString()+' Days';
+      } else if (days == -1) {
+        day = days.abs().toString() + ' Day';
+      } else if (days == -2) {
+        day = days.abs().toString() + ' Days';
       }
 
       print('dues condition true');
       await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        societyName +' '+GlobalFunctions.getCurrencyFormat(dues),
-        'Due in '+day,
+        societyName + ' ' + GlobalFunctions.getCurrencyFormat(dues),
+        'Due in ' + day,
         tz.TZDateTime.from(dateTime, tz.local),
         platformChannelSpecifics,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
+            UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
       );
-    }else{
+    } else {
       flutterLocalNotificationsPlugin.cancel(0);
     }
   });
-
 }
 
 class BaseAppStart extends StatelessWidget {
@@ -248,8 +218,10 @@ class BaseAppStart extends StatelessWidget {
   getThemeData() {
     return ThemeData(
         primaryColor: GlobalVariables.primaryColor,
-        accentColor: GlobalVariables.white,
         primaryColorDark: GlobalVariables.primaryColor,
-        cursorColor: GlobalVariables.secondaryColor);
+        textSelectionTheme:
+            TextSelectionThemeData(cursorColor: GlobalVariables.secondaryColor),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: GlobalVariables.white));
   }
 }

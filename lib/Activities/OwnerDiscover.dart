@@ -1,12 +1,6 @@
 //import 'package:after_layout/after_layout.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/AddNearByShop.dart';
-import 'package:societyrun/Activities/ClassifiedListItemDesc.dart';
 import 'package:societyrun/Activities/CreateClassifiedListing.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OwnerClassifiedListItemDesc.dart';
@@ -18,8 +12,6 @@ import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'base_stateful.dart';
-import 'package:intl/intl.dart';
 
 class BaseOwnerDiscover extends StatefulWidget {
   String pageName;
@@ -86,7 +78,7 @@ class OwnerDiscoverState extends State<BaseOwnerDiscover> {
             if(value.ownerClassifiedList.length>0) {
               if (widget.classifiedId != null) {
                 widget.classifiedId=null;
-                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   // Navigator.of(context).pop();
                   Navigator.push(
                       context,

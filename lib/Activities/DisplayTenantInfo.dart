@@ -1,10 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
-
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:flutter_uploader/flutter_uploader.dart';
@@ -14,16 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AppStatefulState.dart';
 import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Member.dart';
-import 'package:societyrun/Models/ProfileInfo.dart';
-import 'package:societyrun/Models/UploadItem.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -32,7 +21,6 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BaseTenantInfo extends StatefulWidget {
-
   TenantRentalRequest _tenantRentalRequest;
   bool isAdmin;
 
@@ -46,7 +34,6 @@ class BaseTenantInfo extends StatefulWidget {
 }
 
 class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
-
   String? societyId;
 
   TextEditingController _agreementFromController = TextEditingController();
@@ -69,7 +56,7 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
       isStoragePermission = value;
     });
 
-   /* _progressSubscription = uploader.progress.listen((progress) {
+    /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       print("progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
@@ -101,7 +88,6 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
       });
     });
 */
-
   }
 
   @override
@@ -113,45 +99,49 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
         appBar: CustomAppBar(
           title: AppLocalizations.of(context).translate('my_tenant'),
           actions: [
-              PopupMenuButton(
-                  icon: AppIcon(Icons.more_vert,
-                      iconColor:
-                      // isMenuEnable ?
-                      GlobalVariables.white
+            PopupMenuButton(
+                icon: AppIcon(Icons.more_vert,
+                    iconColor:
+                        // isMenuEnable ?
+                        GlobalVariables.white
                     // : GlobalVariables.transparent
-                  ),
-                  // add this line
-                  itemBuilder: (_) => <PopupMenuItem<String>>[
-                    new PopupMenuItem<String>(
-                        child: Container(
-                          //width: 200,
-                          // height: 30,
-                            child: text(AppLocalizations.of(context).translate('renew_agreement'),
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeSMedium)),
-                        value: 'renew'),
-                    new PopupMenuItem<String>(
-                        child: Container(
-                          // width: 100,
-                          // height: 30,
-                            child: text(AppLocalizations.of(context).translate('terminate'),
-                                textColor: GlobalVariables.black,
-                                fontSize: GlobalVariables.textSizeSMedium)),
-                        value: 'close'),
-                  ],
-                  onSelected: (index) async {
-                    switch (index) {
-                      case 'renew':
-                        print('Id : '+widget._tenantRentalRequest.ID!);
-                        showRenewAgreementDialog();
-                        break;
-                      case 'close':
-                        showCloseAgreementDialog();
-                        break;
-                    }
-                  }),
+                    ),
+                // add this line
+                itemBuilder: (_) => <PopupMenuItem<String>>[
+                      new PopupMenuItem<String>(
+                          child: Container(
+                              //width: 200,
+                              // height: 30,
+                              child: text(
+                                  AppLocalizations.of(context)
+                                      .translate('renew_agreement'),
+                                  textColor: GlobalVariables.black,
+                                  fontSize: GlobalVariables.textSizeSMedium)),
+                          value: 'renew'),
+                      new PopupMenuItem<String>(
+                          child: Container(
+                              // width: 100,
+                              // height: 30,
+                              child: text(
+                                  AppLocalizations.of(context)
+                                      .translate('terminate'),
+                                  textColor: GlobalVariables.black,
+                                  fontSize: GlobalVariables.textSizeSMedium)),
+                          value: 'close'),
+                    ],
+                onSelected: (index) async {
+                  switch (index) {
+                    case 'renew':
+                      print('Id : ' + widget._tenantRentalRequest.ID!);
+                      showRenewAgreementDialog();
+                      break;
+                    case 'close':
+                      showCloseAgreementDialog();
+                      break;
+                  }
+                }),
           ],
-        )/*AppBar(
+        ) /*AppBar(
           backgroundColor: GlobalVariables.red,
           centerTitle: true,
           elevation: 0,
@@ -207,7 +197,8 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
             AppLocalizations.of(context).translate('my_tenant'),
             style: TextStyle(color: GlobalVariables.white),
           ),
-        )*/,
+        )*/
+        ,
         body: getBaseLayout(),
       ),
     );
@@ -234,7 +225,9 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
   }
 
   getTenantInfoLayout() {
-    List<Member> tenantInfo = List<Member>.from(widget._tenantRentalRequest.tenant_name!.map((i) => Member.fromJson(i)));
+    List<Member> tenantInfo = List<Member>.from(widget
+        ._tenantRentalRequest.tenant_name!
+        .map((i) => Member.fromJson(i)));
     return Container(
       margin: EdgeInsets.only(top: 8),
       child: SingleChildScrollView(
@@ -243,7 +236,7 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             AppContainer(
-              isListItem:true,
+              isListItem: true,
               child: Builder(
                   builder: (context) => ListView.builder(
                         // scrollDirection: Axis.vertical,
@@ -265,11 +258,13 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                               child: Column(
                                 children: <Widget>[
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                           //margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                          child: tenantInfo[position].PROFILE_PHOTO!
+                                          child: tenantInfo[position]
+                                                  .PROFILE_PHOTO!
                                                   .isEmpty
                                               ? AppAssetsImage(
                                                   GlobalVariables
@@ -283,7 +278,8 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                                   radius: 25.0,
                                                 )
                                               : AppNetworkImage(
-                                            tenantInfo[position].PROFILE_PHOTO,
+                                                  tenantInfo[position]
+                                                      .PROFILE_PHOTO,
                                                   imageWidth: 50.0,
                                                   imageHeight: 50.0,
                                                   borderColor:
@@ -304,19 +300,23 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                               tenantInfo[position].NAME,
                                               maxLine: 2,
                                             ),
-                                            tenantInfo[position].MOBILE!
+                                            tenantInfo[position]
+                                                        .MOBILE!
                                                         .length >
                                                     0
                                                 ? InkWell(
                                                     onTap: () {
                                                       launch("tel://" +
-                                                          tenantInfo[position].MOBILE!);
+                                                          tenantInfo[position]
+                                                              .MOBILE!);
                                                     },
                                                     child: secondaryText(
-                                                        tenantInfo[position].MOBILE,
+                                                        tenantInfo[position]
+                                                            .MOBILE,
                                                         maxLine: 2,
-                                                        textColor: GlobalVariables
-                                                            .skyBlue),
+                                                        textColor:
+                                                            GlobalVariables
+                                                                .skyBlue),
                                                   )
                                                 : InkWell(
                                                     onTap: () async {
@@ -328,7 +328,9 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   BaseEditProfileInfo(
-                                                                      tenantInfo[position].ID,
+                                                                      tenantInfo[
+                                                                              position]
+                                                                          .ID,
                                                                       societyId)));
                                                       if (result == 'profile') {
                                                         Provider.of<UserManagementResponse>(
@@ -346,8 +348,9 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                                                 context)
                                                             .translate(
                                                                 'add_phone'),
-                                                        textColor: GlobalVariables
-                                                            .skyBlue,
+                                                        textColor:
+                                                            GlobalVariables
+                                                                .skyBlue,
                                                       ),
                                                     ),
                                                   )
@@ -360,7 +363,8 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                           iconColor: GlobalVariables.grey,
                                           iconSize: 20.0,
                                           onPressed: () {
-                                            String name = tenantInfo[position].NAME!;
+                                            String name =
+                                                tenantInfo[position].NAME!;
                                             String title = '';
                                             String text = 'Name : ' +
                                                 name +
@@ -375,9 +379,7 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                       )
                                     ],
                                   ),
-                                  position !=
-                                      tenantInfo.length -
-                                              1
+                                  position != tenantInfo.length - 1
                                       ? Divider()
                                       : Container(),
                                   /*call.length > 0
@@ -472,7 +474,7 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
             ),
             //SizedBox(height: 8),
             AppContainer(
-              isListItem:true,
+              isListItem: true,
               child: Column(
                 children: [
                   Row(
@@ -484,13 +486,17 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                       SizedBox(
                         width: 2,
                       ),
-                      text(AppLocalizations.of(context).translate('agreement_from') +
-                          ' : ',fontSize: GlobalVariables.textSizeMedium),
+                      text(
+                          AppLocalizations.of(context)
+                                  .translate('agreement_from') +
+                              ' : ',
+                          fontSize: GlobalVariables.textSizeMedium),
                       SizedBox(
                         width: 8,
                       ),
-                      secondaryText(
-                          GlobalFunctions.convertDateFormat(widget._tenantRentalRequest.AGREEMENT_FROM!, "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
+                      secondaryText(GlobalFunctions.convertDateFormat(
+                              widget._tenantRentalRequest.AGREEMENT_FROM!,
+                              "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
                           ? ''
                           : GlobalFunctions.convertDateFormat(_profileList[0].DOB,"dd-MM-yyyy")*/
                           ),
@@ -506,13 +512,17 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                       SizedBox(
                         width: 2,
                       ),
-                      text(AppLocalizations.of(context).translate('agreement_to') +
-                          ' : ',fontSize: GlobalVariables.textSizeMedium),
+                      text(
+                          AppLocalizations.of(context)
+                                  .translate('agreement_to') +
+                              ' : ',
+                          fontSize: GlobalVariables.textSizeMedium),
                       SizedBox(
                         width: 8,
                       ),
-                      secondaryText(
-                          GlobalFunctions.convertDateFormat(widget._tenantRentalRequest.AGREEMENT_TO!, "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
+                      secondaryText(GlobalFunctions.convertDateFormat(
+                              widget._tenantRentalRequest.AGREEMENT_TO!,
+                              "dd-MM-yyyy") /*userManagementResponse.tenantListForAdmin. == '0000-00-00'
                           ? ''
                           : GlobalFunctions.convertDateFormat(_profileList[0].DOB,"dd-MM-yyyy")*/
                           ),
@@ -524,36 +534,47 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
             AppContainer(
               isListItem: true,
               child: InkWell(
-                onTap: (){
-                  downloadAttachment(
-                      widget._tenantRentalRequest.AGREEMENT);
+                onTap: () {
+                  downloadAttachment(widget._tenantRentalRequest.AGREEMENT);
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.attach_file,color: GlobalVariables.secondaryColor,),
-                    SizedBox(width: 8,),
-                    text('Agreement Attachment',textColor: GlobalVariables.skyBlue,fontSize: GlobalVariables.textSizeSMedium),
-                    SizedBox(width: 4,),
-                    if(downloading) Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        Container(
-                          //height: 20,
-                          //width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            //value: 71.0,
+                    Icon(
+                      Icons.attach_file,
+                      color: GlobalVariables.secondaryColor,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    text('Agreement Attachment',
+                        textColor: GlobalVariables.skyBlue,
+                        fontSize: GlobalVariables.textSizeSMedium),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    if (downloading)
+                      Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            //height: 20,
+                            //width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              //value: 71.0,
+                            ),
                           ),
-                        ),
-                        //SizedBox(width: 4,),
-                        Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
-                      ],
-                    )
+                          //SizedBox(width: 4,),
+                          Container(
+                              child: text(downloadRate.toString(),
+                                  fontSize: GlobalVariables.textSizeSmall,
+                                  textColor: GlobalVariables.skyBlue))
+                        ],
+                      )
                   ],
                 ),
               ),
-
             )
           ],
         ),
@@ -562,11 +583,10 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
   }
 
   void showRenewAgreementDialog() {
-
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter _setState) {
+                builder: (BuildContext context, StateSetter _setState) {
               return Dialog(
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
@@ -596,15 +616,18 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                           height: 16,
                         ),
                         AppTextField(
-                            textHintContent: AppLocalizations.of(context).translate('agreement_from')+"*",
-                            controllerCallback: _agreementFromController,
+                          textHintContent: AppLocalizations.of(context)
+                                  .translate('agreement_from') +
+                              "*",
+                          controllerCallback: _agreementFromController,
                           readOnly: true,
                           contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           suffixIcon: AppIconButton(
                             Icons.date_range,
                             iconColor: GlobalVariables.secondaryColor,
                             onPressed: () {
-                              GlobalFunctions.getSelectedDate(context).then((value) {
+                              GlobalFunctions.getSelectedDate(context)
+                                  .then((value) {
                                 _agreementFromController.text =
                                     value.day.toString().padLeft(2, '0') +
                                         "-" +
@@ -619,24 +642,27 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                           height: 8,
                         ),
                         AppTextField(
-                          textHintContent: AppLocalizations.of(context).translate('agreement_to')+"*",
+                          textHintContent: AppLocalizations.of(context)
+                                  .translate('agreement_to') +
+                              "*",
                           controllerCallback: _agreementToController,
-                            readOnly: true,
-                            contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            suffixIcon: AppIconButton(
-                              Icons.date_range,
-                              iconColor: GlobalVariables.secondaryColor,
-                              onPressed: () {
-                                GlobalFunctions.getSelectedDate(context).then((value) {
-                                  _agreementToController.text =
-                                      value.day.toString().padLeft(2, '0') +
-                                          "-" +
-                                          value.month.toString().padLeft(2, '0') +
-                                          "-" +
-                                          value.year.toString();
-                                });
-                              },
-                            ),
+                          readOnly: true,
+                          contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          suffixIcon: AppIconButton(
+                            Icons.date_range,
+                            iconColor: GlobalVariables.secondaryColor,
+                            onPressed: () {
+                              GlobalFunctions.getSelectedDate(context)
+                                  .then((value) {
+                                _agreementToController.text =
+                                    value.day.toString().padLeft(2, '0') +
+                                        "-" +
+                                        value.month.toString().padLeft(2, '0') +
+                                        "-" +
+                                        value.year.toString();
+                              });
+                            },
+                          ),
                         ),
                         SizedBox(
                           height: 8,
@@ -652,39 +678,46 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                     Column(
                                       children: <Widget>[
                                         Container(
-                                          child: FlatButton.icon(
+                                          child: TextButton.icon(
                                             onPressed: () {
                                               if (isStoragePermission) {
-                                                openFile(context,_setState);
+                                                openFile(context, _setState);
                                               } else {
                                                 GlobalFunctions.askPermission(
-                                                    Permission.storage)
+                                                        Permission.storage)
                                                     .then((value) {
                                                   if (value) {
-                                                    openFile(context,_setState);
+                                                    openFile(
+                                                        context, _setState);
                                                   } else {
                                                     GlobalFunctions.showToast(
-                                                        AppLocalizations.of(context)
+                                                        AppLocalizations.of(
+                                                                context)
                                                             .translate(
-                                                            'download_permission'));
+                                                                'download_permission'));
                                                   }
                                                 });
                                               }
                                             },
                                             icon: AppIcon(
                                               Icons.attach_file,
-                                              iconColor: GlobalVariables.secondaryColor,
+                                              iconColor: GlobalVariables
+                                                  .secondaryColor,
                                               iconSize: 20.0,
                                             ),
                                             label: Flexible(
                                               child: text(
                                                   attachmentFileName != null
                                                       ? attachmentFileName
-                                                      : AppLocalizations.of(context)
-                                                      .translate('attach_agreement')+'*',
-                                                  textColor: GlobalVariables.primaryColor,
-                                                  fontSize: GlobalVariables.textSizeSMedium
-                                              ),
+                                                      : AppLocalizations.of(
+                                                                  context)
+                                                              .translate(
+                                                                  'attach_agreement') +
+                                                          '*',
+                                                  textColor: GlobalVariables
+                                                      .primaryColor,
+                                                  fontSize: GlobalVariables
+                                                      .textSizeSMedium),
                                             ),
                                           ),
                                         ),
@@ -696,7 +729,7 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                               ),
                             ),
                             Container(
-                              child: FlatButton.icon(
+                              child: TextButton.icon(
                                   onPressed: () {
                                     if (isStoragePermission) {
                                       openCamera(context);
@@ -741,28 +774,35 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                               textContent: AppLocalizations.of(context)
                                   .translate('submit'),
                               onPressed: () async {
+                                if (_agreementFromController.text.length > 0) {
+                                  if (_agreementToController.text.length > 0) {
+                                    if (attachmentFilePath != null) {
+                                      _progressDialog!.show();
 
-                                  if (_agreementFromController.text.length > 0) {
-                                    if (_agreementToController.text.length > 0) {
-                                      if (attachmentFilePath != null) {
-                                        _progressDialog!.show();
+                                      Provider.of<UserManagementResponse>(
+                                              context,
+                                              listen: false)
+                                          .renewAgreement(
+                                              widget._tenantRentalRequest.ID!,
+                                              _agreementFromController.text,
+                                              _agreementToController.text,
+                                              GlobalFunctions
+                                                  .convertFileToString(
+                                                      attachmentFilePath!),
+                                              attachmentFileName!.substring(
+                                                  attachmentFileName!
+                                                          .indexOf(".") +
+                                                      1,
+                                                  attachmentFileName!.length),
+                                              widget.isAdmin)
+                                          .then((value) async {
+                                        _progressDialog!.dismiss();
 
-                                        Provider.of<UserManagementResponse>(context,
-                                            listen: false)
-                                            .renewAgreement(
-                                            widget._tenantRentalRequest.ID!,
-                                            _agreementFromController.text,
-                                            _agreementToController.text,
-                                            GlobalFunctions.convertFileToString(attachmentFilePath!),
-                                            attachmentFileName!.substring(attachmentFileName!.indexOf(".")+1,attachmentFileName!.length),
-                                            widget.isAdmin)
-                                            .then((value) async {
-                                          _progressDialog!.dismiss();
-
-                                          GlobalFunctions.showToast(value.message!);
-                                          if (value.status!) {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
+                                        GlobalFunctions.showToast(
+                                            value.message!);
+                                        if (value.status!) {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
 /*
                                             final tag = "File upload ${_tasks.length +
                                                 1}";
@@ -798,21 +838,21 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                                             .enqueued,
                                                       ));
                                             });*/
-                                          }
-                                        });
-                                      } else {
-                                        GlobalFunctions.showToast('Please Select Agreement File');
-                                      }
+                                        }
+                                      });
                                     } else {
-                                      GlobalFunctions.showToast('Please Enter End Date');
+                                      GlobalFunctions.showToast(
+                                          'Please Select Agreement File');
                                     }
                                   } else {
-                                    GlobalFunctions.showToast('Please Enter Start Date');
+                                    GlobalFunctions.showToast(
+                                        'Please Enter End Date');
                                   }
-
-                              }
-
-                              ),
+                                } else {
+                                  GlobalFunctions.showToast(
+                                      'Please Enter Start Date');
+                                }
+                              }),
                         )
                       ],
                     ),
@@ -820,7 +860,6 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                 ),
               );
             }));
-
   }
 
   void openFile(BuildContext context, StateSetter setState) {
@@ -834,11 +873,10 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
   }
 
   void showCloseAgreementDialog() {
-
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -850,7 +888,8 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                     children: <Widget>[
                       Container(
                         child: text(
-                            AppLocalizations.of(context).translate('sure_close_agreement'),
+                            AppLocalizations.of(context)
+                                .translate('sure_close_agreement'),
                             fontSize: GlobalVariables.textSizeLargeMedium,
                             textColor: GlobalVariables.black,
                             fontWeight: FontWeight.bold),
@@ -861,32 +900,35 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Container(
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
-
-                                  Provider.of<UserManagementResponse>(context,listen: false).closeAgreement(widget._tenantRentalRequest.ID!).then((value) {
-
+                                  Provider.of<UserManagementResponse>(context,
+                                          listen: false)
+                                      .closeAgreement(
+                                          widget._tenantRentalRequest.ID!)
+                                      .then((value) {
                                     GlobalFunctions.showToast(value.message!);
-                                    if(value.status!){
+                                    if (value.status!) {
                                       Navigator.of(context).pop();
                                     }
-
                                   });
                                 },
                                 child: text(
-                                    AppLocalizations.of(context).translate('yes'),
+                                    AppLocalizations.of(context)
+                                        .translate('yes'),
                                     textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
                             Container(
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                                 child: text(
-                                    AppLocalizations.of(context).translate('no'),
+                                    AppLocalizations.of(context)
+                                        .translate('no'),
                                     textColor: GlobalVariables.primaryColor,
                                     fontSize: GlobalVariables.textSizeMedium,
                                     fontWeight: FontWeight.bold),
@@ -900,6 +942,5 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                 ),
               );
             }));
-
   }
 }

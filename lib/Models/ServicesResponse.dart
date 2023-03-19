@@ -56,7 +56,7 @@ class ServicesResponse extends ChangeNotifier {
   }
 
   Future<StatusMsgResponse> bookServicePerCategory(
-      String S_Id, String Requirement,userName,userMobile,userEmail,String bookingDate) async {
+      String sId, String Requirement,userName,userMobile,userEmail,String bookingDate) async {
     String userId = await GlobalFunctions.getUserId();
     String societyId = await GlobalFunctions.getSocietyId();
     String societyName = await GlobalFunctions.getSocietyName();
@@ -73,7 +73,7 @@ class ServicesResponse extends ChangeNotifier {
     final RestClientDiscover restClient =
         RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
     var result = await restClient.bookServicePerCategory(
-        S_Id,
+        sId,
         userId,
         userName,
         userEmail,
@@ -112,7 +112,7 @@ class ServicesResponse extends ChangeNotifier {
   }
 
   Future<StatusMsgResponse> updateServiceRatting(
-      String S_Id, String _myRate) async {
+      String sId, String _myRate) async {
     isLoading = true;
     notifyListeners();
     String userId = await GlobalFunctions.getUserId();
@@ -120,7 +120,7 @@ class ServicesResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClientDiscover restClient =
         RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-    var result = await restClient.updateServicesRatting(userId, S_Id, _myRate,societyId);
+    var result = await restClient.updateServicesRatting(userId, sId, _myRate,societyId);
     isLoading = false;
     notifyListeners();
     getOwnerServices();

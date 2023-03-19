@@ -10,7 +10,7 @@ abstract class RestClientRazorPay {
   factory RestClientRazorPay(Dio dio, {String baseUrl}) = RestAPI;
 
   @POST(GlobalVariables.razorPayOrderAPI)
-  Future<Map<String, dynamic>> getRazorPayOrderID(RazorPayOrderRequest request,String razorKey, String secret_key);
+  Future<Map<String, dynamic>> getRazorPayOrderID(RazorPayOrderRequest request,String razorKey, String secretKey);
 
 
 }

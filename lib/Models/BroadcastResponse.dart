@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
-import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 
@@ -88,11 +87,11 @@ class BroadcastResponse extends ChangeNotifier {
       List<FlatMemberDetails> flats,
       String sendTo,
       String smsType,
-      String meeting_name,
-      String meeting_date,
+      String meetingName,
+      String meetingDate,
       String time,
       String minute,
-      String time_type,
+      String timeType,
       String venue,
       String societyName) async {
     final dio = Dio();
@@ -109,11 +108,11 @@ class BroadcastResponse extends ChangeNotifier {
         ar,
         sendTo,
         smsType,
-        meeting_name,
-        meeting_date,
+        meetingName,
+        meetingDate,
         time,
         minute,
-        time_type,
+        timeType,
         venue,
         societyName);
 
@@ -125,12 +124,12 @@ class BroadcastResponse extends ChangeNotifier {
       String sendTo,
       String smsType,
       String date4,
-      String start_time4,
-      String start_minute4,
-      String start_time_type4,
-      String end_time4,
-      String end_minute4,
-      String end_time_type4,
+      String startTime4,
+      String startMinute4,
+      String startTimeType4,
+      String endTime4,
+      String endMinute4,
+      String endTimeType4,
       String societyName) async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -147,12 +146,12 @@ class BroadcastResponse extends ChangeNotifier {
         sendTo,
         smsType,
         date4,
-        start_time4,
-        start_minute4,
-        start_time_type4,
-        end_time4,
-        end_minute4,
-        end_time_type4,
+        startTime4,
+        startMinute4,
+        startTimeType4,
+        endTime4,
+        endMinute4,
+        endTimeType4,
         societyName);
 
     return result;
@@ -163,12 +162,12 @@ class BroadcastResponse extends ChangeNotifier {
       String sendTo,
       String smsType,
       String date3,
-      String start_time3,
-      String start_minute3,
-      String start_time_type3,
-      String end_time3,
-      String end_minute3,
-      String end_time_type3,
+      String startTime3,
+      String startMinute3,
+      String startTimeType3,
+      String endTime3,
+      String endMinute3,
+      String endTimeType3,
       String societyName) async {
 
     final dio = Dio();
@@ -186,12 +185,12 @@ class BroadcastResponse extends ChangeNotifier {
         sendTo,
         smsType,
         date3,
-        start_time3,
-        start_minute3,
-        start_time_type3,
-        end_time3,
-        end_minute3,
-        end_time_type3,
+        startTime3,
+        startMinute3,
+        startTimeType3,
+        endTime3,
+        endMinute3,
+        endTimeType3,
         societyName);
 
     return result;
@@ -201,8 +200,8 @@ class BroadcastResponse extends ChangeNotifier {
 
   @override
   Future<DataResponse> fireDrillSMS(List<FlatMemberDetails> flats, String sendTo, String smsType,
-      String date2, String start_time2, String start_minute2,
-      String start_time_type2, String societyName) async {
+      String date2, String startTime2, String startMinute2,
+      String startTimeType2, String societyName) async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -218,17 +217,17 @@ class BroadcastResponse extends ChangeNotifier {
         ar,
         sendTo,
         smsType,
-        date2, start_time2,  start_minute2,
-         start_time_type2,  societyName);
+        date2, startTime2,  startMinute2,
+         startTimeType2,  societyName);
 
     return result;
 
   }
 
   Future<DataResponse> serviceDownSMS(List<FlatMemberDetails> flats, String sendTo,
-      String smsType, String reason, String reason1, String date1, String start_time1,
-      String start_minute1, String start_time_type1, String end_time, String end_minute,
-      String end_time_type, String societyName) async {
+      String smsType, String reason, String reason1, String date1, String startTime1,
+      String startMinute1, String startTimeType1, String endTime, String endMinute,
+      String endTimeType, String societyName) async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -244,9 +243,9 @@ class BroadcastResponse extends ChangeNotifier {
         ar,
         sendTo,
         smsType,
-        reason,  reason1,  date1,  start_time1,
-         start_minute1,  start_time_type1,  end_time,  end_minute,
-         end_time_type,  societyName);
+        reason,  reason1,  date1,  startTime1,
+         startMinute1,  startTimeType1,  endTime,  endMinute,
+         endTimeType,  societyName);
 
     return result;
 
@@ -254,8 +253,8 @@ class BroadcastResponse extends ChangeNotifier {
   }
 
   Future<DataResponse> powerOutageSMS(List<FlatMemberDetails> flats, String sendTo,
-      String smsType, String date, String start_time, String start_minute, String start_time_type,
-      String time, String minute, String time_type, String societyName) async {
+      String smsType, String date, String startTime, String startMinute, String startTimeType,
+      String time, String minute, String timeType, String societyName) async {
 
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
@@ -271,8 +270,8 @@ class BroadcastResponse extends ChangeNotifier {
         ar,
         sendTo,
         smsType,
-        date,  start_time,  start_minute,  start_time_type,
-         time,  minute,  time_type,  societyName);
+        date,  startTime,  startMinute,  startTimeType,
+         time,  minute,  timeType,  societyName);
 
     return result;
 

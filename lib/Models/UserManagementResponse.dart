@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Bills.dart';
-import 'package:societyrun/Models/DataResponse.dart';
 import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/Member.dart';
@@ -90,7 +89,7 @@ class UserManagementResponse extends ChangeNotifier {
       notifyListeners();
     }
     final dio = Dio();
-    final RestClient restClient = await RestClient(dio);
+    final RestClient restClient = RestClient(dio);
     await restClient.getPaymentCharges().then((value) {
       if(value.status!){
 
@@ -443,19 +442,19 @@ class UserManagementResponse extends ChangeNotifier {
   Future<StatusMsgResponse> editUnitDetails(
       String block,
       String ID,
-      String CONSUMER_NO,
-      String PARKING_SLOT,
+      String consumerNo,
+      String parkingSlot,
       String AREA,
-      String GSTIN_NO,
-      String BILLING_NAME,
+      String gstinNo,
+      String billingName,
       String INTERCOM) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
     String societyId = await GlobalFunctions.getSocietyId();
 
-    var result = await restClient.editUnitDetails(societyId, ID, CONSUMER_NO,
-        PARKING_SLOT, AREA, GSTIN_NO, BILLING_NAME, INTERCOM);
+    var result = await restClient.editUnitDetails(societyId, ID, consumerNo,
+        parkingSlot, AREA, gstinNo, billingName, INTERCOM);
 
     getUnitDetails(block);
     return result;
@@ -598,7 +597,7 @@ class UserManagementResponse extends ChangeNotifier {
     return rentalRequestList;
   }
 
-  Future<StatusMsgResponse> sendInviteAPI(List<String> user_id) async {
+  Future<StatusMsgResponse> sendInviteAPI(List<String> userId) async {
     Dio dio = Dio();
     RestClient restClient = RestClient(dio);
 
@@ -606,7 +605,7 @@ class UserManagementResponse extends ChangeNotifier {
     String societyName = await GlobalFunctions.getSocietyName();
 
     var result =
-        await restClient.getSendInvite(societyId, societyName, user_id);
+        await restClient.getSendInvite(societyId, societyName, userId);
 
     getUseTypeList('yet to login');
     return result;

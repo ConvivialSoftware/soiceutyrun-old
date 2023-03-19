@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
-import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
@@ -9,8 +8,6 @@ import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:intl/intl.dart';
-import 'base_stateful.dart';
 
 class BaseServicesPerCategory extends StatefulWidget {
 

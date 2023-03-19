@@ -1,33 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 //import 'package:clipboard_manager/clipboard_manager.dart';
-import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
-import 'package:societyrun/Activities/DashBoard.dart';
-import 'package:societyrun/Activities/RaiseNewTicket.dart';
-import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/NearByShopResponse.dart';
-import 'package:societyrun/Models/StaffCount.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'base_stateful.dart';
-
 class BaseNearByShopNotificationItemDetails extends StatefulWidget {
-  
   String exclusiveId;
   BaseNearByShopNotificationItemDetails(this.exclusiveId);
 
@@ -43,9 +31,9 @@ class NearByShopNotificationItemDetailsState
     with SingleTickerProviderStateMixin {
   var width, height;
 
-  List<NearByShopOfferDetails> offerDetailsList=<NearByShopOfferDetails>[];
-  List<NearByShopTermsCondition> termsConditionList=<NearByShopTermsCondition>[];
-
+  List<NearByShopOfferDetails> offerDetailsList = <NearByShopOfferDetails>[];
+  List<NearByShopTermsCondition> termsConditionList =
+      <NearByShopTermsCondition>[];
 
   @override
   void dispose() {
@@ -60,17 +48,13 @@ class NearByShopNotificationItemDetailsState
         Provider.of<NearByShopResponse>(context, listen: false)
             .getExclusiveOfferData(GlobalVariables.appFlag, widget.exclusiveId)
             .then((tabLength) {
-              setState(() {
-
-              });
-
+          setState(() {});
         });
-      }else{
+      } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
       }
     });
-   
   }
 
   @override
@@ -83,14 +67,13 @@ class NearByShopNotificationItemDetailsState
         value: Provider.of<NearByShopResponse>(context),
         child: Consumer<NearByShopResponse>(
           builder: (context, value, child) {
-
-            if(value.nearByShopList.length>0) {
-              offerDetailsList = List<NearByShopOfferDetails>.from(
-                  value.nearByShopList[0].offer_details.map((i) =>
-                      NearByShopOfferDetails.fromJson(i)));
-              termsConditionList = List<NearByShopTermsCondition>.from(
-                  value.nearByShopList[0].terms_condition.map((i) =>
-                      NearByShopTermsCondition.fromJson(i)));
+            if (value.nearByShopList.length > 0) {
+              offerDetailsList = List<NearByShopOfferDetails>.from(value
+                  .nearByShopList[0].offer_details
+                  .map((i) => NearByShopOfferDetails.fromJson(i)));
+              termsConditionList = List<NearByShopTermsCondition>.from(value
+                  .nearByShopList[0].terms_condition
+                  .map((i) => NearByShopTermsCondition.fromJson(i)));
             }
             return Builder(
               builder: (context) => Scaffold(
@@ -98,14 +81,16 @@ class NearByShopNotificationItemDetailsState
                 appBar: CustomAppBar(
                   title: 'Offer Details',
                 ),
-                body: !value.isLoading ? getBaseLayout(value) : GlobalFunctions.loadingWidget(context),
+                body: !value.isLoading
+                    ? getBaseLayout(value)
+                    : GlobalFunctions.loadingWidget(context),
               ),
             );
           },
         ));
   }
 
-  getBaseLayout(NearByShopResponse value){
+  getBaseLayout(NearByShopResponse value) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -127,7 +112,8 @@ class NearByShopNotificationItemDetailsState
                         Column(
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.all(GlobalVariables.spacing_standard_new),
+                              margin: EdgeInsets.all(
+                                  GlobalVariables.spacing_standard_new),
                               child: Column(
                                 children: <Widget>[
                                   Row(
@@ -146,9 +132,11 @@ class NearByShopNotificationItemDetailsState
                                         child: text(
                                           'Till ' +
                                               GlobalFunctions.convertDateFormat(
-                                                  value.nearByShopList[0].exp_date!,
+                                                  value.nearByShopList[0]
+                                                      .exp_date!,
                                                   'dd-MMM-yyyy'),
-                                          fontSize:GlobalVariables.textSizeSmall,
+                                          fontSize:
+                                              GlobalVariables.textSizeSmall,
                                         ),
                                       ),
                                     ],
@@ -188,7 +176,7 @@ class NearByShopNotificationItemDetailsState
                                                     value.nearByShopList[0]
                                                         .vendor_shop,
                                                     textColor:
-                                                    GlobalVariables.black,
+                                                        GlobalVariables.black,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: GlobalVariables
                                                         .textSizeLargeMedium,
@@ -197,23 +185,23 @@ class NearByShopNotificationItemDetailsState
                                               divider(),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Expanded(
                                                     child: text(
                                                         value.nearByShopList[0]
                                                             .Title,
                                                         textColor:
-                                                        GlobalVariables
-                                                            .primaryColor,
+                                                            GlobalVariables
+                                                                .primaryColor,
                                                         fontWeight:
-                                                        FontWeight.w500,
+                                                            FontWeight.w500,
                                                         fontSize:
-                                                        GlobalVariables
-                                                            .textSizeMedium,
+                                                            GlobalVariables
+                                                                .textSizeMedium,
                                                         maxLine: 4),
                                                   ),
                                                   SizedBox(
@@ -221,14 +209,14 @@ class NearByShopNotificationItemDetailsState
                                                   ),
                                                   Container(
                                                     margin:
-                                                    EdgeInsets.only(top: 8),
+                                                        EdgeInsets.only(top: 8),
                                                     child: SvgPicture.asset(
                                                       GlobalVariables
                                                           .whatsAppIconPath,
                                                       height: 20,
                                                       width: 20,
-                                                      color:
-                                                      GlobalVariables.primaryColor,
+                                                      color: GlobalVariables
+                                                          .primaryColor,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -236,12 +224,12 @@ class NearByShopNotificationItemDetailsState
                                                   ),
                                                   Container(
                                                     margin:
-                                                    EdgeInsets.only(top: 8),
+                                                        EdgeInsets.only(top: 8),
                                                     child: AppIcon(
                                                       Icons.favorite,
                                                       iconSize: 24,
                                                       iconColor:
-                                                      GlobalVariables.red,
+                                                          GlobalVariables.red,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -255,16 +243,16 @@ class NearByShopNotificationItemDetailsState
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Expanded(
                                                     child: text(
                                                         value.nearByShopList[0]
                                                             .short_description,
                                                         textColor:
-                                                        GlobalVariables
-                                                            .grey,
+                                                            GlobalVariables
+                                                                .grey,
                                                         fontSize: GlobalVariables
                                                             .textSizeSMedium,
                                                         maxLine: 5),
@@ -276,35 +264,38 @@ class NearByShopNotificationItemDetailsState
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                                    MainAxisAlignment.end,
                                                 children: [
                                                   Expanded(
                                                       child: Container(
-                                                        child: Row(
-                                                          children: [
-                                                            AppIcon(
-                                                              Icons.location_on,
-                                                              iconSize: 24,
-                                                              iconColor: GlobalVariables
+                                                    child: Row(
+                                                      children: [
+                                                        AppIcon(
+                                                          Icons.location_on,
+                                                          iconSize: 24,
+                                                          iconColor:
+                                                              GlobalVariables
                                                                   .primaryColor,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 8,
-                                                            ),
-                                                            Flexible(
-                                                                child: text(
-                                                                    value.nearByShopList[0]
-                                                                        .Location,
-                                                                    fontSize:
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Flexible(
+                                                            child: text(
+                                                                value
+                                                                    .nearByShopList[
+                                                                        0]
+                                                                    .Location,
+                                                                fontSize:
                                                                     GlobalVariables
                                                                         .textSizeSMedium,
-                                                                    maxLine: 10)),
-                                                            SizedBox(
-                                                              width: 8,
-                                                            ),
-                                                          ],
+                                                                maxLine: 10)),
+                                                        SizedBox(
+                                                          width: 8,
                                                         ),
-                                                      )),
+                                                      ],
+                                                    ),
+                                                  )),
                                                 ],
                                               )
                                             ],
@@ -318,7 +309,7 @@ class NearByShopNotificationItemDetailsState
                                               color: GlobalVariables.white,
                                               border: Border.all(
                                                   color:
-                                                  GlobalVariables.lightGray,
+                                                      GlobalVariables.lightGray,
                                                   width: 2.0),
                                               shape: BoxShape.circle),
                                           child: new CircleAvatar(
@@ -326,14 +317,15 @@ class NearByShopNotificationItemDetailsState
                                                 value.nearByShopList[0]
                                                     .vendor_logo_bg!)),
                                             child: Container(
-                                              //margin: EdgeInsets.only(top: 8),
+                                                //margin: EdgeInsets.only(top: 8),
                                                 alignment: Alignment.center,
                                                 padding: EdgeInsets.only(
                                                     left: 16,
                                                     right: 16,
                                                     top: 16),
                                                 child: CachedNetworkImage(
-                                                  imageUrl: value.nearByShopList[0]
+                                                  imageUrl: value
+                                                      .nearByShopList[0]
                                                       .vendor_logo!,
                                                 )),
                                             radius: 50,
@@ -345,26 +337,29 @@ class NearByShopNotificationItemDetailsState
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  offerDetailsList.length>0 ? Container(
-                                    decoration: boxDecoration(radius: 10),
-                                    padding: EdgeInsets.all(16),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                          child: text(
-                                            AppLocalizations.of(context)
-                                                .translate('offer_details'),
-                                            textColor: GlobalVariables.primaryColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize:
-                                            GlobalVariables.textSizeMedium,
-                                          ),
-                                          alignment: Alignment.topLeft,
-                                        ),
-                                        SizedBox(
-                                          height: 16,
-                                        ),
-                                        /*Container(
+                                  offerDetailsList.length > 0
+                                      ? Container(
+                                          decoration: boxDecoration(radius: 10),
+                                          padding: EdgeInsets.all(16),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                child: text(
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          'offer_details'),
+                                                  textColor: GlobalVariables
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: GlobalVariables
+                                                      .textSizeMedium,
+                                                ),
+                                                alignment: Alignment.topLeft,
+                                              ),
+                                              SizedBox(
+                                                height: 16,
+                                              ),
+                                              /*Container(
                                          // margin: EdgeInsets.only(left: 10),
                                           child: htmlText("""
     <!--For a much more extensive example, look at example/main.dart-->
@@ -385,142 +380,148 @@ class NearByShopNotificationItemDetailsState
                                               maxLine: 99,
                                               textColor: GlobalVariables.grey),
                                         ),*/
-                                        Builder(
-                                            builder: (context) => ListView.builder(
-                                              physics:
-                                              const NeverScrollableScrollPhysics(),
-                                              itemCount: offerDetailsList.length,
-                                              itemBuilder: (context, position) {
-                                                return Container(
-                                                  margin:
-                                                  EdgeInsets.only(left: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Container(
-                                                            margin:
-                                                            EdgeInsets.only(
-                                                                top: 8),
-                                                            width: 8,
-                                                            height: 8,
-                                                            decoration: BoxDecoration(
-                                                                color:
-                                                                GlobalVariables
-                                                                    .primaryColor,
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 8,
-                                                          ),
-                                                          Flexible(
-                                                              child: Container(
-                                                                  child: text(
-                                                                      offerDetailsList[position].Description,
-                                                                      fontSize:
-                                                                      GlobalVariables.textSizeSMedium,
-                                                                      maxLine: 99,
-                                                                      textColor:
-                                                                      GlobalVariables
-                                                                          .grey))),
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        height: 32,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                              //  scrollDirection: Axis.vertical,
-                                              shrinkWrap: true,
-                                            )),
-                                      ],
-                                    ),
-                                  ) : SizedBox(),
+                                              Builder(
+                                                  builder:
+                                                      (context) =>
+                                                          ListView.builder(
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            itemCount:
+                                                                offerDetailsList
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    position) {
+                                                              return Container(
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            10),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.only(top: 8),
+                                                                          width:
+                                                                              8,
+                                                                          height:
+                                                                              8,
+                                                                          decoration: BoxDecoration(
+                                                                              color: GlobalVariables.primaryColor,
+                                                                              shape: BoxShape.circle),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              8,
+                                                                        ),
+                                                                        Flexible(
+                                                                            child:
+                                                                                Container(child: text(offerDetailsList[position].Description, fontSize: GlobalVariables.textSizeSMedium, maxLine: 99, textColor: GlobalVariables.grey))),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          32,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                            //  scrollDirection: Axis.vertical,
+                                                            shrinkWrap: true,
+                                                          )),
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(),
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  termsConditionList.length>0 ? Container(
-                                    decoration: boxDecoration(radius: 10),
-                                    padding: EdgeInsets.all(16),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                          child: htmlText(
-                                            AppLocalizations.of(context)
-                                                .translate('terms_conn'),
-                                            textColor: GlobalVariables.primaryColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize:
-                                            GlobalVariables.textSizeMedium,
+                                  termsConditionList.length > 0
+                                      ? Container(
+                                          decoration: boxDecoration(radius: 10),
+                                          padding: EdgeInsets.all(16),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                child: htmlText(
+                                                  AppLocalizations.of(context)
+                                                      .translate('terms_conn'),
+                                                  textColor: GlobalVariables
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: GlobalVariables
+                                                      .textSizeMedium,
+                                                ),
+                                                alignment: Alignment.topLeft,
+                                              ),
+                                              SizedBox(
+                                                height: 16,
+                                              ),
+                                              Builder(
+                                                  builder:
+                                                      (context) =>
+                                                          ListView.builder(
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            itemCount:
+                                                                termsConditionList
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    position) {
+                                                              return Container(
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            10),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.only(top: 8),
+                                                                          width:
+                                                                              8,
+                                                                          height:
+                                                                              8,
+                                                                          decoration: BoxDecoration(
+                                                                              color: GlobalVariables.primaryColor,
+                                                                              shape: BoxShape.circle),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              8,
+                                                                        ),
+                                                                        Flexible(
+                                                                            child:
+                                                                                Container(child: text(termsConditionList[position].Description, fontSize: GlobalVariables.textSizeSMedium, maxLine: 99, textColor: GlobalVariables.grey))),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          32,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                            //  scrollDirection: Axis.vertical,
+                                                            shrinkWrap: true,
+                                                          )),
+                                            ],
                                           ),
-                                          alignment: Alignment.topLeft,
-                                        ),
-                                        SizedBox(
-                                          height: 16,
-                                        ),
-                                        Builder(
-                                            builder:
-                                                (context) => ListView.builder(
-                                              physics:
-                                              const NeverScrollableScrollPhysics(),
-                                              itemCount: termsConditionList.length,
-                                              itemBuilder:
-                                                  (context, position) {
-                                                return Container(
-                                                  margin:
-                                                  EdgeInsets.only(
-                                                      left: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Container(
-                                                            margin: EdgeInsets
-                                                                .only(
-                                                                top:
-                                                                8),
-                                                            width: 8,
-                                                            height: 8,
-                                                            decoration: BoxDecoration(
-                                                                color: GlobalVariables
-                                                                    .primaryColor,
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 8,
-                                                          ),
-                                                          Flexible(
-                                                              child: Container(
-                                                                  child: text(
-                                                                      termsConditionList[position].Description,
-                                                                      fontSize: GlobalVariables.textSizeSMedium,
-                                                                      maxLine: 99,
-                                                                      textColor: GlobalVariables.grey))),
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        height: 32,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                              //  scrollDirection: Axis.vertical,
-                                              shrinkWrap: true,
-                                            )),
-                                      ],
-                                    ),
-                                  ):SizedBox(),
+                                        )
+                                      : SizedBox(),
                                 ],
                               ),
                             ),
@@ -614,16 +615,18 @@ class NearByShopNotificationItemDetailsState
                                   padding: EdgeInsets.all(8.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Container(
                                             padding: EdgeInsets.all(8),
                                             child: text(
-                                                value.nearByShopList[0].Offer_Code,
+                                                value.nearByShopList[0]
+                                                    .Offer_Code,
                                                 textColor:
-                                                GlobalVariables.black,
-                                                fontSize: GlobalVariables.textSizeSMedium,
+                                                    GlobalVariables.black,
+                                                fontSize: GlobalVariables
+                                                    .textSizeSMedium,
                                                 maxLine: 1,
                                                 fontWeight: FontWeight.w500)),
                                       ),
@@ -632,8 +635,8 @@ class NearByShopNotificationItemDetailsState
                                       ),
                                       InkWell(
                                           onTap: () {
-                                            FlutterClipboard.copy(
-                                                value.nearByShopList[0]
+                                            FlutterClipboard.copy(value
+                                                    .nearByShopList[0]
                                                     .Offer_Code!)
                                                 .then((value) {
                                               GlobalFunctions.showToast(
@@ -661,11 +664,11 @@ class NearByShopNotificationItemDetailsState
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          child: FlatButton(
+                          child: TextButton(
                               onPressed: () {
                                 launch(value.nearByShopList[0].redeem!);
                               },
-                              color: GlobalVariables.primaryColor,
+                             
                               child: text('Redeem',
                                   textColor: GlobalVariables.white,
                                   fontSize: GlobalVariables.textSizeSMedium,
@@ -681,7 +684,8 @@ class NearByShopNotificationItemDetailsState
         });
   }
 
-  Future<void> insertUserInfoOnExclusiveGetCode(NearByShopResponse value) async {
+  Future<void> insertUserInfoOnExclusiveGetCode(
+      NearByShopResponse value) async {
     String userName = await GlobalFunctions.getDisplayName();
     String societyId = await GlobalFunctions.getSocietyId();
     String societyName = await GlobalFunctions.getSocietyName();
@@ -691,8 +695,7 @@ class NearByShopNotificationItemDetailsState
     String address = await GlobalFunctions.getSocietyAddress();
 
     Provider.of<NearByShopResponse>(context, listen: false)
-        .insertUserInfoOnExclusiveGetCode(
-        societyName, block + ' ' + flat, mobile, address,userName,societyId,value.nearByShopList[0].Id);
+        .insertUserInfoOnExclusiveGetCode(societyName, block + ' ' + flat,
+            mobile, address, userName, societyId, value.nearByShopList[0].Id);
   }
-
 }

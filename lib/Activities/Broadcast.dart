@@ -12,7 +12,6 @@ import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 
 class BaseBroadcast extends StatefulWidget {
   @override
@@ -62,8 +61,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   TextEditingController mailSubject = TextEditingController();
   TextEditingController mailDescription = TextEditingController();
 
-  List<FlatMemberDetails> _notificationAssignFlatList =
-      <FlatMemberDetails>[];
+  List<FlatMemberDetails> _notificationAssignFlatList = <FlatMemberDetails>[];
   List<FlatMemberDetails> _mailAssignFlatList = <FlatMemberDetails>[];
   List<FlatMemberDetails> _smsAssignFlatList = <FlatMemberDetails>[];
 
@@ -91,7 +89,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
       <DropdownMenuItem<String>>[];
   String? _smsAmPmSelectedItem;
 
-  String? societyName,smsCredit='0',smsSent='0',smsBalance="0";
+  String? societyName, smsCredit = '0', smsSent = '0', smsBalance = "0";
 
   List<DropdownMenuItem<String>> _smsHours2ListItems =
       <DropdownMenuItem<String>>[];
@@ -540,9 +538,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                            color: GlobalVariables.lightGray,
+                            width: 2.0,
+                          )),
                       child: ButtonTheme(
                         child: DropdownButton(
                           items: _notificationFlatNoListItems,
@@ -588,7 +586,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                       physics: NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
                       shrinkWrap: true,
-                      childAspectRatio: MediaQuery.of(context).size.width / 150.0,
+                      childAspectRatio:
+                          MediaQuery.of(context).size.width / 150.0,
                       children: List.generate(
                         _notificationAssignFlatList.length,
                         (index) {
@@ -611,7 +610,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                   Container(
                                     margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                     child: text(
-                                      _notificationAssignFlatList[index].BLOCK! +
+                                      _notificationAssignFlatList[index]
+                                              .BLOCK! +
                                           ' ' +
                                           _notificationAssignFlatList[index]
                                               .FLAT! +
@@ -619,7 +619,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                           _notificationAssignFlatList[index]
                                               .NAME +
                                           '-' +
-                                          _notificationAssignFlatList[index].TYPE*/,
+                                          _notificationAssignFlatList[index].TYPE*/
+                                      ,
                                       textColor: GlobalVariables.white,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -685,7 +686,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     Column(
                       children: <Widget>[
                         Container(
-                          child: FlatButton.icon(
+                          child: TextButton.icon(
                             onPressed: () {
                               if (isStoragePermission) {
                                 notificationOpenFile(context);
@@ -722,7 +723,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           ),
                         ),
                         Container(
-                          child: FlatButton.icon(
+                          child: TextButton.icon(
                               onPressed: () {
                                 if (isStoragePermission) {
                                   notificationOpenCamera(context);
@@ -840,9 +841,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           color: GlobalVariables.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                            color: GlobalVariables.lightGray,
+                            width: 2.0,
+                          )),
                       child: ButtonTheme(
                         child: DropdownButton(
                           items: _mailFlatNoListItems,
@@ -918,7 +919,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                           ' ' /*+
                                           _mailAssignFlatList[index].NAME +
                                           '-' +
-                                          _mailAssignFlatList[index].TYPE*/,
+                                          _mailAssignFlatList[index].TYPE*/
+                                      ,
                                       textColor: GlobalVariables.white,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -982,7 +984,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     Column(
                       children: <Widget>[
                         Container(
-                          child: FlatButton.icon(
+                          child: TextButton.icon(
                             onPressed: () {
                               if (isStoragePermission) {
                                 mailOpenFile(context);
@@ -1007,7 +1009,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             label: Text(
                               AppLocalizations.of(context)
                                   .translate('attach_photo'),
-                              style: TextStyle(color: GlobalVariables.primaryColor),
+                              style: TextStyle(
+                                  color: GlobalVariables.primaryColor),
                             ),
                           ),
                         ),
@@ -1019,7 +1022,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           ),
                         ),
                         Container(
-                          child: FlatButton.icon(
+                          child: TextButton.icon(
                               onPressed: () {
                                 if (isStoragePermission) {
                                   mailOpenCamera(context);
@@ -1045,7 +1048,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               label: Text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                                style: TextStyle(color: GlobalVariables.primaryColor),
+                                style: TextStyle(
+                                    color: GlobalVariables.primaryColor),
                               )),
                         ),
                       ],
@@ -1124,12 +1128,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   notificationSubject.text,
                   notificationDescription.text)
               .then((value) async {
-                _progressDialog!.dismiss();
+            _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
 
-                if(value.status!){
-                  Navigator.of(context).pop();
-                }
+            if (value.status!) {
+              Navigator.of(context).pop();
+            }
             print('Value result : ' + value.toString());
             //{data: [], status: true, message: Send Email Sucessfully}
           });
@@ -1147,7 +1151,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   void mailOpenFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
       mailAttachmentFilePath = value;
-      print('selected pic path : '+mailAttachmentFilePath.toString());
+      print('selected pic path : ' + mailAttachmentFilePath.toString());
       getMailCompressFilePath();
     });
   }
@@ -1155,7 +1159,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   void mailOpenCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
       mailAttachmentFilePath = value.path;
-      print('selected pic path : : '+mailAttachmentFilePath.toString());
+      print('selected pic path : : ' + mailAttachmentFilePath.toString());
       getMailCompressFilePath();
     });
   }
@@ -1171,7 +1175,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
               value.toString() + '/' + mailAttachmentFileName!)
           .then((value) {
         mailAttachmentCompressFilePath = value.toString();
-        print('mailAttachmentCompressFilePath : ' + mailAttachmentCompressFilePath!);
+        print('mailAttachmentCompressFilePath : ' +
+            mailAttachmentCompressFilePath!);
         setState(() {});
       });
     });
@@ -1200,11 +1205,10 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   mailSubject.text,
                   mailDescription.text)
               .then((value) async {
-
-                _progressDialog!.dismiss();
+            _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
 
-            if(value.status!){
+            if (value.status!) {
               //Remove cache iMAGE
               if (mailAttachmentFileName != null &&
                   mailAttachmentFilePath != null) {
@@ -1249,7 +1253,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     borderRadius: BorderRadius.circular(10.0))),
                 elevation: 2.0,
                 //  shadowColor: GlobalVariables.green.withOpacity(0.3),
-              //  margin: EdgeInsets.all(20),
+                //  margin: EdgeInsets.all(20),
                 color: GlobalVariables.white,
                 child: Stack(
                   children: <Widget>[
@@ -1269,9 +1273,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-
-                                },
+                                onTap: () {},
                                 child: Container(
                                   child: Column(
                                     children: [
@@ -1279,7 +1281,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                         alignment: Alignment.center,
                                         child: text(smsCredit,
                                             textColor: GlobalVariables.black,
-                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontSize:
+                                                GlobalVariables.textSizeNormal,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -1288,20 +1291,21 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                       Container(
                                         alignment: Alignment.center,
                                         child: text(
-                                            AppLocalizations.of(context).translate('available'),
+                                            AppLocalizations.of(context)
+                                                .translate('available'),
                                             textColor: GlobalVariables.black,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeMedium),
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height:100,
+                              height: 100,
                               width: 4,
                               child: VerticalDivider(
                                 color: GlobalVariables.white,
@@ -1309,9 +1313,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-
-                                },
+                                onTap: () {},
                                 child: Container(
                                   child: Column(
                                     children: [
@@ -1319,7 +1321,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                         alignment: Alignment.center,
                                         child: text(smsSent,
                                             textColor: GlobalVariables.black,
-                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontSize:
+                                                GlobalVariables.textSizeNormal,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -1327,22 +1330,22 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('sent'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('sent'),
                                             textColor: GlobalVariables.black,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeMedium),
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium),
                                       ),
-
-
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                           Container(
                               margin: EdgeInsets.all(5),
                               //TODO: Divider
-                              height:100,
+                              height: 100,
                               width: 4,
                               child: VerticalDivider(
                                 color: GlobalVariables.white,
@@ -1350,9 +1353,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                           Flexible(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){
-
-                                },
+                                onTap: () {},
                                 child: Container(
                                   child: Column(
                                     children: [
@@ -1360,7 +1361,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                         alignment: Alignment.center,
                                         child: text(smsBalance,
                                             textColor: GlobalVariables.black,
-                                            fontSize: GlobalVariables.textSizeNormal,
+                                            fontSize:
+                                                GlobalVariables.textSizeNormal,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -1368,16 +1370,18 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                       ),
                                       Container(
                                         alignment: Alignment.center,
-                                        child: text(AppLocalizations.of(context).translate('balance'),
+                                        child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('balance'),
                                             textColor: GlobalVariables.black,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: GlobalVariables.textSizeMedium),
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium),
                                       ),
                                     ],
                                   ),
                                 ),
-                              )
-                          ),
+                              )),
                         ],
                       ),
                     ),
@@ -1404,9 +1408,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                          color: GlobalVariables.lightGray,
+                          width: 2.0,
+                        )),
                     child: ButtonTheme(
                       child: DropdownButton(
                         items: _smsSendToListItems,
@@ -1424,7 +1428,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         ),
                         underline: SizedBox(),
                         hint: Text(
-                          AppLocalizations.of(context).translate('send_to') + '*',
+                          AppLocalizations.of(context).translate('send_to') +
+                              '*',
                           style: TextStyle(
                               color: GlobalVariables.lightGray, fontSize: 14),
                         ),
@@ -1440,9 +1445,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               color: GlobalVariables.white,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                                color: GlobalVariables.lightGray,
+                                width: 2.0,
+                              )),
                           child: ButtonTheme(
                             child: DropdownButton(
                               items: _smsFlatNoListItems,
@@ -1453,12 +1458,15 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                   print("value : " + value!);
 
                                   for (int i = 0;
-                                      i < broadcastResponse.flatMemberList.length;
+                                      i <
+                                          broadcastResponse
+                                              .flatMemberList.length;
                                       i++) {
-                                    if (broadcastResponse.flatMemberList[i].ID ==
+                                    if (broadcastResponse
+                                            .flatMemberList[i].ID ==
                                         value) {
-                                      _smsAssignFlatList
-                                          .add(broadcastResponse.flatMemberList[i]);
+                                      _smsAssignFlatList.add(
+                                          broadcastResponse.flatMemberList[i]);
                                       break;
                                     }
                                   }
@@ -1473,10 +1481,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                               ),
                               underline: SizedBox(),
                               hint: Text(
-                                AppLocalizations.of(context).translate('flat_no') +
+                                AppLocalizations.of(context)
+                                        .translate('flat_no') +
                                     '*',
                                 style: TextStyle(
-                                    color: GlobalVariables.lightGray, fontSize: 14),
+                                    color: GlobalVariables.lightGray,
+                                    fontSize: 14),
                               ),
                             ),
                           ),
@@ -1518,7 +1528,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                                               ' ' /*+
                                               _smsAssignFlatList[index].NAME +
                                               '-' +
-                                              _smsAssignFlatList[index].TYPE*/,
+                                              _smsAssignFlatList[index].TYPE*/
+                                          ,
                                           textColor: GlobalVariables.white,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -1548,9 +1559,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         color: GlobalVariables.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                          color: GlobalVariables.lightGray,
+                          width: 2.0,
+                        )),
                     child: ButtonTheme(
                       child: DropdownButton(
                         items: _smsTypesListItems,
@@ -1568,7 +1579,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         ),
                         underline: SizedBox(),
                         hint: Text(
-                          AppLocalizations.of(context).translate('sms_type') + '*',
+                          AppLocalizations.of(context).translate('sms_type') +
+                              '*',
                           style: TextStyle(
                               color: GlobalVariables.lightGray, fontSize: 14),
                         ),
@@ -1581,7 +1593,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                   Container(
                     alignment: Alignment.topLeft,
                     child: text(
-                        AppLocalizations.of(context).translate('template_message') +
+                        AppLocalizations.of(context)
+                                .translate('template_message') +
                             '*',
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
@@ -1600,7 +1613,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                       Container(
                         alignment: Alignment.topLeft,
                         child: text(
-                            AppLocalizations.of(context).translate('note') + ':',
+                            AppLocalizations.of(context).translate('note') +
+                                ':',
                             textColor: GlobalVariables.red,
                             fontSize: GlobalVariables.textSizeMedium,
                             fontWeight: FontWeight.bold),
@@ -1626,7 +1640,8 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                     height: 45,
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: AppButton(
-                      textContent: AppLocalizations.of(context).translate('send'),
+                      textContent:
+                          AppLocalizations.of(context).translate('send'),
                       onPressed: () {
                         verifySMSData();
                       },
@@ -1707,9 +1722,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -1747,9 +1762,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -1787,9 +1802,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -1874,9 +1889,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -1914,9 +1929,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -1954,9 +1969,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -1998,9 +2013,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -2038,9 +2053,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -2078,9 +2093,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -2158,9 +2173,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2198,9 +2213,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2238,9 +2253,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2282,9 +2297,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -2322,9 +2337,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -2362,9 +2377,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -2443,9 +2458,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2483,9 +2498,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2523,9 +2538,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2630,9 +2645,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2670,9 +2685,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2710,9 +2725,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -2754,9 +2769,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -2794,9 +2809,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -2834,9 +2849,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -2912,9 +2927,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHoursListItems,
@@ -2952,9 +2967,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMinListItems,
@@ -2992,9 +3007,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPmListItems,
@@ -3036,9 +3051,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsHours2ListItems,
@@ -3076,9 +3091,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsMin2ListItems,
@@ -3116,9 +3131,9 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                             color: GlobalVariables.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
+                              color: GlobalVariables.lightGray,
+                              width: 2.0,
+                            )),
                         child: ButtonTheme(
                           child: DropdownButton(
                             items: _smsAmPm2ListItems,
@@ -3167,14 +3182,12 @@ class _BaseBroadcastState extends State<BaseBroadcast>
   Future<void> getSocietyName() async {
     societyName = await GlobalFunctions.getSocietyName();
     smsCredit = await GlobalFunctions.getSMSCredit();
-    Provider.of<UserManagementResponse>(context,listen: false).getUserManagementDashboard().then((value) {
-
+    Provider.of<UserManagementResponse>(context, listen: false)
+        .getUserManagementDashboard()
+        .then((value) {
       smsSent = value;
-      smsBalance = (int.parse(smsCredit!)-int.parse(smsSent!)).toString();
-      setState(() {
-
-      });
-
+      smsBalance = (int.parse(smsCredit!) - int.parse(smsSent!)).toString();
+      setState(() {});
     });
   }
 
@@ -3197,7 +3210,6 @@ class _BaseBroadcastState extends State<BaseBroadcast>
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
-
           });
         }
         break;
@@ -3223,69 +3235,105 @@ class _BaseBroadcastState extends State<BaseBroadcast>
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
-
           });
         }
         break;
       case "Water Supply":
         {
           _progressDialog!.show();
-          Provider.of<BroadcastResponse>(context,listen: false).waterSupplySMS(_smsAssignFlatList, 
-              _smsSendToSelectedItem!, _smsTypesSelectedItem!, waterSupplyDateController.text
-              , _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!,
-              _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
+          Provider.of<BroadcastResponse>(context, listen: false)
+              .waterSupplySMS(
+                  _smsAssignFlatList,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
+                  waterSupplyDateController.text,
+                  _smsHoursSelectedItem!,
+                  _smsMinSelectedItem!,
+                  _smsAmPmSelectedItem!,
+                  _smsHours2SelectedItem!,
+                  _smsMin2SelectedItem!,
+                  _smsAmPm2SelectedItem!,
+                  societyName!)
+              .then((value) {
             _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
             if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
-
-                
           });
-          
-
         }
         break;
       case "Water Disruption":
         {
           _progressDialog!.show();
-          Provider.of<BroadcastResponse>(context,listen: false).waterDisruptionSMS(_smsAssignFlatList, _smsSendToSelectedItem!, _smsTypesSelectedItem!, waterDisruptionDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsTypesSelectedItem!, _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
+          Provider.of<BroadcastResponse>(context, listen: false)
+              .waterDisruptionSMS(
+                  _smsAssignFlatList,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
+                  waterDisruptionDateController.text,
+                  _smsHoursSelectedItem!,
+                  _smsMinSelectedItem!,
+                  _smsTypesSelectedItem!,
+                  _smsHours2SelectedItem!,
+                  _smsMin2SelectedItem!,
+                  _smsAmPm2SelectedItem!,
+                  societyName!)
+              .then((value) {
             _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
             if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
-         //   GlobalFunctions.showToast(value.message);
-
+            //   GlobalFunctions.showToast(value.message);
           });
-          
-          
         }
         break;
       case "Fire Drill":
         {
           _progressDialog!.show();
-          Provider.of<BroadcastResponse>(context,listen: false).fireDrillSMS(_smsAssignFlatList, _smsSendToSelectedItem!,
-              _smsTypesSelectedItem!, fillDrillDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!, societyName!).then((value) {
+          Provider.of<BroadcastResponse>(context, listen: false)
+              .fireDrillSMS(
+                  _smsAssignFlatList,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
+                  fillDrillDateController.text,
+                  _smsHoursSelectedItem!,
+                  _smsMinSelectedItem!,
+                  _smsAmPmSelectedItem!,
+                  societyName!)
+              .then((value) {
             _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
             if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
-         //   GlobalFunctions.showToast(value.message);
-                
+            //   GlobalFunctions.showToast(value.message);
           });
-          
-          
         }
         break;
       case "Service down":
         {
           _progressDialog!.show();
-          Provider.of<BroadcastResponse>(context,listen: false).serviceDownSMS(_smsAssignFlatList, _smsSendToSelectedItem!, _smsTypesSelectedItem!, serviceDownReason1Controller.text, serviceDownReason2Controller.text, serviceDownDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!, _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
+          Provider.of<BroadcastResponse>(context, listen: false)
+              .serviceDownSMS(
+                  _smsAssignFlatList,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
+                  serviceDownReason1Controller.text,
+                  serviceDownReason2Controller.text,
+                  serviceDownDateController.text,
+                  _smsHoursSelectedItem!,
+                  _smsMinSelectedItem!,
+                  _smsAmPmSelectedItem!,
+                  _smsHours2SelectedItem!,
+                  _smsMin2SelectedItem!,
+                  _smsAmPm2SelectedItem!,
+                  societyName!)
+              .then((value) {
             _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
             if (value.status!) {
@@ -3294,25 +3342,32 @@ class _BaseBroadcastState extends State<BaseBroadcast>
             }
             //GlobalFunctions.showToast(value.message);
           });
-          
-          
         }
         break;
       case "Power Outage":
         {
           _progressDialog!.show();
-          Provider.of<BroadcastResponse>(context,listen: false).powerOutageSMS(_smsAssignFlatList, _smsSendToSelectedItem!, _smsTypesSelectedItem!, powerOutageDateController.text, _smsHoursSelectedItem!, _smsMinSelectedItem!, _smsAmPmSelectedItem!, _smsHours2SelectedItem!, _smsMin2SelectedItem!, _smsAmPm2SelectedItem!, societyName!).then((value) {
-
+          Provider.of<BroadcastResponse>(context, listen: false)
+              .powerOutageSMS(
+                  _smsAssignFlatList,
+                  _smsSendToSelectedItem!,
+                  _smsTypesSelectedItem!,
+                  powerOutageDateController.text,
+                  _smsHoursSelectedItem!,
+                  _smsMinSelectedItem!,
+                  _smsAmPmSelectedItem!,
+                  _smsHours2SelectedItem!,
+                  _smsMin2SelectedItem!,
+                  _smsAmPm2SelectedItem!,
+                  societyName!)
+              .then((value) {
             _progressDialog!.dismiss();
             GlobalFunctions.showToast(value.message!);
             if (value.status!) {
               print('sms1 response : ');
               Navigator.of(context).pop();
             }
-
           });
-
-
         }
         break;
     }

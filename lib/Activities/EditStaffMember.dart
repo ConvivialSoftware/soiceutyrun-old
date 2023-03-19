@@ -13,12 +13,9 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseEditStaffMember extends StatefulWidget {
   Staff staff;
   BaseEditStaffMember(this.staff);
-
 
   //String memberType;
   //BaseAddStaffMember(this.memberType);
@@ -30,21 +27,17 @@ class BaseEditStaffMember extends StatefulWidget {
 }
 
 class EditStaffMemberState extends State<BaseEditStaffMember> {
-
   //String memberType;
-
 
   String? attachmentFilePath;
   String? attachmentIdentityProofFilePath;
   String? attachmentCompressFilePath;
 
-
   String? attachmentFileName;
   String? attachmentIdentityProofFileName;
   String? attachmentIdentityProofCompressFilePath;
 
-
- // AddStaffMemberState(this.memberType);
+  // AddStaffMemberState(this.memberType);
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
@@ -55,54 +48,61 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   TextEditingController _addressController = TextEditingController();
 
   List<String> _roleTypeList = <String>[];
-  List<DropdownMenuItem<String>> __roleTypeListItems = <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> __roleTypeListItems =
+      <DropdownMenuItem<String>>[];
   String? _selectedRoleType;
 
   String? _selectedMembershipType;
 
-
- // List<String> _livesHereList = new List<String>();
+  // List<String> _livesHereList = new List<String>();
   //List<DropdownMenuItem<String>> __livesHereListItems = new List<DropdownMenuItem<String>>();
   //String _selectedLivesHere;
 
- // String _selectedOccupation="Software Engg.";
-  String _selectedGender="Male";
+  // String _selectedOccupation="Software Engg.";
+  String _selectedGender = "Male";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission=false;
+  bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission=value;
+      isStoragePermission = value;
     });
     getRoleTypeData();
 
     /*societyId, block, flat, _staffList[0].STAFF_NAME,  _staffList[0].GENDER,  _staffList[0].DOB, _mobileController.text
         ,  _staffList[0].QUALIFICATION ,  _staffList[0].ADDRESS,  _staffList[0].NOTES, userId,
          _staffList[0].ROLE,  _staffList[0].IMAGE,  _staffList[0].Attachment,  _staffList[0].VEHICLE_NO*/
-    _nameController.text=widget.staff.STAFF_NAME!;
-    _selectedGender= widget.staff.GENDER! ==null ? 'Male' : widget.staff.GENDER!;
-    print('gender : '+widget.staff.GENDER.toString());
-    _dobController.text = widget.staff.DOB!=null ? GlobalFunctions.convertDateFormat(widget.staff.DOB!, "dd/MM/yyyy"):'';
-    _mobileController.text=widget.staff.CONTACT!=null ? widget.staff.CONTACT! : '';
-    _qualificationController.text=widget.staff.QUALIFICATION!=null ?widget.staff.QUALIFICATION! : '';
-    _addressController.text=widget.staff.ADDRESS!=null ? widget.staff.ADDRESS! : '';
-    _noteController.text=widget.staff.NOTES!=null ? widget.staff.NOTES! : '';
-    if(_selectedRoleType!=null)
+    _nameController.text = widget.staff.STAFF_NAME!;
+    _selectedGender =
+        widget.staff.GENDER! == null ? 'Male' : widget.staff.GENDER!;
+    print('gender : ' + widget.staff.GENDER.toString());
+    _dobController.text = widget.staff.DOB != null
+        ? GlobalFunctions.convertDateFormat(widget.staff.DOB!, "dd/MM/yyyy")
+        : '';
+    _mobileController.text =
+        widget.staff.CONTACT != null ? widget.staff.CONTACT! : '';
+    _qualificationController.text =
+        widget.staff.QUALIFICATION != null ? widget.staff.QUALIFICATION! : '';
+    _addressController.text =
+        widget.staff.ADDRESS != null ? widget.staff.ADDRESS! : '';
+    _noteController.text =
+        widget.staff.NOTES != null ? widget.staff.NOTES! : '';
+    if (_selectedRoleType != null)
       _selectedRoleType = widget.staff.ROLE;
     else
-      _selectedRoleType =_roleTypeList[0];
+      _selectedRoleType = _roleTypeList[0];
     attachmentFilePath = widget.staff.IMAGE;
     attachmentIdentityProofFilePath = widget.staff.Attachment;
-    _vehicleNumberController.text=widget.staff.VEHICLE_NO!=null ? widget.staff.VEHICLE_NO! : '';
+    _vehicleNumberController.text =
+        widget.staff.VEHICLE_NO != null ? widget.staff.VEHICLE_NO! : '';
     //_dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-
     //GlobalFunctions.showToast(memberType.toString());
     // TODO: implement build
     return Builder(
@@ -144,7 +144,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         padding: EdgeInsets.all(20),
-       // height: MediaQuery.of(context).size.height / 0.5,
+        // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
             color: GlobalVariables.white,
             borderRadius: BorderRadius.circular(20)),
@@ -160,16 +160,16 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                     border: Border.all(
                       color: GlobalVariables.secondaryColor,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _nameController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).translate('name'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
-                      border: InputBorder.none
-                  ),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeMedium),
+                      border: InputBorder.none),
                 ),
               ),
               Container(
@@ -181,18 +181,19 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                     border: Border.all(
                       color: GlobalVariables.secondaryColor,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _mobileController,
                   keyboardType: TextInputType.number,
                   maxLength: 10,
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('mobile_no'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
+                      hintText:
+                          AppLocalizations.of(context).translate('mobile_no'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeMedium),
                       border: InputBorder.none,
-                    counterText: ''
-                  ),
+                      counterText: ''),
                 ),
               ),
               Container(
@@ -219,7 +220,8 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                     underline: SizedBox(),
                     hint: text(
                       AppLocalizations.of(context).translate('select_role'),
-                      textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSmall,
+                      textColor: GlobalVariables.lightGray,
+                      fontSize: GlobalVariables.textSizeSmall,
                     ),
                   ),
                 ),
@@ -243,10 +245,14 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color:   _selectedGender== "Male" ? GlobalVariables.primaryColor : GlobalVariables.white,
+                                    color: _selectedGender == "Male"
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Male" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
+                                      color: _selectedGender == "Male"
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: AppIcon(Icons.check,
@@ -257,8 +263,8 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                                 child: text(
                                   AppLocalizations.of(context)
                                       .translate('male'),
-                                 textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeMedium,
+                                  textColor: GlobalVariables.primaryColor,
+                                  fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -271,7 +277,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-                          _selectedGender="Female";
+                          _selectedGender = "Female";
                           setState(() {});
                         },
                         child: Container(
@@ -282,10 +288,14 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: _selectedGender== "Female" ? GlobalVariables.primaryColor : GlobalVariables.white,
+                                    color: _selectedGender == "Female"
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedGender== "Female" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
+                                      color: _selectedGender == "Female"
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: AppIcon(Icons.check,
@@ -297,7 +307,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                                   AppLocalizations.of(context)
                                       .translate('female'),
                                   textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeSmall,
+                                  fontSize: GlobalVariables.textSizeSmall,
                                 ),
                               ),
                             ],
@@ -317,16 +327,17 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                     border: Border.all(
                       color: GlobalVariables.secondaryColor,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _qualificationController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('qualification'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
-                      border: InputBorder.none
-                  ),
+                      hintText: AppLocalizations.of(context)
+                          .translate('qualification'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeMedium),
+                      border: InputBorder.none),
                 ),
               ),
               Container(
@@ -338,16 +349,17 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                     border: Border.all(
                       color: GlobalVariables.secondaryColor,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _vehicleNumberController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('vehicle_no'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
-                      border: InputBorder.none
-                  ),
+                      hintText:
+                          AppLocalizations.of(context).translate('vehicle_no'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeMedium),
+                      border: InputBorder.none),
                 ),
               ),
               Row(
@@ -355,7 +367,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                   Flexible(
                     flex: 1,
                     child: Container(
-                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
                       decoration: BoxDecoration(
                           color: GlobalVariables.white,
@@ -363,35 +375,40 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                           border: Border.all(
                             color: GlobalVariables.secondaryColor,
                             width: 3.0,
-                          )
-                      ),
+                          )),
                       child: TextField(
                         controller: _dobController,
                         readOnly: true,
-                        style: TextStyle(
-                            color: GlobalVariables.primaryColor
-                        ),
+                        style: TextStyle(color: GlobalVariables.primaryColor),
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('date_of_birth'),
-                            hintStyle: TextStyle(color: GlobalVariables.veryLightGray ,fontSize: GlobalVariables.textSizeMedium),
+                            hintText: AppLocalizations.of(context)
+                                .translate('date_of_birth'),
+                            hintStyle: TextStyle(
+                                color: GlobalVariables.veryLightGray,
+                                fontSize: GlobalVariables.textSizeMedium),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
-                                onPressed: (){
-
-                                  GlobalFunctions.getSelectedDateForDOB(context).then((value){
-                                    _dobController.text = value.day.toString()+"/"+value.month.toString()+"/"+value.year.toString();
+                                onPressed: () {
+                                  GlobalFunctions.getSelectedDateForDOB(context)
+                                      .then((value) {
+                                    _dobController.text = value.day.toString() +
+                                        "/" +
+                                        value.month.toString() +
+                                        "/" +
+                                        value.year.toString();
                                   });
-
                                 },
-                                icon: Icon(Icons.date_range,color: GlobalVariables.secondaryColor,))
-                        ),
+                                icon: Icon(
+                                  Icons.date_range,
+                                  color: GlobalVariables.secondaryColor,
+                                ))),
                       ),
                     ),
                   ),
                 ],
               ),
               Container(
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
@@ -399,39 +416,41 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                     border: Border.all(
                       color: GlobalVariables.secondaryColor,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _addressController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).translate('address'),
-                      hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
-                      border: InputBorder.none
-                  ),
+                      hintText:
+                          AppLocalizations.of(context).translate('address'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeMedium),
+                      border: InputBorder.none),
                 ),
               ),
               Container(
                 height: 100,
-               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
-                  color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(10),
+                    color: GlobalVariables.white,
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.secondaryColor,
                       width: 3.0,
-                    )
-                ),
+                    )),
                 child: TextField(
                   controller: _noteController,
                   keyboardType: TextInputType.text,
                   maxLines: 99,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('note_for_moderate'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeMedium),
-                    border: InputBorder.none
-                  ),
+                      hintText: AppLocalizations.of(context)
+                          .translate('note_for_moderate'),
+                      hintStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeMedium),
+                      border: InputBorder.none),
                 ),
               ),
               Row(
@@ -443,21 +462,27 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width:50,
+                            width: 50,
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.secondaryColor,
-                              borderRadius: BorderRadius.circular(25),
-
-                            ) : BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: attachmentFilePath!.contains("http") ? NetworkImage(attachmentFilePath!) : FileImage(File(attachmentFilePath!)) as ImageProvider,
-                                    fit: BoxFit.cover,
-                                ),
-                                border: Border.all(color: GlobalVariables.primaryColor,width: 2.0)
-                            ),
+                            decoration: attachmentFilePath == null
+                                ? BoxDecoration(
+                                    color: GlobalVariables.secondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  )
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: attachmentFilePath!
+                                              .contains("http")
+                                          ? NetworkImage(attachmentFilePath!)
+                                          : FileImage(File(attachmentFilePath!))
+                                              as ImageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    border: Border.all(
+                                        color: GlobalVariables.primaryColor,
+                                        width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
                           Column(
@@ -465,28 +490,38 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                               Container(
                                 decoration: BoxDecoration(
                                     color: GlobalVariables.secondaryColor,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
+                                    borderRadius: BorderRadius.circular(10)),
                                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: FlatButton.icon(onPressed: (){
-
-                                  if(isStoragePermission) {
-                                    openFile(context);
-                                  }else{
-                                    GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                      if(value){
+                                child: TextButton.icon(
+                                    onPressed: () {
+                                      if (isStoragePermission) {
                                         openFile(context);
-                                      }else{
-                                        GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                                      } else {
+                                        GlobalFunctions.askPermission(
+                                                Permission.storage)
+                                            .then((value) {
+                                          if (value) {
+                                            openFile(context);
+                                          } else {
+                                            GlobalFunctions.showToast(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'download_permission'));
+                                          }
+                                        });
                                       }
-                                    });
-                                  }
-
-                                }, icon: Icon(Icons.camera_alt,color: GlobalVariables.white,),
-                                    label:Text(AppLocalizations.of(context).translate('attach_photo'),style: TextStyle(
-                                    color: GlobalVariables.white
-                                ),)),
+                                    },
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: GlobalVariables.white,
+                                    ),
+                                    label: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('attach_photo'),
+                                      style: TextStyle(
+                                          color: GlobalVariables.white),
+                                    )),
                               ),
                               /*Container(
                                 margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
@@ -496,7 +531,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                                 ),
                               ),
                               Container(
-                                child: FlatButton.icon(
+                                child: TextButton.icon(
                                     onPressed: () {
 
                                       if(isStoragePermission) {
@@ -523,7 +558,6 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                               ),*/
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -539,37 +573,49 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width:50,
+                            width: 50,
                             height: 50,
                             margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentIdentityProofFilePath==null ? BoxDecoration(
-                              color: GlobalVariables.secondaryColor,
-                              borderRadius: BorderRadius.circular(25),
-
-                            ) : BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image:attachmentIdentityProofFilePath!.contains("http") ? NetworkImage(attachmentIdentityProofFilePath!) :  FileImage(File(attachmentIdentityProofFilePath!)) as ImageProvider,
-                                    fit: BoxFit.cover
-                                ),
-                                border: Border.all(color: GlobalVariables.primaryColor,width: 2.0)
-                            ),
+                            decoration: attachmentIdentityProofFilePath == null
+                                ? BoxDecoration(
+                                    color: GlobalVariables.secondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  )
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: attachmentIdentityProofFilePath!
+                                                .contains("http")
+                                            ? NetworkImage(
+                                                attachmentIdentityProofFilePath!)
+                                            : FileImage(File(
+                                                    attachmentIdentityProofFilePath!))
+                                                as ImageProvider,
+                                        fit: BoxFit.cover),
+                                    border: Border.all(
+                                        color: GlobalVariables.primaryColor,
+                                        width: 2.0)),
                             //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
                           Container(
                             decoration: BoxDecoration(
                                 color: GlobalVariables.secondaryColor,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
+                                borderRadius: BorderRadius.circular(10)),
                             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: FlatButton.icon(onPressed: (){
-
-                              openIdentityProofFile(context);
-
-                            }, icon: AppIcon(Icons.camera_alt,iconColor: GlobalVariables.white,), label:text(
-                              AppLocalizations.of(context).translate('identity_proof'),textColor: GlobalVariables.white
-                            ,)),
+                            child: TextButton.icon(
+                                onPressed: () {
+                                  openIdentityProofFile(context);
+                                },
+                                icon: AppIcon(
+                                  Icons.camera_alt,
+                                  iconColor: GlobalVariables.white,
+                                ),
+                                label: text(
+                                  AppLocalizations.of(context)
+                                      .translate('identity_proof'),
+                                  textColor: GlobalVariables.white,
+                                )),
                           ),
                         ],
                       ),
@@ -582,23 +628,20 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: ButtonTheme(
-                 // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
+                  // minWidth: MediaQuery.of(context).size.width/2,
+                  child: MaterialButton(
                     color: GlobalVariables.primaryColor,
                     onPressed: () {
-
                       verifyInfo();
-
                     },
                     textColor: GlobalVariables.white,
                     //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.primaryColor)
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: GlobalVariables.primaryColor)),
                     child: text(
-                      AppLocalizations.of(context)
-                          .translate('submit'),
-                          fontSize: GlobalVariables.textSizeMedium,
+                      AppLocalizations.of(context).translate('submit'),
+                      fontSize: GlobalVariables.textSizeMedium,
                     ),
                   ),
                 ),
@@ -611,39 +654,30 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   }
 
   void verifyInfo() {
-
-    if(_nameController.text.length>0){
-
-      if(_dobController.text.length>0){
-
-        if(_mobileController.text.length>0){
-
-            if(_selectedRoleType!=null || _selectedRoleType!.length>0){
-
-              if(_addressController.text!=null && _addressController.text.length>0) {
-                addMember();
-              }else{
-                GlobalFunctions.showToast("Please Enter Address");
-              }
-
-            }else{
-              GlobalFunctions.showToast('Please Select Role');
+    if (_nameController.text.length > 0) {
+      if (_dobController.text.length > 0) {
+        if (_mobileController.text.length > 0) {
+          if (_selectedRoleType != null || _selectedRoleType!.length > 0) {
+            if (_addressController.text.length > 0) {
+              addMember();
+            } else {
+              GlobalFunctions.showToast("Please Enter Address");
             }
-
-        }else{
+          } else {
+            GlobalFunctions.showToast('Please Select Role');
+          }
+        } else {
           GlobalFunctions.showToast('Please Enter Mobile Number');
         }
-      }else{
+      } else {
         GlobalFunctions.showToast('Please Select Date of Birth');
       }
-    }else{
+    } else {
       GlobalFunctions.showToast('Please Enter Name');
     }
-
   }
 
   Future<void> addMember() async {
-
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -656,101 +690,116 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
     String? attachment;
     String? attachmentIdentityProof;
 
-    if(attachmentFileName!=null && attachmentFilePath!=null){
+    if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName!;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
-
-    if(attachmentIdentityProofFileName!=null && attachmentIdentityProofFilePath!=null){
-      attachmentIdentityProofName =  attachmentIdentityProofFileName!;
-      attachmentIdentityProof = GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath!);
+    if (attachmentIdentityProofFileName != null &&
+        attachmentIdentityProofFilePath != null) {
+      attachmentIdentityProofName = attachmentIdentityProofFileName!;
+      attachmentIdentityProof = GlobalFunctions.convertFileToString(
+          attachmentIdentityProofCompressFilePath!);
     }
 
-   //print('attachment lengtth : '+attachment.length.toString());
+    //print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog!.show();
-   restClient.addStaffMember(userId,societyId,_nameController.text,
-       _mobileController.text,_vehicleNumberController.text,block+' '+flat,
-       _selectedGender,_dobController.text,_selectedRoleType!,
-       _qualificationController.text,_addressController.text,attachment!,attachmentIdentityProof!).then((value) async {
-
-         _progressDialog!.dismiss();
-         if(value.status!){
-           if (attachmentFilePath != null &&
-               attachmentFilePath != null) {
-             await GlobalFunctions.removeFileFromDirectory(
-                 attachmentFilePath!);
-             await GlobalFunctions.removeFileFromDirectory(
-                 attachmentCompressFilePath!);
-           }
-           if (attachmentIdentityProofFilePath != null &&
-               attachmentIdentityProofFilePath != null) {
-             await GlobalFunctions.removeFileFromDirectory(
-                 attachmentIdentityProofFilePath!);
-             await GlobalFunctions.removeFileFromDirectory(
-                 attachmentIdentityProofCompressFilePath!);
-           }
-           Navigator.of(context).pop();
-         }
-         GlobalFunctions.showToast(value.message!);
-   });
-
+    restClient
+        .addStaffMember(
+            userId,
+            societyId,
+            _nameController.text,
+            _mobileController.text,
+            _vehicleNumberController.text,
+            block + ' ' + flat,
+            _selectedGender,
+            _dobController.text,
+            _selectedRoleType!,
+            _qualificationController.text,
+            _addressController.text,
+            attachment!,
+            attachmentIdentityProof!)
+        .then((value) async {
+      _progressDialog!.dismiss();
+      if (value.status!) {
+        if (attachmentFilePath != null && attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentCompressFilePath!);
+        }
+        if (attachmentIdentityProofFilePath != null &&
+            attachmentIdentityProofFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentIdentityProofFilePath!);
+          await GlobalFunctions.removeFileFromDirectory(
+              attachmentIdentityProofCompressFilePath!);
+        }
+        Navigator.of(context).pop();
+      }
+      GlobalFunctions.showToast(value.message!);
+    });
   }
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentFilePath = value;
       getCompressFilePath();
     });
   }
 
   void openCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath=value.path;
+      attachmentFilePath = value.path;
       getCompressFilePath();
     });
   }
 
   void openIdentityProofFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentIdentityProofFilePath=value;
+      attachmentIdentityProofFilePath = value;
       getCompressIdentityProofFilePath();
     });
   }
 
-  void getCompressFilePath(){
-    attachmentFileName = attachmentFilePath!.substring(attachmentFilePath!.lastIndexOf('/')+1,attachmentFilePath!.length);
-    print('file Name : '+attachmentFileName.toString());
+  void getCompressFilePath() {
+    attachmentFileName = attachmentFilePath!.substring(
+        attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
+    print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getAppDocumentDirectory().then((value) {
-      print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath!, value.toString()+'/'+attachmentFileName!).then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
+          .then((value) {
         attachmentCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentCompressFilePath!);
-        setState(() {
-        });
+        print('Cache file path : ' + attachmentCompressFilePath!);
+        setState(() {});
       });
     });
   }
 
-  void getCompressIdentityProofFilePath(){
-    attachmentIdentityProofFileName = attachmentIdentityProofFilePath!.substring(attachmentIdentityProofFilePath!.lastIndexOf('/')+1,attachmentIdentityProofFilePath!.length);
-    print('file Name : '+attachmentIdentityProofFileName.toString());
+  void getCompressIdentityProofFilePath() {
+    attachmentIdentityProofFileName = attachmentIdentityProofFilePath!
+        .substring(attachmentIdentityProofFilePath!.lastIndexOf('/') + 1,
+            attachmentIdentityProofFilePath!.length);
+    print('file Name : ' + attachmentIdentityProofFileName.toString());
     GlobalFunctions.getAppDocumentDirectory().then((value) {
-      print('cache file Path : '+value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(attachmentIdentityProofFilePath!, value.toString()+'/'+attachmentIdentityProofFileName!).then((value) {
+      print('cache file Path : ' + value.toString());
+      GlobalFunctions.getFilePathOfCompressImage(
+              attachmentIdentityProofFilePath!,
+              value.toString() + '/' + attachmentIdentityProofFileName!)
+          .then((value) {
         attachmentIdentityProofCompressFilePath = value.toString();
-        print('Cache file path : '+attachmentIdentityProofCompressFilePath!);
-        setState(() {
-        });
+        print('Cache file path : ' + attachmentIdentityProofCompressFilePath!);
+        setState(() {});
       });
     });
   }
 
   void getRoleTypeData() {
-
-    _roleTypeList = ["Driver","Maid","Cook","Tutor"];
-    for(int i=0;i<_roleTypeList.length;i++){
+    _roleTypeList = ["Driver", "Maid", "Cook", "Tutor"];
+    for (int i = 0; i < _roleTypeList.length; i++) {
       __roleTypeListItems.add(DropdownMenuItem(
         value: _roleTypeList[i],
         child: text(
@@ -759,10 +808,8 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
         ),
       ));
     }
-   // _selectedMembershipType = __membershipTypeListItems[0].value;
+    // _selectedMembershipType = __membershipTypeListItems[0].value;
   }
-
- 
 
   void changeBRoleTypeDropDownItem(String? value) {
     print('clickable value : ' + value.toString());
@@ -789,7 +836,4 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
     });
   }
 */
-
-
-
 }

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 
-import 'package:flutter_html/html_parser.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 BoxDecoration boxDecoration({double radius = 2,

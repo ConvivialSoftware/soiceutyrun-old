@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,8 +6,6 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
-import 'base_stateful.dart';
 
 class BaseRegister extends StatefulWidget {
   @override
@@ -52,11 +49,14 @@ class RegisterState extends State<BaseRegister> {
                   TextSpan(
                       text: " " +
                           AppLocalizations.of(context).translate('register'),
-                      style: TextStyle(fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.primaryColor)),
+                      style: TextStyle(
+                          fontSize: GlobalVariables.textSizeLargeMedium,
+                          color: GlobalVariables.primaryColor)),
                   TextSpan(
                       text: AppLocalizations.of(context).translate('with_us'),
                       style: TextStyle(
-                          fontSize: GlobalVariables.textSizeLargeMedium, color: GlobalVariables.lightGray))
+                          fontSize: GlobalVariables.textSizeLargeMedium,
+                          color: GlobalVariables.lightGray))
                 ])),
               ),
               Container(
@@ -78,7 +78,8 @@ class RegisterState extends State<BaseRegister> {
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -103,7 +104,8 @@ class RegisterState extends State<BaseRegister> {
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -124,10 +126,12 @@ class RegisterState extends State<BaseRegister> {
                       color: GlobalVariables.lightGray,
                     ),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -148,10 +152,12 @@ class RegisterState extends State<BaseRegister> {
                       color: GlobalVariables.lightGray,
                     ),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -175,7 +181,8 @@ class RegisterState extends State<BaseRegister> {
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: GlobalVariables.primaryColor, width: 2.0),
+                        borderSide: BorderSide(
+                            color: GlobalVariables.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   ),
                 ),
@@ -190,20 +197,20 @@ class RegisterState extends State<BaseRegister> {
                       margin: EdgeInsets.fromLTRB(30, 50, 25, 10),
                       child: ButtonTheme(
                         minWidth: MediaQuery.of(context).size.width / 2,
-                        child: RaisedButton(
+                        child: MaterialButton(
                           color: GlobalVariables.primaryColor,
                           onPressed: () {
-
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) =>
-                                    BaseAddSociety()));
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BaseAddSociety()));
                           },
                           textColor: GlobalVariables.white,
                           //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: GlobalVariables.primaryColor)),
+                              side: BorderSide(
+                                  color: GlobalVariables.primaryColor)),
                           child: text(
                             AppLocalizations.of(context).translate('register'),
                             fontSize: GlobalVariables.textSizeMedium,
@@ -223,15 +230,16 @@ class RegisterState extends State<BaseRegister> {
                           TextSpan(
                               text: AppLocalizations.of(context)
                                   .translate("already_acc"),
-                              style:
-                                  TextStyle(color: GlobalVariables.black, fontSize: 15)),
+                              style: TextStyle(
+                                  color: GlobalVariables.black, fontSize: 15)),
                           TextSpan(
                               text: ("          " +
                                   AppLocalizations.of(context)
                                       .translate('sign_in')),
-                              recognizer: TapGestureRecognizer()..onTap=(){
-                                Navigator.of(context).pop();
-                              },
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pop();
+                                },
                               style: TextStyle(
                                   color: GlobalVariables.primaryColor,
                                   fontSize: GlobalVariables.textSizeNormal,
@@ -249,40 +257,35 @@ class RegisterState extends State<BaseRegister> {
                   alignment: Alignment.bottomCenter,
                   //color: GlobalVariables.orangeAccent,
                   //margin: EdgeInsets.all(20),
-                  child:Column(
+                  child: Column(
                     children: <Widget>[
                       Container(
-                        child: RichText(text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: AppLocalizations.of(context).translate('pre_terms_conn'),style: TextStyle(
-                                  color: GlobalVariables.black
-                              )
-                              ),
-                              TextSpan(
-                                  text: AppLocalizations.of(context).translate('terms_conn'),style: TextStyle(
-                                  color: GlobalVariables.primaryColor
-                              )
-                              ),
-                            ]
-                        )),
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: AppLocalizations.of(context)
+                                  .translate('pre_terms_conn'),
+                              style: TextStyle(color: GlobalVariables.black)),
+                          TextSpan(
+                              text: AppLocalizations.of(context)
+                                  .translate('terms_conn'),
+                              style: TextStyle(
+                                  color: GlobalVariables.primaryColor)),
+                        ])),
                       ),
                       Container(
-                        child: RichText(text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: AppLocalizations.of(context).translate('pre_privacy_statement'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.black
-                                  )
-                              ),
-                              TextSpan(
-                                  text: AppLocalizations.of(context).translate('privacy_statement'),style: TextStyle(
-                                  color: GlobalVariables.primaryColor
-                              )
-                              ),
-                            ]
-                        )),
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: AppLocalizations.of(context)
+                                  .translate('pre_privacy_statement'),
+                              style: TextStyle(color: GlobalVariables.black)),
+                          TextSpan(
+                              text: AppLocalizations.of(context)
+                                  .translate('privacy_statement'),
+                              style: TextStyle(
+                                  color: GlobalVariables.primaryColor)),
+                        ])),
                       )
                     ],
                   ),

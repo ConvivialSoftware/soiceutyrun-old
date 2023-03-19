@@ -16,8 +16,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:ndialog/ndialog.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -123,7 +122,7 @@ class GlobalFunctions {
 
   static Future<bool> isLastMessage(String msgId) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    var id = sharedPreferences!.getString(GlobalVariables.lastMsgId)??'';
+    var id = sharedPreferences!.getString(GlobalVariables.lastMsgId) ?? '';
     sharedPreferences!.setString(GlobalVariables.lastMsgId, msgId);
     return id == msgId;
   }
@@ -517,7 +516,7 @@ class GlobalFunctions {
     GlobalVariables.userImageURLValueNotifer.value = value.Photo!;
     GlobalVariables.userImageURLValueNotifer.notifyListeners();
     GlobalVariables.userNameValueNotifer.notifyListeners();
-    print('LAST_LOGIN : '+value.LAST_LOGIN.toString());
+    print('LAST_LOGIN : ' + value.LAST_LOGIN.toString());
   }
 
   static Future<void> savePasswordToSharedPreferences(String password) async {
@@ -661,7 +660,6 @@ class GlobalFunctions {
     ProgressDialog _progressDialog = ProgressDialog(context,
         message: Text('Please Wait'), title: SizedBox.shrink());
 
-
     return _progressDialog;
   }
 
@@ -693,7 +691,8 @@ class GlobalFunctions {
                 ),
                 text("Please Wait",
                     textColor: GlobalVariables.white,
-                    fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold),
+                    fontSize: GlobalVariables.textSizeSMedium,
+                    fontWeight: FontWeight.bold),
               ],
             ),
           ),
@@ -757,18 +756,21 @@ class GlobalFunctions {
     return selectedDate;
   }
 
-  static getSelectedDateFromStartDate(BuildContext context,String startDate) async {
+  static getSelectedDateFromStartDate(
+      BuildContext context, String startDate) async {
     //DateTime selectedDate = DateTime.now();
 
-   DateTime startSelectedDate =  DateFormat("dd-MM-yyyy").parse(startDate);
+    DateTime startSelectedDate = DateFormat("dd-MM-yyyy").parse(startDate);
     print('selected year : ' + startSelectedDate.year.toString());
-    print('selected month : ' + startSelectedDate.month.toString().padLeft(2,'0'));
-    print('selected day : ' + startSelectedDate.day.toString().padLeft(2,'0'));
+    print('selected month : ' +
+        startSelectedDate.month.toString().padLeft(2, '0'));
+    print('selected day : ' + startSelectedDate.day.toString().padLeft(2, '0'));
 
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: startSelectedDate,
-        firstDate:  DateTime(startSelectedDate.year, startSelectedDate.month, startSelectedDate.day),
+        firstDate: DateTime(startSelectedDate.year, startSelectedDate.month,
+            startSelectedDate.day),
         lastDate: DateTime(3021));
     if (picked != null && picked != startSelectedDate) {
       startSelectedDate = picked;
@@ -932,7 +934,7 @@ class GlobalFunctions {
 
   static Future<String> getAppDocumentDirectory() async {
     Directory tempDir = await getApplicationDocumentsDirectory();
-    print('getAppDocumentDirectory : '+tempDir.path.toString());
+    print('getAppDocumentDirectory : ' + tempDir.path.toString());
 
     return tempDir.path;
   }
@@ -1081,7 +1083,7 @@ class GlobalFunctions {
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: ButtonTheme(
                             //minWidth: MediaQuery.of(context).size.width / 2,
-                            child: RaisedButton(
+                            child: MaterialButton(
                               color: GlobalVariables.primaryColor,
                               onPressed: () {
                                 DashBoardState.logout(context);
@@ -1093,10 +1095,10 @@ class GlobalFunctions {
                                   side: BorderSide(
                                       color: GlobalVariables.primaryColor)),
                               child: text(
-                                AppLocalizations.of(context)
-                                    .translate('logout'),
-                                fontSize: GlobalVariables.textSizeMedium,textColor: GlobalVariables.white
-                              ),
+                                  AppLocalizations.of(context)
+                                      .translate('logout'),
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  textColor: GlobalVariables.white),
                             ),
                           ),
                         ),
@@ -1161,7 +1163,7 @@ class GlobalFunctions {
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                                 child: ButtonTheme(
                                   //minWidth: MediaQuery.of(context).size.width / 2,
-                                  child: RaisedButton(
+                                  child: MaterialButton(
                                     color: GlobalVariables.primaryColor,
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -1171,7 +1173,8 @@ class GlobalFunctions {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.primaryColor)),
+                                            color:
+                                                GlobalVariables.primaryColor)),
                                     child: text(
                                         AppLocalizations.of(context)
                                             .translate('later'),
@@ -1187,7 +1190,7 @@ class GlobalFunctions {
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                               child: ButtonTheme(
                                 //minWidth: MediaQuery.of(context).size.width / 2,
-                                child: RaisedButton(
+                                child: MaterialButton(
                                   color: GlobalVariables.primaryColor,
                                   onPressed: () {
                                     if (!isCompulsory) {
@@ -1197,7 +1200,7 @@ class GlobalFunctions {
                                         'https://play.google.com/store/apps/details?id=' +
                                             AppPackageInfo.packageName;
                                     //String url = 'market://details?id=" '+ AppPackageInfo.packageName;
-                                    if (canLaunch(url) != null) launch(url);
+                                    launch(url);
                                   },
                                   textColor: GlobalVariables.white,
                                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
@@ -1365,7 +1368,7 @@ class GlobalFunctions {
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: ButtonTheme(
                             //minWidth: MediaQuery.of(context).size.width / 2,
-                            child: RaisedButton(
+                            child: MaterialButton(
                               color: GlobalVariables.primaryColor,
                               onPressed: () {
                                 clearSharedPreferenceData();
@@ -1385,7 +1388,8 @@ class GlobalFunctions {
                               child: text(
                                   AppLocalizations.of(context)
                                       .translate('logout'),
-                                  fontSize: GlobalVariables.textSizeMedium,textColor: GlobalVariables.white),
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  textColor: GlobalVariables.white),
                             ),
                           ),
                         ),
@@ -1416,7 +1420,7 @@ class GlobalFunctions {
                   children: [
                     showAdminPermissionDialogToAccessFeature(context,
                         imageWidth: imageWidth, imageHeight: imageHeight)
-                    *//*   Container(
+                    */ /*   Container(
                         //margin: EdgeInsets.all(20),
                         child: SvgPicture.asset(
                       GlobalVariables.verifiedContactIconPath,
@@ -1431,7 +1435,7 @@ class GlobalFunctions {
                             .translate('contact_for_permission_text'),
                             textColor: GlobalVariables.grey, fontSize: GlobalVariables.textSizeMedium
                       ),
-                    )*//*
+                    )*/ /*
                   ],
                 ),
               );
@@ -1500,8 +1504,9 @@ class GlobalFunctions {
     }
   }
 
-  static showAdminPermissionDialogToAccessFeature(BuildContext context,
-      bool isCloseDisplay,{var imageWidth = 200,var imageHeight = 200}) {
+  static showAdminPermissionDialogToAccessFeature(
+      BuildContext context, bool isCloseDisplay,
+      {var imageWidth = 200, var imageHeight = 200}) {
     return isCloseDisplay
         ? showDialog(
             context: context,
@@ -1612,117 +1617,115 @@ class GlobalFunctions {
     }
   }*/
 
-  static String getCurrencyFormat(String amount){
-
-    return NumberFormat.currency(locale: 'HI',symbol: '₹ ',decimalDigits: 2).format(double.parse(amount));
-
+  static String getCurrencyFormat(String amount) {
+    return NumberFormat.currency(locale: 'HI', symbol: '₹ ', decimalDigits: 2)
+        .format(double.parse(amount));
   }
 
-  static String getMobileFormatNumber(String mobileNumber){
-    var number='';
+  static String getMobileFormatNumber(String mobileNumber) {
+    var number = '';
 
-    print('Before MobileNumber : '+mobileNumber);
+    print('Before MobileNumber : ' + mobileNumber);
     number = mobileNumber.trim().toString().replaceAll(" ", "");
-    print('After MobileNumber : '+number);
-    number = number.substring(number.length-10);
-    print('After number : '+number);
+    print('After MobileNumber : ' + number);
+    number = number.substring(number.length - 10);
+    print('After number : ' + number);
     return number;
   }
 
- /* static Future<void> startBackGroundNotificationService() async {
+  /* static Future<void> startBackGroundNotificationService() async {
     await Workmanager.initialize(
       GlobalFunctions.callbackNotificationDispatcher,
       isInDebugMode: true,
     ).then((value) {
       print('WorkManager initialize Done');
       print('WorkManager registerOneOffTask Start');
-      *//*Workmanager().registerOneOffTask(
+      */ /*Workmanager().registerOneOffTask(
         "1",
         GlobalVariables.fetchLocationBackground,
         initialDelay: Duration(minutes: 5),
-        *//**//*constraints :Constraints(
+        */ /**/ /*constraints :Constraints(
         networkType: NetworkType.not_required,
-      ),*//**//*
-        //frequency: Duration(minutes: 15),
-      );*//*
-      Workmanager.registerPeriodicTask(
-        "1",
-        GlobalVariables.fetchNotificationBackground,
-        initialDelay: Duration(seconds: 5),
-        constraints :Constraints(
-        networkType: NetworkType.not_required,
-      ),
-        frequency: Duration(minutes: 5),
-      );
-    });
-  }
-*/
+      ),*/ /// //*
+  //frequency: Duration(minutes: 15),
+  //   );*//*
+  //   Workmanager.registerPeriodicTask(
+  //     "1",
+  //     GlobalVariables.fetchNotificationBackground,
+  //     initialDelay = Duration(seconds: 5),
+  //     constraints  =Constraints(
+  //     networkType: NetworkType.not_required,
+  //   ),
+  //     frequency = Duration(minutes: 5),
+  //   );
+  // });
+  // }
+// */
 
-static Future<void> redirectBannerClick(BuildContext context,String url) async {
-
-  if(url.contains("http")){
-
-    String societyId = await getSocietyId();
-    String block = await getBlock();
-    String flat = await getFlat();
-    String phone = await getMobile();
-    String name = await getDisplayName();
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BaseWebViewScreen(
-                url +
-                    '?' +
-                    'SID=' +
-                    societyId.toString() +
-                    '&MOBILE=' +
-                    phone.toString() +
-                    '&NAME=' +
-                    name.toString() +
-                    '&UNIT=' +
-                    block.toString() +
-                    ' ' +
-                    flat.toString()))).then(
-            (value) {
-          GlobalFunctions.setBaseContext(
-              context);
-        });
-  }else if(url==BannerType.CLASSIFIED){
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BaseDiscover(
-                AppLocalizations.of(context).translate('classified'))))
-        .then((value) {
-      GlobalFunctions.setBaseContext(context);
-    });
-  }else if(url==BannerType.OFFER){
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BaseNearByShopPerCategory())).then((value) {
-      GlobalFunctions.setBaseContext(context);
-    });
-  }else if(url==BannerType.REFEREARN){
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => BaseReferAndEarn()))
-        .then((value) {
-      GlobalFunctions.setBaseContext(context);
-    });
-  }else if(url==BannerType.GATEPASS){
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => BaseMyGate(
-            AppLocalizations.of(context).translate('my_gate'), null)))
-        .then((value) {
-      GlobalFunctions.setBaseContext(context);
-    });
-  }
+  static Future<void> redirectBannerClick(
+      BuildContext context, String url) async {
+    if (url.contains("http")) {
+      String societyId = await getSocietyId();
+      String block = await getBlock();
+      String flat = await getFlat();
+      String phone = await getMobile();
+      String name = await getDisplayName();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseWebViewScreen(url +
+                  '?' +
+                  'SID=' +
+                  societyId.toString() +
+                  '&MOBILE=' +
+                  phone.toString() +
+                  '&NAME=' +
+                  name.toString() +
+                  '&UNIT=' +
+                  block.toString() +
+                  ' ' +
+                  flat.toString()))).then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+    } else if (url == BannerType.CLASSIFIED) {
+      Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseDiscover(
+                      AppLocalizations.of(context).translate('classified'))))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+    } else if (url == BannerType.OFFER) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BaseNearByShopPerCategory())).then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+    } else if (url == BannerType.REFEREARN) {
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseReferAndEarn()))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+    } else if (url == BannerType.GATEPASS) {
+      Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseMyGate(
+                      AppLocalizations.of(context).translate('my_gate'), null)))
+          .then((value) {
+        GlobalFunctions.setBaseContext(context);
+      });
+    }
   }
 
   static bool isEmailValid(String email) {
-    String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-    bool emailValid =  RegExp(p).hasMatch(email);
+    bool emailValid = RegExp(p).hasMatch(email);
     return emailValid;
   }
 }

@@ -123,7 +123,7 @@ class ClassifiedResponse extends ChangeNotifier {
      return result;
   }
 */
-  Future<StatusMsgResponse> interestedClassified(String C_Id) async {
+  Future<StatusMsgResponse> interestedClassified(String cId) async {
 
     String userId = await GlobalFunctions.getUserId();
     String societyId = await GlobalFunctions.getSocietyId();
@@ -139,7 +139,7 @@ class ClassifiedResponse extends ChangeNotifier {
     final dio = Dio();
     final RestClientDiscover restClient =
     RestClientDiscover(dio, baseUrl: GlobalVariables.BaseURLDiscover);
-    var result =  await restClient.interestedClassified(C_Id, userId,societyName,block+' '+flat,mobile,address,userName,userEmail,userProfile,societyId);
+    var result =  await restClient.interestedClassified(cId, userId,societyName,block+' '+flat,mobile,address,userName,userEmail,userProfile,societyId);
     isLoading = false;
     notifyListeners();
     print('interestedClassified : '+result.toString());

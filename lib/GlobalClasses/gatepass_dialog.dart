@@ -6,7 +6,6 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'GlobalVariables.dart';

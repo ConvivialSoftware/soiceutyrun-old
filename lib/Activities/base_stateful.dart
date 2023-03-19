@@ -10,10 +10,8 @@ import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/ExpenseSearchAdd.dart';
-import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/MyComplex.dart';
 import 'package:societyrun/Activities/MyGate.dart';
-import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/Activities/NearByShopNotificationItemDetails.dart';
 import 'package:societyrun/Activities/OwnerClassifiedNotificationItemDesc.dart';
 import 'package:societyrun/Activities/UserManagement.dart';
@@ -265,7 +263,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('onMessageOpened: ${message}');
+      print('onMessageOpened: $message');
       GlobalVariables.isNewlyArrivedNotification = true;
       GlobalVariables.isAlreadyTapped = false;
       showDialogAlertOnOpen(message.data);

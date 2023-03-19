@@ -1,13 +1,9 @@
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
-import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BaseWebViewScreen extends StatefulWidget {

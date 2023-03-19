@@ -1,32 +1,15 @@
 //import 'package:contact_picker/contact_picker.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:html/parser.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/StaffCategory.dart';
-import 'package:societyrun/Activities/StaffDetails.dart';
-import 'package:societyrun/Activities/StaffListPerCategory.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/PollOption.dart';
-import 'package:societyrun/Models/ScheduleVisitor.dart';
-import 'package:societyrun/Models/Staff.dart';
-import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Models/Visitor.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
-import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
 
 class BaseMemberPendingRequest extends StatefulWidget {
   BaseMemberPendingRequest();
@@ -38,8 +21,7 @@ class BaseMemberPendingRequest extends StatefulWidget {
   }
 }
 
-class MemberPendingRequestState
-    extends State<BaseMemberPendingRequest>
+class MemberPendingRequestState extends State<BaseMemberPendingRequest>
     with SingleTickerProviderStateMixin {
   //TabController _tabController;
 
@@ -63,7 +45,6 @@ class MemberPendingRequestState
 
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
     return ChangeNotifierProvider<UserManagementResponse>.value(
       value: Provider.of(context),
@@ -73,7 +54,8 @@ class MemberPendingRequestState
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: CustomAppBar(
-                title: AppLocalizations.of(context).translate('pending_request'),
+                title:
+                    AppLocalizations.of(context).translate('pending_request'),
               ),
               body: getMemberPendingRequestLayout(value),
             ),
@@ -87,8 +69,7 @@ class MemberPendingRequestState
     // print('MyTicketLayout Tab Call');
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 150.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
         !value.isLoading
             ? getMemberPendingRequestListDataLayout(value)
             : GlobalFunctions.loadingWidget(context),
@@ -102,8 +83,7 @@ class MemberPendingRequestState
         children: [
           Container(
             //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(
-                0, 8, 0, 0),
+            margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: Builder(
                 builder: (context) => ListView.builder(
                       // scrollDirection: Axis.vertical,
@@ -129,31 +109,33 @@ class MemberPendingRequestState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 5),
-             //padding: EdgeInsets.all(20),
-             alignment: Alignment.center,
-            /* decoration: BoxDecoration(
+              margin: EdgeInsets.only(top: 5),
+              //padding: EdgeInsets.all(20),
+              alignment: Alignment.center,
+              /* decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25)),*/
               child: value.pendingRequestList[position].PROFILE_PHOTO!.isEmpty
                   ? AppAssetsImage(
-                GlobalVariables.componentUserProfilePath,
-                imageWidth: 30.0,
-                imageHeight: 30.0,
-                borderColor: GlobalVariables.grey,
-                borderWidth: 1.0,
-                fit: BoxFit.cover,
-                radius: 15.0,
-              )
+                      GlobalVariables.componentUserProfilePath,
+                      imageWidth: 30.0,
+                      imageHeight: 30.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 1.0,
+                      fit: BoxFit.cover,
+                      radius: 15.0,
+                    )
                   : AppNetworkImage(
-                value.pendingRequestList[position].PROFILE_PHOTO,
-                imageWidth: 30.0,
-                imageHeight: 30.0,
-                borderColor: GlobalVariables.grey,
-                borderWidth: 1.0,
-                fit: BoxFit.cover,
-                radius: 15.0,
-              )),
-          SizedBox(width: 8,),
+                      value.pendingRequestList[position].PROFILE_PHOTO,
+                      imageWidth: 30.0,
+                      imageHeight: 30.0,
+                      borderColor: GlobalVariables.grey,
+                      borderWidth: 1.0,
+                      fit: BoxFit.cover,
+                      radius: 15.0,
+                    )),
+          SizedBox(
+            width: 8,
+          ),
           Expanded(
             child: Container(
               alignment: Alignment.topLeft,
@@ -167,11 +149,9 @@ class MemberPendingRequestState
                         children: [
                           Container(
                             //  color:GlobalVariables.grey,
-                            child: text(
-                                value.pendingRequestList[position].NAME,
+                            child: text(value.pendingRequestList[position].NAME,
                                 textColor: GlobalVariables.primaryColor,
-                                fontSize:
-                                GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                                 fontWeight: FontWeight.bold,
                                 textStyleHeight: 1.0),
                           ),
@@ -196,23 +176,24 @@ class MemberPendingRequestState
                       ),
                     ],
                   ),
-                  value.pendingRequestList[position].EMAIL!.isNotEmpty? Container(
-                    child: text(
-                        value.pendingRequestList[position].EMAIL,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        textColor: GlobalVariables.black,
-                        textStyleHeight: 1.5),
-                  ) : SizedBox(),
-                  value.pendingRequestList[position].MOBILE!.isNotEmpty ? Container(
-                    child: text(
-                        value.pendingRequestList[position].MOBILE,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        textColor: GlobalVariables.black,
-                        textStyleHeight: 1.5),
-                  ):SizedBox(),
+                  value.pendingRequestList[position].EMAIL!.isNotEmpty
+                      ? Container(
+                          child: text(value.pendingRequestList[position].EMAIL,
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              textColor: GlobalVariables.black,
+                              textStyleHeight: 1.5),
+                        )
+                      : SizedBox(),
+                  value.pendingRequestList[position].MOBILE!.isNotEmpty
+                      ? Container(
+                          child: text(value.pendingRequestList[position].MOBILE,
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              textColor: GlobalVariables.black,
+                              textStyleHeight: 1.5),
+                        )
+                      : SizedBox(),
                   Container(
-                    child: text(
-                        value.pendingRequestList[position].TYPE,
+                    child: text(value.pendingRequestList[position].TYPE,
                         fontSize: GlobalVariables.textSizeSmall,
                         textColor: GlobalVariables.grey,
                         textStyleHeight: 1.5),
@@ -222,62 +203,106 @@ class MemberPendingRequestState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           showDialog(
                               context: context,
-                              builder: (BuildContext context) => StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
+                              builder: (BuildContext context) =>
+                                  StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter setState) {
                                     return Dialog(
                                         shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0)),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
                                         child: Container(
                                           padding: EdgeInsets.all(20),
-                                          width: MediaQuery.of(context).size.width / 1.3,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.3,
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Container(
                                                 child: text(
-                                                    AppLocalizations.of(context).translate('sure_cancel'),
-                                                    fontSize: GlobalVariables.textSizeLargeMedium,
-                                                    textColor: GlobalVariables.black,
-                                                    fontWeight: FontWeight.bold),
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'sure_cancel'),
+                                                    fontSize: GlobalVariables
+                                                        .textSizeLargeMedium,
+                                                    textColor:
+                                                        GlobalVariables.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               Container(
-                                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0, 10, 0, 0),
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
                                                   children: <Widget>[
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                         onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                          _progressDialog!.show();
-                                                          Provider.of<UserManagementResponse>(context,listen: false).deleteFamilyMember(value.pendingRequestList[position].ID!).then((value) {
-
-                                                            _progressDialog!.dismiss();
-                                                            GlobalFunctions.showToast(value.message!);
-                                                            print('value : '+value.toString());
-
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          _progressDialog!
+                                                              .show();
+                                                          Provider.of<UserManagementResponse>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .deleteFamilyMember(value
+                                                                  .pendingRequestList[
+                                                                      position]
+                                                                  .ID!)
+                                                              .then((value) {
+                                                            _progressDialog!
+                                                                .dismiss();
+                                                            GlobalFunctions
+                                                                .showToast(value
+                                                                    .message!);
+                                                            print('value : ' +
+                                                                value
+                                                                    .toString());
                                                           });
                                                         },
                                                         child: text(
-                                                            AppLocalizations.of(context).translate('yes'),
-                                                            textColor: GlobalVariables.primaryColor,
-                                                            fontSize: GlobalVariables.textSizeMedium,
-                                                            fontWeight: FontWeight.bold),
+                                                            AppLocalizations.of(
+                                                                    context)
+                                                                .translate(
+                                                                    'yes'),
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                         onPressed: () {
-                                                          Navigator.of(context).pop();
+                                                          Navigator.of(context)
+                                                              .pop();
                                                         },
                                                         child: text(
-                                                            AppLocalizations.of(context).translate('no'),
-                                                            textColor: GlobalVariables.primaryColor,
-                                                            fontSize: GlobalVariables.textSizeMedium,
-                                                            fontWeight: FontWeight.bold),
+                                                            AppLocalizations.of(
+                                                                    context)
+                                                                .translate(
+                                                                    'no'),
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   ],
@@ -285,77 +310,118 @@ class MemberPendingRequestState
                                               )
                                             ],
                                           ),
-                                        )
-                                    );
+                                        ));
                                   }));
                         },
                         child: Container(
                           child: text(
-                              AppLocalizations.of(context)
-                                  .translate('cancel'),
+                              AppLocalizations.of(context).translate('cancel'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
                               textColor: GlobalVariables.primaryColor),
                         ),
                       ),
                       InkWell(
-                        onTap: (){
-
+                        onTap: () {
                           showDialog(
                               context: context,
-                              builder: (BuildContext context) => StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
+                              builder: (BuildContext context) =>
+                                  StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter setState) {
                                     return Dialog(
                                         shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0)),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
                                         child: Container(
                                           padding: EdgeInsets.all(20),
-                                          width: MediaQuery.of(context).size.width / 1.3,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.3,
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Container(
                                                 child: text(
-                                                    AppLocalizations.of(context).translate('sure_approve'),
-                                                    fontSize: GlobalVariables.textSizeLargeMedium,
-                                                    textColor: GlobalVariables.black,
-                                                    fontWeight: FontWeight.bold),
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'sure_approve'),
+                                                    fontSize: GlobalVariables
+                                                        .textSizeLargeMedium,
+                                                    textColor:
+                                                        GlobalVariables.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               Container(
-                                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0, 10, 0, 0),
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
                                                   children: <Widget>[
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                         onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                          _progressDialog!.show();
-                                                          Provider.of<UserManagementResponse>(context,listen: false).approvePendingRequest(value.pendingRequestList[position].ID!).then((value) {
-
-                                                            _progressDialog!.dismiss();
-                                                            GlobalFunctions.showToast(value.message!);
-                                                            print('value : '+value.toString());
-
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          _progressDialog!
+                                                              .show();
+                                                          Provider.of<UserManagementResponse>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .approvePendingRequest(value
+                                                                  .pendingRequestList[
+                                                                      position]
+                                                                  .ID!)
+                                                              .then((value) {
+                                                            _progressDialog!
+                                                                .dismiss();
+                                                            GlobalFunctions
+                                                                .showToast(value
+                                                                    .message!);
+                                                            print('value : ' +
+                                                                value
+                                                                    .toString());
                                                           });
                                                         },
                                                         child: text(
-                                                            AppLocalizations.of(context).translate('yes'),
-                                                            textColor: GlobalVariables.primaryColor,
-                                                            fontSize: GlobalVariables.textSizeMedium,
-                                                            fontWeight: FontWeight.bold),
+                                                            AppLocalizations.of(
+                                                                    context)
+                                                                .translate(
+                                                                    'yes'),
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                         onPressed: () {
-                                                          Navigator.of(context).pop();
+                                                          Navigator.of(context)
+                                                              .pop();
                                                         },
                                                         child: text(
-                                                            AppLocalizations.of(context).translate('no'),
-                                                            textColor: GlobalVariables.primaryColor,
-                                                            fontSize: GlobalVariables.textSizeMedium,
-                                                            fontWeight: FontWeight.bold),
+                                                            AppLocalizations.of(
+                                                                    context)
+                                                                .translate(
+                                                                    'no'),
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   ],
@@ -363,15 +429,12 @@ class MemberPendingRequestState
                                               )
                                             ],
                                           ),
-                                        )
-                                    );
+                                        ));
                                   }));
-
                         },
                         child: Container(
                           child: text(
-                              AppLocalizations.of(context)
-                                  .translate('Approve'),
+                              AppLocalizations.of(context).translate('Approve'),
                               fontSize: GlobalVariables.textSizeSMedium,
                               fontWeight: FontWeight.bold,
                               textColor: GlobalVariables.primaryColor),

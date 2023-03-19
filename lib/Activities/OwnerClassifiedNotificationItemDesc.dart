@@ -15,11 +15,8 @@ import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
-import 'base_stateful.dart';
 
 class BaseOwnerClassifiedNotificationItemDesc extends StatefulWidget {
- 
   String classifiedId;
 
   BaseOwnerClassifiedNotificationItemDesc(this.classifiedId);
@@ -42,20 +39,17 @@ class CreateClassifiedListingState
   bool isActivationClassified = false;
 
   ProgressDialog? _progressDialog;
-  bool isMenuEnable=true;
+  bool isMenuEnable = true;
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     Provider.of<OwnerClassifiedResponse>(context, listen: false)
-        .getOwnerClassifiedData(Id : null)
+        .getOwnerClassifiedData(Id: null)
         .then((tabLength) {
-      setState(() {
-      });
+      setState(() {});
     });
-   
-
   }
 
   @override
@@ -67,42 +61,42 @@ class CreateClassifiedListingState
         value: Provider.of<OwnerClassifiedResponse>(context),
         child: Consumer<OwnerClassifiedResponse>(
           builder: (context, value, child) {
+            if (value.ownerClassifiedList.length > 0) {
+              imageList = List<ClassifiedImage>.from(value
+                  .ownerClassifiedList[0].Images
+                  .map((i) => ClassifiedImage.fromJson(i)));
+              interestedList = List<Interested>.from(value
+                  .ownerClassifiedList[0].Interested
+                  .map((i) => Interested.fromJson(i)));
+              inDaysCount = GlobalFunctions.getDaysFromDate(
+                  DateTime.now().toIso8601String(),
+                  value.ownerClassifiedList[0].C_Date!);
+              print('DaysCount : ' + inDaysCount.toString());
 
-          if(value.ownerClassifiedList.length>0) {
-            imageList = List<ClassifiedImage>.from(
-                value.ownerClassifiedList[0].Images.map((i) =>
-                    ClassifiedImage.fromJson(i)));
-            interestedList = List<Interested>.from(
-                value.ownerClassifiedList[0].Interested.map((i) =>
-                    Interested.fromJson(i)));
-            inDaysCount = GlobalFunctions.getDaysFromDate(
-                DateTime.now().toIso8601String(),
-                value.ownerClassifiedList[0].C_Date!);
-            print('DaysCount : ' + inDaysCount.toString());
-
-            if (value.ownerClassifiedList[0].Status!
-                .toLowerCase()
-                .trim() ==
-                'active') {
-              isMenuEnable = true;
-            } else if (value.ownerClassifiedList[0].Status!
-                .toLowerCase()
-                .trim() ==
-                'active' &&
-                inDaysCount < 30) {
-              isMenuEnable = true;
-            } else if (inDaysCount > 30) {
-              isMenuEnable = true;
-            } else {
-              isMenuEnable = false;
+              if (value.ownerClassifiedList[0].Status!.toLowerCase().trim() ==
+                  'active') {
+                isMenuEnable = true;
+              } else if (value.ownerClassifiedList[0].Status!
+                          .toLowerCase()
+                          .trim() ==
+                      'active' &&
+                  inDaysCount < 30) {
+                isMenuEnable = true;
+              } else if (inDaysCount > 30) {
+                isMenuEnable = true;
+              } else {
+                isMenuEnable = false;
+              }
             }
-          }
-            
+
             return Scaffold(
               appBar: CustomAppBar(
                 actions: [
                   PopupMenuButton(
-                      icon: Icon(Icons.more_vert, color: isMenuEnable ? GlobalVariables.white : GlobalVariables.transparent),
+                      icon: Icon(Icons.more_vert,
+                          color: isMenuEnable
+                              ? GlobalVariables.white
+                              : GlobalVariables.transparent),
                       // add this line
                       itemBuilder: (_) => <PopupMenuItem<String>>[
                             if (value.ownerClassifiedList[0].Status!
@@ -115,7 +109,8 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Remove",
                                           textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeSMedium)),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                   value: 'remove'),
                             if (value.ownerClassifiedList[0].Status!
                                         .toLowerCase()
@@ -128,7 +123,8 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Edit",
                                           textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeSMedium)),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                   value: 'edit'),
                             if (inDaysCount > 30)
                               new PopupMenuItem<String>(
@@ -137,7 +133,8 @@ class CreateClassifiedListingState
                                       height: 30,
                                       child: text("Activate This Ads",
                                           textColor: GlobalVariables.black,
-                                          fontSize: GlobalVariables.textSizeSMedium)),
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
                                   value: 'active'),
                           ],
                       onSelected: (index) async {
@@ -152,7 +149,8 @@ class CreateClassifiedListingState
                                     builder: (context) =>
                                         BaseCreateClassifiedListing(
                                           true,
-                                          classified: value.ownerClassifiedList[0],
+                                          classified:
+                                              value.ownerClassifiedList[0],
                                         ))).then((value) {
                               //GlobalFunctions.setBaseContext(context);
                             });
@@ -182,11 +180,10 @@ class CreateClassifiedListingState
                                                   AppLocalizations.of(context)
                                                       .translate(
                                                           'sure_active_ads'),
-                                                      fontSize: 18,
-                                                      textColor:
-                                                          GlobalVariables.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                  fontSize: 18,
+                                                  textColor:
+                                                      GlobalVariables.black,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               Container(
@@ -197,7 +194,7 @@ class CreateClassifiedListingState
                                                       MainAxisAlignment.end,
                                                   children: <Widget>[
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
@@ -212,7 +209,10 @@ class CreateClassifiedListingState
                                                                     listen:
                                                                         false)
                                                                 .activeClassifiedStatus(
-                                                                value.ownerClassifiedList[0].id!)
+                                                                    value
+                                                                        .ownerClassifiedList[
+                                                                            0]
+                                                                        .id!)
                                                                 .then((value) {
                                                               _progressDialog!
                                                                   .dismiss();
@@ -226,17 +226,18 @@ class CreateClassifiedListingState
                                                                     context)
                                                                 .translate(
                                                                     'yes'),
-                                                                textColor:
-                                                                    GlobalVariables
-                                                                        .primaryColor,
-                                                                fontSize: GlobalVariables.textSizeMedium,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           )),
                                                     ),
                                                     Container(
-                                                      child: FlatButton(
+                                                      child: TextButton(
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
@@ -247,13 +248,14 @@ class CreateClassifiedListingState
                                                                     context)
                                                                 .translate(
                                                                     'no'),
-                                                                textColor:
-                                                                    GlobalVariables
-                                                                        .primaryColor,
-                                                                fontSize: GlobalVariables.textSizeMedium,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            textColor:
+                                                                GlobalVariables
+                                                                    .primaryColor,
+                                                            fontSize:
+                                                                GlobalVariables
+                                                                    .textSizeMedium,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           )),
                                                     ),
                                                   ],
@@ -268,9 +270,11 @@ class CreateClassifiedListingState
                         }
                       })
                 ],
-                title:AppLocalizations.of(context).translate('create_listing'),
+                title: AppLocalizations.of(context).translate('create_listing'),
               ),
-              body: !value.isLoading ? getBaseLayout(value) : GlobalFunctions.loadingWidget(context),
+              body: !value.isLoading
+                  ? getBaseLayout(value)
+                  : GlobalFunctions.loadingWidget(context),
               bottomNavigationBar: Container(
                 height: 80,
                 decoration: BoxDecoration(
@@ -279,7 +283,9 @@ class CreateClassifiedListingState
                 padding: EdgeInsets.all(20),
                 child: AppButton(
                     textContent: "Interested Customer (" +
-                        (  interestedList==null ? '0' : interestedList!.length.toString() )+
+                        (interestedList == null
+                            ? '0'
+                            : interestedList!.length.toString()) +
                         ")",
                     onPressed: () {
                       if (interestedList!.length > 0)
@@ -336,7 +342,7 @@ class CreateClassifiedListingState
                       _current = index;
                     });
                   }),
-              itemBuilder: (context, index,item) {
+              itemBuilder: (context, index, item) {
                 return Container(
                     margin: EdgeInsets.all(5.0),
                     child: ClipRRect(
@@ -362,8 +368,7 @@ class CreateClassifiedListingState
                 return Container(
                   width: 8.0,
                   height: 8.0,
-                  margin:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _current == index
@@ -374,9 +379,13 @@ class CreateClassifiedListingState
               }).toList(),
             ),
             SizedBox(height: 16),
-            primaryText(value.ownerClassifiedList[0].Title,),
+            primaryText(
+              value.ownerClassifiedList[0].Title,
+            ),
             //SizedBox(height: 2),
-            secondaryText(value.ownerClassifiedList[0].Society_Name,),
+            secondaryText(
+              value.ownerClassifiedList[0].Society_Name,
+            ),
             SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -387,9 +396,18 @@ class CreateClassifiedListingState
                   iconSize: GlobalVariables.textSizeNormal,
                   iconColor: GlobalVariables.grey,
                 ),
-                SizedBox(width: 4,),
+                SizedBox(
+                  width: 4,
+                ),
                 Flexible(
-                  child: text(value.ownerClassifiedList[0].Address!+', '+value.ownerClassifiedList[0].Locality!+', '+value.ownerClassifiedList[0].City!+', '+value.ownerClassifiedList[0].Pincode!,
+                  child: text(
+                      value.ownerClassifiedList[0].Address! +
+                          ', ' +
+                          value.ownerClassifiedList[0].Locality! +
+                          ', ' +
+                          value.ownerClassifiedList[0].City! +
+                          ', ' +
+                          value.ownerClassifiedList[0].Pincode!,
                       /*widget.classifiedList.Address.toString().trim().contains(widget.classifiedList.PinCode.toString().trim()) ? '':widget.classifiedList.Pincode.toString())*/
                       textColor: GlobalVariables.grey,
                       fontSize: GlobalVariables.textSizeSmall,
@@ -408,7 +426,10 @@ class CreateClassifiedListingState
                       color: Colors.transparent,
                       borderRadius:
                       BorderRadius.all(Radius.circular(8))),*/
-                  child: text(/*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price))*/GlobalFunctions.getCurrencyFormat(value.ownerClassifiedList[0].Price!),
+                  child: text(
+                      /*'Rs. '+NumberFormat.currency(locale: 'HI',symbol: '',decimalDigits: 2).format(double.parse(value.ownerClassifiedList[0].Price))*/ GlobalFunctions
+                          .getCurrencyFormat(
+                              value.ownerClassifiedList[0].Price!),
                       textColor: GlobalVariables.black,
                       fontSize: GlobalVariables.textSizeNormal,
                       fontWeight: FontWeight.w500),
@@ -428,22 +449,26 @@ class CreateClassifiedListingState
             ),
             //SizedBox(height: 4),
             Divider(),
-            primaryText('Description',
-              textColor: GlobalVariables.primaryColor,),
+            primaryText(
+              'Description',
+              textColor: GlobalVariables.primaryColor,
+            ),
             SizedBox(height: 8),
             Container(
-              //margin: EdgeInsets.only(left: 8),
+                //margin: EdgeInsets.only(left: 8),
                 child: secondaryText(
-                  value.ownerClassifiedList[0].Description
-                  /*+'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
+              value.ownerClassifiedList[0].Description
+              /*+'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                     +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                     +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'
                     +'1BHK luxurious flat in jail Road. Dasak stop. Walking distance from highway. Nice location..'*/
-                  ,
-                )),
+              ,
+            )),
             Divider(),
             // SizedBox(height: 4),
-            primaryText('Details',),
+            primaryText(
+              'Details',
+            ),
             SizedBox(height: 4),
             Container(
               child: Column(
@@ -453,8 +478,14 @@ class CreateClassifiedListingState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        secondaryText('Posted',),
-                        secondaryText(GlobalFunctions.convertDateFormat(value.ownerClassifiedList[0].C_Date!, 'dd-MM-yyyy'),)
+                        secondaryText(
+                          'Posted',
+                        ),
+                        secondaryText(
+                          GlobalFunctions.convertDateFormat(
+                              value.ownerClassifiedList[0].C_Date!,
+                              'dd-MM-yyyy'),
+                        )
                       ],
                     ),
                   ),
@@ -466,8 +497,12 @@ class CreateClassifiedListingState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        secondaryText('Posted By',),
-                        secondaryText(value.ownerClassifiedList[0].Name,)
+                        secondaryText(
+                          'Posted By',
+                        ),
+                        secondaryText(
+                          value.ownerClassifiedList[0].Name,
+                        )
                       ],
                     ),
                   ),
@@ -520,7 +555,9 @@ class CreateClassifiedListingState
                               ),
                               child: Row(
                                 children: <Widget>[
-                                  interestedList![position].Profile_Image!.isEmpty
+                                  interestedList![position]
+                                          .Profile_Image!
+                                          .isEmpty
                                       ? Image.asset(
                                           GlobalVariables
                                               .componentUserProfilePath,
@@ -548,7 +585,8 @@ class CreateClassifiedListingState
                                           text(
                                               interestedList![position]
                                                   .User_Name,
-                                              textColor: GlobalVariables.primaryColor,
+                                              textColor:
+                                                  GlobalVariables.primaryColor,
                                               fontWeight: FontWeight.bold,
                                               fontSize: GlobalVariables
                                                   .textSizeMedium,
@@ -632,7 +670,8 @@ class CreateClassifiedListingState
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          text(interestedList![position].Address,
+                                          text(
+                                              interestedList![position].Address,
                                               textColor: GlobalVariables.grey,
                                               fontWeight: FontWeight.bold,
                                               fontSize:
@@ -709,7 +748,8 @@ class CreateClassifiedListingState
                         Container(
                           alignment: Alignment.topLeft,
                           child: text(
-                              value.ownerClassifiedList[0].Type!.toLowerCase() !=
+                              value.ownerClassifiedList[0].Type!
+                                          .toLowerCase() !=
                                       'giveaway'
                                   ? 'Please select one'
                                   : 'Are you sure you want to remove this add?',
@@ -776,13 +816,14 @@ class CreateClassifiedListingState
                                                 ),
                                                 Flexible(
                                                   child: Container(
-                                                      margin:
-                                                          EdgeInsets.fromLTRB(
+                                                      margin: EdgeInsets
+                                                          .fromLTRB(
                                                               10, 0, 0, 0),
                                                       child: text(
                                                           _selectOptionList[
                                                               position],
-                                                          fontSize: GlobalVariables.textSizeSMedium,
+                                                          fontSize: GlobalVariables
+                                                              .textSizeSMedium,
                                                           textColor:
                                                               GlobalVariables
                                                                   .black,
@@ -812,7 +853,8 @@ class CreateClassifiedListingState
                                 },
                                 child: Container(
                                     child: text('Close',
-                                        fontSize: GlobalVariables.textSizeMedium,
+                                        fontSize:
+                                            GlobalVariables.textSizeMedium,
                                         textColor: GlobalVariables.grey,
                                         fontWeight: FontWeight.w500)),
                               ),
@@ -839,7 +881,8 @@ class CreateClassifiedListingState
                                                 'giveaway'
                                             ? 'Submit'
                                             : 'Yes',
-                                        fontSize: GlobalVariables.textSizeMedium,
+                                        fontSize:
+                                            GlobalVariables.textSizeMedium,
                                         textColor: GlobalVariables.primaryColor,
                                         fontWeight: FontWeight.w500)),
                               )

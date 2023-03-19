@@ -7,9 +7,6 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
-
-import 'base_stateful.dart';
 
 class BaseHomeService extends StatefulWidget {
   @override
@@ -20,7 +17,6 @@ class BaseHomeService extends StatefulWidget {
 }
 
 class HomeServiceState extends State<BaseHomeService> {
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -69,7 +65,7 @@ class HomeServiceState extends State<BaseHomeService> {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 40, 10, 20),
       padding: EdgeInsets.all(20),
-     // height: MediaQuery.of(context).size.height / 0.5,
+      // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
           color: GlobalVariables.white,
           borderRadius: BorderRadius.circular(20)),
@@ -95,12 +91,13 @@ class HomeServiceState extends State<BaseHomeService> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    /*borderRadius: BorderRadius.circular(10),
+                  color: GlobalVariables.white,
+                  /*borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
-                    )*/),
+                    )*/
+                ),
                 child: ButtonTheme(
                   child: DropdownButton(
                     items: null,
@@ -116,7 +113,9 @@ class HomeServiceState extends State<BaseHomeService> {
                       child: Text(
                         "Today",
                         style: TextStyle(
-                            color: GlobalVariables.secondaryColor, fontSize: 16,fontWeight: FontWeight.w500),
+                            color: GlobalVariables.secondaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -127,38 +126,38 @@ class HomeServiceState extends State<BaseHomeService> {
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10),
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: GlobalVariables.secondaryColor,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).translate('name_of_person'),
-                  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                  border: InputBorder.none
-                ),
+                    hintText: AppLocalizations.of(context)
+                        .translate('name_of_person'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 14),
+                    border: InputBorder.none),
               ),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               decoration: BoxDecoration(
-                color: GlobalVariables.white,
-                borderRadius: BorderRadius.circular(10),
+                  color: GlobalVariables.white,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: GlobalVariables.secondaryColor,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).translate('company_name'),
-                  hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: 14),
-                  border: InputBorder.none
-                ),
+                    hintText:
+                        AppLocalizations.of(context).translate('company_name'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray, fontSize: 14),
+                    border: InputBorder.none),
               ),
             ),
             Container(
@@ -195,22 +194,18 @@ class HomeServiceState extends State<BaseHomeService> {
               height: 45,
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: ButtonTheme(
-               // minWidth: MediaQuery.of(context).size.width/2,
-                child: RaisedButton(
+                // minWidth: MediaQuery.of(context).size.width/2,
+                child: MaterialButton(
                   color: GlobalVariables.primaryColor,
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.primaryColor)
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: GlobalVariables.primaryColor)),
                   child: Text(
-                    AppLocalizations.of(context)
-                        .translate('add'),
-                    style: TextStyle(
-                        fontSize: GlobalVariables.textSizeMedium),
+                    AppLocalizations.of(context).translate('add'),
+                    style: TextStyle(fontSize: GlobalVariables.textSizeMedium),
                   ),
                 ),
               ),
@@ -222,22 +217,20 @@ class HomeServiceState extends State<BaseHomeService> {
   }
 
   getOtherVisitorCardLayout() {
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(5,0, 5,0),
-          padding: EdgeInsets.fromLTRB(5,0,5,0),
+          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
           child: Row(
             children: <Widget>[
               Flexible(
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseCab()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => BaseCab()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -268,9 +261,10 @@ class HomeServiceState extends State<BaseHomeService> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseDelivery()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseDelivery()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -303,9 +297,10 @@ class HomeServiceState extends State<BaseHomeService> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseGuestOthers()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseGuestOthers()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -343,9 +338,8 @@ class HomeServiceState extends State<BaseHomeService> {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.AccentColor,
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: GlobalVariables.AccentColor,
+          borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -356,17 +350,15 @@ class HomeServiceState extends State<BaseHomeService> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             alignment: Alignment.center,
-            child: Text(
-                AppLocalizations.of(context)
-                    .translate('search_property'),
-                style: TextStyle(
-                  color: GlobalVariables.primaryColor,
-                    fontSize: GlobalVariables.varyLargeText,)),
+            child:
+                Text(AppLocalizations.of(context).translate('search_property'),
+                    style: TextStyle(
+                      color: GlobalVariables.primaryColor,
+                      fontSize: GlobalVariables.varyLargeText,
+                    )),
           )
         ],
       ),
     );
   }
-
-
 }

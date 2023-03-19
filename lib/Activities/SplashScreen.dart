@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

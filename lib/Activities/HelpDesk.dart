@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/RaiseNewTicket.dart';
@@ -9,18 +7,14 @@ import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/Complaints.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseHelpDesk extends StatefulWidget {
-   bool isAssignComplaint=false;
+  bool isAssignComplaint = false;
 
   BaseHelpDesk(this.isAssignComplaint);
-
 
   @override
   State<StatefulWidget> createState() {
@@ -30,8 +24,7 @@ class BaseHelpDesk extends StatefulWidget {
 }
 
 class HelpDeskState extends State<BaseHelpDesk> {
-
- /* List<Complaints> _complaintList = new List<Complaints>();
+  /* List<Complaints> _complaintList = new List<Complaints>();
   List<Complaints> value.openComplaintList = new List<Complaints>();
   List<Complaints> value.closeComplaintList = new List<Complaints>();*/
 
@@ -49,9 +42,10 @@ class HelpDeskState extends State<BaseHelpDesk> {
     super.initState();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(widget.isAssignComplaint).then((value) {
-          setState(() {
-          });
+        Provider.of<HelpDeskResponse>(context, listen: false)
+            .getUnitComplaintData(widget.isAssignComplaint)
+            .then((value) {
+          setState(() {});
         });
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
@@ -62,38 +56,39 @@ class HelpDeskState extends State<BaseHelpDesk> {
 
   @override
   Widget build(BuildContext context) {
-      //_progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    //_progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     // TODO: implement build
     return ChangeNotifierProvider<HelpDeskResponse>.value(
-        value: Provider.of(context),
-        child: Consumer<HelpDeskResponse>(builder: (context, value, child){
-          return Builder(
-            builder: (context) => Scaffold(
-              backgroundColor: GlobalVariables.veryLightGray,
-              //resizeToAvoidBottomPadding: false,
-              appBar: CustomAppBar(
-                title: AppLocalizations.of(context).translate('help_desk'),
-              ),
-              body:  getMyTicketLayout(value),
+      value: Provider.of(context),
+      child: Consumer<HelpDeskResponse>(builder: (context, value, child) {
+        return Builder(
+          builder: (context) => Scaffold(
+            backgroundColor: GlobalVariables.veryLightGray,
+            //resizeToAvoidBottomPadding: false,
+            appBar: CustomAppBar(
+              title: AppLocalizations.of(context).translate('help_desk'),
             ),
-          );
-        }),
-
+            body: getMyTicketLayout(value),
+          ),
+        );
+      }),
     );
   }
 
   getMyTicketLayout(HelpDeskResponse value) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         Navigator.pop(context);
         return Future.value(true);
       },
       child: Stack(
         children: <Widget>[
-       //   GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
-           ticketOpenClosedLayout() , //ticketFilterLayout(),
-          !value.isLoading ?  getTicketListDataLayout(value) : GlobalFunctions.loadingWidget(context),
-          !widget.isAssignComplaint ? addTicketFabLayout(): Container(),
+          //   GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
+          ticketOpenClosedLayout(), //ticketFilterLayout(),
+          !value.isLoading
+              ? getTicketListDataLayout(value)
+              : GlobalFunctions.loadingWidget(context),
+          !widget.isAssignComplaint ? addTicketFabLayout() : Container(),
         ],
       ),
     );
@@ -127,14 +122,15 @@ class HelpDeskState extends State<BaseHelpDesk> {
                   child: ButtonTheme(
                     minWidth: 190,
                     height: 50,
-                    child: FlatButton(
+                    child: TextButton(
                       //color: GlobalVariables.grey,
                       child: text(
                         AppLocalizations.of(context).translate('open'),
-                            fontSize: 15.0, textColor: firstTicketTextColor,
+                        fontSize: 15.0,
+                        textColor: firstTicketTextColor,
                       ),
                       onPressed: () {
-                      //  GlobalFunctions.showToast("OPEN Click");
+                        //  GlobalFunctions.showToast("OPEN Click");
                         if (!isOpenTicket) {
                           isOpenTicket = true;
                           isClosedTicket = false;
@@ -163,13 +159,14 @@ class HelpDeskState extends State<BaseHelpDesk> {
                   child: ButtonTheme(
                     minWidth: 190,
                     height: 50,
-                    child: FlatButton(
+                    child: TextButton(
                       child: text(
                         AppLocalizations.of(context).translate('closed'),
-                            fontSize: 15.0, textColor: secondTicketTextColor,
+                        fontSize: 15.0,
+                        textColor: secondTicketTextColor,
                       ),
                       onPressed: () {
-                      //  GlobalFunctions.showToast("CLOSED Click");
+                        //  GlobalFunctions.showToast("CLOSED Click");
                         if (!isClosedTicket) {
                           isOpenTicket = false;
                           isClosedTicket = true;
@@ -181,7 +178,7 @@ class HelpDeskState extends State<BaseHelpDesk> {
                         }
                         setState(() {});
                       },
-                      color: GlobalVariables.transparent,
+                     
                     ),
                   )),
             )
@@ -267,10 +264,11 @@ class HelpDeskState extends State<BaseHelpDesk> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => BaseRaiseNewTicket()));
-                if(result=='back'){
+                if (result == 'back') {
                   GlobalFunctions.setBaseContext(context);
-                  Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(widget.isAssignComplaint);
-                }else{
+                  Provider.of<HelpDeskResponse>(context, listen: false)
+                      .getUnitComplaintData(widget.isAssignComplaint);
+                } else {
                   GlobalFunctions.setBaseContext(context);
                 }
               },
@@ -286,118 +284,146 @@ class HelpDeskState extends State<BaseHelpDesk> {
     );
   }
 
-
   getTicketListDataLayout(HelpDeskResponse value) {
-    print(' value.openComplaintList.length :'+ value.openComplaintList.length.toString());
-    print(' value.closeComplaintList.length :'+ value.closeComplaintList.length.toString());
-    return value.complaintList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 80, 0, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
-            itemCount: isOpenTicket ? value.openComplaintList.length : value.closeComplaintList.length,
-            itemBuilder: (context, position) {
-              return getTicketDescListItemLayout(position,value);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
-    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
+    print(' value.openComplaintList.length :' +
+        value.openComplaintList.length.toString());
+    print(' value.closeComplaintList.length :' +
+        value.closeComplaintList.length.toString());
+    return value.complaintList.length > 0
+        ? Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(0, 80, 0, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: isOpenTicket
+                          ? value.openComplaintList.length
+                          : value.closeComplaintList.length,
+                      itemBuilder: (context, position) {
+                        return getTicketDescListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getTicketDescListItemLayout(int position, HelpDeskResponse value) {
     return InkWell(
-      onTap: () async {
-       // GlobalFunctions.showToast(isOpenTicket ? value.openComplaintList[position].TICKET_NO : value.closeComplaintList[position].TICKET_NO);
-        //print('value.openComplaintList[position].toString()  : '+ value.openComplaintList[position].toString() );
-       // Navigator.of(context).pop();
-        final result = await  Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BaseComplaintInfoAndComments(isOpenTicket ? value.openComplaintList[position] : value.closeComplaintList[position],widget.isAssignComplaint)));
-        if(result=='back'){
-          GlobalFunctions.setBaseContext(context);
-          Provider.of<HelpDeskResponse>(context,listen: false).getUnitComplaintData(widget.isAssignComplaint);
-        }else{
-          GlobalFunctions.setBaseContext(context);
-        }
-      },
-      child: AppContainer(
-        isListItem: true,
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: text(
-                    isOpenTicket ? value.openComplaintList[position].STATUS : value.closeComplaintList[position].STATUS,
-                    textColor: GlobalVariables.white,
-                    fontSize: GlobalVariables.textSizeSmall,
-                    textStyleHeight: 1.0
-                  ),
-                  decoration: BoxDecoration(
-                      color: getTicketCategoryColor(
-                          isOpenTicket ? value.openComplaintList[position].STATUS! : value.closeComplaintList[position].STATUS!),
-                      borderRadius: BorderRadius.circular(5)),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: text(
-                          'Ticket No: ' +
-                              ( isOpenTicket ? value.openComplaintList[position].TICKET_NO! : value.closeComplaintList[position].TICKET_NO!),
-                          textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSmall
-                      ),
-                    ),
-                    widget.isAssignComplaint ? Container(
-                      alignment: Alignment.topRight,
-                      margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      child: text(
-                          'Unit No: '+ (isOpenTicket ? value.openComplaintList[position].BLOCK!+' '+value.openComplaintList[position].FLAT! : value.closeComplaintList[position].BLOCK!+' '+value.closeComplaintList[position].FLAT!),
-                          textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSmall
-                      ),
-                    ):Container(),
-                  ],
-                ),
-              ],
-            ),
-            Container(
-              child: Row(
+        onTap: () async {
+          // GlobalFunctions.showToast(isOpenTicket ? value.openComplaintList[position].TICKET_NO : value.closeComplaintList[position].TICKET_NO);
+          //print('value.openComplaintList[position].toString()  : '+ value.openComplaintList[position].toString() );
+          // Navigator.of(context).pop();
+          final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BaseComplaintInfoAndComments(
+                      isOpenTicket
+                          ? value.openComplaintList[position]
+                          : value.closeComplaintList[position],
+                      widget.isAssignComplaint)));
+          if (result == 'back') {
+            GlobalFunctions.setBaseContext(context);
+            Provider.of<HelpDeskResponse>(context, listen: false)
+                .getUnitComplaintData(widget.isAssignComplaint);
+          } else {
+            GlobalFunctions.setBaseContext(context);
+          }
+        },
+        child: AppContainer(
+          isListItem: true,
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    child: Visibility(
-                      visible: false,
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        width:50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: GlobalVariables.secondaryColor,
-                            shape: BoxShape.rectangle
-                        ),
-                        /* child:*//* SvgPicture.asset(
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: text(
+                        isOpenTicket
+                            ? value.openComplaintList[position].STATUS
+                            : value.closeComplaintList[position].STATUS,
+                        textColor: GlobalVariables.white,
+                        fontSize: GlobalVariables.textSizeSmall,
+                        textStyleHeight: 1.0),
+                    decoration: BoxDecoration(
+                        color: getTicketCategoryColor(isOpenTicket
+                            ? value.openComplaintList[position].STATUS!
+                            : value.closeComplaintList[position].STATUS!),
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: text(
+                            'Ticket No: ' +
+                                (isOpenTicket
+                                    ? value
+                                        .openComplaintList[position].TICKET_NO!
+                                    : value.closeComplaintList[position]
+                                        .TICKET_NO!),
+                            textColor: GlobalVariables.primaryColor,
+                            fontSize: GlobalVariables.textSizeSmall),
+                      ),
+                      widget.isAssignComplaint
+                          ? Container(
+                              alignment: Alignment.topRight,
+                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              child: text(
+                                  'Unit No: ' +
+                                      (isOpenTicket
+                                          ? value.openComplaintList[position]
+                                                  .BLOCK! +
+                                              ' ' +
+                                              value.openComplaintList[position]
+                                                  .FLAT!
+                                          : value.closeComplaintList[position]
+                                                  .BLOCK! +
+                                              ' ' +
+                                              value.closeComplaintList[position]
+                                                  .FLAT!),
+                                  textColor: GlobalVariables.primaryColor,
+                                  fontSize: GlobalVariables.textSizeSmall),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: Visibility(
+                        visible: false,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.secondaryColor,
+                              shape: BoxShape.rectangle),
+                          /* child:*/ /* SvgPicture.asset(
                           GlobalVariables.waterIconPath,
-                        ),*//*CircleAvatar(
+                        ),*/ /*CircleAvatar(
                           radius: 5,
                           backgroundColor: GlobalVariables.mediumGreen,
                          // backgroundImage: NetworkImage(value.openComplaintList[position]. ),
                         ),*/
+                        ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    child: Container(
-                      //margin: EdgeInsets.fromLTRB(5, 0, 0, 0), //alignment: Alignment.topLeft,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          /* Container(
+                    Flexible(
+                      child: Container(
+                        //margin: EdgeInsets.fromLTRB(5, 0, 0, 0), //alignment: Alignment.topLeft,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            /* Container(
                               // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -406,20 +432,28 @@ class HelpDeskState extends State<BaseHelpDesk> {
 
                             ],
                           )),*/
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: primaryText(
-                                isOpenTicket ? value.openComplaintList[position].SUBJECT : value.closeComplaintList[position].SUBJECT,
-                                maxLine: 1,),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: secondaryText(
-                                isOpenTicket ? value.openComplaintList[position].DESCRIPTION : value.closeComplaintList[position].DESCRIPTION,
-                              maxLine: 1,
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: primaryText(
+                                isOpenTicket
+                                    ? value.openComplaintList[position].SUBJECT
+                                    : value
+                                        .closeComplaintList[position].SUBJECT,
+                                maxLine: 1,
+                              ),
                             ),
-                          ),
-                          /*Row(
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              child: secondaryText(
+                                isOpenTicket
+                                    ? value
+                                        .openComplaintList[position].DESCRIPTION
+                                    : value.closeComplaintList[position]
+                                        .DESCRIPTION,
+                                maxLine: 1,
+                              ),
+                            ),
+                            /*Row(
                             children: [
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -435,14 +469,14 @@ class HelpDeskState extends State<BaseHelpDesk> {
                               ),
                             ],
                           ),*/
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            /*isAssignComplaint ? Container(
+              /*isAssignComplaint ? Container(
               height: 1,
               color: GlobalVariables.mediumGreen,
               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -497,40 +531,52 @@ class HelpDeskState extends State<BaseHelpDesk> {
                 ),
               ],
             ) : Container(),*/
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: text(
-                      'Issued on: ' +
-                          ( isOpenTicket ? GlobalFunctions.convertDateFormat(value.openComplaintList[position].DATE!,"dd-MM-yyyy") : GlobalFunctions.convertDateFormat(value.closeComplaintList[position].DATE!,"dd-MM-yyyy")),
-                      textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    AppIcon(
-                      Icons.insert_comment_outlined,
-                      iconColor: GlobalVariables.lightGray,
-                      iconSize: 20.0,
-                    ),
-                    SizedBox(width: 3,),
-                    text(
-                        ( isOpenTicket ? value.openComplaintList[position].COMMENT_COUNT : value.closeComplaintList[position].COMMENT_COUNT )! +
-                            ' Comments',
-                        textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeSmall),
-                  ],
-                ),
-              ],
-            )
-          ],
-        ),
-      )
-    );
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: text(
+                        'Issued on: ' +
+                            (isOpenTicket
+                                ? GlobalFunctions.convertDateFormat(
+                                    value.openComplaintList[position].DATE!,
+                                    "dd-MM-yyyy")
+                                : GlobalFunctions.convertDateFormat(
+                                    value.closeComplaintList[position].DATE!,
+                                    "dd-MM-yyyy")),
+                        textColor: GlobalVariables.grey,
+                        fontSize: GlobalVariables.textSizeSmall),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      AppIcon(
+                        Icons.insert_comment_outlined,
+                        iconColor: GlobalVariables.lightGray,
+                        iconSize: 20.0,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      text(
+                          (isOpenTicket
+                                  ? value
+                                      .openComplaintList[position].COMMENT_COUNT
+                                  : value.closeComplaintList[position]
+                                      .COMMENT_COUNT)! +
+                              ' Comments',
+                          textColor: GlobalVariables.grey,
+                          fontSize: GlobalVariables.textSizeSmall),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
   }
-
 
   static getTicketCategoryColor(String category) {
     switch (category.toLowerCase()) {
@@ -551,5 +597,4 @@ class HelpDeskState extends State<BaseHelpDesk> {
         break;
     }
   }
-
 }

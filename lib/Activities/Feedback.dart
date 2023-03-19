@@ -13,7 +13,6 @@ import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'base_stateful.dart';
 
 class BaseFeedback extends StatefulWidget {
   @override
@@ -24,7 +23,6 @@ class BaseFeedback extends StatefulWidget {
 }
 
 class FeedbackState extends State<BaseFeedback> {
-
   TextEditingController complaintSubject = TextEditingController();
   TextEditingController complaintDesc = TextEditingController();
   String? attachmentFilePath;
@@ -47,26 +45,19 @@ class FeedbackState extends State<BaseFeedback> {
     // TODO: implement build
 
     return Builder(
-      builder: (context) =>
-          Scaffold(
-            appBar: CustomAppBar(
-              title: AppLocalizations.of(context).translate('feedback'),
-            ),
-            body: getBaseLayout(),
-          ),
+      builder: (context) => Scaffold(
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).translate('feedback'),
+        ),
+        body: getBaseLayout(),
+      ),
     );
   }
 
   getBaseLayout() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: GlobalVariables.veryLightGray,
       ),
@@ -98,7 +89,10 @@ class FeedbackState extends State<BaseFeedback> {
         child: Container(
           child: Column(
             children: <Widget>[
-              AppTextField(textHintContent: AppLocalizations.of(context).translate('title'), controllerCallback: complaintSubject),
+              AppTextField(
+                  textHintContent:
+                      AppLocalizations.of(context).translate('title'),
+                  controllerCallback: complaintSubject),
               /*Container(
                 //  height: 150,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -123,10 +117,14 @@ class FeedbackState extends State<BaseFeedback> {
               ),*/
               Container(
                 height: 150,
-                child: AppTextField(textHintContent: AppLocalizations.of(context)
-                    .translate('complaint_desc'), controllerCallback: complaintDesc,maxLines: 99,),
+                child: AppTextField(
+                  textHintContent:
+                      AppLocalizations.of(context).translate('complaint_desc'),
+                  controllerCallback: complaintDesc,
+                  maxLines: 99,
+                ),
               ),
-            /*  Container(
+              /*  Container(
                 height: 150,
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -156,37 +154,38 @@ class FeedbackState extends State<BaseFeedback> {
                       width: 50,
                       height: 50,
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      decoration: attachmentFilePath == null ? BoxDecoration(
-                        color: GlobalVariables.secondaryColor,
-                        borderRadius: BorderRadius.circular(25),
-
-                      ) : BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: FileImage(File(attachmentFilePath!)),
-                              fit: BoxFit.cover
-                          ),
-                          border: Border.all(
-                              color: GlobalVariables.primaryColor, width: 2.0)
-                      ),
+                      decoration: attachmentFilePath == null
+                          ? BoxDecoration(
+                              color: GlobalVariables.secondaryColor,
+                              borderRadius: BorderRadius.circular(25),
+                            )
+                          : BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: FileImage(File(attachmentFilePath!)),
+                                  fit: BoxFit.cover),
+                              border: Border.all(
+                                  color: GlobalVariables.primaryColor,
+                                  width: 2.0)),
                       //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                     ),
                     Column(
                       children: <Widget>[
                         Container(
-                          child: FlatButton.icon(
+                          child: TextButton.icon(
                             onPressed: () {
                               if (isStoragePermission) {
                                 openFile(context);
                               } else {
                                 GlobalFunctions.askPermission(
-                                    Permission.storage).then((value) {
+                                        Permission.storage)
+                                    .then((value) {
                                   if (value) {
                                     openFile(context);
                                   } else {
                                     GlobalFunctions.showToast(
-                                        AppLocalizations.of(context).translate(
-                                            'download_permission'));
+                                        AppLocalizations.of(context)
+                                            .translate('download_permission'));
                                   }
                                 });
                               }
@@ -196,8 +195,8 @@ class FeedbackState extends State<BaseFeedback> {
                               iconColor: GlobalVariables.secondaryColor,
                             ),
                             label: text(
-                              AppLocalizations.of(context).translate(
-                                  'attach_photo'),
+                              AppLocalizations.of(context)
+                                  .translate('attach_photo'),
                               textColor: GlobalVariables.primaryColor,
                             ),
                           ),
@@ -210,20 +209,21 @@ class FeedbackState extends State<BaseFeedback> {
                           ),
                         ),
                         Container(
-                          child: FlatButton.icon(
+                          child: TextButton.icon(
                               onPressed: () {
                                 if (isStoragePermission) {
                                   openCamera(context);
                                 } else {
                                   GlobalFunctions.askPermission(
-                                      Permission.storage).then((value) {
+                                          Permission.storage)
+                                      .then((value) {
                                     if (value) {
                                       openCamera(context);
                                     } else {
                                       GlobalFunctions.showToast(
                                           AppLocalizations.of(context)
                                               .translate(
-                                              'download_permission'));
+                                                  'download_permission'));
                                     }
                                   });
                                 }
@@ -235,26 +235,29 @@ class FeedbackState extends State<BaseFeedback> {
                               label: text(
                                 AppLocalizations.of(context)
                                     .translate('take_picture'),
-                               textColor: GlobalVariables.primaryColor,
+                                textColor: GlobalVariables.primaryColor,
                               )),
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
-              SizedBox(height: 16,),
-              AppButton(textContent: AppLocalizations.of(context).translate('submit'), onPressed: (){
-                verifyData();
-              }),
+              SizedBox(
+                height: 16,
+              ),
+              AppButton(
+                  textContent: AppLocalizations.of(context).translate('submit'),
+                  onPressed: () {
+                    verifyData();
+                  }),
               /*Container(
                 alignment: Alignment.topLeft,
                 height: 45,
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: ButtonTheme(
                   // minWidth: MediaQuery.of(context).size.width/2,
-                  child: RaisedButton(
+                  child: MaterialButton(
                     color: GlobalVariables.primaryColor,
                     onPressed: () {
 
@@ -291,23 +294,18 @@ class FeedbackState extends State<BaseFeedback> {
     _progressDialog!.show();
     if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName!;
-      attachment = GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
+      attachment =
+          GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
     }
 
-    restClient.addFeedback(
-        societyId,
-        block,
-        flat,
-        societyName,
-        complaintSubject.text,
-        complaintDesc.text,
-        attachment!).then((value) async {
+    restClient
+        .addFeedback(societyId, block, flat, societyName, complaintSubject.text,
+            complaintDesc.text, attachment!)
+        .then((value) async {
       _progressDialog!.dismiss();
       if (value.status!) {
-        if (attachmentFileName != null &&
-            attachmentFilePath != null) {
-          await GlobalFunctions.removeFileFromDirectory(
-              attachmentFilePath!);
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
           await GlobalFunctions.removeFileFromDirectory(
               attachmentCompressFilePath!);
         }
@@ -316,7 +314,6 @@ class FeedbackState extends State<BaseFeedback> {
       GlobalFunctions.showToast(value.message!);
     });
   }
-
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
@@ -339,7 +336,7 @@ class FeedbackState extends State<BaseFeedback> {
     GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
-          attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
+              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
         print('Cache file path : ' + attachmentCompressFilePath!);
@@ -359,6 +356,4 @@ class FeedbackState extends State<BaseFeedback> {
       GlobalFunctions.showToast("Please Enter Complaint Subject");
     }
   }
-
-
 }

@@ -13,7 +13,6 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
 
 class BaseAddVehicle extends StatefulWidget {
   //String memberType;

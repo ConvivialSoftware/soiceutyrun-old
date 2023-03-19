@@ -1,21 +1,12 @@
 //import 'package:custom_switch/custom_switch.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_custom_switch/flutter_custom_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:ndialog/ndialog.dart';
-import 'package:societyrun/Activities/AboutSocietyRun.dart';
-import 'package:societyrun/Activities/ChangePassword.dart';
-import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/LoginPage.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseAppNotificationSettings extends StatefulWidget {

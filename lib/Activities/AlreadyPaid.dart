@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
@@ -20,16 +19,16 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseAlreadyPaid extends StatefulWidget {
   bool isAdmin;
   Receipt? receiptData;
   String invoiceNo;
   double amount;
   int penaltyAmount;
-  String mBlock,mFlat;
-  BaseAlreadyPaid(this.invoiceNo,this.amount,this.mBlock,this.mFlat,this.penaltyAmount,{this.receiptData,this.isAdmin=false});
+  String mBlock, mFlat;
+  BaseAlreadyPaid(
+      this.invoiceNo, this.amount, this.mBlock, this.mFlat, this.penaltyAmount,
+      {this.receiptData, this.isAdmin = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -41,15 +40,15 @@ class BaseAlreadyPaid extends StatefulWidget {
 class AlreadyPaidState extends State<BaseAlreadyPaid> {
   List<Bank> _bankList = <Bank>[];
 
- // List<BankResponse> _bankResponseList = new List<BankResponse>();
-  String paymentType="Cheque";
+  // List<BankResponse> _bankResponseList = new List<BankResponse>();
+  String paymentType = "Cheque";
   //String complaintPriority="No";
 
-  TextEditingController _chequeBankNameController  =  TextEditingController();
-  TextEditingController _amountController  =  TextEditingController();
+  TextEditingController _chequeBankNameController = TextEditingController();
+  TextEditingController _amountController = TextEditingController();
   //TextEditingController _penaltyAmountController = TextEditingController();
-  TextEditingController _noteController  =  TextEditingController();
-  TextEditingController _referenceController  = TextEditingController();
+  TextEditingController _noteController = TextEditingController();
+  TextEditingController _referenceController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
 
   var insertedDate;
@@ -61,9 +60,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   String _areaSelectedItem;
 */
 
-
-  List<DropdownMenuItem<String>> __bankListItems =
-      <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> __bankListItems = <DropdownMenuItem<String>>[];
 
   String? _bankSelectedItem;
   String? _bankAccountNoSelectedItem;
@@ -73,18 +70,18 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   String? attachmentCompressFilePath;
 
   ProgressDialog? _progressDialog;
-  bool isStoragePermission=false;
+  bool isStoragePermission = false;
 
- /* String invoiceNo;
+  /* String invoiceNo;
   double amount;*/
- // AlreadyPaidState(this.invoiceNo,this.amount);
+  // AlreadyPaidState(this.invoiceNo,this.amount);
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission=value;
+      isStoragePermission = value;
     });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
@@ -94,8 +91,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
             .translate('pls_check_internet_connectivity'));
       }
     });
-    if(widget.isAdmin){
-      if(widget.receiptData!=null) {
+    if (widget.isAdmin) {
+      if (widget.receiptData != null) {
         print('PAYMENT_DATE : ' + widget.receiptData!.PAYMENT_DATE!);
         _dateController.text = GlobalFunctions.convertDateFormat(
             widget.receiptData!.PAYMENT_DATE!, "dd-MM-yyyy");
@@ -105,10 +102,14 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         _referenceController.text = widget.receiptData!.REFERENCE_NO!;
         paymentType = widget.receiptData!.TRANSACTION_MODE!;
       }
-      _amountController.text=(double.parse(widget.amount.toString())/*-double.parse(widget.penaltyAmount.t
-      oString())*/).toStringAsFixed(2);
-    }else {
-      _amountController.text=(double.parse(widget.amount.toString())).toStringAsFixed(2);
+      _amountController.text = (double.parse(widget.amount
+              .toString()) /*-double.parse(widget.penaltyAmount.t
+      oString())*/
+          )
+          .toStringAsFixed(2);
+    } else {
+      _amountController.text =
+          (double.parse(widget.amount.toString())).toStringAsFixed(2);
       _dateController.text =
           DateTime.now().toLocal().day.toString().padLeft(2, '0') +
               "-" +
@@ -150,8 +151,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   getBaseLayout() {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 200.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
         getAlreadyPaidLayout(),
       ],
     );
@@ -170,8 +170,9 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
           child: Column(
             children: <Widget>[
               AppTextField(
-                textHintContent:
-                widget.isAdmin? 'Receipt Date' : AppLocalizations.of(context).translate('date'),
+                textHintContent: widget.isAdmin
+                    ? 'Receipt Date'
+                    : AppLocalizations.of(context).translate('date'),
                 controllerCallback: _dateController,
                 readOnly: true,
                 contentPadding: EdgeInsets.only(top: 14),
@@ -179,9 +180,18 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                   Icons.date_range,
                   iconColor: GlobalVariables.secondaryColor,
                   onPressed: () {
-                    GlobalFunctions.getSelectedDate(context).then((value){
-                      _dateController.text = value.day.toString().padLeft(2,'0')+"-"+value.month.toString().padLeft(2,'0')+"-"+value.year.toString();
-                      insertedDate =value.toLocal().year.toString()+"-"+value.toLocal().month.toString().padLeft(2,'0')+"-"+value.day.toString().padLeft(2,'0');
+                    GlobalFunctions.getSelectedDate(context).then((value) {
+                      _dateController.text =
+                          value.day.toString().padLeft(2, '0') +
+                              "-" +
+                              value.month.toString().padLeft(2, '0') +
+                              "-" +
+                              value.year.toString();
+                      insertedDate = value.toLocal().year.toString() +
+                          "-" +
+                          value.toLocal().month.toString().padLeft(2, '0') +
+                          "-" +
+                          value.day.toString().padLeft(2, '0');
                     });
                   },
                 ),
@@ -198,10 +208,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                           AppLocalizations.of(context)
                               .translate('personal')*/
                           paymentType = "Cheque";
-                          setState(() {
-
-                          });
-
+                          setState(() {});
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -211,10 +218,14 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: paymentType== "Cheque" ? GlobalVariables.primaryColor : GlobalVariables.white,
+                                    color: paymentType == "Cheque"
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: paymentType== "Cheque" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
+                                      color: paymentType == "Cheque"
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: AppIcon(Icons.check,
@@ -222,11 +233,9 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                  "Cheque",
-                                  textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeMedium
-                                ),
+                                child: text("Cheque",
+                                    textColor: GlobalVariables.primaryColor,
+                                    fontSize: GlobalVariables.textSizeMedium),
                               ),
                             ],
                           ),
@@ -238,12 +247,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                       child: InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-
                           paymentType = "NEFT/IMPS";
-                          setState(() {
-
-                          });
-
+                          setState(() {});
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -253,10 +258,14 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: paymentType!= "Cheque" ? GlobalVariables.primaryColor : GlobalVariables.white,
+                                    color: paymentType != "Cheque"
+                                        ? GlobalVariables.primaryColor
+                                        : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: paymentType!= "Cheque" ? GlobalVariables.primaryColor : GlobalVariables.secondaryColor,
+                                      color: paymentType != "Cheque"
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.secondaryColor,
                                       width: 2.0,
                                     )),
                                 child: AppIcon(Icons.check,
@@ -267,7 +276,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                                 child: text(
                                   "NEFT/IMPS",
                                   textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeMedium,
+                                  fontSize: GlobalVariables.textSizeMedium,
                                 ),
                               ),
                             ],
@@ -278,16 +287,18 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                   ],
                 ),
               ),
-              paymentType== "Cheque" ?
-              AppTextField(
-                textHintContent:
-                AppLocalizations.of(context).translate('cheque_bank_name'),
-                controllerCallback: _chequeBankNameController,
-              ):Container(),
+              paymentType == "Cheque"
+                  ? AppTextField(
+                      textHintContent: AppLocalizations.of(context)
+                          .translate('cheque_bank_name'),
+                      controllerCallback: _chequeBankNameController,
+                    )
+                  : Container(),
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, paymentType== "Cheque" ? 10:20, 0, 0),
+                margin: EdgeInsets.fromLTRB(
+                    0, paymentType == "Cheque" ? 10 : 20, 0, 0),
                 decoration: BoxDecoration(
                     color: GlobalVariables.white,
                     borderRadius: BorderRadius.circular(10),
@@ -311,22 +322,24 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                       textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                     ),*/
                     decoration: InputDecoration(
-                      //filled: true,
-                      //fillColor: Hexcolor('#ecedec'),
+                        //filled: true,
+                        //fillColor: Hexcolor('#ecedec'),
                         labelText: AppLocalizations.of(context)
-                            .translate('select_bank') +
+                                .translate('select_bank') +
                             '*',
-                        labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                        labelStyle: TextStyle(
+                            color: GlobalVariables.lightGray,
+                            fontSize: GlobalVariables.textSizeSMedium),
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent))
-                      // border: new CustomBorderTextFieldSkin().getSkin(),
-                    ),
+                        // border: new CustomBorderTextFieldSkin().getSkin(),
+                        ),
                   ),
                 ),
               ),
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('amount') ,
+                    AppLocalizations.of(context).translate('amount'),
                 controllerCallback: _amountController,
                 keyboardType: TextInputType.number,
               ),
@@ -340,116 +353,124 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                   : SizedBox(),*/
               AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('reference_no')+'*',
+                    AppLocalizations.of(context).translate('reference_no') +
+                        '*',
                 controllerCallback: _referenceController,
               ),
               Container(
                 height: 150,
                 child: AppTextField(
                   textHintContent:
-                  AppLocalizations.of(context).translate('enter_note'),
+                      AppLocalizations.of(context).translate('enter_note'),
                   controllerCallback: _noteController,
                   maxLines: 99,
                   contentPadding: EdgeInsets.only(top: 14),
                 ),
               ),
-              widget.isAdmin ? SizedBox():Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width:50,
-                      height: 50,
-                      margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                      decoration: attachmentFilePath==null ? BoxDecoration(
-                        color: GlobalVariables.secondaryColor,
-                        borderRadius: BorderRadius.circular(25),
-
-                      ) : BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                                        image:
-                                            FileImage(File(attachmentFilePath!)),
-                              fit: BoxFit.cover
+              widget.isAdmin
+                  ? SizedBox()
+                  : Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 50,
+                            height: 50,
+                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                            decoration: attachmentFilePath == null
+                                ? BoxDecoration(
+                                    color: GlobalVariables.secondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  )
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: FileImage(
+                                            File(attachmentFilePath!)),
+                                        fit: BoxFit.cover),
+                                    border: Border.all(
+                                        color: GlobalVariables.primaryColor,
+                                        width: 2.0)),
+                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
                           ),
-                          border: Border.all(color: GlobalVariables.primaryColor,width: 2.0)
-                      ),
-                      //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          child: FlatButton.icon(
-                            onPressed: () {
-
-                              if(isStoragePermission) {
-                                openFile(context);
-                              }else{
-                                GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                  if(value){
-                                    openFile(context);
-                                  }else{
-                                    GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
-                                  }
-                                });
-                              }
-
-                            },
-                            icon: AppIcon(
-                              Icons.attach_file,
-                              iconColor: GlobalVariables.secondaryColor,
-                              iconSize: 20.0,
-                            ),
-                            label: text(
-                              AppLocalizations.of(context).translate('attach_photo'),
-                              textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeSMedium
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: text(
-                            'OR',
-                            textColor: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium
-                          ),
-                        ),
-                        Container(
-                          child: FlatButton.icon(
-                              onPressed: () {
-
-                                if(isStoragePermission) {
-                                  openCamera(context);
-                                }else{
-                                  GlobalFunctions.askPermission(Permission.storage).then((value) {
-                                    if(value){
-                                      openCamera(context);
-                                    }else{
-                                      GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_permission'));
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                child: TextButton.icon(
+                                  onPressed: () {
+                                    if (isStoragePermission) {
+                                      openFile(context);
+                                    } else {
+                                      GlobalFunctions.askPermission(
+                                              Permission.storage)
+                                          .then((value) {
+                                        if (value) {
+                                          openFile(context);
+                                        } else {
+                                          GlobalFunctions.showToast(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                      'download_permission'));
+                                        }
+                                      });
                                     }
-                                  });
-                                }
-
-                              },
-                              icon: AppIcon(
-                                Icons.camera_alt,
-                                iconColor: GlobalVariables.secondaryColor,
-                                iconSize: 20.0,
+                                  },
+                                  icon: AppIcon(
+                                    Icons.attach_file,
+                                    iconColor: GlobalVariables.secondaryColor,
+                                    iconSize: 20.0,
+                                  ),
+                                  label: text(
+                                      AppLocalizations.of(context)
+                                          .translate('attach_photo'),
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
+                                ),
                               ),
-                              label: text(
-                                AppLocalizations.of(context)
-                                    .translate('take_picture'),
-                                textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeSMedium
-                              )),
-                        ),
-                      ],
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: text('OR',
+                                    textColor: GlobalVariables.lightGray,
+                                    fontSize: GlobalVariables.textSizeSMedium),
+                              ),
+                              Container(
+                                child: TextButton.icon(
+                                    onPressed: () {
+                                      if (isStoragePermission) {
+                                        openCamera(context);
+                                      } else {
+                                        GlobalFunctions.askPermission(
+                                                Permission.storage)
+                                            .then((value) {
+                                          if (value) {
+                                            openCamera(context);
+                                          } else {
+                                            GlobalFunctions.showToast(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'download_permission'));
+                                          }
+                                        });
+                                      }
+                                    },
+                                    icon: AppIcon(
+                                      Icons.camera_alt,
+                                      iconColor: GlobalVariables.secondaryColor,
+                                      iconSize: 20.0,
+                                    ),
+                                    label: text(
+                                        AppLocalizations.of(context)
+                                            .translate('take_picture'),
+                                        textColor: GlobalVariables.primaryColor,
+                                        fontSize:
+                                            GlobalVariables.textSizeSMedium)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-
-                  ],
-                ),
-              ),
               Container(
                 alignment: Alignment.topLeft,
                 height: 45,
@@ -472,8 +493,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     print('clickable value : ' + value.toString());
     setState(() {
       _bankSelectedItem = value;
-      for(int i=0;i<_bankList.length;i++){
-        if(_bankSelectedItem==_bankList[i].BANK_NAME){
+      for (int i = 0; i < _bankList.length; i++) {
+        if (_bankSelectedItem == _bankList[i].BANK_NAME) {
           _bankAccountNoSelectedItem = _bankList[i].ACCOUNT_NO;
           break;
         }
@@ -485,22 +506,22 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   getBankData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
-   String societyId = await GlobalFunctions.getSocietyId();
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog!.show();
-    restClientERP.getBankData(societyId,widget.invoiceNo).then((value) {
+    restClientERP.getBankData(societyId, widget.invoiceNo).then((value) {
       print('Response : ' + value.toString());
       _progressDialog!.dismiss();
       List<dynamic> _list = value.bank!;
 
-      _bankList = List<Bank>.from(_list.map((i)=>Bank.fromJson(i)));
+      _bankList = List<Bank>.from(_list.map((i) => Bank.fromJson(i)));
 
       //_categorySelectedItem = __categoryListItems[0].value;
-      if(widget.receiptData!=null) {
+      if (widget.receiptData != null) {
         getAmountCalculationData();
       }
-      for(int i=0;i<_bankList.length;i++){
+      for (int i = 0; i < _bankList.length; i++) {
         __bankListItems.add(DropdownMenuItem(
           value: _bankList[i].BANK_NAME,
           child: text(
@@ -508,8 +529,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
             textColor: GlobalVariables.primaryColor,
           ),
         ));
-        if(widget.isAdmin){
-          if(widget.receiptData!=null) {
+        if (widget.isAdmin) {
+          if (widget.receiptData != null) {
             if (widget.receiptData!.BANK_ACCOUNTNO == _bankList[i].ACCOUNT_NO) {
               _bankSelectedItem = _bankList[i].BANK_NAME;
               _bankAccountNoSelectedItem = _bankList[i].ACCOUNT_NO;
@@ -517,51 +538,49 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
           }
         }
       }
-      print('bsnk list lenght : '+_bankList.length.toString());
-      setState(() {
-      });
-
+      print('bsnk list lenght : ' + _bankList.length.toString());
+      setState(() {});
     });
   }
+
   getAmountCalculationData() async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
 
-   // _progressDialog.show();
-    restClientERP.amountCalculation(societyId,widget.invoiceNo,widget.amount.toString()).then((value) {
+    // _progressDialog.show();
+    restClientERP
+        .amountCalculation(
+            societyId, widget.invoiceNo, widget.amount.toString())
+        .then((value) {
       //print('Response : ' + value.toString());
       // _progressDialog.dismiss();
-      print('bsnk list lenght : '+value.toString());
+      print('bsnk list lenght : ' + value.toString());
       _amountController.text = (value.AMOUNT).toString();
       //_penaltyAmountController.text = value.PENALTY.toString();
-      setState(() {
-      });
-
+      setState(() {});
     });
   }
 
-
   Future<void> addPaymentRequest() async {
-
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-  //  String block = await GlobalFunctions.getBlock();
-   // String flat = await GlobalFunctions.getFlat();
+    //  String block = await GlobalFunctions.getBlock();
+    // String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
     String attachmentName;
     String attachment;
 
-    if(attachmentFileName!=null && attachmentFilePath!=null){
+    if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName!;
       attachment =
           GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
-    }else{
-      attachmentName="";
-      attachment="";
+    } else {
+      attachmentName = "";
+      attachment = "";
     }
 /*
     print('Before : Date :'+_dateController.text);
@@ -585,22 +604,21 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                 attachment,
                 "P")
             .then((value) async {
-      print("add paymentRequest response : "+ value.toString());
+      print("add paymentRequest response : " + value.toString());
       _progressDialog!.dismiss();
       if (value.status!) {
-     //   Navigator.of(context).pop();
-        if(attachmentFileName!=null && attachmentFilePath!=null){
-          await GlobalFunctions.removeFileFromDirectory(
-              attachmentFilePath!);
+        //   Navigator.of(context).pop();
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
           await GlobalFunctions.removeFileFromDirectory(
               attachmentCompressFilePath!);
         }
         Provider.of<UserManagementResponse>(context, listen: false)
-            .getLedgerData(null,widget.mBlock,widget.mFlat);
+            .getLedgerData(null, widget.mBlock, widget.mFlat);
         getMessageInfo();
       }
       GlobalFunctions.showToast(value.message!);
-    })/*.catchError((Object obj) {
+    }) /*.catchError((Object obj) {
       switch (obj.runtimeType) {
         case DioError:
           {
@@ -610,62 +628,58 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
           break;
         default:
       }
-    })*/;
+    })*/
+        ;
   }
 
   void openFile(BuildContext context) {
     GlobalFunctions.getFilePath(context).then((value) {
-      attachmentFilePath=value;
+      attachmentFilePath = value;
       getCompressFilePath();
     });
-
   }
 
   void openCamera(BuildContext context) {
     GlobalFunctions.openCamera().then((value) {
-      attachmentFilePath=value.path;
+      attachmentFilePath = value.path;
       getCompressFilePath();
     });
   }
 
-  void getCompressFilePath(){
+  void getCompressFilePath() {
     attachmentFileName = attachmentFilePath!.substring(
         attachmentFilePath!.lastIndexOf('/') + 1, attachmentFilePath!.length);
-    print('file Name : '+attachmentFileName.toString());
+    print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getAppDocumentDirectory().then((value) {
-      print('cache file Path : '+value.toString());
+      print('cache file Path : ' + value.toString());
       GlobalFunctions.getFilePathOfCompressImage(
               attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
           .then((value) {
         attachmentCompressFilePath = value.toString();
         print('Cache file path : ' + attachmentCompressFilePath!);
-        setState(() {
-        });
+        setState(() {});
       });
     });
   }
 
   void verifyData() {
-    if (_bankSelectedItem!=null) {
-      if(_referenceController.text.length>0){
-        if(double.parse(_amountController.text)>0) {
-        if(widget.isAdmin){
-          addApproveReceiptPaymentRequest();
-        }else {
-          addPaymentRequest();
-        }
-        }else{
+    if (_bankSelectedItem != null) {
+      if (_referenceController.text.length > 0) {
+        if (double.parse(_amountController.text) > 0) {
+          if (widget.isAdmin) {
+            addApproveReceiptPaymentRequest();
+          } else {
+            addPaymentRequest();
+          }
+        } else {
           GlobalFunctions.showToast("Please Enter Valid Amount");
         }
-      }else{
+      } else {
         GlobalFunctions.showToast("Please Enter Reference Number");
       }
-
-    }else{
+    } else {
       GlobalFunctions.showToast("Please Select Paid to Bank");
     }
-
-
   }
 
   /*getMessageInfo() {
@@ -688,7 +702,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             alignment: Alignment.topRight,
-            child: FlatButton(onPressed: (){
+            child: TextButton(onPressed: (){
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             }, child: Text(AppLocalizations.of(context).translate('close'),style: TextStyle(
@@ -707,65 +721,72 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: AppContainer(
-                  child:  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        child: AppAssetsImage(
-                          GlobalVariables.successIconPath,
-                          imageWidth: 80,
-                          imageHeight: 80,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: AppContainer(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: AppAssetsImage(
+                            GlobalVariables.successIconPath,
+                            imageWidth: 80,
+                            imageHeight: 80,
+                          ),
                         ),
-                      ),
-                      /* Container(
+                        /* Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: Text(AppLocalizations.of(context)
                               .translate('successful_payment'))),*/
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: text(AppLocalizations.of(context)
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: text(
+                              AppLocalizations.of(context)
                                   .translate('already_paid_status'),
                               textColor: GlobalVariables.primaryColor,
                               fontSize: GlobalVariables.textSizeNormal,
                               fontWeight: FontWeight.bold),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: text(AppLocalizations.of(context)
-                              .translate('already_paid_status_desc'),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
-                          )
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        alignment: Alignment.topRight,
-                        child: FlatButton(onPressed: (){
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        }, child: text(AppLocalizations.of(context).translate('okay'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeSMedium,fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ],
-                  ),
-                )
-              );
+                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: text(
+                                AppLocalizations.of(context)
+                                    .translate('already_paid_status_desc'),
+                                textColor: GlobalVariables.grey,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                fontWeight: FontWeight.normal)),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          alignment: Alignment.topRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: text(
+                                AppLocalizations.of(context).translate('okay'),
+                                textColor: GlobalVariables.primaryColor,
+                                fontSize: GlobalVariables.textSizeSMedium,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
             }));
   }
 
   Future<void> addApproveReceiptPaymentRequest() async {
-
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     //  String block = await GlobalFunctions.getBlock();
     // String flat = await GlobalFunctions.getFlat();
-   // String userId = await GlobalFunctions.getUserId();
-   /* String attachmentName;
+    // String userId = await GlobalFunctions.getUserId();
+    /* String attachmentName;
     String attachment;
 
     if(attachmentFileName!=null && attachmentFilePath!=null){
@@ -795,11 +816,11 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
       _noteController.text,
     )
         .then((value) {
-      print("addApproveReceiptRequest : "+ value.toString());
+      print("addApproveReceiptRequest : " + value.toString());
       _progressDialog!.dismiss();
       if (value.status!) {
-           Navigator.of(context).pop();
-           Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
         /*if(attachmentFileName!=null && attachmentFilePath!=null){
           // GlobalFunctions.removeFileFromDirectory(attachmentCompressFilePath);
           GlobalFunctions.getTemporaryDirectoryPath()
@@ -809,14 +830,11 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
           });
         }*/
         //Provider.of<UserManagementResponse>(context, listen: false).getLedgerData(null,widget.mBlock,widget.mFlat);
-        Provider.of<UserManagementResponse>(context,listen: false).getMonthExpensePendingRequestData();
+        Provider.of<UserManagementResponse>(context, listen: false)
+            .getMonthExpensePendingRequestData();
         //getMessageInfo();
       }
       GlobalFunctions.showToast(value.message!);
     });
-
-
   }
-
 }
-

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
@@ -23,7 +22,6 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AddAgreement.dart';
-import 'base_stateful.dart';
 
 class BaseMyUnit extends StatefulWidget {
   String? pageName;
@@ -265,22 +263,23 @@ class MyUnitState extends State<BaseMyUnit>
               ),
               AppSocietyPermission.isSocHideTenantPermission
                   ? SizedBox()
-                  : userType != 'Tenant' ? Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        BaseAddAgreement(block, flat, false)));
-                          },
-                          child: smallTextContainerOutlineLayout(
-                            AppLocalizations.of(context)
-                                .translate('add_tenant'),
-                          ),
-                        ),
-                        /*SizedBox(
+                  : userType != 'Tenant'
+                      ? Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => BaseAddAgreement(
+                                            block, flat, false)));
+                              },
+                              child: smallTextContainerOutlineLayout(
+                                AppLocalizations.of(context)
+                                    .translate('add_tenant'),
+                              ),
+                            ),
+                            /*SizedBox(
                     width: 8,
                   ),
                   InkWell(
@@ -300,8 +299,9 @@ class MyUnitState extends State<BaseMyUnit>
                       AppLocalizations.of(context).translate('add'),
                     ),
                   ),*/
-                      ],
-                    ):SizedBox(),
+                          ],
+                        )
+                      : SizedBox(),
             ],
           ),
         ),
@@ -359,7 +359,8 @@ class MyUnitState extends State<BaseMyUnit>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BaseStaffCategory(false,"Staff")));
+                          builder: (context) =>
+                              BaseStaffCategory(false, "Staff")));
                 },
                 child: smallTextContainerOutlineLayout(
                   AppLocalizations.of(context).translate('add'),
@@ -590,9 +591,9 @@ class MyUnitState extends State<BaseMyUnit>
       {UserManagementResponse? userManagementInstance}) {
     var call = '', email = '', userId, userType;
     if (memberType == 'family' || memberType == 'tenant') {
-      if(memberType == 'tenant')
+      if (memberType == 'tenant')
         call = _list[position].MOBILE.toString();
-        else
+      else
         call = _list[position].Phone.toString();
 
       userId = _list[position].ID.toString();
@@ -621,10 +622,12 @@ class MyUnitState extends State<BaseMyUnit>
                 .getUnitMemberData();
           }
         } else if (memberType == 'tenant') {
-          List<TenantRentalRequest> tenantRentalRequest = userManagementInstance!
-              .tenantAgreementList
-              .where((element) => element.ID == _list[position].AGREEMENT_ID)
-              .toList();
+          List<TenantRentalRequest> tenantRentalRequest =
+              userManagementInstance!
+                  .tenantAgreementList
+                  .where(
+                      (element) => element.ID == _list[position].AGREEMENT_ID)
+                  .toList();
 //private/var/mobile/Containers/Data/Application/7C6B9535-92F8-437A-ABE7-BE8F1CA0F15E/tmp/com.convivial.SocietyRunApp-Inbox/Pay Slip September pdf (1).pdf
           if (tenantRentalRequest.length > 0) {
             var result = await Navigator.push(
@@ -947,7 +950,7 @@ class MyUnitState extends State<BaseMyUnit>
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         deleteVehicle(position, value);
@@ -960,7 +963,7 @@ class MyUnitState extends State<BaseMyUnit>
                       )),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

@@ -1,28 +1,20 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/ChangePassword.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/OtpWithMobile.dart';
 import 'package:societyrun/Activities/Register.dart';
-import 'package:societyrun/Activities/WebViewScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
-import 'package:societyrun/GlobalClasses/ChangeLanguageNotifier.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:provider/provider.dart';
 import 'package:societyrun/Models/Banners.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:dio/dio.dart';
-import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BaseLoginPage extends StatelessWidget {
   @override
@@ -132,7 +124,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     BorderRadius.all(Radius.circular(10.0))),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.primaryColor, width: 2.0),
+                                    color: GlobalVariables.primaryColor,
+                                    width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
@@ -169,12 +162,14 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.primaryColor, width: 2.0),
+                                    color: GlobalVariables.primaryColor,
+                                    width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: GlobalVariables.primaryColor, width: 2.0),
+                                    color: GlobalVariables.primaryColor,
+                                    width: 2.0),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
@@ -194,7 +189,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                 child: ButtonTheme(
                                   minWidth:
                                       MediaQuery.of(context).size.width / 2,
-                                  child: RaisedButton(
+                                  child: MaterialButton(
                                     color: GlobalVariables.primaryColor,
                                     onPressed: () {
                                       //  username.text = 'pallaviunde@gmail.com';
@@ -226,7 +221,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
-                                            color: GlobalVariables.primaryColor)),
+                                            color:
+                                                GlobalVariables.primaryColor)),
                                     child: text(
                                       AppLocalizations.of(context)
                                           .translate('login'),
@@ -312,7 +308,8 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
                                           child: text(
                                               AppLocalizations.of(context)
                                                   .translate('register'),
-                                              textColor: GlobalVariables.primaryColor,
+                                              textColor:
+                                                  GlobalVariables.primaryColor,
                                               fontSize: GlobalVariables
                                                   .textSizeLargeMedium,
                                               fontWeight: FontWeight.bold),
@@ -560,7 +557,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
               context,
               new MaterialPageRoute(
                   builder: (BuildContext context) => BaseChangePassword()),
-                  (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
         } else {
           //TODO: Navigate To DashBoardPage
           Navigator.pushAndRemoveUntil(
@@ -618,8 +615,10 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   getThemeData() {
     return ThemeData(
         primaryColor: GlobalVariables.primaryColor,
-        accentColor: GlobalVariables.white,
         primaryColorDark: GlobalVariables.primaryColor,
-        cursorColor: GlobalVariables.secondaryColor);
+        textSelectionTheme:
+            TextSelectionThemeData(cursorColor: GlobalVariables.secondaryColor),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: GlobalVariables.white));
   }
 }

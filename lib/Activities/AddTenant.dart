@@ -1,35 +1,28 @@
 import 'dart:async';
-import 'dart:io';
 
 //import 'package:contact_picker/contact_picker.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddAgreement.dart';
-import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/UploadItem.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseAddTenant extends StatefulWidget {
   AddAgreementInfo agreementInfo;
   bool isAdmin;
 
-  BaseAddTenant(this.agreementInfo,this.isAdmin);
+  BaseAddTenant(this.agreementInfo, this.isAdmin);
 
   @override
   State<StatefulWidget> createState() {
@@ -39,7 +32,6 @@ class BaseAddTenant extends StatefulWidget {
 }
 
 class AddTenantState extends State<BaseAddTenant> {
-
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
@@ -52,19 +44,19 @@ class AddTenantState extends State<BaseAddTenant> {
 
   List<String> _bloodGroupList = <String>[];
   List<DropdownMenuItem<String>> __bloodGroupListItems =
-  <DropdownMenuItem<String>>[];
+      <DropdownMenuItem<String>>[];
   String? _selectedBloodGroup;
 
   ///private/var/mobile/Containers/Data/Application/9C028A34-9A90-4CFF-89DA-6F17D34AE672/tmp/com.convivial.SocietyRunApp-Inbox/Sample.pdf
- /* List<String> _membershipTypeList = new List<String>();
+  /* List<String> _membershipTypeList = new List<String>();
   List<DropdownMenuItem<String>> __membershipTypeListItems =
   new List<DropdownMenuItem<String>>();*/
-  String _selectedMembershipType='Tenant';
+  String _selectedMembershipType = 'Tenant';
 
 /*  List<String> _livesHereList = new List<String>();
   List<DropdownMenuItem<String>> __livesHereListItems =
   new List<DropdownMenuItem<String>>();*/
-  String _selectedLivesHere='Yes';
+  String _selectedLivesHere = 'Yes';
 
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
@@ -74,7 +66,7 @@ class AddTenantState extends State<BaseAddTenant> {
   final PageController pageController = PageController();
   int currentPageIndex = 0;
   int pageCount = 0;
-  List<AddTenantInfo> _addTenantInfoList=<AddTenantInfo>[];
+  List<AddTenantInfo> _addTenantInfoList = <AddTenantInfo>[];
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
 
@@ -89,7 +81,7 @@ class AddTenantState extends State<BaseAddTenant> {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBloodGroupData();
-  //  getMembershipTypeData();
+    //  getMembershipTypeData();
     // gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
@@ -101,9 +93,10 @@ class AddTenantState extends State<BaseAddTenant> {
     //_addTenantInfoList.length = int.parse(widget.agreementInfo.noOfBachelor);
 
     AddTenantInfo a = AddTenantInfo();
-    _addTenantInfoList = List.filled(int.parse(widget.agreementInfo.noOfBachelor), a);
+    _addTenantInfoList =
+        List.filled(int.parse(widget.agreementInfo.noOfBachelor), a);
 
-   /* _progressSubscription = uploader.progress.listen((progress) {
+    /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       print("progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
@@ -134,8 +127,6 @@ class AddTenantState extends State<BaseAddTenant> {
         _tasks[exp.tag] = task.copyWith(status: exp.status);
       });
     });*/
-
-
   }
 
   @override
@@ -153,7 +144,7 @@ class AddTenantState extends State<BaseAddTenant> {
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: CustomAppBar(
-          title:  AppLocalizations.of(context).translate('add_tenant'),
+          title: AppLocalizations.of(context).translate('add_tenant'),
         ),
         body: getBaseLayout(),
       ),
@@ -163,102 +154,110 @@ class AddTenantState extends State<BaseAddTenant> {
   List<Widget> buildDotIndicator() {
     List<Widget> list = [];
     for (int i = 0; i < int.parse(widget.agreementInfo.noOfBachelor); i++) {
-      list.add(i == pageCount ? indicator(isActive: true) : indicator(isActive: false));
+      list.add(i == pageCount
+          ? indicator(isActive: true)
+          : indicator(isActive: false));
     }
     return list;
   }
 
-
   getBaseLayout() {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 200.0),
-       Container(
-         margin: EdgeInsets.only(bottom: 60),
-         child: PageView.builder(
-           physics: NeverScrollableScrollPhysics(),
-             controller: pageController,
-             onPageChanged: (index){
-               pageCount=index;
-               setState(() {
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
+        Container(
+          margin: EdgeInsets.only(bottom: 60),
+          child: PageView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              controller: pageController,
+              onPageChanged: (index) {
+                pageCount = index;
+                setState(() {});
+              },
+              itemBuilder: (context, position) {
+                if (position == int.parse(widget.agreementInfo.noOfBachelor))
+                  return SizedBox();
+                else
+                  return getAddTenantLayout(position);
+              }),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+            padding: EdgeInsets.only(left: 16),
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            decoration: BoxDecoration(
+                color: GlobalVariables.primaryColor,
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 15,
+                  child: text('${pageCount + 1}',
+                      fontSize: GlobalVariables.textSizeMedium,
+                      textColor: GlobalVariables.primaryColor),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: buildDotIndicator(),
+                ),
+                pageCount != int.parse(widget.agreementInfo.noOfBachelor) - 1
+                    ? TextButton(
+                        onPressed: () {
+                          if (verifyInfo()) {
+                            if (_alterMobileController.text.length > 0) {
+                              if (_alterMobileController.text.length > 0 &&
+                                  _alterMobileController.text.length == 10) {
+                                addTenantInfo();
+                                removeViewData();
+                                pageController.nextPage(
+                                    duration: Duration(seconds: 1),
+                                    curve: Curves.easeInOut);
+                              } else {
+                                GlobalFunctions.showToast(
+                                    'Please Enter Valid Alternate Mobile Number');
+                              }
+                            } else {
+                              addTenantInfo();
+                              removeViewData();
+                              pageController.nextPage(
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.easeInOut);
+                            }
+                          }
+                        },
+                        child: text('Next',
+                            fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.white),
+                      )
+                    : TextButton(
+                        onPressed: () {
+                          //Navigator.pop(context);
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => OPBottomNavigationScreen()));
+                          if (verifyInfo()) {
+                            addTenantInfo();
+                            //print('Path : '+widget.agreementInfo.agreementAttachmentPath);
+                            addAgreementWithTenantDetails();
+                          }
+                        },
+                        child: text('Submit',
+                            fontSize: GlobalVariables.textSizeMedium,
+                            textColor: GlobalVariables.white),
+                      )
+              ],
+            ),
+          ),
+        )
 
-               });
-             },
-             itemBuilder: (context,position){
-               if(position == int.parse(widget.agreementInfo.noOfBachelor))
-                 return SizedBox();
-               else
-                 return getAddTenantLayout(position);
-
-         }),
-       ),
-       Align(
-         alignment: Alignment.bottomCenter,
-         child: Container(
-           margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-           padding: EdgeInsets.only(left: 16),
-           width: MediaQuery.of(context).size.width,
-           height: 50,
-           decoration: BoxDecoration(color: GlobalVariables.primaryColor, borderRadius: BorderRadius.circular(10.0)),
-           child: Row(
-             mainAxisSize: MainAxisSize.min,
-             crossAxisAlignment: CrossAxisAlignment.center,
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: <Widget>[
-               CircleAvatar(
-                 backgroundColor: Colors.white,
-                 radius: 15,
-                 child: text('${pageCount + 1}', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.primaryColor),
-               ),
-               Row(
-                 mainAxisSize: MainAxisSize.min,
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: buildDotIndicator(),
-               ),
-               pageCount != int.parse(widget.agreementInfo.noOfBachelor)-1
-                   ? FlatButton(
-                 onPressed: () {
-
-                   if(verifyInfo()) {
-
-                     if(_alterMobileController.text.length>0) {
-                       if (_alterMobileController.text.length > 0 &&
-                           _alterMobileController.text.length == 10) {
-                         addTenantInfo();
-                         removeViewData();
-                         pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
-                       } else {
-                         GlobalFunctions.showToast('Please Enter Valid Alternate Mobile Number');
-                       }
-                     }else{
-                     addTenantInfo();
-                     removeViewData();
-                     pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
-                   }
-                   }
-                 },
-                 child: text('Next', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.white),
-               )
-                   : FlatButton(
-                 onPressed: () {
-                  //Navigator.pop(context);
-                   //Navigator.push(context, MaterialPageRoute(builder: (context) => OPBottomNavigationScreen()));
-                   if(verifyInfo()){
-                     addTenantInfo();
-                     //print('Path : '+widget.agreementInfo.agreementAttachmentPath);
-                     addAgreementWithTenantDetails();
-                   }
-                 },
-                 child: text('Submit', fontSize: GlobalVariables.textSizeMedium, textColor: GlobalVariables.white),
-               )
-             ],
-           ),
-         ),
-       )
-
-       // getAddTenantLayout(),
+        // getAddTenantLayout(),
       ],
     );
   }
@@ -270,7 +269,7 @@ class AddTenantState extends State<BaseAddTenant> {
           children: <Widget>[
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('name') + '*',
+                  AppLocalizations.of(context).translate('name') + '*',
               controllerCallback: _nameController,
             ),
             Container(
@@ -308,8 +307,7 @@ class AddTenantState extends State<BaseAddTenant> {
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: text(
-                                AppLocalizations.of(context)
-                                    .translate('male'),
+                                AppLocalizations.of(context).translate('male'),
                                 textColor: GlobalVariables.primaryColor,
                                 fontSize: GlobalVariables.textSizeMedium,
                               ),
@@ -366,7 +364,7 @@ class AddTenantState extends State<BaseAddTenant> {
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('date_of_birth'),
+                  AppLocalizations.of(context).translate('date_of_birth'),
               controllerCallback: _dobController,
               readOnly: true,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -374,21 +372,19 @@ class AddTenantState extends State<BaseAddTenant> {
                 Icons.date_range,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
-                  GlobalFunctions.getSelectedDateForDOB(context)
-                      .then((value) {
-                    _dobController.text =
-                        value.day.toString().padLeft(2, '0') +
-                            "-" +
-                            value.month.toString().padLeft(2, '0') +
-                            "-" +
-                            value.year.toString();
+                  GlobalFunctions.getSelectedDateForDOB(context).then((value) {
+                    _dobController.text = value.day.toString().padLeft(2, '0') +
+                        "-" +
+                        value.month.toString().padLeft(2, '0') +
+                        "-" +
+                        value.year.toString();
                   });
                 },
               ),
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('contact1') + '*',
+                  AppLocalizations.of(context).translate('contact1') + '*',
               controllerCallback: _mobileController,
               keyboardType: TextInputType.number,
               maxLength: 10,
@@ -397,15 +393,15 @@ class AddTenantState extends State<BaseAddTenant> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  PhoneContact contact =
+                      await FlutterContactPicker.pickPhoneContact();
                   print('contact Name : ' + contact.fullName!);
-                  print('contact Number : ' +
-                      contact.phoneNumber.toString());
+                  print('contact Number : ' + contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
                       //  _nameController.text = _contact.fullName;
-                     /* String phoneNumber = _contact!.phoneNumber
+                      /* String phoneNumber = _contact!.phoneNumber
                           .toString()
                           .substring(
                           0,
@@ -413,8 +409,13 @@ class AddTenantState extends State<BaseAddTenant> {
                               .toString()
                               .indexOf('(') -
                               1);*/
-                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
-                      _mobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      String phoneNumber = contact.phoneNumber!.number!
+                          .trim()
+                          .toString()
+                          .replaceAll(" ", "");
+                      _mobileController.text =
+                          GlobalFunctions.getMobileFormatNumber(
+                              phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
                   });
@@ -423,7 +424,7 @@ class AddTenantState extends State<BaseAddTenant> {
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('contact2'),
+                  AppLocalizations.of(context).translate('contact2'),
               controllerCallback: _alterMobileController,
               keyboardType: TextInputType.number,
               maxLength: 10,
@@ -432,10 +433,10 @@ class AddTenantState extends State<BaseAddTenant> {
                 Icons.phone_android,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () async {
-                  PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                  PhoneContact contact =
+                      await FlutterContactPicker.pickPhoneContact();
                   print('contact Name : ' + contact.fullName!);
-                  print('contact Number : ' +
-                      contact.phoneNumber.toString());
+                  print('contact Number : ' + contact.phoneNumber.toString());
                   _contact = contact;
                   setState(() {
                     if (_contact != null) {
@@ -448,8 +449,13 @@ class AddTenantState extends State<BaseAddTenant> {
                               .toString()
                               .indexOf('(') -
                               1);*/
-                      String phoneNumber = contact.phoneNumber!.number!.trim().toString().replaceAll(" ", "");
-                      _alterMobileController.text = GlobalFunctions.getMobileFormatNumber(phoneNumber.toString());
+                      String phoneNumber = contact.phoneNumber!.number!
+                          .trim()
+                          .toString()
+                          .replaceAll(" ", "");
+                      _alterMobileController.text =
+                          GlobalFunctions.getMobileFormatNumber(
+                              phoneNumber.toString());
                       // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
                     }
                   });
@@ -458,7 +464,7 @@ class AddTenantState extends State<BaseAddTenant> {
             ),
             AppTextField(
               textHintContent:
-              AppLocalizations.of(context).translate('email_id'),
+                  AppLocalizations.of(context).translate('email_id'),
               controllerCallback: _emailController,
               keyboardType: TextInputType.emailAddress,
               contentPadding: EdgeInsets.only(top: 14),
@@ -473,7 +479,7 @@ class AddTenantState extends State<BaseAddTenant> {
                   flex: 3,
                   child: AppTextField(
                     textHintContent:
-                    AppLocalizations.of(context).translate('occupation'),
+                        AppLocalizations.of(context).translate('occupation'),
                     controllerCallback: _occupationController,
                   ),
                 ),
@@ -501,15 +507,18 @@ class AddTenantState extends State<BaseAddTenant> {
                           iconColor: GlobalVariables.secondaryColor,
                         ),
                         decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
                             labelText: AppLocalizations.of(context)
                                 .translate('blood_group'),
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                            labelStyle: TextStyle(
+                                color: GlobalVariables.lightGray,
+                                fontSize: GlobalVariables.textSizeSMedium),
                             enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                            ),
                         /*underline: SizedBox(),
                         hint: text(
                           AppLocalizations.of(context)
@@ -527,7 +536,7 @@ class AddTenantState extends State<BaseAddTenant> {
               height: 100,
               child: AppTextField(
                 textHintContent:
-                AppLocalizations.of(context).translate('permanent_address'),
+                    AppLocalizations.of(context).translate('permanent_address'),
                 controllerCallback: _addressController,
                 maxLines: 99,
                 contentPadding: EdgeInsets.only(top: 14),
@@ -543,7 +552,8 @@ class AddTenantState extends State<BaseAddTenant> {
     if (_nameController.text.length > 0) {
       // if(_dobController.text.length>0){
 
-      if (_mobileController.text.length > 0 && _mobileController.text.length==10) {
+      if (_mobileController.text.length > 0 &&
+          _mobileController.text.length == 10) {
         //  if(_emailController.text.length>0){
 
         //  if(_selectedBloodGroup!=null || _selectedBloodGroup.length>0){
@@ -552,7 +562,7 @@ class AddTenantState extends State<BaseAddTenant> {
 
         if (_selectedMembershipType != null) {
           if (_selectedLivesHere != null) {
-              return true;
+            return true;
           } else {
             GlobalFunctions.showToast('Please Select Lives Here');
           }
@@ -582,10 +592,12 @@ class AddTenantState extends State<BaseAddTenant> {
     return false;
   }
 
-  Future<void> addAgreementWithTenantDetails() async{
-
-    print('file type : '+ widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length));
-   // print('file path : '+ );
+  Future<void> addAgreementWithTenantDetails() async {
+    print('file type : ' +
+        widget.agreementInfo.agreementAttachmentName.substring(
+            widget.agreementInfo.agreementAttachmentName.indexOf(".") + 1,
+            widget.agreementInfo.agreementAttachmentName.length));
+    // print('file path : '+ );
 
     if (widget.agreementInfo.rentedTo ==
         AppLocalizations.of(context).translate('group_bachelor')) {
@@ -593,52 +605,55 @@ class AddTenantState extends State<BaseAddTenant> {
     }
     String societyId = await GlobalFunctions.getSocietyId();
 
-    List<Map<String,String?>> tlist = <Map<String,String?>>[];
+    List<Map<String, String?>> tlist = <Map<String, String?>>[];
     // List<Map<String,String>> tlist = _addTenantInfoList.forEach((element) => element.toMap());
-    _addTenantInfoList.forEach((element)=>tlist.add(element.toMap()));
+    _addTenantInfoList.forEach((element) => tlist.add(element.toMap()));
 
     _progressDialog!.show();
     Provider.of<UserManagementResponse>(context, listen: false)
         .addAgreement(
-        societyId,
-        widget.agreementInfo.block,
-        widget.agreementInfo.flat,
-        tlist,
-        widget.agreementInfo.startDate,
-        widget.agreementInfo.endDate,
-        widget.agreementInfo.agreementAttachmentPath,
-        widget.agreementInfo.rentedTo,
-        widget.agreementInfo.isNocEmail,
-        widget.agreementInfo.agreementAttachmentName.substring(widget.agreementInfo.agreementAttachmentName.indexOf(".")+1,widget.agreementInfo.agreementAttachmentName.length),
-        widget.isAdmin)
+            societyId,
+            widget.agreementInfo.block,
+            widget.agreementInfo.flat,
+            tlist,
+            widget.agreementInfo.startDate,
+            widget.agreementInfo.endDate,
+            widget.agreementInfo.agreementAttachmentPath,
+            widget.agreementInfo.rentedTo,
+            widget.agreementInfo.isNocEmail,
+            widget.agreementInfo.agreementAttachmentName.substring(
+                widget.agreementInfo.agreementAttachmentName.indexOf(".") + 1,
+                widget.agreementInfo.agreementAttachmentName.length),
+            widget.isAdmin)
         .then((value) async {
       _progressDialog!.dismiss();
 
       GlobalFunctions.showToast(value.message!);
       if (value.status!) {
         getMessageInfo();
-        await GlobalFunctions.removeFileFromDirectory(widget.agreementInfo.agreementAttachmentPath);
+        await GlobalFunctions.removeFileFromDirectory(
+            widget.agreementInfo.agreementAttachmentPath);
 
-      //  Navigator.of(context).pop();
-       // Navigator.of(context).pop();
+        //  Navigator.of(context).pop();
+        // Navigator.of(context).pop();
 
-       /* if (widget.agreementInfo.agreementAttachmentName != null && widget.agreementInfo.agreementAttachmentPath != null) {
+        /* if (widget.agreementInfo.agreementAttachmentName != null && widget.agreementInfo.agreementAttachmentPath != null) {
           print('attachmentFilePath : ' + widget.agreementInfo.agreementAttachmentPath.toString());
           print('attachmentFileName : ' + widget.agreementInfo.agreementAttachmentName.toString());
           print('attachmentFileName : ' +
               widget.agreementInfo.agreementAttachmentPath.replaceAll(widget.agreementInfo.agreementAttachmentName, "").toString());
 
-         *//* File file = File(attachmentFilePath);
+         */ /* File file = File(attachmentFilePath);
           Uint8List bytes = file.readAsBytesSync();
           _progressDialog.show();
           AWSClient()
               .uploadData('uploads', attachmentFileName, bytes)
               .then((value) {
             _progressDialog.hide();
-          });*//*
+          });*/ /*
 
 
-*//*
+*/ /*
           final tag = "File upload ${_tasks.length + 1}";
           final taskId = await uploader.enqueue(
               url: "https://societyrun.com//Uploads/",
@@ -669,7 +684,7 @@ class AddTenantState extends State<BaseAddTenant> {
                       type: MediaType.Pdf,
                       status: UploadTaskStatus.enqueued,
                     ));
-          });*//*
+          });*/ /*
 
         }
 */
@@ -683,12 +698,12 @@ class AddTenantState extends State<BaseAddTenant> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                   child: AppContainer(
-                    child:  Column(
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -704,31 +719,37 @@ class AddTenantState extends State<BaseAddTenant> {
                               .translate('successful_payment'))),*/
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: text(AppLocalizations.of(context)
-                              .translate('tenant_add_status'),textColor: GlobalVariables.primaryColor,fontSize: GlobalVariables.textSizeNormal,fontWeight: FontWeight.bold
-                          ),
-                        ),Container(
-                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: text(AppLocalizations.of(context)
-                                .translate('tenant_add_status_desc'),textColor: GlobalVariables.grey,fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.normal
-                            )
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('tenant_add_status'),
+                              textColor: GlobalVariables.primaryColor,
+                              fontSize: GlobalVariables.textSizeNormal,
+                              fontWeight: FontWeight.bold),
                         ),
+                        Container(
+                            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: text(
+                                AppLocalizations.of(context)
+                                    .translate('tenant_add_status_desc'),
+                                textColor: GlobalVariables.grey,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                fontWeight: FontWeight.normal)),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           alignment: Alignment.topRight,
                           child: AppButton(
-                            textContent : AppLocalizations.of(context).translate('okay'),
-                            onPressed: (){
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-        Navigator.of(context).pop();
-                          },
+                            textContent:
+                                AppLocalizations.of(context).translate('okay'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
                           ),
                         ),
                       ],
                     ),
-                  )
-              );
+                  ));
             }));
   }
 
@@ -770,71 +791,75 @@ class AddTenantState extends State<BaseAddTenant> {
     });
   }
 
-   addTenantInfo() {
-
-    print('Size : '+_addTenantInfoList.length.toString());
-    print('pageCount : '+pageCount.toString());
+  addTenantInfo() {
+    print('Size : ' + _addTenantInfoList.length.toString());
+    print('pageCount : ' + pageCount.toString());
     // _addTenantInfoList.insert(pageCount,);
-    _addTenantInfoList[pageCount]= AddTenantInfo(
-        name: _nameController.text,
-        gender: _selectedGender,
-        dob: _dobController.text,
-        mobile: _mobileController.text,
-        alternateMobile: _alterMobileController.text,
-        emailId: _emailController.text,
-        membershipType: _selectedMembershipType,
-        livesHere: _selectedLivesHere,
-        occupations: _occupationController.text,
-        bloodGroup: _selectedBloodGroup??'',
-        permanentAddress: _addressController.text,
-        //attachmentPhoto: attachmentCompressFilePath==null ?  '' : GlobalFunctions.convertFileToString(attachmentCompressFilePath),
-       // attachmentIdentity: attachmentIdentityProofCompressFilePath==null ?  '' :GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath)
+    _addTenantInfoList[pageCount] = AddTenantInfo(
+      name: _nameController.text,
+      gender: _selectedGender,
+      dob: _dobController.text,
+      mobile: _mobileController.text,
+      alternateMobile: _alterMobileController.text,
+      emailId: _emailController.text,
+      membershipType: _selectedMembershipType,
+      livesHere: _selectedLivesHere,
+      occupations: _occupationController.text,
+      bloodGroup: _selectedBloodGroup ?? '',
+      permanentAddress: _addressController.text,
+      //attachmentPhoto: attachmentCompressFilePath==null ?  '' : GlobalFunctions.convertFileToString(attachmentCompressFilePath),
+      // attachmentIdentity: attachmentIdentityProofCompressFilePath==null ?  '' :GlobalFunctions.convertFileToString(attachmentIdentityProofCompressFilePath)
     );
 
-    print('tanant list : '+_addTenantInfoList.toString());
+    print('tanant list : ' + _addTenantInfoList.toString());
   }
 
   void removeViewData() {
-
-    _nameController.text='';
+    _nameController.text = '';
     _selectedGender = 'Male';
-    _dobController.text='';
-    _mobileController.text='';
-    _alterMobileController.text='';
-    _emailController.text='';
+    _dobController.text = '';
+    _mobileController.text = '';
+    _alterMobileController.text = '';
+    _emailController.text = '';
     //_selectedLivesHere=null;
-    _occupationController.text='';
-    _selectedBloodGroup=null;
-    _addressController.text='';
-   /* attachmentFileName=null;
+    _occupationController.text = '';
+    _selectedBloodGroup = null;
+    _addressController.text = '';
+    /* attachmentFileName=null;
     attachmentFilePath=null;
     attachmentCompressFilePath=null;
     attachmentIdentityProofFileName=null;
     attachmentIdentityProofFilePath=null;
     attachmentIdentityProofCompressFilePath=null;*/
-
   }
 }
 
-class AddTenantInfo{
-
-  String? name,gender,dob,mobile,alternateMobile,membershipType,
-  emailId,livesHere,occupations,bloodGroup,permanentAddress;
+class AddTenantInfo {
+  String? name,
+      gender,
+      dob,
+      mobile,
+      alternateMobile,
+      membershipType,
+      emailId,
+      livesHere,
+      occupations,
+      bloodGroup,
+      permanentAddress;
 
   AddTenantInfo({
-      this.name,
-      this.gender,
-      this.dob,
-      this.mobile,
-      this.alternateMobile,
-      this.membershipType,
-      this.emailId,
-      this.livesHere,
-      this.occupations,
-      this.bloodGroup,
-      this.permanentAddress,
-      }
-      );
+    this.name,
+    this.gender,
+    this.dob,
+    this.mobile,
+    this.alternateMobile,
+    this.membershipType,
+    this.emailId,
+    this.livesHere,
+    this.occupations,
+    this.bloodGroup,
+    this.permanentAddress,
+  });
 
   Map<String, String?> toMap() {
     return {

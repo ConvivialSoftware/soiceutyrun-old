@@ -60,7 +60,7 @@ dependencies:
   package_info: ^2.0.2
   pie_chart: ^5.0.1
   webview_flutter: ^2.1.2
-  dropdown_search: ^2.0.0
+  dropdown_search: ^5.0.5
   #dropdown_plus: ^0.0.9
   flutter_switch: ^0.3.2
   rate_my_app: ^1.1.1
@@ -76,8 +76,7 @@ dependencies:
     git:
       url: git://github.com/google/charts.git
       path: charts_flutter
-  workmanager: ^0.4.1
-  open_file: ^3.2.1
+  open_file_safe: ^3.2.3
   #amazon_cognito_identity_dart: ^0.0.22
 
   #intl_translation: ^0.17.1

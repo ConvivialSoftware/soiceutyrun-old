@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -24,14 +20,13 @@ import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseViewReceipt extends StatefulWidget {
   String? invoiceNo, yearSelectedItem;
   Receipt? receipt;
   String? mBlock, mFLat;
 
-  BaseViewReceipt(this.invoiceNo, this.yearSelectedItem,this.mBlock,this.mFLat,
+  BaseViewReceipt(
+      this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat,
       {this.receipt});
 
   @override
@@ -68,7 +63,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
               .translate('pls_check_internet_connectivity'));
         }
       });
-    }else{
+    } else {
       _receiptList.add(widget.receipt!);
     }
 
@@ -146,13 +141,15 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
         key: _scaffoldKey,
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: CustomAppBar(
-          actions: _receiptList.length>0 && _receiptList[0].STATUS=='A'
+          actions: _receiptList.length > 0 && _receiptList[0].STATUS == 'A'
               ? [
                   AppIconButton(Icons.mail, iconColor: GlobalVariables.white,
                       onPressed: () {
                     emailReceiptDialog(context);
                   }),
-            SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                   AppIconButton(Icons.download_sharp,
                       iconColor: GlobalVariables.white, onPressed: () {
                     if (isStoragePermission) {
@@ -170,12 +167,14 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                       });
                     }
                   }),
-            SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                 ]
               : [],
-          title: _receiptList.length>0 && _receiptList[0].STATUS=='A'
-                ? AppLocalizations.of(context).translate('receipt') +
-                    ' #' +
+          title: _receiptList.length > 0 && _receiptList[0].STATUS == 'A'
+              ? AppLocalizations.of(context).translate('receipt') +
+                  ' #' +
                   widget.invoiceNo!
               : widget.receipt != null
                   ? widget.receipt!.FLAT_NO!
@@ -216,16 +215,17 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                   child: text(
                                       GlobalFunctions.getCurrencyFormat(
                                           (_receiptList[0].AMOUNT! +
-                                          double.parse(
-                                              _receiptList[0]
-                                                  .PENALTY_AMOUNT??'0'))
-                                          .toString())
-                                        /*  double.parse((_receiptList[0].AMOUNT +
+                                                  double.parse(_receiptList[0]
+                                                          .PENALTY_AMOUNT ??
+                                                      '0'))
+                                              .toString())
+                                      /*  double.parse((_receiptList[0].AMOUNT +
                                                       double.parse(
                                                           _receiptList[0]
                                                               .PENALTY_AMOUNT??'0'))
                                                   .toString())
-                                              .toStringAsFixed(2)*/,
+                                              .toStringAsFixed(2)*/
+                                      ,
                                       textColor: GlobalVariables.primaryColor,
                                       fontSize: GlobalVariables.textSizeXXLarge,
                                       fontWeight: FontWeight.bold),
@@ -236,7 +236,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                 Container(
                                   alignment: Alignment.center,
                                   child: text(
-                                      _receiptList[0].STATUS=='A'
+                                      _receiptList[0].STATUS == 'A'
                                           ? ''
                                           : '*Unapproved Receipt',
                                       textColor: GlobalVariables.red,
@@ -273,7 +273,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                       Container(
                                         //  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                                         child: secondaryText(
-                                            _receiptList[0].NAME??'',
+                                            _receiptList[0].NAME ?? '',
                                             textColor: GlobalVariables.grey,
                                             fontSize: GlobalVariables
                                                 .textSizeSMedium),
@@ -384,65 +384,86 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                           ),
                           _receiptList[0].ATTACHMENT!.isNotEmpty
                               ? AppContainer(
-                            isListItem: true,
-                            child: InkWell(
-                              onTap: () {
-                                downloadAttachment(_receiptList[0].ATTACHMENT);
-                              },
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      AppIcon(
-                                        Icons.attachment,
-                                        iconColor: GlobalVariables.skyBlue,
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Flexible(
-                                        child: text(
-                                           AppLocalizations.of(context)
-                                                .translate('attachment'),
-                                            fontSize: GlobalVariables.textSizeSMedium,
-                                            textColor: GlobalVariables.skyBlue),
-                                      ),
-                                      SizedBox(width: 4,),
-                                      if(downloading) Stack(
-                                        alignment: AlignmentDirectional.center,
-                                        children: [
-                                          Container(
-                                            //height: 20,
-                                            //width: 20,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              //value: 71.0,
+                                  isListItem: true,
+                                  child: InkWell(
+                                    onTap: () {
+                                      downloadAttachment(
+                                          _receiptList[0].ATTACHMENT);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            AppIcon(
+                                              Icons.attachment,
+                                              iconColor:
+                                                  GlobalVariables.skyBlue,
                                             ),
-                                          ),
-                                          //SizedBox(width: 4,),
-                                          Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
-                                        ],
-                                      )
-                                    ],
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Flexible(
+                                              child: text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('attachment'),
+                                                  fontSize: GlobalVariables
+                                                      .textSizeSMedium,
+                                                  textColor:
+                                                      GlobalVariables.skyBlue),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            if (downloading)
+                                              Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                children: [
+                                                  Container(
+                                                    //height: 20,
+                                                    //width: 20,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      //value: 71.0,
+                                                    ),
+                                                  ),
+                                                  //SizedBox(width: 4,),
+                                                  Container(
+                                                      child: text(
+                                                          downloadRate
+                                                              .toString(),
+                                                          fontSize:
+                                                              GlobalVariables
+                                                                  .textSizeSmall,
+                                                          textColor:
+                                                              GlobalVariables
+                                                                  .skyBlue))
+                                                ],
+                                              )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          )
+                                )
                               : SizedBox(),
                           AppUserPermission.isUserAccountingPermission &&
-                              _receiptList[0].STATUS!='A'
+                                  _receiptList[0].STATUS != 'A'
                               ? Container(
-                            margin: EdgeInsets.all(16.0),
+                                  margin: EdgeInsets.all(16.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         width: 120,
                                         child: AppButton(
                                             textContent:
-                                            AppLocalizations.of(context)
-                                                .translate('cancel').toString().toUpperCase(),
+                                                AppLocalizations.of(context)
+                                                    .translate('cancel')
+                                                    .toString()
+                                                    .toUpperCase(),
                                             onPressed: () {
                                               cancelReceiptRequest(
                                                   _receiptList[0].ID!);
@@ -514,10 +535,10 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-    if(widget.mBlock==null){
+    if (widget.mBlock == null) {
       widget.mBlock = await GlobalFunctions.getBlock();
     }
-    if(widget.mFLat==null){
+    if (widget.mFLat == null) {
       widget.mFLat = await GlobalFunctions.getFlat();
     }
     _progressDialog!.show();
@@ -559,7 +580,9 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                 builder: (BuildContext context, StateSetter _stateState) {
               isEditEmail
                   ? _emailTextController.text = ''
-                  : _emailTextController.text = (_receiptViewList.Email!=null ? _receiptViewList.Email : email)!;
+                  : _emailTextController.text = (_receiptViewList.Email != null
+                      ? _receiptViewList.Email
+                      : email)!;
 
               return Dialog(
                   shape: RoundedRectangleBorder(
@@ -588,12 +611,12 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                             'Send #' +
                                 _receiptList[0].RECEIPT_NO! +
                                 ' on below email id',
-                           /* GlobalFunctions.convertDateFormat(
+                            /* GlobalFunctions.convertDateFormat(
                                 _receiptList[0].PAYMENT_DATE,
-                                'dd-MM-yyyy') *//*+
+                                'dd-MM-yyyy') */ /*+
                                 ' to ' +
                                 GlobalFunctions.convertDateFormat(
-                                    _receiptList[0].END_DATE, 'dd-MM-yyyy')*//*
+                                    _receiptList[0].END_DATE, 'dd-MM-yyyy')*/ /*
                             */
                             textColor: GlobalVariables.primaryColor,
                             fontSize: GlobalVariables.textSizeSMedium,
@@ -640,7 +663,8 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
                                         ? AppIconButton(Icons.edit,
-                                            iconColor: GlobalVariables.primaryColor,
+                                            iconColor:
+                                                GlobalVariables.primaryColor,
                                             iconSize: 24, onPressed: () {
                                             _emailTextController.clear();
                                             isEditEmail = true;
@@ -664,7 +688,8 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                           alignment: Alignment.topRight,
                           height: 45,
                           child: AppButton(
-                            textContent: AppLocalizations.of(context).translate('email_now'),
+                            textContent: AppLocalizations.of(context)
+                                .translate('email_now'),
                             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                             onPressed: () {
                               GlobalFunctions.checkInternetConnection()
@@ -689,12 +714,12 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                             },
                           ),
                         ),
-                      /*  Container(
+                        /*  Container(
                           alignment: Alignment.topRight,
                           //height: 45,
                           child: ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width / 3,
-                            child: RaisedButton(
+                            child: MaterialButton(
                               color: GlobalVariables.green,
                               onPressed: () {
 
@@ -721,7 +746,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
   }
 
   Future<void> getReceiptMail(
-      String invoice_no, String emailId, String year) async {
+      String invoiceNo, String emailId, String year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -729,7 +754,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
 
     _progressDialog!.show();
     restClientERP
-        .getReceiptMail(societyId, invoice_no, _emailTextController.text, year)
+        .getReceiptMail(societyId, invoiceNo, _emailTextController.text, year)
         .then((value) {
       print('Response : ' + value.toString());
 
@@ -764,10 +789,12 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
       GlobalFunctions.convertBase64StringToFile(
               value.dataString!, 'Receipt' + widget.invoiceNo! + '.pdf')
           .then((value) {
-        if(value){
-          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_folder'));
-        }else{
-          GlobalFunctions.showToast(AppLocalizations.of(context).translate('download_failed'));
+        if (value) {
+          GlobalFunctions.showToast(
+              AppLocalizations.of(context).translate('download_folder'));
+        } else {
+          GlobalFunctions.showToast(
+              AppLocalizations.of(context).translate('download_failed'));
         }
       });
       _progressDialog!.dismiss();
@@ -789,36 +816,36 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
   }
 
   void cancelReceiptRequest(String id) {
-
     showDialog(
         context: _scaffoldKey.currentContext!,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width / 1.3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        child: text(
-                            AppLocalizations.of(context).translate('sure_cancel_receipt'),
-                            fontSize: GlobalVariables.textSizeLargeMedium,
-                            textColor: GlobalVariables.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                              child: FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('sure_cancel_receipt'),
+                              fontSize: GlobalVariables.textSizeLargeMedium,
+                              textColor: GlobalVariables.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
                                     _progressDialog!.show();
                                     Provider.of<UserManagementResponse>(context,
                                             listen: false)
@@ -830,42 +857,45 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                         Navigator.of(
                                                 _scaffoldKey.currentContext!)
                                             .pop();
-                                      Provider.of<UserManagementResponse>(context,listen: false).getMonthExpensePendingRequestData();
-                                   //  Navigator.of(context).pop();
-                                    }
-                                  });
-                                },
-                                child: text(
-                                    AppLocalizations.of(context).translate('yes'),
-                                    textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
-                                    fontWeight: FontWeight.bold),
+                                        Provider.of<UserManagementResponse>(
+                                                context,
+                                                listen: false)
+                                            .getMonthExpensePendingRequestData();
+                                        //  Navigator.of(context).pop();
+                                      }
+                                    });
+                                  },
+                                  child: text(
+                                      AppLocalizations.of(context)
+                                          .translate('yes'),
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: text(
-                                    AppLocalizations.of(context).translate('no'),
-                                    textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
-                                    fontWeight: FontWeight.bold),
+                              Container(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: text(
+                                      AppLocalizations.of(context)
+                                          .translate('no'),
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              );
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ));
             }));
-
   }
 
- /* void approveReceiptRequest(String id) {
+  /* void approveReceiptRequest(String id) {
 
     showDialog(
         context: context,
@@ -893,7 +923,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               Container(
-                                child: FlatButton(
+                                child: TextButton(
                                   onPressed: () {
                                    // Navigator.of(context).pop();
                                 //    logout(context);
@@ -906,7 +936,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                 ),
                               ),
                               Container(
-                                child: FlatButton(
+                                child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },

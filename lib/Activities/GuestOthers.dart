@@ -10,8 +10,6 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseGuestOthers extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -69,7 +67,7 @@ class GuestOthersState extends State<BaseGuestOthers> {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 40, 10, 20),
       padding: EdgeInsets.all(20),
-     // height: MediaQuery.of(context).size.height / 0.5,
+      // height: MediaQuery.of(context).size.height / 0.5,
       decoration: BoxDecoration(
           color: GlobalVariables.white,
           borderRadius: BorderRadius.circular(20)),
@@ -80,10 +78,11 @@ class GuestOthersState extends State<BaseGuestOthers> {
             Container(
               alignment: Alignment.topLeft,
               child: text(
-                AppLocalizations.of(context).translate('guest_other_arriving_on'),
+                AppLocalizations.of(context)
+                    .translate('guest_other_arriving_on'),
                 textColor: GlobalVariables.primaryColor,
-                    fontSize: GlobalVariables.textSizeLargeMedium,
-                    fontWeight: FontWeight.bold,
+                fontSize: GlobalVariables.textSizeLargeMedium,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Align(
@@ -94,12 +93,13 @@ class GuestOthersState extends State<BaseGuestOthers> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    /*borderRadius: BorderRadius.circular(10),
+                  color: GlobalVariables.white,
+                  /*borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: GlobalVariables.mediumGreen,
                       width: 3.0,
-                    )*/),
+                    )*/
+                ),
                 child: ButtonTheme(
                   child: DropdownButton(
                     items: null,
@@ -112,9 +112,10 @@ class GuestOthersState extends State<BaseGuestOthers> {
                     underline: SizedBox(),
                     hint: Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                      child:  text(
-                        "Today",
-                       textColor: GlobalVariables.secondaryColor, fontSize: GlobalVariables.textSizeMedium,fontWeight: FontWeight.w500),
+                      child: text("Today",
+                          textColor: GlobalVariables.secondaryColor,
+                          fontSize: GlobalVariables.textSizeMedium,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -133,21 +134,21 @@ class GuestOthersState extends State<BaseGuestOthers> {
                         border: Border.all(
                           color: GlobalVariables.secondaryColor,
                           width: 3.0,
-                        )
-                    ),
+                        )),
                     child: TextField(
                       maxLength: 10,
                       decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context).translate('add_name_from_contact'),
-                          hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                          hintText: AppLocalizations.of(context)
+                              .translate('add_name_from_contact'),
+                          hintStyle: TextStyle(
+                              color: GlobalVariables.lightGray,
+                              fontSize: GlobalVariables.textSizeSMedium),
                           border: InputBorder.none,
                           counterText: '',
                           suffixIcon: AppIcon(
                             Icons.contacts,
                             iconColor: GlobalVariables.secondaryColor,
-                          )
-
-                      ),
+                          )),
                     ),
                   ),
                 ),
@@ -156,8 +157,9 @@ class GuestOthersState extends State<BaseGuestOthers> {
                   child: Container(
                     alignment: Alignment.topRight,
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: text('OR',textColor: GlobalVariables.secondaryColor,fontSize: GlobalVariables.textSizeMedium
-                    ),
+                    child: text('OR',
+                        textColor: GlobalVariables.secondaryColor,
+                        fontSize: GlobalVariables.textSizeMedium),
                   ),
                 )
               ],
@@ -171,14 +173,15 @@ class GuestOthersState extends State<BaseGuestOthers> {
                   border: Border.all(
                     color: GlobalVariables.secondaryColor,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('enter_name'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                    border: InputBorder.none
-                ),
+                    hintText:
+                        AppLocalizations.of(context).translate('enter_name'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray,
+                        fontSize: GlobalVariables.textSizeSMedium),
+                    border: InputBorder.none),
               ),
             ),
             Container(
@@ -190,24 +193,26 @@ class GuestOthersState extends State<BaseGuestOthers> {
                   border: Border.all(
                     color: GlobalVariables.secondaryColor,
                     width: 3.0,
-                  )
-              ),
+                  )),
               child: TextField(
                 decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).translate('mobile_no'),
-                    hintStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                    border: InputBorder.none
-                ),
+                    hintText:
+                        AppLocalizations.of(context).translate('mobile_no'),
+                    hintStyle: TextStyle(
+                        color: GlobalVariables.lightGray,
+                        fontSize: GlobalVariables.textSizeSMedium),
+                    border: InputBorder.none),
               ),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
               alignment: Alignment.topLeft,
               child: text(
-                AppLocalizations.of(context).translate('frequently_guest_other_running'),
+                AppLocalizations.of(context)
+                    .translate('frequently_guest_other_running'),
                 textColor: GlobalVariables.primaryColor,
-                    fontSize: GlobalVariables.textSizeLargeMedium,
-                    fontWeight: FontWeight.w400,
+                fontSize: GlobalVariables.textSizeLargeMedium,
+                fontWeight: FontWeight.w400,
               ),
             ),
             Container(
@@ -238,10 +243,10 @@ class GuestOthersState extends State<BaseGuestOthers> {
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: text(
-                                AppLocalizations.of(context)
-                                    .translate('once'),
-                                textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium),
+                                  AppLocalizations.of(context)
+                                      .translate('once'),
+                                  textColor: GlobalVariables.primaryColor,
+                                  fontSize: GlobalVariables.textSizeMedium),
                             ),
                           ],
                         ),
@@ -276,7 +281,7 @@ class GuestOthersState extends State<BaseGuestOthers> {
                                 AppLocalizations.of(context)
                                     .translate('frequently'),
                                 textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -292,21 +297,18 @@ class GuestOthersState extends State<BaseGuestOthers> {
               height: 45,
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: ButtonTheme(
-               // minWidth: MediaQuery.of(context).size.width/2,
-                child: RaisedButton(
+                // minWidth: MediaQuery.of(context).size.width/2,
+                child: MaterialButton(
                   color: GlobalVariables.primaryColor,
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   textColor: GlobalVariables.white,
                   //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),side: BorderSide(color: GlobalVariables.primaryColor)
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: GlobalVariables.primaryColor)),
                   child: text(
-                    AppLocalizations.of(context)
-                        .translate('add'),
-                        fontSize: GlobalVariables.textSizeMedium,
+                    AppLocalizations.of(context).translate('add'),
+                    fontSize: GlobalVariables.textSizeMedium,
                   ),
                 ),
               ),
@@ -318,22 +320,20 @@ class GuestOthersState extends State<BaseGuestOthers> {
   }
 
   getOtherVisitorCardLayout() {
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(5,0, 5,0),
-          padding: EdgeInsets.fromLTRB(5,0,5,0),
+          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
           child: Row(
             children: <Widget>[
               Flexible(
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseCab()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => BaseCab()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -364,9 +364,10 @@ class GuestOthersState extends State<BaseGuestOthers> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseDelivery()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseDelivery()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -399,9 +400,10 @@ class GuestOthersState extends State<BaseGuestOthers> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            BaseHomeService()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseHomeService()));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -430,22 +432,17 @@ class GuestOthersState extends State<BaseGuestOthers> {
               ),
             ],
           ),
-
         ),
       ],
     );
-
-
   }
 
   getSearchPropertyLayout() {
-
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
       decoration: BoxDecoration(
-        color: GlobalVariables.AccentColor,
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: GlobalVariables.AccentColor,
+          borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -457,15 +454,13 @@ class GuestOthersState extends State<BaseGuestOthers> {
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             alignment: Alignment.center,
             child: text(
-                AppLocalizations.of(context)
-                    .translate('search_property'),
-                textColor: GlobalVariables.primaryColor,
-                    fontSize: GlobalVariables.varyLargeText,),
+              AppLocalizations.of(context).translate('search_property'),
+              textColor: GlobalVariables.primaryColor,
+              fontSize: GlobalVariables.varyLargeText,
+            ),
           )
         ],
       ),
     );
-
-
   }
 }

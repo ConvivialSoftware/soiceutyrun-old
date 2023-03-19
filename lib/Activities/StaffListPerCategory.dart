@@ -1,31 +1,22 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
-import 'package:societyrun/Activities/RaiseNewTicket.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/GatePassResponse.dart';
-import 'package:societyrun/Models/Staff.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
-import 'base_stateful.dart';
 
 class BaseStaffListPerCategory extends StatefulWidget {
   String _roleName;
   String type;
   bool isAdmin;
 
-  BaseStaffListPerCategory(this._roleName,this.type,{this.isAdmin=false});
+  BaseStaffListPerCategory(this._roleName, this.type, {this.isAdmin = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -34,16 +25,15 @@ class BaseStaffListPerCategory extends StatefulWidget {
   }
 }
 
-class StaffListPerCategoryState
-    extends State<BaseStaffListPerCategory> {
+class StaffListPerCategoryState extends State<BaseStaffListPerCategory> {
   ProgressDialog? _progressDialog;
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
- // String _roleName;
+  // String _roleName;
 
 //  StaffListPerCategoryState(this._roleName);
 
- // List<Staff> value.staffList = List<Staff>();
+  // List<Staff> value.staffList = List<Staff>();
 
   @override
   void initState() {
@@ -52,7 +42,8 @@ class StaffListPerCategoryState
     getSharedPreferenceData();
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
-        Provider.of<GatePass>(context,listen: false).getStaffRoleDetailsData(widget._roleName,widget.type);
+        Provider.of<GatePass>(context, listen: false)
+            .getStaffRoleDetailsData(widget._roleName, widget.type);
       } else {
         GlobalFunctions.showToast(AppLocalizations.of(context)
             .translate('pls_check_internet_connectivity'));
@@ -64,8 +55,8 @@ class StaffListPerCategoryState
   Widget build(BuildContext context) {
     // TODO: implement build
     return ChangeNotifierProvider<GatePass>.value(
-        value: Provider.of<GatePass>(context),
-      child: Consumer<GatePass>(builder: (context,value,child){
+      value: Provider.of<GatePass>(context),
+      child: Consumer<GatePass>(builder: (context, value, child) {
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: GlobalVariables.veryLightGray,
@@ -83,9 +74,10 @@ class StaffListPerCategoryState
   getStaffListPerCategoryLayout(GatePass value) {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 180.0),
-        value.isLoading? GlobalFunctions.loadingWidget(context):  getStaffListPerCategoryListDataLayout(value),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getStaffListPerCategoryListDataLayout(value),
       ],
     );
   }
@@ -94,10 +86,10 @@ class StaffListPerCategoryState
     return value.staffList.length > 0
         ? Container(
             //padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(0,16, 0, 0),
-           // padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            // padding: EdgeInsets.all(10),
             // height: MediaQuery.of(context).size.height / 0.5,
-          /*  decoration: BoxDecoration(
+            /*  decoration: BoxDecoration(
                 color: GlobalVariables.white,
                 borderRadius: BorderRadius.circular(10)),*/
 
@@ -106,7 +98,8 @@ class StaffListPerCategoryState
                       // scrollDirection: Axis.vertical,
                       itemCount: value.staffList.length,
                       itemBuilder: (context, position) {
-                        return getStaffListPerCategoryListItemLayout(position,value);
+                        return getStaffListPerCategoryListItemLayout(
+                            position, value);
                       }, //  scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                     )),
@@ -115,10 +108,9 @@ class StaffListPerCategoryState
   }
 
   getStaffListPerCategoryListItemLayout(int position, GatePass value) {
-
-    if(widget.type=="Staff" || widget.type=="Helper") {
-      List<String> _workHouseList = value.staffList[position].ASSIGN_FLATS!
-          .split(',');
+    if (widget.type == "Staff" || widget.type == "Helper") {
+      List<String> _workHouseList =
+          value.staffList[position].ASSIGN_FLATS!.split(',');
       for (int i = 0; i < _workHouseList.length; i++) {
         if (_workHouseList[i].length == 0) {
           _workHouseList.removeAt(i);
@@ -160,15 +152,12 @@ class StaffListPerCategoryState
                       BaseStaffDetails(value.staffList[position])));
           if (result == 'back') {
             Provider.of<GatePass>(context, listen: false)
-                .getStaffRoleDetailsData(widget._roleName,widget.type);
+                .getStaffRoleDetailsData(widget._roleName, widget.type);
           }
         },
         child: AppContainer(
           isListItem: true,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width / 1.1,
+          width: MediaQuery.of(context).size.width / 1.1,
           // padding: EdgeInsets.all(10),
           // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
           /* decoration: BoxDecoration(
@@ -180,31 +169,32 @@ class StaffListPerCategoryState
                 children: [
                   //profileLayout(),
                   Container(
-                    //padding: EdgeInsets.all(10),
-                    // alignment: Alignment.center,
-                    /* decoration: BoxDecoration(
+                      //padding: EdgeInsets.all(10),
+                      // alignment: Alignment.center,
+                      /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
                       child: staffImage!.isEmpty
                           ? AppAssetsImage(
-                        GlobalVariables.componentUserProfilePath,
-                        imageWidth: 70.0,
-                        imageHeight: 70.0,
-                        borderColor: GlobalVariables.grey,
-                        borderWidth: 1.0,
-                        fit: BoxFit.cover,
-                        radius: 35.0,
-                      )
+                              GlobalVariables.componentUserProfilePath,
+                              imageWidth: 70.0,
+                              imageHeight: 70.0,
+                              borderColor: GlobalVariables.grey,
+                              borderWidth: 1.0,
+                              fit: BoxFit.cover,
+                              radius: 35.0,
+                            )
                           : AppNetworkImage(
-                        staffImage,
-                        imageWidth: 70.0,
-                        imageHeight: 70.0,
-                        borderColor: GlobalVariables.grey,
-                        borderWidth: 1.0,
-                        fit: BoxFit.cover,
-                        radius: 35.0,
-                      )
+                              staffImage,
+                              imageWidth: 70.0,
+                              imageHeight: 70.0,
+                              borderColor: GlobalVariables.grey,
+                              borderWidth: 1.0,
+                              fit: BoxFit.cover,
+                              radius: 35.0,
+                            )),
+                  SizedBox(
+                    width: 8,
                   ),
-                  SizedBox(width: 8,),
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -229,10 +219,10 @@ class StaffListPerCategoryState
                               children: <Widget>[
                                 Container(
                                     child: AppIcon(
-                                      Icons.star,
-                                      iconColor: GlobalVariables.skyBlue,
-                                      iconSize: 15,
-                                    )),
+                                  Icons.star,
+                                  iconColor: GlobalVariables.skyBlue,
+                                  iconSize: 15,
+                                )),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                   child: text(
@@ -264,26 +254,31 @@ class StaffListPerCategoryState
                       ),
                     ),
                   ),
-                  widget.isAdmin ?   Container(
-                      alignment: Alignment.topRight,
-                      child: AppIconButton(
-                        Icons.delete,
-                        iconColor: GlobalVariables.primaryColor,
-                        onPressed: (){
-
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) => StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0)),
-                                      child: displayDeleteLayout(value.staffList[position].SID!),
-                                    );
-                                  }));
-                        },
-                      )):SizedBox(),
-                 /* Container(
+                  widget.isAdmin
+                      ? Container(
+                          alignment: Alignment.topRight,
+                          child: AppIconButton(
+                            Icons.delete,
+                            iconColor: GlobalVariables.primaryColor,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      StatefulBuilder(builder:
+                                          (BuildContext context,
+                                              StateSetter setState) {
+                                        return Dialog(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                          child: displayDeleteLayout(
+                                              value.staffList[position].SID!),
+                                        );
+                                      }));
+                            },
+                          ))
+                      : SizedBox(),
+                  /* Container(
                     child: AppIcon(
                       Icons.arrow_forward_ios,
                       iconColor: GlobalVariables.lightGray,
@@ -295,44 +290,42 @@ class StaffListPerCategoryState
           ),
         ),
       );
-    }else{
+    } else {
       return AppContainer(
-          isListItem: true,
-          width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.1,
+        isListItem: true,
+        width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           children: [
             Row(
               children: [
                 //profileLayout(),
                 Container(
-                  //padding: EdgeInsets.all(10),
-                  // alignment: Alignment.center,
-                  /* decoration: BoxDecoration(
+                    //padding: EdgeInsets.all(10),
+                    // alignment: Alignment.center,
+                    /* decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),*/
                     child: value.staffList[position].PHOTO!.isEmpty
                         ? AppAssetsImage(
-                      GlobalVariables.componentUserProfilePath,
-                      imageWidth: 70.0,
-                      imageHeight: 70.0,
-                      borderColor: GlobalVariables.grey,
-                      borderWidth: 1.0,
-                      fit: BoxFit.cover,
-                      radius: 35.0,
-                    )
+                            GlobalVariables.componentUserProfilePath,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )
                         : AppNetworkImage(
-                      value.staffList[position].PHOTO,
-                      imageWidth: 70.0,
-                      imageHeight: 70.0,
-                      borderColor: GlobalVariables.grey,
-                      borderWidth: 1.0,
-                      fit: BoxFit.cover,
-                      radius: 35.0,
-                    )
+                            value.staffList[position].PHOTO,
+                            imageWidth: 70.0,
+                            imageHeight: 70.0,
+                            borderColor: GlobalVariables.grey,
+                            borderWidth: 1.0,
+                            fit: BoxFit.cover,
+                            radius: 35.0,
+                          )),
+                SizedBox(
+                  width: 8,
                 ),
-                SizedBox(width: 8,),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -351,32 +344,35 @@ class StaffListPerCategoryState
                             ),
                             Container(
                                 child: AppIconButton(
-                                  Icons.delete,
-                                  iconColor: GlobalVariables.primaryColor,
-                                  onPressed: (){
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) => StatefulBuilder(
-                                            builder: (BuildContext context, StateSetter setState) {
-                                              return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10.0)),
-                                                child: displayDeleteLayout(value.staffList[position].ID!),
-                                              );
-                                            }));
-                                  },
-                                )),
+                              Icons.delete,
+                              iconColor: GlobalVariables.primaryColor,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(builder:
+                                            (BuildContext context,
+                                                StateSetter setState) {
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0)),
+                                            child: displayDeleteLayout(
+                                                value.staffList[position].ID!),
+                                          );
+                                        }));
+                              },
+                            )),
                           ],
                         ),
                         Container(
-                          child: text(
-                            value.staffList[position].EMAIL,fontSize: GlobalVariables.textSizeSMedium
-                          ),
+                          child: text(value.staffList[position].EMAIL,
+                              fontSize: GlobalVariables.textSizeSMedium),
                         ),
                         Container(
-                          child: text(
-                            value.staffList[position].PHONE,fontSize: GlobalVariables.textSizeSMedium
-                          ),
+                          child: text(value.staffList[position].PHONE,
+                              fontSize: GlobalVariables.textSizeSMedium),
                         ),
                       ],
                     ),
@@ -392,7 +388,6 @@ class StaffListPerCategoryState
             ),
           ],
         ),
-
       );
     }
   }
@@ -419,16 +414,14 @@ class StaffListPerCategoryState
   }
 
   displayDeleteLayout(String id) {
-
-   return Container(
+    return Container(
       padding: EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width / 1.3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: text(
-                AppLocalizations.of(context).translate('sure_delete'),
+            child: text(AppLocalizations.of(context).translate('sure_delete'),
                 fontSize: GlobalVariables.textSizeLargeMedium,
                 textColor: GlobalVariables.black,
                 fontWeight: FontWeight.bold),
@@ -439,35 +432,34 @@ class StaffListPerCategoryState
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       _progressDialog!.show();
-                      Provider.of<GatePass>(context,listen: false).getStaffDelete(id,widget.type).then((value) {
+                      Provider.of<GatePass>(context, listen: false)
+                          .getStaffDelete(id, widget.type)
+                          .then((value) {
                         _progressDialog!.dismiss();
                         GlobalFunctions.showToast(value.message!);
-                        if(value.status!) {
-                          Provider.of<GatePass>(
-                              context, listen: false)
+                        if (value.status!) {
+                          Provider.of<GatePass>(context, listen: false)
                               .getStaffRoleDetailsData(
-                              widget._roleName, widget.type);
+                                  widget._roleName, widget.type);
                         }
                       });
                     },
-                    child: text(
-                        AppLocalizations.of(context).translate('yes'),
+                    child: text(AppLocalizations.of(context).translate('yes'),
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: text(
-                        AppLocalizations.of(context).translate('no'),
+                    child: text(AppLocalizations.of(context).translate('no'),
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
@@ -479,9 +471,5 @@ class StaffListPerCategoryState
         ],
       ),
     );
-
-
   }
-
-  
 }

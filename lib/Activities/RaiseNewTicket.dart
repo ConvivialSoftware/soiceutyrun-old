@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,7 +7,6 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/ComplaintCategory.dart';
 import 'package:societyrun/Models/Complaints.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
@@ -19,14 +16,10 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'HelpDesk.dart';
-import 'base_stateful.dart';
-
 class BaseRaiseNewTicket extends StatefulWidget {
-
   bool isAdmin;
 
-  BaseRaiseNewTicket({this.isAdmin=false});
+  BaseRaiseNewTicket({this.isAdmin = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -61,38 +54,33 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
 
   bool isStoragePermission = false;
 
-  List<DropdownMenuItem<String>> _blockListItems =
-      <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> _blockListItems = <DropdownMenuItem<String>>[];
   String? _selectedBlock;
 
-  List<DropdownMenuItem<String>> _flatListItems =
-      <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<String>> _flatListItems = <DropdownMenuItem<String>>[];
   String? _selectedFlat;
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    if(widget.isAdmin)
-      getBlockFlatData();
+    if (widget.isAdmin) getBlockFlatData();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         //getComplaintAreaData();
-        Provider.of<HelpDeskResponse>(context,listen: false)
+        Provider.of<HelpDeskResponse>(context, listen: false)
             .getComplaintCategoryData()
             .then((value) {
-          print('before setState list : '+value.toString());
+          print('before setState list : ' + value.toString());
           for (int i = 0; i < value.length; i++) {
             __categoryListItems.add(DropdownMenuItem(
               value: value[i].COMPLAINT_CATEGORY,
-              child: text(
-                value[i].COMPLAINT_CATEGORY,
+              child: text(value[i].COMPLAINT_CATEGORY,
                   textColor: GlobalVariables.black,
-                  fontSize: GlobalVariables.textSizeSMedium
-              ),
+                  fontSize: GlobalVariables.textSizeSMedium),
             ));
           }
           print('before setState');
@@ -116,7 +104,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
             builder: (context) => Scaffold(
               backgroundColor: GlobalVariables.veryLightGray,
               appBar: CustomAppBar(
-                title:AppLocalizations.of(context).translate('help_desk'),
+                title: AppLocalizations.of(context).translate('help_desk'),
               ),
               body: getBaseLayout(value),
             ),
@@ -129,32 +117,31 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   getBaseLayout(HelpDeskResponse value) {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 200.0),
-       value.isLoading ? GlobalFunctions.loadingWidget(context) : getRaiseTicketLayout(value),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
+        value.isLoading
+            ? GlobalFunctions.loadingWidget(context)
+            : getRaiseTicketLayout(value),
       ],
     );
   }
 
   getRaiseTicketLayout(HelpDeskResponse value) {
     print('Out If');
-    if(value.complaintCategoryList.length>0){
+    if (value.complaintCategoryList.length > 0) {
       print('In If');
       __categoryListItems = <DropdownMenuItem<String>>[];
       for (int i = 0; i < value.complaintCategoryList.length; i++) {
         __categoryListItems.add(DropdownMenuItem(
           value: value.complaintCategoryList[i].COMPLAINT_CATEGORY,
-          child: text(
-            value.complaintCategoryList[i].COMPLAINT_CATEGORY,
+          child: text(value.complaintCategoryList[i].COMPLAINT_CATEGORY,
               textColor: GlobalVariables.black,
-            fontSize: GlobalVariables.textSizeSMedium
-          ),
+              fontSize: GlobalVariables.textSizeSMedium),
         ));
       }
     }
     return SingleChildScrollView(
       child: AppContainer(
-       /* margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
+        /* margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
         padding: EdgeInsets.all(
             20), // height: MediaQuery.of(context).size.height / 0.5,
         decoration: BoxDecoration(
@@ -167,97 +154,106 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
               alignment: Alignment.topLeft,
               child: text(
                 AppLocalizations.of(context).translate('raise_new_ticket'),
-                  textColor: GlobalVariables.primaryColor,
-                    fontSize: GlobalVariables.textSizeLargeMedium,
-                    fontWeight: FontWeight.bold,
+                textColor: GlobalVariables.primaryColor,
+                fontSize: GlobalVariables.textSizeLargeMedium,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            widget.isAdmin ? Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: GlobalVariables.lightGray,
-                          width: 2.0,
-                        )),
-                    child: ButtonTheme(
-                      child: DropdownButtonFormField(
-                        items: _blockListItems,
-                        value: _selectedBlock,
-                        onChanged: (value){
-                          _selectedBlock=value as String?;
-                          _selectedFlat=null;
-                          getBlockFlatData();
-                        },
-                        isExpanded: true,
-                        icon: AppIcon(
-                          Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.secondaryColor,
-                        ),
-                        decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
-                            labelText: AppLocalizations.of(context)
-                                .translate('block'),
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: GlobalVariables.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: GlobalVariables.lightGray,
-                          width: 2.0,
-                        )),
-                    child: ButtonTheme(
-                      child: DropdownButtonFormField(
-                        items: _flatListItems,
-                        value: _selectedFlat,
-                        onChanged: (value){
-                          _selectedFlat=value as String?;
-                          setState(() {
-                          });
-                        },
-                        isExpanded: true,
-                        icon: AppIcon(
-                          Icons.keyboard_arrow_down,
-                          iconColor: GlobalVariables.secondaryColor,
-                        ),
-                        decoration: InputDecoration(
-                          //filled: true,
-                          //fillColor: Hexcolor('#ecedec'),
-                            labelText: AppLocalizations.of(context)
-                                .translate('flat'),
-                            labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent))
-                          // border: new CustomBorderTextFieldSkin().getSkin(),
+            widget.isAdmin
+                ? Row(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: GlobalVariables.lightGray,
+                                width: 2.0,
+                              )),
+                          child: ButtonTheme(
+                            child: DropdownButtonFormField(
+                              items: _blockListItems,
+                              value: _selectedBlock,
+                              onChanged: (value) {
+                                _selectedBlock = value as String?;
+                                _selectedFlat = null;
+                                getBlockFlatData();
+                              },
+                              isExpanded: true,
+                              icon: AppIcon(
+                                Icons.keyboard_arrow_down,
+                                iconColor: GlobalVariables.secondaryColor,
+                              ),
+                              decoration: InputDecoration(
+                                  //filled: true,
+                                  //fillColor: Hexcolor('#ecedec'),
+                                  labelText: AppLocalizations.of(context)
+                                      .translate('block'),
+                                  labelStyle: TextStyle(
+                                      color: GlobalVariables.lightGray,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.transparent))
+                                  // border: new CustomBorderTextFieldSkin().getSkin(),
+                                  ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ):SizedBox(),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                          decoration: BoxDecoration(
+                              color: GlobalVariables.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: GlobalVariables.lightGray,
+                                width: 2.0,
+                              )),
+                          child: ButtonTheme(
+                            child: DropdownButtonFormField(
+                              items: _flatListItems,
+                              value: _selectedFlat,
+                              onChanged: (value) {
+                                _selectedFlat = value as String?;
+                                setState(() {});
+                              },
+                              isExpanded: true,
+                              icon: AppIcon(
+                                Icons.keyboard_arrow_down,
+                                iconColor: GlobalVariables.secondaryColor,
+                              ),
+                              decoration: InputDecoration(
+                                  //filled: true,
+                                  //fillColor: Hexcolor('#ecedec'),
+                                  labelText: AppLocalizations.of(context)
+                                      .translate('flat'),
+                                  labelStyle: TextStyle(
+                                      color: GlobalVariables.lightGray,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.transparent))
+                                  // border: new CustomBorderTextFieldSkin().getSkin(),
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : SizedBox(),
             AppTextField(
               textHintContent:
                   AppLocalizations.of(context).translate('subject') + '*',
@@ -303,8 +299,8 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                               child: text(
                                 AppLocalizations.of(context)
                                     .translate('personal'),
-                                  textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                textColor: GlobalVariables.primaryColor,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -347,7 +343,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                                 AppLocalizations.of(context)
                                     .translate('community'),
                                 textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium,
+                                fontSize: GlobalVariables.textSizeMedium,
                               ),
                             ),
                           ],
@@ -387,16 +383,18 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                       textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                   ),*/
                   decoration: InputDecoration(
-                    //filled: true,
-                    //fillColor: Hexcolor('#ecedec'),
+                      //filled: true,
+                      //fillColor: Hexcolor('#ecedec'),
                       labelText: AppLocalizations.of(context)
-                          .translate('select_category') +
+                              .translate('select_category') +
                           '*',
-                      labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                      labelStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium),
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.transparent))
-                    // border: new CustomBorderTextFieldSkin().getSkin(),
-                  ),
+                      // border: new CustomBorderTextFieldSkin().getSkin(),
+                      ),
                 ),
               ),
             ),
@@ -474,13 +472,12 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                   Column(
                     children: <Widget>[
                       Container(
-                        child: FlatButton.icon(
+                        child: TextButton.icon(
                           onPressed: () {
                             if (isStoragePermission) {
                               openFile(context);
                             } else {
-                              GlobalFunctions.askPermission(
-                                      Permission.storage)
+                              GlobalFunctions.askPermission(Permission.storage)
                                   .then((value) {
                                 if (value) {
                                   openFile(context);
@@ -498,24 +495,20 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                             iconSize: 20.0,
                           ),
                           label: text(
-                            AppLocalizations.of(context)
-                                .translate('attach_photo'),
+                              AppLocalizations.of(context)
+                                  .translate('attach_photo'),
                               textColor: GlobalVariables.primaryColor,
-                            fontSize: GlobalVariables.textSizeSMedium
-                          ),
+                              fontSize: GlobalVariables.textSizeSMedium),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: text(
-                          'OR',
+                        child: text('OR',
                             textColor: GlobalVariables.lightGray,
-                          fontSize: GlobalVariables.textSizeSMedium
-
-                        ),
+                            fontSize: GlobalVariables.textSizeSMedium),
                       ),
                       Container(
-                        child: FlatButton.icon(
+                        child: TextButton.icon(
                             onPressed: () {
                               if (isStoragePermission) {
                                 openCamera(context);
@@ -528,8 +521,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                                   } else {
                                     GlobalFunctions.showToast(
                                         AppLocalizations.of(context)
-                                            .translate(
-                                                'download_permission'));
+                                            .translate('download_permission'));
                                   }
                                 });
                               }
@@ -540,11 +532,10 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                               iconSize: 20.0,
                             ),
                             label: text(
-                              AppLocalizations.of(context)
-                                  .translate('take_picture'),
+                                AppLocalizations.of(context)
+                                    .translate('take_picture'),
                                 textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeSMedium
-                            )),
+                                fontSize: GlobalVariables.textSizeSMedium)),
                       ),
                     ],
                   ),
@@ -587,17 +578,17 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                                 : GlobalVariables.transparent,
                             width: 2.0,
                           )),
-                      child: AppIcon(Icons.check, iconColor: GlobalVariables.white),
+                      child: AppIcon(Icons.check,
+                          iconColor: GlobalVariables.white),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: text(
-                      AppLocalizations.of(context)
-                          .translate('mark_as_urgent'),
+                        AppLocalizations.of(context)
+                            .translate('mark_as_urgent'),
                         textColor: GlobalVariables.black,
-                        fontSize: GlobalVariables.textSizeSMedium
-                    ),
+                        fontSize: GlobalVariables.textSizeSMedium),
                   ),
                 ],
               ),
@@ -671,7 +662,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
   }
 */
 
- /* void getComplaintCategoryData() async {
+  /* void getComplaintCategoryData() async {
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
@@ -745,10 +736,8 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
       print("add complaint response : " + value.toString());
       _progressDialog!.dismiss();
       if (value.status!) {
-        if (attachmentFileName != null &&
-            attachmentFilePath != null) {
-          await GlobalFunctions.removeFileFromDirectory(
-              attachmentFilePath!);
+        if (attachmentFileName != null && attachmentFilePath != null) {
+          await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
           await GlobalFunctions.removeFileFromDirectory(
               attachmentCompressFilePath!);
         }
@@ -813,7 +802,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     }
   }
 
-void setBlockData(List<Block> _blockList) {
+  void setBlockData(List<Block> _blockList) {
     _blockListItems = <DropdownMenuItem<String>>[];
     for (int i = 0; i < _blockList.length; i++) {
       _blockListItems.add(DropdownMenuItem(
@@ -825,7 +814,7 @@ void setBlockData(List<Block> _blockList) {
       ));
     }
 
-    if(_selectedBlock==null) {
+    if (_selectedBlock == null) {
       _selectedBlock = _blockListItems[0].value;
     }
     //setState(() {});
@@ -848,7 +837,7 @@ void setBlockData(List<Block> _blockList) {
   }
 
   void getBlockFlatData() {
-    print('_selectedBlock : '+_selectedBlock.toString());
+    print('_selectedBlock : ' + _selectedBlock.toString());
     Provider.of<UserManagementResponse>(context, listen: false)
         .getBlock()
         .then((value) {

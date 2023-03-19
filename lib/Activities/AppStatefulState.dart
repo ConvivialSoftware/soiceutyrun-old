@@ -1,16 +1,12 @@
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
-import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 abstract class AppStatefulState<T extends StatefulWidget> extends State<T>{
 

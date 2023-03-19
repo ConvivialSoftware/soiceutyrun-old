@@ -1,29 +1,19 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 //import 'package:societyrun/AWS/AWSClient.dart';
 import 'package:societyrun/Activities/AddTenant.dart';
-import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/UploadItem.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
-import 'base_stateful.dart';
 
 class BaseAddAgreement extends StatefulWidget {
   String block, flat;
@@ -44,7 +34,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
 
   TextEditingController _agreementFromController = TextEditingController();
   TextEditingController _agreementToController = TextEditingController();
- // TextEditingController _noOfBachelorController = TextEditingController();
+  // TextEditingController _noOfBachelorController = TextEditingController();
 
   /*List<DropdownMenuItem<String>> _blockListItems =
       new List<DropdownMenuItem<String>>();
@@ -56,12 +46,12 @@ class AddAgreementState extends State<BaseAddAgreement> {
 
   List<String> _rentedList = <String>[];
   List<DropdownMenuItem<String>> _rentedToListItems =
-  <DropdownMenuItem<String>>[];
+      <DropdownMenuItem<String>>[];
   String? _selectedRentedTo;
 
   List<String> _groupCountList = <String>[];
   List<DropdownMenuItem<String>> _groupCountListItems =
-  <DropdownMenuItem<String>>[];
+      <DropdownMenuItem<String>>[];
   String? _selectedGroupCount;
 
   String? _selectedIssueNOC;
@@ -69,7 +59,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
   ProgressDialog? _progressDialog;
   bool isStoragePermission = false;
 
- // List<String> selectedUserList = List<String>();
+  // List<String> selectedUserList = List<String>();
 
   /*FlutterUploader uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
@@ -86,7 +76,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
       isStoragePermission = value;
     });
 
-   /* _progressSubscription = uploader.progress.listen((progress) {
+    /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       print("progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
@@ -122,7 +112,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
   @override
   void dispose() {
     super.dispose();
-   // _progressSubscription?.cancel();
+    // _progressSubscription?.cancel();
     //_resultSubscription?.cancel();
   }
 
@@ -149,8 +139,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
   getBaseLayout(UserManagementResponse userManagementResponse) {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 200.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
         getAddAgreementLayout(userManagementResponse),
       ],
     );
@@ -176,8 +165,8 @@ class AddAgreementState extends State<BaseAddAgreement> {
                 child: DropdownButtonFormField(
                   items: _rentedToListItems,
                   value: _selectedRentedTo,
-                  onChanged: (value){
-                    _selectedRentedTo=value as String?;
+                  onChanged: (value) {
+                    _selectedRentedTo = value as String?;
                     setState(() {});
                   },
                   isExpanded: true,
@@ -186,21 +175,23 @@ class AddAgreementState extends State<BaseAddAgreement> {
                     iconColor: GlobalVariables.secondaryColor,
                   ),
                   decoration: InputDecoration(
-                    //filled: true,
-                    //fillColor: Hexcolor('#ecedec'),
-                      labelText: AppLocalizations.of(context)
-                          .translate('rented_to'),
-                      labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
+                      //filled: true,
+                      //fillColor: Hexcolor('#ecedec'),
+                      labelText:
+                          AppLocalizations.of(context).translate('rented_to'),
+                      labelStyle: TextStyle(
+                          color: GlobalVariables.lightGray,
+                          fontSize: GlobalVariables.textSizeSMedium),
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.transparent))
-                    // border: new CustomBorderTextFieldSkin().getSkin(),
-                  ),
+                      // border: new CustomBorderTextFieldSkin().getSkin(),
+                      ),
                 ),
               ),
             ),
             AppTextField(
               textHintContent:
-                  AppLocalizations.of(context).translate('start_date')+'*',
+                  AppLocalizations.of(context).translate('start_date') + '*',
               controllerCallback: _agreementFromController,
               readOnly: true,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -221,7 +212,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
             ),
             AppTextField(
               textHintContent:
-                  AppLocalizations.of(context).translate('end_date')+'*',
+                  AppLocalizations.of(context).translate('end_date') + '*',
               controllerCallback: _agreementToController,
               readOnly: true,
               contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -229,7 +220,9 @@ class AddAgreementState extends State<BaseAddAgreement> {
                 Icons.date_range,
                 iconColor: GlobalVariables.secondaryColor,
                 onPressed: () {
-                  GlobalFunctions.getSelectedDateFromStartDate(context,_agreementFromController.text).then((value) {
+                  GlobalFunctions.getSelectedDateFromStartDate(
+                          context, _agreementFromController.text)
+                      .then((value) {
                     _agreementToController.text =
                         value.day.toString().padLeft(2, '0') +
                             "-" +
@@ -240,48 +233,54 @@ class AddAgreementState extends State<BaseAddAgreement> {
                 },
               ),
             ),
-            _selectedRentedTo== AppLocalizations.of(context)
-                .translate('group_bachelor') ? /*AppTextField(
+            _selectedRentedTo ==
+                    AppLocalizations.of(context).translate('group_bachelor')
+                ? /*AppTextField(
                 textHintContent: AppLocalizations.of(context).translate('no_of_bachelor'),
                 controllerCallback: _noOfBachelorController,
               keyboardType: TextInputType.number,
-            )*/Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-              decoration: BoxDecoration(
-                  color: GlobalVariables.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: GlobalVariables.lightGray,
-                    width: 2.0,
-                  )),
-              child: ButtonTheme(
-                child: DropdownButtonFormField(
-                  items: _groupCountListItems,
-                  value: _selectedGroupCount,
-                  onChanged: (value){
-                    _selectedGroupCount=value as String?;
-                    setState(() {});
-                  },
-                  isExpanded: true,
-                  icon: AppIcon(
-                    Icons.keyboard_arrow_down,
-                    iconColor: GlobalVariables.secondaryColor,
-                  ),
-                  decoration: InputDecoration(
-                    //filled: true,
-                    //fillColor: Hexcolor('#ecedec'),
-                      labelText: AppLocalizations.of(context)
-                          .translate('no_of_bachelor'),
-                      labelStyle: TextStyle(color: GlobalVariables.lightGray,fontSize: GlobalVariables.textSizeSMedium),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent))
-                    // border: new CustomBorderTextFieldSkin().getSkin(),
-                  ),
-                ),
-              ),
-            ):SizedBox(),
+            )*/
+                Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    decoration: BoxDecoration(
+                        color: GlobalVariables.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: GlobalVariables.lightGray,
+                          width: 2.0,
+                        )),
+                    child: ButtonTheme(
+                      child: DropdownButtonFormField(
+                        items: _groupCountListItems,
+                        value: _selectedGroupCount,
+                        onChanged: (value) {
+                          _selectedGroupCount = value as String?;
+                          setState(() {});
+                        },
+                        isExpanded: true,
+                        icon: AppIcon(
+                          Icons.keyboard_arrow_down,
+                          iconColor: GlobalVariables.secondaryColor,
+                        ),
+                        decoration: InputDecoration(
+                            //filled: true,
+                            //fillColor: Hexcolor('#ecedec'),
+                            labelText: AppLocalizations.of(context)
+                                .translate('no_of_bachelor'),
+                            labelStyle: TextStyle(
+                                color: GlobalVariables.lightGray,
+                                fontSize: GlobalVariables.textSizeSMedium),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))
+                            // border: new CustomBorderTextFieldSkin().getSkin(),
+                            ),
+                      ),
+                    ),
+                  )
+                : SizedBox(),
             widget.isAdmin
                 ? Container(
                     child: Column(
@@ -330,24 +329,25 @@ class AddAgreementState extends State<BaseAddAgreement> {
                                                         AppLocalizations.of(
                                                                 context)
                                                             .translate('yes')
-                                                    ? GlobalVariables.primaryColor
+                                                    ? GlobalVariables
+                                                        .primaryColor
                                                     : GlobalVariables
                                                         .secondaryColor,
                                                 width: 2.0,
                                               )),
                                           child: AppIcon(Icons.check,
-                                              iconColor:
-                                                  GlobalVariables.white),
+                                              iconColor: GlobalVariables.white),
                                         ),
                                         Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              10, 0, 0, 0),
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 0, 0, 0),
                                           child: text(
                                             AppLocalizations.of(context)
                                                 .translate('yes'),
-                                            textColor: GlobalVariables.primaryColor,
-                                            fontSize: GlobalVariables
-                                                .textSizeMedium,
+                                            textColor:
+                                                GlobalVariables.primaryColor,
+                                            fontSize:
+                                                GlobalVariables.textSizeMedium,
                                           ),
                                         ),
                                       ],
@@ -386,18 +386,18 @@ class AddAgreementState extends State<BaseAddAgreement> {
                                                         AppLocalizations.of(
                                                                 context)
                                                             .translate('no')
-                                                    ? GlobalVariables.primaryColor
+                                                    ? GlobalVariables
+                                                        .primaryColor
                                                     : GlobalVariables
                                                         .secondaryColor,
                                                 width: 2.0,
                                               )),
                                           child: AppIcon(Icons.check,
-                                              iconColor:
-                                                  GlobalVariables.white),
+                                              iconColor: GlobalVariables.white),
                                         ),
                                         Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              10, 0, 0, 0),
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 0, 0, 0),
                                           child: text(
                                               AppLocalizations.of(context)
                                                   .translate('no'),
@@ -429,7 +429,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
                         Column(
                           children: <Widget>[
                             Container(
-                              child: FlatButton.icon(
+                              child: TextButton.icon(
                                 onPressed: () {
                                   if (isStoragePermission) {
                                     openFile(context);
@@ -455,13 +455,15 @@ class AddAgreementState extends State<BaseAddAgreement> {
                                 ),
                                 label: Flexible(
                                   child: text(
-                                    attachmentFileName != null
-                                        ? attachmentFileName
-                                        : AppLocalizations.of(context)
-                                            .translate('attach_agreement')+'*',
-                                    textColor: GlobalVariables.primaryColor,
-                                      fontSize: GlobalVariables.textSizeSMedium
-                                  ),
+                                      attachmentFileName != null
+                                          ? attachmentFileName
+                                          : AppLocalizations.of(context)
+                                                  .translate(
+                                                      'attach_agreement') +
+                                              '*',
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
                                 ),
                               ),
                             ),
@@ -473,7 +475,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
                               ),
                             ),
                             Container(
-                              child: FlatButton.icon(
+                              child: TextButton.icon(
                                   onPressed: () {
                                     if (isStoragePermission) {
                                       openCamera(context);
@@ -516,23 +518,26 @@ class AddAgreementState extends State<BaseAddAgreement> {
               child: AppButton(
                 textContent: AppLocalizations.of(context).translate('next'),
                 onPressed: () {
-
-                  if(verifyInfo()) {
+                  if (verifyInfo()) {
                     AddAgreementInfo agreementInfo = AddAgreementInfo(
-                      rentedTo: _selectedRentedTo!,
-                      startDate: _agreementFromController.text,
-                      endDate: _agreementToController.text,
-                      noOfBachelor: _selectedGroupCount!,
-                      isNocEmail: _selectedIssueNOC?? AppLocalizations.of(context)
-                          .translate('no'),
-                      agreementAttachmentPath: GlobalFunctions.convertFileToString(attachmentFilePath!),
-                      block: widget.block,
-                      flat: widget.flat,
-                      agreementAttachmentName: attachmentFileName!
-                    );
+                        rentedTo: _selectedRentedTo!,
+                        startDate: _agreementFromController.text,
+                        endDate: _agreementToController.text,
+                        noOfBachelor: _selectedGroupCount!,
+                        isNocEmail: _selectedIssueNOC ??
+                            AppLocalizations.of(context).translate('no'),
+                        agreementAttachmentPath:
+                            GlobalFunctions.convertFileToString(
+                                attachmentFilePath!),
+                        block: widget.block,
+                        flat: widget.flat,
+                        agreementAttachmentName: attachmentFileName!);
 
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => BaseAddTenant(agreementInfo,widget.isAdmin)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                BaseAddTenant(agreementInfo, widget.isAdmin)));
                   }
                   //verifyInfo();
                   //AWSClient().downloadData('uploads', 'file-sample_150kB.pdf');
@@ -546,7 +551,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
   }
 
   void getRentedToData() {
-    _rentedList = ["Family","Group(Bachelor)","Other"];
+    _rentedList = ["Family", "Group(Bachelor)", "Other"];
     for (int i = 0; i < _rentedList.length; i++) {
       _rentedToListItems.add(DropdownMenuItem(
         value: _rentedList[i],
@@ -560,7 +565,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
   }
 
   void getGroupCountData() {
-    _groupCountList = ["1","2","3","4"];
+    _groupCountList = ["1", "2", "3", "4"];
     for (int i = 0; i < _groupCountList.length; i++) {
       _groupCountListItems.add(DropdownMenuItem(
         value: _groupCountList[i],
@@ -570,10 +575,8 @@ class AddAgreementState extends State<BaseAddAgreement> {
         ),
       ));
     }
-     _selectedGroupCount = _groupCountListItems[0].value;
-    setState(() {
-
-    });
+    _selectedGroupCount = _groupCountListItems[0].value;
+    setState(() {});
   }
 
   bool verifyInfo() {
@@ -587,7 +590,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
         if (_agreementToController.text.length > 0) {
           if (attachmentFilePath != null) {
             return true;
-           // addAgreement();
+            // addAgreement();
           } else {
             GlobalFunctions.showToast('Please Select Agreement File');
           }
@@ -616,7 +619,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
       print('attachmentFileName : ' +
           attachmentFilePath.replaceAll(attachmentFileName, "").toString());
 
-    *//*  File file = File(attachmentFilePath);
+    */ /*  File file = File(attachmentFilePath);
       Uint8List bytes = file.readAsBytesSync();
       _progressDialog.show();
       AWSClient()
@@ -624,10 +627,10 @@ class AddAgreementState extends State<BaseAddAgreement> {
           .then((value) {
         _progressDialog.hide();
       });
-*//*
+*/ /*
 
 
-       *//*final tag = "File upload ${_tasks.length + 1}";
+       */ /*final tag = "File upload ${_tasks.length + 1}";
             final taskId = await uploader.enqueue(
                 url: "https://societyrun.com//Uploads/",
                 //required: url to upload to
@@ -657,10 +660,10 @@ class AddAgreementState extends State<BaseAddAgreement> {
                         type: MediaType.Pdf,
                         status: UploadTaskStatus.enqueued,
                       ));
-            });*//*
+            });*/ /*
 
     }
-    *//*if (!widget.isAdmin) {
+    */ /*if (!widget.isAdmin) {
       _progressDialog.show();
       Provider.of<UserManagementResponse>(context, listen: false)
           .addAgreement(
@@ -700,7 +703,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
 
         }
       });
-    }*//*
+    }*/ /*
   }*/
 
   void openFile(BuildContext context) {
@@ -712,22 +715,27 @@ class AddAgreementState extends State<BaseAddAgreement> {
       setState(() {});
     });
   }
-
 }
 
-class AddAgreementInfo{
+class AddAgreementInfo {
+  String rentedTo,
+      startDate,
+      endDate,
+      noOfBachelor,
+      isNocEmail,
+      agreementAttachmentPath,
+      agreementAttachmentName,
+      block,
+      flat;
 
-  String rentedTo,startDate,endDate,noOfBachelor,isNocEmail,agreementAttachmentPath,agreementAttachmentName,block,flat;
-
-  AddAgreementInfo({
-    required this.rentedTo,
-    required this.startDate,
-    required this.endDate,
-    required this.noOfBachelor,
-    required this.isNocEmail,
-    required this.agreementAttachmentPath,
-    required this.block,
-    required this.flat,
-    required this.agreementAttachmentName
-  });
+  AddAgreementInfo(
+      {required this.rentedTo,
+      required this.startDate,
+      required this.endDate,
+      required this.noOfBachelor,
+      required this.isNocEmail,
+      required this.agreementAttachmentPath,
+      required this.block,
+      required this.flat,
+      required this.agreementAttachmentName});
 }

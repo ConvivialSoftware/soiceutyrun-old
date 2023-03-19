@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/DescriptionOfHomeService.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -9,8 +8,6 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
-import 'base_stateful.dart';
 
 class BaseOwnerServices extends StatefulWidget {
   @override
@@ -21,16 +18,13 @@ class BaseOwnerServices extends StatefulWidget {
 }
 
 class OwnerServicesState extends State<BaseOwnerServices> {
-
-
-  var _myRate=0.0;
+  var _myRate = 0.0;
 
   @override
   void initState() {
     super.initState();
-   // getHomeCareList();
-    Provider.of<ServicesResponse>(context,listen: false).getOwnerServices();
-
+    // getHomeCareList();
+    Provider.of<ServicesResponse>(context, listen: false).getOwnerServices();
   }
 
   @override
@@ -46,7 +40,9 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                 appBar: CustomAppBar(
                   title: AppLocalizations.of(context).translate('my_services'),
                 ),
-                body: value.isLoading ? GlobalFunctions.loadingWidget(context) : getBaseLayout(value),
+                body: value.isLoading
+                    ? GlobalFunctions.loadingWidget(context)
+                    : getBaseLayout(value),
               ),
             );
           },
@@ -69,7 +65,6 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                     context, 200.0),
                 getHomeCareListDataLayout(value),
               ],
-
             ),
           ),
         ],
@@ -83,20 +78,21 @@ class OwnerServicesState extends State<BaseOwnerServices> {
       margin: EdgeInsets.fromLTRB(18, 40, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
-             scrollDirection: Axis.vertical,
-            itemCount: value.ownerServicesList.length,
-            itemBuilder: (context, position) {
-              return getHomeCareListItemLayout(position,value.ownerServicesList);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
+                scrollDirection: Axis.vertical,
+                itemCount: value.ownerServicesList.length,
+                itemBuilder: (context, position) {
+                  return getHomeCareListItemLayout(
+                      position, value.ownerServicesList);
+                }, //  scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              )),
     );
   }
 
   getHomeCareListItemLayout(int position, List<Services> servicesList) {
-   // print('servicesList[position].Rating : '+servicesList[position].Rating);
+    // print('servicesList[position].Rating : '+servicesList[position].Rating);
     return InkWell(
-      onTap: (){
+      onTap: () {
         /*Navigator.push(context, MaterialPageRoute(
             builder: (context) =>
                 BaseDescriptionOfHomeService()));*/
@@ -108,7 +104,8 @@ class OwnerServicesState extends State<BaseOwnerServices> {
             child: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 16,top: 8,right: 16,bottom: 8),
+                  padding:
+                      EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
                   child: Column(
                     children: <Widget>[
                       Row(
@@ -121,13 +118,15 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                                   text(servicesList[position].Name,
                                       fontSize: GlobalVariables.textSizeSMedium,
                                       maxLine: 2,
-                                      textColor: GlobalVariables.primaryColor,fontWeight: FontWeight.w500),
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontWeight: FontWeight.w500),
                                   SizedBox(height: 4),
-                                  text(servicesList[position].Title==null?'':servicesList[position].Title,
-                                      textColor:
-                                      GlobalVariables.grey,
-                                      fontSize:
-                                      GlobalVariables.textSizeSmall,
+                                  text(
+                                      servicesList[position].Title == null
+                                          ? ''
+                                          : servicesList[position].Title,
+                                      textColor: GlobalVariables.grey,
+                                      fontSize: GlobalVariables.textSizeSmall,
                                       maxLine: 2),
                                   SizedBox(height: 4),
                                   Row(
@@ -143,10 +142,13 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                                         width: 4,
                                       ),
                                       text(
-                                          GlobalFunctions.convertDateFormat(servicesList[position].booking_date!, 'dd-MM-yyyy'),
+                                          GlobalFunctions.convertDateFormat(
+                                              servicesList[position]
+                                                  .booking_date!,
+                                              'dd-MM-yyyy'),
                                           textColor: GlobalVariables.grey,
                                           fontSize:
-                                          GlobalVariables.textSizeSmall,
+                                              GlobalVariables.textSizeSmall,
                                           fontWeight: FontWeight.normal),
                                     ],
                                   )
@@ -172,39 +174,66 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  child:  Row(
+                                  child: Row(
                                     children: <Widget>[
                                       Container(
                                           child: AppIcon(
-                                            Icons.star,
-                                            iconColor:
-                                            GlobalVariables.orangeYellow,
-                                            iconSize: 15,
-                                          )),
+                                        Icons.star,
+                                        iconColor: GlobalVariables.orangeYellow,
+                                        iconSize: 15,
+                                      )),
                                       InkWell(
-
-                                        onTap: (){
-
+                                        onTap: () {
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) =>
                                                   StatefulBuilder(builder:
                                                       (BuildContext context,
-                                                      StateSetter setState) {
+                                                          StateSetter
+                                                              setState) {
                                                     return Dialog(
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius:
-                                                            BorderRadius.circular(
-                                                                10.0)),
-                                                        child: showMyRattingBar(setState,servicesList[position].S_Id!));
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0)),
+                                                        child: showMyRattingBar(
+                                                            setState,
+                                                            servicesList[
+                                                                    position]
+                                                                .S_Id!));
                                                   }));
-
                                         },
-
                                         child: Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              5, 0, 0, 0),
-                                          child: text(servicesList[position].Rating!.length==0?'0.0' :servicesList[position].Rating!.length==0?'0.0' : double.parse(servicesList[position].Rating!)>0.0 ? servicesList[position].Rating :AppLocalizations.of(context).translate('add_ratting'),fontSize: GlobalVariables.textSizeSmall,fontWeight: FontWeight.bold,textColor: GlobalVariables.skyBlue),
+                                          margin:
+                                              EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                          child: text(
+                                              servicesList[position]
+                                                          .Rating!
+                                                          .length ==
+                                                      0
+                                                  ? '0.0'
+                                                  : servicesList[position]
+                                                              .Rating!
+                                                              .length ==
+                                                          0
+                                                      ? '0.0'
+                                                      : double.parse(servicesList[
+                                                                      position]
+                                                                  .Rating!) >
+                                                              0.0
+                                                          ? servicesList[
+                                                                  position]
+                                                              .Rating
+                                                          : AppLocalizations.of(
+                                                                  context)
+                                                              .translate(
+                                                                  'add_ratting'),
+                                              fontSize:
+                                                  GlobalVariables.textSizeSmall,
+                                              fontWeight: FontWeight.bold,
+                                              textColor:
+                                                  GlobalVariables.skyBlue),
                                         ),
                                       ),
                                     ],
@@ -223,7 +252,9 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                   width: 4,
                   height: 35,
                   margin: EdgeInsets.only(top: 16),
-                  color: position % 2 == 0 ? GlobalVariables.lightPurple : GlobalVariables.orangeYellow,
+                  color: position % 2 == 0
+                      ? GlobalVariables.lightPurple
+                      : GlobalVariables.orangeYellow,
                 )
               ],
             ),
@@ -232,7 +263,7 @@ class OwnerServicesState extends State<BaseOwnerServices> {
   }
 
   showMyRattingBar(StateSetter setState, String serviceId) {
-  //  print('after setstate : ' + myRate.toString());
+    //  print('after setstate : ' + myRate.toString());
     return Container(
       padding: EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width / 1.3,
@@ -282,22 +313,20 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                   onRatingUpdate: (rating) {
                     print(rating);
                     _myRate = rating;
-                    print('_myRate : '+_myRate.toString());
-                    setState(() {
-
-                    });
-
+                    print('_myRate : ' + _myRate.toString());
+                    setState(() {});
                   },
                 ),
               ),
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: text(_myRate.toString(),
+                child: text(
+                  _myRate.toString(),
                   //myRate.toStringAsFixed(1).toString(),
-    textColor: GlobalVariables.skyBlue,
-                      fontSize: GlobalVariables.textSizeNormal,
-                      fontWeight: FontWeight.w800,
+                  textColor: GlobalVariables.skyBlue,
+                  fontSize: GlobalVariables.textSizeNormal,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],
@@ -306,9 +335,11 @@ class OwnerServicesState extends State<BaseOwnerServices> {
             onTap: () {
               if (_myRate > 0) {
                 Navigator.of(context).pop();
-                Provider.of<ServicesResponse>(context,listen: false).updateServiceRatting(serviceId,_myRate.toString()).then((value) {
-                  if(value.status!){
-                    _myRate=0.0;
+                Provider.of<ServicesResponse>(context, listen: false)
+                    .updateServiceRatting(serviceId, _myRate.toString())
+                    .then((value) {
+                  if (value.status!) {
+                    _myRate = 0.0;
                   }
                   GlobalFunctions.showToast(value.message!);
                 });
@@ -330,13 +361,15 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                     color: GlobalVariables.transparent,
                     width: 3.0,
                   )),
-              child: FlatButton(
+              child: TextButton(
                   onPressed: () {
                     if (_myRate > 0) {
                       Navigator.of(context).pop();
-                      Provider.of<ServicesResponse>(context,listen: false).updateServiceRatting(serviceId,_myRate.toString()).then((value) {
-                        if(value.status!){
-                          _myRate=0.0;
+                      Provider.of<ServicesResponse>(context, listen: false)
+                          .updateServiceRatting(serviceId, _myRate.toString())
+                          .then((value) {
+                        if (value.status!) {
+                          _myRate = 0.0;
                         }
                         GlobalFunctions.showToast(value.message!);
                       });
@@ -347,7 +380,7 @@ class OwnerServicesState extends State<BaseOwnerServices> {
                   },
                   child: text(
                     'Submit',
-                      textColor: GlobalVariables.white,
+                    textColor: GlobalVariables.white,
                   )),
             ),
           )

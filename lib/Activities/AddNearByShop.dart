@@ -10,8 +10,6 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 
-import 'base_stateful.dart';
-
 class BaseAddNearByShop extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +25,7 @@ class AddNearByShopState extends State<BaseAddNearByShop> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: CustomAppBar(
-           title: AppLocalizations.of(context).translate('add_near_by_shop'),
+          title: AppLocalizations.of(context).translate('add_near_by_shop'),
         ),
         body: getBaseLayout(),
       ),
@@ -253,7 +251,7 @@ class AddNearByShopState extends State<BaseAddNearByShop> {
                           color: GlobalVariables.transparent,
                           width: 3.0,
                         )),
-                    child: FlatButton.icon(
+                    child: TextButton.icon(
                         onPressed: () {},
                         icon: Icon(
                           Icons.camera_alt,
@@ -273,7 +271,7 @@ class AddNearByShopState extends State<BaseAddNearByShop> {
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: ButtonTheme(
                 // minWidth: MediaQuery.of(context).size.width/2,
-                child: RaisedButton(
+                child: MaterialButton(
                   color: GlobalVariables.primaryColor,
                   onPressed: () {},
                   textColor: GlobalVariables.white,

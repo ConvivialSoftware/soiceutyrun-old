@@ -27,9 +27,9 @@ abstract class RestClientDiscover {
      /* @Field("Property_Details") String propertyDetails,*/ @Field("Price") String price,
       @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name[]") var images,
       @Field("Address") String address, @Field("Pincode") String pincode,
-      @Field("Society_Name") String Society_Name,
+      @Field("Society_Name") String societyName,
       @Field("SOCIETY_ID") String societyId,
-      @Field("add_visibility") String add_visibility,
+      @Field("add_visibility") String addVisibility,
       @Field("GCM_ID") String gcmId,
       );
 
@@ -41,7 +41,7 @@ abstract class RestClientDiscover {
       @Field("Title") String title, @Field("Description") String description,
       /* @Field("Property_Details") String propertyDetails,*/ @Field("Price") String price,
       @Field("Locality") String locality, @Field("City") String city,@Field("Img_Name[]") var images,
-      @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String Society_Name,@Field("add_visibility") String add_visibility,);
+      @Field("Address") String address, @Field("Pincode") String pincode,@Field("Society_Name") String societyName,@Field("add_visibility") String addVisibility,);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.exclusiveOfferAPI)
@@ -55,16 +55,16 @@ abstract class RestClientDiscover {
   @POST(GlobalVariables.insertUserInfoOnExclusiveGetCode)
   Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(
       @Field("User_Id") String userID,@Field("Society_Name") String societyName,@Field("Unit") String unit, @Field("Mobile") String mobile,
-      @Field("Address") String address,@Field("User_Name") String name,@Field("SOCIETY_ID") String societyID,@Field("Id") String exclusiveId,@Field("User_Email") String User_Email);
+      @Field("Address") String address,@Field("User_Name") String name,@Field("SOCIETY_ID") String societyID,@Field("Id") String exclusiveId,@Field("User_Email") String userEmail);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.interestedClassified)
   Future<StatusMsgResponse> interestedClassified(
-      @Field("C_Id") String C_Id,@Field("User_Id") String user_id,
+      @Field("C_Id") String cId,@Field("User_Id") String userId,
       @Field("Society_Name") String societyName,@Field("Unit") String unit,
       @Field("Mobile") String mobile, @Field("Address") String address,
-      @Field("User_Name") String User_Name,@Field("User_Email") String User_Email,
-      @Field("Profile_Image") String Profile_Image,@Field("SOCIETY_ID") String societyId);
+      @Field("User_Name") String userName,@Field("User_Email") String userEmail,
+      @Field("Profile_Image") String profileImage,@Field("SOCIETY_ID") String societyId);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.servicesCategory)
@@ -77,7 +77,7 @@ abstract class RestClientDiscover {
   @FormUrlEncoded()
   @POST(GlobalVariables.bookServicePerCategory)
   Future<StatusMsgResponse> bookServicePerCategory(
-      @Field("S_Id") String S_Id,@Field("User_Id") String user_id,
+      @Field("S_Id") String sId,@Field("User_Id") String userId,
       @Field("Name") String Name,@Field("Email") String Email,
       @Field("Society_Name") String societyName,@Field("Unit") String unit,
       @Field("Mobile") String mobile, @Field("Address") String address,
@@ -90,7 +90,7 @@ abstract class RestClientDiscover {
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addServicesRatting)
-  Future<StatusMsgResponse> updateServicesRatting(@Field("User_Id") String userId,@Field("S_Id") String S_Id,@Field("Rating") String Rating,@Field("SOCIETY_ID") String societyId,);
+  Future<StatusMsgResponse> updateServicesRatting(@Field("User_Id") String userId,@Field("S_Id") String sId,@Field("Rating") String Rating,@Field("SOCIETY_ID") String societyId,);
 
 
   @FormUrlEncoded()

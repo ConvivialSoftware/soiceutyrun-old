@@ -1,34 +1,18 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
-import 'package:societyrun/Activities/AboutSocietyRun.dart';
-import 'package:societyrun/Activities/AppNotificationSettings.dart';
 import 'package:societyrun/Activities/AppStatefulState.dart';
-import 'package:societyrun/Activities/ChangePassword.dart';
-import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/Feedback.dart';
-import 'package:societyrun/Activities/LoginPage.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
-import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppTextField.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BaseRentalRequestUserDetails extends StatefulWidget {
   TenantRentalRequest rentalRequest;
@@ -54,21 +38,19 @@ class _BaseRentalRequestUserDetailsState
         widget.rentalRequest.tenant_name!.map((i) => Tenant.fromJson(i)));
 
     print(tenantDetailsList.toString());
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: CustomAppBar(
           title: AppLocalizations.of(context).translate('rental_request') +
-                  ' ' +
-                  tenantDetailsList[0].BLOCK! +
-                  ' ' +
-                  tenantDetailsList[0].FLAT!,
+              ' ' +
+              tenantDetailsList[0].BLOCK! +
+              ' ' +
+              tenantDetailsList[0].FLAT!,
         ),
         body: getBaseLayout(),
       ),
@@ -89,16 +71,21 @@ class _BaseRentalRequestUserDetailsState
       child: Container(
         child: Column(
           children: [
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
             AppContainer(
               isListItem: true,
               child: Row(
                 children: [
                   Container(
                     child: AppAssetsImage(
-                      widget.rentalRequest.RENTED_TO!.toLowerCase()=='family' ? GlobalVariables.familyImagePath
-                          : widget.rentalRequest.RENTED_TO!.toLowerCase()=='group'? GlobalVariables.bachelorsImagePath
-                          : GlobalVariables.commercialImagePath,
+                      widget.rentalRequest.RENTED_TO!.toLowerCase() == 'family'
+                          ? GlobalVariables.familyImagePath
+                          : widget.rentalRequest.RENTED_TO!.toLowerCase() ==
+                                  'group'
+                              ? GlobalVariables.bachelorsImagePath
+                              : GlobalVariables.commercialImagePath,
                       imageWidth: 60.0,
                       imageHeight: 60.0,
                       borderColor: GlobalVariables.transparent,
@@ -113,7 +100,9 @@ class _BaseRentalRequestUserDetailsState
                   Expanded(
                       child: Column(
                     children: [
-                      SizedBox(height: 8,),
+                      SizedBox(
+                        height: 8,
+                      ),
                       Row(
                         children: [
                           Container(
@@ -127,9 +116,10 @@ class _BaseRentalRequestUserDetailsState
                           ),
                           Container(
                             child: text(
-                                'Expires on '+GlobalFunctions.convertDateFormat(
-                                    widget.rentalRequest.AGREEMENT_TO!,
-                                    "dd-MM-yyyy"),
+                                'Expires on ' +
+                                    GlobalFunctions.convertDateFormat(
+                                        widget.rentalRequest.AGREEMENT_TO!,
+                                        "dd-MM-yyyy"),
                                 fontSize: GlobalVariables.textSizeSMedium,
                                 textColor: GlobalVariables.black,
                                 textStyleHeight: 1.0),
@@ -145,9 +135,10 @@ class _BaseRentalRequestUserDetailsState
                         children: [
                           InkWell(
                             onTap: () {
-                              _selectedPosition=null;
+                              _selectedPosition = null;
                               if (widget.rentalRequest.AGREEMENT!.isNotEmpty) {
-                                downloadAttachment(widget.rentalRequest.AGREEMENT);
+                                downloadAttachment(
+                                    widget.rentalRequest.AGREEMENT);
                               } else {
                                 GlobalFunctions.showToast(
                                     AppLocalizations.of(context)
@@ -173,22 +164,30 @@ class _BaseRentalRequestUserDetailsState
                                       textColor: GlobalVariables.skyBlue,
                                       textStyleHeight: 1.0),
                                 ),
-                                SizedBox(width: 4,),
-                                if(downloading && _selectedPosition==null) Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    Container(
-                                      //height: 20,
-                                      //width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        //value: 71.0,
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                if (downloading && _selectedPosition == null)
+                                  Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        //height: 20,
+                                        //width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          //value: 71.0,
+                                        ),
                                       ),
-                                    ),
-                                    //SizedBox(width: 4,),
-                                    Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
-                                  ],
-                                )
+                                      //SizedBox(width: 4,),
+                                      Container(
+                                          child: text(downloadRate.toString(),
+                                              fontSize:
+                                                  GlobalVariables.textSizeSmall,
+                                              textColor:
+                                                  GlobalVariables.skyBlue))
+                                    ],
+                                  )
                               ],
                             ),
                           ),
@@ -388,9 +387,11 @@ class _BaseRentalRequestUserDetailsState
                               fontWeight: FontWeight.bold),
                         ),
                         Container(
-                          child: text(tenantDetailsList[position].ADDRESS,
-                              textColor: GlobalVariables.grey,
-                              fontSize: GlobalVariables.textSizeSMedium,),
+                          child: text(
+                            tenantDetailsList[position].ADDRESS,
+                            textColor: GlobalVariables.grey,
+                            fontSize: GlobalVariables.textSizeSMedium,
+                          ),
                         ),
                         /*SizedBox(
                           height: 4,
@@ -433,7 +434,7 @@ class _BaseRentalRequestUserDetailsState
                     ),
                   ),
                 ),
-               /* Container(
+                /* Container(
                   child: IconButton(
                       icon: AppIcon(
                         Icons.attach_file,
@@ -451,61 +452,74 @@ class _BaseRentalRequestUserDetailsState
                 )*/
               ],
             ),
-            tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty ? Divider(): SizedBox(),
-            tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty) {
-                      _selectedPosition=position;
-                      downloadAttachment(tenantDetailsList[position].IDENTITY_PROOF);
-                    } else {
-                      GlobalFunctions.showToast(
-                          AppLocalizations.of(context)
-                              .translate('document_not_available'));
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty
+                ? Divider()
+                : SizedBox(),
+            tenantDetailsList[position].IDENTITY_PROOF!.isNotEmpty
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                          child: AppIcon(
-                            Icons.attach_file,
-                            iconColor: GlobalVariables.skyBlue,
-                          )),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        child: text(
-                            AppLocalizations.of(context)
-                                .translate('identity_proof'),
-                            fontSize: GlobalVariables.textSizeMedium,
-                            textColor: GlobalVariables.skyBlue,
-                            textStyleHeight: 1.0),
-                      ),
-                      SizedBox(width: 4,),
-                      if(downloading && position==_selectedPosition) Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Container(
-                            //height: 20,
-                            //width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              //value: 71.0,
+                      InkWell(
+                        onTap: () {
+                          if (tenantDetailsList[position]
+                              .IDENTITY_PROOF!
+                              .isNotEmpty) {
+                            _selectedPosition = position;
+                            downloadAttachment(
+                                tenantDetailsList[position].IDENTITY_PROOF);
+                          } else {
+                            GlobalFunctions.showToast(
+                                AppLocalizations.of(context)
+                                    .translate('document_not_available'));
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                                child: AppIcon(
+                              Icons.attach_file,
+                              iconColor: GlobalVariables.skyBlue,
+                            )),
+                            SizedBox(
+                              width: 4,
                             ),
-                          ),
-                          //SizedBox(width: 4,),
-                          Container(child: text(downloadRate.toString(),fontSize: GlobalVariables.textSizeSmall,textColor: GlobalVariables.skyBlue))
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                /*  InkWell(
+                            Container(
+                              child: text(
+                                  AppLocalizations.of(context)
+                                      .translate('identity_proof'),
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  textColor: GlobalVariables.skyBlue,
+                                  textStyleHeight: 1.0),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            if (downloading && position == _selectedPosition)
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Container(
+                                    //height: 20,
+                                    //width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      //value: 71.0,
+                                    ),
+                                  ),
+                                  //SizedBox(width: 4,),
+                                  Container(
+                                      child: text(downloadRate.toString(),
+                                          fontSize:
+                                              GlobalVariables.textSizeSmall,
+                                          textColor: GlobalVariables.skyBlue))
+                                ],
+                              )
+                          ],
+                        ),
+                      ),
+                      /*  InkWell(
                         onTap: (){
                           if(widget.rentalRequest.TENANT_CONSENT.isNotEmpty) {
                             downloadAttachment(
@@ -535,8 +549,9 @@ class _BaseRentalRequestUserDetailsState
                           ],
                         ),
                       ),*/
-              ],
-            ): SizedBox(),
+                    ],
+                  )
+                : SizedBox(),
           ],
         ),
       ),
@@ -548,7 +563,7 @@ class _BaseRentalRequestUserDetailsState
   approveMemberLayout() {
     return Container(
       padding: EdgeInsets.all(16),
-    //  width: MediaQuery.of(context).size.width,
+      //  width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -571,13 +586,15 @@ class _BaseRentalRequestUserDetailsState
               contentPadding: EdgeInsets.only(top: 14),
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Container(
             child: text(
               AppLocalizations.of(context).translate('rental_request_approve'),
               fontSize: GlobalVariables.textSizeSMedium,
               textColor: GlobalVariables.black,
-             // fontWeight: FontWeight.bold,
+              // fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -586,7 +603,7 @@ class _BaseRentalRequestUserDetailsState
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       if (_reasonController.text.length > 0) {
                         Navigator.of(context).pop();
@@ -610,14 +627,15 @@ class _BaseRentalRequestUserDetailsState
                         GlobalFunctions.showToast('Please Enter Note');
                       }
                     },
-                    child: text(AppLocalizations.of(context).translate('Approve'),
+                    child: text(
+                        AppLocalizations.of(context).translate('Approve'),
                         textColor: GlobalVariables.primaryColor,
                         fontSize: GlobalVariables.textSizeMedium,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 /*Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

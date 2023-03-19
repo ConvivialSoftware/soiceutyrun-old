@@ -3,6 +3,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -12,7 +13,6 @@ import 'package:societyrun/Activities/DuesBillPayment.dart';
 import 'package:societyrun/Activities/Ledger.dart';
 import 'package:societyrun/Activities/ViewBill.dart';
 import 'package:societyrun/Activities/ViewReceipt.dart';
-import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -26,14 +26,12 @@ import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
 
 class BaseDues extends StatefulWidget {
-
   bool isAdmin;
   String? mBlock, mFlat;
 
-  BaseDues({this.isAdmin=false,this.mBlock,this.mFlat});
+  BaseDues({this.isAdmin = false, this.mBlock, this.mFlat});
 
   @override
   _BaseDuesState createState() => _BaseDuesState();
@@ -49,10 +47,15 @@ class _BaseDuesState extends State<BaseDues> {
   TextEditingController _amountTextController = TextEditingController();
   bool isEditEmail = false;
   bool isEditAmount = false;
-  var amount, invoiceNo, referenceNo, billType, orderId,duesRs = "", duesDate = "";
+  var amount,
+      invoiceNo,
+      referenceNo,
+      billType,
+      orderId,
+      duesRs = "",
+      duesDate = "";
 
-  var userId = "",
-      societyId;
+  var userId = "", societyId;
   var email = '', phone = '', consumerId = '', societyName = '', userType = '';
   ProgressDialog? _progressDialog;
 
@@ -63,7 +66,7 @@ class _BaseDuesState extends State<BaseDues> {
     getSharedPreferenceDuesData();
     getSharedPreferenceData();
     //if(widget.isAdmin)
-      getDuesData();
+    getDuesData();
     super.initState();
   }
 
@@ -85,9 +88,11 @@ class _BaseDuesState extends State<BaseDues> {
                 : PreferredSize(
                     child: SizedBox(),
                     preferredSize: Size(0, 0),
-              ),
+                  ),
             backgroundColor: GlobalVariables.veryLightGray,
-            body: value.isLoading ?GlobalFunctions.loadingWidget(context) : getMyDuesLayout(value),
+            body: value.isLoading
+                ? GlobalFunctions.loadingWidget(context)
+                : getMyDuesLayout(value),
           );
         },
       ),
@@ -116,131 +121,131 @@ class _BaseDuesState extends State<BaseDues> {
     print('getMyDuesLayout Tab call');
     return GlobalVariables.isERPAccount
         ? SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-              context, 150.0),
-          Container(
-            margin: EdgeInsets.only(top: 8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            child: Stack(
               children: <Widget>[
+                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
+                    context, 150.0),
                 Container(
-                  child: Builder(
-                      builder: (context) => ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: value.billList.length,
-                        itemBuilder: (context, position) {
-                          return getBillListItemLayout(
-                              position, context, value);
-                        }, //  scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                      )),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                value.pendingList.length > 0
-                    ? Container(
-                  alignment: Alignment.topLeft,
-                  //color: GlobalVariables.white,
-                  margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
-                  child: text(
-                    AppLocalizations.of(context)
-                        .translate('pending_transaction'),
-                    textColor: GlobalVariables.black,
-                    fontSize: GlobalVariables.textSizeMedium,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-                    : Container(),
-                value.pendingList.length > 0
-                    ? Container(
-                  margin: EdgeInsets.fromLTRB(16.0,16.0,16.0,8.0),
-                  color: GlobalVariables.white,
-                  child: Builder(
-                      builder: (context) => ListView.builder(
-                        physics:
-                        const NeverScrollableScrollPhysics(),
-                        itemCount:
-                        /*value.pendingList.length >= 3
+                  margin: EdgeInsets.only(top: 8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: Builder(
+                            builder: (context) => ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: value.billList.length,
+                                  itemBuilder: (context, position) {
+                                    return getBillListItemLayout(
+                                        position, context, value);
+                                  }, //  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                )),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      value.pendingList.length > 0
+                          ? Container(
+                              alignment: Alignment.topLeft,
+                              //color: GlobalVariables.white,
+                              margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                              child: text(
+                                AppLocalizations.of(context)
+                                    .translate('pending_transaction'),
+                                textColor: GlobalVariables.black,
+                                fontSize: GlobalVariables.textSizeMedium,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : Container(),
+                      value.pendingList.length > 0
+                          ? Container(
+                              margin:
+                                  EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+                              color: GlobalVariables.white,
+                              child: Builder(
+                                  builder: (context) => ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                            /*value.pendingList.length >= 3
                                         ? 3
                                         : */
-                        value.pendingList.length,
-                        itemBuilder: (context, position) {
-                          return getPendingListItemLayout(
-                              position, value);
-                        }, //  scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                      )),
-                )
-                    : Container(),
-                SizedBox(
-                  height: 8,
-                ),
-                value.ledgerList.length > 0
-                    ? Container(
-                  margin: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        //color: GlobalVariables.white,
-                        child: text(
-                          AppLocalizations.of(context)
-                              .translate('recent_transaction'),
-                          textColor: GlobalVariables.black,
-                          fontSize: GlobalVariables.textSizeMedium,
-                          fontWeight: FontWeight.bold,
-                        ),
+                                            value.pendingList.length,
+                                        itemBuilder: (context, position) {
+                                          return getPendingListItemLayout(
+                                              position, value);
+                                        }, //  scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                      )),
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 8,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
+                      value.ledgerList.length > 0
+                          ? Container(
+                              margin: EdgeInsets.only(left: 20, right: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    //color: GlobalVariables.white,
+                                    child: text(
+                                      AppLocalizations.of(context)
+                                          .translate('recent_transaction'),
+                                      textColor: GlobalVariables.black,
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
                                               builder: (context) => BaseLedger(
                                                   widget.mBlock!,
                                                   widget.mFlat!)));
-                        },
-                        child: smallTextContainerOutlineLayout(
-                            AppLocalizations.of(context)
-                                .translate('see_all')),
-                      )
+                                    },
+                                    child: smallTextContainerOutlineLayout(
+                                        AppLocalizations.of(context)
+                                            .translate('see_all')),
+                                  )
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      value.ledgerList.length > 0
+                          ? Container(
+                              margin: EdgeInsets.all(16.0),
+                              color: GlobalVariables.white,
+                              child: Builder(
+                                  builder: (context) => ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: value.ledgerList.length >= 3
+                                            ? 3
+                                            : value.ledgerList.length,
+                                        itemBuilder: (context, position) {
+                                          return getListItemLayout(
+                                              position, value);
+                                        }, //  scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                      )),
+                            )
+                          : Container(),
                     ],
                   ),
-                )
-                    : Container(),
-                value.ledgerList.length > 0
-                    ? Container(
-                  margin: EdgeInsets.all(16.0),
-                  color: GlobalVariables.white,
-                  child: Builder(
-                      builder: (context) => ListView.builder(
-                        physics:
-                        const NeverScrollableScrollPhysics(),
-                        itemCount: value.ledgerList.length >= 3
-                            ? 3
-                            : value.ledgerList.length,
-                        itemBuilder: (context, position) {
-                          return getListItemLayout(
-                              position, value);
-                        }, //  scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                      )),
-                )
-                    : Container(),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
-    )
+          )
         : getNoERPAccountLayout();
   }
-
 
   getBillListItemLayout(
       int position, BuildContext context, UserManagementResponse value) {
@@ -264,7 +269,7 @@ class _BaseDuesState extends State<BaseDues> {
               child: Column(
                 children: <Widget>[
                   Row(
-                    crossAxisAlignment:CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
@@ -277,8 +282,8 @@ class _BaseDuesState extends State<BaseDues> {
                         child: text(
                           value.billList[position].TYPE != null
                               ? value.billList[position].TYPE == 'Bill'
-                              ? 'Maintenance Bill'
-                              : value.billList[position].TYPE
+                                  ? 'Maintenance Bill'
+                                  : value.billList[position].TYPE
                               : '',
                           textColor: GlobalVariables.white,
                           fontSize: GlobalVariables.textSizeSmall,
@@ -286,20 +291,20 @@ class _BaseDuesState extends State<BaseDues> {
                       ),
                       (value.billList[position].AMOUNT! -
                                   value.billList[position].RECEIVED!) <=
-                          0
+                              0
                           ? text(
-                        'Paid',
-                        textColor: GlobalVariables.primaryColor,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        fontWeight: FontWeight.bold,
-                      )
+                              'Paid',
+                              textColor: GlobalVariables.primaryColor,
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              fontWeight: FontWeight.bold,
+                            )
                           : text(
-                        getBillPaymentStatus(position, value),
-                        textColor:
-                        getBillPaymentStatusColor(position, value),
-                        fontSize: GlobalVariables.textSizeSMedium,
-                        fontWeight: FontWeight.bold,
-                      ),
+                              getBillPaymentStatus(position, value),
+                              textColor:
+                                  getBillPaymentStatusColor(position, value),
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              fontWeight: FontWeight.bold,
+                            ),
                     ],
                   ),
                   Container(
@@ -311,7 +316,8 @@ class _BaseDuesState extends State<BaseDues> {
                           GlobalFunctions.getCurrencyFormat(
                               (value.billList[position].AMOUNT! -
                                       value.billList[position].RECEIVED!)
-                        .toString()) ,/*+
+                                  .toString()),
+                          /*+
                               double.parse((value.billList[position].AMOUNT -
                                   value.billList[position].RECEIVED)
                                   .toString())
@@ -324,7 +330,7 @@ class _BaseDuesState extends State<BaseDues> {
                           value.billList[position].DUE_DATE != null
                               ? GlobalFunctions.convertDateFormat(
                                   value.billList[position].DUE_DATE!,
-                              "dd-MM-yyyy")
+                                  "dd-MM-yyyy")
                               : '',
                           textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeMedium,
@@ -333,7 +339,9 @@ class _BaseDuesState extends State<BaseDues> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Divider(),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -343,12 +351,12 @@ class _BaseDuesState extends State<BaseDues> {
                         InkWell(
                           onTap: () {
                             if (value.billList[position].TYPE!
-                                .toLowerCase()
-                                .toString() ==
-                                'bill' ||
+                                        .toLowerCase()
+                                        .toString() ==
+                                    'bill' ||
                                 value.billList[position].TYPE!
-                                    .toLowerCase()
-                                    .toString() ==
+                                        .toLowerCase()
+                                        .toString() ==
                                     'invoice') {
                               Navigator.push(
                                   context,
@@ -364,7 +372,9 @@ class _BaseDuesState extends State<BaseDues> {
                                   MaterialPageRoute(
                                       builder: (context) => BaseViewReceipt(
                                           value.billList[position].INVOICE_NO,
-                                          null,widget.mBlock,widget.mFlat)));
+                                          null,
+                                          widget.mBlock,
+                                          widget.mFlat)));
                             }
                           },
                           child: Container(
@@ -391,10 +401,14 @@ class _BaseDuesState extends State<BaseDues> {
                           ),
                         ),
                         Visibility(
-                          visible: !widget.isAdmin ,
+                          visible: !widget.isAdmin,
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>BaseDuesBillPayment(value.billList[position])));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseDuesBillPayment(
+                                          value.billList[position])));
                             },
                             child: Container(
                               child: Column(
@@ -438,8 +452,11 @@ class _BaseDuesState extends State<BaseDues> {
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: text(
-                                    !widget.isAdmin ? AppLocalizations.of(context)
-                                        .translate('get_bill') : AppLocalizations.of(context).translate('send_bill'),
+                                    !widget.isAdmin
+                                        ? AppLocalizations.of(context)
+                                            .translate('get_bill')
+                                        : AppLocalizations.of(context)
+                                            .translate('send_bill'),
                                     fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.grey,
                                   ),
@@ -450,45 +467,51 @@ class _BaseDuesState extends State<BaseDues> {
                         ),
                         InkWell(
                           onTap: () async {
-                            if(!AppSocietyPermission.isSocHideAlreadyPaidPermission) {
+                            if (!AppSocietyPermission
+                                .isSocHideAlreadyPaidPermission) {
                               final result = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          BaseAlreadyPaid(
-                                            value.billList[position].INVOICE_NO!,
+                                      builder: (context) => BaseAlreadyPaid(
+                                            value
+                                                .billList[position].INVOICE_NO!,
                                             value.billList[position].AMOUNT!,
                                             widget.mBlock!,
                                             widget.mFlat!,
-                                            value
-                                                .billList[position].PENALTY_REM!,
+                                            value.billList[position]
+                                                .PENALTY_REM!,
                                             isAdmin: widget.isAdmin,
                                           )));
                               if (result == 'back') {
                                 Provider.of<UserManagementResponse>(context,
-                                    listen: false)
+                                        listen: false)
                                     .getAllBillData(
                                         widget.mBlock!, widget.mFlat!);
                               }
-                            }else{
-                              GlobalFunctions.showAdminPermissionDialogToAccessFeature(context,true);
+                            } else {
+                              GlobalFunctions
+                                  .showAdminPermissionDialogToAccessFeature(
+                                      context, true);
                             }
                           },
                           child: Container(
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: /*true ? */AppIcon(
-                                    Icons.check_circle,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                  ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
-                                ),
+                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: /*true ? */ AppIcon(
+                                      Icons.check_circle,
+                                      iconColor: GlobalVariables.secondaryColor,
+                                    ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
+                                    ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: text(
-                                    !widget.isAdmin ? AppLocalizations.of(context)
-                                        .translate('already_paid') : AppLocalizations.of(context).translate('payment'),
+                                    !widget.isAdmin
+                                        ? AppLocalizations.of(context)
+                                            .translate('already_paid')
+                                        : AppLocalizations.of(context)
+                                            .translate('payment'),
                                     fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.grey,
                                   ),
@@ -554,7 +577,7 @@ class _BaseDuesState extends State<BaseDues> {
             ),
           ),
         ),
-                                                                                                                                                                                                                     Container(
+        Container(
             padding: EdgeInsets.all(8),
             child: Column(
               children: <Widget>[
@@ -577,17 +600,23 @@ class _BaseDuesState extends State<BaseDues> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => BaseViewReceipt(
-                                    null,
-                                    /*UserManagementResponse.listYear[0].years*/
-                                    null,widget.mBlock,widget.mFlat,receipt: value.pendingList[position],)));
+                                      null,
+                                      /*UserManagementResponse.listYear[0].years*/
+                                      null,
+                                      widget.mBlock,
+                                      widget.mFlat,
+                                      receipt: value.pendingList[position],
+                                    )));
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: text(
-                          GlobalFunctions.getCurrencyFormat(value.pendingList[position].AMOUNT.toString())
-                              /*double.parse(value.pendingList[position].AMOUNT
+                          GlobalFunctions.getCurrencyFormat(
+                              value.pendingList[position].AMOUNT.toString())
+                          /*double.parse(value.pendingList[position].AMOUNT
                                   .toString())
-                                  .toStringAsFixed(2)*/,
+                                  .toStringAsFixed(2)*/
+                          ,
                           textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeSMedium,
                           fontWeight: FontWeight.bold,
@@ -698,7 +727,7 @@ class _BaseDuesState extends State<BaseDues> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
     final toDateTine =
-    DateTime.parse(value.billList[position].DUE_DATE.toString());
+        DateTime.parse(value.billList[position].DUE_DATE.toString());
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -720,7 +749,7 @@ class _BaseDuesState extends State<BaseDues> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
     final toDateTine =
-    DateTime.parse(value.billList[position].DUE_DATE.toString());
+        DateTime.parse(value.billList[position].DUE_DATE.toString());
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -818,8 +847,8 @@ class _BaseDuesState extends State<BaseDues> {
                               counterText: "",
                               border: isEditAmount
                                   ? new UnderlineInputBorder(
-                                  borderSide:
-                                  new BorderSide(color: Colors.green))
+                                      borderSide:
+                                          new BorderSide(color: Colors.green))
                                   : InputBorder.none,
                               // disabledBorder: InputBorder.none,
                               // enabledBorder: InputBorder.none,
@@ -831,146 +860,150 @@ class _BaseDuesState extends State<BaseDues> {
                           ),
                         ),
                         (AppSocietyPermission.isSocPayAmountEditPermission ||
-                            AppSocietyPermission.isSocPayAmountNoLessPermission)
+                                AppSocietyPermission
+                                    .isSocPayAmountNoLessPermission)
                             ? Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                          child: !isEditAmount
-                              ? IconButton(
-                              icon: AppIcon(
-                                Icons.edit,
-                                iconColor: GlobalVariables.primaryColor,
-                                iconSize:
-                                GlobalVariables.textSizeLarge,
-                              ),
-                              onPressed: () {
-                                _amountTextController.clear();
-                                isEditAmount = true;
-                                setState(() {});
-                              })
-                              : IconButton(
-                              icon: AppIcon(
-                                Icons.cancel,
-                                iconColor: GlobalVariables.grey,
-                                iconSize: 24,
-                              ),
-                              onPressed: () {
-                                _amountTextController.clear();
-                                _amountTextController.text = amount;
-                                isEditAmount = false;
-                                setState(() {});
-                              }),
-                        )
+                                margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                child: !isEditAmount
+                                    ? IconButton(
+                                        icon: AppIcon(
+                                          Icons.edit,
+                                          iconColor:
+                                              GlobalVariables.primaryColor,
+                                          iconSize:
+                                              GlobalVariables.textSizeLarge,
+                                        ),
+                                        onPressed: () {
+                                          _amountTextController.clear();
+                                          isEditAmount = true;
+                                          setState(() {});
+                                        })
+                                    : IconButton(
+                                        icon: AppIcon(
+                                          Icons.cancel,
+                                          iconColor: GlobalVariables.grey,
+                                          iconSize: 24,
+                                        ),
+                                        onPressed: () {
+                                          _amountTextController.clear();
+                                          _amountTextController.text = amount;
+                                          isEditAmount = false;
+                                          setState(() {});
+                                        }),
+                              )
                             : SizedBox(),
                       ],
                     ),
                     (hasPayTMGateway || hasRazorPayGateway)
                         ? Container(
-                      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                      alignment: Alignment.topLeft,
-                      child: primaryText(
-                        AppLocalizations.of(context)
-                            .translate('select_payment_option'),
-                        textColor: GlobalVariables.black,
-                        //fontSize: GlobalVariables.textSizeMedium,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    )
+                            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            alignment: Alignment.topLeft,
+                            child: primaryText(
+                              AppLocalizations.of(context)
+                                  .translate('select_payment_option'),
+                              textColor: GlobalVariables.black,
+                              //fontSize: GlobalVariables.textSizeMedium,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          )
                         : Container(),
                     hasRazorPayGateway
                         ? Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedPaymentGateway = "RazorPay";
-                          setState(() {});
-                          // getListOfPaymentGateway();
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color:
-                                    _selectedPaymentGateway != "PayTM"
-                                        ? GlobalVariables.primaryColor
-                                        : GlobalVariables.white,
-                                    borderRadius:
-                                    BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _selectedPaymentGateway !=
-                                          "PayTM"
-                                          ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Image.asset(
-                                  GlobalVariables.razorPayIconPath,
-                                  height: 40,
-                                  width: 100,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: InkWell(
+                              //  splashColor: GlobalVariables.mediumGreen,
+                              onTap: () {
+                                _selectedPaymentGateway = "RazorPay";
+                                setState(() {});
+                                // getListOfPaymentGateway();
+                              },
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              _selectedPaymentGateway != "PayTM"
+                                                  ? GlobalVariables.primaryColor
+                                                  : GlobalVariables.white,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          border: Border.all(
+                                            color: _selectedPaymentGateway !=
+                                                    "PayTM"
+                                                ? GlobalVariables.primaryColor
+                                                : GlobalVariables
+                                                    .secondaryColor,
+                                            width: 2.0,
+                                          )),
+                                      child: AppIcon(Icons.check,
+                                          iconColor: GlobalVariables.white),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                      child: Image.asset(
+                                        GlobalVariables.razorPayIconPath,
+                                        height: 40,
+                                        width: 100,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
+                            ),
+                          )
                         : Container(),
                     hasPayTMGateway
                         ? Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedPaymentGateway = "PayTM";
-                          //   getListOfPaymentGateway();
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color:
-                                    _selectedPaymentGateway == "PayTM"
-                                        ? GlobalVariables.primaryColor
-                                        : GlobalVariables.white,
-                                    borderRadius:
-                                    BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _selectedPaymentGateway ==
-                                          "PayTM"
-                                          ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Image.asset(
-                                  GlobalVariables.payTMIconPath,
-                                  height: 20,
-                                  width: 80,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: InkWell(
+                              //  splashColor: GlobalVariables.mediumGreen,
+                              onTap: () {
+                                _selectedPaymentGateway = "PayTM";
+                                //   getListOfPaymentGateway();
+                                setState(() {});
+                              },
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              _selectedPaymentGateway == "PayTM"
+                                                  ? GlobalVariables.primaryColor
+                                                  : GlobalVariables.white,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          border: Border.all(
+                                            color: _selectedPaymentGateway ==
+                                                    "PayTM"
+                                                ? GlobalVariables.primaryColor
+                                                : GlobalVariables
+                                                    .secondaryColor,
+                                            width: 2.0,
+                                          )),
+                                      child: AppIcon(Icons.check,
+                                          iconColor: GlobalVariables.white),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                      child: Image.asset(
+                                        GlobalVariables.payTMIconPath,
+                                        height: 20,
+                                        width: 80,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
+                            ),
+                          )
                         : Container(),
                     Container(
                       alignment: Alignment.topLeft,
@@ -1001,7 +1034,8 @@ class _BaseDuesState extends State<BaseDues> {
                     if (double.parse(_amountTextController.text) <= 0) {
                       GlobalFunctions.showToast(
                           'Amount must be grater than zero');
-                    } else if (AppSocietyPermission.isSocPayAmountNoLessPermission) {
+                    } else if (AppSocietyPermission
+                        .isSocPayAmountNoLessPermission) {
                       if (double.parse(amount) <=
                           double.parse(_amountTextController.text)) {
                         Navigator.of(context).pop();
@@ -1043,7 +1077,7 @@ class _BaseDuesState extends State<BaseDues> {
       showDialog(
           context: context,
           builder: (BuildContext context) => StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+                  builder: (BuildContext context, StateSetter setState) {
                 return Dialog(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
@@ -1091,18 +1125,18 @@ class _BaseDuesState extends State<BaseDues> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => StatefulBuilder(
-                                builder: (BuildContext context,
-                                    StateSetter setState) {
+                                    builder: (BuildContext context,
+                                        StateSetter setState) {
                                   return Dialog(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(10.0)),
+                                            BorderRadius.circular(10.0)),
                                     child: displayConsumerId(value),
                                   );
                                 }));
@@ -1115,7 +1149,7 @@ class _BaseDuesState extends State<BaseDues> {
                       )),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -1160,8 +1194,7 @@ class _BaseDuesState extends State<BaseDues> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      FlutterClipboard.copy(consumerId)
-                          .then((value) {
+                      FlutterClipboard.copy(consumerId).then((value) {
                         GlobalFunctions.showToast("Copied to Clipboard");
                         launch(
                             UserManagementResponse.payOptionList[0].PAYTM_URL!);
@@ -1222,41 +1255,45 @@ class _BaseDuesState extends State<BaseDues> {
                     InkWell(
                       onTap: () {
                         if (value.ledgerList[position].TYPE!
-                            .toLowerCase()
-                            .toString() ==
-                            'bill' ||
+                                    .toLowerCase()
+                                    .toString() ==
+                                'bill' ||
                             value.ledgerList[position].TYPE!
-                                .toLowerCase()
-                                .toString() ==
+                                    .toLowerCase()
+                                    .toString() ==
                                 'invoice') {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewBill(
                                       value.ledgerList[position].RECEIPT_NO,
-                                      UserManagementResponse
-                                          .listYear[0].years,widget.mBlock,widget.mFlat)));
+                                      UserManagementResponse.listYear[0].years,
+                                      widget.mBlock,
+                                      widget.mFlat)));
                         } else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewReceipt(
                                       value.ledgerList[position].RECEIPT_NO,
-                                      UserManagementResponse
-                                          .listYear[0].years,widget.mBlock,widget.mFlat)));
+                                      UserManagementResponse.listYear[0].years,
+                                      widget.mBlock,
+                                      widget.mFlat)));
                         }
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: text(
-                          GlobalFunctions.getCurrencyFormat(value.ledgerList[position].AMOUNT.toString())
-                              /*double.parse(value.ledgerList[position].AMOUNT
+                          GlobalFunctions.getCurrencyFormat(
+                              value.ledgerList[position].AMOUNT.toString())
+                          /*double.parse(value.ledgerList[position].AMOUNT
                                   .toString())
-                                  .toStringAsFixed(2)*/,
+                                  .toStringAsFixed(2)*/
+                          ,
                           textColor: value.ledgerList[position].TYPE!
-                              .toLowerCase()
-                              .toString() ==
-                              'bill'
+                                      .toLowerCase()
+                                      .toString() ==
+                                  'bill'
                               ? GlobalVariables.red
                               : GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeSMedium,
@@ -1276,7 +1313,7 @@ class _BaseDuesState extends State<BaseDues> {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -1290,10 +1327,10 @@ class _BaseDuesState extends State<BaseDues> {
                     children: <Widget>[
                       Container(
                           child: AppAssetsImage(
-                            GlobalVariables.paidIconPath,
-                            imageWidth: 70.0,
-                            imageHeight: 70.0,
-                          )),
+                        GlobalVariables.paidIconPath,
+                        imageWidth: 70.0,
+                        imageHeight: 70.0,
+                      )),
                       Container(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           child: text(AppLocalizations.of(context)
@@ -1323,14 +1360,14 @@ class _BaseDuesState extends State<BaseDues> {
                                         builder: (BuildContext context) =>
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
-                                                StateSetter setState) {
+                                                    StateSetter setState) {
                                               return Dialog(
                                                 /*shape: RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
                                                                 25.0)),*/
                                                 backgroundColor:
-                                                Colors.transparent,
+                                                    Colors.transparent,
                                                 elevation: 0.0,
                                                 child: getListOfPaymentGateway(
                                                     context,
@@ -1355,16 +1392,16 @@ class _BaseDuesState extends State<BaseDues> {
             }));
   }
 
-
   void emailBillDialog(
       BuildContext context, int position, UserManagementResponse value) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               isEditEmail
                   ? _emailTextController.text = ''
-                  : _emailTextController.text = value.billList[position].Email ?? email;
+                  : _emailTextController.text =
+                      value.billList[position].Email ?? email;
 
               return Dialog(
                   shape: RoundedRectangleBorder(
@@ -1390,16 +1427,16 @@ class _BaseDuesState extends State<BaseDues> {
                               'Send #' +
                                   value.billList[position].INVOICE_NO! +
                                   ' on below email id',
-                            textColor: GlobalVariables.primaryColor,
-                            fontSize: GlobalVariables.textSizeSMedium
-                            /*GlobalFunctions.convertDateFormat(
+                              textColor: GlobalVariables.primaryColor,
+                              fontSize: GlobalVariables.textSizeSMedium
+                              /*GlobalFunctions.convertDateFormat(
                                 value.billList[position].START_DATE,
                                 'dd-MMM-yy') +
                                 ' To ' +
                                 GlobalFunctions.convertDateFormat(
                                     value.billList[position].END_DATE,
                                     'dd-MMM-yy'),*/
-                          ),
+                              ),
                         ),
                         Divider(),
                         Flexible(
@@ -1428,8 +1465,8 @@ class _BaseDuesState extends State<BaseDues> {
                                       decoration: InputDecoration(
                                         border: isEditEmail
                                             ? new UnderlineInputBorder(
-                                            borderSide: new BorderSide(
-                                                color: Colors.green))
+                                                borderSide: new BorderSide(
+                                                    color: Colors.green))
                                             : InputBorder.none,
                                         contentPadding: EdgeInsets.all(5),
                                       ),
@@ -1442,28 +1479,29 @@ class _BaseDuesState extends State<BaseDues> {
                                     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: !isEditEmail
                                         ? IconButton(
-                                        icon: AppIcon(
-                                          Icons.edit,
-                                          iconColor: GlobalVariables.primaryColor,
-                                          iconSize: 24,
-                                        ),
-                                        onPressed: () {
-                                          _emailTextController.clear();
-                                          isEditEmail = true;
-                                          setState(() {});
-                                        })
+                                            icon: AppIcon(
+                                              Icons.edit,
+                                              iconColor:
+                                                  GlobalVariables.primaryColor,
+                                              iconSize: 24,
+                                            ),
+                                            onPressed: () {
+                                              _emailTextController.clear();
+                                              isEditEmail = true;
+                                              setState(() {});
+                                            })
                                         : IconButton(
-                                        icon: AppIcon(
-                                          Icons.cancel,
-                                          iconColor: GlobalVariables.grey,
-                                          iconSize: 24,
-                                        ),
-                                        onPressed: () {
-                                          _emailTextController.clear();
-                                          _emailTextController.text = email;
-                                          isEditEmail = false;
-                                          setState(() {});
-                                        }),
+                                            icon: AppIcon(
+                                              Icons.cancel,
+                                              iconColor: GlobalVariables.grey,
+                                              iconSize: 24,
+                                            ),
+                                            onPressed: () {
+                                              _emailTextController.clear();
+                                              _emailTextController.text = email;
+                                              isEditEmail = false;
+                                              setState(() {});
+                                            }),
                                   ),
                                 )
                               ],
@@ -1474,14 +1512,14 @@ class _BaseDuesState extends State<BaseDues> {
                           alignment: Alignment.topRight,
                           height: 45,
                           child: AppButton(
-                            textContent: AppLocalizations.of(context).translate('email_now'),
+                            textContent: AppLocalizations.of(context)
+                                .translate('email_now'),
                             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                             onPressed: () {
                               GlobalFunctions.checkInternetConnection()
                                   .then((internet) {
                                 if (internet) {
-                                  if (_emailTextController.text.length >
-                                      0) {
+                                  if (_emailTextController.text.length > 0) {
                                     Navigator.of(context).pop();
                                     getBillMail(
                                         value.billList[position].INVOICE_NO!,
@@ -1493,10 +1531,9 @@ class _BaseDuesState extends State<BaseDues> {
                                         'Please Enter Email ID');
                                   }
                                 } else {
-                                  GlobalFunctions.showToast(AppLocalizations
-                                      .of(context)
-                                      .translate(
-                                      'pls_check_internet_connectivity'));
+                                  GlobalFunctions.showToast(
+                                      AppLocalizations.of(context).translate(
+                                          'pls_check_internet_connectivity'));
                                 }
                               });
                             },
@@ -1543,7 +1580,7 @@ class _BaseDuesState extends State<BaseDues> {
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width / 2,
-              child: RaisedButton(
+              child: MaterialButton(
                 color: GlobalVariables.primaryColor,
                 onPressed: () {
                   Navigator.push(
@@ -1573,7 +1610,7 @@ class _BaseDuesState extends State<BaseDues> {
     return showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -1622,7 +1659,7 @@ class _BaseDuesState extends State<BaseDues> {
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: text(
                             AppLocalizations.of(context)
-                                .translate('transaction_id') +
+                                    .translate('transaction_id') +
                                 ' : ' +
                                 paymentId.toString(),
                             textColor: GlobalVariables.primaryColor,
@@ -1649,7 +1686,7 @@ class _BaseDuesState extends State<BaseDues> {
     return showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -1706,11 +1743,11 @@ class _BaseDuesState extends State<BaseDues> {
             }));
   }
 
-  void getRazorPayOrderID(int position, String razorKey, String secret_key,
+  void getRazorPayOrderID(int position, String razorKey, String secretKey,
       double textAmount, UserManagementResponse UserManagementResponse) {
     final dio = Dio();
     final RestClientRazorPay restClientRazorPay =
-    RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
+        RestClientRazorPay(dio, baseUrl: GlobalVariables.BaseRazorPayURL);
     amount = textAmount * 100;
     invoiceNo = UserManagementResponse.billList[position].INVOICE_NO;
     _progressDialog!.show();
@@ -1720,7 +1757,7 @@ class _BaseDuesState extends State<BaseDues> {
         receipt: widget.mBlock! + ' ' + widget.mFlat! + '-' + invoiceNo,
         paymentCapture: 1);
     restClientRazorPay
-        .getRazorPayOrderID(request, razorKey, secret_key)
+        .getRazorPayOrderID(request, razorKey, secretKey)
         .then((value) {
       print('getRazorPayOrderID Response : ' + value.toString());
       orderId = value['id'];
@@ -1734,7 +1771,7 @@ class _BaseDuesState extends State<BaseDues> {
       int position, UserManagementResponse UserManagementResponse) async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
     //String block = await GlobalFunctions.getBlock();
     //String flat = await GlobalFunctions.getFlat();
@@ -1744,7 +1781,7 @@ class _BaseDuesState extends State<BaseDues> {
             societyId,
             widget.mBlock! + ' ' + widget.mFlat!,
             orderId,
-        (double.parse(amount) / 100).toString())
+            (double.parse(amount) / 100).toString())
         .then((value) {
       print('Value : ' + value.toString());
       _progressDialog!.dismiss();
@@ -1769,10 +1806,10 @@ class _BaseDuesState extends State<BaseDues> {
       String paymentId, String paymentStatus, String? orderId) async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     String societyId = await GlobalFunctions.getSocietyId();
-  //  String block = await GlobalFunctions.getBlock();
-   // String flat = await GlobalFunctions.getFlat();
+    //  String block = await GlobalFunctions.getBlock();
+    // String flat = await GlobalFunctions.getFlat();
 
     print("AMOUNT>>>>>>>> $amount");
 
@@ -1785,16 +1822,16 @@ class _BaseDuesState extends State<BaseDues> {
     _progressDialog!.show();
     restClientERP
         .addOnlinePaymentRequest(
-        societyId,
+            societyId,
             widget.mFlat!,
             widget.mBlock!,
-        invoiceNo,
-        (amount / 100).toString(),
-        paymentId,
-        "Online Transaction",
-        "Razorpay",
-        paymentDate,
-        paymentStatus,
+            invoiceNo,
+            (amount / 100).toString(),
+            paymentId,
+            "Online Transaction",
+            "Razorpay",
+            paymentDate,
+            paymentStatus,
             orderId!)
         .then((value) {
       print("add OnlinepaymentRequest response : " + value.toString());
@@ -1804,9 +1841,7 @@ class _BaseDuesState extends State<BaseDues> {
         if (paymentStatus == 'success') {
           Provider.of<UserManagementResponse>(context, listen: false)
               .getPayOption(widget.mBlock!, widget.mFlat!)
-              .then((value) {
-
-          });
+              .then((value) {});
           paymentSuccessDialog(paymentId);
         } else {
           paymentFailureDialog();
@@ -1864,8 +1899,13 @@ class _BaseDuesState extends State<BaseDues> {
       'amount': amount,
       'name': societyName,
       'order_id': orderId,
-      'description':
-          widget.mBlock! + ' ' + widget.mFlat! + '-' + invoiceNo + '/' + billType,
+      'description': widget.mBlock! +
+          ' ' +
+          widget.mFlat! +
+          '-' +
+          invoiceNo +
+          '/' +
+          billType,
       'prefill': {'contact': phone, 'email': email}
     };
 
@@ -1877,16 +1917,16 @@ class _BaseDuesState extends State<BaseDues> {
   }
 
   Future<void> getBillMail(
-      String invoice_no, String type, String emailId, String? year) async {
+      String invoiceNo, String type, String emailId, String? year) async {
     final dio = Dio();
     final RestClientERP restClientERP =
-    RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+        RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
     societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog!.show();
     restClientERP
         .getBillMail(
-        societyId, type, invoice_no, _emailTextController.text, year)
+            societyId, type, invoiceNo, _emailTextController.text, year)
         .then((value) {
       print('Response : ' + value.toString());
 
@@ -1915,7 +1955,7 @@ class _BaseDuesState extends State<BaseDues> {
     email = await GlobalFunctions.getUserName();
     consumerId = await GlobalFunctions.getConsumerID();
     societyName = await GlobalFunctions.getSocietyName();
-   // flat = await GlobalFunctions.getFlat();
+    // flat = await GlobalFunctions.getFlat();
     // block = await GlobalFunctions.getBlock();
     userType = await GlobalFunctions.getUserType();
 
@@ -1930,7 +1970,7 @@ class _BaseDuesState extends State<BaseDues> {
   void getDuesData() {
     if (GlobalVariables.isERPAccount) {
       Provider.of<UserManagementResponse>(context, listen: false)
-          .getPayOption(widget.mBlock,widget.mFlat)
+          .getPayOption(widget.mBlock, widget.mFlat)
           .then((payOptionList) {
         if (payOptionList.length > 0) {
           print(payOptionList[0].KEY_ID.toString());
@@ -1946,8 +1986,7 @@ class _BaseDuesState extends State<BaseDues> {
             hasPayTMGateway = true;
           }
           print('hasPayTMGateway' + hasPayTMGateway.toString());
-          print(
-              'hasRazorPayGateway' + hasRazorPayGateway.toString());
+          print('hasRazorPayGateway' + hasRazorPayGateway.toString());
         }
         setState(() {});
       });
