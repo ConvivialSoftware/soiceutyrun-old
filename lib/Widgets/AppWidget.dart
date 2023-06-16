@@ -95,9 +95,9 @@ Widget htmlText(var text,
       var fontWeight = FontWeight.normal,var textStyleHeight=1.5}) {
   return Html(
       data: text,
-    onLinkTap: (url, _, __, ___) {
-      launch(url!);
-    },
+   onLinkTap: (url, attributes, element) {
+     launch(url!);
+   } 
 
 
   )/* Html(

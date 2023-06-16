@@ -894,8 +894,7 @@ class GlobalFunctions {
       minWidth: 400,
       format: format,
     );
-    print('After Compress : ' + _imageFile!.lengthSync().toString());
-    return _imageFile.path;
+    return _imageFile?.path??'';
   }
 
   static removeFileFromDirectory(String path) {

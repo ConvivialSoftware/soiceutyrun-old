@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/SplashScreen.dart';
@@ -27,6 +28,8 @@ import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+
+import 'locator.dart';
 
 Logger logger = Logger(
   printer: PrettyPrinter(
@@ -50,6 +53,7 @@ callbackNotificationDispatcher() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -68,7 +72,7 @@ Future<void> showLocalNotification() async {
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
     '1003',
     'societyrun_channel_schedule',
-    'channel_for_bill_reminder',
+  
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
@@ -188,7 +192,7 @@ class BaseAppStart extends StatelessWidget {
             ChangeNotifierProvider<UserManagementResponse>.value(
                 value: userManagementResponse),
           ],
-          child: MaterialApp(
+          child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             theme: getThemeData(),
             title: "SocietyRun",

@@ -21,12 +21,29 @@ class BaseWebViewScreen extends StatefulWidget {
 }
 
 class WebViewScreenState extends State<BaseWebViewScreen> {
+  late WebViewController _controller;
 
   var pageURL;
   WebViewScreenState(this.pageURL);
 
   @override
   void initState() {
+     _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+
+          },
+
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(pageURL));
     super.initState();
   }
 
@@ -45,14 +62,7 @@ class WebViewScreenState extends State<BaseWebViewScreen> {
           decoration: BoxDecoration(
             color: GlobalVariables.white,
           ),
-          child: /*WebView(
-          onWebViewCreated: (WebViewController webViewController){
-            _webViewCompleter.complete(webViewController);
-          },
-          initialUrl: url,
-        ),*/WebView(
-            initialUrl: pageURL ,
-          ),
+          child: WebViewWidget(controller: _controller,)
         ),
       ),
     );

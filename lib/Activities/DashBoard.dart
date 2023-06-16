@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:rate_my_app/rate_my_app.dart';
@@ -40,6 +41,7 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:intl/intl.dart';
 
+import '../controllers/notification_controller.dart';
 import 'LoginPage.dart';
 
 class BaseDashBoard extends StatefulWidget {
@@ -2119,14 +2121,15 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
          context, MaterialPageRoute(builder: (context) => BaseFacilities()));*/
     } else if (item == AppLocalizations.of(context).translate('my_gate')) {
       //Redirect to  My Gate
-      Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseMyGate(
-                      AppLocalizations.of(context).translate('my_gate'), null)))
-          .then((value) {
-        GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
-      });
+      Get.find<AppNotificationController>().goToMyGate();
+      // Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => BaseMyGate(
+      //                 AppLocalizations.of(context).translate('my_gate'), null)))
+      //     .then((value) {
+      //   GlobalFunctions.setBaseContext(dashboardScaffoldKey.currentContext!);
+      // });
     } else if (item ==
         AppLocalizations.of(context).translate('my_activities')) {
       //Redirect to  My Dues
@@ -2879,7 +2882,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       _selectedSocietyLogin!.LoggedUsername = loggedUsername;
       _selectedSocietyLogin!.isSelected = true;
       print("Flat" + _selectedSocietyLogin!.FLAT.toString());
-      GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin!);
+      await GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin!);
+      Get.find<AppNotificationController>().initGatepass();
     } else {
       //show logout Dialog
       GlobalFunctions.forceLogoutDialog(context);
