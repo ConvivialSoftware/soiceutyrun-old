@@ -6,5 +6,6 @@ import 'controllers/notification_controller.dart';
 GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
+
   Get.put(AppNotificationController(), permanent: true);
 }

@@ -16,7 +16,7 @@ class AppNotificationController extends GetxController {
     final societyId = await GlobalFunctions.getSocietyId();
     final userId = await GlobalFunctions.getUserId();
 
-    await showNotificationPermission();
+  
 
     SocietyGatepass.initialize(
         theme: GatepassTheme(
@@ -26,8 +26,8 @@ class AppNotificationController extends GetxController {
         ),
         options: NotificationOptions(
             username: username,
-            channelKey: "GatepassCallChannel",
-            channelName: "channel-Name",
+            channelKey: "societyrun_channel",
+            channelName: "societyrun_channel",
             channelGroupName: "GatepassCallChannel_group",
             channelGroupKey: "GatepassCallChannel_group",
             soundSourceDialog: "assets/audio/res_alert.mp3",
@@ -38,6 +38,7 @@ class AppNotificationController extends GetxController {
             societyId: societyId,
             userId: userId,
             username: username));
+             
   }
 
   Future<void> updateFCMToken(String token) async {
@@ -53,7 +54,7 @@ class AppNotificationController extends GetxController {
   showNotificationPermission() =>
       Get.find<GatepassController>().showNotificationPermission(
           permissionAlertTitle:
-              'Saraswat needs your permission to send notifications');
+              'Societyrun needs your permission to send notifications');
 
   refreshToken() {}
 

@@ -32,8 +32,6 @@ import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-import '../main.dart';
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -146,8 +144,9 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
       } else if (gatePassPayload.tYPE ==
           NotificationTypes.TYPE_VISITOR_VERIFY) {
         //show visitor verify notification
-        Get.find<GatepassController>()
-            .showGatepassNotification(society['data']);
+        
+        GatepassController
+            .showGatepassNotification(message.data);
       }
     }
   } catch (e) {
@@ -270,10 +269,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
     FirebaseMessaging.onMessage.listen((message) {
       randomNumber = random.nextInt(20);
-      print('randomNumber : ' + randomNumber.toString());
-      print('onMessage:message.toString()');
-      logger.wtf('notification:${message.notification?.body ?? 'NO BODY'}');
-      logger.wtf('notification:${message.notification?.title ?? 'TITLE'}');
+
       GlobalVariables.isNewlyArrivedNotification = true;
       GlobalVariables.isAlreadyTapped = false;
       _showNotification(message.data, false);
@@ -332,7 +328,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
         //show dialog
         GatepassController.showGatepassDialog(
-            payload: gatePassPayload, onRedirection: () => Get.back());
+            payload: message, onRedirection: () => Get.back());
       }
     }
   }
@@ -388,7 +384,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
           if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
             if (isInAppCallNotification) {
-              _fcm.showAlert(_ctx!, gatePassPayload);
+              _fcm.showAlert(_ctx!, payload);
             } else {
               navigate(gatePassPayload, _ctx!);
             }
@@ -411,25 +407,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
   _showNotification(Map<String, dynamic> message, bool shouldRedirect,
       {bool showLocalNotification = true}) async {
-    //SystemAlertOverlayWindow.showOverLayWindow(_isShowingWindow,prefMode);
-    print('_showNotification context : ' + _ctx.toString());
-    // bool isNewlyArrivedNotification =
-    //await GlobalFunctions.getIsNewlyArrivedNotification();
-    //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
     isGuestEntryNotification =
         await GlobalFunctions.getGuestEntryNotification();
     isDailyEntryNotification =
         await GlobalFunctions.getDailyEntryNotification();
     isInAppCallNotification = await GlobalFunctions.getInAppCallNotification();
-    print('isDailyEntryNotification : ' + isDailyEntryNotification.toString());
-    print('isGuestEntryNotification : ' + isGuestEntryNotification.toString());
-    print('isInAppCallyNotification : ' + isInAppCallNotification.toString());
-    print("After _showNotification onMessage >>>> $message");
     GatePassPayload gatePassPayload;
     Map data;
-    /*Map notification;
-    notification = message["notification"];
-    notification["click_action"]="FLUTTER_NOTIFICATION_CLICK";*/
+
     GlobalFunctions.setNotificationBackGroundData(message.toString());
     if (Platform.isIOS) {
       data = message;
@@ -462,6 +447,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
         }
       }
+      if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+        if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
+          GatepassController.showGatepassDialog(
+              payload: message, onRedirection: () => Get.back());
+
+          return;
+        }
+      }
       if (!gatePassPayload.isBackGround!) {
         //  if (GlobalVariables.isNewlyArrivedNotification) {
         // GlobalVariables.isNewlyArrivedNotification = false;
@@ -470,23 +463,17 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
               gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
             if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
-              print('_showNotification isAlreadyTapped : ' +
-                  GlobalVariables.isAlreadyTapped.toString());
               if ((gatePassPayload.vSITORTYPE ==
                       GlobalVariables.GatePass_Taxi ||
                   gatePassPayload.vSITORTYPE ==
                       GlobalVariables.GatePass_Delivery)) {
                 if (isInAppCallNotification) {
-                  // _fcm.showAlert(_ctx!, gatePassPayload);
-                  createNotificationChannelForGatePass(
-                      gatePassPayload.toJson());
+                  _fcm.showAlert(_ctx!, message);
                 }
               } else {
                 if (isGuestEntryNotification) {
                   if (isInAppCallNotification) {
-                    //_fcm.showAlert(_ctx!, gatePassPayload);
-                    createNotificationChannelForGatePass(
-                        gatePassPayload.toJson());
+                    _fcm.showAlert(_ctx!, message);
                   }
                 }
               }

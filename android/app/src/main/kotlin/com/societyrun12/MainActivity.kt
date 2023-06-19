@@ -70,7 +70,7 @@ class MainActivity : FlutterActivity() {
             val mChannel = NotificationChannel(id, name, importance)
             mChannel.description = descriptionText
 
-            val soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.alert);
+            val soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.res_alert);
             val att = AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
