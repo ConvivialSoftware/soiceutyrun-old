@@ -16,29 +16,35 @@ class AppNotificationController extends GetxController {
     final societyId = await GlobalFunctions.getSocietyId();
     final userId = await GlobalFunctions.getUserId();
 
-  
-
     SocietyGatepass.initialize(
         theme: GatepassTheme(
           primaryColor: GlobalVariables.primaryColor,
           secondaryColor: GlobalVariables.primaryColor,
           accentColor: GlobalVariables.AccentColor,
         ),
-        options: NotificationOptions(
-            username: username,
-            channelKey: "societyrun_channel",
-            channelName: "societyrun_channel",
-            channelGroupName: "GatepassCallChannel_group",
-            channelGroupKey: "GatepassCallChannel_group",
-            soundSourceDialog: "assets/audio/res_alert.mp3",
-            soundSource: "resource://raw/res_alert"),
         myGateOptions: MyGateOptions(
             block: block,
             flatNo: flatNo,
             societyId: societyId,
             userId: userId,
             username: username));
-             
+  }
+
+  initGatepassNotifications() async {
+    final username = await GlobalFunctions.getUserName();
+    SocietyGatepass.initializeNotificationOptions(NotificationOptions(
+        username: username,
+        channelKey: "societyrun_channel",
+        channelName: "societyrun_channel",
+        channelGroupName: "GatepassCallChannel_group",
+        channelGroupKey: "GatepassCallChannel_group",
+        soundSourceDialog: "assets/audio/res_alert.mp3",
+        soundSource: "resource://raw/res_alert"));
+  }
+
+  listenNotificationActions() async{
+    await initGatepass();
+    Get.find<GatepassController>().startListenNotificaionActions();
   }
 
   Future<void> updateFCMToken(String token) async {

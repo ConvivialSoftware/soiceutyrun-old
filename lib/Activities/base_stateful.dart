@@ -144,9 +144,8 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
       } else if (gatePassPayload.tYPE ==
           NotificationTypes.TYPE_VISITOR_VERIFY) {
         //show visitor verify notification
-        
-        GatepassController
-            .showGatepassNotification(message.data);
+
+        GatepassController.showGatepassNotification(message.data);
       }
     }
   } catch (e) {
@@ -272,6 +271,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
       GlobalVariables.isNewlyArrivedNotification = true;
       GlobalVariables.isAlreadyTapped = false;
+      
       _showNotification(message.data, false);
     });
 
