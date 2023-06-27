@@ -42,7 +42,7 @@ class AppNotificationController extends GetxController {
         soundSource: "resource://raw/res_alert"));
   }
 
-  listenNotificationActions() async{
+  listenNotificationActions() async {
     await initGatepass();
     Get.find<GatepassController>().startListenNotificaionActions();
   }
@@ -57,10 +57,18 @@ class AppNotificationController extends GetxController {
     // await restClient.updateGcmToken(societyId, userId, token);
   }
 
-  showNotificationPermission() =>
+  showNotificationPermission() async {
+    final bool isAllowed =
+        await GlobalFunctions.isNotificationPermissionAllowed();
+
+    if (!isAllowed) {
       Get.find<GatepassController>().showNotificationPermission(
           permissionAlertTitle:
               'Societyrun needs your permission to send notifications');
+     await GlobalFunctions.setNotificationPermissionAllowed();         
+    }
+
+  }
 
   refreshToken() {}
 

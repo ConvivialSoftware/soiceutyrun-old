@@ -151,8 +151,6 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
         'DashBoard _dashboardSacfoldKey : ' + dashboardScaffoldKey.toString());
     getExpandableListViewData(context);
 
-    // TODO: implement build
-    //  GlobalFunctions.showToast("Dashboard state page");
     return ChangeNotifierProvider<LoginDashBoardResponse>.value(
       value: Provider.of<LoginDashBoardResponse>(context),
       child: Consumer<LoginDashBoardResponse>(
@@ -2883,7 +2881,8 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
       _selectedSocietyLogin!.isSelected = true;
       print("Flat" + _selectedSocietyLogin!.FLAT.toString());
       await GlobalFunctions.saveDataToSharedPreferences(_selectedSocietyLogin!);
-      Get.find<AppNotificationController>().initGatepass();
+      await Get.find<AppNotificationController>().initGatepass();
+      await Get.find<AppNotificationController>().showNotificationPermission();
     } else {
       //show logout Dialog
       GlobalFunctions.forceLogoutDialog(context);

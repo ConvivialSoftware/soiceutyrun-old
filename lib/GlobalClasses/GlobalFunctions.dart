@@ -543,6 +543,19 @@ class GlobalFunctions {
         token);
   }
 
+  static Future<bool> isNotificationPermissionAllowed() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences!
+            .getBool(GlobalVariables.keyAllowedNotificationPermissions) ??
+        false;
+  }
+
+  static setNotificationPermissionAllowed() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences!
+        .setBool(GlobalVariables.keyAllowedNotificationPermissions, true);
+  }
+
   static backIconLayoutAndImplementation(BuildContext context, String title) {
     return Container(
       color: GlobalVariables.white,
@@ -894,7 +907,7 @@ class GlobalFunctions {
       minWidth: 400,
       format: format,
     );
-    return _imageFile?.path??'';
+    return _imageFile?.path ?? '';
   }
 
   static removeFileFromDirectory(String path) {

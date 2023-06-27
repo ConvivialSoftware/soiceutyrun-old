@@ -56,6 +56,7 @@ class GlobalVariables {
   static var keySocietyContact = "Contact";
   static var keyNotificationBackGroundData = "NotificationBackGroundData";
   static var keyShowUpdateAppDialogDate = "updateDate";
+  static var keyAllowedNotificationPermissions = "allowedNotificationPermissions";
 
   //static var appImagePath = "assets/images/ic_societyrun.png";
   static var appLogoPath = "assets/images/society_run_green.png";
