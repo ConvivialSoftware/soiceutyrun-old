@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:society_gatepass/society_gatepass.dart';
@@ -38,7 +37,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Map<String, dynamic>? receivedMessage;
 final String androidChannelIdVisitor = "1001";
 final String androidChannelIdOther = "1002";
-final String androidChannelName = "societyrun_channel";
+final String androidChannelName = "societyrun_channel_local";
 final String androidChannelDesc = "channel_for_gatepass_feature";
 
 //const String TYPE_MANUALLY_STATUS_UPDATE = "manually_status_update";
@@ -78,32 +77,13 @@ var iOSPlatformChannelSpecifics = IOSNotificationDetails();
 
 @pragma('vm:entry-point')
 Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
-  // logger.wtf(message.messageId);
-  //
   GlobalVariables.isNewlyArrivedNotification = true;
-  //GlobalFunctions.setIsNewlyArrivedNotification(true);
   GatePassPayload gatePassPayload;
-  print('myBackgroundMessageHandler before isAlreadyTapped : ' +
-      GlobalVariables.isAlreadyTapped.toString());
-  /*print('myBackgroundMessageHandler before isNewlyArrivedNotification : ' +
-      GlobalVariables.isNewlyArrivedNotification.toString());*/
-  print("myBackgroundMessageHandler onMessage >>>> ${message.notification}");
-  print(
-      "myBackgroundMessageHandler contentAvailable >>>> ${message.contentAvailable}");
-  print(
-      "myBackgroundMessageHandler sentTime >>>> ${message.sentTime.toString()}");
+
   Map data;
-  /*Map notification;
-  notification = message["notification"];
-  notification["click_action"]="FLUTTER_NOTIFICATION_CLICK";*/
+
   GlobalFunctions.setNotificationBackGroundData(message.toString());
-  print(
-      "After myBackgroundMessageHandler onMessage >>>> ${message.data.toString()}");
-  if (Platform.isIOS) {
-    data = message.data;
-  } else {
-    data = message.data;
-  }
+  data = message.data;
   try {
     String uuid = Uuid().v1();
     String payloadData = data["society"];
@@ -130,11 +110,9 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
               ? iOSPlatformChannelSpecificsForVisitor
               : iOSPlatformChannelSpecifics);
       GlobalVariables.isAlreadyTapped = false;
-      print('onMessage myBackgroundMessageHandler after isAlreadyTapped : ' +
-          GlobalVariables.isAlreadyTapped.toString());
+
       if (gatePassPayload.tYPE != NotificationTypes.TYPE_VISITOR_VERIFY) {
         Random random = new Random();
-        print('generate background randomNumber : ');
         flutterLocalNotificationsPlugin.show(
             random.nextInt(20),
             gatePassPayload.title,
@@ -151,7 +129,6 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
   } catch (e) {
     print(e);
   }
-//  SystemAlertOverlayWindow.showOverLayWindow(false,SystemWindowPrefMode.OVERLAY);
   return Future<void>.value();
 }
 
@@ -164,19 +141,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   Random random = new Random();
   int randomNumber = 1;
 
-/*
-  String _platformVersion = 'Unknown';
-  bool _isShowingWindow = false;
-  bool _isUpdatedWindow = false;
-  SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
-
-*/
-
   static BuildContext get getCtx => _ctx!;
-  static const MethodChannel _channel =
-      MethodChannel('com.societyrun12/create_channel');
-  static const MethodChannel _channelForGatePass =
-      MethodChannel('com.societyrun12/create_channel_gatepass');
 
   static void setCtx(BuildContext currentContext) {
     _ctx = currentContext;
@@ -187,60 +152,14 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
-    print('call base init');
-    _fcm.setListeners();
-    setState(() {
       _ctx = this.context;
-    });
     firebaseCloudMessagingListeners();
-    createNotificationChannel();
-    /* _initPlatformState();
-    _requestPermissions();
-    SystemAlertWindow.registerOnClickListener(SystemAlertOverlayWindow.callBackFunction);*/
   }
-
-  @override
+   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _ctx = this.context;
-    print('didChangeDependencies : ' + context.toString());
-    if (!mounted) {
-      print('UnMounted : ' + mounted.toString());
-      print('UnMounted context : ' + context.toString());
-    } else {
-      print('Mounted : ' + mounted.toString());
-      print('Mounted context : ' + context.toString());
-    }
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-/*
-  Future<void> _initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await SystemAlertWindow.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
-  Future<void> _requestPermissions() async {
-    await SystemAlertWindow.requestPermissions(prefMode: prefMode);
-  }*/
 
   Future<void> firebaseCloudMessagingListeners() async {
     var initializationSettingsAndroid =
@@ -271,52 +190,23 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
       GlobalVariables.isNewlyArrivedNotification = true;
       GlobalVariables.isAlreadyTapped = false;
-      
+
       _showNotification(message.data, false);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('onMessageOpened: $message');
       GlobalVariables.isNewlyArrivedNotification = true;
       GlobalVariables.isAlreadyTapped = false;
       showDialogAlertOnOpen(message.data);
     });
 
     FirebaseMessaging.instance.getInitialMessage().then((value) {
-      print('onInitialMessage: $value');
-      showDialogAlertOnOpen(value!.data);
+      if (value != null) {
+        showDialogAlertOnOpen(value.data);
+      }
     });
 
     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
-
-    /*_fcm.firebaseMessaging.configure(
-      onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
-      onMessage: (Map<String, dynamic> message) async {
-        print('onMessage before isAlreadyTapped : ' +
-            GlobalVariables.isAlreadyTapped.toString());
-        GlobalVariables.isAlreadyTapped = false;
-        print('onMessage after isAlreadyTapped : ' +
-            GlobalVariables.isAlreadyTapped.toString());
-        print("onMessage >>>> $message");
-        GlobalVariables.isNewlyArrivedNotification = true;
-        //GlobalFunctions.setIsNewlyArrivedNotification(true);
-        _showNotification(message, false);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch >>>> $message");
-        GlobalVariables.isNewlyArrivedNotification = true;
-        //GlobalFunctions.setIsNewlyArrivedNotification(true);
-        //GlobalFunctions.showToast("onLaunch");
-        _showNotification(message, true);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume >>>> $message");
-        GlobalVariables.isNewlyArrivedNotification = true;
-        //GlobalFunctions.setIsNewlyArrivedNotification(true);
-        //GlobalFunctions.showToast("OnResume");
-        _showNotification(message, true);
-      },
-    );*/
   }
 
   showDialogAlertOnOpen(Map<String, dynamic> message) {
@@ -334,8 +224,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   }
 
   Future selectNotification(String? payload) async {
-    print('selectNotification context : ' + _ctx.toString());
-    print('In selectNotification method');
     try {
       // bool isNewlyArrivedNotification = await GlobalFunctions.getIsNewlyArrivedNotification();
       //print('sharedPref isNewlyArrivedNotification : '+isNewlyArrivedNotification.toString());
@@ -350,12 +238,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
       Map<String, dynamic> temp = json.decode(payload!);
       GatePassPayload gatePassPayload = GatePassPayload.fromJson(temp);
-      print('selectNotification isNewlyArrivedNotification : ' +
-          GlobalVariables.isNewlyArrivedNotification.toString());
-      print('selectNotification isAlreadyTapped : ' +
-          GlobalVariables.isAlreadyTapped.toString());
-      print('selectNotification isBackGround : ' +
-          gatePassPayload.isBackGround.toString());
 
       DBNotificationPayload _dbNotificationPayload =
           DBNotificationPayload.fromJson(temp);
@@ -376,8 +258,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
         }
       }
       if (!GlobalVariables.isAlreadyTapped) {
-        print('IF selectNotification isAlreadyTapped : ' +
-            GlobalVariables.isAlreadyTapped.toString());
         GlobalVariables.isAlreadyTapped = true;
 
         if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
@@ -847,41 +727,6 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           new MaterialPageRoute(
               builder: (BuildContext context) => BaseDashBoard()),
           (Route<dynamic> route) => false);
-    }
-  }
-
-  Future<void> createNotificationChannel() async {
-    Map<String, String> channelMap = {
-      "id": androidChannelIdVisitor,
-      "name": androidChannelName,
-      "description": androidChannelDesc,
-    };
-    try {
-      await _channel.invokeMethod('createNotificationChannel', channelMap);
-      setState(() {
-        //_statusText = _finished;
-      });
-    } on PlatformException catch (e) {
-      //_statusText = _error;
-      print('createNotificationChannel' + e.toString());
-    }
-  }
-
-  Future<void> createNotificationChannelForGatePass(
-      Map<String, dynamic> channelMap) async {
-    try {
-      await _channelForGatePass
-          .invokeMethod('createNotificationChannelForGatePass', channelMap)
-          .then((value) {
-        setState(() {
-          print("createNotificationChannelForGatePass");
-          print("Response : $value");
-          GlobalFunctions.showToast("$value");
-        });
-      });
-    } on PlatformException catch (e) {
-      //_statusText = _error;
-      print('createNotificationChannelForGatePass' + e.toString());
     }
   }
 }
