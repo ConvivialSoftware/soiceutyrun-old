@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:external_path/external_path.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -98,6 +99,14 @@ class GlobalFunctions {
           Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken);
     }
     return "";
+  }
+
+  static getGCMToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    if (token?.isNotEmpty ?? false) {
+      saveFCMToken(token!);
+    }
+    return token;
   }
 
   static getPassword() async {

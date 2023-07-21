@@ -537,7 +537,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
   }
 
   void userLogin(String username, String password, BuildContext context) async {
-    fcmToken = await GlobalFunctions.getFCMToken();
+    fcmToken = await GlobalFunctions.getGCMToken();
     final dio = Dio();
     final restClient = RestClient(dio);
     //  var date = GlobalFunctions.getAppLanguage();
