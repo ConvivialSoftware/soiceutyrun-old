@@ -278,19 +278,21 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getAllSocietyStaffData(String socId) async {
-    // TODO: implement getStaffData
-    ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
+  Future<DataResponse> getAllSocietyStaffData(
+      String socId, String block, String flat) async {
+    //todo change flat
 
-    FormData formData = FormData.fromMap({GlobalVariables.societyId: socId});
-    print(GlobalVariables.societyId + ": " + socId);
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.block: block,
+      GlobalVariables.flat: flat
+    });
 
-    print('baseurl : ' + baseUrl! + GlobalVariables.unitStaffAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitStaffAPI,
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLGatepass + GlobalVariables.unitStaffAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
-    print('value of getStaffData : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 

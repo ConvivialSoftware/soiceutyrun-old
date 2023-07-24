@@ -1062,9 +1062,12 @@ class MyUnitState extends State<BaseMyUnit>
           case 1:
             {
               if (!isHouseholdTabAPICall) {
-                Provider.of<UserManagementResponse>(context, listen: false)
-                    .getUnitMemberData()
-                    .then((value) {});
+                Future.wait([
+                  Provider.of<UserManagementResponse>(context, listen: false)
+                      .getUnitMemberData(),
+                  Provider.of<UserManagementResponse>(context, listen: false)
+                      .getStaffList()
+                ]);
               }
             }
             break;

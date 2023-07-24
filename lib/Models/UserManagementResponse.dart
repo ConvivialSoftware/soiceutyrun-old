@@ -251,7 +251,6 @@ class UserManagementResponse extends ChangeNotifier {
       if (value.status!) {
 
         memberListForAdmin = List<Member>.from(value.members!.map((i) => Member.fromJson(i)));
-        print('before memberList length : ' + memberList.length.toString());
         staffListForAdmin = List<Staff>.from(value.staff!.map((i) => Staff.fromJson(i)));
         vehicleListForAdmin =
             List<Vehicle>.from(value.vehicles!.map((i) => Vehicle.fromJson(i)));
@@ -346,6 +345,32 @@ class UserManagementResponse extends ChangeNotifier {
     notifyListeners();
     return ledgerList;
   }
+  Future<dynamic> getStaffList({String? block, String? flat}) async {
+    staffList.clear();
+    isLoading = true;
+    final dio = Dio();
+    final assignFlat = flat ?? await GlobalFunctions.getFlat();
+    final assignBlock = block ?? await GlobalFunctions.getBlock();
+
+    final RestClient restClient = RestClient(dio);
+    String societyId = await GlobalFunctions.getSocietyId();
+    await restClient
+        .getAllSocietyStaffData(societyId, assignBlock, assignFlat)
+        .then((value) {
+      staffList.clear();
+      List<dynamic> _list = value.data ?? [];
+      final allStaff = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
+     
+      staffList = allStaff
+          .where((e) =>
+              e.TYPE == 'Helper' &&
+              e.ASSIGN_FLATS!.split(',').contains('$assignBlock $assignFlat'))
+          .toList();
+      isLoading = false;
+      notifyListeners();
+    });
+  }
+
 
   Future<String> getUserManagementDashboard() async {
     Dio dio = Dio();

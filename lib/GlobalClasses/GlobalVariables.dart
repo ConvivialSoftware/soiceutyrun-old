@@ -203,7 +203,7 @@ class GlobalVariables {
   static const BaseURL = "https://societyrun.com/Flutter/";
  // static const BaseURLAndroid = "https://societyrun.com/Android/";
   static const BaseRazorPayURL = "https://api.razorpay.com/";
-
+  static const BaseURLGatepass = "https://api.societyrun.com/Gatepass/";
   /*Api Name for BaseURL*/
   static const LoginAPI = "Api";
   static const AllSocietyAPI = "Api/login";
@@ -214,7 +214,7 @@ class GlobalVariables {
   static const newPasswordAPI = "Api/newpwd";
   static const unitMemberAPI = "Members";
   static const unitAddMemberAPI = "Members/insert";
-  static const unitStaffAPI = "staff/staff_list";
+  static const unitStaffAPI = "Userside/staff_list";
   static const unitVehicleAPI = "Vehicle";
   static const unitAddVehicleAPI = "Vehicle/insert";
   static const ComplaintsAPI = "Helpdesk";

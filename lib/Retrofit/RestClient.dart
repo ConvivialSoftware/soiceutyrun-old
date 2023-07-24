@@ -98,7 +98,9 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.unitStaffAPI)
   Future<DataResponse> getAllSocietyStaffData(
-      @Field(GlobalVariables.societyId) String socId);
+      @Field(GlobalVariables.societyId) String socId,
+      @Field(GlobalVariables.block) String block,
+      @Field(GlobalVariables.flat) String flat);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.unitVehicleAPI)
