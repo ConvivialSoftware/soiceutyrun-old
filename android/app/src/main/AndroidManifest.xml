@@ -6,12 +6,22 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE " />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
     <uses-permission
         android:name="android.permission.REQUEST_INSTALL_PACKAGES"
         tools:node="remove" />
+
+<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>        
+
     <application
         android:name="com.societyrun12.Application"
         android:label="SocietyRun"
@@ -67,6 +77,8 @@
 
             android:exported="true"
             tools:node="merge"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             >
             <!--android:showWhenLocked="true"
             android:turnScreenOn="true"-->
@@ -113,5 +125,11 @@
             &lt;!&ndash; changes this number to configure connection timeout for the upload http request &ndash;&gt;
             <meta-data android:name="com.bluechilli.flutteruploader.UPLOAD_CONNECTION_TIMEOUT_IN_SECONDS" android:value="3600" />
         </provider>-->
+        <service
+            android:name="me.carda.awesome_notifications.services.ForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall"
+            android:stopWithTask="true" />
     </application>
 </manifest>

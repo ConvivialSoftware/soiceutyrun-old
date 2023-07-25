@@ -76,6 +76,7 @@ class AppNotificationController extends GetxController {
       Get.find<GatepassController>().showTestNotification();
 
   goToMyGate() {
+    initGatepass();
     final isAdmin = false;
     Get.to(() => MyGatePage(
         pageName: 'My Gate', isAdmin: isAdmin, type: 'helper', vid: '2548'));

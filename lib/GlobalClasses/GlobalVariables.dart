@@ -578,7 +578,8 @@ class GatePassFields {
   static const ID = "ID";
   static const COMMENT = "COMMENT";
   static const STATUS = "STATUS";
-  static const GCM_ID="GCM_ID";
+  static const GCM_ID = "GCM_ID";
+  static bool showCallUi = false;
 }
 
 class NotificationTypes{

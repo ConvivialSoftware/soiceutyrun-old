@@ -122,7 +122,7 @@ packages:
     source: hosted
     version: "3.0.0"
   awesome_notifications:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: awesome_notifications
       sha256: "6482ced1a57d0cb7eaecafdeb8ac5ef8547dfd39e5e6af7b24e220b8fd888a6e"
@@ -1393,7 +1393,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "2889e904b320e29263ad65a40b98b2eac5a10f27"
+      resolved-ref: "5ad24cbadc2f4acc9c7df71cdaab728bdac32a8c"
       url: "https://zapniroshana@bitbucket.org/Convivialsoln/society_gatepass.git"
     source: git
     version: "0.0.1"

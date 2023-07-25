@@ -26,6 +26,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/DBNotificatioPayload.dart';
 import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
+import 'package:societyrun/controllers/notification_controller.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 //import 'package:system_alert_window/system_alert_window.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -152,10 +153,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
-      _ctx = this.context;
+    _ctx = this.context;
     firebaseCloudMessagingListeners();
   }
-   @override
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _ctx = this.context;
@@ -330,7 +332,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
         if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
           GatepassController.showGatepassDialog(
-              payload: message, onRedirection: () => Get.back());
+              payload: message,
+              onRedirection: () {
+                Get.back();
+                Get.find<AppNotificationController>().goToMyGate();
+              });
 
           return;
         }
@@ -614,19 +620,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
             (Route<dynamic> route) => false);
       }*/
     } else if (temp.tYPE == NotificationTypes.TYPE_FVISITOR) {
-      /*final result = await */ Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),
-                  temp.vID)));
-      /*if (result == null) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => BaseDashBoard()),
-            (Route<dynamic> route) => false);
-      }*/
+      Get.find<AppNotificationController>().goToMyGate();
     } else if (temp.tYPE == NotificationTypes.TYPE_SInApp) {
       /*final result = await */ Navigator.push(
           context,

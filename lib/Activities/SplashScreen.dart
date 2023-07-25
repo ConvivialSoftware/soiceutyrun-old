@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:society_gatepass/society_gatepass.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/LoginPage.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
@@ -35,8 +37,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Get.find<AppNotificationController>().listenNotificationActions();
-    Timer(Duration(seconds: 3), ()=>navigateToPage(context));
+    AwesomeNotifications().actionStream.listen((receivedNotification) async {
+      await Get.find<AppNotificationController>().initGatepass();
+      if (receivedNotification.channelKey == "societyrun_channel") {
+        if (receivedNotification.buttonKeyPressed.isEmpty) {
+          GatePassFields.showCallUi = true;
+        }
+      }
+      NotificationController.onActionReceivedMethod(receivedNotification, () {
+        navigateToPage(context);
+
+      });
+    });
+    Timer(Duration(seconds: 3), () {
+      if (!GatePassFields.showCallUi) {
+        navigateToPage(context);
+      }
+    });
   }
 
   navigateToPage(BuildContext context) {
