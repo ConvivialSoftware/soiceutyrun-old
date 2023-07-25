@@ -121,6 +121,8 @@ class GlobalVariables {
   static var expenseIconPath = "assets/other_assets/expense.svg";
   static var payTMIconPath = "assets/other_assets/paytm.png";
   static var razorPayIconPath = "assets/other_assets/razorpay.png";
+  static var upiPayIconPath = "assets/other_assets/upi.jpeg";
+  static var ccAvenuePayIconPath = "assets/images/ccavenue.jpg";
   static var appSettingsIconPath = "assets/other_assets/app_settings.svg";
   static var inAppCallIconPath = "assets/other_assets/in_app_call.svg";
   static var dailyHelpsIconPath = "assets/other_assets/daily_helps.svg";
@@ -284,6 +286,7 @@ class GlobalVariables {
   static const maintenanceStaffRoleAPI = "Gatepassapp/role";
   static const staffDeleteAPI = "staff/staff_delete";
   static const tenantMoveOutAPI = "Members/tenant_moveout";
+  static const getccAveneuParams = "AndroidApi/ccavenuet_request";
 
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
@@ -547,6 +550,7 @@ class GlobalVariables {
   static const society_member = "society_member";
   static const emergency = "emergency";
   static const Role = "Role";
+
 }
 
 class BannerType{
@@ -784,4 +788,30 @@ class AppUserPermission{
   static bool isUserCommitteePhonePermission=false;
   static var userCommitteePhonePermission = '';*/
 
+}
+class AvenueConst {
+  static const tid = 'tid';
+  static const merchantId = 'merchant_id';
+  static const currency = 'currency';
+  static const language = 'language';
+  static const billingName = 'billing_name';
+  static const billingAddress = 'billing_address';
+  static const billingCity = 'billing_city';
+  static const billingState = 'billing_state';
+  static const billingZip = 'billing_zip';
+  static const billingCountry = 'billing_country';
+  static const billingTel = 'billing_tel';
+  static const billingEmail = 'billing_email';
+  static const merchantParam1 = 'merchant_param1';
+  static const merchantParam2 = 'merchant_param2';
+  static const merchantParam3 = 'merchant_param3';
+  static const merchantParam4 = 'merchant_param4';
+  static const promoCode = 'promo_code';
+  static const custIdentifier = 'customer_identifier';
+  static const integrationType = 'integration_type';
+  static const amount = 'amount';
+  static const subAccId = 'sub_acc_id';
+  static const subAccountId = 'sub_account_id';
+  static const appName = 'app_name';
+  static const userId = 'user_id';
 }

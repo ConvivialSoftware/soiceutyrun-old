@@ -9,6 +9,7 @@ import 'package:societyrun/Models/LedgerResponse.dart';
 import 'package:societyrun/Models/MonthExpensePendingRequestResponse.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
+import 'package:societyrun/Models/ccavenue_response.dart';
 import 'RestAPI.dart';
 
 @RestApi(baseUrl: GlobalVariables.BaseURLERP)
@@ -148,7 +149,22 @@ abstract class RestClientERP {
   @FormUrlEncoded()
   @POST(GlobalVariables.amountCalculationAPI)
   Future<DataResponse> amountCalculation(@Field("SOCIETY_ID") String socId,@Field("INVOICE_NO") String invoiceNo,@Field("AMOUNT") String amount);
-
+  @FormUrlEncoded()
+  @POST(GlobalVariables.getccAveneuParams)
+  Future<AvenueResponse> getAvenueParams(
+      @Field(AvenueConst.tid) String tid,
+      @Field(AvenueConst.merchantId) String merchantId,
+      @Field(AvenueConst.billingName) String name,
+      @Field(AvenueConst.billingAddress) String address,
+      @Field(AvenueConst.billingCity) String city,
+      @Field(AvenueConst.billingTel) String tel,
+      @Field(AvenueConst.billingEmail) String email,
+      @Field(AvenueConst.merchantParam1) String invoiceNo,
+      @Field(AvenueConst.merchantParam2) String societyId,
+      @Field(AvenueConst.merchantParam3) String block,
+      @Field(AvenueConst.amount) String amount,
+      @Field(AvenueConst.subAccId) String subAccId,
+      );
 }
 
 

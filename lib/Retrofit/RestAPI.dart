@@ -17,6 +17,7 @@ import 'package:societyrun/Models/PaymentCharges.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/StatusMsgResponse.dart';
 import 'package:societyrun/Models/VehicleResponse.dart';
+import 'package:societyrun/Models/ccavenue_response.dart';
 import 'package:societyrun/Models/razor_pay_order_request.dart';
 import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
@@ -4199,5 +4200,59 @@ class RestAPI
     final value = _result.data;
     print('value of tenantMoveOut : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
+  }
+  @override
+  Future<AvenueResponse> getAvenueParams(
+      String tid,
+      String merchantId,
+      String name,
+      String address,
+      String city,
+      String tel,
+      String email,
+      String amount,
+      String invoice,
+      String societyId,
+      String block,
+      String subAccId,
+      ) async {
+    final userId = await GlobalFunctions.getUserId();
+    final billinAddress = await GlobalFunctions.getSocietyName();
+
+    FormData formData = FormData.fromMap({
+      AvenueConst.tid: tid,
+      AvenueConst.language: 'EN',
+      AvenueConst.currency: 'INR',
+      AvenueConst.billingName: name,
+      AvenueConst.billingAddress: billinAddress,
+      AvenueConst.billingCity: 'Mumbai',
+      AvenueConst.billingState: 'Maharashtra ',
+      AvenueConst.billingZip: '411018',
+      AvenueConst.billingCountry: 'India',
+      AvenueConst.billingTel: tel,
+      AvenueConst.billingEmail: email,
+      AvenueConst.merchantParam1: invoice,
+      AvenueConst.merchantParam2: societyId,
+      AvenueConst.merchantParam3: block,
+      AvenueConst.promoCode: '',
+      AvenueConst.custIdentifier: '',
+      AvenueConst.integrationType: 'iframe_normal',
+      AvenueConst.amount: amount,
+      AvenueConst.userId: userId,
+      AvenueConst.subAccId: subAccId,
+      AvenueConst.subAccountId: subAccId,
+      AvenueConst.appName: 'SocietyrunSociety',
+    });
+
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLERP + GlobalVariables.getccAveneuParams,
+        options: restClientOption(),
+        data: formData);
+
+    if (_result.statusCode == 200) {
+      final value = _result.data;
+      return AvenueResponse.fromJson(value);
+    }
+    return AvenueResponse(errorMessage: 'Error connecting CCAvenue');
   }
 }

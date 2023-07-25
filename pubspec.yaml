@@ -125,6 +125,7 @@ flutter:
     - assets/images/society_run_green.png
     - assets/images/society_run_green.svg
     - assets/images/societyrun_icon.png
+    - assets/images/ccavenue.jpg
     - i18n/en.json
     - i18n/hi.json
     - assets/other_assets/component_user_profile.png

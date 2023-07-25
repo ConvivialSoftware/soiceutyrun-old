@@ -1,33 +1,36 @@
-class PaymentChargesResponse{
-
+class PaymentChargesResponse {
   List<dynamic>? Razorpay;
   List<dynamic>? Paytm;
+  List<dynamic>? UPI;
+  List<dynamic>? Avenue;
   String? message;
   bool? status;
 
-  PaymentChargesResponse({this.Razorpay, this.Paytm, this.message, this.status});
+  PaymentChargesResponse(
+      {this.Razorpay,
+      this.Paytm,
+      this.UPI,
+      this.message,
+      this.Avenue,
+      this.status});
 
-  factory PaymentChargesResponse.fromJson(Map<String,dynamic> map){
-
+  factory PaymentChargesResponse.fromJson(Map<String, dynamic> map) {
     return PaymentChargesResponse(
         Razorpay: map["Razorpay"],
         Paytm: map["Paytm"],
-      status: map["status"],
-      message: map["message"]
-    );
-
+        UPI: map["UPI"],
+        Avenue: map["CCAvenue"],
+        status: map["status"],
+        message: map["message"]);
   }
-
 }
 
-class PaymentPerGateway{
-
+class PaymentPerGateway {
   List<dynamic>? Preferred_Method;
   List<dynamic>? Other_Method;
   PaymentPerGateway({this.Preferred_Method, this.Other_Method});
 
-  factory PaymentPerGateway.fromJson(Map<String,dynamic> map){
-
+  factory PaymentPerGateway.fromJson(Map<String, dynamic> map) {
     return PaymentPerGateway(
       Preferred_Method: map["Preferred_Method"],
       Other_Method: map["Other_Method"],
@@ -36,14 +39,12 @@ class PaymentPerGateway{
   }
 }
 
-class PaymentMethod{
-
-  String? variable,value;
+class PaymentMethod {
+  String? variable, value;
 
   PaymentMethod({this.variable, this.value});
 
-  factory PaymentMethod.fromJson(Map<String,dynamic> map){
-
+  factory PaymentMethod.fromJson(Map<String, dynamic> map) {
     return PaymentMethod(
       variable: map["variable"],
       value: map["value"],

@@ -986,6 +986,13 @@ class GlobalFunctions {
 
     return newDate;
   }
+  static String getFormattedDateForPayment(String date) {
+    String newDate = '';
+    var dFormat = DateFormat('MMMM yyyy');
+    newDate = dFormat.format(DateTime.parse(date));
+
+    return newDate;
+  }
 
   static String getCurrentDate(String format) {
     String newDate;
@@ -1749,4 +1756,213 @@ class GlobalFunctions {
     bool emailValid = RegExp(p).hasMatch(email);
     return emailValid;
   }
+
+  static paymentSuccessDialog(BuildContext context, String paymentId,
+      {VoidCallback? onCompleted}) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  width: MediaQuery.of(context).size.width / 1.2,
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                  // height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: AppIconButton(
+                          Icons.close,
+                          iconColor: GlobalVariables.primaryColor,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Container(
+                        //color: GlobalVariables.grey,
+                        child: AppAssetsImage(
+                          GlobalVariables.successIconPath,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
+                          //imageColor: GlobalVariables.green,
+                        ),
+                      ),
+                      Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('successful_payment'),
+                              fontSize: GlobalVariables.textSizeSMedium,
+                              fontWeight: FontWeight.bold,
+                              textColor: GlobalVariables.black)),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      paymentId.isEmpty
+                          ? const SizedBox()
+                          : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: text(
+                                AppLocalizations.of(context)
+                                    .translate('transaction_id'),
+                                textColor: GlobalVariables.grey,
+                                fontSize: GlobalVariables.textSizeSMedium,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: text(paymentId.toString(),
+                                textColor: GlobalVariables.primaryColor,
+                                fontSize: GlobalVariables.textSizeSMedium,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        child: text(
+                            AppLocalizations.of(context)
+                                .translate('thank_you_payment'),
+                            textColor: GlobalVariables.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }));
+
+    onCompleted?.call();
+  }
+
+  static paymentFailureDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                  //height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: AppIconButton(
+                          Icons.close,
+                          iconColor: GlobalVariables.primaryColor,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Container(
+                        child: AppAssetsImage(
+                          GlobalVariables.failureIconPath,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('failure_to_pay'),
+                              textColor: GlobalVariables.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeMedium)),
+
+                      /* Container(
+                                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('order_amount'))),*/
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('payment_failed_try_again'),
+                              textColor: GlobalVariables.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeSMedium)),
+                    ],
+                  ),
+                ),
+              );
+            }));
+  }
+
+  static noResponseDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: GlobalVariables.transparent,
+                  // width: MediaQuery.of(context).size.width/3,
+                  //height: MediaQuery.of(context).size.height/4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: AppIconButton(
+                          Icons.close,
+                          iconColor: GlobalVariables.primaryColor,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Container(
+                        child: AppAssetsImage(
+                          GlobalVariables.failureIconPath,
+                          imageWidth: 80.0,
+                          imageHeight: 80.0,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: text(
+                              AppLocalizations.of(context)
+                                  .translate('failure_to_pay'),
+                              textColor: GlobalVariables.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeMedium)),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                          child: text('No payment status received',
+                              textColor: GlobalVariables.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: GlobalVariables.textSizeSMedium)),
+                    ],
+                  ),
+                ),
+              );
+            }));
+  }
 }
+
