@@ -206,8 +206,8 @@ flutter:
     - assets/other_assets/refer.svg
     - assets/other_assets/rate.svg
     - assets/other_assets/already_paid.png
-    #- assets/other_assets/user_round.svg
     - assets/other_assets/user_management.svg
+    - shorebird.yaml
   fonts:
     - family: sans-serif
       fonts:
