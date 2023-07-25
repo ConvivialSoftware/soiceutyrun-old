@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:external_path/external_path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -1016,10 +1017,28 @@ class GlobalFunctions {
     }
     return status;
   }
+  static Future<bool> isAndroidSDKBelow33() async {
+    if (Platform.isAndroid) {
+      final info = await DeviceInfoPlugin().androidInfo;
+      if (info.version.sdkInt < 33) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   static Future<bool> askPermission(Permission permission) async {
+    ///check permission is photos
+    /// When running on Android T and above: Read image files from external storage
+    /// When running on Android < T: Nothing
+    Permission requestedPermission = permission;
+    if (requestedPermission == Permission.storage) {
+      if (!await isAndroidSDKBelow33()) {
+        requestedPermission = Permission.photos;
+      }
+    }
     bool status = false;
-    await permission.request().then((value) {
+    await requestedPermission.request().then((value) {
       if (value.isGranted) {
         status = true;
       }
