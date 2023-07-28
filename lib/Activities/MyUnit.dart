@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
@@ -8,7 +9,6 @@ import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/DisplayTenantInfo.dart';
 import 'package:societyrun/Activities/Dues.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/StaffCategory.dart';
 import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
@@ -19,6 +19,7 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:societyrun/controllers/notification_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AddAgreement.dart';
@@ -356,11 +357,12 @@ class MyUnitState extends State<BaseMyUnit>
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              BaseStaffCategory(false, "Staff")));
+                  Get.find<AppNotificationController>().goToStaffTab();
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             BaseStaffCategory(false, "Staff")));
                 },
                 child: smallTextContainerOutlineLayout(
                   AppLocalizations.of(context).translate('add'),

@@ -115,8 +115,6 @@ class MyGateState extends State<BaseMyGate>
     if (widget.pageName != null) {
       redirectToPage(widget.pageName!);
     }
-    print('after build');
-    // TODO: implement build
     return ChangeNotifierProvider<GatePass>.value(
       value: Provider.of(context),
       child: Consumer<GatePass>(

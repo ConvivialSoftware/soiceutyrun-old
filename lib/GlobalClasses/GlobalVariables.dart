@@ -251,7 +251,7 @@ class GlobalVariables {
   static const assignComplaintsAPI = "Helpdesk/assigncomplaints";
   static const gatePassWrongEntryAPI = "Gatepass/wrong_entry";
   static const deleteExpectedVisitorAPI = "Gatepass/schedulevisitor_delete";
-  static const staffCountAPI = "staff/staffcnt";
+  static const staffCountAPI = "Userside/staffcnt";
   static const staffRoleDetailsAPI = "staff/staffrole";
   static const addStaffRattingAPI = "staff/add_rating";
   static const addHouseholdAPI = "staff/add_household";

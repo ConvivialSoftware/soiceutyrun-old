@@ -1981,7 +1981,7 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.staffCountAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.staffCountAPI,
+    final Response _result = await _dio.post(GlobalVariables.BaseURLGatepass!+GlobalVariables.staffCountAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;

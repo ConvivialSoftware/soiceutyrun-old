@@ -65,9 +65,8 @@ class AppNotificationController extends GetxController {
       Get.find<GatepassController>().showNotificationPermission(
           permissionAlertTitle:
               'Societyrun needs your permission to send notifications');
-     await GlobalFunctions.setNotificationPermissionAllowed();         
+      await GlobalFunctions.setNotificationPermissionAllowed();
     }
-
   }
 
   refreshToken() {}
@@ -80,5 +79,20 @@ class AppNotificationController extends GetxController {
     final isAdmin = false;
     Get.to(() => MyGatePage(
         pageName: 'My Gate', isAdmin: isAdmin, type: 'helper', vid: '2548'));
+  }
+
+  goToStaffCategory(String roleName) {
+    Get.put(MyGateController());
+    Get.to(() => StaffCategoryPage(
+          roleName: roleName,
+        ));
+  }
+
+  goToStaffTab() {
+    initGatepass();
+    final isAdmin = false;
+    Get.to(() => MyGatePage(
+        pageName: 'My Gate', isAdmin: isAdmin, type: 'helper', vid: '2548'));
+    Get.put(MyGateController()).setSelectedTab(1);
   }
 }

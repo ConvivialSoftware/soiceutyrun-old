@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:societyrun/Activities/StaffListPerCategory.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -11,15 +11,13 @@ import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
-
+import 'package:societyrun/controllers/notification_controller.dart';
 
 class BaseStaffCategory extends StatefulWidget {
-
-  bool isHideAppBar=false;
+  bool isHideAppBar = false;
   String type;
 
-
-  BaseStaffCategory(this.isHideAppBar,this.type);
+  BaseStaffCategory(this.isHideAppBar, this.type);
 
   @override
   State<StatefulWidget> createState() {
@@ -29,7 +27,6 @@ class BaseStaffCategory extends StatefulWidget {
 }
 
 class StaffCategoryState extends State<BaseStaffCategory> {
-
   ProgressDialog? _progressDialog;
   List<StaffCount>? _staffListCount = <StaffCount>[];
 
@@ -49,16 +46,17 @@ class StaffCategoryState extends State<BaseStaffCategory> {
 
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
     return Builder(
       builder: (context) => Scaffold(
         backgroundColor: GlobalVariables.veryLightGray,
         //resizeToAvoidBottomPadding: false,
-        appBar: !widget.isHideAppBar ? CustomAppBar(
-          title: AppLocalizations.of(context).translate('staff_category'),
-        ):null,
-        body:  getStaffCategoryLayout(),
+        appBar: !widget.isHideAppBar
+            ? CustomAppBar(
+                title: AppLocalizations.of(context).translate('staff_category'),
+              )
+            : null,
+        body: getStaffCategoryLayout(),
       ),
     );
   }
@@ -66,42 +64,37 @@ class StaffCategoryState extends State<BaseStaffCategory> {
   getStaffCategoryLayout() {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 180.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
         getStaffCategoryListDataLayout(),
       ],
     );
   }
 
   getStaffCategoryListDataLayout() {
-    return _staffListCount!.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          0, 16, 0, 0),
-      child: Builder(
-          builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
-            itemCount: _staffListCount!.length,
-            itemBuilder: (context, position) {
-              return getStaffCategoryListItemLayout(position);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
-    ):Container();
+    return _staffListCount!.length > 0
+        ? Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: _staffListCount!.length,
+                      itemBuilder: (context, position) {
+                        return getStaffCategoryListItemLayout(position);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : Container();
   }
 
   getStaffCategoryListItemLayout(int position) {
     return InkWell(
-      onTap: () async {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    BaseStaffListPerCategory(_staffListCount![position].ROLE!,widget.type,)));
-      },
+      onTap: () => Get.find<AppNotificationController>()
+          .goToStaffCategory(_staffListCount![position].ROLE ?? ''),
       child: AppContainer(
         isListItem: true,
-       // width: MediaQuery.of(context).size.width / 1.1,
+        // width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           children: [
             Row(
@@ -115,11 +108,15 @@ class StaffCategoryState extends State<BaseStaffCategory> {
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: text(_staffListCount![position].Role_count,fontSize: GlobalVariables.textSizeSmall),
+                  child: text(_staffListCount![position].Role_count,
+                      fontSize: GlobalVariables.textSizeSmall),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: AppIcon(Icons.arrow_forward_ios,iconColor: GlobalVariables.lightGray,),
+                  child: AppIcon(
+                    Icons.arrow_forward_ios,
+                    iconColor: GlobalVariables.lightGray,
+                  ),
                 ),
               ],
             ),
@@ -135,13 +132,12 @@ class StaffCategoryState extends State<BaseStaffCategory> {
     String societyId = await GlobalFunctions.getSocietyId();
 
     _progressDialog!.show();
-    restClient.staffCount(societyId,'Staff').then((value) {
+    restClient.staffCount(societyId, 'Staff').then((value) {
       _progressDialog!.dismiss();
       List<dynamic> _list = value.data!;
-      _staffListCount = List<StaffCount>.from(_list.map((i)=>StaffCount.fromJson(i)));
+      _staffListCount =
+          List<StaffCount>.from(_list.map((i) => StaffCount.fromJson(i)));
       setState(() {});
     });
-
   }
-
 }
