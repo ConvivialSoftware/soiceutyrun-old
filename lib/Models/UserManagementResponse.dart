@@ -206,9 +206,9 @@ class UserManagementResponse extends ChangeNotifier {
   }
 
   getAllBillData(String? block, String? flat) async {
-    if (billList.length == 0) {
-      isLoading = true;
-      notifyListeners();
+    if (block == null && flat == null) {
+      block = await GlobalFunctions.getBlock();
+      flat = await GlobalFunctions.getFlat();
     }
     final dio = Dio();
     final RestClientERP restClientERP =
@@ -227,7 +227,7 @@ class UserManagementResponse extends ChangeNotifier {
 
       isLoading = false;
       notifyListeners();
-      getLedgerData(null, block ?? '', flat ?? '');
+      // getLedgerData(null, block ?? '', flat ?? '');
     });
   }
 

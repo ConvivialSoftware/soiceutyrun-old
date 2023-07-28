@@ -231,6 +231,7 @@ class GlobalVariables {
   static const CommitteeDirectoryAPI = "View_directory/commitee";
   static const NeighboursDirectoryAPI = "View_directory/society_member";
   static const EmergencyDirectoryAPI = "Api/emergency";
+  static const VehicleDirectoryAPI = "View_directory/vehicle";
   static const AnnouncementAPI = "Announcement";
   static const AnnouncementPollAPI = "Poll";
   static const pollVoteAPI = "Dashboard/vote";
@@ -285,9 +286,15 @@ class GlobalVariables {
   static const referAPI = "Api/refer";
   static const maintenanceStaffRoleAPI = "Gatepassapp/role";
   static const staffDeleteAPI = "staff/staff_delete";
+   static const pendingVehicleAPI = "Members/pending_vehicle";
+  static const approveVehicleAPI = "Members/approve_vehicle";
+  static const cancelVehicleAPI = "Members/cancel_vehicle";
   static const tenantMoveOutAPI = "Members/tenant_moveout";
   static const getccAveneuParams = "AndroidApi/ccavenuet_request";
-
+  static const getUPIStatus = "AndroidApi/Upi_status";
+  static const updateNotificationAPI = "Api/updatenotification";
+  static const updateTokenAPI = "Api/update_token";
+  static const getOrderIdForUPI = "AndroidApi/Upi_transaction";
   /*GATEPASEE DIALOG API*/
   static const approveGatePassAPI = "Gatepassapp/visitorcalling_response";
  // static const rejectGatepassAPI = "Gatepassapp/visitorstatusupdate";.;
@@ -549,6 +556,7 @@ class GlobalVariables {
   static const commitee_member = "commitee_member";
   static const society_member = "society_member";
   static const emergency = "emergency";
+   static const vehicle = "vehicle";
   static const Role = "Role";
 
 }
@@ -599,6 +607,7 @@ class NotificationTypes{
   static const String TYPE_VISITOR_VERIFY = "Visitor_verify";
   static const String TYPE_POLL = "Poll";
   static const String TYPE_BILL = "Bill";
+  static const String TYPE_REJECT_GATEPASS = "gatepass_reject_call";
   static const String TYPE_RECEIPT = "Receipt";
   static const String TYPE_WEB = "Web";
   static const String TYPE_BROADCAST = "Broadcast";

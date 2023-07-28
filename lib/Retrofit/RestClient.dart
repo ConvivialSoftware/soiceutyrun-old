@@ -196,8 +196,9 @@ abstract class RestClient {
   @FormUrlEncoded()
   @POST(GlobalVariables.EmergencyDirectoryAPI)
   Future<DataResponse> getEmergencyDirectoryData(
-      @Field(GlobalVariables.societyId) String societyId);
-
+      @Field(GlobalVariables.societyId) String societyId);@FormUrlEncoded()
+  @POST(GlobalVariables.VehicleDirectoryAPI)
+  Future<DataResponse> getVehicleDirectoryData(@Field(GlobalVariables.societyId) String societyId);
   @FormUrlEncoded()
   @POST(GlobalVariables.NeighboursDirectoryAPI)
   Future<DataResponse> getNeighboursDirectoryData(

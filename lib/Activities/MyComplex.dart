@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -250,7 +249,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               value.announcementList[position].SUBJECT,
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Container(
               child: htmlText(
             value.announcementList[position].DESCRIPTION,
@@ -314,7 +315,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                     fontSize: GlobalVariables.textSizeSmall,
                                     textColor: GlobalVariables.skyBlue))
                           ],
-                      )
+                        )
                     ],
                   ),
                 )
@@ -486,7 +487,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                       children: <Widget>[
                         Container(
                           child: primaryText(
-                            value.meetingList[position].USER_NAME??'',
+                            value.meetingList[position].USER_NAME ?? '',
                             fontSize: GlobalVariables.textSizeSMedium,
                             /*textColor: GlobalVariables.green,
                             fontWeight: FontWeight.bold,*/
@@ -499,7 +500,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                               children: <Widget>[
                                 Container(
                                   child: text(
-                                    value.meetingList[position].BLOCK!.length > 0
+                                    value.meetingList[position].BLOCK!.length >
+                                            0
                                         ? value.meetingList[position].BLOCK
                                                 .toString() +
                                             ' ' +
@@ -529,17 +531,25 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               ],
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Container(
               alignment: Alignment.topLeft,
-              child: primaryText(value.meetingList[position].SUBJECT,)),
-          SizedBox(height: 8,),
+              child: primaryText(
+                value.meetingList[position].SUBJECT,
+              )),
+          SizedBox(
+            height: 8,
+          ),
           htmlText(
             value.meetingList[position].DESCRIPTION,
             textColor: GlobalVariables.grey,
             fontSize: GlobalVariables.textSizeSMedium,
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Column(
             children: <Widget>[
               Container(
@@ -554,7 +564,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(
+                      width: 8,
+                    ),
                     /*Container(
                       child: text(
                         "Venue : ",
@@ -563,15 +575,14 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                       ),
                     ),*/
                     Container(
-                      child: text(
-                        value.meetingList[position].VENUE,
-                        textColor: GlobalVariables.primaryColor,
-                        fontSize: GlobalVariables.textSizeSMedium,
+                      child: text(value.meetingList[position].VENUE,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0),
-                      ),
-                  ],
                     ),
+                  ],
                 ),
+              ),
               SizedBox(
                 height: 4,
               ),
@@ -585,8 +596,10 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
-                    SizedBox(width: 8,),
-                /*    Container(
+                    SizedBox(
+                      width: 8,
+                    ),
+                    /*    Container(
                       child: text(
                         "Date : ",
                         textColor: GlobalVariables.green,
@@ -595,15 +608,15 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                     )*/
                     Container(
                       child: text(
-                        value.meetingList[position]
-                            .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
-                        textColor: GlobalVariables.primaryColor,
-                        fontSize: GlobalVariables.textSizeSMedium,
+                          value.meetingList[position]
+                              .START_DATE /*+' to '+ value.meetingList[position].END_DATE*/,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0),
-                      ),
-                  ],
                     ),
+                  ],
                 ),
+              ),
               SizedBox(
                 height: 4,
               ),
@@ -617,15 +630,16 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(
+                      width: 8,
+                    ),
                     Container(
                       child: text(
-                        value.meetingList[position]
-                            .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
-                        textColor: GlobalVariables.primaryColor,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                          textStyleHeight: 1.0
-                      ),
+                          value.meetingList[position]
+                              .Start_Time /*+' to '+ value.meetingList[position].END_TIME*/,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0),
                     ),
                   ],
                 ),
@@ -666,7 +680,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                           Icons.attach_file,
                           iconColor: GlobalVariables.secondaryColor,
                         )),
-                        SizedBox(width: 4,),
+                        SizedBox(
+                          width: 4,
+                        ),
                         Container(
                           child: text(
                             "Attachment",
@@ -695,7 +711,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                       fontSize: GlobalVariables.textSizeSmall,
                                       textColor: GlobalVariables.skyBlue))
                             ],
-                        )
+                          )
                       ],
                     ),
                   ),
@@ -710,8 +726,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     print('getPollSurveyLayout Tab Call');
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 150.0),
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
         value.isLoading
             ? GlobalFunctions.loadingWidget(context)
             : getPollSurveyListDataLayout(value),
@@ -721,26 +736,29 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
 
   getPollSurveyListDataLayout(MyComplexResponse value) {
     print('getPollSurveyListDataLayout Tab Call');
-    return value.pollList.length>0 ? Container(
-      //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(top: 8),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: value.pollList.length,
-                itemBuilder: (context, position) {
-                  return getPollSurveyListItemLayout(position, value);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
+    return value.pollList.length > 0
+        ? Container(
+            //padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 8),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: value.pollList.length,
+                      itemBuilder: (context, position) {
+                        return getPollSurveyListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   getPollSurveyListItemLayout(var position, MyComplexResponse value) {
     print('>>>>> ' + position.toString());
 
     print('EXPIRY_DATE : ' +
-        GlobalFunctions.isDateSameOrGrater(value.pollList[position].EXPIRY_DATE!)
+        GlobalFunctions.isDateSameOrGrater(
+                value.pollList[position].EXPIRY_DATE!)
             .toString());
     print('SECRET_POLL : ' + value.pollList[position].SECRET_POLL.toString());
     print('VOTED_TO : ' + value.pollList[position].VOTED_TO!.length.toString());
@@ -815,8 +833,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              child: primaryText(value.pollList[position].USER_NAME,
-                                  fontSize: GlobalVariables.textSizeSMedium,
+                              child: primaryText(
+                                value.pollList[position].USER_NAME,
+                                fontSize: GlobalVariables.textSizeSMedium,
                               ),
                             ),
                             Container(
@@ -865,12 +884,18 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               ],
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Container(
             alignment: Alignment.topLeft,
-            child: primaryText(value.pollList[position].POLL_Q,),
+            child: primaryText(
+              value.pollList[position].POLL_Q,
+            ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Container(
             alignment: Alignment.topLeft,
             child: htmlText(
@@ -879,9 +904,13 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               fontSize: GlobalVariables.textSizeSMedium,
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           getVoteLayout(position, value),
-          SizedBox(height: 4,),
+          SizedBox(
+            height: 4,
+          ),
           Divider(),
           Row(
             children: [
@@ -913,8 +942,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                   text(
                                     "  (Result On " +
                                         GlobalFunctions.convertDateFormat(
-                                            value
-                                                .pollList[position].EXPIRY_DATE!,
+                                            value.pollList[position]
+                                                .EXPIRY_DATE!,
                                             "dd MMM yy") +
                                         ")",
                                     textColor: GlobalVariables.primaryColor,
@@ -945,9 +974,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                          //  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: GlobalFunctions.isDateSameOrGrater(
-                                        value.pollList[position].EXPIRY_DATE!) &&
+                            //  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: GlobalFunctions.isDateSameOrGrater(value
+                                        .pollList[position].EXPIRY_DATE!) &&
                                     (value.pollList[position].VOTED_TO!.length >
                                         0)
                                 ? text(
@@ -958,7 +987,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                   )
                                 : Container(),
                           ),
-                          SizedBox(width: 8,),
+                          SizedBox(
+                            width: 8,
+                          ),
                           Container(
                             alignment: Alignment.topRight,
                             padding: EdgeInsets.all(8),
@@ -1026,16 +1057,14 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
   getDirectoryLayout(MyComplexResponse value) {
     print('getDirectoryLayout Tab Call');
     return SingleChildScrollView(
-      
       child: Stack(
         children: <Widget>[
-          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-              context, 150.0),
+          GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
           value.isLoading
               ? Container(
-            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
-              child: GlobalFunctions.loadingWidget(context)
-          )
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 3),
+                  child: GlobalFunctions.loadingWidget(context))
               : getDirectoryListDataLayout(value),
         ],
       ),
@@ -1145,17 +1174,17 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     print('getDirectoryListDataLayout Tab Call');
     return value.directoryList.length > 0
         ? Container(
-      margin: EdgeInsets.only(top: 8),
-          child: Builder(
-              builder: (context) => ListView.builder(
-                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: value.directoryList.length,
-                    itemBuilder: (context, position) {
-                      return getDirectoryListItemLayout(position, value);
-                    }, //  scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                  )),
-        )
+            margin: EdgeInsets.only(top: 8),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: value.directoryList.length,
+                      itemBuilder: (context, position) {
+                        return getDirectoryListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
         : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
@@ -1165,20 +1194,21 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     return Column(
       children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
+          margin: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               text(
                 type,
-                textColor:
-                    position == 0 ? GlobalVariables.white : GlobalVariables.black,
+                textColor: position == 0
+                    ? GlobalVariables.white
+                    : GlobalVariables.black,
                 fontSize: GlobalVariables.textSizeMedium,
                 fontWeight: FontWeight.bold,
               ),
               InkWell(
-                  onTap: (){
+                  onTap: () {
                     if (type != 'Near By Shops') {
                       Navigator.push(
                           context,
@@ -1187,7 +1217,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                   value.directoryList[position])));
                     }
                   },
-                  child: smallTextContainerOutlineLayout(AppLocalizations.of(context).translate('see_all'))),
+                  child: smallTextContainerOutlineLayout(
+                      AppLocalizations.of(context).translate('see_all'))),
             ],
           ),
         ),
@@ -1199,8 +1230,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                   builder: (context) => ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: value
-                          .directoryList[position].directoryTypeWiseList!.length,
+                      itemCount: value.directoryList[position]
+                          .directoryTypeWiseList!.length,
                       itemBuilder: (context, childPosition) {
                         return getDirectoryTypeWiseItemLayout(
                             position, childPosition, type, value);
@@ -1218,11 +1249,11 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     String type,
     MyComplexResponse value,
   ) {
-
     String name = '', field = '', permission = '';
     if (type == 'Committee') {
-      name = value
-          .directoryList[position].directoryTypeWiseList![childPosition].NAME;
+      name = value.directoryList[position].directoryTypeWiseList![childPosition]
+              .NAME ??
+          '';
 
       field = value
           .directoryList[position].directoryTypeWiseList![childPosition].POST;
@@ -1236,8 +1267,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
           : value.directoryList[position].directoryTypeWiseList![childPosition]
               .Name;
 
-      field = value.directoryList[position].directoryTypeWiseList![childPosition]
-                  .Category ==
+      field = value.directoryList[position]
+                  .directoryTypeWiseList![childPosition].Category ==
               null
           ? ''
           : value.directoryList[position].directoryTypeWiseList![childPosition]
@@ -1245,19 +1276,17 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
 
       print('name : ' + name);
       print('field : ' + field);
-
     }
 
     if (type == 'Neighbours') {
       name = value
           .directoryList[position].directoryTypeWiseList![childPosition].NAME;
 
-      field = value.directoryList[position].directoryTypeWiseList![childPosition]
-              .BLOCK +
+      field = value.directoryList[position]
+              .directoryTypeWiseList![childPosition].BLOCK +
           "-" +
           value.directoryList[position].directoryTypeWiseList![childPosition]
               .FLAT;
-
     }
 
     if (type == 'Near By Shops') {
@@ -1270,7 +1299,6 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     if (name == null) name = '';
 
     if (field == null) field = '';
-
 
     return Container(
       //width: 200,
@@ -1297,12 +1325,14 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                     child: primaryText(
                       name,
                       // textColor: GlobalVariables.green,
-                       fontSize: GlobalVariables.textSizeSMedium,
+                      fontSize: GlobalVariables.textSizeSMedium,
                       // maxLine: 1,
                     ),
                   ),
                 ),
-                SizedBox(width: 2,),
+                SizedBox(
+                  width: 2,
+                ),
                 Flexible(
                   flex: 1,
                   child: Container(
@@ -1319,7 +1349,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
             ),
           ),
           childPosition !=
-                  value.directoryList[position].directoryTypeWiseList!.length - 1
+                  value.directoryList[position].directoryTypeWiseList!.length -
+                      1
               ? Divider()
               : SizedBox(),
         ],
@@ -1575,9 +1606,8 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     print('getEventsLayout Tab Call');
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-            context, 150.0),
-    /*    Align(
+        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 150.0),
+        /*    Align(
           alignment: Alignment.topCenter,
           child: Container(
             width:
@@ -1610,7 +1640,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     );*/
         value.eventList.length > 0
             ? Container(
-                margin: EdgeInsets.only(top:8),
+                margin: EdgeInsets.only(top: 8),
                 child: Builder(
                     builder: (context) => ListView.builder(
                           // scrollDirection: Axis.vertical,
@@ -1703,18 +1733,24 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               ],
             ),
           ),
-          SizedBox(height: 16,),
-          Container(
-            alignment: Alignment.topLeft,
-            child: primaryText(value.eventList[position].SUBJECT,),
+          SizedBox(
+            height: 16,
           ),
-          SizedBox(height: 8,),
           Container(
             alignment: Alignment.topLeft,
-            child: htmlText(
-              value.eventList[position].DESCRIPTION,
-              textColor: GlobalVariables.grey,
-              fontSize: GlobalVariables.textSizeSMedium,
+            child: primaryText(
+              value.eventList[position].SUBJECT,
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Container(
+              alignment: Alignment.topLeft,
+              child: htmlText(
+                value.eventList[position].DESCRIPTION,
+                textColor: GlobalVariables.grey,
+                fontSize: GlobalVariables.textSizeSMedium,
               )),
           SizedBox(
             height: 8,
@@ -1732,16 +1768,17 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                       iconSize: GlobalVariables.textSizeNormal,
                     ),
                   ),
-                 SizedBox(width: 8,),
-                  Container(
-                    child: text(
-                      value.eventList[position].VENUE,
-                      textColor: GlobalVariables.primaryColor,
-                      fontSize: GlobalVariables.textSizeSMedium,
-                        textStyleHeight: 1.0),
-                    ),
-                ],
+                  SizedBox(
+                    width: 8,
                   ),
+                  Container(
+                    child: text(value.eventList[position].VENUE,
+                        textColor: GlobalVariables.primaryColor,
+                        fontSize: GlobalVariables.textSizeSMedium,
+                        textStyleHeight: 1.0),
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 4,
               ),
@@ -1755,20 +1792,22 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(
+                      width: 8,
+                    ),
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                       child: text(
                           value.eventList[position].START_DATE! +
-                            ' to ' +
+                              ' to ' +
                               value.eventList[position].END_DATE!,
-                        textColor: GlobalVariables.primaryColor,
-                        fontSize: GlobalVariables.textSizeSMedium,
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeSMedium,
                           textStyleHeight: 1.0),
-                      ),
-                  ],
                     ),
+                  ],
                 ),
+              ),
               SizedBox(
                 height: 4,
               ),
@@ -1782,17 +1821,18 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                         iconSize: GlobalVariables.textSizeNormal,
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(
+                      width: 8,
+                    ),
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 3, 0, 0),
                       child: text(
                           value.eventList[position].START_TIME! +
-                            ' to ' +
+                              ' to ' +
                               value.eventList[position].END_TIME!,
-                        textColor: GlobalVariables.primaryColor,
-                        fontSize: GlobalVariables.textSizeSMedium,
-                          textStyleHeight: 1.0
-                      ),
+                          textColor: GlobalVariables.primaryColor,
+                          fontSize: GlobalVariables.textSizeSMedium,
+                          textStyleHeight: 1.0),
                     ),
                   ],
                 ),
@@ -1861,7 +1901,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                       fontSize: GlobalVariables.textSizeSmall,
                                       textColor: GlobalVariables.skyBlue))
                             ],
-                        )
+                          )
                       ],
                     ),
                   ),
@@ -1999,18 +2039,20 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
 
   getDocumentListDataLayout(MyComplexResponse value) {
     print('getDocumentListDataLayout Tab Call');
-    return value.documentList.length>0 ? Container(
-      margin : EdgeInsets.only(top: 8),
-      child: Builder(
-          builder: (context) => ListView.builder(
-                // scrollDirection: Axis.vertical,
-                itemCount: value.documentList.length,
-                itemBuilder: (context, position) {
-                  return getDocumentListItemLayout(position, value);
-                }, //  scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-              )),
-    ):GlobalFunctions.noDataFoundLayout(context, "No Data Found");
+    return value.documentList.length > 0
+        ? Container(
+            margin: EdgeInsets.only(top: 8),
+            child: Builder(
+                builder: (context) => ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      itemCount: value.documentList.length,
+                      itemBuilder: (context, position) {
+                        return getDocumentListItemLayout(position, value);
+                      }, //  scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                    )),
+          )
+        : GlobalFunctions.noDataFoundLayout(context, "No Data Found");
   }
 
   /* Container(
@@ -2035,7 +2077,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Flexible(
-                  flex:2,
+                  flex: 2,
                   child: Container(
                     alignment: Alignment.topLeft,
                     child: primaryText(
@@ -2047,9 +2089,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                   flex: 1,
                   child: Container(
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: text(
-                        value.documentList[position]
-                            .DOCUMENT_CATEGORY,
+                    child: text(value.documentList[position].DOCUMENT_CATEGORY,
                         textColor: GlobalVariables.white,
                         fontSize: GlobalVariables.textSizeVerySmall),
                     decoration: BoxDecoration(
@@ -2061,7 +2101,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
               ],
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Container(
             alignment: Alignment.topLeft,
             child: secondaryText(
@@ -2129,7 +2171,9 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                               Icons.attach_file,
                               iconColor: GlobalVariables.secondaryColor,
                             )),
-                            SizedBox(width: 4,),
+                            SizedBox(
+                              width: 4,
+                            ),
                             Container(
                               child: text(
                                 "Attachment",
@@ -2159,13 +2203,15 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                                               GlobalVariables.textSizeSmall,
                                           textColor: GlobalVariables.skyBlue))
                                 ],
-                            )
+                              )
                           ],
                         ),
                       ),
                     )
                   : Container(),
-              SizedBox(width: 4,),
+              SizedBox(
+                width: 4,
+              ),
               text(
                   value.documentList[position].USER_NAME == null
                       ? 'Posted By: - '

@@ -72,6 +72,9 @@ abstract class RestClientERP {
   Future<StatusMsgResponse> postRazorPayTransactionOrderID(@Field("SOCIETY_ID") String socId, @Field("FLAT_NO") String flat,
       @Field("ORDER_ID") String orderId,@Field("AMOUNT") String amount);
 
+  @POST(GlobalVariables.getUPIStatus)
+  Future<String> getUPIStatus(
+      @Field("SOCIETY_ID") String socId, @Field("ORDER_ID") String orderId);
   @FormUrlEncoded()
   @POST(GlobalVariables.expenseAPI)
   Future<DataResponse> getExpenseData(@Field("SOCIETY_ID") String socId,@Field("START_DATE") String? startDate,@

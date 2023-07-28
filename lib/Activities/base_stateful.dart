@@ -112,6 +112,11 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
               : iOSPlatformChannelSpecifics);
       GlobalVariables.isAlreadyTapped = false;
 
+      if (gatePassPayload.tYPE == NotificationTypes.TYPE_REJECT_GATEPASS) {
+        GatepassController.closeGatepassDialog();
+        return;
+      }
+      
       if (gatePassPayload.tYPE != NotificationTypes.TYPE_VISITOR_VERIFY) {
         Random random = new Random();
         flutterLocalNotificationsPlugin.show(
@@ -128,7 +133,7 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
       }
     }
   } catch (e) {
-    print(e);
+    print("ERROR >>> $e");
   }
   return Future<void>.value();
 }
@@ -329,13 +334,17 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
           SQLiteDbProvider.db.insertUnReadNotification(_dbNotificationPayload);
         }
       }
+      if (gatePassPayload.tYPE == NotificationTypes.TYPE_REJECT_GATEPASS) {
+        GatepassController.closeGatepassDialog();
+        return;
+      }
+
       if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
         if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
           GatepassController.showGatepassDialog(
               payload: message,
               onRedirection: () {
                 Get.back();
-                Get.find<AppNotificationController>().goToMyGate();
               });
 
           return;

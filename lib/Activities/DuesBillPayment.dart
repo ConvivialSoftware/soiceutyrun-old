@@ -174,7 +174,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
               // value.pendingPayments.isNotEmpty
               //     ? _getPendingPaymentBanner(value.pendingPayments[0])
               //     : const SizedBox(),
-            
+
               AppContainer(
                 height: 200,
                 child: Column(
@@ -748,22 +748,26 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
   }
 
   Future<void> checkPaymentStatus(String orderId) async {
-    // try {
-    //   final dio = Dio();
-    //   final RestClientERP restClient =
-    //       RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
+    try {
+      final dio = Dio();
+      final RestClientERP restClient =
+          RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
 
-    //   final socId = await GlobalFunctions.getSocietyId();
+      final socId = await GlobalFunctions.getSocietyId();
 
-    //   final status = await restClient.getUPIStatus(socId, orderId);
+      final status = await restClient.getUPIStatus(socId, orderId);
 
-    //   _handleFlowWithStatus(status);
-    // } catch (e) {}
+      _handleFlowWithStatus(status);
+    } catch (e) {}
   }
 
   _handleFlowWithStatus(String status) {
     if (status == 'success') {
-      GlobalFunctions.paymentSuccessDialog(context, '');
+      GlobalFunctions.paymentSuccessDialog(
+        context,
+        '',
+        onCompleted: () => _goBackAndRefresh(),
+      );
       return;
     } else if (status == 'failure') {
       GlobalFunctions.paymentFailureDialog(context);
@@ -992,7 +996,7 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
     // } catch (e) {
     //   GlobalFunctions.showToast('Somthing went wrong');
     //   setBusy(false, state);
-      return '';
+    return '';
     // }
   }
 

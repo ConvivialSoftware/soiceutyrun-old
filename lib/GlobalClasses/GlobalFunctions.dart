@@ -1776,7 +1776,7 @@ class GlobalFunctions {
     return emailValid;
   }
 
-  static paymentSuccessDialog(BuildContext context, String paymentId,
+  static  paymentSuccessDialog(BuildContext context, String paymentId,
       {VoidCallback? onCompleted}) async {
     await showDialog(
         context: context,

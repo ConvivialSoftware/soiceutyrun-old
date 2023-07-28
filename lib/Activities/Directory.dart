@@ -31,6 +31,7 @@ class DirectoryState extends State<BaseDirectory> {
   bool isNeighbours = false;
   bool isCommittee = false;
   bool isEmergency = false;
+  bool isVehicle = false;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class DirectoryState extends State<BaseDirectory> {
       isNeighbours = true;
       isCommittee = false;
       isEmergency = false;
+      isVehicle = false;
       WidgetsBinding.instance.addPostFrameCallback((_){
 
       Provider.of<MyComplexResponse>(context, listen: false)
@@ -53,6 +55,7 @@ class DirectoryState extends State<BaseDirectory> {
       isCommittee = true;
       isNeighbours = false;
       isEmergency = false;
+      isVehicle = false;
       WidgetsBinding.instance.addPostFrameCallback((_){
       Provider.of<MyComplexResponse>(context, listen: false)
           .getCommitteeDirectoryData()
@@ -65,11 +68,25 @@ class DirectoryState extends State<BaseDirectory> {
       isCommittee = false;
       isNeighbours = false;
       isEmergency = true;
+      isVehicle = false;
       WidgetsBinding.instance.addPostFrameCallback((_){
       Provider.of<MyComplexResponse>(context, listen: false)
           .getEmergencyDirectoryData()
           .then((value) {
       });
+      });
+
+    }
+    if (widget.directory.directoryType == 'Vehicle') {
+      isCommittee = false;
+      isNeighbours = false;
+      isEmergency = false;
+      isVehicle = true;
+      WidgetsBinding.instance.addPostFrameCallback((_){
+        Provider.of<MyComplexResponse>(context, listen: false)
+            .getVehicleDirectoryData()
+            .then((value) {
+        });
       });
 
     }
@@ -116,6 +133,8 @@ class DirectoryState extends State<BaseDirectory> {
     if (isCommittee) length = value.committeeList.length;
 
     if (isEmergency) length = value.emergencyList.length;
+
+    if (isVehicle) length = value.vehicleList.length;
 
     return Container(
       margin: EdgeInsets.only(top: 8),
@@ -220,6 +239,29 @@ class DirectoryState extends State<BaseDirectory> {
           : phone = false;
 
       if (phone) callNumber = value.emergencyList[position].Contact_No!;
+    }
+
+    if (widget.directory.directoryType == 'Vehicle') {
+      name = value.vehicleList[position].VEHICLE_NO! == null
+          ? ''
+          : value.vehicleList[position].VEHICLE_NO!;
+
+      field = value.vehicleList[position].MODEL! == null
+          ? ''
+          : value.vehicleList[position].MODEL!;
+
+      flat = value.vehicleList[position].FLAT == null ||
+          value.vehicleList[position].BLOCK == null
+          ? ''
+          : value.vehicleList[position].BLOCK! +
+          ' ' +
+          value.vehicleList[position].FLAT!;
+
+      value.vehicleList[position].INTERCOM!.length != 0
+          ? phone = true
+          : phone = false;
+
+      if (phone) callNumber = value.vehicleList[position].INTERCOM!;
     }
 
     return widget.directory.directoryType != 'Emergency'

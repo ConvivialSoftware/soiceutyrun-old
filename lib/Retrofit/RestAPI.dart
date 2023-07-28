@@ -4239,8 +4239,8 @@ class RestAPI
       AvenueConst.integrationType: 'iframe_normal',
       AvenueConst.amount: amount,
       AvenueConst.userId: userId,
-      AvenueConst.subAccId: subAccId,
-      AvenueConst.subAccountId: subAccId,
+      // AvenueConst.subAccId: subAccId,
+      // AvenueConst.subAccountId: subAccId,
       AvenueConst.appName: 'SocietyrunSociety',
     });
 
@@ -4254,5 +4254,48 @@ class RestAPI
       return AvenueResponse.fromJson(value);
     }
     return AvenueResponse(errorMessage: 'Error connecting CCAvenue');
+  }
+  @override
+  Future<String> getUPIStatus(String socId, String orderId) async {
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      'ORDER_ID': orderId,
+    });
+
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLERP + GlobalVariables.getUPIStatus,
+        options: restClientERPOption(),
+        data: formData);
+    final value = _result.data;
+    if (_result.statusCode == 200) {
+      final String status = value['status'] ?? '';
+
+      return status.toLowerCase();
+    }
+    return '';
+  }
+  @override
+  Future<DataResponse> getVehicleDirectoryData(String societyId) async {
+   
+    try {
+      ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
+
+      FormData formData = FormData.fromMap({
+        GlobalVariables.societyId: societyId,
+      });
+      print(GlobalVariables.societyId + ": " + societyId);
+
+      print('baseurl : ' + baseUrl! + GlobalVariables.VehicleDirectoryAPI);
+      final Response _result = await _dio.post(
+          baseUrl! + GlobalVariables.VehicleDirectoryAPI,
+          options: restClientOption(),
+          data: formData);
+      final value = _result.data;
+      print('value of getVehicleDirectoryData : ' + value.toString());
+      return DataResponse.fromJson(value);
+    } catch (e) {
+     
+      throw Exception(e);
+    }
   }
 }

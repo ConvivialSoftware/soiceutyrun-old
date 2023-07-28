@@ -87,8 +87,8 @@ class _AvenueWebViewState extends State<AvenueWebView> {
 
   String _buildUrl() {
     //test url
-    // return 'https://test.ccavenue.com/transaction.do?command=initiateTransaction&encRequest=${widget.avenu.encVal}&access_code=${widget.avenu.accessCode}';
-    return 'https://secure.ccavenue.com/transaction.do?command=initiateTransaction&encRequest=${widget.avenu.encVal}&access_code=${widget.avenu.accessCode}';
+    return 'https://test.ccavenue.com/transaction.do?command=initiateTransaction&encRequest=${widget.avenu.encVal}&access_code=${widget.avenu.accessCode}';
+    // return 'https://secure.ccavenue.com/transaction.do?command=initiateTransaction&encRequest=${widget.avenu.encVal}&access_code=${widget.avenu.accessCode}';
   }
 
   @override
