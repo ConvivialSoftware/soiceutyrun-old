@@ -4292,7 +4292,7 @@ class RestAPI
           data: formData);
       final value = _result.data;
       print('value of getVehicleDirectoryData : ' + value.toString());
-      return DataResponse.fromJson(value);
+      return DataResponse.fromVehicleJson(value);
     } catch (e) {
      
       throw Exception(e);

@@ -790,8 +790,8 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
               value.dataString!, 'Receipt' + widget.invoiceNo! + '.pdf')
           .then((value) {
         if (value) {
-          GlobalFunctions.showToast(
-              AppLocalizations.of(context).translate('download_folder'));
+          // GlobalFunctions.showToast(
+          //     AppLocalizations.of(context).translate('download_folder'));
         } else {
           GlobalFunctions.showToast(
               AppLocalizations.of(context).translate('download_failed'));

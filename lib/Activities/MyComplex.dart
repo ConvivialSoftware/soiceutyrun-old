@@ -13,6 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/MyComplexResponse.dart';
 import 'package:societyrun/Models/PollOption.dart';
+import 'package:societyrun/Models/VehicleDirectory,.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
@@ -1231,7 +1232,11 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: value.directoryList[position]
-                          .directoryTypeWiseList!.length,
+                                  .directoryTypeWiseList!.length >
+                              5
+                          ? 5
+                          : value.directoryList[position].directoryTypeWiseList!
+                              .length,
                       itemBuilder: (context, childPosition) {
                         return getDirectoryTypeWiseItemLayout(
                             position, childPosition, type, value);
@@ -1250,6 +1255,7 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
     MyComplexResponse value,
   ) {
     String name = '', field = '', permission = '';
+
     if (type == 'Committee') {
       name = value.directoryList[position].directoryTypeWiseList![childPosition]
               .NAME ??
@@ -1295,6 +1301,15 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
 
       field = value
           .directoryList[position].directoryTypeWiseList![childPosition].field;
+    }
+    if (type == 'Vehicle') {
+      VehicleDirectory vehicleDirectory =
+          value.directoryList[position].directoryTypeWiseList![childPosition];
+
+      name = vehicleDirectory.VEHICLE_NO ?? '';
+
+      field = vehicleDirectory.MODEL ?? '';
+      return vehicleItem(vehicleDirectory);
     }
     if (name == null) name = '';
 
@@ -2383,5 +2398,66 @@ class MyComplexState extends AppStatefulState<BaseMyComplex>
         GlobalFunctions.showToast(value.message!);
       }
     });
+  }
+
+  vehicleItem(VehicleDirectory directory) {
+    return Container(
+      //padding: EdgeInsets.all(10),
+      //margin: position == 0 ? EdgeInsets.only(top: 10) : EdgeInsets.all(0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: getIconForVehicle(directory.WHEEL ?? ''),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: primaryText(
+                    directory.VEHICLE_NO ?? '',
+                  ),
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: secondaryText(
+                      '${directory.BLOCK} - ${directory.FLAT}',
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  getIconForVehicle(String vehicleType) {
+    if (vehicleType == '4 Wheeler' ||
+        vehicleType == '4' ||
+        vehicleType == 'four') {
+      return AppIcon(
+        Icons.directions_car,
+        iconColor: GlobalVariables.secondaryColor,
+      );
+    } else if (vehicleType == '2 Wheeler' ||
+        vehicleType == '2' ||
+        vehicleType == 'two') {
+      return AppIcon(
+        Icons.motorcycle,
+        iconColor: GlobalVariables.secondaryColor,
+      );
+    } else {
+      return AppIcon(
+        Icons.motorcycle,
+        iconColor: GlobalVariables.secondaryColor,
+      );
+    }
   }
 }

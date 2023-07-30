@@ -153,7 +153,7 @@ class UserManagementResponse extends ChangeNotifier {
 
   Future<dynamic> getPayOption(String? block, String? flat) async {
     isLoading = true;
-    notifyListeners();
+    // notifyListeners();
 
     hasRazorPayGateway = false;
     hasPayTMGateway = false;
@@ -248,8 +248,7 @@ class UserManagementResponse extends ChangeNotifier {
       if (value.status!) {
         memberList =
             List<Member>.from(value.members!.map((i) => Member.fromJson(i)));
-        staffList =
-            List<Staff>.from(value.staff!.map((i) => Staff.fromJson(i)));
+       
         vehicleList =
             List<Vehicle>.from(value.vehicles!.map((i) => Vehicle.fromJson(i)));
         tenantAgreementList = <TenantRentalRequest>[];

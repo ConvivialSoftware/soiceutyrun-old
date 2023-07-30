@@ -11,6 +11,9 @@ class DataResponse {
   List<dynamic>? Year;
   List<dynamic>? unit;
   List<dynamic>? Role;
+  List<dynamic>? Vehicle;
+
+
   String? message;
   String? android_version;
   String? android_type;
@@ -24,13 +27,23 @@ class DataResponse {
   DataResponse({this.data, this.message, this.status,
     this.android_version,this.android_type,this.ios_version,
     this.ios_type,this.front,this.refer,this.service,this.bank,this.category,this.Year,
-    this.unit,this.dataString,this.PENALTY,this.AMOUNT,this.Role});
+    this.unit,this.dataString,this.PENALTY,this.AMOUNT,this.Role,this.Vehicle});
 
 
   factory DataResponse.fromJson(Map<String, dynamic> map){
 
     return DataResponse(
         data: map[GlobalVariables.DATA],
+        status: map[GlobalVariables.STATUS],
+        message: map[GlobalVariables.MESSAGE]
+    );
+
+  }
+
+factory DataResponse.fromVehicleJson(Map<String, dynamic> map){
+
+    return DataResponse(
+        data: map['vehicle'],
         status: map[GlobalVariables.STATUS],
         message: map[GlobalVariables.MESSAGE]
     );

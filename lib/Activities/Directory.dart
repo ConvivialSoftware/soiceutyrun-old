@@ -5,6 +5,7 @@ import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/MyComplexResponse.dart';
+import 'package:societyrun/Models/VehicleDirectory,.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
@@ -26,12 +27,15 @@ class BaseDirectory extends StatefulWidget {
 }
 
 class DirectoryState extends State<BaseDirectory> {
+  final TextEditingController _searchQuery = TextEditingController();
   var societyId, flat, block;
 
   bool isNeighbours = false;
   bool isCommittee = false;
   bool isEmergency = false;
   bool isVehicle = false;
+
+  List<VehicleDirectory> searchList = [];
 
   @override
   void initState() {
@@ -41,11 +45,10 @@ class DirectoryState extends State<BaseDirectory> {
       isCommittee = false;
       isEmergency = false;
       isVehicle = false;
-      WidgetsBinding.instance.addPostFrameCallback((_){
-
-      Provider.of<MyComplexResponse>(context, listen: false)
-          .getNeighboursDirectoryData()
-          .then((value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<MyComplexResponse>(context, listen: false)
+            .getNeighboursDirectoryData()
+            .then((value) {
           // _progressDialog!.dismiss();
         });
       });
@@ -56,45 +59,41 @@ class DirectoryState extends State<BaseDirectory> {
       isNeighbours = false;
       isEmergency = false;
       isVehicle = false;
-      WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<MyComplexResponse>(context, listen: false)
-          .getCommitteeDirectoryData()
-          .then((value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<MyComplexResponse>(context, listen: false)
+            .getCommitteeDirectoryData()
+            .then((value) {});
       });
-      });
-
     }
     if (widget.directory.directoryType == 'Emergency') {
       isCommittee = false;
       isNeighbours = false;
       isEmergency = true;
       isVehicle = false;
-      WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<MyComplexResponse>(context, listen: false)
-          .getEmergencyDirectoryData()
-          .then((value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<MyComplexResponse>(context, listen: false)
+            .getEmergencyDirectoryData()
+            .then((value) {});
       });
-      });
-
     }
     if (widget.directory.directoryType == 'Vehicle') {
       isCommittee = false;
       isNeighbours = false;
       isEmergency = false;
       isVehicle = true;
-      WidgetsBinding.instance.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<MyComplexResponse>(context, listen: false)
             .getVehicleDirectoryData()
             .then((value) {
+          searchList = Provider.of<MyComplexResponse>(context, listen: false)
+              .vehicleList;
         });
       });
-
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return ChangeNotifierProvider<MyComplexResponse>.value(
         value: Provider.of(context),
         child: Consumer<MyComplexResponse>(builder: (context, value, child) {
@@ -104,8 +103,8 @@ class DirectoryState extends State<BaseDirectory> {
               //resizeToAvoidBottomPadding: false,
               appBar: CustomAppBar(
                 title: widget.directory.directoryType! +
-                      ' ' +
-                      AppLocalizations.of(context).translate('directory'),
+                    ' ' +
+                    AppLocalizations.of(context).translate('directory'),
               ),
               body: getDirectoryLayout(value),
             ),
@@ -113,16 +112,72 @@ class DirectoryState extends State<BaseDirectory> {
         }));
   }
 
-  getDirectoryLayout(MyComplexResponse value) {
+  Widget getDirectoryLayout(MyComplexResponse value) {
     print('getDirectoryLayout Tab Call');
     return Stack(
       children: <Widget>[
         GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 180.0),
         value.isLoading
             ? GlobalFunctions.loadingWidget(context)
-            : getDirectoryListDataLayout(value)
+            : getDirectoryListDataLayout(value),
+        getSearchBarLayout(value),
       ],
     );
+  }
+
+  //search vehicle bar
+  Widget getSearchBarLayout(MyComplexResponse myComplexResponse) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: GlobalVariables.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        margin: EdgeInsets.only(left: 8, right: 8),
+        child: TextField(
+          controller: _searchQuery,
+          onChanged: (value) => _onVehicleSearch(myComplexResponse),
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.search,
+              color: GlobalVariables.grey,
+            ),
+            hintText: AppLocalizations.of(context).translate('search'),
+            hintStyle: TextStyle(
+              color: GlobalVariables.grey,
+              fontSize: 18,
+            ),
+            border: InputBorder.none,
+          ),
+          style: TextStyle(
+            color: GlobalVariables.black,
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _onVehicleSearch(MyComplexResponse value) {
+    //search by vehicle
+
+    List<VehicleDirectory> tempSearchList = [];
+
+    if (_searchQuery.text.isNotEmpty) {
+      for (int i = 0; i < searchList.length; i++) {
+        if (searchList[i]
+            .VEHICLE_NO!
+            .toLowerCase()
+            .contains(_searchQuery.text.toLowerCase())) {
+          tempSearchList.add(searchList[i]);
+        }
+      }
+      searchList = tempSearchList;
+    } else {
+      searchList = value.vehicleList;
+    }
+    setState(() {});
   }
 
   getDirectoryListDataLayout(MyComplexResponse value) {
@@ -134,10 +189,10 @@ class DirectoryState extends State<BaseDirectory> {
 
     if (isEmergency) length = value.emergencyList.length;
 
-    if (isVehicle) length = value.vehicleList.length;
+    if (isVehicle) length = searchList.length;
 
     return Container(
-      margin: EdgeInsets.only(top: 8),
+      margin: EdgeInsets.only(top: isVehicle ? 72 : 8),
       child: Builder(
           builder: (context) => ListView.builder(
                 // scrollDirection: Axis.vertical,
@@ -175,7 +230,7 @@ class DirectoryState extends State<BaseDirectory> {
               ' ' +
               value.committeeList[position].FLAT!;
 
-      if(!AppSocietyPermission.isSocHideCommitteeContactPaidPermission) {
+      if (!AppSocietyPermission.isSocHideCommitteeContactPaidPermission) {
         value.committeeList[position].EMAIL!.length != 0
             ? email = true
             : email = false;
@@ -188,7 +243,6 @@ class DirectoryState extends State<BaseDirectory> {
 
         if (email) emailId = value.committeeList[position].EMAIL!;
       }
-
     }
 
     if (widget.directory.directoryType == 'Neighbours') {
@@ -207,7 +261,7 @@ class DirectoryState extends State<BaseDirectory> {
               ' ' +
               value.neighbourList[position].FLAT!;
 
-      if(!AppSocietyPermission.isSocHideContactPermission) {
+      if (!AppSocietyPermission.isSocHideContactPermission) {
         permission = value.neighbourList[position].PERMISSIONS!;
         if (value.neighbourList[position].Phone != null) {
           if (permission.contains('memberPhone')) {
@@ -242,26 +296,25 @@ class DirectoryState extends State<BaseDirectory> {
     }
 
     if (widget.directory.directoryType == 'Vehicle') {
-      name = value.vehicleList[position].VEHICLE_NO! == null
-          ? ''
-          : value.vehicleList[position].VEHICLE_NO!;
+      name = value.vehicleList[position].VEHICLE_NO ?? '';
 
-      field = value.vehicleList[position].MODEL! == null
+      field = value.vehicleList[position].MODEL == null
           ? ''
           : value.vehicleList[position].MODEL!;
 
       flat = value.vehicleList[position].FLAT == null ||
-          value.vehicleList[position].BLOCK == null
+              value.vehicleList[position].BLOCK == null
           ? ''
           : value.vehicleList[position].BLOCK! +
-          ' ' +
-          value.vehicleList[position].FLAT!;
+              ' ' +
+              value.vehicleList[position].FLAT!;
 
       value.vehicleList[position].INTERCOM!.length != 0
           ? phone = true
           : phone = false;
 
-      if (phone) callNumber = value.vehicleList[position].INTERCOM!;
+      if (phone) callNumber = value.vehicleList[position].INTERCOM ?? '';
+      return getVehicleRecentTransactionListItemLayout(searchList[position]);
     }
 
     return widget.directory.directoryType != 'Emergency'
@@ -299,16 +352,14 @@ class DirectoryState extends State<BaseDirectory> {
                         : Container(),
                   ],
                 ),
-                !isEmergency
-                    ? Divider()
-                    : Container(),
+                !isEmergency ? Divider() : Container(),
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
                         child: secondaryText(
                           name,
-                         /* textColor: GlobalVariables.black,
+                          /* textColor: GlobalVariables.black,
                           fontSize: GlobalVariables.textSizeLargeMedium,
                           fontWeight: FontWeight.bold,*/
                         ),
@@ -336,7 +387,9 @@ class DirectoryState extends State<BaseDirectory> {
                             ),
                   ],
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 Container(
                   alignment: Alignment.topLeft,
                   child: text(field,
@@ -347,17 +400,17 @@ class DirectoryState extends State<BaseDirectory> {
             ),
           )
         : AppContainer(
-           isListItem: true,
+            isListItem: true,
             child: Column(
               children: <Widget>[
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                       // margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
+                        // margin: EdgeInsets.fromLTRB(10, 10, 5, 5),
                         child: primaryText(
                           name,
-                         /* textColor: GlobalVariables.black,
+                          /* textColor: GlobalVariables.black,
                           fontSize: GlobalVariables.textSizeLargeMedium,
                           fontWeight: FontWeight.bold,*/
                         ),
@@ -385,9 +438,13 @@ class DirectoryState extends State<BaseDirectory> {
                 Divider(),
                 Container(
                   alignment: Alignment.topLeft,
-                  child: secondaryText(address,),
+                  child: secondaryText(
+                    address,
+                  ),
                 ),
-                SizedBox(height: 4,),
+                SizedBox(
+                  height: 4,
+                ),
                 Container(
                   alignment: Alignment.topLeft,
                   child: text(field,
@@ -397,5 +454,71 @@ class DirectoryState extends State<BaseDirectory> {
               ],
             ),
           );
+  }
+
+  getVehicleRecentTransactionListItemLayout(VehicleDirectory directory) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  getIconForVehicle(directory.WHEEL ?? ''),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: primaryText(
+                        directory.VEHICLE_NO ?? '',
+                      ),
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: secondaryText(
+                          '${directory.BLOCK} - ${directory.FLAT}',
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  getIconForVehicle(String vehicleType) {
+    if (vehicleType == '4 Wheeler' ||
+        vehicleType == '4' ||
+        vehicleType == 'four') {
+      return AppIcon(
+        Icons.directions_car,
+        iconColor: GlobalVariables.secondaryColor,
+      );
+    } else if (vehicleType == '2 Wheeler' ||
+        vehicleType == '2' ||
+        vehicleType == 'two') {
+      return AppIcon(
+        Icons.motorcycle,
+        iconColor: GlobalVariables.secondaryColor,
+      );
+    } else {
+      return AppIcon(
+        Icons.motorcycle,
+        iconColor: GlobalVariables.secondaryColor,
+      );
+    }
   }
 }

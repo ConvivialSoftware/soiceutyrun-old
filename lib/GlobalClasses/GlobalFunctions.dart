@@ -1011,7 +1011,13 @@ class GlobalFunctions {
 
   static Future<bool> checkPermission(Permission permission) async {
     bool status = false;
-    var _permissionStatus = await permission.status;
+    Permission requestedPermission = permission;
+    if (requestedPermission == Permission.storage) {
+      if (!await isAndroidSDKBelow33()) {
+        requestedPermission = Permission.photos;
+      }
+    }
+    var _permissionStatus = await requestedPermission.status;
     if (_permissionStatus.isGranted) {
       status = true;
     }

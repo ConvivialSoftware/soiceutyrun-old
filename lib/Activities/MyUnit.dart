@@ -709,9 +709,7 @@ class MyUnitState extends State<BaseMyUnit>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       primaryText(
-                        memberType == 'family' || memberType == 'tenant'
-                            ? _list[position].NAME
-                            : _list[position].STAFF_NAME,
+                        _list[position].NAME,
                         maxLine: 2,
                       ),
                       call.length > 0
@@ -1039,10 +1037,8 @@ class MyUnitState extends State<BaseMyUnit>
 
   void _handleTabSelection() {
     if (widget.pageName == null) {
-      print('Call _handleTabSelection');
-      //if(_tabController.indexIsChanging){
+      if (!mounted) return;
       _callAPI(_tabController!.index);
-      //}
     }
   }
 

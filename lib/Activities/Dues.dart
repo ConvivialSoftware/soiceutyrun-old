@@ -1988,7 +1988,6 @@ class _BaseDuesState extends State<BaseDues> {
           print('hasPayTMGateway' + hasPayTMGateway.toString());
           print('hasRazorPayGateway' + hasRazorPayGateway.toString());
         }
-        setState(() {});
       });
     }
   }

@@ -1,3 +1,4 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "dart.flutterSdkPath": "C:/Development/flutter_windows_3.0.1-stable/flutter"
 }
