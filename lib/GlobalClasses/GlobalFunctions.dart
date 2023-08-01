@@ -18,7 +18,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:open_file_safe/open_file_safe.dart';
+import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -987,6 +987,7 @@ class GlobalFunctions {
 
     return newDate;
   }
+
   static String getFormattedDateForPayment(String date) {
     String newDate = '';
     var dFormat = DateFormat('MMMM yyyy');
@@ -1010,19 +1011,20 @@ class GlobalFunctions {
   }
 
   static Future<bool> checkPermission(Permission permission) async {
-    bool status = false;
     Permission requestedPermission = permission;
-    if (requestedPermission == Permission.storage) {
-      if (!await isAndroidSDKBelow33()) {
-        requestedPermission = Permission.photos;
+    if (requestedPermission == Permission.storage &&
+        await isAndroidSDKBelow33()) {
+      requestedPermission = Permission.manageExternalStorage;
+    }
+    bool status = false;
+    await permission.request().then((value) {
+      if (value.isGranted) {
+        status = true;
       }
-    }
-    var _permissionStatus = await requestedPermission.status;
-    if (_permissionStatus.isGranted) {
-      status = true;
-    }
+    });
     return status;
   }
+
   static Future<bool> isAndroidSDKBelow33() async {
     if (Platform.isAndroid) {
       final info = await DeviceInfoPlugin().androidInfo;
@@ -1038,10 +1040,9 @@ class GlobalFunctions {
     /// When running on Android T and above: Read image files from external storage
     /// When running on Android < T: Nothing
     Permission requestedPermission = permission;
-    if (requestedPermission == Permission.storage) {
-      if (!await isAndroidSDKBelow33()) {
-        requestedPermission = Permission.photos;
-      }
+    if (requestedPermission == Permission.storage &&
+        !await isAndroidSDKBelow33()) {
+      requestedPermission = Permission.manageExternalStorage;
     }
     bool status = false;
     await requestedPermission.request().then((value) {
@@ -1549,7 +1550,8 @@ class GlobalFunctions {
       print('file path : ' + '$path/$fileName');
       // await file.writeAsBytes(decodedBytes.buffer.asUint8List());
       print('complete');
-      OpenFile.open('$path/$fileName');
+      final result = await OpenFile.open('$path/$fileName');
+      print('result : ' + result.toString());
       return true;
     } catch (e) {
       print(e.toString());
@@ -1782,12 +1784,12 @@ class GlobalFunctions {
     return emailValid;
   }
 
-  static  paymentSuccessDialog(BuildContext context, String paymentId,
+  static paymentSuccessDialog(BuildContext context, String paymentId,
       {VoidCallback? onCompleted}) async {
     await showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -1834,29 +1836,29 @@ class GlobalFunctions {
                       paymentId.isEmpty
                           ? const SizedBox()
                           : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: text(
-                                AppLocalizations.of(context)
-                                    .translate('transaction_id'),
-                                textColor: GlobalVariables.grey,
-                                fontSize: GlobalVariables.textSizeSMedium,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: text(paymentId.toString(),
-                                textColor: GlobalVariables.primaryColor,
-                                fontSize: GlobalVariables.textSizeSMedium,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: text(
+                                      AppLocalizations.of(context)
+                                          .translate('transaction_id'),
+                                      textColor: GlobalVariables.grey,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                  child: text(paymentId.toString(),
+                                      textColor: GlobalVariables.primaryColor,
+                                      fontSize: GlobalVariables.textSizeSMedium,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                       Container(
                         alignment: Alignment.center,
                         margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
@@ -1879,7 +1881,7 @@ class GlobalFunctions {
     return showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -1940,7 +1942,7 @@ class GlobalFunctions {
     return showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+                builder: (BuildContext context, StateSetter setState) {
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
@@ -1990,4 +1992,3 @@ class GlobalFunctions {
             }));
   }
 }
-
