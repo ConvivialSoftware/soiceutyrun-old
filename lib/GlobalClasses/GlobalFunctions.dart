@@ -1013,7 +1013,7 @@ class GlobalFunctions {
   static Future<bool> checkPermission(Permission permission) async {
     Permission requestedPermission = permission;
     if (requestedPermission == Permission.storage &&
-        await isAndroidSDKBelow33()) {
+        !await isAndroidSDKBelow33()) {
       requestedPermission = Permission.manageExternalStorage;
     }
     bool status = false;
@@ -1026,6 +1026,7 @@ class GlobalFunctions {
   }
 
   static Future<bool> isAndroidSDKBelow33() async {
+    print('isAndroidSDKBelow33 : ' + Platform.operatingSystemVersion);
     if (Platform.isAndroid) {
       final info = await DeviceInfoPlugin().androidInfo;
       if (info.version.sdkInt < 33) {
@@ -1536,6 +1537,11 @@ class GlobalFunctions {
   static Future<bool> convertBase64StringToFile(
       String base64String, String fileName) async {
     try {
+      final hasPermission =
+          await checkPermission(Permission.manageExternalStorage);
+      if (!hasPermission) {
+        return false;
+      }
       base64String = base64String.replaceAll('\n', '');
       base64String = base64String.replaceAll('\r', '');
       var decodedBytes = base64Decode(base64String);
