@@ -84,7 +84,10 @@ class _BaseDuesBillPaymentState extends State<BaseDuesBillPayment> {
         : Provider.of<UserManagementResponse>(context, listen: false)
                 .hasCcAvenue
             ? _selectedPaymentGateway = ccavenuePayment
-            : _selectedPaymentGateway = 'RazorPay';
+            : Provider.of<UserManagementResponse>(context, listen: false)
+                    .hasPayTMGateway
+                ? _selectedPaymentGateway = 'PayTM'
+                : _selectedPaymentGateway = 'RazorPay';
 
     setState(() {});
   }
