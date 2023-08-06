@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AlreadyPaid.dart';
@@ -11,6 +10,7 @@ import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/Receipt.dart';
 import 'package:societyrun/Models/ReceiptViewResponse.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
@@ -24,10 +24,11 @@ class BaseViewReceipt extends StatefulWidget {
   String? invoiceNo, yearSelectedItem;
   Receipt? receipt;
   String? mBlock, mFLat;
+  Ledger? type;
 
   BaseViewReceipt(
       this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat,
-      {this.receipt});
+      {this.receipt, this.type});
 
   @override
   State<StatefulWidget> createState() {
@@ -50,23 +51,44 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
   ReceivePort _port = ReceivePort();*/
   bool isStoragePermission = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isCreditDebitNote = false;
+
   @override
   void initState() {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    isCreditDebitNote = widget.type?.TYPE?.toLowerCase() == 'credit note' ||
+        widget.type?.PURPOSE?.toLowerCase() == 'debit note' ||
+        widget.type?.TYPE?.toLowerCase() == 'payment';
     getSharedPrefData();
-    if (widget.invoiceNo != null) {
-      GlobalFunctions.checkInternetConnection().then((internet) {
-        if (internet) {
-          getReceiptData();
-        } else {
-          GlobalFunctions.showToast(AppLocalizations.of(context)
-              .translate('pls_check_internet_connectivity'));
-        }
-      });
+    if (!isCreditDebitNote) {
+      if (widget.invoiceNo != null) {
+        GlobalFunctions.checkInternetConnection().then((internet) {
+          if (internet) {
+            getReceiptData();
+          } else {
+            GlobalFunctions.showToast(AppLocalizations.of(context)
+                .translate('pls_check_internet_connectivity'));
+          }
+        });
+      } else {
+        _receiptList.add(widget.receipt!);
+      }
     } else {
-      _receiptList.add(widget.receipt!);
+      _receiptList.add(Receipt(
+          NAME: widget.type?.NAME ?? '',
+          AMOUNT: 1,
+          RECEIPT_NO: widget.type?.RECEIPT_NO,
+          FLAT_NO: widget.mFLat,
+          PURPOSE: widget.type?.PURPOSE,
+          PENALTY_AMOUNT: '0',
+          STATUS: 'A',
+          ATTACHMENT: '',
+          INVOICE_NO: widget.type?.RECEIPT_NO,
+          REFERENCE_NO: widget.type?.RECEIPT_NO,
+          PAYMENT_DATE: widget.type?.C_DATE,
+          NARRATION: widget.type?.NARRATION ?? ''));
     }
-
     /*IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
@@ -142,43 +164,36 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
         backgroundColor: GlobalVariables.veryLightGray,
         appBar: CustomAppBar(
           actions: _receiptList.length > 0 && _receiptList[0].STATUS == 'A'
-              ? [
-                  AppIconButton(Icons.mail, iconColor: GlobalVariables.white,
-                      onPressed: () {
-                    emailReceiptDialog(context);
-                  }),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  AppIconButton(Icons.download_sharp,
-                      iconColor: GlobalVariables.white, onPressed: () {
-                    if (isStoragePermission) {
-                      print('true');
-                      getPDF();
-                    } else {
-                      GlobalFunctions.askPermission(Permission.storage)
-                          .then((value) {
-                        if (value) {
-                          getPDF();
-                        } else {
-                          GlobalFunctions.showToast(AppLocalizations.of(context)
-                              .translate('download_permission'));
-                        }
-                      });
-                    }
-                  }),
-                  SizedBox(
-                    width: 16,
-                  ),
-                ]
+              ? widget.type?.TYPE?.toLowerCase() == 'payment'
+                  ? []
+                  : [
+                      AppIconButton(Icons.mail, iconColor: GlobalVariables.red,
+                          onPressed: () {
+                        emailReceiptDialog(context);
+                      }),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      AppIconButton(Icons.download_sharp,
+                          iconColor: GlobalVariables.red, onPressed: () {
+                        viewPdfOnline(
+                            type: widget.type?.TYPE ?? '',
+                            number: widget.invoiceNo ?? '');
+                      }),
+                      SizedBox(
+                        width: 16,
+                      ),
+                    ]
               : [],
-          title: _receiptList.length > 0 && _receiptList[0].STATUS == 'A'
-              ? AppLocalizations.of(context).translate('receipt') +
-                  ' #' +
-                  widget.invoiceNo!
-              : widget.receipt != null
-                  ? widget.receipt!.FLAT_NO!
-                  : '',
+          title: isCreditDebitNote
+              ? '${widget.type?.TYPE}#${widget.type?.RECEIPT_NO}'
+              : _receiptList.length > 0 && _receiptList[0].STATUS == 'A'
+                  ? AppLocalizations.of(context).translate('receipt') +
+                      ' #' +
+                      widget.invoiceNo!
+                  : widget.receipt != null
+                      ? widget.receipt!.FLAT_NO!
+                      : '',
         ),
         body: getBaseLayout(),
       ),
@@ -200,9 +215,11 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                 Container(
                                   alignment: Alignment.topRight,
                                   child: text(
-                                      GlobalFunctions.convertDateFormat(
-                                          _receiptList[0].PAYMENT_DATE!,
-                                          "dd-MM-yyyy"),
+                                      isCreditDebitNote
+                                          ? _receiptList[0].PAYMENT_DATE
+                                          : GlobalFunctions.convertDateFormat(
+                                              _receiptList[0].PAYMENT_DATE!,
+                                              "dd-MM-yyyy"),
                                       textColor: GlobalVariables.grey,
                                       fontSize:
                                           GlobalVariables.textSizeSMedium),
@@ -213,12 +230,15 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                 Container(
                                   alignment: Alignment.center,
                                   child: text(
-                                      GlobalFunctions.getCurrencyFormat(
-                                          (_receiptList[0].AMOUNT! +
-                                                  double.parse(_receiptList[0]
-                                                          .PENALTY_AMOUNT ??
-                                                      '0'))
-                                              .toString())
+                                      isCreditDebitNote
+                                          ? '₹ ${widget.type?.AMOUNT}'
+                                          : GlobalFunctions.getCurrencyFormat(
+                                              (_receiptList[0].AMOUNT! +
+                                                      double.parse(_receiptList[
+                                                                  0]
+                                                              .PENALTY_AMOUNT ??
+                                                          '0'))
+                                                  .toString())
                                       /*  double.parse((_receiptList[0].AMOUNT +
                                                       double.parse(
                                                           _receiptList[0]

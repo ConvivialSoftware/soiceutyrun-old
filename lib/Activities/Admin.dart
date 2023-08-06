@@ -916,6 +916,7 @@ class _BaseAdminState extends State<BaseAdmin> {
                                       null,
                                       null,
                                       receipt: value.adminPendingList[position],
+                                      type: value.ledgerList[position],
                                     )));
                       },
                       child: Container(

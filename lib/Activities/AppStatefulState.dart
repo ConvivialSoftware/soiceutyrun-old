@@ -1,20 +1,15 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-abstract class AppStatefulState<T extends StatefulWidget> extends State<T>{
-
+abstract class AppStatefulState<T extends StatefulWidget> extends State<T> {
   /* String _taskId,;
   ReceivePort _port = ReceivePort();*/
   bool downloading = false;
   //String downloadingStr = "No data";
-  int downloadRate=0;
+  int downloadRate = 0;
   String? _localPath;
 
   @override
@@ -64,67 +59,68 @@ abstract class AppStatefulState<T extends StatefulWidget> extends State<T>{
     send.send([id, status, progress]);
   }*/
 
-  void downloadAttachment(var url/*, var _localPath*/) async {
-    GlobalFunctions.checkPermission(Permission.storage).then((value) async {
-      if(value) {
-        GlobalFunctions.showToast("Downloading attachment....");
-        String localPath;
-        if (Platform.isAndroid) {
-          localPath = _localPath! + Platform.pathSeparator;
-        }else{
-          localPath = _localPath! + Platform.pathSeparator + "Download";
-        }
-        final savedDir = Directory(localPath);
-        bool hasExisted = await savedDir.exists();
-        if (!hasExisted) {
-          savedDir.create();
-        }
+  void downloadAttachment(var url /*, var _localPath*/) async {
+    print('Download URL : ' + url);
 
-        String fileName = url.substring(url.lastIndexOf(Platform.pathSeparator) + 1);
+    launchUrl(Uri.parse(url), mode: LaunchMode.externalNonBrowserApplication);
+    // GlobalFunctions.checkPermission(Permission.storage).then((value) async {
+    //   if (value) {
+    //     GlobalFunctions.showToast("Downloading attachment....");
+    //     String localPath;
+    //     if (Platform.isAndroid) {
+    //       localPath = _localPath! + Platform.pathSeparator;
+    //     } else {
+    //       localPath = _localPath! + Platform.pathSeparator + "Download";
+    //     }
+    //     final savedDir = Directory(localPath);
+    //     bool hasExisted = await savedDir.exists();
+    //     if (!hasExisted) {
+    //       savedDir.create();
+    //     }
 
-        Dio dio = Dio();
-        await dio.download(url, localPath+Platform.pathSeparator+fileName, onReceiveProgress: (rec, total) {
-          setState(() {
-            downloading = true;
-            //print('Rac : '+rec.toString());
-            //  print('total : '+total.toString());
-            downloadRate =((rec/total)*100).toInt();
-            print('downloadRate : '+downloadRate.toString());
-            //downloadingStr = "Downloading File : $rec" ;
-          });
-        } );
-        setState(() {
-          downloading = false;
-          //downloadingStr = "Completed";
-          GlobalFunctions.showToast("Downloading completed");
-          //launch('file://'+localPath+Platform.pathSeparator+fileName);
-          // Navigator.of(context).pop();
-        });
-        _openDownloadedFile(localPath+Platform.pathSeparator+fileName);
+    //     Dio dio = Dio();
+    //     await dio.download(url, localPath+Platform.pathSeparator+fileName, onReceiveProgress: (rec, total) {
+    //       setState(() {
+    //         downloading = true;
+    //         //print('Rac : '+rec.toString());
+    //         //  print('total : '+total.toString());
+    //         downloadRate =((rec/total)*100).toInt();
+    //         print('downloadRate : '+downloadRate.toString());
+    //         //downloadingStr = "Downloading File : $rec" ;
+    //       });
+    //     } );
+    //     setState(() {
+    //       downloading = false;
+    //       //downloadingStr = "Completed";
+    //       GlobalFunctions.showToast("Downloading completed");
+    //       //launch('file://'+localPath+Platform.pathSeparator+fileName);
+    //       // Navigator.of(context).pop();
+    //     });
+    //     _openDownloadedFile(localPath+Platform.pathSeparator+fileName);
 
-        /*_taskId = await FlutterDownloader.enqueue(
-          url: url,
-          savedDir: localPath,
-          headers: {"auth": "test_for_sql_encoding"},
-          //fileName: "SocietyRunImage/Document",
-          showNotification: true,
-          // show download progress in status bar (for Android)
-          openFileFromNotification:
-          true, // click on notification to open downloaded file (for Android)
-        );*/
-      }else{
-        GlobalFunctions.askPermission(Permission.storage)
-            .then((value) {
-          if (value) {
-            downloadAttachment(url /*, _localPath*/);
-          } else {
-            GlobalFunctions.showToast(AppLocalizations.of(context)
-                .translate('download_permission'));
-          }
-        });
-      }
+    //     /*_taskId = await FlutterDownloader.enqueue(
+    //       url: url,
+    //       savedDir: localPath,
+    //       headers: {"auth": "test_for_sql_encoding"},
+    //       //fileName: "SocietyRunImage/Document",
+    //       showNotification: true,
+    //       // show download progress in status bar (for Android)
+    //       openFileFromNotification:
+    //       true, // click on notification to open downloaded file (for Android)
+    //     );*/
+    //   }else{
+    //     GlobalFunctions.askPermission(Permission.storage)
+    //         .then((value) {
+    //       if (value) {
+    //         downloadAttachment(url /*, _localPath*/);
+    //       } else {
+    //         GlobalFunctions.showToast(AppLocalizations.of(context)
+    //             .translate('download_permission'));
+    //       }
+    //     });
+    //   }
 
-    });
+    // });
   }
 
   Future<void> _openDownloadedFile(String path) async {

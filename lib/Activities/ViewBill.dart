@@ -13,6 +13,7 @@ import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
 import 'package:societyrun/Models/BillDetails.dart';
 import 'package:societyrun/Models/BillHeads.dart';
 import 'package:societyrun/Models/BillViewResponse.dart';
+import 'package:societyrun/Models/Ledger.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
@@ -23,7 +24,8 @@ import 'package:societyrun/Widgets/AppWidget.dart';
 class BaseViewBill extends StatefulWidget {
   String? invoiceNo, yearSelectedItem;
   String? mBlock, mFLat;
-  BaseViewBill(this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat);
+  Ledger? type;
+  BaseViewBill(this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat,this.type);
 
   @override
   State<StatefulWidget> createState() {
@@ -47,23 +49,31 @@ class ViewBillState extends State<BaseViewBill> {
   bool isEditEmail = false;
 
   bool isStoragePermission = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isCreditDebitNote = false;
 
   @override
   void initState() {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
+    isCreditDebitNote = widget.type?.TYPE?.toLowerCase() == 'credit note' ||
+        widget.type?.TYPE?.toLowerCase() == 'debit note';
     getSharedPrefData();
     //getTransactionList();
     GlobalFunctions.checkPermission(Permission.storage).then((value) {
       isStoragePermission = value;
     });
-    GlobalFunctions.checkInternetConnection().then((internet) {
-      if (internet) {
-        getBillData();
-      } else {
-        GlobalFunctions.showToast(AppLocalizations.of(context)
-            .translate('pls_check_internet_connectivity'));
-      }
-    });
+    //getTransactionList();
+    if (!isCreditDebitNote) {
+      GlobalFunctions.checkInternetConnection().then((internet) {
+        if (internet) {
+          getBillData();
+        } else {
+          GlobalFunctions.showToast(AppLocalizations.of(context)
+              .translate('pls_check_internet_connectivity'));
+        }
+      });
+    }
+
     super.initState();
   }
 
@@ -92,21 +102,8 @@ class ViewBillState extends State<BaseViewBill> {
                   width: 16,
                 ),
                 AppIconButton(Icons.download_sharp,
-                    iconColor: GlobalVariables.white, onPressed: () {
-                  if (isStoragePermission) {
-                    print('true');
-                    getPDF();
-                  } else {
-                    GlobalFunctions.askPermission(Permission.storage)
-                        .then((value) {
-                      if (value) {
-                        getPDF();
-                      } else {
-                        GlobalFunctions.showToast(AppLocalizations.of(context)
-                            .translate('download_permission'));
-                      }
-                    });
-                  }
+                    iconColor: GlobalVariables.red, onPressed: () {
+                  viewPdf();
                 }),
                 SizedBox(
                   width: 16,
@@ -444,7 +441,7 @@ class ViewBillState extends State<BaseViewBill> {
       BillHeads penaltyBillHeads = BillHeads();
       penaltyBillHeads.AMOUNT =
           double.parse(value.PENALTY.toString()).toStringAsFixed(2);
-      penaltyBillHeads.HEAD_NAME = "Penalty";
+      penaltyBillHeads.HEAD_NAME = "Late Fee/Interest";
 
       totalAmount += double.parse(value.PENALTY.toString());
       _billHeadsList.add(arrearsBillHeads);
@@ -668,6 +665,17 @@ class ViewBillState extends State<BaseViewBill> {
         default:
       }
     });
+  }
+
+  Future viewPdf() async {
+    try {
+      _progressDialog?.show();
+      await viewPdfOnline(
+          type: widget.type?.TYPE ?? '', number: widget.invoiceNo ?? '');
+      _progressDialog?.dismiss();
+    } catch (e) {
+      GlobalFunctions.showToast(e.toString());
+    }
   }
 
   Future<void> getPDF() async {

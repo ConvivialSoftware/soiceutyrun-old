@@ -93,6 +93,7 @@ dependencies:
   file: ^6.1.4
   awesome_notifications: ^0.6.21
   device_info_plus: ^9.0.2
+  url_launcher: ^6.1.12
 
 dev_dependencies:
   flutter_test:
