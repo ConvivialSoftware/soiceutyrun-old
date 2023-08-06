@@ -25,7 +25,8 @@ class BaseViewBill extends StatefulWidget {
   String? invoiceNo, yearSelectedItem;
   String? mBlock, mFLat;
   Ledger? type;
-  BaseViewBill(this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat,this.type);
+  BaseViewBill(this.invoiceNo, this.yearSelectedItem, this.mBlock, this.mFLat,
+      this.type);
 
   @override
   State<StatefulWidget> createState() {
@@ -102,8 +103,10 @@ class ViewBillState extends State<BaseViewBill> {
                   width: 16,
                 ),
                 AppIconButton(Icons.download_sharp,
-                    iconColor: GlobalVariables.red, onPressed: () {
-                  viewPdf();
+                    iconColor: GlobalVariables.white, onPressed: () {
+                  viewPdfOnline(
+                      number: widget.invoiceNo ?? '',
+                      type: widget.type?.TYPE ?? "");
                 }),
                 SizedBox(
                   width: 16,
@@ -665,17 +668,6 @@ class ViewBillState extends State<BaseViewBill> {
         default:
       }
     });
-  }
-
-  Future viewPdf() async {
-    try {
-      _progressDialog?.show();
-      await viewPdfOnline(
-          type: widget.type?.TYPE ?? '', number: widget.invoiceNo ?? '');
-      _progressDialog?.dismiss();
-    } catch (e) {
-      GlobalFunctions.showToast(e.toString());
-    }
   }
 
   Future<void> getPDF() async {

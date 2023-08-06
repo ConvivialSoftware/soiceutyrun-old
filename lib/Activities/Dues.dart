@@ -365,7 +365,8 @@ class _BaseDuesState extends State<BaseDues> {
                                           value.billList[position].INVOICE_NO,
                                           null,
                                           widget.mBlock!,
-                                          widget.mFlat!)));
+                                          widget.mFlat!,
+                                          value.ledgerList[position])));
                             } else {
                               Navigator.push(
                                   context,
@@ -1269,7 +1270,7 @@ class _BaseDuesState extends State<BaseDues> {
                                       value.ledgerList[position].RECEIPT_NO,
                                       UserManagementResponse.listYear[0].years,
                                       widget.mBlock,
-                                      widget.mFlat)));
+                                      widget.mFlat,value.ledgerList[position])));
                         } else {
                           Navigator.push(
                               context,

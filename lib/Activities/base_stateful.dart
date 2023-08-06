@@ -605,7 +605,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       /*final result = await */ Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseViewBill(temp.iD!, null, null, null)));
+              builder: (context) => BaseViewBill(temp.iD!, null, null, null,null)));
       /*if (result == null) {
         Navigator.pushAndRemoveUntil(
             context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddNearByShop.dart';
 import 'package:societyrun/Activities/AddNewMember.dart';
@@ -211,7 +212,7 @@ getWidget(String title,String name) {
       break;
     case GlobalVariables.ViewBillPage:
       {
-        return BaseViewBill(null,null,null,null);
+        return BaseViewBill(null,null,null,null,null);
       }
       break;
     /*default:

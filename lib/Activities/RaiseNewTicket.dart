@@ -460,15 +460,25 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                           fit: BoxFit.cover,
                           radius: 25.0,
                         )
-                      : AppFileImage(
-                          attachmentFilePath,
-                          imageWidth: 50.0,
-                          imageHeight: 50.0,
-                          borderColor: GlobalVariables.grey,
-                          borderWidth: 1.0,
-                          fit: BoxFit.cover,
-                          radius: 25.0,
-                        ),
+                      : attachmentCompressFilePath!.isDoc()
+                          ? AppAssetsImage(
+                              GlobalVariables.pdfIconPath,
+                              imageWidth: 50.0,
+                              imageHeight: 50.0,
+                              borderColor: GlobalVariables.grey,
+                              borderWidth: 1.0,
+                              fit: BoxFit.cover,
+                              radius: 25.0,
+                            )
+                          : AppFileImage(
+                              attachmentFilePath,
+                              imageWidth: 50.0,
+                              imageHeight: 50.0,
+                              borderColor: GlobalVariables.grey,
+                              borderWidth: 1.0,
+                              fit: BoxFit.cover,
+                              radius: 25.0,
+                            ),
                   Column(
                     children: <Widget>[
                       Container(

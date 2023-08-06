@@ -167,15 +167,15 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
               ? widget.type?.TYPE?.toLowerCase() == 'payment'
                   ? []
                   : [
-                      AppIconButton(Icons.mail, iconColor: GlobalVariables.red,
-                          onPressed: () {
+                      AppIconButton(Icons.mail,
+                          iconColor: GlobalVariables.white, onPressed: () {
                         emailReceiptDialog(context);
                       }),
                       SizedBox(
                         width: 16,
                       ),
                       AppIconButton(Icons.download_sharp,
-                          iconColor: GlobalVariables.red, onPressed: () {
+                          iconColor: GlobalVariables.white, onPressed: () {
                         viewPdfOnline(
                             type: widget.type?.TYPE ?? '',
                             number: widget.invoiceNo ?? '');

@@ -9,16 +9,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dio/dio.dart' as d;
 
 //import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -40,6 +42,7 @@ import 'package:societyrun/Models/LoginResponse.dart';
 import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GlobalFunctions {
@@ -897,8 +900,9 @@ class GlobalFunctions {
 
   static Future<String> getFilePathOfCompressImage(
       String path, String targetPath) async {
-    print('Path : ' + path.toString());
-    print('targetPath : ' + targetPath.toString());
+    if (path.isDoc()) {
+      return path;
+    }
     var format = CompressFormat.jpeg;
     if (path.endsWith(".png")) {
       format = CompressFormat.png;
@@ -1996,5 +2000,76 @@ class GlobalFunctions {
                 ),
               );
             }));
+  }
+}
+
+Future viewPdfOnline({required String type, required String number}) async {
+  final societyId = await GlobalFunctions.getSocietyId();
+  final token = '';
+
+  final data = d.FormData.fromMap(
+      {'SOCIETY_ID': '$societyId', 'NUMBER': '$number', 'TYPE': '$type'});
+  var headers = {
+    'Authorization': token,
+    'Cookie':
+        'CAKEPHP=2dc7b2c8686b80e904ff8933d1c0506d; CAKEPHP=3c2df7c1f9d7518020d8c3f435ca5955'
+  };
+
+  final endpioint = '${GlobalVariables.BaseURLERP}AndroidApi/pdf_download';
+  final dio = d.Dio();
+  var response = await dio.post(
+    endpioint,
+    options: d.Options(
+      headers: headers,
+      contentType: d.Headers.formUrlEncodedContentType,
+    ),
+    data: data,
+  );
+
+  if (response.statusCode == 200) {
+    try {
+      final result = response.data;
+      if (result['status'] != false) {
+        final url = result['presignedUrl'] ?? '';
+        if (url.isNotEmpty) {
+          Get.to(() => PDFView(
+                url: url,
+                title: '$type#$number',
+              ));
+        } else {
+          GlobalFunctions.showToast('Error with PDF url');
+        }
+      } else {
+        GlobalFunctions.showToast(result['message']);
+      }
+    } catch (e) {
+      GlobalFunctions.showToast('Something went wrong. Please try again later');
+    }
+  } else {
+    GlobalFunctions.showToast(response.statusMessage ?? 'Something went wrong');
+  }
+}
+
+class PDFView extends StatelessWidget {
+  const PDFView({Key? key, this.url, required this.title}) : super(key: key);
+  final url;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            title,
+          ),
+        ),
+        body: Container(child: SfPdfViewer.network(url)));
+  }
+}
+
+extension PathX on String {
+  bool isDoc() {
+    final ext = this.split('.').last;
+    return ext == 'doc' || ext == 'docx' || ext == 'pdf';
   }
 }

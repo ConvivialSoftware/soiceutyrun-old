@@ -77,7 +77,8 @@ dependencies:
     git:
       url: https://github.com/devplanet-dp/charts.git
       path: charts_flutter
-  open_file: ^3.3.2
+  open_file_safe: ^3.2.3
+  syncfusion_flutter_pdfviewer:
   society_gatepass:
     git:
       url: https://zapniroshana@bitbucket.org/Convivialsoln/society_gatepass.git

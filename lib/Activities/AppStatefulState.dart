@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:url_launcher/url_launcher.dart';
